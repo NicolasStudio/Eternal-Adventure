@@ -7,9 +7,9 @@ const classes = {
 
         name: "Guerreiro",
 
-        image: "Eternal-Adventure/assets/img/assets/character/class/warrior.png",
+        image: "assets/img/assets/character/class/warrior.png",
 
-        hud: "Eternal-Adventure/assets/img/assets/character/class/warrior-hud.png",
+        hud: "assets/img/assets/character/class/warrior-hud.png",
 
         description: "Especialista em combate corpo a corpo.",
 
@@ -23,9 +23,9 @@ const classes = {
 
         name: "Arqueiro",
 
-        image: "Eternal-Adventure/assets/img/assets/character/class/archer.png",
+        image: "assets/img/assets/character/class/archer.png",
 
-        hud: "Eternal-Adventure/assets/img/assets/character/class/archer-hud.png",
+        hud: "assets/img/assets/character/class/archer-hud.png",
 
         description: "Especialista em ataques à distância.",
 
@@ -39,9 +39,9 @@ const classes = {
 
         name: "Mago",
 
-        image: "Eternal-Adventure/assets/img/assets/character/class/mage.png",
+        image: "assets/img/assets/character/class/mage.png",
 
-        hud: "Eternal-Adventure/assets/img/assets/character/class/mage-hud.png",
+        hud: "assets/img/assets/character/class/mage-hud.png",
 
         description: "Especialista em magia ofensiva.",
 

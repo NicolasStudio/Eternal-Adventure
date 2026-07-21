@@ -13,7 +13,7 @@ const chests = {
         slot: "chest",
         class: "warrior",
         rarity: rarities.common,
-        icon: "Eternal-Adventure/assets/img/assets/items/chest/chest-warrior-rarity-comum.png",
+        icon: "assets/img/assets/items/chest/chest-warrior-rarity-comum.png",
 
         stats: {
             armor: 6
@@ -32,7 +32,7 @@ const chests = {
         slot: "chest",
         class: "warrior",
         rarity: rarities.uncommon,
-        icon: "Eternal-Adventure/assets/img/assets/items/chest/chest-warrior-rarity-incomum.png",
+        icon: "assets/img/assets/items/chest/chest-warrior-rarity-incomum.png",
 
         stats: {
             armor: 10
@@ -51,7 +51,7 @@ const chests = {
         slot: "chest",
         class: "warrior",
         rarity: rarities.rare,
-        icon: "Eternal-Adventure/assets/img/assets/items/chest/chest-warrior-rarity-rare.png",
+        icon: "assets/img/assets/items/chest/chest-warrior-rarity-rare.png",
 
         stats: {
             armor: 16
@@ -70,7 +70,7 @@ const chests = {
         slot: "chest",
         class: "warrior",
         rarity: rarities.mystic,
-        icon: "Eternal-Adventure/assets/img/assets/items/chest/chest-warrior-rarity-mistico.png",
+        icon: "assets/img/assets/items/chest/chest-warrior-rarity-mistico.png",
 
         stats: {
             armor: 23
@@ -89,7 +89,7 @@ const chests = {
         slot: "chest",
         class: "warrior",
         rarity: rarities.legendary,
-        icon: "Eternal-Adventure/assets/img/assets/items/chest/chest-warrior-rarity-lendario.png",
+        icon: "assets/img/assets/items/chest/chest-warrior-rarity-lendario.png",
 
         stats: {
             armor: 31
@@ -108,7 +108,7 @@ const chests = {
         slot: "chest",
         class: "warrior",
         rarity: rarities.ultraje,
-        icon: "Eternal-Adventure/assets/img/assets/items/chest/chest-warrior-rarity-ultraje.png",
+        icon: "assets/img/assets/items/chest/chest-warrior-rarity-ultraje.png",
 
         stats: {
             armor: 40
@@ -130,7 +130,7 @@ const chests = {
         slot: "chest",
         class: "mage",
         rarity: rarities.common,
-        icon: "Eternal-Adventure/assets/img/assets/items/chest/chest-mage-rarity-comum.png",
+        icon: "assets/img/assets/items/chest/chest-mage-rarity-comum.png",
 
         stats: {
             armor: 5
@@ -149,7 +149,7 @@ const chests = {
         slot: "chest",
         class: "mage",
         rarity: rarities.uncommon,
-        icon: "Eternal-Adventure/assets/img/assets/items/chest/chest-mage-rarity-incomum.png",
+        icon: "assets/img/assets/items/chest/chest-mage-rarity-incomum.png",
 
         stats: {
             armor: 8
@@ -168,7 +168,7 @@ const chests = {
         slot: "chest",
         class: "mage",
         rarity: rarities.rare,
-        icon: "Eternal-Adventure/assets/img/assets/items/chest/chest-mage-rarity-rare.png",
+        icon: "assets/img/assets/items/chest/chest-mage-rarity-rare.png",
 
         stats: {
             armor: 13
@@ -187,7 +187,7 @@ const chests = {
         slot: "chest",
         class: "mage",
         rarity: rarities.mystic,
-        icon: "Eternal-Adventure/assets/img/assets/items/chest/chest-mage-rarity-mistico.png",
+        icon: "assets/img/assets/items/chest/chest-mage-rarity-mistico.png",
 
         stats: {
             armor: 18
@@ -206,7 +206,7 @@ const chests = {
         slot: "chest",
         class: "mage",
         rarity: rarities.legendary,
-        icon: "Eternal-Adventure/assets/img/assets/items/chest/chest-mage-rarity-lendario.png",
+        icon: "assets/img/assets/items/chest/chest-mage-rarity-lendario.png",
 
         stats: {
             armor: 24
@@ -225,7 +225,7 @@ const chests = {
         slot: "chest",
         class: "mage",
         rarity: rarities.ultraje,
-        icon: "Eternal-Adventure/assets/img/assets/items/chest/chest-mage-rarity-ultraje.png",
+        icon: "assets/img/assets/items/chest/chest-mage-rarity-ultraje.png",
 
         stats: {
             armor: 32
@@ -247,7 +247,7 @@ const chests = {
         slot: "chest",
         class: "archer",
         rarity: rarities.common,
-        icon: "Eternal-Adventure/assets/img/assets/items/chest/chest-archer-rarity-comum.png",
+        icon: "assets/img/assets/items/chest/chest-archer-rarity-comum.png",
 
         stats: {
             armor: 4
@@ -266,7 +266,7 @@ const chests = {
         slot: "chest",
         class: "archer",
         rarity: rarities.uncommon,
-        icon: "Eternal-Adventure/assets/img/assets/items/chest/chest-archer-rarity-incomum.png",
+        icon: "assets/img/assets/items/chest/chest-archer-rarity-incomum.png",
 
         stats: {
             armor: 7
@@ -285,7 +285,7 @@ const chests = {
         slot: "chest",
         class: "archer",
         rarity: rarities.rare,
-        icon: "Eternal-Adventure/assets/img/assets/items/chest/chest-archer-rarity-rare.png",
+        icon: "assets/img/assets/items/chest/chest-archer-rarity-rare.png",
 
         stats: {
             armor: 11
@@ -304,7 +304,7 @@ const chests = {
         slot: "chest",
         class: "archer",
         rarity: rarities.mystic,
-        icon: "Eternal-Adventure/assets/img/assets/items/chest/chest-archer-rarity-mistico.png",
+        icon: "assets/img/assets/items/chest/chest-archer-rarity-mistico.png",
 
         stats: {
             armor: 16
@@ -323,7 +323,7 @@ const chests = {
         slot: "chest",
         class: "archer",
         rarity: rarities.legendary,
-        icon: "Eternal-Adventure/assets/img/assets/items/chest/chest-archer-rarity-lendario.png",
+        icon: "assets/img/assets/items/chest/chest-archer-rarity-lendario.png",
 
         stats: {
             armor: 22
@@ -342,7 +342,7 @@ const chests = {
         slot: "chest",
         class: "archer",
         rarity: rarities.ultraje,
-        icon: "Eternal-Adventure/assets/img/assets/items/chest/chest-archer-rarity-ultraje.png",
+        icon: "assets/img/assets/items/chest/chest-archer-rarity-ultraje.png",
 
         stats: {
             armor: 28

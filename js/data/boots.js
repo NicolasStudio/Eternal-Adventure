@@ -13,7 +13,7 @@ const boots = {
         slot: "boots",
         class: "warrior",
         rarity: rarities.common,
-        icon: "Eternal-Adventure/assets/img/assets/items/boots/boots-warrior-rarity-comum.png",
+        icon: "assets/img/assets/items/boots/boots-warrior-rarity-comum.png",
 
         stats: {
             armor: 1,
@@ -33,7 +33,7 @@ const boots = {
         slot: "boots",
         class: "warrior",
         rarity: rarities.uncommon,
-        icon: "Eternal-Adventure/assets/img/assets/items/boots/boots-warrior-rarity-incomum.png",
+        icon: "assets/img/assets/items/boots/boots-warrior-rarity-incomum.png",
 
         stats: {
             armor: 2,
@@ -53,7 +53,7 @@ const boots = {
         slot: "boots",
         class: "warrior",
         rarity: rarities.rare,
-        icon: "Eternal-Adventure/assets/img/assets/items/boots/boots-warrior-rarity-rare.png",
+        icon: "assets/img/assets/items/boots/boots-warrior-rarity-rare.png",
 
         stats: {
             armor: 4,
@@ -73,7 +73,7 @@ const boots = {
         slot: "boots",
         class: "warrior",
         rarity: rarities.mystic,
-        icon: "Eternal-Adventure/assets/img/assets/items/boots/boots-warrior-rarity-mistico.png",
+        icon: "assets/img/assets/items/boots/boots-warrior-rarity-mistico.png",
 
         stats: {
             armor: 6,
@@ -93,7 +93,7 @@ const boots = {
         slot: "boots",
         class: "warrior",
         rarity: rarities.legendary,
-        icon: "Eternal-Adventure/assets/img/assets/items/boots/boots-warrior-rarity-lendario.png",
+        icon: "assets/img/assets/items/boots/boots-warrior-rarity-lendario.png",
 
         stats: {
             armor: 8,
@@ -113,7 +113,7 @@ const boots = {
         slot: "boots",
         class: "warrior",
         rarity: rarities.ultraje,
-        icon: "Eternal-Adventure/assets/img/assets/items/boots/boots-warrior-rarity-ultraje.png",
+        icon: "assets/img/assets/items/boots/boots-warrior-rarity-ultraje.png",
 
         stats: {
             armor: 10,
@@ -136,7 +136,7 @@ const boots = {
         slot: "boots",
         class: "mage",
         rarity: rarities.common,
-        icon: "Eternal-Adventure/assets/img/assets/items/boots/boots-mage-rarity-comum.png",
+        icon: "assets/img/assets/items/boots/boots-mage-rarity-comum.png",
 
         stats: {
             armor: 1,
@@ -156,7 +156,7 @@ const boots = {
         slot: "boots",
         class: "mage",
         rarity: rarities.uncommon,
-        icon: "Eternal-Adventure/assets/img/assets/items/boots/boots-mage-rarity-incomum.png",
+        icon: "assets/img/assets/items/boots/boots-mage-rarity-incomum.png",
 
         stats: {
             armor: 2,
@@ -176,7 +176,7 @@ const boots = {
         slot: "boots",
         class: "mage",
         rarity: rarities.rare,
-        icon: "Eternal-Adventure/assets/img/assets/items/boots/boots-mage-rarity-rare.png",
+        icon: "assets/img/assets/items/boots/boots-mage-rarity-rare.png",
 
         stats: {
             armor: 3,
@@ -196,7 +196,7 @@ const boots = {
         slot: "boots",
         class: "mage",
         rarity: rarities.mystic,
-        icon: "Eternal-Adventure/assets/img/assets/items/boots/boots-mage-rarity-mistico.png",
+        icon: "assets/img/assets/items/boots/boots-mage-rarity-mistico.png",
 
         stats: {
             armor: 5,
@@ -216,7 +216,7 @@ const boots = {
         slot: "boots",
         class: "mage",
         rarity: rarities.legendary,
-        icon: "Eternal-Adventure/assets/img/assets/items/boots/boots-mage-rarity-lendario.png",
+        icon: "assets/img/assets/items/boots/boots-mage-rarity-lendario.png",
 
         stats: {
             armor: 7,
@@ -236,7 +236,7 @@ const boots = {
         slot: "boots",
         class: "mage",
         rarity: rarities.ultraje,
-        icon: "Eternal-Adventure/assets/img/assets/items/boots/boots-mage-rarity-ultraje.png",
+        icon: "assets/img/assets/items/boots/boots-mage-rarity-ultraje.png",
 
         stats: {
             armor: 9,
@@ -259,7 +259,7 @@ const boots = {
         slot: "boots",
         class: "archer",
         rarity: rarities.common,
-        icon: "Eternal-Adventure/assets/img/assets/items/boots/boots-archer-rarity-comum.png",
+        icon: "assets/img/assets/items/boots/boots-archer-rarity-comum.png",
 
         stats: {
             armor: 1,
@@ -279,7 +279,7 @@ const boots = {
         slot: "boots",
         class: "archer",
         rarity: rarities.uncommon,
-        icon: "Eternal-Adventure/assets/img/assets/items/boots/boots-archer-rarity-incomum.png",
+        icon: "assets/img/assets/items/boots/boots-archer-rarity-incomum.png",
 
         stats: {
             armor: 2,
@@ -299,7 +299,7 @@ const boots = {
         slot: "boots",
         class: "archer",
         rarity: rarities.rare,
-        icon: "Eternal-Adventure/assets/img/assets/items/boots/boots-archer-rarity-rare.png",
+        icon: "assets/img/assets/items/boots/boots-archer-rarity-rare.png",
 
         stats: {
             armor: 3,
@@ -319,7 +319,7 @@ const boots = {
         slot: "boots",
         class: "archer",
         rarity: rarities.mystic,
-        icon: "Eternal-Adventure/assets/img/assets/items/boots/boots-archer-rarity-mistico.png",
+        icon: "assets/img/assets/items/boots/boots-archer-rarity-mistico.png",
 
         stats: {
             armor: 5,
@@ -339,7 +339,7 @@ const boots = {
         slot: "boots",
         class: "archer",
         rarity: rarities.legendary,
-        icon: "Eternal-Adventure/assets/img/assets/items/boots/boots-archer-rarity-lendario.png",
+        icon: "assets/img/assets/items/boots/boots-archer-rarity-lendario.png",
 
         stats: {
             armor: 6,
@@ -359,7 +359,7 @@ const boots = {
         slot: "boots",
         class: "archer",
         rarity: rarities.ultraje,
-        icon: "Eternal-Adventure/assets/img/assets/items/boots/boots-archer-rarity-ultraje.png",
+        icon: "assets/img/assets/items/boots/boots-archer-rarity-ultraje.png",
 
         stats: {
             armor: 8,

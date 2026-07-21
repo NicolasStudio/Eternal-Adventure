@@ -21,7 +21,7 @@ export default class CityView {
                         <div class="city-grid">
                             <article class="city-card" data-city="blacksmith">
                                 <div class="city-card-image">
-                                    <img src="./Eternal-Adventure/assets/img/backgrounds/cards_city/card_ferraria.png">
+                                    <img src="./assets/img/backgrounds/cards_city/card_ferraria.png">
                                 </div>
                                 <div class="city-card-header">
                                     <h3 class="city-name">Ferraria</h3>
@@ -34,7 +34,7 @@ export default class CityView {
                             </article>
                             <article class="city-card" data-city="market">
                                 <div class="city-card-image">
-                                    <img src="./Eternal-Adventure/assets/img/backgrounds/cards_city/card_market.png">
+                                    <img src="./assets/img/backgrounds/cards_city/card_market.png">
                                 </div>
                                 <div class="city-card-header">
                                     <h3 class="city-name">Mercado</h3>
@@ -46,7 +46,7 @@ export default class CityView {
                             </article>
                             <article class="city-card" data-city="infirmary">
                                 <div class="city-card-image">
-                                    <img src="./Eternal-Adventure/assets/img/backgrounds/cards_city/card_nursing.png">
+                                    <img src="./assets/img/backgrounds/cards_city/card_nursing.png">
                                 </div>
                                 <div class="city-card-header">
                                     <h3 class="city-name">Enfermaria</h3>
@@ -69,7 +69,7 @@ export default class CityView {
         return `
             <article class="city-card" data-city="blacksmith">
                 <div class="city-card-image">
-                    <img src="./Eternal-Adventure/assets/img/backgrounds/cards_city/card_ferraria.png" alt="Ferraria">
+                    <img src="./assets/img/backgrounds/cards_city/card_ferraria.png" alt="Ferraria">
                 </div>
                 <div class="city-card-header">
                     <h3 class="city-name">Ferraria</h3>
@@ -87,7 +87,7 @@ export default class CityView {
         return `
             <article class="city-card" data-city="market">
                 <div class="city-card-image">
-                    <img src="Eternal-Adventure/assets/img/backgrounds/cards_city/card_market.png" alt="Mercado">
+                    <img src="assets/img/backgrounds/cards_city/card_market.png" alt="Mercado">
                 </div>
                 <div class="city-card-header">
                     <h3 class="city-name">Mercado</h3>
@@ -104,7 +104,7 @@ export default class CityView {
         return `
             <article class="city-card locked" data-city="soon">
                 <div class="city-card-image">
-                    <img src="Eternal-Adventure/assets/img/backgrounds/cards_city/card_nursing.png" alt="Em breve">
+                    <img src="assets/img/backgrounds/cards_city/card_nursing.png" alt="Em breve">
                 </div>
                 <div class="city-card-header">
                     <h3 class="city-name">Em Breve</h3>

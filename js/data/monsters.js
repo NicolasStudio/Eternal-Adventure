@@ -8,7 +8,7 @@ const monsters = [
         level: 1,
         type: "beast",
 
-        sprite: "Eternal-Adventure/assets/img/monsters/creature_1/wolf.png",
+        sprite: "assets/img/monsters/creature_1/wolf.png",
 
         status: {
             vidaMaxima: 50,
@@ -38,7 +38,7 @@ const monsters = [
         level: 1,
         type: "beast",
 
-        sprite: "Eternal-Adventure/assets/img/monsters/creature_1/boar.png",
+        sprite: "assets/img/monsters/creature_1/boar.png",
 
         status: {
             vidaMaxima: 80,
@@ -68,7 +68,7 @@ const monsters = [
         level: 3,
         type: "beast",
 
-        sprite: "Eternal-Adventure/assets/img/monsters/creature_1/three_wolf.png",
+        sprite: "assets/img/monsters/creature_1/three_wolf.png",
 
         status: {
             vidaMaxima: 100,

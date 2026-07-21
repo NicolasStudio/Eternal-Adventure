@@ -13,7 +13,7 @@ const helmets = {
         slot: "helmet",
         class: "warrior",
         rarity: rarities.common,
-        icon: "Eternal-Adventure/assets/img/assets/items/helmets/helmets-warrior-rarity-comum.png",
+        icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-comum.png",
 
         stats: {
             armor: 3,
@@ -33,7 +33,7 @@ const helmets = {
         slot: "helmet",
         class: "warrior",
         rarity: rarities.uncommon,
-        icon: "Eternal-Adventure/assets/img/assets/items/helmets/helmets-warrior-rarity-incomum.png",
+        icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-incomum.png",
 
         stats: {
             armor: 5,
@@ -53,7 +53,7 @@ const helmets = {
         slot: "helmet",
         class: "warrior",
         rarity: rarities.rare,
-        icon: "Eternal-Adventure/assets/img/assets/items/helmets/helmets-warrior-rarity-rare.png",
+        icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-rare.png",
 
         stats: {
             armor: 8,
@@ -73,7 +73,7 @@ const helmets = {
         slot: "helmet",
         class: "warrior",
         rarity: rarities.mystic,
-        icon: "Eternal-Adventure/assets/img/assets/items/helmets/helmets-warrior-rarity-mistico.png",
+        icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-mistico.png",
 
         stats: {
             armor: 12,
@@ -93,7 +93,7 @@ const helmets = {
         slot: "helmet",
         class: "warrior",
         rarity: rarities.legendary,
-        icon: "Eternal-Adventure/assets/img/assets/items/helmets/helmets-warrior-rarity-lendario.png",
+        icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-lendario.png",
 
         stats: {
             armor: 18,
@@ -113,7 +113,7 @@ const helmets = {
         slot: "helmet",
         class: "warrior",
         rarity: rarities.ultraje,
-        icon: "Eternal-Adventure/assets/img/assets/items/helmets/helmets-warrior-rarity-ultraje.png",
+        icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-ultraje.png",
 
         stats: {
             armor: 25,
@@ -136,7 +136,7 @@ const helmets = {
         slot: "helmet",
         class: "mage",
         rarity: rarities.common,
-        icon: "Eternal-Adventure/assets/img/assets/items/helmets/helmets-mage-rarity-comum.png",
+        icon: "assets/img/assets/items/helmets/helmets-mage-rarity-comum.png",
 
         stats: {
             armor: 2,
@@ -156,7 +156,7 @@ const helmets = {
         slot: "helmet",
         class: "mage",
         rarity: rarities.uncommon,
-        icon: "Eternal-Adventure/assets/img/assets/items/helmets/helmets-mage-rarity-incomum.png",
+        icon: "assets/img/assets/items/helmets/helmets-mage-rarity-incomum.png",
 
         stats: {
             armor: 4,
@@ -176,7 +176,7 @@ const helmets = {
         slot: "helmet",
         class: "mage",
         rarity: rarities.rare,
-        icon: "Eternal-Adventure/assets/img/assets/items/helmets/helmets-mage-rarity-rare.png",
+        icon: "assets/img/assets/items/helmets/helmets-mage-rarity-rare.png",
 
         stats: {
             armor: 6,
@@ -196,7 +196,7 @@ const helmets = {
         slot: "helmet",
         class: "mage",
         rarity: rarities.mystic,
-        icon: "Eternal-Adventure/assets/img/assets/items/helmets/helmets-mage-rarity-mistico.png",
+        icon: "assets/img/assets/items/helmets/helmets-mage-rarity-mistico.png",
 
         stats: {
             armor: 9,
@@ -216,7 +216,7 @@ const helmets = {
         slot: "helmet",
         class: "mage",
         rarity: rarities.legendary,
-        icon: "Eternal-Adventure/assets/img/assets/items/helmets/helmets-mage-rarity-lendario.png",
+        icon: "assets/img/assets/items/helmets/helmets-mage-rarity-lendario.png",
 
         stats: {
             armor: 14,
@@ -236,7 +236,7 @@ const helmets = {
         slot: "helmet",
         class: "mage",
         rarity: rarities.ultraje,
-        icon: "Eternal-Adventure/assets/img/assets/items/helmets/helmets-mage-rarity-ultraje.png",
+        icon: "assets/img/assets/items/helmets/helmets-mage-rarity-ultraje.png",
 
         stats: {
             armor: 20,
@@ -259,7 +259,7 @@ const helmets = {
         slot: "helmet",
         class: "archer",
         rarity: rarities.common,
-        icon: "Eternal-Adventure/assets/img/assets/items/helmets/helmets-archer-rarity-comum.png",
+        icon: "assets/img/assets/items/helmets/helmets-archer-rarity-comum.png",
 
         stats: {
             armor: 2,
@@ -279,7 +279,7 @@ const helmets = {
         slot: "helmet",
         class: "archer",
         rarity: rarities.uncommon,
-        icon: "Eternal-Adventure/assets/img/assets/items/helmets/helmets-archer-rarity-incomum.png",
+        icon: "assets/img/assets/items/helmets/helmets-archer-rarity-incomum.png",
 
         stats: {
             armor: 4,
@@ -299,7 +299,7 @@ const helmets = {
         slot: "helmet",
         class: "archer",
         rarity: rarities.rare,
-        icon: "Eternal-Adventure/assets/img/assets/items/helmets/helmets-archer-rarity-rare.png",
+        icon: "assets/img/assets/items/helmets/helmets-archer-rarity-rare.png",
 
         stats: {
             armor: 6,
@@ -319,7 +319,7 @@ const helmets = {
         slot: "helmet",
         class: "archer",
         rarity: rarities.mystic,
-        icon: "Eternal-Adventure/assets/img/assets/items/helmets/helmets-archer-rarity-mistico.png",
+        icon: "assets/img/assets/items/helmets/helmets-archer-rarity-mistico.png",
 
         stats: {
             armor: 9,
@@ -339,7 +339,7 @@ const helmets = {
         slot: "helmet",
         class: "archer",
         rarity: rarities.legendary,
-        icon: "Eternal-Adventure/assets/img/assets/items/helmets/helmets-archer-rarity-lendario.png",
+        icon: "assets/img/assets/items/helmets/helmets-archer-rarity-lendario.png",
 
         stats: {
             armor: 14,
@@ -359,7 +359,7 @@ const helmets = {
         slot: "helmet",
         class: "archer",
         rarity: rarities.ultraje,
-        icon: "Eternal-Adventure/assets/img/assets/items/helmets/helmets-archer-rarity-ultraje.png",
+        icon: "assets/img/assets/items/helmets/helmets-archer-rarity-ultraje.png",
 
         stats: {
             armor: 20,

@@ -248,7 +248,7 @@ export default class HudScreen {
         this.currentMonster = null;
         this.combatView.exit();
         this.currentView = "";
-        this.setBackground("Eternal-Adventure/assets/img/backgrounds/tela_inicial.png");
+        this.setBackground("assets/img/backgrounds/tela_inicial.png");
         this.refreshCurrentView();
     }
 
@@ -285,7 +285,7 @@ export default class HudScreen {
 
     show() {
 
-        this.setBackground("Eternal-Adventure/assets/img/backgrounds/tela_inicial.png");
+        this.setBackground("assets/img/backgrounds/tela_inicial.png");
 
         this.render();
 

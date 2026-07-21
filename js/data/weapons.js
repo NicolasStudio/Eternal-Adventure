@@ -14,7 +14,7 @@ const weapons = {
         class: "warrior",
         weaponType: "sword",
         rarity: rarities.common,
-        icon: "Eternal-Adventure/assets/img/assets/items/weapons/sword-rarity-comum.png",
+        icon: "assets/img/assets/items/weapons/sword-rarity-comum.png",
 
         stats: {
             attack: 5,
@@ -39,7 +39,7 @@ const weapons = {
         class: "warrior",
         weaponType: "sword",
         rarity: rarities.uncommon,
-        icon: "Eternal-Adventure/assets/img/assets/items/weapons/sword-rarity-incomum.png",
+        icon: "assets/img/assets/items/weapons/sword-rarity-incomum.png",
 
         stats: {
             attack: 12,
@@ -64,7 +64,7 @@ const weapons = {
         class: "warrior",
         weaponType: "sword",
         rarity: rarities.rare,
-        icon: "Eternal-Adventure/assets/img/assets/items/weapons/sword-rarity-raro.png",
+        icon: "assets/img/assets/items/weapons/sword-rarity-raro.png",
 
         stats: {
             attack: 22,
@@ -89,7 +89,7 @@ const weapons = {
         class: "warrior",
         weaponType: "sword",
         rarity: rarities.mystic,
-        icon: "Eternal-Adventure/assets/img/assets/items/weapons/sword-rarity-mistico.png",
+        icon: "assets/img/assets/items/weapons/sword-rarity-mistico.png",
 
         stats: {
             attack: 34,
@@ -114,7 +114,7 @@ const weapons = {
         class: "warrior",
         weaponType: "sword",
         rarity: rarities.legendary,
-        icon: "Eternal-Adventure/assets/img/assets/items/weapons/sword-rarity-lendario.png",
+        icon: "assets/img/assets/items/weapons/sword-rarity-lendario.png",
 
         stats: {
             attack: 48,
@@ -139,7 +139,7 @@ const weapons = {
         class: "warrior",
         weaponType: "sword",
         rarity: rarities.ultraje,
-        icon: "Eternal-Adventure/assets/img/assets/items/weapons/sword-rarity-ultraje.png",
+        icon: "assets/img/assets/items/weapons/sword-rarity-ultraje.png",
 
         stats: {
             attack: 65,
@@ -167,7 +167,7 @@ const weapons = {
         class: "mage",
         weaponType: "scepter",
         rarity: rarities.common,
-        icon: "Eternal-Adventure/assets/img/assets/items/weapons/scepter-rarity-comum.png",
+        icon: "assets/img/assets/items/weapons/scepter-rarity-comum.png",
         stats: {
             attack: 6,
             armor: 0,
@@ -189,7 +189,7 @@ const weapons = {
         class: "mage",
         weaponType: "scepter",
         rarity: rarities.uncommon,
-        icon: "Eternal-Adventure/assets/img/assets/items/weapons/scepter-rarity-incomum.png",
+        icon: "assets/img/assets/items/weapons/scepter-rarity-incomum.png",
         stats: {
             attack: 12,
             armor: 0,
@@ -211,7 +211,7 @@ const weapons = {
         class: "mage",
         weaponType: "scepter",
         rarity: rarities.rare,
-        icon: "Eternal-Adventure/assets/img/assets/items/weapons/scepter-rarity-raro.png",
+        icon: "assets/img/assets/items/weapons/scepter-rarity-raro.png",
         stats: {
             attack: 22,
             armor: 0,
@@ -233,7 +233,7 @@ const weapons = {
         class: "mage",
         weaponType: "scepter",
         rarity: rarities.mystic,
-        icon: "Eternal-Adventure/assets/img/assets/items/weapons/scepter-rarity-mistico.png",
+        icon: "assets/img/assets/items/weapons/scepter-rarity-mistico.png",
         stats: {
             attack: 34,
             armor: 0,
@@ -255,7 +255,7 @@ const weapons = {
         class: "mage",
         weaponType: "scepter",
         rarity: rarities.legendary,
-        icon: "Eternal-Adventure/assets/img/assets/items/weapons/scepter-rarity-lendario.png",
+        icon: "assets/img/assets/items/weapons/scepter-rarity-lendario.png",
         stats: {
             attack: 48,
             armor: 0,
@@ -277,7 +277,7 @@ const weapons = {
         class: "mage",
         weaponType: "scepter",
         rarity: rarities.ultraje,
-        icon: "Eternal-Adventure/assets/img/assets/items/weapons/scepter-rarity-ultraje.png",
+        icon: "assets/img/assets/items/weapons/scepter-rarity-ultraje.png",
         stats: {
             attack: 65,
             armor: 0,
@@ -302,7 +302,7 @@ const weapons = {
         class: "archer",
         weaponType: "arch",
         rarity: rarities.common,
-        icon: "Eternal-Adventure/assets/img/assets/items/weapons/arch-rarity-comum.png",
+        icon: "assets/img/assets/items/weapons/arch-rarity-comum.png",
         stats: {
             attack: 5,
             armor: 0,
@@ -324,7 +324,7 @@ const weapons = {
         class: "archer",
         weaponType: "arch",
         rarity: rarities.uncommon,
-        icon: "Eternal-Adventure/assets/img/assets/items/weapons/arch-rarity-incomum.png",
+        icon: "assets/img/assets/items/weapons/arch-rarity-incomum.png",
         stats: {
             attack: 10,
             armor: 0,
@@ -346,7 +346,7 @@ const weapons = {
         class: "archer",
         weaponType: "arch",
         rarity: rarities.rare,
-        icon: "Eternal-Adventure/assets/img/assets/items/weapons/arch-rarity-raro.png",
+        icon: "assets/img/assets/items/weapons/arch-rarity-raro.png",
         stats: {
             attack: 18,
             armor: 0,
@@ -368,7 +368,7 @@ const weapons = {
         class: "archer",
         weaponType: "arch",
         rarity: rarities.mystic,
-        icon: "Eternal-Adventure/assets/img/assets/items/weapons/arch-rarity-mistico.png",
+        icon: "assets/img/assets/items/weapons/arch-rarity-mistico.png",
         stats: {
             attack: 28,
             armor: 0,
@@ -390,7 +390,7 @@ const weapons = {
         class: "archer",
         weaponType: "arch",
         rarity: rarities.legendary,
-        icon: "Eternal-Adventure/assets/img/assets/items/weapons/arch-rarity-lendario.png",
+        icon: "assets/img/assets/items/weapons/arch-rarity-lendario.png",
         stats: {
             attack: 40,
             armor: 0,
@@ -412,7 +412,7 @@ const weapons = {
         class: "archer",
         weaponType: "arch",
         rarity: rarities.ultraje,
-        icon: "Eternal-Adventure/assets/img/assets/items/weapons/arch-rarity-ultraje.png",
+        icon: "assets/img/assets/items/weapons/arch-rarity-ultraje.png",
         stats: {
             attack: 55,
             armor: 0,

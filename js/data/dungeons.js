@@ -21,8 +21,8 @@ const dungeons = [
             "threeWolf"
         ],
 
-        image: "Eternal-Adventure/assets/img/assets/card_dungeon/card_grove_1.png",
-        background: "Eternal-Adventure/assets/img/backgrounds/page_1/grove_1.png",
+        image: "assets/img/assets/card_dungeon/card_grove_1.png",
+        background: "assets/img/backgrounds/page_1/grove_1.png",
 
         drops: [
             {
@@ -41,8 +41,8 @@ const dungeons = [
         page: 1,
         fights: 5,
 
-        image: "Eternal-Adventure/assets/img/assets/card_dungeon/card_grove_2.png",
-        background: "Eternal-Adventure/assets/img/backgrounds/page_1/grove_2.png",
+        image: "assets/img/assets/card_dungeon/card_grove_2.png",
+        background: "assets/img/backgrounds/page_1/grove_2.png",
 
         drops: [
             {
@@ -61,8 +61,8 @@ const dungeons = [
         page: 1,
         fights: 5,
 
-        image: "Eternal-Adventure/assets/img/assets/card_dungeon/card_grove_3.png",
-        background: "Eternal-Adventure/assets/img/backgrounds/page_1/grove_3.png",
+        image: "assets/img/assets/card_dungeon/card_grove_3.png",
+        background: "assets/img/backgrounds/page_1/grove_3.png",
 
         drops: [
             {
@@ -81,8 +81,8 @@ const dungeons = [
         page: 2,
         fights: 1,
 
-        image: "Eternal-Adventure/assets/img/assets/card_dungeon/card_grove_end.png",
-        background: "Eternal-Adventure/assets/img/backgrounds/page_1/grove_end.png",
+        image: "assets/img/assets/card_dungeon/card_grove_end.png",
+        background: "assets/img/backgrounds/page_1/grove_end.png",
 
         drops: [
             {

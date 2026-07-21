@@ -3,7 +3,7 @@ const items = {
     smallPotion: {
         id: "smallPotion",
         name: "Poção Pequena",
-        icon: "Eternal-Adventure/assets/img/assets/items/consumables/small_potion.png",
+        icon: "assets/img/assets/items/consumables/small_potion.png",
 
         type: "item",
         stackable: true,
@@ -26,7 +26,7 @@ const items = {
     mediumPotion: {
         id: "mediumPotion",
         name: "Poção Média",
-        icon: "Eternal-Adventure/assets/img/assets/items/consumables/medium_potion.png",
+        icon: "assets/img/assets/items/consumables/medium_potion.png",
 
         type: "item",
         stackable: true,
@@ -49,7 +49,7 @@ const items = {
     largePotion: {
         id: "largePotion",
         name: "Poção Grande",
-        icon: "Eternal-Adventure/assets/img/assets/items/consumables/large_potion.png",
+        icon: "assets/img/assets/items/consumables/large_potion.png",
 
         type: "item",
         stackable: true,

@@ -12,7 +12,7 @@ export default class HomeScreen {
         this.element.innerHTML = `
             <div class="home">
                 <div class="fog"></div>
-                <img class="home_logo" src="Eternal-Adventure/assets/img/backgrounds/logo.png" alt="Eternal Adventure" >
+                <img class="home_logo" src="assets/img/backgrounds/logo.png" alt="Eternal Adventure" >
                 <div class="menu">
                     <button id="btn-new-game">
                         Novo Jogo
