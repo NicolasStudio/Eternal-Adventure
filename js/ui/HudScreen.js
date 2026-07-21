@@ -1,0 +1,322 @@
+import CharacterView from "../views/CharacterView.js";
+import DungeonView from "../views/DungeonView.js";
+import CombatView from "../views/CombatView.js";
+import CityView from "../views/CityView.js";
+import MarketView from "../views/MarketView.js";
+import PlayerHUD from "./components/PlayerHUD.js";
+import MonsterHUD from "./components/MonsterHUD.js";
+import Toolbar from "./components/Toolbar.js";
+import DungeonHeader from "./components/DungeonHeader.js";
+import Toast from "../ui/components/Toast.js";
+
+
+export default class HudScreen {
+
+    constructor(game) {
+
+        this.game = game;
+        this.element = document.getElementById("hud-screen");
+
+        this.characterView = new CharacterView(game);
+        this.dungeonView = new DungeonView(game);
+        this.combatView = new CombatView(game);
+        this.cityView = new CityView(game);
+        this.marketView = new MarketView(game);
+        this.playerHUD = new PlayerHUD(game);
+        this.monsterHUD = new MonsterHUD(game);
+        this.toolbar = new Toolbar(game);
+        this.dungeonHeader = new DungeonHeader(game);
+
+        this.currentView = "";
+        this.characterVisible = true;
+        this.inCombat = false;
+        this.currentMonster = null;
+        this.backgroundImage = "";
+        this.preparationMode = false;
+    }
+
+    render() {
+        this.element.innerHTML = `
+            <div class="hud-background" style="background-image:url('${this.backgroundImage ?? ""}')"></div>
+            ${this.renderHeader()}
+            ${this.renderContent()}
+            ${this.renderNavigation()}
+        `;
+    }
+
+    setBackground(image) {
+        this.backgroundImage = image;
+
+        const background = this.element.querySelector(".hud-background");
+
+        if (background) {
+            background.style.backgroundImage = `url("${image}")`;
+        }
+    }
+
+    renderHeader() {
+        return `
+            <header class="hud-header ${this.inCombat ? "combat" : "exploration"}">
+                ${this.playerHUD.render()}
+                ${this.inCombat
+                    ? this.dungeonHeader.render(
+                        this.combatView.currentDungeon,
+                        this.combatView.currentFloor
+                    )
+                    : ""}
+                ${this.renderRightPanel()}
+            </header>
+        `;
+    }
+
+    renderRightPanel() {
+        return this.inCombat
+            ? this.monsterHUD.render(this.combatView.currentMonster)
+            : this.toolbar.render();
+    }
+
+    updateHUD() {
+
+        this.playerHUD.update();
+
+        if (this.inCombat) {
+            this.monsterHUD.update?.();
+        }
+
+        if (this.currentView === "character") {
+            this.refreshCurrentView();
+        }
+
+    }
+
+    renderContent() {
+
+        if (!this.characterVisible) return "";
+
+        switch (this.currentView) {
+
+            case "character":
+                return this.characterView.render();
+
+            case "dungeon":
+                return this.inCombat
+                    ? this.combatView.render()
+                    : this.dungeonView.render();
+
+            case "city":
+                return this.cityView.render();
+
+            case "market":
+                return this.marketView.render();
+
+            default:
+                return "";
+        }
+
+    }
+
+    enterPreparationMode() {
+
+        this.preparationMode = true;
+
+        this.currentView = "character";
+
+        this.refreshCurrentView();
+
+    }
+
+    exitPreparationMode() {
+
+        this.preparationMode = false;
+
+    }
+
+    renderNavigation() {
+
+        const characterDisabled =
+            this.inCombat && !this.preparationMode;
+
+        const dungeonDisabled =
+            this.inCombat || this.preparationMode;
+
+        const cityDisabled =
+            this.inCombat || this.preparationMode;
+
+        return `
+            <nav class="hud-navigation">
+
+                <button
+                    class="nav-item ${this.currentView === "character" ? "active" : ""} ${characterDisabled ? "disabled" : ""}"
+                    data-view="character">
+
+                    <i class="fa-solid fa-user"></i>
+                    <span>Personagem</span>
+
+                </button>
+
+                <button
+                    class="nav-item ${this.currentView === "dungeon" ? "active" : ""} ${dungeonDisabled ? "disabled" : ""}"
+                    data-view="dungeon">
+
+                    <i class="fa-solid fa-book-atlas"></i>
+                    <span>Dungeons</span>
+
+                </button>
+
+                <button
+                    class="nav-item ${this.currentView === "city" ? "active" : ""} ${cityDisabled ? "disabled" : ""}"
+                    data-view="city">
+
+                    <i class="fa-solid fa-city"></i>
+                    <span>Cidade</span>
+
+                </button>
+
+                <button class="nav-item">
+                    <i class="fa-solid fa-hourglass-half"></i>
+                    <span>Em breve</span>
+                </button>
+
+            </nav>
+        `;
+
+    }
+
+    registerEvents() {
+
+        this.element.querySelectorAll(".nav-item").forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                if (this.inCombat && !this.preparationMode) {
+                    Toast.show("Você não pode trocar de tela durante um combate.");
+                    return;
+                }
+
+                this.changeView(button.dataset.view);
+
+            });
+
+        });
+
+    }
+
+    changeView(view) {
+        this.currentView = view;
+        this.refreshCurrentView();
+    }
+
+    refreshCurrentView() {
+
+        this.render();
+        this.registerEvents();
+
+        switch (this.currentView) {
+
+            case "character":
+                this.characterView.registerEvents(document);
+                break;
+
+            case "dungeon":
+                this.dungeonView.registerEvents(document);
+                break;
+
+            case "city":
+                this.cityView.registerEvents(document);
+                break;
+
+            case "market":
+                this.marketView.registerEvents(document);
+                break;
+
+        }
+
+    }
+    
+    async enterCombat(monster, dungeon) {
+
+        this.inCombat = true;
+
+        this.setBackground(dungeon.background);
+
+        await this.combatView.enter(dungeon);
+
+    }
+
+    exitCombat() {
+        this.inCombat = false;
+        this.currentMonster = null;
+        this.combatView.exit();
+        this.currentView = "";
+        this.setBackground("Eternal-Adventure/assets/img/backgrounds/tela_inicial.png");
+        this.refreshCurrentView();
+    }
+
+    showCharacter() {
+
+        if (this.characterVisible) return;
+
+        this.characterVisible = true;
+        this.refreshCurrentView();
+
+    }
+
+    async hideCharacter() {
+
+        if (!this.characterVisible) return;
+
+        this.characterVisible = false;
+
+        if (this.preparationMode && this.combatView.currentFloor >= 1) {
+
+            this.exitPreparationMode();
+
+            this.changeView("dungeon");
+
+            await this.combatView.startNextFloor();
+
+            return;
+
+        }
+
+        this.refreshCurrentView();
+
+    }
+
+    show() {
+
+        this.setBackground("Eternal-Adventure/assets/img/backgrounds/tela_inicial.png");
+
+        this.render();
+
+        this.registerEvents();
+
+        switch (this.currentView) {
+
+            case "character":
+                this.characterView.registerEvents(document);
+                break;
+
+            case "dungeon":
+                this.dungeonView.registerEvents(document);
+                break;
+
+            case "city":
+                this.cityView.registerEvents(document);
+                break;
+
+            case "market":
+                this.marketView.registerEvents(document);
+                break;
+
+        }
+
+        this.element.classList.remove("hidden");
+
+    }
+
+    hide() {
+        this.element.classList.add("hidden");
+    }
+
+}

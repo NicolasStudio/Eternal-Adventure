@@ -1,0 +1,168 @@
+/* ==========================================================
+   INVENTÁRIO
+========================================================== */
+.market-inventory{
+    display:flex;
+    flex-direction:column;
+    height:100%;
+    padding:18px;
+}
+
+/* ==========================================================
+   CABEÇALHO
+========================================================== */
+.market-inventory-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+    padding-bottom:14px;
+    border-bottom:1px solid rgba(139,115,85,.25);
+    font-family:"Cinzel",serif;
+    font-size:20px;
+    color:#ecd8b3;
+    letter-spacing:2px;
+    text-transform:uppercase;
+}
+.market-inventory-title span{
+    font-size:13px;
+    color:#bda57d;
+    letter-spacing:1px;
+}
+
+/* ==========================================================
+   LISTA
+========================================================== */
+.market-item-list{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    overflow-y:auto;
+    padding-right:6px;
+}
+
+/* ==========================================================
+   SCROLL
+========================================================== */
+.market-item-list::-webkit-scrollbar{
+    width:8px;
+}
+.market-item-list::-webkit-scrollbar-track{
+    background:#120c08;
+    border-radius:8px;
+}
+.market-item-list::-webkit-scrollbar-thumb{
+    background:#6b543c;
+    border-radius:8px;
+}
+.market-item-list::-webkit-scrollbar-thumb:hover{
+    background:#8b7355;
+}
+
+/* ==========================================================
+   ITEM
+========================================================== */
+.market-item{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    width:100%;
+    min-height:72px;
+    padding:12px;
+    cursor:pointer;
+    border:none;
+    border-radius:8px;
+    background:linear-gradient(180deg, #2c1810 0%, #1a0f0a 100%);
+    border:2px solid #5a4a3a;
+    transition:all .25s ease;
+    box-shadow:inset 0 0 18px rgba(0,0,0,.35);
+}
+.market-item:hover{
+    transform:translateY(-2px);
+    border-color:#d4a373;
+    box-shadow:0 0 18px rgba(212,163,115,.15), inset 0 0 18px rgba(0,0,0,.35);
+}
+
+/* ==========================================================
+   ITEM SELECIONADO
+========================================================== */
+.market-item.selected{
+    border-color:#69d823;
+    box-shadow:0 0 22px rgba(105,216,35,.22), inset 0 0 18px rgba(0,0,0,.35);
+}
+
+/* ==========================================================
+   ÍCONE
+========================================================== */
+.market-item-icon{
+    width:48px;
+    height:48px;
+    flex-shrink:0;
+    image-rendering:pixelated;
+    padding:6px;
+    border-radius:6px;
+    border:1px solid rgba(139,115,85,.35);
+    background:#120c08;
+}
+
+/* ==========================================================
+   CONTEÚDO
+========================================================== */
+.market-item-content{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:5px;
+    text-align:left;
+}
+.market-item-name{
+    font-size:16px;
+    font-weight:bold;
+    color:#ecd8b3;
+    font-family:"Cinzel",serif;
+}
+.market-item-rarity{
+    font-size:13px;
+    font-weight:bold;
+    letter-spacing:1px;
+}
+
+/* ==========================================================
+   VALOR
+========================================================== */
+.market-item-price{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-left:auto;
+    font-size:15px;
+    font-weight:bold;
+    color:#ffd34d;
+}
+.market-item-price i{
+    color:#d4a373;
+}
+
+/* ==========================================================
+   INVENTÁRIO VAZIO
+========================================================== */
+.market-empty{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:18px;
+    padding:40px;
+    text-align:center;
+}
+.market-empty i{
+    font-size:58px;
+    color:#6b543c;
+}
+.market-empty span{
+    color:#bda57d;
+    line-height:1.6;
+}

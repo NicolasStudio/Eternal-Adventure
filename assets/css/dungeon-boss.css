@@ -1,0 +1,18 @@
+/* ==========================================================
+   BOSS CONTAINER
+========================================================== */
+.dungeon-boss{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex:1;
+}
+
+.dungeon-card.boss{
+    width:220px;
+}
+
+.dungeon-card.boss .dungeon-name{
+    color:#f0d5b0;
+}

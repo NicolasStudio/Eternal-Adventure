@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;700&display=swap');
+.home {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(ellipse at center, #1a0f0a 0%, #0d0705 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efeito de pergaminho antigo no fundo */
+.home::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4a373' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+}
+
+/* Bordas decorativas medievais */
+.home::after {
+    content: '⚔️ ✦ ⚔️';
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #8b7355;
+    font-size: 14px;
+    letter-spacing: 20px;
+    font-family: 'Cinzel', serif;
+    opacity: 0.3;
+}
+
+.home_logo {
+    width: 550px;
+    filter: drop-shadow(0 0 30px rgba(180, 120, 70, 0.3));
+    transition: filter 0.5s ease;
+    position: relative;
+    z-index: 1;
+    top: -70px;
+    height: auto;
+}
+
+.home_logo:hover {
+    filter: drop-shadow(0 0 50px rgba(180, 120, 70, 0.5));
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.menu button {
+    width: 240px;
+    height: 50px;
+    cursor: pointer;
+    background: linear-gradient(180deg, #2c1810 0%, #1a0f0a 100%);
+    border: 2px solid #8b7355;
+    border-radius: 3px;
+    color: #d4a373;
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(180, 120, 70, 0.3);
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 
+        inset 0 0 30px rgba(0, 0, 0, 0.5),
+        0 5px 15px rgba(0, 0, 0, 0.5);
+    padding: 0 20px;
+}
+
+/* Efeito de relevo nas bordas */
+.menu button::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    right: 3px;
+    bottom: 3px;
+    border: 1px solid rgba(139, 115, 85, 0.2);
+    border-radius: 2px;
+    pointer-events: none;
+}
+
+/* Decoração lateral dos botões */
+.menu button::after {
+    content: '✦';
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #8b7355;
+    font-size: 12px;
+    opacity: 0.5;
+}
+
+.menu button:hover:not(:disabled) {
+    background: linear-gradient(180deg, #3d2418 0%, #2c1810 100%);
+    border-color: #d4a373;
+    color: #f0d5b0;
+    box-shadow: 
+        inset 0 0 30px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(180, 120, 70, 0.2);
+    transform: scale(1.02);
+    text-shadow: 0 0 20px rgba(180, 120, 70, 0.5);
+}
+
+.menu button:active:not(:disabled) {
+    transform: scale(0.98);
+    box-shadow: 
+        inset 0 0 30px rgba(0, 0, 0, 0.7),
+        0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.menu button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    filter: grayscale(0.6);
+}
+
+.menu button:disabled::after {
+    content: '🔒';
+    font-size: 14px;
+}
+
+.menu button small {
+    font-family: 'MedievalSharp', cursive;
+    font-size: 12px;
+    opacity: 0.7;
+    letter-spacing: 1px;
+    display: block;
+    margin-top: 2px;
+}
+
+/* Versão do jogo */
+.home small {
+    font-family: 'MedievalSharp', cursive;
+    color: #8b7355;
+    font-size: 14px;
+    letter-spacing: 4px;
+    opacity: 0.6;
+    position: relative;
+    z-index: 1;
+    margin-top: 10px;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+#btn-new-game{
+    border-color:#d8b16c;
+}
+
+#btn-new-game:hover{
+    box-shadow: 0 0 25px rgba(212,163,115,.25);
+}
+
+/* Efeito de fumaça/nevoeiro sutil no fundo */
+@keyframes fog {
+    0% { transform: translateX(-10%) scale(1); opacity: 0.05; }
+    50% { transform: translateX(10%) scale(1.1); opacity: 0.08; }
+    100% { transform: translateX(-10%) scale(1); opacity: 0.05; }
+}
+
+.home .fog {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(180, 120, 70, 0.1) 0%, transparent 70%);
+    animation: fog 15s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.home small{
+    opacity:.95;
+    font-size:13px;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .home_logo {
+        width: 280px;
+    }
+    
+    .menu button {
+        width: 200px;
+        height: 45px;
+        font-size: 14px;
+    }
+    
+    .menu button::after {
+        display: none;
+    }
+}

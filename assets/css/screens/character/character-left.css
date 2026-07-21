@@ -1,0 +1,251 @@
+/* ==========================================================
+   LADO ESQUERDO
+========================================================== */
+.character-left{
+    width:35%;
+    display:flex;
+    flex-direction:column;
+    padding:20px;
+    border-right:1px solid rgba(212,163,115,.25);
+}
+
+/* ==========================================================
+   ABAS
+========================================================== */
+.character-tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:20px;
+}
+
+.character-tab{
+    flex:1;
+    height:40px;
+    cursor:pointer;
+    border:none;
+    border-radius:6px;
+    background:rgba(255,255,255,.04);
+    color:#d4a373;
+    font-family:"Cinzel", serif;
+    font-size:15px;
+    font-weight:600;
+    transition:.25s;
+}
+
+.character-tab:hover{
+    background:rgba(212,163,115,.12);
+    color:#f0d5b0;
+}
+
+.character-tab.active{
+    background:rgba(212,163,115,.18);
+    color:#f0d5b0;
+    border-bottom:2px solid #69d823;
+}
+
+/* ==========================================================
+   CONTEÚDO
+========================================================== */
+.character-tab-content{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+/* ==========================================================
+   AVATAR
+========================================================== */
+.character-avatar{
+    width:120px;
+    height:120px;
+    margin:0 auto;
+    display: flex;
+    image-rendering:pixelated;
+    border:2px solid #8b7355;
+    background:#2a1a12;
+}
+
+/* ==========================================================
+   NOME
+========================================================== */
+.box-info{
+    display: flex;
+    justify-content: space-between;
+}
+
+.character-name{
+    text-align:center;
+    font-family:"Cinzel", serif;
+    font-size:24px;
+    color:#f0d5b0;
+}
+
+.character-class{
+    text-align:center;
+    color:#d4a373;
+    font-size:15px;
+}
+
+.character-level{
+    text-align:center;
+    color:#69d823;
+    font-weight:bold;
+}
+
+.character-gold{
+    text-align:center;
+    color: #ffd700;
+    font-weight:bold;
+}
+
+/* ==========================================================
+   BARRAS
+========================================================== */
+.character-bars{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-top:10px;
+}
+
+.character-bar{
+    position:relative;
+    height:22px;
+    border:2px solid #5f6580;
+    background:#111;
+    overflow:hidden;
+}
+
+.character-fill{
+    height:100%;
+}
+
+.character-fill.hp{
+    background:linear-gradient(180deg, #ff5b5b, #C7315D);
+}
+
+.character-fill.xp{
+    background:linear-gradient(180deg, #4b8cff, #0050fc);
+}
+
+.character-bar span{
+    position:absolute;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#FFF;
+    font-size:13px;
+    font-weight:bold;
+    text-shadow:0 1px 2px #000;
+}
+
+/* ==========================================================
+   ATRIBUTOS
+========================================================== */
+.character-stats{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-top:10px;
+}
+
+.character-stat{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:8px 10px;
+    background:rgba(255,255,255,.03);
+    border-radius:4px;
+}
+
+.character-stat span:first-child{
+    color:#d4a373;
+}
+
+.character-stat span:last-child{
+    color:#FFF;
+    font-weight:bold;
+}
+
+/* ==========================================
+   EQUIPADOS
+========================================== */
+.character-equipped{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.equipment-slot{
+    padding:12px;
+    border: 2px solid rgba(212,163,115,.18);
+    background:rgba(255,255,255,.03);
+    border-radius:6px;
+    transition:.2s;
+    cursor:pointer;
+}
+
+.equipment-slot.selected{
+    border-color:#d4a373;
+    transform:translateY(-2px);
+    box-shadow:inset 0 0 30px rgba(0,0,0,0.5), 0 0 30px rgba(255, 167, 94, 0.2);
+}
+
+.equipment-slot:hover{
+    border-color:#8b7355;
+}
+
+.equipment-title{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:#d4a373;
+    font-weight:bold;
+    margin-bottom:6px;
+}
+
+.equipment-item{
+    color:#f0d5b0;
+    font-size:14px;
+}
+
+.equipment-header{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.equipment-image{
+    width:52px;
+    height:52px;
+    border:2px solid #8b7355;
+    background:rgba(0,0,0,.35);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-shrink:0;
+}
+
+.equipment-image img{
+    width:40px;
+    height:40px;
+    image-rendering:pixelated;
+}
+
+.equipment-info{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
+.equipment-name{
+    color:#d4a373;
+    font-weight:bold;
+}
+
+.equipment-item{
+    color:#FFF;
+    font-size:14px;
+}
