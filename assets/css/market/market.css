@@ -231,69 +231,197 @@
    RESPONSIVO
 ========================================================== */
 
-@media (max-width:1100px){
+/* ----------------------------------------------------------
+   NOTEBOOKS (1366x768 / 1600x900)
+---------------------------------------------------------- */
+
+@media (max-width:1366px), (max-height:768px){
 
     .market-window{
 
-        width:95vw;
-        height:92vh;
+        width:94vw;
+        height:90vh;
 
     }
 
     .market-body{
 
         grid-template-columns:300px 1fr;
-
         gap:18px;
-
         padding:18px;
+
+    }
+
+    .market-left{
+
+        width:300px;
+
+    }
+
+    .market-right{
+
+        min-width:0;
+
+    }
+
+    .market-placeholder,
+    .market-empty{
+
+        padding:28px;
+        gap:14px;
+
+    }
+
+    .market-placeholder i,
+    .market-empty i{
+
+        font-size:46px;
+
+    }
+
+    .market-placeholder h3{
+
+        font-size:26px;
+
+    }
+
+    .market-placeholder p,
+    .market-empty span{
+
+        font-size:15px;
+        line-height:1.6;
 
     }
 
 }
 
-@media (max-width:900px){
+/* ----------------------------------------------------------
+   TABLETS
+---------------------------------------------------------- */
+
+@media (max-width:992px){
+
+    .market-window{
+
+        width:96vw;
+        height:92vh;
+
+    }
+
+    .market-body{
+
+        grid-template-columns:280px 1fr;
+        gap:16px;
+        padding:16px;
+
+    }
+
+    .market-left{
+
+        width:280px;
+
+    }
+
+    .market-right{
+
+        min-width:0;
+
+    }
+
+}
+
+/* ----------------------------------------------------------
+   CELULAR
+---------------------------------------------------------- */
+
+@media (max-width:768px){
+
+    .market-window{
+
+        width:100vw;
+        height:100vh;
+
+        border:none;
+        border-radius:0;
+
+    }
 
     .market-body{
 
         display:flex;
         flex-direction:column;
 
+        gap:16px;
+        padding:16px;
+
     }
 
     .market-left{
 
         width:100%;
-        min-height:260px;
+        min-height:240px;
+
+    }
+
+    .market-right{
+
+        min-height:320px;
+
+    }
+
+    .market-placeholder,
+    .market-empty{
+
+        padding:24px;
+
+    }
+
+    .market-placeholder i,
+    .market-empty i{
+
+        font-size:40px;
+
+    }
+
+    .market-placeholder h3{
+
+        font-size:22px;
+
+    }
+
+    .market-placeholder p,
+    .market-empty span{
+
+        font-size:14px;
 
     }
 
 }
 
-@media (max-width:768px){
+/* ----------------------------------------------------------
+   FULL HD
+---------------------------------------------------------- */
+
+@media (min-width:1920px){
 
     .market-window{
 
-        width:98vw;
-        height:96vh;
-
-    }
-
-    .market-body{
-
-        padding:14px;
-
-        gap:14px;
+        width:1150px;
+        height:820px;
 
     }
 
 }
 
-@media (min-width:2000px){
+/* ----------------------------------------------------------
+   2K / 4K
+---------------------------------------------------------- */
+
+@media (min-width:2560px){
 
     .market-window{
 
-        width:1280px;
+        width:1250px;
         height:860px;
 
     }

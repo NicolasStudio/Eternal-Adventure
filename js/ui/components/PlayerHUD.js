@@ -34,34 +34,37 @@ export default class PlayerHUD {
 
                 </div>
 
-                <div class="hud-bars">
+                <div class="hud-bar">
 
-                    <div class="hud-bar">
-                        <div
-                            id="hp-fill"
-                            class="hud-fill hp"
-                            style="width:${hpPercent}%;">
-                        </div>
+                    <span class="hud-label">HP</span>
 
-                        <span id="hp-text" class="hud-text">
-                            ${player.currentHP} / ${player.maxHP}
-                        </span>
+                    <div
+                        id="hp-fill"
+                        class="hud-fill hp"
+                        style="width:${hpPercent}%;">
                     </div>
 
-                    <div class="hud-bar">
-                        <div
-                            id="xp-fill"
-                            class="hud-fill xp"
-                            style="width:${xpPercent}%;">
-                        </div>
-
-                        <span id="xp-text" class="hud-text">
-                            ${currentXP} / ${maxXP}
-                        </span>
-                    </div>
+                    <span id="hp-text" class="hud-text">
+                        ${player.currentHP} / ${player.maxHP}
+                    </span>
 
                 </div>
 
+                <div class="hud-bar">
+
+                    <span class="hud-label">XP</span>
+
+                    <div
+                        id="xp-fill"
+                        class="hud-fill xp"
+                        style="width:${xpPercent}%;">
+                    </div>
+
+                    <span id="xp-text" class="hud-text">
+                        ${currentXP} / ${maxXP}
+                    </span>
+
+                </div>
             </aside>
         `;
     }

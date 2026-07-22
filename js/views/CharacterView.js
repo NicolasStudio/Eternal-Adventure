@@ -72,12 +72,14 @@ export default class CharacterView {
 
                     <div class="character-bar">
 
+                        <span class="character-label">HP</span>
+
                         <div
                             class="character-fill hp"
                             style="width:${hpPercent}%;">
                         </div>
 
-                        <span>
+                        <span class="character-text">
                             ${player.currentHP} / ${player.maxHP}
                         </span>
 
@@ -85,12 +87,14 @@ export default class CharacterView {
 
                     <div class="character-bar">
 
+                        <span class="character-label">XP</span>
+
                         <div
                             class="character-fill xp"
                             style="width:${xpPercent}%;">
                         </div>
 
-                        <span>
+                        <span class="character-text">
                             ${player.currentXP} / ${requiredXP}
                         </span>
 
@@ -115,7 +119,7 @@ export default class CharacterView {
                         <span>${stats.agility}</span>
                     </div>
 
-                    <div class="character-divider"></div>
+                    <div class="character-divider"><hr></div>
 
                     <div class="character-stat">
                         <span>Chance Crítica</span>

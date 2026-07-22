@@ -82,6 +82,7 @@
     display:flex;
     justify-content:space-between;
     align-items:center;
+    margin-bottom: 5px;
 }
 .character-name{
     text-align:center;
@@ -107,35 +108,73 @@
    BARRAS
 ========================================================== */
 .character-bars{
+
     display:flex;
     flex-direction:column;
     gap:10px;
+
 }
+
 .character-bar{
     position:relative;
-    height:22px;
-    border:2px solid #5f6580;
+    height:24px;
+    border:1px solid #8b7355;
+    border-radius:5px;
     background:#111;
     overflow:hidden;
 }
-.character-fill{
-    height:100%;
+
+/* ==========================
+   LABEL
+========================== */
+.character-label{
+    position:absolute;
+    left:8px;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:3;
+    font-family:"Cinzel",serif;
+    font-size:12px;
+    font-weight:bold;
+    color:#ecd8b3;
+    letter-spacing:1px;
+    text-shadow:0 1px 2px #000;
 }
+
+/* ==========================
+   BARRAS
+========================== */
+.character-fill{
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    transition:width .25s ease;
+    z-index:1;
+}
+
 .character-fill.hp{
     background:linear-gradient(180deg,#ff5b5b,#c7315d);
 }
+
 .character-fill.xp{
     background:linear-gradient(180deg,#4b8cff,#0050fc);
 }
-.character-bar span{
+
+/* ==========================
+   TEXTO
+========================== */
+.character-text{
     position:absolute;
     inset:0;
     display:flex;
     justify-content:center;
     align-items:center;
+    z-index:2;
     color:#fff;
     font-size:13px;
     font-weight:bold;
+    font-family:"Cinzel",serif;
     text-shadow:0 1px 2px #000;
 }
 
@@ -143,9 +182,14 @@
    ATRIBUTOS
 ========================================================== */
 .character-stats{
+    margin-top: 20px;
     display:flex;
     flex-direction:column;
-    gap:8px;
+    gap: 5px;
+}
+hr{
+    border: 1px solid #d4a373;
+    margin: 2px;
 }
 .character-stat{
     display:flex;

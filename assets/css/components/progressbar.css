@@ -2,27 +2,47 @@
    BARRAS
 ========================================================== */
 .hud-bar{
-    width:100%;
-    height:22px;
-    background:#111;
-    border:2px solid #8b7355;
     position:relative;
+    width:100%;
+    height:24px;
+    background:#111;
+    margin-top:5px;
+    border-radius:5px;
     overflow:hidden;
+}
+
+/* ==========================================================
+   LABEL
+========================================================== */
+.hud-label{
+    position:absolute;
+    left:8px;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:3;
+    font-family:"Cinzel",serif;
+    font-size:12px;
+    font-weight:bold;
+    color:#f4d6a1;
+    text-shadow:0 1px 2px rgba(0,0,0,.9);
+    letter-spacing:1px;
 }
 
 /* ==========================================================
    PREENCHIMENTO
 ========================================================== */
 .hud-fill{
-    height:100%;
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
     transition:width .3s ease;
+    z-index:1;
 }
 .hud-fill.hp{
-    width:100%;
     background:linear-gradient(180deg,#ff5b5b,#C7315D);
 }
 .hud-fill.xp{
-    width:0%;
     background:linear-gradient(180deg,#4b8cff,#0050fc);
 }
 
@@ -35,6 +55,7 @@
     display:flex;
     justify-content:center;
     align-items:center;
+    z-index:2;
     font-family:"Cinzel",serif;
     font-size:13px;
     font-weight:bold;

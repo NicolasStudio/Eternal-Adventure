@@ -134,15 +134,15 @@ export default class CombatEngine {
 
             return `
                 <span class="combat-critical">Ataque Crítico!</span><br>
-                Você recebeu <strong>${this.monster.status.nomeAtaque}</strong>,
-                levando <strong>${result.damage}</strong> de dano.
+                Você recebeu <strong>${this.monster.status.nomeAtaque}</strong>, 
+                <strong>${result.damage}</strong> de dano.
             `;
 
         }
 
         return `
-            Você recebeu <strong>${this.monster.status.nomeAtaque}</strong>,
-            levando <strong>${result.damage}</strong> de dano.
+            Você recebeu <strong>${this.monster.status.nomeAtaque}</strong>, 
+            <strong>${result.damage}</strong> de dano.
         `;
 
     }

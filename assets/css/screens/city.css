@@ -5,8 +5,8 @@
     position:absolute;
     inset:50% auto auto 50%;
     transform:translate(-50%,-50%);
-    width:min(1100px,90vw);
-    height:min(750px,80vh);
+    width:min(1100px,92vw);
+    height:min(760px,88vh);
     display:flex;
     flex-direction:column;
     background:rgba(20,12,8,.75);
@@ -202,17 +202,224 @@
 /* ==========================================================
    RESPONSIVO
 ========================================================== */
-@media (max-width:900px){
-    .city-grid{
-        grid-template-columns:repeat(2,minmax(240px,1fr));
-    }
-}
-@media (max-width:650px){
+
+/* ----------------------------------------------------------
+   NOTEBOOKS (1366x768 / 1600x900)
+---------------------------------------------------------- */
+
+@media (max-width:1366px), (max-height:768px){
+
     .city-window{
-        width:96vw;
-        height:96vh;
+
+        width:94vw;
+        height:88vh;
+
     }
+
+    .city-header{
+
+        height:52px;
+        padding:0 18px;
+
+    }
+
+    .city-header h2{
+
+        font-size:22px;
+        letter-spacing:2px;
+
+    }
+
+    .city-close{
+
+        width:36px;
+        height:36px;
+        font-size:18px;
+
+    }
+
+    .city-body{
+
+        padding:22px;
+
+    }
+
+    .city-container{
+
+        gap:22px;
+
+    }
+
+    .city-title{
+
+        font-size:28px;
+        letter-spacing:5px;
+
+    }
+
     .city-grid{
-        grid-template-columns:1fr;
+
+        gap:22px;
+
     }
+
+    /* Mantém os cards praticamente iguais */
+
+    .city-card-image{
+
+        height:240px;
+
+    }
+
+    .city-name{
+
+        font-size:24px;
+
+    }
+
+    .city-option{
+
+        padding:12px 0;
+        font-size:15px;
+
+    }
+
+    .city-enter{
+
+        width:280px;
+        height:42px;
+        font-size:16px;
+
+    }
+
+}
+
+/* ----------------------------------------------------------
+   TABLETS
+---------------------------------------------------------- */
+
+@media (max-width:992px){
+
+    .city-window{
+
+        width:96vw;
+        height:92vh;
+
+    }
+
+    .city-body{
+
+        padding:20px;
+
+    }
+
+    .city-grid{
+
+        grid-template-columns:repeat(2,minmax(240px,1fr));
+        gap:20px;
+
+    }
+
+    .city-card-image{
+
+        height:220px;
+
+    }
+
+}
+
+/* ----------------------------------------------------------
+   CELULAR
+---------------------------------------------------------- */
+
+@media (max-width:768px){
+
+    .city-window{
+
+        width:100vw;
+        height:100vh;
+
+        border:none;
+        border-radius:0;
+
+    }
+
+    .city-header{
+
+        height:48px;
+        padding:0 14px;
+
+    }
+
+    .city-header h2{
+
+        font-size:18px;
+
+    }
+
+    .city-body{
+
+        padding:16px;
+
+    }
+
+    .city-title{
+
+        font-size:22px;
+        letter-spacing:3px;
+
+    }
+
+    .city-grid{
+
+        grid-template-columns:1fr;
+        gap:18px;
+
+    }
+
+    .city-card{
+
+        max-width:360px;
+        margin:auto;
+
+    }
+
+    .city-card-image{
+
+        height:220px;
+
+    }
+
+    .city-name{
+
+        font-size:22px;
+
+    }
+
+}
+
+/* ----------------------------------------------------------
+   ULTRAWIDE
+---------------------------------------------------------- */
+
+@media (min-width:1920px){
+
+    .city-window{
+
+        width:1150px;
+        height:780px;
+
+    }
+
+}
+
+@media (min-width:2560px){
+
+    .city-window{
+
+        width:1250px;
+        height:840px;
+
+    }
+
 }
