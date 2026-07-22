@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;700&display=swap');
 .home {
     width: 100%;
-    height: 100vh;
+    min-height:100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -38,12 +38,11 @@
 }
 
 .home_logo {
-    width: 550px;
+    width:min(550px,80vw);
     filter: drop-shadow(0 0 30px rgba(180, 120, 70, 0.3));
     transition: filter 0.5s ease;
     position: relative;
     z-index: 1;
-    top: -70px;
     height: auto;
 }
 
@@ -54,14 +53,14 @@
 .menu {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 14px;
     position: relative;
     z-index: 1;
 }
 
 .menu button {
-    width: 240px;
-    height: 50px;
+    width:220px;
+    height:46px;
     cursor: pointer;
     background: linear-gradient(180deg, #2c1810 0%, #1a0f0a 100%);
     border: 2px solid #8b7355;
@@ -150,7 +149,7 @@
     color: #8b7355;
     font-size: 14px;
     letter-spacing: 4px;
-    opacity: 0.6;
+    opacity:.95;
     position: relative;
     z-index: 1;
     margin-top: 10px;
@@ -182,9 +181,26 @@
     pointer-events: none;
 }
 
-.home small{
-    opacity:.95;
-    font-size:13px;
+@media (max-width:1366px), (max-height:768px){
+
+    .home_logo{
+        width:430px;
+    }
+
+    .menu{
+        gap:14px;
+    }
+
+    .menu button{
+        width:220px;
+        height:46px;
+        font-size:15px;
+    }
+
+    .home small{
+        margin-top:8px;
+        font-size:12px;
+    }
 }
 
 /* Responsividade */

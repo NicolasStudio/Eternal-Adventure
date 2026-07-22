@@ -35,7 +35,6 @@ export default class CombatEngine {
     }
 
     attack() {
-
         const playerTurn = this.currentTurn === "player";
 
         const attacker = playerTurn

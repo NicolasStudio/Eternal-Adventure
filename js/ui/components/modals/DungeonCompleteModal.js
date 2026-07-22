@@ -27,7 +27,7 @@ export default class DungeonCompleteModal {
             <div class="dungeon-complete-modal">
 
                 <h2 class="dungeon-complete-title">
-                    🏆 DUNGEON CONCLUÍDA
+                    DUNGEON CONCLUÍDA!!!
                 </h2>
 
                 <p class="dungeon-complete-name">

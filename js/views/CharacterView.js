@@ -574,7 +574,18 @@ export default class CharacterView {
 
             this.game.hudScreen.currentView = "dungeon";
 
-            await this.game.hudScreen.combatView.startNextFloor();
+            this.game.hudScreen.refreshCurrentView();
+
+            if (this.game.hudScreen.onPreparationFinished) {
+
+                const resolve =
+                    this.game.hudScreen.onPreparationFinished;
+
+                this.game.hudScreen.onPreparationFinished = null;
+
+                resolve();
+
+            }
 
             return;
 
@@ -583,6 +594,7 @@ export default class CharacterView {
         this.game.hudScreen.currentView = "";
 
         this.game.hudScreen.render();
+
         this.game.hudScreen.registerEvents();
 
     }

@@ -1,147 +1,301 @@
 /* ==========================================================
    MARKET WINDOW
 ========================================================== */
+
 .market-window{
     position:absolute;
-    top:50%;
-    left:50%;
+    inset:50% auto auto 50%;
     transform:translate(-50%,-50%);
-    width:min(1000px,90vw);
-    height:min(700px,90vh);
+    width:min(1100px,92vw);
+    height:min(720px,92vh);
+
     display:flex;
     flex-direction:column;
+
     overflow:hidden;
-    background:rgba(20,12,8,.75);
-    backdrop-filter:blur(12px);
+
+    background:
+        linear-gradient(rgba(0,0,0,.18),rgba(0,0,0,.18)),
+        radial-gradient(circle at top,#24160d 0%,#120b07 70%,#0a0604 100%);
+
     border:2px solid #8b7355;
     border-radius:10px;
-    box-shadow:0 0 60px rgba(0,0,0,.55), inset 0 0 40px rgba(0,0,0,.35);
+
+    box-shadow:
+        0 0 60px rgba(0,0,0,.6),
+        inset 0 0 60px rgba(0,0,0,.35);
+
     z-index:50;
 }
 
-.city-enter:disabled{
-    opacity:.45;
-    cursor:not-allowed;
-    filter:grayscale(.4);
+.market-window::before{
+    content:"";
+    position:absolute;
+    inset:8px;
+    border:1px solid rgba(212,181,129,.15);
+    border-radius:6px;
+    pointer-events:none;
 }
 
 /* ==========================================================
    BODY
 ========================================================== */
+
 .market-body{
     flex:1;
+
     display:grid;
     grid-template-columns:320px 1fr;
-    gap:24px;
-    padding:24px;
+
+    gap:22px;
+
+    padding:22px;
+
+    min-height:0;
     overflow:hidden;
 }
 
 /* ==========================================================
    PAINÉIS
 ========================================================== */
+
 .market-left,
 .market-right{
+
     position:relative;
+
     display:flex;
     flex-direction:column;
+
+    min-height:0;
+
     overflow:hidden;
+
+    background:rgba(15,9,6,.82);
+
     border:2px solid #8b7355;
     border-radius:8px;
-    background:radial-gradient(circle,#1b120c 0%,#0f0906 100%);
-    box-shadow:inset 0 0 60px rgba(0,0,0,.45), 0 8px 30px rgba(0,0,0,.35);
+
+    box-shadow:
+        inset 0 0 40px rgba(0,0,0,.45),
+        0 10px 25px rgba(0,0,0,.25);
+
 }
+
+.city-option.city-action{
+    transition: .2s ease;
+    cursor: pointer;
+}
+
+.city-option.city-action:hover{
+    background: #8b7355;
+    color: #fff;
+    border-color: #c8a46b;
+}
+
+.city-option.city-action.disabled{
+    cursor: default;
+}
+
+.city-option.city-action.disabled:hover{
+    background: transparent;
+    color: inherit;
+    border-color: inherit;
+    transform: none;
+}
+
 .market-left::before,
 .market-right::before{
+
     content:"";
+
     position:absolute;
+
     inset:6px;
-    border:1px solid rgba(139,115,85,.18);
-    border-radius:5px;
+
+    border:1px solid rgba(212,181,129,.15);
+
+    border-radius:4px;
+
     pointer-events:none;
+
 }
 
 /* ==========================================================
    COLUNAS
 ========================================================== */
+
 .market-left{
-    min-width:320px;
+
+    width:320px;
+    flex-shrink:0;
+
 }
+
 .market-right{
+
     min-width:0;
+    flex:1;
+
 }
 
 /* ==========================================================
    PLACEHOLDER
 ========================================================== */
+
 .market-placeholder,
 .market-empty{
+
     flex:1;
+
     display:flex;
     flex-direction:column;
     justify-content:center;
     align-items:center;
-    text-align:center;
+
     gap:18px;
+
     padding:40px;
+
+    text-align:center;
+
     color:#bda57d;
-    overflow: auto;
+
 }
+
 .market-placeholder i,
 .market-empty i{
-    font-size:52px;
+
+    font-size:54px;
+
     color:#8b7355;
+
+    opacity:.9;
+
 }
+
 .market-placeholder h3{
+
     margin:0;
+
     font-family:"Cinzel",serif;
+
     font-size:30px;
+
     color:#ecd8b3;
+
     letter-spacing:2px;
+
 }
+
 .market-placeholder p,
 .market-empty span{
+
     margin:0;
-    max-width:320px;
-    line-height:1.6;
+
+    max-width:360px;
+
+    line-height:1.7;
+
     color:#bda57d;
+
+}
+
+/* ==========================================================
+   SCROLLBAR
+========================================================== */
+
+.market-left::-webkit-scrollbar,
+.market-right::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+.market-left::-webkit-scrollbar-thumb,
+.market-right::-webkit-scrollbar-thumb{
+
+    background:#8b7355;
+    border-radius:20px;
+
+}
+
+.market-left::-webkit-scrollbar-track,
+.market-right::-webkit-scrollbar-track{
+
+    background:rgba(255,255,255,.04);
+
 }
 
 /* ==========================================================
    RESPONSIVO
 ========================================================== */
+
 @media (max-width:1100px){
+
     .market-window{
+
         width:95vw;
         height:92vh;
+
     }
+
     .market-body{
-        grid-template-columns:280px 1fr;
+
+        grid-template-columns:300px 1fr;
+
         gap:18px;
+
         padding:18px;
+
     }
+
 }
+
 @media (max-width:900px){
+
     .market-body{
+
         display:flex;
         flex-direction:column;
+
     }
+
     .market-left{
+
+        width:100%;
         min-height:260px;
+
     }
+
 }
+
 @media (max-width:768px){
+
     .market-window{
+
         width:98vw;
         height:96vh;
+
     }
+
     .market-body{
-        padding:16px;
+
+        padding:14px;
+
+        gap:14px;
+
     }
+
 }
+
 @media (min-width:2000px){
+
     .market-window{
-        width:1250px;
+
+        width:1280px;
         height:860px;
+
     }
+
 }

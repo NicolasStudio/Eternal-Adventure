@@ -1,34 +1,33 @@
 /* ==========================================================
    TELA DE SELEÇÃO DE CLASSE
 ========================================================== */
-.class-selection {
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 35px;
-    background: radial-gradient(ellipse at center, #1a0f0a 0%, #0d0705 100%);
-    position: relative;
-    overflow: hidden;
+.class-selection{
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:32px;
+    padding:30px 20px;
+    background:radial-gradient(ellipse at center,#1a0f0a 0%,#0d0705 100%);
+    position:relative;
+    overflow:hidden;
 }
-
-.class-selection::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d4a373' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
-    pointer-events: none;
+.class-selection::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d4a373' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+    pointer-events:none;
 }
-
-.class-selection h1 {
-    font-family: "Cinzel", serif;
-    font-size: 48px;
-    color: #f0d5b0;
-    text-shadow: 0 0 20px rgba(0,0,0,.6);
-    position: relative;
-    z-index: 2;
+.class-selection h1{
+    position:relative;
+    z-index:2;
+    font-family:"Cinzel",serif;
+    font-size:44px;
+    color:#f0d5b0;
+    text-shadow:0 0 20px rgba(0,0,0,.6);
 }
 
 /* ==========================================================
@@ -37,95 +36,87 @@
 .class-grid{
     display:flex;
     justify-content:center;
-    gap:30px;
+    flex-wrap:wrap;
+    gap:28px;
     position:relative;
     z-index:2;
 }
-
 .class-card{
     width:220px;
     padding:20px;
     cursor:pointer;
     border:2px solid #8b7355;
     border-radius:4px;
-    background:linear-gradient(180deg, #2c1810 0%, #1a0f0a 100%);
+    background:linear-gradient(180deg,#2c1810 0%,#1a0f0a 100%);
     transition:.25s;
     box-shadow:inset 0 0 30px rgba(0,0,0,.45), 0 5px 15px rgba(0,0,0,.5);
 }
-
 .class-card:hover{
     transform:translateY(-8px);
     border-color:#d4a373;
     box-shadow:inset 0 0 30px rgba(0,0,0,.45), 0 0 25px rgba(212,163,115,.25);
 }
-
 .class-card.selected{
+    transform:translateY(-8px);
     border-color:#ec9238;
-    box-shadow:inset 0 0 30px rgba(0,0,0,0.9), 0 0 30px rgba(255, 158, 79, 0.2);
+    box-shadow:inset 0 0 30px rgba(0,0,0,.75), 0 0 30px rgba(236,146,56,.35);
 }
-
 .class-card img{
     width:140px;
     display:block;
     margin:auto;
     image-rendering:pixelated;
 }
-
 .class-card h2{
-    margin-top:20px;
+    margin-top:18px;
     text-align:center;
     color:#f0d5b0;
-    font-family:"Cinzel", serif;
+    font-family:"Cinzel",serif;
     font-size:18px;
     letter-spacing:1px;
 }
 
 /* ==========================================================
-   PAINEL DE INFORMAÇÕES
+   PAINEL
 ========================================================== */
 .class-info{
-    width:820px;
-    min-height:220px;
-    background:linear-gradient(180deg, #1b100b 0%, #100806 100%);
+    width:min(850px,95%);
+    min-height:210px;
+    padding:30px;
+    background:linear-gradient(180deg,#1b100b 0%,#100806 100%);
     border:2px solid #8b7355;
     border-radius:4px;
-    padding:30px;
+    box-shadow:inset 0 0 35px rgba(0,0,0,.5), 0 8px 20px rgba(0,0,0,.45);
     position:relative;
     z-index:2;
-    box-shadow:inset 0 0 35px rgba(0,0,0,.5), 0 8px 20px rgba(0,0,0,.45);
 }
-
 .class-info h2{
-    font-family:"Cinzel", serif;
+    font-family:"Cinzel",serif;
     color:#f0d5b0;
-    font-size:34px;
-    margin-bottom:10px;
+    font-size:30px;
+    margin-bottom:12px;
 }
-
 .class-info p{
     color:#d4a373;
-    margin-bottom:25px;
-    line-height:1.6;
     font-size:17px;
+    line-height:1.6;
+    margin-bottom:24px;
 }
-
 .class-info ul{
     list-style:none;
     display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:15px 50px;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px 40px;
 }
-
 .class-info li{
     display:flex;
     justify-content:space-between;
     align-items:center;
     padding:8px 0;
-    color:#f0d5b0;
     border-bottom:1px solid rgba(139,115,85,.25);
-    font-family:"Cinzel", serif;
+    color:#f0d5b0;
+    font-family:"Cinzel",serif;
 }
-
 .class-info li span{
     color:#d4a373;
 }
@@ -135,21 +126,19 @@
 ========================================================== */
 .class-actions{
     display:flex;
-    flex-direction:column;
-    gap:15px;
-    align-items:center;
+    justify-content:center;
+    gap:20px;
     position:relative;
     z-index:2;
 }
-
 .class-actions button{
-    width:240px;
+    width:260px;
     height:50px;
     cursor:pointer;
-    background:linear-gradient(180deg, #2c1810 0%, #1a0f0a 100%);
+    background:linear-gradient(180deg,#2c1810 0%,#1a0f0a 100%);
     border:2px solid #8b7355;
     color:#d4a373;
-    font-family:"Cinzel", serif;
+    font-family:"Cinzel",serif;
     font-size:16px;
     font-weight:bold;
     letter-spacing:2px;
@@ -157,32 +146,123 @@
     transition:.25s;
     box-shadow:inset 0 0 30px rgba(0,0,0,.5), 0 5px 15px rgba(0,0,0,.5);
 }
-
 .class-actions button:hover:not(:disabled){
     border-color:#d4a373;
     color:#f0d5b0;
     transform:scale(1.02);
     box-shadow:inset 0 0 30px rgba(0,0,0,.5), 0 0 30px rgba(212,163,115,.25);
 }
-
 .class-actions button:disabled{
-    opacity:.4;
+    opacity:.45;
     cursor:not-allowed;
     filter:grayscale(.6);
 }
 
 /* ==========================================================
-   RESPONSIVO
+   NOTEBOOK 1366x768
 ========================================================== */
-@media(max-width:900px){
+@media (max-width:1366px), (max-height:768px){
+    .class-selection{
+        gap:22px;
+        padding:20px;
+    }
+    .class-selection h1{
+        font-size:38px;
+    }
+    .class-grid{
+        gap:18px;
+    }
+    .class-card{
+        width:190px;
+        padding:15px;
+    }
+    .class-card img{
+        width:115px;
+    }
+    .class-card h2{
+        margin-top:12px;
+        font-size:17px;
+    }
+    .class-info{
+        min-height:170px;
+        padding:20px;
+    }
+    .class-info h2{
+        font-size:28px;
+    }
+    .class-info p{
+        font-size:15px;
+        margin-bottom:18px;
+        line-height:1.45;
+    }
+    .class-info ul{
+        gap:10px 25px;
+    }
+    .class-actions{
+        gap:15px;
+    }
+    .class-actions button{
+        width:260px;
+        height:46px;
+        font-size:15px;
+    }
+}
+
+/* ==========================================================
+   TABLETS
+========================================================== */
+@media (max-width:900px){
+    .class-selection{
+        padding:30px 15px;
+    }
+    .class-grid{
+        gap:18px;
+    }
+    .class-card{
+        width:180px;
+    }
+    .class-info{
+        width:100%;
+    }
+    .class-info ul{
+        grid-template-columns:1fr;
+    }
+}
+
+/* ==========================================================
+   CELULARES
+========================================================== */
+@media (max-width:600px){
+    .class-selection{
+        justify-content:flex-start;
+        padding:25px 15px;
+    }
+    .class-selection h1{
+        font-size:30px;
+        text-align:center;
+    }
     .class-grid{
         flex-direction:column;
         align-items:center;
     }
-    .class-info{
-        width:95%;
+    .class-card{
+        width:220px;
     }
-    .class-info ul{
-        grid-template-columns:1fr;
+    .class-info{
+        padding:18px;
+    }
+    .class-info h2{
+        font-size:24px;
+    }
+    .class-info p{
+        font-size:14px;
+    }
+    .class-actions{
+        flex-direction:column;
+        width:100%;
+    }
+    .class-actions button{
+        width:100%;
+        max-width:260px;
     }
 }

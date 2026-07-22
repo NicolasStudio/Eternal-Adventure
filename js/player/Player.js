@@ -68,43 +68,121 @@ export default class Player {
     }
 
     addItem(item) {
+
         if (!item) return;
+
         const stackable = item.type === "item";
+
         if (stackable) {
-            const existingItem = this.inventory.find(inventoryItem => inventoryItem.id === item.id);
+
+            const existingItem = this.inventory.find(
+                inventoryItem => inventoryItem.id === item.id
+            );
+
             if (existingItem) {
+
                 existingItem.quantity++;
+
                 this.notify();
+
                 return;
+
             }
+
         }
-        this.inventory.push({ ...item, quantity: 1 });
+
+        this.inventory.push({
+
+            ...structuredClone(item),
+
+            uid: crypto.randomUUID(),
+
+            quantity:1
+
+        });
 
         this.notify();
+
     }
 
     equipItem(item) {
+
         if (!item) return false;
+
         if (item.class !== this.class.id) {
             return false;
         }
+
         const slot = item.slot;
+
         if (this.equipment[slot]) {
             this.addItem(this.equipment[slot]);
         }
-        this.inventory = this.inventory.filter(i => i !== item);
+
+        this.inventory = this.inventory.filter(i => i.uid !== item.uid);
+
         this.equipment[slot] = item;
+
         this.notify();
+
         return true;
+
     }
 
     unequipItem(slot) {
+
         const item = this.equipment[slot];
+
         if (!item) return false;
+
         this.addItem(item);
+
         this.equipment[slot] = null;
+
         this.notify();
+
         return true;
+
+    }
+
+    removeItem(item) {
+
+        if (!item) return;
+
+        const inventoryItem = this.inventory.find(i => i.uid === item.uid);
+
+        if (!inventoryItem) return;
+
+        if (inventoryItem.quantity > 1) {
+
+            inventoryItem.quantity--;
+
+        } else {
+
+            this.inventory = this.inventory.filter(i => i.uid !== item.uid);
+
+        }
+
+        this.notify();
+
+    }
+
+    sellItem(item) {
+
+        if (!item) return false;
+
+        if (!item.sellValue) return false;
+
+        const inventoryItem = this.inventory.find(i => i.uid === item.uid);
+
+        if (!inventoryItem) return false;
+
+        this.addGold(inventoryItem.sellValue);
+
+        this.removeItem(inventoryItem);
+
+        return true;
+
     }
 
     addXP(amount) {
@@ -193,43 +271,4 @@ export default class Player {
 
     }
 
-    removeItem(item) {
-
-        if (!item) return;
-
-        const inventoryItem = this.inventory.find(i => i.id === item.id);
-
-        if (!inventoryItem) return;
-
-        if (inventoryItem.quantity > 1) {
-
-            inventoryItem.quantity--;
-
-        } else {
-
-            this.inventory = this.inventory.filter(i => i !== inventoryItem);
-
-        }
-
-        this.notify();
-
-    }
-
-    sellItem(item) {
-
-        if (!item) return false;
-
-        if (!item.sellValue) return false;
-
-        const inventoryItem = this.inventory.find(i => i.id === item.id);
-
-        if (!inventoryItem) return false;
-
-        this.addGold(inventoryItem.sellValue);
-
-        this.removeItem(inventoryItem);
-
-        return true;
-
-    }
 }

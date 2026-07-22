@@ -21,7 +21,7 @@ export default class LevelUpModal {
                     </button>
 
                     <h2 class="levelup-title">
-                        ⭐ LEVEL UP ⭐
+                         LEVEL UP 
                     </h2>
 
                     <p class="levelup-level">

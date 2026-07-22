@@ -11,7 +11,7 @@ const monsters = [
         sprite: "assets/img/monsters/creature_1/wolf.png",
 
         status: {
-            vidaMaxima: 50,
+            vidaMaxima: 10,
             dano: 7,
             nomeAtaque: "Mordida",
             armadura: 3,
@@ -41,7 +41,7 @@ const monsters = [
         sprite: "assets/img/monsters/creature_1/boar.png",
 
         status: {
-            vidaMaxima: 80,
+            vidaMaxima: 10,
             dano: 8,
             nomeAtaque: "Investida",
             armadura: 4,
@@ -71,7 +71,7 @@ const monsters = [
         sprite: "assets/img/monsters/creature_1/three_wolf.png",
 
         status: {
-            vidaMaxima: 100,
+            vidaMaxima: 10,
             dano: 18,
             nomeAtaque: "Mordida Tripla",
             armadura: 5,

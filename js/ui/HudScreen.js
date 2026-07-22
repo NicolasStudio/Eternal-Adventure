@@ -33,6 +33,7 @@ export default class HudScreen {
         this.currentMonster = null;
         this.backgroundImage = "";
         this.preparationMode = false;
+        this.onPreparationFinished = null;
     }
 
     render() {
@@ -90,7 +91,6 @@ export default class HudScreen {
     }
 
     renderContent() {
-
         if (!this.characterVisible) return "";
 
         switch (this.currentView) {
@@ -267,13 +267,23 @@ export default class HudScreen {
 
         this.characterVisible = false;
 
-        if (this.preparationMode && this.combatView.currentFloor >= 1) {
+        if (this.preparationMode) {
 
             this.exitPreparationMode();
 
-            this.changeView("dungeon");
+            this.currentView = "dungeon";
 
-            await this.combatView.startNextFloor();
+            this.refreshCurrentView();
+
+            if (this.onPreparationFinished) {
+
+                const resolve = this.onPreparationFinished;
+
+                this.onPreparationFinished = null;
+
+                resolve();
+
+            }
 
             return;
 

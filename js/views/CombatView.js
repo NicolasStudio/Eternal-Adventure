@@ -3,6 +3,7 @@ import CombatEngine from "../combat/CombatEngine.js";
 import LootSystem from "../combat/LootSystem.js";
 import LevelUpModal from "../ui/components/modals/LevelUpModal.js";
 import RewardModal from "../ui/components/modals/RewardModal.js";
+import CombatToast from "../combat/CombatToast.js";
 import ContinueDungeonModal from "../ui/components/modals/ContinueDungeonModal.js";
 import InventoryPromptModal from "../ui/components/modals/InventoryPromptModal.js";
 import DungeonCompleteModal from "../ui/components/modals/DungeonCompleteModal.js";
@@ -58,7 +59,18 @@ export default class CombatView {
         this.currentDungeon = dungeon;
         this.currentFloor = 1;
 
-        await this.enterFloor();
+        while (this.currentFloor <= this.currentDungeon.fights) {
+
+            const result = await this.enterFloor();
+
+            if (!result) {
+                return;
+            }
+
+            this.currentFloor++;
+        }
+
+        await this.finishDungeon();
 
     }
 
@@ -83,34 +95,40 @@ export default class CombatView {
 
         this.engine.currentTurn = initiative;
 
-        this.messages = [];
-        this.pendingMessages = [];
-
-        // <<< IMPORTANTE
+        // Atualiza a HUD para renderizar a arena e o monstro
         this.game.hudScreen.currentView = "dungeon";
         this.game.hudScreen.refreshCurrentView();
 
+        // Aguarda um frame para garantir que o DOM foi atualizado
+        await new Promise(resolve => requestAnimationFrame(resolve));
+
         if (this.currentFloor === 1) {
 
-            this.queueMessage(
-                `Você entrou em <strong>${this.currentDungeon.name}</strong>.`
+            await CombatToast.show(
+                `Entrou em ${this.currentDungeon.name}`,
+                "system"
             );
 
         }
 
-        this.queueMessage(`Andar ${this.currentFloor}`);
-
-        this.queueMessage(`${this.currentMonster.name} apareceu!`);
-
-        this.queueMessage(
-            initiative === "player"
-                ? "Você tomou a iniciativa!"
-                : `${this.currentMonster.name} tomou a iniciativa!`
+        await CombatToast.show(
+            `Andar ${this.currentFloor}`,
+            "system"
         );
 
-        await this.flushMessages();
+        await CombatToast.show(
+            `${this.currentMonster.name} apareceu!`,
+            "system"
+        );
 
-        await this.combatLoop();
+        await CombatToast.show(
+            initiative === "player"
+                ? "Você iniciou o combate!"
+                : `${this.currentMonster.name} iniciou o combate!`,
+            "system"
+        );
+
+        return await this.combatLoop();
 
     }
 
@@ -122,107 +140,110 @@ export default class CombatView {
 
             const state = this.engine.checkCombatState();
 
-            if (state.finished) {
+            if (!state.finished) {
 
-                this.queueMessage(
-                    state.winner === "player"
-                        ? `${this.currentMonster.name} foi derrotado!`
-                        : "Você foi derrotado!"
+                this.engine.nextTurn();
+
+                await this.sleep(this.turnDelay);
+
+                continue;
+
+            }
+
+            await CombatToast.show(
+
+                state.winner === "player"
+                    ? `${this.currentMonster.name} derrotado!`
+                    : "Você foi derrotado!",
+
+                "system"
+
+            );
+
+            if (state.winner === "player") {
+
+                const reward = LootSystem.generate(
+                    this.currentMonster,
+                    this.game.player
                 );
 
-                await this.flushMessages();
+                await this.rewardModal.show(reward);
 
-                if (state.winner === "player") {
+                const levelUps =
+                    this.game.player.collectReward(reward);
 
-                    const reward = LootSystem.generate(
-                        this.currentMonster,
-                        this.game.player
+                this.game.hudScreen.refreshCurrentView();
+
+                for (const levelUp of levelUps) {
+
+                    await this.levelUpModal.show(
+                        levelUp.level,
+                        levelUp.bonus
                     );
 
-                    // ==========================
-                    // RECOMPENSA
-                    // ==========================
-                    await this.rewardModal.show(reward);
+                }
 
-                    const levelUps = this.game.player.collectReward(reward);
+                // Último andar
+                if (this.currentFloor >= this.currentDungeon.fights) {
 
+                    await this.finishDungeon();
+
+                    return;
+
+                }
+
+                // =====================================================
+                // PRIMEIRO PERGUNTA SE DESEJA ABRIR O INVENTÁRIO
+                // =====================================================
+
+                const openInventory =
+                    await this.inventoryPromptModal.show();
+
+                if (openInventory) {
+
+                    this.game.hudScreen.enterPreparationMode();
+
+                    await new Promise(resolve => {
+
+                        this.game.hudScreen.onPreparationFinished = resolve;
+
+                    });
+
+                    this.game.hudScreen.exitPreparationMode();
+
+                    this.game.hudScreen.currentView = "dungeon";
                     this.game.hudScreen.refreshCurrentView();
 
-                    for (const levelUp of levelUps) {
+                }
 
-                        await this.levelUpModal.show(
-                            levelUp.level,
-                            levelUp.bonus
-                        );
+                // =====================================================
+                // DEPOIS PERGUNTA SE DESEJA CONTINUAR
+                // =====================================================
 
+                const continueDungeon =
+                    await this.continueDungeonModal.show();
 
-                    }
-
-                    // ==========================
-                    // DUNGEON CONCLUÍDA
-                    // ==========================
-                    if (this.currentFloor >= this.currentDungeon.fights) {
-
-                        await this.finishDungeon();
-
-                        return;
-
-                    }
-
-                    // Fecha o combate
-                    await this.closeCombat();
-
-                    // ==========================
-                    // CONTINUAR DUNGEON?
-                    // ==========================
-                    const continueDungeon =
-                        await this.continueDungeonModal.show();
-
-                    if (!continueDungeon) {
-
-                        this.game.hudScreen.exitCombat();
-
-                        return;
-
-                    }
-
-                    // ==========================
-                    // ABRIR INVENTÁRIO?
-                    // ==========================
-                    const openInventory =
-                        await this.inventoryPromptModal.show();
-
-                    if (openInventory) {
-
-                        this.game.hudScreen.enterPreparationMode();
-
-                        return;
-
-                    }
-
-                    // ==========================
-                    // PRÓXIMO ANDAR
-                    // ==========================
-                    await this.startNextFloor();
-
-                } else {
+                if (!continueDungeon) {
 
                     await this.closeCombat();
 
                     this.game.hudScreen.exitCombat();
 
-                    // Futuramente:
-                    // await this.showGameOver();
+                    return false;
 
                 }
 
-                break;
+                return true;
 
             }
 
-            this.engine.nextTurn();
+            // Derrota
 
-            await this.sleep(this.turnDelay);
+            await this.closeCombat();
+
+            this.game.hudScreen.exitCombat();
+
+            return false;
 
         }
 
@@ -230,37 +251,34 @@ export default class CombatView {
 
     async playTurn() {
         const result = this.engine.attack();
+
         this.game.hudScreen.playerHUD.updateHP();
         this.game.hudScreen.monsterHUD.updateHP();
-        this.queueMessage(this.engine.createAttackMessage(result));
-        await this.flushMessages();
+
+        const message = this.engine.createAttackMessage(result);
+
+        const type =
+            result.attacker === "player"
+                ? "player"
+                : "enemy";
+
+        await CombatToast.show(message, type);
+
     }
 
     async closeCombat() {
-        await this.sleep(400);
-        const combatWindow = document.querySelector(".combat-window");
-        if (combatWindow) {
-            combatWindow.style.transition = "opacity .35s ease";
-            combatWindow.style.opacity = "0";
-        }
-        await this.sleep(350);
-        this.messages = [];
-        this.pendingMessages = [];
+
+        CombatToast.clear();
+
         this.currentMonster = null;
+
         this.engine = null;
-        const log = document.querySelector(".combat-log");
-        if (log) {
-            log.innerHTML = "";
-        }
-        if (combatWindow) {
-            combatWindow.remove();
-        }
+
         this.game.hudScreen.monsterHUD.hide();
+
     }
 
     async startNextFloor() {
-
-        if (!this.currentDungeon) return;
 
         this.currentFloor++;
 
@@ -268,63 +286,78 @@ export default class CombatView {
 
     }
 
-    async finishDungeon() {
+async finishDungeon() {
 
-        const dungeon = this.currentDungeon;
+    console.log("FINISH DUNGEON");
 
-        await this.dungeonCompleteModal.show(dungeon);
+    const dungeon = this.currentDungeon;
 
-        await this.closeCombat();
+    await this.dungeonCompleteModal.show(dungeon);
 
-        this.game.hudScreen.exitCombat();
+    await this.closeCombat();
 
-    }
+    this.game.hudScreen.exitCombat();
 
-    exit() {
+    return false;
+
+}
+
+    exit(){
+
         this.currentDungeon = null;
+
         this.currentFloor = 1;
+
         this.currentMonster = null;
+
         this.engine = null;
-        this.messages = [];
-        this.pendingMessages = [];
+
     }
 
     render() {
+
         if (!this.currentDungeon || !this.currentMonster) {
+
             return "";
+
         }
+
         return `
             <section class="combat-window">
+
                 <div class="combat-main">
+
                     ${this.renderArena()}
-                    <aside class="combat-sidebar">
-                        ${this.renderLog()}
-                    </aside>
+
                 </div>
+
             </section>
         `;
+
     }
 
     renderArena() {
-        if (!this.currentMonster) {
+        if (!this.currentDungeon || !this.currentMonster) {
             return "";
         }
-        return `
-            <section class="combat-arena">
-                <div class="monster-stage">
-                    <img class="combat-monster" src="${this.currentMonster.sprite}" alt="${this.currentMonster.name}">
-                </div>
-            </section>
-        `;
+
+            return `
+                <section class="combat-arena">
+
+                    <div class="monster-stage">
+
+                        <img
+                            class="combat-monster"
+                            src="${this.currentMonster.sprite}"
+                            alt="${this.currentMonster.name}">
+
+                    </div>
+
+                    <div id="combat-toast-container"></div>
+
+                </section>
+            `;
+
     }
 
-    renderLog() {
-        return `
-            <section class="combat-log">
-                <header class="combat-sidebar-header">Combate</header>
-                <hr>
-                ${this.messages.map(message => `<div class="combat-message">${message}</div>`).join("")}
-            </section>
-        `;
-    }
 }

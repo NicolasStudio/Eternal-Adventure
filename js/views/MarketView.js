@@ -68,9 +68,9 @@ export default class MarketView {
     }
 
     renderItem(item) {
-        const selected = this.selectedItem?.id === item.id;
+        const selected = this.selectedItem?.uid === item.uid;
         return `
-            <button class="market-item ${selected ? "selected" : ""}" data-id="${item.id}">
+            <button class="market-item ${selected ? "selected" : ""}" data-uid="${item.uid}">
                 <img src="${item.icon}" alt="${item.name}" class="market-item-icon">
                 <div class="market-item-content">
                     <span class="market-item-name">${item.name}</span>
@@ -441,7 +441,7 @@ export default class MarketView {
         });
         container.querySelectorAll(".market-item").forEach(button => {
             button.addEventListener("click", () => {
-                const item = this.inventory.find(item => item.id === button.dataset.id);
+                const item = this.inventory.find(item => item.uid === button.dataset.uid);
                 if (!item) return;
                 this.selectedItem = item;
                 this.game.hudScreen.refreshCurrentView();

@@ -27,7 +27,7 @@ const dungeons = [
         drops: [
             {
                 type: ["helmet", "weapon"],
-                rarity: "uncommon"
+                rarity: "common"
             },
             items.smallPotion
         ]

@@ -1,195 +1,259 @@
 import Toast from "../ui/components/Toast.js";
 
-
 export default class CityView {
+
     constructor(game) {
+
         this.game = game;
-        this.selectedCard = null;
+
     }
 
     render() {
+
         return `
             <section class="city-window">
+
                 <header class="city-header">
+
                     <h2>Cidade</h2>
+
                     <button class="city-close">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
+
                 </header>
+
                 <div class="city-body">
+
                     <section class="city-container">
+
                         <div class="city-grid">
-                            <article class="city-card" data-city="blacksmith">
+
+                            <article class="city-card">
+
                                 <div class="city-card-image">
-                                    <img src="./assets/img/backgrounds/cards_city/card_ferraria.png">
+                                    <img src="./assets/img/backgrounds/cards_city/card_ferraria.png" alt="Ferraria">
                                 </div>
+
                                 <div class="city-card-header">
                                     <h3 class="city-name">Ferraria</h3>
                                 </div>
+
                                 <div class="city-card-actions">
-                                    <div class="city-option disabled">🔨 Melhorar Arma</div>
-                                    <div class="city-option disabled">🛡️ Melhorar Armadura</div>
-                                    <div class="city-option disabled">✨ Encantar</div>
+
+                                    <div class="city-option city-action disabled"
+                                         data-message="A Ferraria estará disponível em breve.">
+                                        🔨 Melhorar Arma
+                                    </div>
+
+                                    <div class="city-option city-action disabled"
+                                         data-message="A Ferraria estará disponível em breve.">
+                                        🛡️ Melhorar Armadura
+                                    </div>
+
+                                    <div class="city-option city-action disabled"
+                                         data-message="A Ferraria estará disponível em breve.">
+                                        ✨ Encantar
+                                    </div>
+
                                 </div>
+
                             </article>
-                            <article class="city-card" data-city="market">
+
+                            <article class="city-card">
+
                                 <div class="city-card-image">
-                                    <img src="./assets/img/backgrounds/cards_city/card_market.png">
+                                    <img src="./assets/img/backgrounds/cards_city/card_market.png" alt="Mercado">
                                 </div>
+
                                 <div class="city-card-header">
                                     <h3 class="city-name">Mercado</h3>
                                 </div>
+
                                 <div class="city-card-actions">
-                                    <div class="city-option disabled">🛒 Comprar</div>
-                                    <div class="city-option">💰 Vender</div>
+
+                                    <div class="city-option city-action disabled"
+                                         data-message="A compra de itens estará disponível em breve.">
+                                        🛒 Comprar
+                                    </div>
+
+                                    <div class="city-option city-action"
+                                         data-view="market">
+                                        💰 Vender
+                                    </div>
+
                                 </div>
+
                             </article>
-                            <article class="city-card" data-city="infirmary">
+
+                            <article class="city-card">
+
                                 <div class="city-card-image">
-                                    <img src="./assets/img/backgrounds/cards_city/card_nursing.png">
+                                    <img src="./assets/img/backgrounds/cards_city/card_nursing.png" alt="Enfermaria">
                                 </div>
+
                                 <div class="city-card-header">
                                     <h3 class="city-name">Enfermaria</h3>
                                 </div>
+
                                 <div class="city-card-actions">
-                                    <div class="city-option disabled">Em breve</div>
+
+                                    <div class="city-option city-action disabled"
+                                         data-message="A Enfermaria estará disponível em breve.">
+                                        Em breve
+                                    </div>
+
                                 </div>
+
                             </article>
+
                         </div>
-                        <div class="city-actions">
-                            <button class="city-enter">Entrar</button>
-                        </div>
+
                     </section>
+
                 </div>
+
             </section>
         `;
+
     }
 
     renderBlacksmith() {
+
         return `
-            <article class="city-card" data-city="blacksmith">
+            <article class="city-card">
+
                 <div class="city-card-image">
                     <img src="./assets/img/backgrounds/cards_city/card_ferraria.png" alt="Ferraria">
                 </div>
+
                 <div class="city-card-header">
                     <h3 class="city-name">Ferraria</h3>
                 </div>
+
                 <div class="city-card-actions">
-                    <div class="city-option disabled">🔨 Melhorar Arma</div>
-                    <div class="city-option disabled">🛡️ Melhorar Armadura</div>
-                    <div class="city-option disabled">✨ Encantar</div>
+
+                    <div class="city-option city-action disabled"
+                         data-message="A Ferraria estará disponível em breve.">
+                        🔨 Melhorar Arma
+                    </div>
+
+                    <div class="city-option city-action disabled"
+                         data-message="A Ferraria estará disponível em breve.">
+                        🛡️ Melhorar Armadura
+                    </div>
+
+                    <div class="city-option city-action disabled"
+                         data-message="A Ferraria estará disponível em breve.">
+                        ✨ Encantar
+                    </div>
+
                 </div>
+
             </article>
         `;
+
     }
 
     renderMarket() {
+
         return `
-            <article class="city-card" data-city="market">
+            <article class="city-card">
+
                 <div class="city-card-image">
-                    <img src="assets/img/backgrounds/cards_city/card_market.png" alt="Mercado">
+                    <img src="./assets/img/backgrounds/cards_city/card_market.png" alt="Mercado">
                 </div>
+
                 <div class="city-card-header">
                     <h3 class="city-name">Mercado</h3>
                 </div>
+
                 <div class="city-card-actions">
-                    <div class="city-option disabled">🛒 Comprar (Em breve)</div>
-                    <div class="city-option">💰 Vender Itens</div>
+
+                    <div class="city-option city-action disabled"
+                         data-message="A compra de itens estará disponível em breve.">
+                        🛒 Comprar
+                    </div>
+
+                    <div class="city-option city-action"
+                         data-view="market">
+                        💰 Vender
+                    </div>
+
                 </div>
+
             </article>
         `;
+
     }
 
     renderComingSoon() {
+
         return `
-            <article class="city-card locked" data-city="soon">
+            <article class="city-card">
+
                 <div class="city-card-image">
-                    <img src="assets/img/backgrounds/cards_city/card_nursing.png" alt="Em breve">
+                    <img src="./assets/img/backgrounds/cards_city/card_nursing.png" alt="Enfermaria">
                 </div>
+
                 <div class="city-card-header">
-                    <h3 class="city-name">Em Breve</h3>
+                    <h3 class="city-name">Enfermaria</h3>
                 </div>
+
                 <div class="city-card-actions">
-                    <div class="city-option disabled">Novas Construções</div>
+
+                    <div class="city-option city-action disabled"
+                         data-message="A Enfermaria estará disponível em breve.">
+                        Em breve
+                    </div>
+
                 </div>
+
             </article>
         `;
+
     }
 
     registerEvents(container = document) {
 
-        const cards = container.querySelectorAll(".city-card");
-        const enterButton = container.querySelector(".city-enter");
         const closeButton = container.querySelector(".city-close");
 
-        // Estado inicial
-        this.selectedCard ??= null;
+        container.querySelectorAll(".city-action").forEach(action => {
 
-        enterButton.disabled = this.selectedCard === null;
+            action.addEventListener("click", () => {
 
-        cards.forEach(card => {
+                if (action.classList.contains("disabled")) {
 
-            // Mantém o selected ao renderizar novamente
-            if (card.dataset.city === this.selectedCard) {
-                card.classList.add("selected");
-            }
+                    const message = action.dataset.message;
 
-            card.addEventListener("click", () => {
+                    if (message) {
 
-                cards.forEach(c => c.classList.remove("selected"));
+                        Toast.show(message);
 
-                card.classList.add("selected");
+                    }
 
-                this.selectedCard = card.dataset.city;
+                    return;
 
-                enterButton.disabled = false;
+                }
+
+                const view = action.dataset.view;
+
+                if (view) {
+
+                    this.game.hudScreen.changeView(view);
+
+                }
 
             });
 
         });
 
-        enterButton?.addEventListener("click", () => {
-
-            if (!this.selectedCard) {
-
-                Toast.show("Selecione um local.");
-
-                return;
-
-            }
-
-            switch (this.selectedCard) {
-
-                case "market":
-
-                    this.game.hudScreen.changeView("market");
-                    break;
-
-                case "blacksmith":
-
-                    Toast.show("A Ferraria estará disponível em breve.");
-                    break;
-
-                case "infirmary":
-
-                    Toast.show("A Enfermaria estará disponível em breve.");
-                    break;
-
-                default:
-
-                    Toast.show("Local indisponível.");
-                    break;
-            }
-
-        });
-
         closeButton?.addEventListener("click", () => {
-
-            this.selectedCard = null;
 
             this.game.hudScreen.changeView("");
 
         });
 
     }
+
 }
