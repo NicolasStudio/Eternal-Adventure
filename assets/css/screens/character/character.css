@@ -53,7 +53,6 @@
 }
 
 .character-header h2{
-
     font-family:"Cinzel",serif;
 
     color:#f0d5b0;
@@ -168,7 +167,7 @@
 
         width:94vw;
 
-        height:90vh;
+        height:85vh;
 
     }
 
@@ -184,7 +183,7 @@
 
         width:97vw;
 
-        height:94vh;
+        height:85vh;
 
     }
 
@@ -200,7 +199,7 @@
 
         width:100vw;
 
-        height:100vh;
+        height:85vh;
 
         border:none;
 

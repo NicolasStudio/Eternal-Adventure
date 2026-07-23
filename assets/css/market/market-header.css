@@ -16,13 +16,10 @@
    TÍTULO
 ========================================================== */
 .market-header h2{
-    margin:0;
-    font-family:"Cinzel", serif;
-    font-size:26px;
-    font-weight:bold;
-    color:#ecd8b3;
-    letter-spacing:3px;
-    text-transform:uppercase;
+    font-family:"Cinzel",serif;
+    color:#f0d5b0;
+    font-size:clamp(20px,1.8vw,28px);
+    letter-spacing:2px;
 }
 .market-header span{
     display:block;
@@ -80,7 +77,9 @@
         height:64px;
     }
     .market-header h2{
-        font-size:22px;
+        font-family:"Cinzel",serif;
+        color:#f0d5b0;
+        font-size:clamp(20px,1.8vw,28px);
         letter-spacing:2px;
     }
     .market-close{

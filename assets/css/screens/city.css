@@ -5,8 +5,8 @@
     position:absolute;
     inset:50% auto auto 50%;
     transform:translate(-50%,-50%);
-    width:min(1100px,92vw);
-    height:min(760px,88vh);
+    width:min(1100px,90vw);
+    height:min(750px,80vh);
     display:flex;
     flex-direction:column;
     background:rgba(20,12,8,.75);
@@ -31,10 +31,12 @@
 }
 .city-header h2{
     font-family:"Cinzel",serif;
-    font-size:24px;
-    color:#ecd8b3;
-    letter-spacing:3px;
-    text-transform:uppercase;
+
+    color:#f0d5b0;
+
+    font-size:clamp(20px,1.8vw,28px);
+
+    letter-spacing:2px;
 }
 .city-close{
     width:40px;
@@ -82,6 +84,24 @@
     padding:30px;
     overflow-y:auto;
 }
+
+.city-body::-webkit-scrollbar{
+    width:8px;
+}
+
+.city-body::-webkit-scrollbar-track{
+    background:rgba(255,255,255,.05);
+}
+
+.city-body::-webkit-scrollbar-thumb{
+    background:#8a6a3d;
+    border-radius:8px;
+}
+
+.city-body::-webkit-scrollbar-thumb:hover{
+    background:#b38b4d;
+}
+
 
 /* ==========================================================
    CONTAINER
@@ -212,7 +232,7 @@
     .city-window{
 
         width:94vw;
-        height:88vh;
+        height:90vh;
 
     }
 
@@ -224,9 +244,13 @@
     }
 
     .city-header h2{
+    font-family:"Cinzel",serif;
 
-        font-size:22px;
-        letter-spacing:2px;
+    color:#f0d5b0;
+
+    font-size:clamp(20px,1.8vw,28px);
+
+    letter-spacing:2px;
 
     }
 
@@ -303,7 +327,7 @@
     .city-window{
 
         width:96vw;
-        height:92vh;
+        height:90vh;
 
     }
 
@@ -337,7 +361,7 @@
     .city-window{
 
         width:100vw;
-        height:100vh;
+        height:90vh;
 
         border:none;
         border-radius:0;
@@ -352,8 +376,13 @@
     }
 
     .city-header h2{
+    font-family:"Cinzel",serif;
 
-        font-size:18px;
+    color:#f0d5b0;
+
+    font-size:clamp(20px,1.8vw,28px);
+
+    letter-spacing:2px;
 
     }
 

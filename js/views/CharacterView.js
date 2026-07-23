@@ -17,8 +17,8 @@ export default class CharacterView {
                 case "weapon": return item.slot === "weapon";
                 case "helmet": return item.slot === "helmet";
                 case "chest": return item.slot === "chest";
-                case "legs": return item.slot === "legs";
-                case "boots": return item.slot === "boots";
+                case "leg": return item.slot === "leg";
+                case "boot": return item.slot === "boot";
                 case "item": return item.type === "item";
                 default:
                     console.warn(`Aba desconhecida: ${this.rightTab}`);
@@ -150,8 +150,8 @@ export default class CharacterView {
                 ${this.renderEquipmentSlot("weapon", "Arma", equipment.weapon)}
                 ${this.renderEquipmentSlot("helmet", "Cabeça", equipment.helmet)}
                 ${this.renderEquipmentSlot("chest", "Peitoral", equipment.chest)}
-                ${this.renderEquipmentSlot("legs", "Calças", equipment.legs)}
-                ${this.renderEquipmentSlot("boots", "Botas", equipment.boots)}
+                ${this.renderEquipmentSlot("leg", "Calças", equipment.leg)}
+                ${this.renderEquipmentSlot("boot", "Botas", equipment.boot)}
             </div>
         `;
     }
@@ -195,8 +195,8 @@ export default class CharacterView {
                 <button class="inventory-tab ${this.rightTab === "weapon" ? "active" : ""}" data-tab="weapon">Armas</button>
                 <button class="inventory-tab ${this.rightTab === "helmet" ? "active" : ""}" data-tab="helmet">Cabeça</button>
                 <button class="inventory-tab ${this.rightTab === "chest" ? "active" : ""}" data-tab="chest">Peitoral</button>
-                <button class="inventory-tab ${this.rightTab === "legs" ? "active" : ""}" data-tab="legs">Calças</button>
-                <button class="inventory-tab ${this.rightTab === "boots" ? "active" : ""}" data-tab="boots">Botas</button>
+                <button class="inventory-tab ${this.rightTab === "leg" ? "active" : ""}" data-tab="leg">Calças</button>
+                <button class="inventory-tab ${this.rightTab === "boot" ? "active" : ""}" data-tab="boot">Botas</button>
                 <button class="inventory-tab ${this.rightTab === "item" ? "active" : ""}" data-tab="item">Itens</button>
             </div>
         `;

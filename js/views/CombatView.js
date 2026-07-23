@@ -19,7 +19,7 @@ export default class CombatView {
         this.messages = [];
         this.pendingMessages = [];
         this.messageDelay = 1000;
-        this.turnDelay = 800;
+        this.turnDelay = 900;
         this.rewardModal = new RewardModal(game);
         this.levelUpModal = new LevelUpModal(this.game);
         this.continueDungeonModal = new ContinueDungeonModal();
@@ -76,8 +76,7 @@ export default class CombatView {
 
     async enterFloor() {
 
-        const monsterId =
-            this.currentDungeon.monsters[this.currentFloor - 1];
+        const monsterId = this.currentDungeon.monsters[this.currentFloor - 1];
 
         this.currentMonster = structuredClone(
             monsters.find(monster => monster.id === monsterId)
@@ -287,9 +286,6 @@ export default class CombatView {
     }
 
 async finishDungeon() {
-
-    console.log("FINISH DUNGEON");
-
     const dungeon = this.currentDungeon;
 
     await this.dungeonCompleteModal.show(dungeon);

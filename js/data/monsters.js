@@ -117,7 +117,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 1
+                quantidade: 3
             }
         ]
     },
@@ -282,7 +282,7 @@ const monsters = [
 
         status: {
             vidaMaxima: 250,
-            dano: 20,
+            dano: 28,
             nomeAtaque: "Dilacerar ",
             armadura: 15,
             agilidade: 16,

@@ -41,6 +41,15 @@ const dungeons = [
         page: 1,
         fights: 5,
 
+        monsters: [
+            "beetle",
+            "spider",
+            "beetle",
+            "spider",
+            "ant"
+        ],
+
+
         image: "assets/img/assets/card_dungeon/card_grove_2.png",
         background: "assets/img/backgrounds/page_1/grove_2.png",
 
@@ -61,6 +70,14 @@ const dungeons = [
         page: 1,
         fights: 5,
 
+        monsters: [
+            "beaver",
+            "crocodile",
+            "beaver",
+            "crocodile",
+            "bear"
+        ],
+
         image: "assets/img/assets/card_dungeon/card_grove_3.png",
         background: "assets/img/backgrounds/page_1/grove_3.png",
 
@@ -80,6 +97,10 @@ const dungeons = [
         boss: true,
         page: 2,
         fights: 1,
+        
+        monsters: [
+            "werewolf"
+        ],
 
         image: "assets/img/assets/card_dungeon/card_grove_end.png",
         background: "assets/img/backgrounds/page_1/grove_end.png",

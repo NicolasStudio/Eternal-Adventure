@@ -7,7 +7,7 @@
     inset:50% auto auto 50%;
     transform:translate(-50%,-50%);
     width:min(1100px,92vw);
-    height:min(720px,92vh);
+    height:min(700px,92vh);
 
     display:flex;
     flex-direction:column;
@@ -240,7 +240,7 @@
     .market-window{
 
         width:94vw;
-        height:90vh;
+        height:85vh;
 
     }
 
