@@ -2,10 +2,21 @@ export default class DungeonHeader {
 
     render(dungeon, floor) {
 
+        const showFloor = !dungeon?.isBoss;
+
         return `
             <section class="combat-header-inline">
-                <h2 class="combat-title">${dungeon?.name ?? ""}</h2>
-                <span class="combat-floor">Andar ${floor} / 5</span>
+
+                <h2 class="combat-title">
+                    ${dungeon?.name ?? ""}
+                </h2>
+
+                ${
+                    showFloor
+                        ? `<span class="combat-floor">Andar ${floor} / ${dungeon.fights}</span>`
+                        : ""
+                }
+
             </section>
         `;
 

@@ -1,8 +1,13 @@
+import NewsModal from "../ui/NewsModal.js";
+import SaveService from "../services/SaveService.js";
+
 export default class HomeScreen {
 
     constructor(game) {
         this.game = game;
         this.element = document.getElementById("home-screen");
+
+        this.newsModal = new NewsModal();
 
         this.render();
         this.bindEvents();
@@ -11,13 +16,18 @@ export default class HomeScreen {
     render() {
         this.element.innerHTML = `
             <div class="home">
-                <div class="fog"></div>
+                
+            <button id="btn-news" class="btn-news">
+                <img class="pergaminho" src="assets/img/icons/pergaminho.png" alt="Pergaminho" >
+            </button>
+
+            <div class="fog"></div>
                 <img class="home_logo" src="assets/img/backgrounds/logo.png" alt="Eternal Adventure" >
                 <div class="menu">
                     <button id="btn-new-game">
                         Novo Jogo
                     </button>
-                    <button disabled>
+                    <button id="btn-continue" ${SaveService.hasLocalSave() ? "" : "disabled"}>
                         Continuar
                     </button>
                     <button>
@@ -25,7 +35,7 @@ export default class HomeScreen {
                     </button>
                 </div>
                 <small>
-                    Alpha v0.2
+                    Alpha v0.3
                 </small>
             </div>
         `;
@@ -33,13 +43,33 @@ export default class HomeScreen {
 
     bindEvents() {
 
-        const button = this.element.querySelector("#btn-new-game");
+        this.element
+            .querySelector("#btn-new-game")
+            .addEventListener("click", () => {
 
-        button.addEventListener("click", () => {
+                this.game.showScreen("class");
 
-            this.game.showScreen("class");
+            });
 
-        });
+        this.element
+            .querySelector("#btn-news")
+            .addEventListener("click", () => {
+
+                this.newsModal.show();
+
+            });
+
+        this.element
+            .querySelector("#btn-continue")
+            ?.addEventListener("click", () => {
+
+                const data = SaveService.loadFromLocalStorage();
+
+                if (!data || !SaveService.isValidSave(data)) return;
+
+                SaveService.applyLoadedData(this.game, data);
+
+            });
 
     }
 

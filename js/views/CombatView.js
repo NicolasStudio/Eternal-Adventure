@@ -8,7 +8,6 @@ import ContinueDungeonModal from "../ui/components/modals/ContinueDungeonModal.j
 import InventoryPromptModal from "../ui/components/modals/InventoryPromptModal.js";
 import DungeonCompleteModal from "../ui/components/modals/DungeonCompleteModal.js";
 
-
 export default class CombatView {
     constructor(game) {
         this.game = game;
@@ -55,305 +54,161 @@ export default class CombatView {
     }
 
     async enter(dungeon) {
-
         this.currentDungeon = dungeon;
         this.currentFloor = 1;
-
         while (this.currentFloor <= this.currentDungeon.fights) {
-
             const result = await this.enterFloor();
-
             if (!result) {
                 return;
             }
-
             this.currentFloor++;
         }
-
         await this.finishDungeon();
-
     }
 
     async enterFloor() {
-
         const monsterId = this.currentDungeon.monsters[this.currentFloor - 1];
-
-        this.currentMonster = structuredClone(
-            monsters.find(monster => monster.id === monsterId)
-        );
-
-        this.currentMonster.status.vidaAtual =
-            this.currentMonster.status.vidaMaxima;
-
-        this.engine = new CombatEngine(
-            this.game.player,
-            this.currentMonster
-        );
-
+        this.currentMonster = structuredClone(monsters.find(monster => monster.id === monsterId));
+        this.currentMonster.status.vidaAtual = this.currentMonster.status.vidaMaxima;
+        this.engine = new CombatEngine(this.game.player, this.currentMonster);
         const initiative = this.engine.rollInitiative();
-
         this.engine.currentTurn = initiative;
-
-        // Atualiza a HUD para renderizar a arena e o monstro
         this.game.hudScreen.currentView = "dungeon";
         this.game.hudScreen.refreshCurrentView();
-
-        // Aguarda um frame para garantir que o DOM foi atualizado
         await new Promise(resolve => requestAnimationFrame(resolve));
-
         if (this.currentFloor === 1) {
-
-            await CombatToast.show(
-                `Entrou em ${this.currentDungeon.name}`,
-                "system"
-            );
-
+            await CombatToast.show(`Entrou em ${this.currentDungeon.name}`, "system");
         }
-
-        await CombatToast.show(
-            `Andar ${this.currentFloor}`,
-            "system"
-        );
-
-        await CombatToast.show(
-            `${this.currentMonster.name} apareceu!`,
-            "system"
-        );
-
-        await CombatToast.show(
-            initiative === "player"
-                ? "Você iniciou o combate!"
-                : `${this.currentMonster.name} iniciou o combate!`,
-            "system"
-        );
-
+        await CombatToast.show(`Andar ${this.currentFloor}`, "system");
+        await CombatToast.show(`${this.currentMonster.name} apareceu!`, "system");
+        await CombatToast.show(initiative === "player" ? "Você iniciou o combate!" : `${this.currentMonster.name} iniciou o combate!`, "system");
         return await this.combatLoop();
-
     }
 
     async combatLoop() {
-
         while (true) {
-
             await this.playTurn();
-
             const state = this.engine.checkCombatState();
-
             if (!state.finished) {
-
                 this.engine.nextTurn();
-
                 await this.sleep(this.turnDelay);
-
                 continue;
-
             }
-
-            await CombatToast.show(
-
-                state.winner === "player"
-                    ? `${this.currentMonster.name} derrotado!`
-                    : "Você foi derrotado!",
-
-                "system"
-
-            );
-
+            await CombatToast.show(state.winner === "player" ? `${this.currentMonster.name} derrotado!` : "Você foi derrotado!", "system");
             if (state.winner === "player") {
-
-                const reward = LootSystem.generate(
-                    this.currentMonster,
-                    this.game.player
-                );
-
+                const reward = LootSystem.generate(this.currentMonster, this.game.player);
                 await this.rewardModal.show(reward);
-
-                const levelUps =
-                    this.game.player.collectReward(reward);
-
+                const levelUps = this.game.player.collectReward(reward);
                 this.game.hudScreen.refreshCurrentView();
-
                 for (const levelUp of levelUps) {
-
-                    await this.levelUpModal.show(
-                        levelUp.level,
-                        levelUp.bonus
-                    );
-
+                    await this.levelUpModal.show(levelUp.level, levelUp.bonus);
                 }
-
-                // Último andar
                 if (this.currentFloor >= this.currentDungeon.fights) {
-
                     await this.finishDungeon();
-
                     return;
-
                 }
-
-                // =====================================================
-                // PRIMEIRO PERGUNTA SE DESEJA ABRIR O INVENTÁRIO
-                // =====================================================
-
-                const openInventory =
-                    await this.inventoryPromptModal.show();
-
+                const openInventory = await this.inventoryPromptModal.show();
                 if (openInventory) {
-
                     this.game.hudScreen.enterPreparationMode();
-
                     await new Promise(resolve => {
-
                         this.game.hudScreen.onPreparationFinished = resolve;
-
                     });
-
                     this.game.hudScreen.exitPreparationMode();
-
                     this.game.hudScreen.currentView = "dungeon";
                     this.game.hudScreen.refreshCurrentView();
-
                 }
-
-                // =====================================================
-                // DEPOIS PERGUNTA SE DESEJA CONTINUAR
-                // =====================================================
-
-                const continueDungeon =
-                    await this.continueDungeonModal.show();
-
+                const continueDungeon = await this.continueDungeonModal.show();
                 if (!continueDungeon) {
-
                     await this.closeCombat();
-
                     this.game.hudScreen.exitCombat();
-
                     return false;
-
                 }
-
                 return true;
-
             }
-
-            // Derrota
-
             await this.closeCombat();
-
             this.game.hudScreen.exitCombat();
-
             return false;
-
         }
-
     }
 
     async playTurn() {
         const result = this.engine.attack();
-
         this.game.hudScreen.playerHUD.updateHP();
         this.game.hudScreen.monsterHUD.updateHP();
 
         const message = this.engine.createAttackMessage(result);
 
-        const type =
-            result.attacker === "player"
-                ? "player"
-                : "enemy";
+        let type = result.attacker === "player"
+            ? "player"
+            : "enemy";
 
-        await CombatToast.show(message, type);
+        if (result.attacker === "player") {
 
-    }
-
-    async closeCombat() {
-
-        CombatToast.clear();
-
-        this.currentMonster = null;
-
-        this.engine = null;
-
-        this.game.hudScreen.monsterHUD.hide();
-
-    }
-
-    async startNextFloor() {
-
-        this.currentFloor++;
-
-        await this.enterFloor();
-
-    }
-
-async finishDungeon() {
-    const dungeon = this.currentDungeon;
-
-    await this.dungeonCompleteModal.show(dungeon);
-
-    await this.closeCombat();
-
-    this.game.hudScreen.exitCombat();
-
-    return false;
-
-}
-
-    exit(){
-
-        this.currentDungeon = null;
-
-        this.currentFloor = 1;
-
-        this.currentMonster = null;
-
-        this.engine = null;
-
-    }
-
-    render() {
-
-        if (!this.currentDungeon || !this.currentMonster) {
-
-            return "";
+            if (result.lifeSteal > 0) {
+                type = "lifeSteal player";
+            }
+            else if (result.critical) {
+                type = "critico player";
+            }
 
         }
 
+        await CombatToast.show(message, type);
+    }
+
+    async closeCombat() {
+        CombatToast.clear();
+        this.currentMonster = null;
+        this.engine = null;
+        this.game.hudScreen.monsterHUD.hide();
+    }
+
+    async startNextFloor() {
+        this.currentFloor++;
+        await this.enterFloor();
+    }
+
+    async finishDungeon() {
+        const dungeon = this.currentDungeon;
+        await this.dungeonCompleteModal.show(dungeon);
+        this.game.player.completeDungeon(dungeon.id);
+        console.log(this.game.player.progress);
+        await this.closeCombat();
+        this.game.hudScreen.exitCombat();
+        return false;
+    }
+
+    exit() {
+        this.currentDungeon = null;
+        this.currentFloor = 1;
+        this.currentMonster = null;
+        this.engine = null;
+    }
+
+    render() {
+        if (!this.currentDungeon || !this.currentMonster) {
+            return "";
+        }
         return `
             <section class="combat-window">
-
                 <div class="combat-main">
-
                     ${this.renderArena()}
-
                 </div>
-
             </section>
         `;
-
     }
 
     renderArena() {
         if (!this.currentDungeon || !this.currentMonster) {
             return "";
         }
-
-            return `
-                <section class="combat-arena">
-
-                    <div class="monster-stage">
-
-                        <img
-                            class="combat-monster"
-                            src="${this.currentMonster.sprite}"
-                            alt="${this.currentMonster.name}">
-
-                    </div>
-
-                    <div id="combat-toast-container"></div>
-
-                </section>
-            `;
-
+        return `
+            <section class="combat-arena">
+                <div class="monster-stage">
+                    <img class="combat-monster" src="${this.currentMonster.sprite}" alt="${this.currentMonster.name}">
+                </div>
+                <div id="combat-toast-container"></div>
+            </section>
+        `;
     }
-
 }

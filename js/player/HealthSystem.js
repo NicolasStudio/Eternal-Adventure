@@ -1,43 +1,252 @@
+import Toast from "../ui/components/Toast.js";
+
 export default class HealthSystem {
     constructor(player, onHealthUpdate = null) {
         this.player = player;
         this.onHealthUpdate = onHealthUpdate;
+
         this.regenerationInterval = null;
+
+        // Regeneração padrão
+        this.regenerationPercent = 1;
+        this.regenerationTime = 120000;
+
+        // Burst
+        this.burstMode = false;
     }
+
+    /* =====================================================
+       VIDA
+    ===================================================== */
 
     heal(amount) {
         if (amount <= 0) return;
-        this.player.currentHP = Math.min(this.player.currentHP + amount, this.player.maxHP);
+
+        this.player.currentHP = Math.min(
+            this.player.currentHP + amount,
+            this.player.maxHP
+        );
+
         this.update();
     }
 
     damage(amount) {
         if (amount <= 0) return;
-        this.player.currentHP = Math.max(this.player.currentHP - amount, 0);
+
+        this.player.currentHP = Math.max(
+            this.player.currentHP - amount,
+            0
+        );
+
         this.update();
+
         if (this.player.currentHP === 0) {
             this.player.onDeath?.();
         }
     }
 
+    /* =====================================================
+       REGENERAÇÃO
+    ===================================================== */
+
     startRegeneration() {
         this.stopRegeneration();
+
         this.regenerationInterval = setInterval(() => {
-            if (this.player.currentHP >= this.player.maxHP) return;
-            const healAmount = Math.max(1, Math.floor(this.player.maxHP * 0.01));
+
+            // Vida cheia
+            if (this.player.currentHP >= this.player.maxHP) {
+
+                if (this.burstMode) {
+                    this.deactivateBurst();
+                    Toast.show("Sua recuperação foi concluída.");
+                }
+
+                return;
+            }
+
+            const healAmount = Math.max(
+                1,
+                Math.floor(
+                    this.player.maxHP * (this.regenerationPercent / 100)
+                )
+            );
+
             this.heal(healAmount);
-        }, 120000);
+
+            if (this.burstMode) {
+                this.player.addXP(2);
+                this.update();
+            }
+
+        }, this.regenerationTime);
     }
 
     stopRegeneration() {
         if (!this.regenerationInterval) return;
+
         clearInterval(this.regenerationInterval);
         this.regenerationInterval = null;
     }
 
-    update() {
-        if (this.onHealthUpdate) {
-            this.onHealthUpdate();
+    /* =====================================================
+       BURST
+    ===================================================== */
+
+    activateBurst() {
+        this.burstMode = true;
+        this.regenerationPercent = 5;
+
+        this.startRegeneration();
+        this.update();
+    }
+
+    deactivateBurst() {
+        if (!this.burstMode) return;
+
+        this.burstMode = false;
+        this.regenerationPercent = 1;
+
+        this.startRegeneration();
+        this.update();
+    }
+
+    /* =====================================================
+       INFORMAÇÕES
+    ===================================================== */
+
+    getMissingHP() {
+        return Math.max(
+            0,
+            this.player.maxHP - this.player.currentHP
+        );
+    }
+
+    getBurstCost() {
+        return Math.max(
+            1,
+            this.getMissingHP() - this.player.level
+        );
+    }
+
+    getInstantHealCost() {
+        return Math.max(
+            1,
+            this.getMissingHP() + this.player.level
+        );
+    }
+
+    /* =====================================================
+       ENFERMARIA
+    ===================================================== */
+
+    handleHospitalAction(action) {
+
+        switch (action) {
+
+            case "burst":
+                return this.buyBurst();
+
+            case "instant":
+                return this.buyInstantHeal();
+
+            default:
+                return false;
         }
+    }
+
+    buyBurst() {
+
+        // Se a vida já está cheia, encerra o Burst automaticamente
+        if (this.burstMode && this.player.currentHP >= this.player.maxHP) {
+            this.deactivateBurst();
+        }
+
+        if (this.burstMode) {
+            Toast.show("O Burst de Vida já está ativo.");
+            return false;
+        }
+
+        if (this.player.currentHP >= this.player.maxHP) {
+            Toast.show("Sua vida já está completa.");
+            return false;
+        }
+
+        const cost = this.getBurstCost();
+
+        if (this.player.gold < cost) {
+            Toast.show("Ouro insuficiente.");
+            return false;
+        }
+
+        this.player.gold -= cost;
+
+        this.activateBurst();
+
+        Toast.show("Burst de Vida ativado.");
+
+        return true;
+    }
+
+    buyInstantHeal() {
+
+        if (this.player.currentHP >= this.player.maxHP) {
+            Toast.show("Sua vida já está completa.");
+            return false;
+        }
+
+        const cost = this.getInstantHealCost();
+
+        if (this.player.gold < cost) {
+            Toast.show("Ouro insuficiente.");
+            return false;
+        }
+
+        this.player.gold -= cost;
+
+        this.heal(this.getMissingHP());
+
+        Toast.show("Vida restaurada.");
+
+        return true;
+    }
+
+    /* =====================================================
+       INTERFACE DA ENFERMARIA
+    ===================================================== */
+
+    updateHospitalUI() {
+
+        const currentHpElement = document.getElementById("hospital-current-hp");
+        const regenElement = document.getElementById("hospital-regeneration");
+        const missingHpElement = document.getElementById("hospital-missing-hp");
+        const goldElement = document.getElementById("hospital-gold");
+
+        if (currentHpElement) {
+            currentHpElement.textContent =
+                `${this.player.currentHP} / ${this.player.maxHP}`;
+        }
+
+        if (regenElement) {
+            regenElement.textContent =
+                `${this.regenerationPercent}% / ${this.regenerationTime / 60000} min`;
+        }
+
+        if (missingHpElement) {
+            missingHpElement.textContent = this.getMissingHP();
+        }
+
+        if (goldElement) {
+            goldElement.textContent = this.player.gold;
+        }
+    }
+
+    /* =====================================================
+       UPDATE
+    ===================================================== */
+
+    update() {
+        this.onHealthUpdate?.();
+        this.updateHospitalUI();
     }
 }

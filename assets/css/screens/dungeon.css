@@ -7,7 +7,6 @@
     left:50%;
     transform:translate(-50%,-50%);
     width:min(1080px,92vw);
-    height:min(760px,90vh);
     background:rgba(20,12,8,.75);
     backdrop-filter:blur(12px);
     border:2px solid #8b7355;
@@ -567,7 +566,7 @@
     .dungeon-window{
 
         width:94vw;
-        height:85vh;
+        height:auto;
 
     }
 
@@ -685,7 +684,7 @@
     .dungeon-window{
 
         width:97vw;
-        height:85vh;
+        height: auto;
 
     }
 
@@ -718,7 +717,7 @@
     .dungeon-window{
 
         width:100vw;
-        height:85vh;
+        height: auto;
 
         border:none;
         border-radius:0;
@@ -800,7 +799,7 @@
     .dungeon-window{
 
         width:1150px;
-        height:820px;
+        height: auto;
 
     }
 
@@ -817,7 +816,7 @@
     .dungeon-window{
 
         width:1250px;
-        height:860px;
+        height: auto;
 
     }
 

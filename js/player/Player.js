@@ -7,6 +7,7 @@ import PlayerStats from "../core/PlayerStats.js";
 import HealthSystem from "../player/HealthSystem.js";
 import experience from "../data/experience.js";
 import levels  from "../data/levels.js";
+import qualities from "../data/quality.js";
 
 export default class Player {
     constructor(characterClass) {
@@ -21,6 +22,9 @@ export default class Player {
         this.health.startRegeneration();
         this.baseStats = this.createBaseStats();
         this.inventory = [];
+        this.progress = {
+            dungeons: {}
+        };
         this.equipment = {
             weapon: null,
             helmet: null,
@@ -29,6 +33,24 @@ export default class Player {
             boots: null
         };
         this.stats = new PlayerStats(this);
+
+        // Baú diário (Pokébox): fica pronto imediatamente numa partida nova.
+        this.chest = {
+            readyAt: Date.now()
+        };
+
+        // Álbum/bestiário: ids das cartas já descobertas (sem duplicar).
+        this.album = [];
+    }
+
+    unlockCard(id) {
+        if (!this.album.includes(id)) {
+            this.album.push(id);
+        }
+    }
+
+    hasCard(id) {
+        return this.album.includes(id);
     }
 
     addListener(callback) {
@@ -91,9 +113,24 @@ export default class Player {
 
         }
 
+        const clone = structuredClone(item);
+
+        // Equipamentos (armas, elmos, peitorais, pernas, botas) sempre
+        // começam com qualidade "Nenhuma" até serem melhorados na Ferraria.
+        if (clone.slot && !clone.quality) {
+            clone.quality = structuredClone(qualities.none);
+        }
+
+        // baseStats guarda os atributos ORIGINAIS do item (antes de
+        // qualquer melhoria). Toda melhoria de qualidade recalcula
+        // clone.stats a partir daqui, então isso só é gravado uma vez.
+        if (clone.slot && clone.stats && !clone.baseStats) {
+            clone.baseStats = structuredClone(clone.stats);
+        }
+
         this.inventory.push({
 
-            ...structuredClone(item),
+            ...clone,
 
             uid: crypto.randomUUID(),
 
@@ -247,6 +284,27 @@ export default class Player {
         this.notify();
     }
 
+    removeGold(amount) {
+
+        if (!amount || amount <= 0) return false;
+
+        if (this.gold < amount) {
+            return false;
+        }
+
+        this.gold -= amount;
+
+        this.notify();
+
+        return true;
+
+    }
+
+    canAfford(amount) {
+
+        return this.gold >= amount;
+
+    }
     collectReward(reward) {
 
         if (!reward) return [];
@@ -271,4 +329,21 @@ export default class Player {
 
     }
 
+    completeDungeon(dungeonId) {
+
+        if (!dungeonId) return;
+
+        this.progress.dungeons[dungeonId] = {
+            completed: true
+        };
+
+        this.notify();
+
+    }
+
+    hasCompletedDungeon(dungeonId) {
+
+        return this.progress.dungeons[dungeonId]?.completed === true;
+
+    }
 }

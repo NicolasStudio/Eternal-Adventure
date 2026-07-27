@@ -55,6 +55,23 @@
     padding-right:4px;
 }
 
+.character-tab-content::-webkit-scrollbar{
+    width: 4px;
+}
+
+.character-tab-content::-webkit-scrollbar-track{
+    background:rgba(255,255,255,.05);
+}
+
+.character-tab-content::-webkit-scrollbar-thumb{
+    background:#8a6a3d;
+    border-radius:8px;
+}
+
+.character-tab-content::-webkit-scrollbar-thumb:hover{
+    background:#b38b4d;
+}
+
 /* ==========================================================
    AVATAR
 ========================================================== */

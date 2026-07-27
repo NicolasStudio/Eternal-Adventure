@@ -99,25 +99,51 @@
 }
 
 /* ==========================================================
-   PLAYER
+   PLAYER - ATAQUE NORMAL
 ========================================================== */
-.combat-toast.player{
-    left:62%;
-    top:42%;
-    background:#f5f1e8;
-    color:#b31212;
+.combat-toast.player {
+    left: 62%;
+    top: 42%;
+    background: #f5f1e8;
+    color: #b31212;
+    border: 2px solid #d7cdbd;
+}
+
+/* ==========================================================
+   PLAYER - CRÍTICO
+========================================================== */
+.combat-toast.critico.player {
+    left: 62%;
+    top: 42%;
+    background: #fad55d;
+    color: #b31212;
+    border: 2px solid #b31212;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+/* ==========================================================
+   PLAYER - LIFE STEAL
+========================================================== */
+.combat-toast.lifeSteal.player {
+    left: 62%;
+    top: 42%;
+    background: #32d35a;
+    color: #ffffff;
+    border: 2px solid #0b8d2b;
+    font-size: 20px;
 }
 
 /* ==========================================================
    ENEMY
 ========================================================== */
-.combat-toast.enemy{
-    left:18%;
-    top:42%;
-    background:#fad55d;
-    color:#b31212;
+.combat-toast.enemy {
+    left: 18%;
+    top: 42%;
+    background: #fad55d;
+    color: #b31212;
+    border: 2px solid #b31212;
 }
-
 /* ==========================================================
    SYSTEM
 ========================================================== */

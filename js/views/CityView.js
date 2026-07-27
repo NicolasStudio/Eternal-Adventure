@@ -1,10 +1,12 @@
 import Toast from "../ui/components/Toast.js";
+import HospitalModal from "../ui/components/modals/HospitalModal.js";
 
 export default class CityView {
 
     constructor(game) {
 
         this.game = game;
+        this.hospitalModal = new HospitalModal(game);
 
     }
 
@@ -29,83 +31,11 @@ export default class CityView {
 
                         <div class="city-grid">
 
-                            <article class="city-card">
+                            ${this.renderBlacksmith()}
 
-                                <div class="city-card-image">
-                                    <img src="./assets/img/backgrounds/cards_city/card_ferraria.png" alt="Ferraria">
-                                </div>
+                            ${this.renderMarket()}
 
-                                <div class="city-card-header">
-                                    <h3 class="city-name">Ferraria</h3>
-                                </div>
-
-                                <div class="city-card-actions">
-
-                                    <div class="city-option city-action disabled"
-                                         data-message="A Ferraria estará disponível em breve.">
-                                        🔨 Melhorar Arma
-                                    </div>
-
-                                    <div class="city-option city-action disabled"
-                                         data-message="A Ferraria estará disponível em breve.">
-                                        🛡️ Melhorar Armadura
-                                    </div>
-
-                                    <div class="city-option city-action disabled"
-                                         data-message="A Ferraria estará disponível em breve.">
-                                        ✨ Encantar
-                                    </div>
-
-                                </div>
-
-                            </article>
-
-                            <article class="city-card">
-
-                                <div class="city-card-image">
-                                    <img src="./assets/img/backgrounds/cards_city/card_market.png" alt="Mercado">
-                                </div>
-
-                                <div class="city-card-header">
-                                    <h3 class="city-name">Mercado</h3>
-                                </div>
-
-                                <div class="city-card-actions">
-
-                                    <div class="city-option city-action disabled"
-                                         data-message="A compra de itens estará disponível em breve.">
-                                        🛒 Comprar
-                                    </div>
-
-                                    <div class="city-option city-action"
-                                         data-view="market">
-                                        💰 Vender
-                                    </div>
-
-                                </div>
-
-                            </article>
-
-                            <article class="city-card">
-
-                                <div class="city-card-image">
-                                    <img src="./assets/img/backgrounds/cards_city/card_nursing.png" alt="Enfermaria">
-                                </div>
-
-                                <div class="city-card-header">
-                                    <h3 class="city-name">Enfermaria</h3>
-                                </div>
-
-                                <div class="city-card-actions">
-
-                                    <div class="city-option city-action disabled"
-                                         data-message="A Enfermaria estará disponível em breve.">
-                                        Em breve
-                                    </div>
-
-                                </div>
-
-                            </article>
+                            ${this.renderHospital()}
 
                         </div>
 
@@ -133,18 +63,24 @@ export default class CityView {
 
                 <div class="city-card-actions">
 
-                    <div class="city-option city-action disabled"
-                         data-message="A Ferraria estará disponível em breve.">
+                    <div
+                            class="city-option city-action"
+    data-view="blacksmith-weapon"
+                    >
                         🔨 Melhorar Arma
                     </div>
 
-                    <div class="city-option city-action disabled"
-                         data-message="A Ferraria estará disponível em breve.">
+                    <div
+                        class="city-option city-action"
+                        data-view="blacksmith-armor"
+                    >
                         🛡️ Melhorar Armadura
                     </div>
 
-                    <div class="city-option city-action disabled"
-                         data-message="A Ferraria estará disponível em breve.">
+                    <div
+                        class="city-option city-action disabled"
+                        data-message="Os encantamentos estarão disponíveis em breve."
+                    >
                         ✨ Encantar
                     </div>
 
@@ -170,10 +106,10 @@ export default class CityView {
 
                 <div class="city-card-actions">
 
-                    <div class="city-option city-action disabled"
-                         data-message="A compra de itens estará disponível em breve.">
-                        🛒 Comprar
-                    </div>
+                <div class="city-option city-action"
+                    data-view="market-buy">
+                    🛒 Comprar
+                </div>
 
                     <div class="city-option city-action"
                          data-view="market">
@@ -187,7 +123,7 @@ export default class CityView {
 
     }
 
-    renderComingSoon() {
+    renderHospital() {
 
         return `
             <article class="city-card">
@@ -202,9 +138,9 @@ export default class CityView {
 
                 <div class="city-card-actions">
 
-                    <div class="city-option city-action disabled"
-                         data-message="A Enfermaria estará disponível em breve.">
-                        Em breve
+                    <div class="city-option city-action"
+                         data-view="hospital">
+                        🏥 Ir para Enfermaria
                     </div>
 
                 </div>
@@ -214,46 +150,59 @@ export default class CityView {
 
     }
 
-    registerEvents(container = document) {
+registerEvents(container = document) {
 
-        const closeButton = container.querySelector(".city-close");
+    const closeButton = container.querySelector(".city-close");
 
-        container.querySelectorAll(".city-action").forEach(action => {
+    container.querySelectorAll(".city-action").forEach(action => {
 
-            action.addEventListener("click", () => {
+        action.addEventListener("click", async () => {
 
-                if (action.classList.contains("disabled")) {
+            if (action.classList.contains("disabled")) {
 
-                    const message = action.dataset.message;
+                Toast.show(action.dataset.message);
 
-                    if (message) {
+                return;
 
-                        Toast.show(message);
+            }
 
+            const view = action.dataset.view;
+
+            if (view === "hospital") {
+
+                let option;
+
+                do {
+
+                    option = await this.hospitalModal.show();
+
+                    if (!option) {
+                        this.game.player.health.deactivateBurst();
+                        break;
                     }
 
-                    return;
+                    this.game.player.health.handleHospitalAction(option);
 
-                }
+                } while (option);
 
-                const view = action.dataset.view;
+                return;
 
-                if (view) {
+            }
 
-                    this.game.hudScreen.changeView(view);
+            if (view) {
 
-                }
+                this.game.hudScreen.changeView(view);
 
-            });
-
-        });
-
-        closeButton?.addEventListener("click", () => {
-
-            this.game.hudScreen.changeView("");
+            }
 
         });
 
-    }
+    });
+
+    closeButton?.addEventListener("click", () => {
+        this.game.hudScreen.changeView("");
+    });
+
+}
 
 }

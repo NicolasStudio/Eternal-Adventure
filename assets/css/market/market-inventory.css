@@ -96,8 +96,8 @@
    ÍCONE
 ========================================================== */
 .market-item-icon{
-    width:48px;
-    height:48px;
+    width:54px;
+    height:54px;
     flex-shrink:0;
     image-rendering:pixelated;
     padding:6px;

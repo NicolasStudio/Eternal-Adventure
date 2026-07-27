@@ -25,8 +25,8 @@ const weapons = {
             penetration: 1
         },
 
-        value: 20,
-        sellValue: 10
+        value: 120,
+        sellValue: 60
 
     },
 
@@ -50,8 +50,8 @@ const weapons = {
             penetration: 2
         },
 
-        value: 60,
-        sellValue: 30
+        value: 360,
+        sellValue: 180
 
     },
 
@@ -75,8 +75,8 @@ const weapons = {
             penetration: 5
         },
 
-        value: 180,
-        sellValue: 90
+        value: 1080,
+        sellValue: 540
 
     },
 
@@ -100,8 +100,8 @@ const weapons = {
             penetration: 8
         },
 
-        value: 540,
-        sellValue: 270
+        value: 3240,
+        sellValue: 1620
 
     },
 
@@ -125,8 +125,8 @@ const weapons = {
             penetration: 12
         },
 
-        value: 1620,
-        sellValue: 810
+        value: 9720,
+        sellValue: 4860
 
     },
 
@@ -150,8 +150,8 @@ const weapons = {
             penetration: 18
         },
 
-        value: 4860,
-        sellValue: 2430
+        value: 0,
+        sellValue: 0
 
     },
 
@@ -176,8 +176,8 @@ const weapons = {
             lifeSteal: 0,
             penetration: 1
         },
-        value: 20,
-        sellValue: 10
+        value: 120,
+        sellValue: 60
     },
 
     scepter_uncommon: {
@@ -198,8 +198,8 @@ const weapons = {
             lifeSteal: 0,
             penetration: 3
         },
-        value: 60,
-        sellValue: 30
+        value: 360,
+        sellValue: 180
     },
 
     scepter_rare: {
@@ -220,8 +220,8 @@ const weapons = {
             lifeSteal: 1,
             penetration: 6
         },
-        value: 180,
-        sellValue: 90
+        value: 1080,
+        sellValue: 540
     },
 
     scepter_mystic: {
@@ -242,8 +242,8 @@ const weapons = {
             lifeSteal: 2,
             penetration: 10
         },
-        value: 540,
-        sellValue: 270  
+        value: 3240,
+        sellValue: 1620  
     },
 
     scepter_legendary: {
@@ -264,8 +264,8 @@ const weapons = {
             lifeSteal: 4,
             penetration: 15
         },
-        value: 1620,
-        sellValue: 810
+        value: 9720,
+        sellValue: 4860
     },
 
     scepter_ultraje: {
@@ -286,8 +286,8 @@ const weapons = {
             lifeSteal: 7,
             penetration: 22
         },
-        value: 4860,
-        sellValue: 2430
+        value: 0,
+        sellValue: 0
     },
 
 /* ==========================================
@@ -311,8 +311,8 @@ const weapons = {
             lifeSteal: 0,
             penetration: 0
         },
-        value: 20,
-        sellValue: 10
+        value: 120,
+        sellValue: 60
     },
 
     arch_uncommon: {
@@ -333,8 +333,8 @@ const weapons = {
             lifeSteal: 0,
             penetration: 1
         },
-        value: 60,
-        sellValue: 30
+        value: 360,
+        sellValue: 180
     },
 
     arch_rare: {
@@ -355,8 +355,8 @@ const weapons = {
             lifeSteal: 0,
             penetration: 2
         },
-        value: 180,
-        sellValue: 90
+        value: 1080,
+        sellValue: 540
     },
 
     arch_mystic: {
@@ -377,8 +377,8 @@ const weapons = {
             lifeSteal: 1,
             penetration: 4
         },
-        value: 540,
-        sellValue: 270  
+        value: 3240,
+        sellValue: 1620  
     },
 
     arch_legendary: {
@@ -399,8 +399,8 @@ const weapons = {
             lifeSteal: 2,
             penetration: 6
         },
-        value: 1620,
-        sellValue: 810
+        value: 9720,
+        sellValue: 4860
     },
 
     arch_ultraje: {
@@ -421,8 +421,8 @@ const weapons = {
             lifeSteal: 3,
             penetration: 8
         },
-        value: 4860,
-        sellValue: 2430
+        value: 0,
+        sellValue: 0
     }
 };
 

@@ -1,20 +1,48 @@
-.loading-screen{
+#loading-screen {
 
-    opacity:1;
+    position: fixed;
 
-    transition:opacity .7s ease;
+    inset: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    z-index: 99999;
+
+    overflow: hidden;
 
 }
 
-.loading-screen.hide{
+.loading-screen {
 
-    opacity:0;
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background: #1b100c;
+
+    background-image:
+        radial-gradient(rgba(255,255,255,.04) 1px, transparent 1px);
+
+    background-size: 18px 18px;
+
+    transition: opacity .7s ease;
+
+    overflow: hidden;
 
 }
 
-.loading-logo{
+.loading-screen.hide {
 
-    animation:logoPulse 2.5s ease-in-out infinite;
+    opacity: 0;
 
 }
 

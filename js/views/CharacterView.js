@@ -21,7 +21,7 @@ export default class CharacterView {
                 case "boot": return item.slot === "boot";
                 case "item": return item.type === "item";
                 default:
-                    console.warn(`Aba desconhecida: ${this.rightTab}`);
+                    // console.warn(`Aba desconhecida: ${this.rightTab}`);
                     return false;
             }
         });

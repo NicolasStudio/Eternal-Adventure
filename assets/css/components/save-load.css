@@ -1,0 +1,123 @@
+/* ==========================================================
+   MODAL - CARREGAR JOGO
+========================================================== */
+.load-game-modal{
+    position:relative;
+    width:380px;
+    max-width:92%;
+    padding:0;
+    border:1px solid #7d6846;
+    border-radius:8px;
+    background:rgba(18,13,9,.96);
+    box-shadow:0 0 20px rgba(0,0,0,.7), inset 0 0 25px rgba(255,255,255,.03);
+    color:#efe2bf;
+    font-family:"Cinzel",serif;
+    animation:rewardPopup .25s ease;
+    overflow:hidden;
+}
+
+.load-game-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 18px;
+    border-bottom:1px solid rgba(212,163,115,.25);
+}
+
+.load-game-header h2{
+    margin:0;
+    font-size:1.15rem;
+    color:#f6d19c;
+}
+
+.load-game-close{
+    background:none;
+    border:none;
+    color:#bca46d;
+    font-size:1.1rem;
+    cursor:pointer;
+    transition:.15s;
+}
+
+.load-game-close:hover{
+    color:#f1c75c;
+}
+
+.load-game-dropzone{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    margin:22px 18px;
+    padding:30px 16px;
+    border:2px dashed #5b4633;
+    border-radius:8px;
+    background:rgba(0,0,0,.2);
+    color:#bca46d;
+    font-size:.85rem;
+    text-align:center;
+    cursor:pointer;
+    transition:.15s;
+}
+
+.load-game-dropzone i{
+    font-size:1.8rem;
+    color:#8b7355;
+}
+
+.load-game-dropzone:hover,
+.load-game-dropzone.dragover{
+    border-color:#c79b37;
+    background:rgba(216,159,27,.08);
+    color:#f3e0b7;
+}
+
+.load-game-dropzone.dragover i{
+    color:#f1c75c;
+}
+
+.load-game-footer{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    padding:14px 18px 20px;
+    border-top:1px solid rgba(212,163,115,.25);
+}
+
+.load-game-cancel,
+.load-game-confirm{
+    padding:9px 20px;
+    border-radius:6px;
+    font-family:"Cinzel",serif;
+    font-weight:700;
+    font-size:.9rem;
+    cursor:pointer;
+    transition:.15s;
+}
+
+.load-game-cancel{
+    border:2px solid #5b4633;
+    background:rgba(0,0,0,.25);
+    color:#d8c39b;
+}
+
+.load-game-cancel:hover{
+    border-color:#8b7355;
+    color:#f3e0b7;
+}
+
+.load-game-confirm{
+    border:2px solid #c79b37;
+    background:linear-gradient(180deg,rgba(216,159,27,.3),rgba(155,102,4,.18));
+    color:#f1c75c;
+}
+
+.load-game-confirm:hover:not(:disabled){
+    border-color:#f1c75c;
+}
+
+.load-game-confirm:disabled{
+    opacity:.4;
+    cursor:not-allowed;
+}

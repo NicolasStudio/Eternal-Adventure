@@ -174,7 +174,7 @@ export default class MarketView {
 
     renderDetails() {
 
-        const exists = this.inventory.some(item => item.id === this.selectedItem?.id);
+        const exists = this.inventory.some(item => item.uid === this.selectedItem?.uid);
 
         if (!exists) {
             this.selectedItem = null;

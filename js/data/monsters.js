@@ -2,6 +2,9 @@ import items from "./items.js";
 
 const monsters = [
 
+    // ============================================
+    // NÍVEL 1 - Iniciantes (Fácil)
+    // ============================================
     {
         id: "wolf",
         name: "Lobo Cinzento",
@@ -11,18 +14,18 @@ const monsters = [
         sprite: "assets/img/monsters/creature_1/wolf.png",
 
         status: {
-            vidaMaxima: 50,
-            dano: 7,
+            vidaMaxima: 40,
+            dano: 6,
             nomeAtaque: "Mordida",
-            armadura: 3,
-            agilidade: 7,
-            xp: 20,
-            ouro: 12
+            armadura: 2,
+            agilidade: 8,
+            xp: 30,
+            ouro: 10
         },
 
         drops: [
             {
-                type: ["helmet", "weapon"],
+                type: ["weapon"],
                 rarity: "common"
             },
             {
@@ -41,13 +44,13 @@ const monsters = [
         sprite: "assets/img/monsters/creature_1/boar.png",
 
         status: {
-            vidaMaxima: 80,
+            vidaMaxima: 65,
             dano: 8,
             nomeAtaque: "Investida",
             armadura: 4,
             agilidade: 4,
-            xp: 35,
-            ouro: 22
+            xp: 40,
+            ouro: 18
         },
 
         drops: [
@@ -62,6 +65,9 @@ const monsters = [
         ]
     },
 
+    // ============================================
+    // NÍVEL 3 - Médio Iniciante
+    // ============================================
     {
         id: "threeWolf",
         name: "Fera Tricefálica",
@@ -71,13 +77,13 @@ const monsters = [
         sprite: "assets/img/monsters/creature_1/three_wolf.png",
 
         status: {
-            vidaMaxima: 120,
-            dano: 18,
+            vidaMaxima: 110,
+            dano: 16,
             nomeAtaque: "Mordida Tripla",
             armadura: 5,
             agilidade: 10,
-            xp: 55,
-            ouro: 50
+            xp: 65,
+            ouro: 45
         },
 
         drops: [
@@ -92,6 +98,9 @@ const monsters = [
         ]
     },
 
+    // ============================================
+    // NÍVEL 5 - Intermediário (Desafio moderado)
+    // ============================================
     {
         id: "beetle",
         name: "Besouro",
@@ -101,13 +110,13 @@ const monsters = [
         sprite: "assets/img/monsters/creature_2/beetle.png",
 
         status: {
-            vidaMaxima: 120,
-            dano: 4,
+            vidaMaxima: 130,
+            dano: 12,
             nomeAtaque: "Mordida",
-            armadura: 9,
-            agilidade: 7,
+            armadura: 10,
+            agilidade: 5,
             xp: 60,
-            ouro: 25
+            ouro: 30
         },
 
         drops: [
@@ -132,12 +141,12 @@ const monsters = [
 
         status: {
             vidaMaxima: 80,
-            dano: 10,
-            nomeAtaque: "Investida",
+            dano: 14,
+            nomeAtaque: "Picada",
             armadura: 3,
-            agilidade: 12,
-            xp: 75,
-            ouro: 30
+            agilidade: 16,
+            xp: 70,
+            ouro: 35
         },
 
         drops: [
@@ -161,13 +170,13 @@ const monsters = [
         sprite: "assets/img/monsters/creature_2/ant.png",
 
         status: {
-            vidaMaxima: 180,
-            dano: 20,
+            vidaMaxima: 200,
+            dano: 22,
             nomeAtaque: "Picada",
-            armadura: 8,
-            agilidade: 12,
+            armadura: 9,
+            agilidade: 10,
             xp: 95,
-            ouro: 90
+            ouro: 85
         },
 
         drops: [
@@ -181,7 +190,10 @@ const monsters = [
             }
         ]
     },
-
+    
+    // ============================================
+    // NÍVEL 10 - Desafio Médio
+    // ============================================
     {
         id: "beaver",
         name: "Castor",
@@ -191,43 +203,13 @@ const monsters = [
         sprite: "assets/img/monsters/creature_3/beaver.png",
 
         status: {
-            vidaMaxima: 150,
-            dano: 15,
+            vidaMaxima: 220,
+            dano: 26,
             nomeAtaque: "Dentada",
-            armadura: 7,
-            agilidade: 13,
-            xp: 80,
-            ouro: 75
-        },
-
-        drops: [
-            {
-                type: ["chest"],
-                rarity: "common"
-            },
-            {
-                item: items.smallPotion,
-                quantidade: 1
-            }
-        ]
-    },
-
-    {
-        id: "crocodile",
-        name: "Crocrodilo",
-        level: 10,
-        type: "beast",
-
-        sprite: "assets/img/monsters/creature_3/crocodile.png",
-
-        status: {
-            vidaMaxima: 180,
-            dano: 15,
-            nomeAtaque: "Investida",
-            armadura: 10,
-            agilidade: 3,
-            xp: 85,
-            ouro: 75
+            armadura: 8,
+            agilidade: 14,
+            xp: 120,
+            ouro: 80
         },
 
         drops: [
@@ -243,21 +225,21 @@ const monsters = [
     },
 
     {
-        id: "bear",
-        name: "Urso Negro",
+        id: "crocodile",
+        name: "Crocodilo",
         level: 10,
         type: "beast",
 
-        sprite: "assets/img/monsters/creature_3/bear.png",
+        sprite: "assets/img/monsters/creature_3/crocodile.png",
 
         status: {
-            vidaMaxima: 220,
-            dano: 18,
-            nomeAtaque: "Picada",
-            armadura: 13,
-            agilidade: 15,
-            xp: 120,
-            ouro: 120
+            vidaMaxima: 300,
+            dano: 30,
+            nomeAtaque: "Investida",
+            armadura: 15,
+            agilidade: 6,
+            xp: 135,
+            ouro: 100
         },
 
         drops: [
@@ -272,22 +254,55 @@ const monsters = [
         ]
     },
 
-        {
+    {
+        id: "bear",
+        name: "Urso Marrom",
+        level: 10,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_3/bear.png",
+
+        status: {
+            vidaMaxima: 380,
+            dano: 38,
+            nomeAtaque: "Golpe de Garra",
+            armadura: 17,
+            agilidade: 9,
+            xp: 170,
+            ouro: 150
+        },
+
+        drops: [
+            {
+                type: ["chest"],
+                rarity: "common"
+            },
+            {
+                item: items.smallPotion,
+                quantidade: 4
+            }
+        ]
+    },
+
+    // ============================================
+    // NÍVEL 13 - Boss Intermediário
+    // ============================================
+    {
         id: "werewolf",
         name: "Lobisomem",
-        level: 15,
+        level: 13,
         type: "beast",
 
         sprite: "assets/img/monsters/creature_boss/werewolf.png",
 
         status: {
-            vidaMaxima: 250,
-            dano: 28,
-            nomeAtaque: "Dilacerar ",
-            armadura: 15,
+            vidaMaxima: 550,
+            dano: 50,
+            nomeAtaque: "Dilacerar",
+            armadura: 22,
             agilidade: 16,
-            xp: 180,
-            ouro: 200
+            xp: 270,
+            ouro: 240
         },
 
         drops: [
@@ -297,10 +312,322 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
+                quantidade: 4
+            }
+        ]
+    },
+
+    // ============================================
+    // NÍVEL 15 - Desafio Intermediário
+    // ============================================
+    {
+        id: "goblin",
+        name: "Goblin",
+        level: 15,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_4/goblin.png",
+
+        status: {
+            vidaMaxima: 320,
+            dano: 36,
+            nomeAtaque: "Cortar",
+            armadura: 16,
+            agilidade: 14,
+            xp: 170,
+            ouro: 150
+        },
+
+        drops: [
+            {
+                type: ["leg"],
+                rarity: "uncommon"
+            },
+            {
+                item: items.smallPotion,
+                quantidade: 2
+            }
+        ]
+    },
+
+    {
+        id: "elf",
+        name: "Elfo das Cavernas",
+        level: 15,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_4/elf.png",
+
+        status: {
+            vidaMaxima: 280,
+            dano: 38,
+            nomeAtaque: "Multiplos Cortes",
+            armadura: 14,
+            agilidade: 20,
+            xp: 180,
+            ouro: 160
+        },
+
+        drops: [
+            {
+                type: ["leg"],
+                rarity: "uncommon"
+            },
+            {
+                item: items.smallPotion,
+                quantidade: 2
+            }
+        ]
+    },
+
+    {
+        id: "troll",
+        name: "Troll",
+        level: 15,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_4/troll.png",
+
+        status: {
+            vidaMaxima: 420,
+            dano: 40,
+            nomeAtaque: "Porretada",
+            armadura: 20,
+            agilidade: 8,
+            xp: 190,
+            ouro: 180
+        },
+
+        drops: [
+            {
+                type: ["leg"],
+                rarity: "uncommon"
+            },
+            {
+                item: items.smallPotion,
+                quantidade: 4
+            }
+        ]
+    },
+
+    // ============================================
+    // NÍVEL 18 - Desafio Avançado
+    // ============================================
+    {
+        id: "goblin_2",
+        name: "Goblin da Caverna",
+        level: 18,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_5/goblin_2.png",
+
+        status: {
+            vidaMaxima: 380,
+            dano: 42,
+            nomeAtaque: "Estocada",
+            armadura: 17,
+            agilidade: 15,
+            xp: 195,
+            ouro: 180
+        },
+
+        drops: [
+            {
+                type: ["chest"],
+                rarity: "uncommon"
+            },
+            {
+                item: items.smallPotion,
                 quantidade: 3
             }
         ]
-    }
+    },
+
+    {
+        id: "ogre_2",
+        name: "Ogro Bestial",
+        level: 18,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_5/ogre_2.png",
+
+        status: {
+            vidaMaxima: 460,
+            dano: 46,
+            nomeAtaque: "Investida",
+            armadura: 22,
+            agilidade: 8,
+            xp: 210,
+            ouro: 200
+        },
+
+        drops: [
+            {
+                type: ["chest"],
+                rarity: "uncommon"
+            },
+            {
+                item: items.smallPotion,
+                quantidade: 4
+            }
+        ]
+    },
+
+    {
+        id: "ogre",
+        name: "Ogro",
+        level: 18,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_5/ogre.png",
+
+        status: {
+            vidaMaxima: 500,
+            dano: 44,
+            nomeAtaque: "Arranhar",
+            armadura: 24,
+            agilidade: 6,
+            xp: 220,
+            ouro: 210
+        },
+
+        drops: [
+            {
+                type: ["chest"],
+                rarity: "uncommon"
+            },
+            {
+                item: items.smallPotion,
+                quantidade: 5
+            }
+        ]
+    },
+
+    // ============================================
+    // NÍVEL 21 - Desafio Difícil
+    // ============================================
+    {
+        id: "kid-zombie",
+        name: "Kid Zombie",
+        level: 21,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_6/kid-zombie.png",
+
+        status: {
+            vidaMaxima: 400,
+            dano: 44,
+            nomeAtaque: "Morder",
+            armadura: 18,
+            agilidade: 14,
+            xp: 210,
+            ouro: 200
+        },
+
+        drops: [
+            {
+                type: ["helmet", "boot"],
+                rarity: "uncommon"
+            },
+            {
+                item: items.smallPotion,
+                quantidade: 3
+            }
+        ]
+    },
+
+    {
+        id: "zombie",
+        name: "Zombie",
+        level: 21,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_6/zombie.png",
+
+        status: {
+            vidaMaxima: 480,
+            dano: 46,
+            nomeAtaque: "Morder",
+            armadura: 20,
+            agilidade: 10,
+            xp: 230,
+            ouro: 220
+        },
+
+        drops: [
+            {
+                type: ["helmet", "boot"],
+                rarity: "uncommon"
+            },
+            {
+                item: items.smallPotion,
+                quantidade: 4
+            }
+        ]
+    },
+
+    {
+        id: "big-zombie",
+        name: "Big Zombie",
+        level: 21,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_6/big-zombie.png",
+
+        status: {
+            vidaMaxima: 580,
+            dano: 50,
+            nomeAtaque: "Esmagar",
+            armadura: 24,
+            agilidade: 7,
+            xp: 260,
+            ouro: 250
+        },
+
+        drops: [
+            {
+                type: ["helmet", "boot"],
+                rarity: "uncommon"
+            },
+            {
+                item: items.smallPotion,
+                quantidade: 5
+            }
+        ]
+    },
+
+    // ============================================
+    // NÍVEL 25 - Boss Final (Desafio Épico)
+    // ============================================
+    {
+        id: "skullKingIII",
+        name: "Rei Caveira III",
+        level: 25,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_boss_2/skullKingIII.png",
+
+        status: {
+            vidaMaxima: 750,
+            dano: 60,
+            nomeAtaque: "Dilacerar",
+            armadura: 28,
+            agilidade: 14,
+            xp: 400,
+            ouro: 380
+        },
+
+        drops: [
+            {
+                type: ["weapon"],
+                rarity: "rare"
+            },
+            {
+                item: items.mediumPotion,
+                quantidade: 4
+            }
+        ]
+    },
 
 ];
 

@@ -1,0 +1,204 @@
+/* ==========================================================
+    BOTÃO DE ATUALIZAÇÕES
+========================================================== */
+.btn-news{
+    position:absolute;
+    top:30px;
+    left:30px;
+    width:54px;
+    height:54px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background-color:transparent;
+    font-size:22px;
+    cursor:pointer;
+    transition:.25s;
+    border:none;
+    outline:none;
+    z-index:50;
+}
+.btn-news:hover{
+    transform:translateY(-2px) scale(1.08);
+    color:#ffd866;
+}
+.btn-news:active{
+    transform:scale(.96);
+}
+.pergaminho{
+    width:48px;
+    transform:rotate(45deg);
+    background-color:transparent;
+}
+.pergaminho:hover{
+    filter: drop-shadow(0 3px 10px #ffdb3b80);
+}
+/* ==========================================================
+    MODAL
+========================================================== */
+.news-modal{
+    position:fixed;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:rgba(0,0,0,.78);
+    backdrop-filter:blur(5px);
+    z-index:9999;
+    animation:fadeIn .25s ease;
+}
+
+/* ==========================================================
+    JANELA
+========================================================== */
+.news-window{
+    position:relative;
+    width:720px;
+    max-width:92vw;
+    max-height:85vh;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    background:linear-gradient(180deg, #231812, #18100d);
+    border:2px solid #8c6b36;
+    border-radius:12px;
+    box-shadow:0 0 40px rgba(0,0,0,.8), 0 0 25px rgba(212,163,115,.12);
+}
+.news-window::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    border-radius:12px;
+    box-shadow:inset 0 0 35px rgba(255,220,140,.05);
+}
+
+/* ==========================================================
+    CABEÇALHO
+========================================================== */
+.news-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 25px;
+    background:linear-gradient(to bottom, #3b291d, #2a1c16);
+    border-bottom:1px solid #5e4423;
+}
+.news-header h2{
+    margin:0;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:#e2bf83;
+    font-family:'Cinzel', serif;
+    font-size:24px;
+    letter-spacing:2px;
+}
+
+/* ==========================================================
+    BOTÃO FECHAR
+========================================================== */
+.news-close{
+    width:40px;
+    height:40px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border:1px solid transparent;
+    border-radius:50%;
+    background:transparent;
+    color:#ccb48c;
+    cursor:pointer;
+    font-size:18px;
+    transition:.2s;
+}
+.news-close:hover{
+    background:#4b2f20;
+    border-color:#8c6b36;
+    color:#ffd56a;
+}
+
+/* ==========================================================
+    CORPO
+========================================================== */
+.news-body{
+    padding:25px;
+    overflow-y:auto;
+}
+
+/* ==========================================================
+    VERSÕES
+========================================================== */
+.news-version{
+    padding-bottom:24px;
+    margin-bottom:24px;
+    border-bottom:1px solid rgba(212,163,115,.18);
+}
+.news-version:last-child{
+    border:none;
+    margin-bottom:0;
+    padding-bottom:0;
+}
+.news-version-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
+}
+.news-version-header h3{
+    margin:0;
+    color:#f0ca87;
+    font-family:'Cinzel', serif;
+    font-size:20px;
+}
+.news-version-header span{
+    color:#998773;
+    font-size:13px;
+}
+
+/* ==========================================================
+    LISTA
+========================================================== */
+.news-version ul{
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+.news-version li{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:8px 0;
+    color:#ddd4c7;
+    line-height:1.7;
+}
+.news-version li i{
+    color:#d4a373;
+    margin-top:5px;
+    font-size:11px;
+}
+
+/* ==========================================================
+    SCROLL
+========================================================== */
+.news-body::-webkit-scrollbar{
+    width:8px;
+}
+.news-body::-webkit-scrollbar-track{
+    background:#1d1512;
+}
+.news-body::-webkit-scrollbar-thumb{
+    background:#7b5a2d;
+    border-radius:8px;
+}
+.news-body::-webkit-scrollbar-thumb:hover{
+    background:#a67b3f;
+}
+
+/* ==========================================================
+    ANIMAÇÃO
+========================================================== */
+@keyframes fadeIn{
+    from{opacity:0; transform:scale(.98);}
+    to{opacity:1; transform:scale(1);}
+}

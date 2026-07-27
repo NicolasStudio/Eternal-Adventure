@@ -92,8 +92,10 @@ const dungeons = [
 
     {
         id: "forest_boss",
-        name: "Boss do Bosque",
-        level: 15,
+        name: "Boss",
+        isBoss: true,
+        maxFloor: 1,
+        level: 13,
         boss: true,
         page: 2,
         fights: 1,
@@ -112,7 +114,117 @@ const dungeons = [
             },
             items.smallPotion
         ]
-    }
+    },
+
+    {
+        id: "cave_1",
+        name: "Caverna I",
+        level: 15,
+        boss: false,
+        page: 3,
+        fights: 5,
+
+        monsters: [
+            "goblin",
+            "elf",
+            "elf",
+            "gobin",
+            "troll"
+        ],
+
+        image: "assets/img/assets/card_dungeon/card_cave_1.png",
+        background: "assets/img/backgrounds/page_2/cave_4.png",
+
+        drops: [
+            {
+                type: ["leg"],
+                rarity: "uncommon"
+            },
+            items.smallPotion
+        ]
+    },
+
+    {
+        id: "cave_2",
+        name: "Caverna II",
+        level: 18,
+        boss: false,
+        page: 3,
+        fights: 5,
+
+        monsters: [
+            "goblin_2",
+            "ogre_2",
+            "goblin_2",
+            "ogre_2",
+            "ogre"
+        ],
+
+        image: "assets/img/assets/card_dungeon/card_cave_2.png",
+        background: "assets/img/backgrounds/page_2/cave_5.png",
+
+        drops: [
+            {
+                type: ["chest"],
+                rarity: "uncommon"
+            },
+            items.smallPotion
+        ]
+    },
+
+    {
+        id: "cave_3",
+        name: "Caverna III",
+        level: 21,
+        boss: false,
+        page: 3,
+        fights: 5,
+
+        monsters: [
+            "kid-zombie",
+            "zombie",
+            "kid-zombie",
+            "zombie",
+            "big-zombie"
+        ],
+
+        image: "assets/img/assets/card_dungeon/card_cave_3.png",
+        background: "assets/img/backgrounds/page_2/cave_6.png",
+
+        drops: [
+            {
+                type: ["helmet", "boot"],
+                rarity: "uncommon"
+            },
+            items.smallPotion
+        ]
+    },
+
+    {
+        id: "cave_boss",
+        name: "Boss",
+        isBoss: true,
+        maxFloor: 1,
+        level: 25,
+        boss: true,
+        page: 4,
+        fights: 1,
+        
+        monsters: [
+            "skullKingIII"
+        ],
+
+        image: "assets/img/assets/card_dungeon/card_cave_end.png",
+        background: "assets/img/backgrounds/page_2/cave_end.png",
+
+        drops: [
+            {
+                type: ["weapon"],
+                rarity: "rare"
+            },
+            items.mediumPotion
+        ]
+    },
 
 ];
 

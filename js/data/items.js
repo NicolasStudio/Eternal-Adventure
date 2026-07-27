@@ -16,11 +16,12 @@ const items = {
 
         quality: null,
 
-        heal: 20,
+        heal: 25,
 
-        effect: "Recupera 20 pontos de Vida.",
+        effect: "Recupera 25 pontos de Vida.",
 
-        sellValue: 5
+        buyValue: 15,
+        sellValue: 7
     },
 
     mediumPotion: {
@@ -39,36 +40,56 @@ const items = {
 
         quality: null,
 
-        heal: 150,
+        heal: 70,
 
-        effect: "Recupera 150 pontos de Vida.",
+        effect: "Recupera 700 pontos de Vida.",
 
-        sellValue: 15
+        buyValue: 45,
+        sellValue: 20
     },
 
-    largePotion: {
-        id: "largePotion",
-        name: "Poção Grande",
-        icon: "assets/img/assets/items/consumables/large_potion.png",
+    // largePotion: {
+    //     id: "largePotion",
+    //     name: "Poção Grande",
+    //     icon: "assets/img/assets/items/consumables/large_potion.png",
 
-        type: "item",
-        stackable: true,
+    //     type: "item",
+    //     stackable: true,
 
-        rarity: {
-            id: "rare",
-            name: "Raro",
-            color: "#0050fc"
-        },
+    //     rarity: {
+    //         id: "rare",
+    //         name: "Raro",
+    //         color: "#0050fc"
+    //     },
 
-        quality: null,
+    //     quality: null,
 
-        heal: 300,
+    //     heal: 300,
 
-        effect: "Recupera 300 pontos de Vida.",
+    //     effect: "Recupera 300 pontos de Vida.",
 
-        sellValue: 35
-    }
+    //     buyValue: 70,
+    //     sellValue: 35
+    // }
 
 };
+
+/**
+ * Retorna todos os itens em formato de Array.
+ */
+export function getAllItems() {
+
+    return Object.values(items);
+
+}
+
+/**
+ * Busca um item pelo ID.
+ */
+export function getItemById(id) {
+
+    return Object.values(items).find(item => item.id === id) ?? null;
+
+}
 
 export default items;
