@@ -14,18 +14,18 @@ const monsters = [
         sprite: "assets/img/monsters/creature_1/wolf.png",
 
         status: {
-            vidaMaxima: 40,
-            dano: 6,
+            vidaMaxima: 18,
+            dano: 12,
             nomeAtaque: "Mordida",
-            armadura: 2,
-            agilidade: 8,
-            xp: 30,
+            armadura: 3,
+            agilidade: 3,
+            xp: 25,
             ouro: 10
         },
 
         drops: [
             {
-                type: ["weapon"],
+                type: ["weapon", "helmet"],
                 rarity: "common"
             },
             {
@@ -44,12 +44,12 @@ const monsters = [
         sprite: "assets/img/monsters/creature_1/boar.png",
 
         status: {
-            vidaMaxima: 65,
-            dano: 8,
+            vidaMaxima: 18,
+            dano: 12,
             nomeAtaque: "Investida",
-            armadura: 4,
-            agilidade: 4,
-            xp: 40,
+            armadura: 3,
+            agilidade: 3,
+            xp: 25,
             ouro: 18
         },
 
@@ -71,18 +71,18 @@ const monsters = [
     {
         id: "threeWolf",
         name: "Fera Tricefálica",
-        level: 3,
+        level: 1,
         type: "beast",
 
         sprite: "assets/img/monsters/creature_1/three_wolf.png",
 
         status: {
-            vidaMaxima: 110,
-            dano: 16,
+            vidaMaxima: 36,
+            dano: 18,
             nomeAtaque: "Mordida Tripla",
-            armadura: 5,
-            agilidade: 10,
-            xp: 65,
+            armadura: 3,
+            agilidade: 3,
+            xp: 50,
             ouro: 45
         },
 
@@ -99,23 +99,23 @@ const monsters = [
     },
 
     // ============================================
-    // NÍVEL 5 - Intermediário (Desafio moderado)
+    // NÍVEL 3 - Intermediário (Desafio moderado)
     // ============================================
     {
         id: "beetle",
         name: "Besouro",
-        level: 5,
+        level: 3,
         type: "beast",
 
         sprite: "assets/img/monsters/creature_2/beetle.png",
 
         status: {
-            vidaMaxima: 130,
-            dano: 12,
+            vidaMaxima: 30,
+            dano: 15,
             nomeAtaque: "Mordida",
-            armadura: 10,
-            agilidade: 5,
-            xp: 60,
+            armadura: 3,
+            agilidade: 4,
+            xp: 25,
             ouro: 30
         },
 
@@ -134,18 +134,18 @@ const monsters = [
     {
         id: "spider",
         name: "Aranha",
-        level: 5,
+        level: 3,
         type: "beast",
 
         sprite: "assets/img/monsters/creature_2/spider.png",
 
         status: {
-            vidaMaxima: 80,
-            dano: 14,
+            vidaMaxima: 27,
+            dano: 17,
             nomeAtaque: "Picada",
             armadura: 3,
-            agilidade: 16,
-            xp: 70,
+            agilidade: 4,
+            xp: 25,
             ouro: 35
         },
 
@@ -170,12 +170,12 @@ const monsters = [
         sprite: "assets/img/monsters/creature_2/ant.png",
 
         status: {
-            vidaMaxima: 200,
-            dano: 22,
+            vidaMaxima: 54,
+            dano: 30,
             nomeAtaque: "Picada",
-            armadura: 9,
-            agilidade: 10,
-            xp: 95,
+            armadura: 4,
+            agilidade: 5,
+            xp: 125,
             ouro: 85
         },
 
@@ -192,23 +192,23 @@ const monsters = [
     },
     
     // ============================================
-    // NÍVEL 10 - Desafio Médio
+    // NÍVEL 7 - Desafio Médio
     // ============================================
     {
         id: "beaver",
         name: "Castor",
-        level: 10,
+        level: 7,
         type: "beast",
 
         sprite: "assets/img/monsters/creature_3/beaver.png",
 
         status: {
-            vidaMaxima: 220,
-            dano: 26,
+            vidaMaxima: 36,
+            dano: 20,
             nomeAtaque: "Dentada",
-            armadura: 8,
-            agilidade: 14,
-            xp: 120,
+            armadura: 5,
+            agilidade: 6,
+            xp: 63,
             ouro: 80
         },
 
@@ -227,18 +227,18 @@ const monsters = [
     {
         id: "crocodile",
         name: "Crocodilo",
-        level: 10,
+        level: 7,
         type: "beast",
 
         sprite: "assets/img/monsters/creature_3/crocodile.png",
 
         status: {
-            vidaMaxima: 300,
-            dano: 30,
+            vidaMaxima: 36,
+            dano: 20,
             nomeAtaque: "Investida",
-            armadura: 15,
+            armadura: 5,
             agilidade: 6,
-            xp: 135,
+            xp: 63,
             ouro: 100
         },
 
@@ -257,18 +257,18 @@ const monsters = [
     {
         id: "bear",
         name: "Urso Marrom",
-        level: 10,
+        level: 7,
         type: "beast",
 
         sprite: "assets/img/monsters/creature_3/bear.png",
 
         status: {
-            vidaMaxima: 380,
-            dano: 38,
+            vidaMaxima: 80,
+            dano: 30,
             nomeAtaque: "Golpe de Garra",
-            armadura: 17,
-            agilidade: 9,
-            xp: 170,
+            armadura: 5,
+            agilidade: 6,
+            xp: 125,
             ouro: 150
         },
 
@@ -285,23 +285,23 @@ const monsters = [
     },
 
     // ============================================
-    // NÍVEL 13 - Boss Intermediário
+    // NÍVEL 10 - Boss Intermediário
     // ============================================
     {
         id: "werewolf",
         name: "Lobisomem",
-        level: 13,
+        level: 10,
         type: "beast",
 
         sprite: "assets/img/monsters/creature_boss/werewolf.png",
 
         status: {
-            vidaMaxima: 550,
-            dano: 50,
+            vidaMaxima: 120,
+            dano: 40,
             nomeAtaque: "Dilacerar",
-            armadura: 22,
-            agilidade: 16,
-            xp: 270,
+            armadura: 5,
+            agilidade: 7,
+            xp: 438,
             ouro: 240
         },
 
@@ -318,23 +318,23 @@ const monsters = [
     },
 
     // ============================================
-    // NÍVEL 15 - Desafio Intermediário
+    // NÍVEL 13 - Desafio Intermediário
     // ============================================
     {
         id: "goblin",
         name: "Goblin",
-        level: 15,
+        level: 13,
         type: "beast",
 
         sprite: "assets/img/monsters/creature_4/goblin.png",
 
         status: {
-            vidaMaxima: 320,
-            dano: 36,
+            vidaMaxima: 54,
+            dano: 28,
             nomeAtaque: "Cortar",
-            armadura: 16,
-            agilidade: 14,
-            xp: 170,
+            armadura: 6,
+            agilidade: 9,
+            xp: 125,
             ouro: 150
         },
 
@@ -353,18 +353,18 @@ const monsters = [
     {
         id: "elf",
         name: "Elfo das Cavernas",
-        level: 15,
+        level: 13,
         type: "beast",
 
         sprite: "assets/img/monsters/creature_4/elf.png",
 
         status: {
-            vidaMaxima: 280,
-            dano: 38,
+            vidaMaxima: 54,
+            dano: 28,
             nomeAtaque: "Multiplos Cortes",
-            armadura: 14,
-            agilidade: 20,
-            xp: 180,
+            armadura: 6,
+            agilidade: 9,
+            xp: 125,
             ouro: 160
         },
 
@@ -383,18 +383,18 @@ const monsters = [
     {
         id: "troll",
         name: "Troll",
-        level: 15,
+        level: 13,
         type: "beast",
 
         sprite: "assets/img/monsters/creature_4/troll.png",
 
         status: {
-            vidaMaxima: 420,
-            dano: 40,
+            vidaMaxima: 108,
+            dano: 39,
             nomeAtaque: "Porretada",
-            armadura: 20,
-            agilidade: 8,
-            xp: 190,
+            armadura: 6,
+            agilidade: 9,
+            xp: 250,
             ouro: 180
         },
 
@@ -411,23 +411,23 @@ const monsters = [
     },
 
     // ============================================
-    // NÍVEL 18 - Desafio Avançado
+    // NÍVEL 15 - Desafio Avançado
     // ============================================
     {
         id: "goblin_2",
         name: "Goblin da Caverna",
-        level: 18,
+        level: 15,
         type: "beast",
 
         sprite: "assets/img/monsters/creature_5/goblin_2.png",
 
         status: {
-            vidaMaxima: 380,
-            dano: 42,
+            vidaMaxima: 54,
+            dano: 30,
             nomeAtaque: "Estocada",
-            armadura: 17,
-            agilidade: 15,
-            xp: 195,
+            armadura: 7,
+            agilidade: 9,
+            xp: 125,
             ouro: 180
         },
 
@@ -452,12 +452,12 @@ const monsters = [
         sprite: "assets/img/monsters/creature_5/ogre_2.png",
 
         status: {
-            vidaMaxima: 460,
-            dano: 46,
+            vidaMaxima: 63,
+            dano: 34,
             nomeAtaque: "Investida",
-            armadura: 22,
-            agilidade: 8,
-            xp: 210,
+            armadura: 8,
+            agilidade: 11,
+            xp: 125,
             ouro: 200
         },
 
@@ -482,12 +482,12 @@ const monsters = [
         sprite: "assets/img/monsters/creature_5/ogre.png",
 
         status: {
-            vidaMaxima: 500,
-            dano: 44,
+            vidaMaxima: 135,
+            dano: 48,
             nomeAtaque: "Arranhar",
-            armadura: 24,
-            agilidade: 6,
-            xp: 220,
+            armadura: 8,
+            agilidade: 11,
+            xp: 250,
             ouro: 210
         },
 
@@ -515,12 +515,12 @@ const monsters = [
         sprite: "assets/img/monsters/creature_6/kid-zombie.png",
 
         status: {
-            vidaMaxima: 400,
-            dano: 44,
+            vidaMaxima: 72,
+            dano: 38,
             nomeAtaque: "Morder",
-            armadura: 18,
-            agilidade: 14,
-            xp: 210,
+            armadura: 9,
+            agilidade: 12,
+            xp: 250,
             ouro: 200
         },
 
@@ -545,12 +545,12 @@ const monsters = [
         sprite: "assets/img/monsters/creature_6/zombie.png",
 
         status: {
-            vidaMaxima: 480,
-            dano: 46,
+            vidaMaxima: 72,
+            dano: 38,
             nomeAtaque: "Morder",
-            armadura: 20,
-            agilidade: 10,
-            xp: 230,
+            armadura: 9,
+            agilidade: 12,
+            xp: 250,
             ouro: 220
         },
 
@@ -575,12 +575,12 @@ const monsters = [
         sprite: "assets/img/monsters/creature_6/big-zombie.png",
 
         status: {
-            vidaMaxima: 580,
-            dano: 50,
+            vidaMaxima: 150,
+            dano: 53,
             nomeAtaque: "Esmagar",
-            armadura: 24,
-            agilidade: 7,
-            xp: 260,
+            armadura: 9,
+            agilidade: 12,
+            xp: 500,
             ouro: 250
         },
 
@@ -608,12 +608,12 @@ const monsters = [
         sprite: "assets/img/monsters/creature_boss_2/skullKingIII.png",
 
         status: {
-            vidaMaxima: 750,
-            dano: 60,
+            vidaMaxima: 300,
+            dano: 68,
             nomeAtaque: "Dilacerar",
-            armadura: 28,
+            armadura: 10,
             agilidade: 14,
-            xp: 400,
+            xp: 875,
             ouro: 380
         },
 

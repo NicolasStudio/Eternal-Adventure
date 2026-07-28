@@ -155,7 +155,6 @@
     color:#998773;
     font-size:13px;
 }
-
 /* ==========================================================
     LISTA
 ========================================================== */
@@ -166,7 +165,7 @@
 }
 .news-version li{
     display:flex;
-    align-items:flex-start;
+    align-items:center;
     gap:12px;
     padding:8px 0;
     color:#ddd4c7;
@@ -174,7 +173,6 @@
 }
 .news-version li i{
     color:#d4a373;
-    margin-top:5px;
     font-size:11px;
 }
 

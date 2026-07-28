@@ -1,6 +1,18 @@
 export default [
 
     {
+        version: "Alpha v0.4",
+        date: "Julho de 2026",
+        changes: [
+            "Grande balanceamento de emergência",
+            "Correções de layout.",
+            "Inserção do menu de opções (ainda não tem musica), limpar dados faz apaga os dados salvos no seu navegador.",
+            "Preparando o código para receber a função no ferreiro 'Encantar'",
+
+        ]
+    },
+
+    {
         version: "Alpha v0.3",
         date: "Julho de 2026",
         changes: [

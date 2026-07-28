@@ -280,14 +280,16 @@ export default class BlacksmithWeapon {
         if (!this.anvilWeapon?.baseStats) return "";
 
         const next = UpgradeService.getNextQuality(this.anvilWeapon);
-        const nextBonus = next ? UpgradeService.getStatBonusFor(this.anvilWeapon, next) : 0;
 
         return Object.entries(this.anvilWeapon.baseStats)
             .filter(([, baseValue]) => baseValue !== 0)
             .map(([key, baseValue]) => {
 
                 const currentValue = this.anvilWeapon.stats[key];
-                const nextValue = next ? baseValue + nextBonus : currentValue;
+
+                const nextValue = next
+                    ? baseValue + UpgradeService.getBonusForStat(this.anvilWeapon, next, key)
+                    : currentValue;
 
                 return `
                     <div class="blacksmith-stat">

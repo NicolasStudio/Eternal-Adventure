@@ -1,5 +1,6 @@
 import NewsModal from "../ui/NewsModal.js";
 import SaveService from "../services/SaveService.js";
+import SettingsModal from "./components/modals/SettingsModal.js";
 
 export default class HomeScreen {
 
@@ -8,6 +9,7 @@ export default class HomeScreen {
         this.element = document.getElementById("home-screen");
 
         this.newsModal = new NewsModal();
+        this.settingsModal = new SettingsModal(game);
 
         this.render();
         this.bindEvents();
@@ -30,7 +32,7 @@ export default class HomeScreen {
                     <button id="btn-continue" ${SaveService.hasLocalSave() ? "" : "disabled"}>
                         Continuar
                     </button>
-                    <button>
+                    <button id="btn-settings">
                         Configurações
                     </button>
                 </div>
@@ -68,6 +70,14 @@ export default class HomeScreen {
                 if (!data || !SaveService.isValidSave(data)) return;
 
                 SaveService.applyLoadedData(this.game, data);
+
+            });
+
+        this.element
+            .querySelector("#btn-settings")
+            ?.addEventListener("click", () => {
+
+                this.settingsModal.show();
 
             });
 

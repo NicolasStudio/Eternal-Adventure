@@ -104,6 +104,10 @@ export default class SaveService {
         return !!localStorage.getItem(STORAGE_KEY);
     }
 
+    static clearLocalSave() {
+        localStorage.removeItem(STORAGE_KEY);
+    }
+
     static loadFromLocalStorage() {
 
         const raw = localStorage.getItem(STORAGE_KEY);

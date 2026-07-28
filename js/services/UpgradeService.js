@@ -4,6 +4,11 @@ import upgradeCosts from "../data/upgradeCosts.js";
 // Ordem fixa de progressão da qualidade de um item.
 const QUALITY_ORDER = ["none", "ordinary", "mediocre", "exceptional"];
 
+// Status secundários só passam a receber bônus de melhoria quando o
+// item chega em "Excepcional". Antes disso, só os principais
+// (attack, armor, agility) ganham pontos a cada melhoria.
+const SECONDARY_STATS = ["criticalChance", "lifeSteal", "penetration"];
+
 export default class UpgradeService {
 
     // Retorna a qualidade atual do item (item recém dropado = "none").
@@ -53,19 +58,48 @@ export default class UpgradeService {
 
     }
 
+    // Bônus que UM status específico ganha numa dada qualidade.
+    // Status secundários (criticalChance, lifeSteal, penetration) só
+    // recebem bônus a partir da qualidade "Excepcional" — antes disso
+    // o bônus deles é sempre 0, mesmo com a raridade/qualidade calculando
+    // um valor maior que zero pros status principais.
+    static getBonusForStat(item, quality, statKey) {
+
+        const bonus = this.getStatBonusFor(item, quality);
+
+        if (SECONDARY_STATS.includes(statKey) && quality?.id !== "exceptional") {
+            return 0;
+        }
+
+        return bonus;
+
+    }
+
     // Recalcula item.stats a partir do item.baseStats (o valor original,
     // sem melhoria nenhuma) + o bônus da qualidade atual.
     // Só os atributos que o item já possui (valor != 0) recebem o bônus.
+    //
+    // Status secundários (criticalChance, lifeSteal, penetration) só
+    // começam a ganhar bônus quando a qualidade chega em "Excepcional".
+    // Antes disso (Ordinário, Medíocre) só os principais (attack, armor,
+    // agility) recebem os pontos da melhoria.
     static applyStats(item) {
 
         if (!item?.baseStats) return;
 
-        const bonus = this.getStatBonus(item);
+        const quality = this.getCurrentQuality(item);
 
         const stats = {};
 
         Object.entries(item.baseStats).forEach(([key, value]) => {
-            stats[key] = value !== 0 ? value + bonus : value;
+
+            if (value === 0) {
+                stats[key] = 0;
+                return;
+            }
+
+            stats[key] = value + this.getBonusForStat(item, quality, key);
+
         });
 
         item.stats = stats;

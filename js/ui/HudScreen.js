@@ -15,6 +15,7 @@ import ChestHUD from "./components/ChestHUD.js";
 import ChestRewardModal from "./components/modals/ChestRewardModal.js";
 import AlbumModal from "./components/modals/AlbumModal.js";
 import LoadGameModal from "./components/modals/LoadGameModal.js";
+import SettingsModal from "./components/modals/SettingsModal.js";
 
 export default class HudScreen {
     constructor(game) {
@@ -36,6 +37,7 @@ export default class HudScreen {
         this.chestRewardModal = new ChestRewardModal();
         this.albumModal = new AlbumModal(game);
         this.loadGameModal = new LoadGameModal(game);
+        this.settingsModal = new SettingsModal(game);
         this.currentView = "";
         this.characterVisible = true;
         this.inCombat = false;

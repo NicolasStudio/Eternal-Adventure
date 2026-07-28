@@ -5,8 +5,8 @@ import UpgradeService from "../services/UpgradeService.js";
 const ARMOR_SLOTS = [
     { id: "helmet", label: "Elmo", icon: "fa-solid fa-hat-wizard" },
     { id: "chest", label: "Peitoral", icon: "fa-solid fa-shirt" },
-    { id: "legs", label: "Pernas", icon: "fa-solid fa-socks" },
-    { id: "boots", label: "Botas", icon: "fa-solid fa-boot" }
+    { id: "leg", label: "Pernas", icon: "fa-solid fa-socks" },
+    { id: "boot", label: "Botas", icon: "fa-solid fa-shoe-prints" }
 ];
 
 export default class BlacksmithArmor {
@@ -182,14 +182,16 @@ export default class BlacksmithArmor {
         if (!this.anvilItem?.baseStats) return "";
 
         const next = UpgradeService.getNextQuality(this.anvilItem);
-        const nextBonus = next ? UpgradeService.getStatBonusFor(this.anvilItem, next) : 0;
 
         return Object.entries(this.anvilItem.baseStats)
             .filter(([, baseValue]) => baseValue !== 0)
             .map(([key, baseValue]) => {
 
                 const currentValue = this.anvilItem.stats[key];
-                const nextValue = next ? baseValue + nextBonus : currentValue;
+
+                const nextValue = next
+                    ? baseValue + UpgradeService.getBonusForStat(this.anvilItem, next, key)
+                    : currentValue;
 
                 return `
                     <div class="blacksmith-stat">

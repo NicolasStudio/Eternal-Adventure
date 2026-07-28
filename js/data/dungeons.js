@@ -36,7 +36,7 @@ const dungeons = [
     {
         id: "forest_2",
         name: "Bosque II",
-        level: 5,
+        level: 3,
         boss: false,
         page: 1,
         fights: 5,
@@ -65,7 +65,7 @@ const dungeons = [
     {
         id: "forest_3",
         name: "Bosque III",
-        level: 10,
+        level: 7,
         boss: false,
         page: 1,
         fights: 5,
@@ -95,7 +95,7 @@ const dungeons = [
         name: "Boss",
         isBoss: true,
         maxFloor: 1,
-        level: 13,
+        level: 10,
         boss: true,
         page: 2,
         fights: 1,
@@ -119,7 +119,7 @@ const dungeons = [
     {
         id: "cave_1",
         name: "Caverna I",
-        level: 15,
+        level: 13,
         boss: false,
         page: 3,
         fights: 5,
@@ -128,7 +128,7 @@ const dungeons = [
             "goblin",
             "elf",
             "elf",
-            "gobin",
+            "goblin",
             "troll"
         ],
 
@@ -147,7 +147,7 @@ const dungeons = [
     {
         id: "cave_2",
         name: "Caverna II",
-        level: 18,
+        level: 15,
         boss: false,
         page: 3,
         fights: 5,
@@ -175,7 +175,7 @@ const dungeons = [
     {
         id: "cave_3",
         name: "Caverna III",
-        level: 21,
+        level: 18,
         boss: false,
         page: 3,
         fights: 5,
@@ -205,7 +205,7 @@ const dungeons = [
         name: "Boss",
         isBoss: true,
         maxFloor: 1,
-        level: 25,
+        level: 20,
         boss: true,
         page: 4,
         fights: 1,

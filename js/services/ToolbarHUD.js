@@ -52,6 +52,10 @@ export default class Toolbar {
         toolbar.querySelector("#btn-load")?.addEventListener("click", () => {
             this.game.hudScreen.loadGameModal.show();
         });
+
+        toolbar.querySelector("#btn-settings")?.addEventListener("click", () => {
+            this.game.hudScreen.settingsModal.show();
+        });
     }
 
     async toggleFullscreen() {

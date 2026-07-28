@@ -1,0 +1,213 @@
+/* ==========================================================
+   MODAL - CONFIGURAÇÕES
+========================================================== */
+.settings-modal{
+    position:relative;
+    width:380px;
+    max-width:92%;
+    padding:0;
+    border:1px solid #7d6846;
+    border-radius:8px;
+    background:rgba(18,13,9,.96);
+    box-shadow:0 0 20px rgba(0,0,0,.7), inset 0 0 25px rgba(255,255,255,.03);
+    color:#efe2bf;
+    font-family:"Cinzel",serif;
+    animation:rewardPopup .25s ease;
+    overflow:hidden;
+}
+
+.settings-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 18px;
+    border-bottom:1px solid rgba(212,163,115,.25);
+}
+
+.settings-header h2{
+    margin:0;
+    font-size:1.15rem;
+    color:#f6d19c;
+}
+
+.settings-close{
+    background:none;
+    border:none;
+    color:#bca46d;
+    font-size:1.1rem;
+    cursor:pointer;
+    transition:.15s;
+}
+
+.settings-close:hover{
+    color:#f1c75c;
+}
+
+.settings-section{
+    padding:16px 20px;
+    border-bottom:1px solid rgba(212,163,115,.15);
+}
+
+.settings-section h3{
+    margin:0 0 12px;
+    font-size:.85rem;
+    letter-spacing:.5px;
+    text-transform:uppercase;
+    color:#bca46d;
+}
+
+.settings-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    padding:8px 0;
+}
+
+.settings-checkbox{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:#d8c39b;
+    font-size:.92rem;
+    cursor:pointer;
+    white-space:nowrap;
+}
+
+.settings-checkbox input[type="checkbox"]{
+    width:16px;
+    height:16px;
+    accent-color:#c79b37;
+    cursor:pointer;
+}
+
+.settings-row input[type="range"]{
+    flex:1;
+    accent-color:#c79b37;
+    cursor:pointer;
+}
+
+.settings-row input[type="range"]:disabled{
+    opacity:.35;
+    cursor:not-allowed;
+}
+
+.settings-danger-button{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:100%;
+    padding:10px;
+    border:2px solid #7a2e2e;
+    border-radius:6px;
+    background:rgba(122,46,46,.15);
+    color:#e39a9a;
+    font-family:"Cinzel",serif;
+    font-size:.9rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:.15s;
+}
+
+.settings-danger-button:hover{
+    border-color:#c04b4b;
+    background:rgba(122,46,46,.28);
+    color:#ffb3b3;
+}
+
+.settings-footer{
+    padding:14px 20px 20px;
+    display:flex;
+    justify-content:center;
+}
+
+.settings-exit-button{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:9px 24px;
+    border:2px solid #5b4633;
+    border-radius:6px;
+    background:rgba(0,0,0,.25);
+    color:#d8c39b;
+    font-family:"Cinzel",serif;
+    font-size:.9rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:.15s;
+}
+
+.settings-exit-button:hover{
+    border-color:#8b7355;
+    color:#f3e0b7;
+}
+
+/* ==========================================================
+   CONFIRMAÇÃO DE LIMPEZA DE DADOS
+========================================================== */
+.settings-confirm-overlay{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,.8);
+    backdrop-filter:blur(2px);
+    z-index:5;
+}
+
+.settings-confirm-modal{
+    width:300px;
+    max-width:88%;
+    padding:20px;
+    border:1px solid #7a2e2e;
+    border-radius:8px;
+    background:rgba(24,16,11,.98);
+    text-align:center;
+}
+
+.settings-confirm-modal p{
+    margin:0 0 18px;
+    font-size:.88rem;
+    color:#e8d9b8;
+    line-height:1.5;
+}
+
+.settings-confirm-actions{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+}
+
+.settings-confirm-yes,
+.settings-confirm-no{
+    padding:8px 20px;
+    border-radius:6px;
+    font-family:"Cinzel",serif;
+    font-weight:700;
+    font-size:.85rem;
+    cursor:pointer;
+    transition:.15s;
+}
+
+.settings-confirm-yes{
+    border:2px solid #c04b4b;
+    background:rgba(122,46,46,.25);
+    color:#ffb3b3;
+}
+
+.settings-confirm-yes:hover{
+    border-color:#e36868;
+}
+
+.settings-confirm-no{
+    border:2px solid #5b4633;
+    background:rgba(0,0,0,.25);
+    color:#d8c39b;
+}
+
+.settings-confirm-no:hover{
+    border-color:#8b7355;
+    color:#f3e0b7;
+}

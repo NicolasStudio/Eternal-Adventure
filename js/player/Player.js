@@ -29,8 +29,8 @@ export default class Player {
             weapon: null,
             helmet: null,
             chest: null,
-            legs: null,
-            boots: null
+            leg: null,
+            boot: null
         };
         this.stats = new PlayerStats(this);
 
@@ -71,11 +71,11 @@ export default class Player {
     createBaseStats() {
         switch (this.class.id) {
             case "warrior":
-                return { attack: 6, armor: 5, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0 };
+                return { attack: 5, armor: 5, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0 };
             case "archer":
-                return { attack: 7, armor: 3, agility: 8, criticalChance: 0, lifeSteal: 0, penetration: 0 };
+                return { attack: 1, armor: 3, agility: 7, criticalChance: 0, lifeSteal: 0, penetration: 0 };
             case "mage":
-                return { attack: 9, armor: 2, agility: 4, criticalChance: 0, lifeSteal: 0, penetration: 0 };
+                return { attack: 8, armor: 1, agility: 5, criticalChance: 0, lifeSteal: 0, penetration: 0 };
             default:
                 return { attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0 };
         }
