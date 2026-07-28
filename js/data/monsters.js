@@ -25,7 +25,7 @@ const monsters = [
 
         drops: [
             {
-                type: ["weapon"],
+                type: ["weapon", "boot"],
                 rarity: "common"
             },
             {
