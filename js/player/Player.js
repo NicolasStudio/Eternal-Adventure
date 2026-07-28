@@ -71,9 +71,9 @@ export default class Player {
     createBaseStats() {
         switch (this.class.id) {
             case "warrior":
-                return { attack: 5, armor: 5, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0 };
+                return { attack: 4, armor: 5, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0 };
             case "archer":
-                return { attack: 1, armor: 3, agility: 7, criticalChance: 0, lifeSteal: 0, penetration: 0 };
+                return { attack: 2, armor: 3, agility: 7, criticalChance: 0, lifeSteal: 0, penetration: 0 };
             case "mage":
                 return { attack: 8, armor: 1, agility: 5, criticalChance: 0, lifeSteal: 0, penetration: 0 };
             default:
