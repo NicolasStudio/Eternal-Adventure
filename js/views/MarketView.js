@@ -4,6 +4,8 @@ export default class MarketView {
     constructor(game) {
         this.game = game;
         this.selectedItem = null;
+        this.sellQuantity = 1;
+        this.keydownBound = false;
     }
 
     get player() {
@@ -181,6 +183,15 @@ export default class MarketView {
         }
         if (!this.selectedItem) {
             return this.renderPlaceholder();
+        }
+
+        const ownedQuantity = this.selectedItem.quantity ?? 1;
+
+        if (this.sellQuantity > ownedQuantity) {
+            this.sellQuantity = ownedQuantity;
+        }
+        if (this.sellQuantity < 1) {
+            this.sellQuantity = 1;
         }
 
         return `
@@ -398,10 +409,39 @@ export default class MarketView {
     renderSellPanel(){
 
         const item = this.selectedItem;
+        const ownedQuantity = item.quantity ?? 1;
+        const isStackable = ownedQuantity > 1;
+
+        const totalValue = item.sellValue * this.sellQuantity;
 
         return `
 
             <div class="market-sell-panel">
+
+                ${
+                    isStackable
+                        ? `
+                            <div class="market-owned">
+                                <span>Você possui</span>
+                                <strong>${ownedQuantity}</strong>
+                            </div>
+
+                            <div class="market-quantity-control">
+                                <div class="market-quantity-header">
+                                    <span>Quantidade a vender</span>
+                                    <span class="market-quantity-value">${this.sellQuantity}/${ownedQuantity}</span>
+                                </div>
+                                <input
+                                    type="range"
+                                    class="market-quantity-slider"
+                                    min="1"
+                                    max="${ownedQuantity}"
+                                    value="${this.sellQuantity}"
+                                >
+                            </div>
+                        `
+                        : ""
+                }
 
                 <div class="market-price">
 
@@ -415,7 +455,7 @@ export default class MarketView {
 
                         <i class="fa-solid fa-coins"></i>
 
-                        ${item.sellValue}
+                        ${totalValue}
 
                     </strong>
 
@@ -425,7 +465,7 @@ export default class MarketView {
 
                     <i class="fa-solid fa-hand-holding-dollar"></i>
 
-                    Vender Item
+                    Vender ${isStackable ? `(${this.sellQuantity})` : "Item"}
 
                 </button>
 
@@ -444,37 +484,86 @@ export default class MarketView {
                 const item = this.inventory.find(item => item.uid === button.dataset.uid);
                 if (!item) return;
                 this.selectedItem = item;
+                this.sellQuantity = 1;
                 this.game.hudScreen.refreshCurrentView();
             });
         });
-        container.querySelector(".market-sell-button")?.addEventListener("click", () => {
 
-            if (!this.selectedItem) {
+        container.querySelector(".market-quantity-slider")?.addEventListener("input", (event) => {
 
-                Toast.show("Selecione um item.");
+            this.sellQuantity = Number(event.target.value);
 
-                return;
+            const item = this.selectedItem;
+            if (!item) return;
 
-            }
+            const valueLabel = container.querySelector(".market-quantity-value");
+            const priceValue = container.querySelector(".market-price-value");
+            const sellButton = container.querySelector(".market-sell-button");
 
-            const sold = this.player.sellItem(this.selectedItem);
-
-            if (!sold) {
-
-                Toast.show("Não foi possível vender o item.");
-
-                return;
-
-            }
-
-            Toast.show(
-                `${this.selectedItem.name} vendido por ${this.selectedItem.sellValue} ouro.`
-            );
-
-            this.selectedItem = null;
-
-            this.game.hudScreen.refreshCurrentView();
+            if (valueLabel) valueLabel.textContent = `${this.sellQuantity}/${item.quantity ?? 1}`;
+            if (priceValue) priceValue.innerHTML = `<i class="fa-solid fa-coins"></i> ${item.sellValue * this.sellQuantity}`;
+            if (sellButton) sellButton.innerHTML = `<i class="fa-solid fa-hand-holding-dollar"></i> Vender (${this.sellQuantity})`;
 
         });
+
+        container.querySelector(".market-sell-button")?.addEventListener("click", () => {
+            this.sellSelectedItem();
+        });
+
+        // Enter também confirma a venda do item selecionado (só nesta tela).
+        if (!this.keydownBound) {
+
+            document.addEventListener("keydown", (event) => {
+
+                if (event.key !== "Enter") return;
+
+                if (!document.querySelector(".market-window")) return;
+
+                this.sellSelectedItem();
+
+            });
+
+            this.keydownBound = true;
+
+        }
+    }
+
+    sellSelectedItem() {
+
+        if (!this.selectedItem) {
+
+            Toast.show("Selecione um item.");
+
+            return;
+
+        }
+
+        const quantity = this.sellQuantity;
+        const item = this.selectedItem;
+
+        const actualQuantity = Math.min(quantity, item.quantity ?? 1);
+        const total = item.sellValue * actualQuantity;
+
+        const sold = this.player.sellItem(item, quantity);
+
+        if (!sold) {
+
+            Toast.show("Não foi possível vender o item.");
+
+            return;
+
+        }
+
+        Toast.show(
+            actualQuantity > 1
+                ? `${actualQuantity}x ${item.name} vendido(s) por ${total} ouro.`
+                : `${item.name} vendido por ${total} ouro.`
+        );
+
+        this.selectedItem = null;
+        this.sellQuantity = 1;
+
+        this.game.hudScreen.refreshCurrentView();
+
     }
 }

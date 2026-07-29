@@ -17,7 +17,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/sword-rarity-comum.png",
 
         stats: {
-            attack: 5,
+            attack: 4,
             armor: 0,
             agility: -2,
             criticalChance: 0,
@@ -42,7 +42,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/sword-rarity-incomum.png",
 
         stats: {
-            attack: 12,
+            attack: 10,
             armor: 0,
             agility: -3,
             criticalChance: 0,
@@ -67,7 +67,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/sword-rarity-raro.png",
 
         stats: {
-            attack: 22,
+            attack: 20,
             armor: 0,
             agility: -4,
             criticalChance: 0,

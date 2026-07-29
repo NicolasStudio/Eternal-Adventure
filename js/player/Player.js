@@ -71,11 +71,11 @@ export default class Player {
     createBaseStats() {
         switch (this.class.id) {
             case "warrior":
-                return { attack: 4, armor: 5, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0 };
+                return { attack: 5, armor: 5, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0 };
             case "archer":
-                return { attack: 2, armor: 3, agility: 7, criticalChance: 0, lifeSteal: 0, penetration: 0 };
+                return { attack: 6, armor: 3, agility: 7, criticalChance: 0, lifeSteal: 0, penetration: 0 };
             case "mage":
-                return { attack: 8, armor: 1, agility: 5, criticalChance: 0, lifeSteal: 0, penetration: 0 };
+                return { attack: 8, armor: 0, agility: 5, criticalChance: 0, lifeSteal: 0, penetration: 0 };
             default:
                 return { attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0 };
         }
@@ -182,7 +182,7 @@ export default class Player {
 
     }
 
-    removeItem(item) {
+    removeItem(item, amount = 1) {
 
         if (!item) return;
 
@@ -190,9 +190,13 @@ export default class Player {
 
         if (!inventoryItem) return;
 
-        if (inventoryItem.quantity > 1) {
+        const currentQuantity = inventoryItem.quantity ?? 1;
 
-            inventoryItem.quantity--;
+        const toRemove = Math.min(amount, currentQuantity);
+
+        if (currentQuantity > toRemove) {
+
+            inventoryItem.quantity -= toRemove;
 
         } else {
 
@@ -204,7 +208,7 @@ export default class Player {
 
     }
 
-    sellItem(item) {
+    sellItem(item, amount = 1) {
 
         if (!item) return false;
 
@@ -214,9 +218,11 @@ export default class Player {
 
         if (!inventoryItem) return false;
 
-        this.addGold(inventoryItem.sellValue);
+        const toSell = Math.min(amount, inventoryItem.quantity ?? 1);
 
-        this.removeItem(inventoryItem);
+        this.addGold(inventoryItem.sellValue * toSell);
+
+        this.removeItem(inventoryItem, toSell);
 
         return true;
 

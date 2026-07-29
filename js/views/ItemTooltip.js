@@ -18,19 +18,10 @@ export default class ItemTooltip {
     }
 
     renderHeader() {
-        let subtitle;
-        if (this.item.type === "item") {
-            subtitle = "Consumível";
-        } else if (this.item.class) {
-            subtitle = this.getClassName(this.item.class);
-        } else {
-            subtitle = "Todas as Classes";
-        }
         return `
             <div class="tooltip-header">
                 <img class="tooltip-image" src="${this.item.icon}" alt="${this.item.name}">
                 <h2 class="tooltip-name">${this.item.name.toUpperCase()}</h2>
-                <span class="tooltip-class">${subtitle}</span>
             </div>
         `;
     }
@@ -38,7 +29,14 @@ export default class ItemTooltip {
     renderInfo() {
         const rarity = this.item.rarity ?? { name: "Comum", color: "#FFFFFF" };
         const quality = this.item.quality ?? { name: "Nenhuma", color: "#8f8578" };
-        const itemClass = this.item.class ? this.getClassName(this.item.class) : "Todas as Classes";
+        let itemClass;
+        if (this.item.type === "item") {
+            itemClass = "Consumível";
+        } else if (this.item.class) {
+            itemClass = this.getClassName(this.item.class);
+        } else {
+            itemClass = "Todas as Classes";
+        }
         return `
             <div class="tooltip-section">
                 <div class="tooltip-row">

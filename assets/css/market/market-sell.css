@@ -47,6 +47,79 @@
 
     padding-top:24px;
 
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+
+}
+
+/* ==========================================================
+   QUANTIDADE EM ESTOQUE
+========================================================== */
+.market-owned{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:13px;
+    color:#bda57d;
+}
+.market-owned strong{
+    font-family:"Cinzel",serif;
+    font-size:16px;
+    color:#ecd8b3;
+}
+
+/* ==========================================================
+   CONTROLE DE QUANTIDADE A VENDER
+========================================================== */
+.market-quantity-control{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+.market-quantity-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:13px;
+    color:#bda57d;
+}
+.market-quantity-value{
+    font-family:"Cinzel",serif;
+    font-weight:bold;
+    color:#ffd34d;
+}
+.market-quantity-slider{
+    -webkit-appearance:none;
+    appearance:none;
+    width:100%;
+    height:6px;
+    border-radius:4px;
+    background:linear-gradient(180deg, rgba(60,40,20,.6), rgba(20,10,5,.75));
+    border:1px solid rgba(139,115,85,.35);
+    cursor:pointer;
+    accent-color:#d4a373;
+}
+.market-quantity-slider::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    appearance:none;
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background:#ecd8b3;
+    border:2px solid #8b7355;
+    box-shadow:0 0 8px rgba(212,163,115,.5);
+    cursor:pointer;
+    margin-top:-1px;
+}
+.market-quantity-slider::-moz-range-thumb{
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background:#ecd8b3;
+    border:2px solid #8b7355;
+    box-shadow:0 0 8px rgba(212,163,115,.5);
+    cursor:pointer;
 }
 
 /* ==========================================================
