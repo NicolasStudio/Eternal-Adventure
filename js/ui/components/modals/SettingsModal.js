@@ -1,5 +1,6 @@
 import SaveService from "../../../services/SaveService.js";
 import AudioSettings from "../../../services/AudioSettings.js";
+import MusicService from "../../../services/MusicService.js";
 import Toast from "../Toast.js";
 
 export default class SettingsModal {
@@ -133,6 +134,7 @@ export default class SettingsModal {
         this.modal.querySelector("#settings-music-enabled")?.addEventListener("change", (event) => {
             this.settings.musicEnabled = event.target.checked;
             AudioSettings.save(this.settings);
+            MusicService.refreshSettings();
             this.refresh();
         });
 
@@ -145,6 +147,7 @@ export default class SettingsModal {
         this.modal.querySelector("#settings-music-volume")?.addEventListener("input", (event) => {
             this.settings.musicVolume = Number(event.target.value);
             AudioSettings.save(this.settings);
+            MusicService.refreshSettings();
         });
 
         this.modal.querySelector("#settings-sfx-volume")?.addEventListener("input", (event) => {

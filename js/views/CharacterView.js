@@ -580,6 +580,8 @@ export default class CharacterView {
 
             this.game.hudScreen.refreshCurrentView();
 
+            this.game.hudScreen.updateMusic();
+
             if (this.game.hudScreen.onPreparationFinished) {
 
                 const resolve =
@@ -600,6 +602,8 @@ export default class CharacterView {
         this.game.hudScreen.render();
 
         this.game.hudScreen.registerEvents();
+
+        this.game.hudScreen.updateMusic();
 
     }
 }

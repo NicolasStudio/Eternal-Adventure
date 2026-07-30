@@ -9,6 +9,7 @@ export default class DungeonCard {
     render() {
         const { id, name, level, image, boss, page } = this.dungeon;
         const locked = this.player.level < level;
+        const clears = this.player.getDungeonClears(id);
         return `
             <button
                 type="button"
@@ -19,6 +20,11 @@ export default class DungeonCard {
                 data-level="${level}"
                 data-boss="${boss}"
                 aria-label="${name}">
+                ${
+                    !boss
+                        ? `<span class="dungeon-clears-badge">${Math.min(clears, 3)}/3</span>`
+                        : ""
+                }
                 <div class="dungeon-card-header">
                     <span class="dungeon-name">${name}</span>
                 </div>

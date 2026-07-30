@@ -8,7 +8,9 @@ export default [
             "Correções de layout.",
             "Inserção do menu de opções (ainda não tem musica), limpar dados faz apaga os dados salvos no seu navegador.",
             "Preparando o código para receber a função no ferreiro 'Encantar'",
-
+            "Ajustes de balanceamento.",
+            "Adicionado método de Skip de Dungeon após tê-la completado três vezes.",
+            "Por fim adicionado vida, quer dizer trilha sonora ► ♫",
         ]
     },
 

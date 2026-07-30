@@ -16,6 +16,7 @@ import ChestRewardModal from "./components/modals/ChestRewardModal.js";
 import AlbumModal from "./components/modals/AlbumModal.js";
 import LoadGameModal from "./components/modals/LoadGameModal.js";
 import SettingsModal from "./components/modals/SettingsModal.js";
+import MusicService from "../services/MusicService.js";
 
 export default class HudScreen {
     constructor(game) {
@@ -179,6 +180,43 @@ export default class HudScreen {
     changeView(view) {
         this.currentView = view;
         this.refreshCurrentView();
+        this.updateMusic();
+    }
+
+    // Decide qual música ambiente deve estar tocando pra tela atual.
+    // "character" (personagem/inventário) nunca troca a faixa — só
+    // continua o que já estava tocando antes de abrir.
+    updateMusic() {
+
+        if (this.inCombat) {
+            MusicService.play("combat");
+            return;
+        }
+
+        switch (this.currentView) {
+
+            case "dungeon":
+                MusicService.play("dungeonMenu");
+                break;
+
+            case "city":
+            case "market":
+            case "market-buy":
+            case "blacksmith-weapon":
+            case "blacksmith-armor":
+                MusicService.play("city");
+                break;
+
+            case "character":
+                // continua a música da tela de onde o personagem foi aberto
+                break;
+
+            default:
+                MusicService.play("home");
+                break;
+
+        }
+
     }
 
     refreshCurrentView() {
@@ -215,6 +253,7 @@ export default class HudScreen {
     async enterCombat(monster, dungeon) {
         this.inCombat = true;
         this.setBackground(dungeon.background);
+        this.updateMusic();
         await this.combatView.enter(dungeon);
     }
 
@@ -225,6 +264,7 @@ export default class HudScreen {
         this.currentView = "";
         this.setBackground("assets/img/backgrounds/tela_inicial.png");
         this.refreshCurrentView();
+        this.updateMusic();
     }
 
     showCharacter() {
@@ -256,6 +296,7 @@ export default class HudScreen {
         this.toolbarHUD.registerEvents(this.element);
         if (!this.inCombat) this.chestHUD.registerEvents(this.element);
         this.registerEvents();
+        this.updateMusic();
         switch (this.currentView) {
             case "character":
                 this.characterView.registerEvents(document);

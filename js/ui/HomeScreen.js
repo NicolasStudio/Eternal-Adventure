@@ -1,6 +1,7 @@
 import NewsModal from "../ui/NewsModal.js";
 import SaveService from "../services/SaveService.js";
 import SettingsModal from "./components/modals/SettingsModal.js";
+import MusicService from "../services/MusicService.js";
 
 export default class HomeScreen {
 
@@ -85,6 +86,7 @@ export default class HomeScreen {
 
     show() {
         this.element.classList.remove("hidden");
+        MusicService.play("home");
     }
 
     hide() {

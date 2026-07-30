@@ -339,8 +339,11 @@ export default class Player {
 
         if (!dungeonId) return;
 
+        const previousClears = this.progress.dungeons[dungeonId]?.clears ?? 0;
+
         this.progress.dungeons[dungeonId] = {
-            completed: true
+            completed: true,
+            clears: previousClears + 1
         };
 
         this.notify();
@@ -350,6 +353,22 @@ export default class Player {
     hasCompletedDungeon(dungeonId) {
 
         return this.progress.dungeons[dungeonId]?.completed === true;
+
+    }
+
+    getDungeonClears(dungeonId) {
+
+        return this.progress.dungeons[dungeonId]?.clears ?? 0;
+
+    }
+
+    // Skip só libera depois de 3 conclusões reais, e nunca pra dungeons de chefe
+    // (fights === 1 já identifica isso, mas checar dungeon.boss é mais explícito).
+    canSkipDungeon(dungeon) {
+
+        if (!dungeon || dungeon.boss) return false;
+
+        return this.getDungeonClears(dungeon.id) >= 3;
 
     }
 }

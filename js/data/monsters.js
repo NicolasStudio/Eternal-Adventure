@@ -60,7 +60,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 2
+                quantidade: 1
             }
         ]
     },
@@ -93,7 +93,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 3
+                quantidade: 2
             }
         ]
     },
@@ -110,8 +110,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_2/beetle.png",
 
         status: {
-            vidaMaxima: 30,
-            dano: 15,
+            vidaMaxima: 36,
+            dano: 16,
             nomeAtaque: "Mordida",
             armadura: 3,
             agilidade: 4,
@@ -126,7 +126,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 3
+                quantidade: 1
             }
         ]
     },
@@ -141,7 +141,7 @@ const monsters = [
 
         status: {
             vidaMaxima: 27,
-            dano: 17,
+            dano: 22,
             nomeAtaque: "Picada",
             armadura: 3,
             agilidade: 4,
@@ -156,7 +156,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 2
+                quantidade: 1
             }
         ]
     },
@@ -171,11 +171,11 @@ const monsters = [
 
         status: {
             vidaMaxima: 54,
-            dano: 30,
+            dano: 35,
             nomeAtaque: "Picada",
-            armadura: 4,
+            armadura: 5,
             agilidade: 5,
-            xp: 125,
+            xp: 155,
             ouro: 85
         },
 
@@ -186,7 +186,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 3
+                quantidade: 2
             }
         ]
     },
@@ -203,10 +203,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_3/beaver.png",
 
         status: {
-            vidaMaxima: 36,
-            dano: 20,
+            vidaMaxima: 51,
+            dano: 25,
             nomeAtaque: "Dentada",
-            armadura: 5,
+            armadura: 8,
             agilidade: 6,
             xp: 63,
             ouro: 80
@@ -219,7 +219,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 2
+                quantidade: 1
             }
         ]
     },
@@ -233,12 +233,12 @@ const monsters = [
         sprite: "assets/img/monsters/creature_3/crocodile.png",
 
         status: {
-            vidaMaxima: 36,
-            dano: 20,
+            vidaMaxima: 60,
+            dano: 27,
             nomeAtaque: "Investida",
-            armadura: 5,
+            armadura: 8,
             agilidade: 6,
-            xp: 63,
+            xp: 70,
             ouro: 100
         },
 
@@ -249,7 +249,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 3
+                quantidade: 1
             }
         ]
     },
@@ -264,11 +264,11 @@ const monsters = [
 
         status: {
             vidaMaxima: 80,
-            dano: 30,
+            dano: 34,
             nomeAtaque: "Golpe de Garra",
-            armadura: 5,
+            armadura: 7,
             agilidade: 6,
-            xp: 125,
+            xp: 130,
             ouro: 150
         },
 
@@ -279,7 +279,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 4
+                quantidade: 2
             }
         ]
     },
@@ -296,11 +296,11 @@ const monsters = [
         sprite: "assets/img/monsters/creature_boss/werewolf.png",
 
         status: {
-            vidaMaxima: 120,
-            dano: 40,
+            vidaMaxima: 150,
+            dano: 50,
             nomeAtaque: "Dilacerar",
-            armadura: 5,
-            agilidade: 7,
+            armadura: 8,
+            agilidade: 9,
             xp: 438,
             ouro: 240
         },
@@ -312,7 +312,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 4
+                quantidade: 2
             }
         ]
     },
@@ -329,10 +329,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_4/goblin.png",
 
         status: {
-            vidaMaxima: 54,
-            dano: 28,
+            vidaMaxima: 60,
+            dano: 35,
             nomeAtaque: "Cortar",
-            armadura: 6,
+            armadura: 10,
             agilidade: 9,
             xp: 125,
             ouro: 150
@@ -345,7 +345,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 2
+                quantidade: 1
             }
         ]
     },
@@ -359,11 +359,11 @@ const monsters = [
         sprite: "assets/img/monsters/creature_4/elf.png",
 
         status: {
-            vidaMaxima: 54,
-            dano: 28,
+            vidaMaxima: 64,
+            dano: 40,
             nomeAtaque: "Multiplos Cortes",
-            armadura: 6,
-            agilidade: 9,
+            armadura: 10,
+            agilidade: 12,
             xp: 125,
             ouro: 160
         },
@@ -375,7 +375,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 2
+                quantidade: 1
             }
         ]
     },
@@ -389,12 +389,12 @@ const monsters = [
         sprite: "assets/img/monsters/creature_4/troll.png",
 
         status: {
-            vidaMaxima: 108,
-            dano: 39,
+            vidaMaxima: 130,
+            dano: 45,
             nomeAtaque: "Porretada",
-            armadura: 6,
+            armadura: 12,
             agilidade: 9,
-            xp: 250,
+            xp: 280,
             ouro: 180
         },
 
@@ -405,7 +405,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 4
+                quantidade: 2
             }
         ]
     },
@@ -422,10 +422,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_5/goblin_2.png",
 
         status: {
-            vidaMaxima: 54,
-            dano: 30,
+            vidaMaxima: 65,
+            dano: 45,
             nomeAtaque: "Estocada",
-            armadura: 7,
+            armadura: 13,
             agilidade: 9,
             xp: 125,
             ouro: 180
@@ -438,7 +438,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 3
+                quantidade: 1
             }
         ]
     },
@@ -452,13 +452,13 @@ const monsters = [
         sprite: "assets/img/monsters/creature_5/ogre_2.png",
 
         status: {
-            vidaMaxima: 63,
-            dano: 34,
+            vidaMaxima: 100,
+            dano: 45,
             nomeAtaque: "Investida",
-            armadura: 8,
-            agilidade: 11,
-            xp: 125,
-            ouro: 200
+            armadura: 15,
+            agilidade: 8,
+            xp: 185,
+            ouro: 220
         },
 
         drops: [
@@ -468,7 +468,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 4
+                quantidade: 2
             }
         ]
     },
@@ -482,13 +482,13 @@ const monsters = [
         sprite: "assets/img/monsters/creature_5/ogre.png",
 
         status: {
-            vidaMaxima: 135,
-            dano: 48,
+            vidaMaxima: 150,
+            dano: 55,
             nomeAtaque: "Arranhar",
-            armadura: 8,
-            agilidade: 11,
-            xp: 250,
-            ouro: 210
+            armadura: 15,
+            agilidade: 15,
+            xp: 280,
+            ouro: 230
         },
 
         drops: [
@@ -498,7 +498,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 5
+                quantidade: 3
             }
         ]
     },
@@ -515,13 +515,13 @@ const monsters = [
         sprite: "assets/img/monsters/creature_6/kid-zombie.png",
 
         status: {
-            vidaMaxima: 72,
-            dano: 38,
+            vidaMaxima: 90,
+            dano: 60,
             nomeAtaque: "Morder",
-            armadura: 9,
-            agilidade: 12,
-            xp: 250,
-            ouro: 200
+            armadura: 18,
+            agilidade: 15,
+            xp: 280,
+            ouro: 220
         },
 
         drops: [
@@ -531,7 +531,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 3
+                quantidade: 1
             }
         ]
     },
@@ -545,13 +545,13 @@ const monsters = [
         sprite: "assets/img/monsters/creature_6/zombie.png",
 
         status: {
-            vidaMaxima: 72,
-            dano: 38,
+            vidaMaxima: 115,
+            dano: 60,
             nomeAtaque: "Morder",
             armadura: 9,
             agilidade: 12,
-            xp: 250,
-            ouro: 220
+            xp: 290,
+            ouro: 230
         },
 
         drops: [
@@ -561,7 +561,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 4
+                quantidade: 2
             }
         ]
     },
@@ -576,9 +576,9 @@ const monsters = [
 
         status: {
             vidaMaxima: 150,
-            dano: 53,
+            dano: 55,
             nomeAtaque: "Esmagar",
-            armadura: 9,
+            armadura: 20,
             agilidade: 12,
             xp: 500,
             ouro: 250
@@ -591,7 +591,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 5
+                quantidade: 3
             }
         ]
     },
@@ -609,9 +609,9 @@ const monsters = [
 
         status: {
             vidaMaxima: 300,
-            dano: 68,
+            dano: 73,
             nomeAtaque: "Dilacerar",
-            armadura: 10,
+            armadura: 28,
             agilidade: 14,
             xp: 875,
             ouro: 380
@@ -624,7 +624,7 @@ const monsters = [
             },
             {
                 item: items.mediumPotion,
-                quantidade: 4
+                quantidade: 2
             }
         ]
     },

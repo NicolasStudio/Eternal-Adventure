@@ -416,6 +416,22 @@
    Notebook (1366x768 / 1280x720 / 1037px)
 ========================================================== */
 
+@media (max-width:1390px){
+    .album-grid{
+
+        grid-template-columns:repeat(4,150px);
+
+        grid-template-rows:auto;
+
+        gap:18px;
+
+    }
+
+    .album-card{
+        width:150px;
+    }
+
+}
 @media (max-width:1100px){
 
 

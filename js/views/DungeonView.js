@@ -1,6 +1,9 @@
 import DungeonCard from "./DungeonCard.js";
 import dungeons from "../data/dungeons.js";
 import DungeonTooltip from "./DungeonTooltip.js";
+import DungeonSkipService from "../services/DungeonSkipService.js";
+import DungeonSkipConfirmModal from "../ui/components/modals/DungeonSkipConfirmModal.js";
+import DungeonSkipResultModal from "../ui/components/modals/DungeonSkipResultModal.js";
 
 export default class DungeonView {
     constructor(game) {
@@ -8,6 +11,9 @@ export default class DungeonView {
         this.selectedDungeon = null;
         this.currentPage = 1;
         this.tooltip = new DungeonTooltip();
+        this.skipConfirmModal = new DungeonSkipConfirmModal();
+        this.skipResultModal = new DungeonSkipResultModal();
+        this.skipping = false;
     }
 
     canEnterDungeon(requiredLevel) {
@@ -65,6 +71,10 @@ export default class DungeonView {
         return `
             <div class="dungeon-actions">
                 <button class="dungeon-enter" disabled>Entrar na Dungeon</button>
+                <button class="dungeon-skip" disabled>
+                    <i class="fa-solid fa-forward"></i>
+                    Skip
+                </button>
             </div>
         `;
     }
@@ -90,6 +100,7 @@ export default class DungeonView {
         });
         const cards = container.querySelectorAll(".dungeon-card");
         const enterButton = container.querySelector(".dungeon-enter");
+        const skipButton = container.querySelector(".dungeon-skip");
         cards.forEach(card => {
             card.addEventListener("click", () => {
                 cards.forEach(c => {
@@ -113,6 +124,10 @@ export default class DungeonView {
                     enterButton.disabled = true;
                     enterButton.textContent = `Necessário nível ${requiredLevel}`;
                 }
+
+                const canSkip = canEnter && this.game.player.canSkipDungeon(dungeon);
+                skipButton.classList.toggle("visible", canSkip);
+                skipButton.disabled = !canSkip;
             });
         });
 
@@ -134,6 +149,11 @@ export default class DungeonView {
             );
 
         });
+
+        skipButton?.addEventListener("click", () => {
+            this.handleSkip();
+        });
+
         container.querySelector(".dungeon-prev")?.addEventListener("click", () => {
             this.previousPage();
             this.game.hudScreen.changeView("dungeon");
@@ -154,6 +174,34 @@ export default class DungeonView {
                 this.tooltip.hide();
             });
         });
+    }
+
+    async handleSkip() {
+
+        if (this.skipping) return;
+
+        const dungeon = this.selectedDungeon;
+
+        if (!dungeon) return;
+
+        if (!this.game.player.canSkipDungeon(dungeon)) return;
+
+        const confirmed = await this.skipConfirmModal.show(dungeon);
+
+        if (!confirmed) return;
+
+        this.skipping = true;
+
+        const result = DungeonSkipService.run(this.game.player, dungeon);
+
+        this.game.hudScreen.refreshCurrentView();
+
+        await this.skipResultModal.show(dungeon, result);
+
+        this.skipping = false;
+
+        this.game.hudScreen.changeView("dungeon");
+
     }
 
     refresh(container) {
