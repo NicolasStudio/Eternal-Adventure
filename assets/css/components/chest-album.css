@@ -416,7 +416,13 @@
    Notebook (1366x768 / 1280x720 / 1037px)
 ========================================================== */
 
+<<<<<<< HEAD
 @media (max-width:1390px){
+=======
+@media (max-width:1366px){
+
+
+>>>>>>> 77d2991144ead6d870cb618e81aefba39558b1ba
     .album-grid{
 
         grid-template-columns:repeat(4,150px);
@@ -432,6 +438,10 @@
     }
 
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 77d2991144ead6d870cb618e81aefba39558b1ba
 @media (max-width:1100px){
 
 
