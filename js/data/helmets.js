@@ -16,12 +16,12 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-comum.png",
 
         stats: {
-            armor: 3,
+            armor: 2,
             lifeSteal: 1
         },
 
-        value: 80,
-        sellValue: 40
+        value: 50,
+        sellValue: 20
 
     },
 
@@ -40,7 +40,7 @@ const helmets = {
             lifeSteal: 2
         },
 
-        value: 240,
+        value: 200,
         sellValue: 120
 
     },
@@ -143,8 +143,8 @@ const helmets = {
             penetration: 1
         },
 
-        value: 80,
-        sellValue: 40
+        value: 50,
+        sellValue: 20
 
     },
 
@@ -163,7 +163,7 @@ const helmets = {
             penetration: 2
         },
 
-        value: 240,
+        value: 200,
         sellValue: 120
 
     },
@@ -263,11 +263,11 @@ const helmets = {
 
         stats: {
             armor: 2,
-            criticalChance: 2
+            criticalChance: 1
         },
 
-        value: 80,
-        sellValue: 40
+        value: 50,
+        sellValue: 20
 
     },
 
@@ -286,7 +286,7 @@ const helmets = {
             criticalChance: 4
         },
 
-        value: 240,
+        value: 200,
         sellValue: 120
 
     },

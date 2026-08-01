@@ -12,15 +12,15 @@ const upgradeCosts = {
 
     weapon: {
         none: 250,
-        ordinary: 500,
-        mediocre: 1000,
+        ordinary: 700,
+        mediocre: 1400,
         exceptional: 0
     },
 
     armor: {
         none: 200,
-        ordinary: 400,
-        mediocre: 800,
+        ordinary: 650,
+        mediocre: 1200,
         exceptional: 0
     }
 

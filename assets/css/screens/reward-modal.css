@@ -22,6 +22,19 @@
     font-family:"Cinzel", serif;
     animation:rewardPopup .25s ease;
 }
+.reward-modal::-webkit-scrollbar{
+    width:8px;
+}
+.reward-modal::-webkit-scrollbar-track{
+    background:#1d1512;
+}
+.reward-modal::-webkit-scrollbar-thumb{
+    background:#7b5a2d;
+    border-radius:8px;
+}
+.reward-modal::-webkit-scrollbar-thumb:hover{
+    background:#a67b3f;
+}
 .reward-title{
     margin:0 0 12px;
     text-align:center;

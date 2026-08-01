@@ -16,7 +16,7 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-warrior-rarity-comum.png",
 
         stats: {
-            armor: 5,
+            armor: 2,
             agility: 1
         },
 
@@ -139,8 +139,8 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-mage-rarity-comum.png",
 
         stats: {
-            armor: 4,
-            agility: 2
+            armor: 2,
+            agility: 1
         },
 
         value: 95,
@@ -262,8 +262,8 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-archer-rarity-comum.png",
 
         stats: {
-            armor: 3,
-            agility: 3
+            armor: 2,
+            agility: 1
         },
 
         value: 95,

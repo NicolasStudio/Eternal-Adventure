@@ -75,7 +75,7 @@ export default class Player {
             case "archer":
                 return { attack: 6, armor: 3, agility: 7, criticalChance: 0, lifeSteal: 0, penetration: 0 };
             case "mage":
-                return { attack: 8, armor: 0, agility: 5, criticalChance: 0, lifeSteal: 0, penetration: 0 };
+                return { attack: 8, armor: 2, agility: 5, criticalChance: 0, lifeSteal: 0, penetration: 0 };
             default:
                 return { attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0 };
         }

@@ -25,7 +25,7 @@ const monsters = [
 
         drops: [
             {
-                type: ["weapon", "helmet"],
+                type: ["helmet", "weapon"],
                 rarity: "common"
             },
             {
@@ -110,10 +110,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_2/beetle.png",
 
         status: {
-            vidaMaxima: 36,
-            dano: 16,
+            vidaMaxima: 30,
+            dano: 13,
             nomeAtaque: "Mordida",
-            armadura: 3,
+            armadura: 5,
             agilidade: 4,
             xp: 25,
             ouro: 30
@@ -121,7 +121,7 @@ const monsters = [
 
         drops: [
             {
-                type: ["leg", "boot"],
+                type: ["leg"],
                 rarity: "common"
             },
             {
@@ -143,7 +143,7 @@ const monsters = [
             vidaMaxima: 27,
             dano: 22,
             nomeAtaque: "Picada",
-            armadura: 3,
+            armadura: 2,
             agilidade: 4,
             xp: 25,
             ouro: 35
@@ -151,8 +151,6 @@ const monsters = [
 
         drops: [
             {
-                type: ["leg", "boot"],
-                rarity: "common"
             },
             {
                 item: items.smallPotion,
@@ -170,10 +168,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_2/ant.png",
 
         status: {
-            vidaMaxima: 54,
-            dano: 35,
+            vidaMaxima: 50,
+            dano: 32,
             nomeAtaque: "Picada",
-            armadura: 5,
+            armadura: 4,
             agilidade: 5,
             xp: 155,
             ouro: 85
@@ -181,7 +179,7 @@ const monsters = [
 
         drops: [
             {
-                type: ["leg", "boot"],
+                type: ["boot"],
                 rarity: "common"
             },
             {
@@ -203,8 +201,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_3/beaver.png",
 
         status: {
-            vidaMaxima: 51,
-            dano: 25,
+            vidaMaxima: 52,
+            dano: 27,
             nomeAtaque: "Dentada",
             armadura: 8,
             agilidade: 6,
@@ -214,8 +212,7 @@ const monsters = [
 
         drops: [
             {
-                type: ["chest"],
-                rarity: "common"
+
             },
             {
                 item: items.smallPotion,
@@ -249,7 +246,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 1
+                quantidade: 2
             }
         ]
     },
@@ -263,8 +260,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_3/bear.png",
 
         status: {
-            vidaMaxima: 80,
-            dano: 34,
+            vidaMaxima: 70,
+            dano: 37,
             nomeAtaque: "Golpe de Garra",
             armadura: 7,
             agilidade: 6,
@@ -274,8 +271,6 @@ const monsters = [
 
         drops: [
             {
-                type: ["chest"],
-                rarity: "common"
             },
             {
                 item: items.smallPotion,
@@ -299,7 +294,7 @@ const monsters = [
             vidaMaxima: 150,
             dano: 50,
             nomeAtaque: "Dilacerar",
-            armadura: 8,
+            armadura: 9,
             agilidade: 9,
             xp: 438,
             ouro: 240
@@ -330,7 +325,7 @@ const monsters = [
 
         status: {
             vidaMaxima: 60,
-            dano: 35,
+            dano: 45,
             nomeAtaque: "Cortar",
             armadura: 10,
             agilidade: 9,
@@ -360,7 +355,7 @@ const monsters = [
 
         status: {
             vidaMaxima: 64,
-            dano: 40,
+            dano: 45,
             nomeAtaque: "Multiplos Cortes",
             armadura: 10,
             agilidade: 12,
@@ -370,8 +365,6 @@ const monsters = [
 
         drops: [
             {
-                type: ["leg"],
-                rarity: "uncommon"
             },
             {
                 item: items.smallPotion,
@@ -390,7 +383,7 @@ const monsters = [
 
         status: {
             vidaMaxima: 130,
-            dano: 45,
+            dano: 48,
             nomeAtaque: "Porretada",
             armadura: 12,
             agilidade: 9,
@@ -422,7 +415,7 @@ const monsters = [
         sprite: "assets/img/monsters/creature_5/goblin_2.png",
 
         status: {
-            vidaMaxima: 65,
+            vidaMaxima: 100,
             dano: 45,
             nomeAtaque: "Estocada",
             armadura: 13,
@@ -433,8 +426,6 @@ const monsters = [
 
         drops: [
             {
-                type: ["chest"],
-                rarity: "uncommon"
             },
             {
                 item: items.smallPotion,
@@ -453,9 +444,9 @@ const monsters = [
 
         status: {
             vidaMaxima: 100,
-            dano: 45,
+            dano: 52,
             nomeAtaque: "Investida",
-            armadura: 15,
+            armadura: 16,
             agilidade: 8,
             xp: 185,
             ouro: 220
@@ -483,9 +474,9 @@ const monsters = [
 
         status: {
             vidaMaxima: 150,
-            dano: 55,
+            dano: 57,
             nomeAtaque: "Arranhar",
-            armadura: 15,
+            armadura: 16,
             agilidade: 15,
             xp: 280,
             ouro: 230
@@ -515,7 +506,7 @@ const monsters = [
         sprite: "assets/img/monsters/creature_6/kid-zombie.png",
 
         status: {
-            vidaMaxima: 90,
+            vidaMaxima: 110,
             dano: 60,
             nomeAtaque: "Morder",
             armadura: 18,
@@ -545,7 +536,7 @@ const monsters = [
         sprite: "assets/img/monsters/creature_6/zombie.png",
 
         status: {
-            vidaMaxima: 115,
+            vidaMaxima: 130,
             dano: 60,
             nomeAtaque: "Morder",
             armadura: 9,
@@ -575,7 +566,7 @@ const monsters = [
         sprite: "assets/img/monsters/creature_6/big-zombie.png",
 
         status: {
-            vidaMaxima: 150,
+            vidaMaxima: 180,
             dano: 55,
             nomeAtaque: "Esmagar",
             armadura: 20,

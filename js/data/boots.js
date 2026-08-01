@@ -17,7 +17,7 @@ const boots = {
 
         stats: {
             armor: 1,
-            agility: 3
+            agility: 2
         },
 
         value: 80,
@@ -140,7 +140,7 @@ const boots = {
 
         stats: {
             armor: 1,
-            agility: 4
+            agility: 3
         },
 
         value: 80,

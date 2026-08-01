@@ -17,12 +17,12 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/sword-rarity-comum.png",
 
         stats: {
-            attack: 4,
+            attack: 3,
             armor: 0,
-            agility: -2,
+            agility: -4,
             criticalChance: 0,
-            lifeSteal: 0,
-            penetration: 1
+            lifeSteal: 1,
+            penetration: 0
         },
 
         value: 120,
@@ -42,7 +42,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/sword-rarity-incomum.png",
 
         stats: {
-            attack: 10,
+            attack: 7,
             armor: 0,
             agility: -3,
             criticalChance: 0,
@@ -67,7 +67,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/sword-rarity-raro.png",
 
         stats: {
-            attack: 20,
+            attack: 17,
             armor: 0,
             agility: -4,
             criticalChance: 0,
@@ -307,7 +307,7 @@ const weapons = {
             attack: 5,
             armor: 0,
             agility: 2,
-            criticalChance: 2,
+            criticalChance: 1,
             lifeSteal: 0,
             penetration: 0
         },
@@ -326,7 +326,7 @@ const weapons = {
         rarity: rarities.uncommon,
         icon: "assets/img/assets/items/weapons/arch-rarity-incomum.png",
         stats: {
-            attack: 10,
+            attack: 9,
             armor: 0,
             agility: 4,
             criticalChance: 4,

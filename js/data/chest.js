@@ -16,11 +16,11 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-warrior-rarity-comum.png",
 
         stats: {
-            armor: 6
+            armor: 4
         },
 
         value: 100,
-        sellValue: 50
+        sellValue: 40
 
     },
 
@@ -39,7 +39,7 @@ const chests = {
         },
 
         value: 300,
-        sellValue: 150
+        sellValue: 130
 
     },
 
@@ -133,7 +133,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-mage-rarity-comum.png",
 
         stats: {
-            armor: 5
+            armor: 4
         },
 
         value: 100,
@@ -250,7 +250,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-archer-rarity-comum.png",
 
         stats: {
-            armor: 4
+            armor: 2
         },
 
         value: 100,
