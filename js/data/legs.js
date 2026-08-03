@@ -36,7 +36,7 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-warrior-rarity-incomum.png",
 
         stats: {
-            armor: 6,
+            armor: 4,
             agility: 2
         },
 
@@ -56,7 +56,7 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-warrior-rarity-rare.png",
 
         stats: {
-            armor: 12,
+            armor: 6,
             agility: 3
         },
 
@@ -76,7 +76,7 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-warrior-rarity-mistico.png",
 
         stats: {
-            armor: 16,
+            armor: 12,
             agility: 4
         },
 
@@ -96,7 +96,7 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-warrior-rarity-lendario.png",
 
         stats: {
-            armor: 22,
+            armor: 14,
             agility: 5
         },
 
@@ -116,7 +116,7 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-warrior-rarity-ultraje.png",
 
         stats: {
-            armor: 30,
+            armor: 18,
             agility: 6
         },
 
@@ -159,8 +159,8 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-mage-rarity-incomum.png",
 
         stats: {
-            armor: 6,
-            agility: 3
+            armor: 4,
+            agility: 2
         },
 
         value: 285,
@@ -179,8 +179,8 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-mage-rarity-rare.png",
 
         stats: {
-            armor: 9,
-            agility: 4
+            armor: 6,
+            agility: 3
         },
 
         value: 855,
@@ -200,7 +200,7 @@ const legs = {
 
         stats: {
             armor: 12,
-            agility: 5
+            agility: 4
         },
 
         value: 2565,
@@ -219,8 +219,8 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-mage-rarity-lendario.png",
 
         stats: {
-            armor: 17,
-            agility: 6
+            armor: 14,
+            agility: 5
         },
 
         value: 7695,
@@ -239,8 +239,8 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-mage-rarity-ultraje.png",
 
         stats: {
-            armor: 22,
-            agility: 8
+            armor: 18,
+            agility: 6
         },
 
         value: 0,
@@ -282,8 +282,8 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-archer-rarity-incomum.png",
 
         stats: {
-            armor: 5,
-            agility: 4
+            armor: 4,
+            agility: 2
         },
 
         value: 285,
@@ -302,8 +302,8 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-archer-rarity-rare.png",
 
         stats: {
-            armor: 8,
-            agility: 5
+            armor: 6,
+            agility: 4
         },
 
         value: 855,
@@ -322,8 +322,8 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-archer-rarity-mistico.png",
 
         stats: {
-            armor: 11,
-            agility: 6
+            armor: 12,
+            agility: 2
         },
 
         value: 2565,
@@ -342,8 +342,8 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-archer-rarity-lendario.png",
 
         stats: {
-            armor: 15,
-            agility: 8
+            armor: 14,
+            agility: 3
         },
 
         value: 7695,
@@ -362,8 +362,8 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-archer-rarity-ultraje.png",
 
         stats: {
-            armor: 20,
-            agility: 10
+            armor: 18,
+            agility: 4
         },
 
         value: 0,

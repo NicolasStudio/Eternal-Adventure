@@ -226,6 +226,112 @@ const dungeons = [
         ]
     },
 
+    {
+        id: "cave_4",
+        name: "Caverna IV",
+        level: 23,
+        boss: false,
+        page: 5,
+        fights: 4,
+
+        monsters: [
+            "duende_1",
+            "duende_2",
+            "duende_3",
+            "duende_4"
+        ],
+
+        image: "assets/img/assets/card_dungeon/card_cave_4.png",
+        background: "assets/img/backgrounds/page_3/cave_7.png",
+
+        drops: [
+            {
+                type: ["boot"],
+                rarity: "rare"
+            },
+            items.smallPotion
+        ]
+    },
+
+    {
+        id: "cave_5",
+        name: "Caverna V",
+        level: 25,
+        boss: false,
+        page: 5,
+        fights: 3,
+        
+        monsters: [
+            "scarab",
+            "scorpion",
+            "basilisk"
+        ],
+
+        image: "assets/img/assets/card_dungeon/card_cave_5.png",
+        background: "assets/img/backgrounds/page_3/cave_8.png",
+
+        drops: [
+            {
+                type: ["leg"],
+                rarity: "rare"
+            },
+            items.smallPotion
+        ]
+    },
+
+    {
+        id: "cave_6",
+        name: "Caverna VI",
+        level: 27,
+        boss: false,
+        page: 5,
+        fights: 4,
+        
+        monsters: [
+            "goblin_donatello",
+            "goblin_leonardo",
+            "goblin_michelangelo",
+            "goblin_rafael"
+        ],
+
+        image: "assets/img/assets/card_dungeon/card_cave_6.png",
+        background: "assets/img/backgrounds/page_3/cave_9.png",
+
+        drops: [
+            {
+                type: ["helmet"],
+                rarity: "rare"
+            },
+            items.smallPotion
+        ]
+    },
+
+    {
+        id: "cave_boss2",
+        name: "Boss",
+        isBoss: true,
+        maxFloor: 1,
+        level: 30,
+        boss: true,
+        page: 6,
+        fights: 1,
+        
+        monsters: [
+            "king-the-goblins"
+        ],
+
+        image: "assets/img/assets/card_dungeon/card_cave_end_2.png",
+        background: "assets/img/backgrounds/page_3/cave_end2.png",
+
+        drops: [
+            {
+                type: ["chest"],
+                rarity: "rare"
+            },
+            items.mediumPotion
+        ]
+    },
+
 ];
 
 export default dungeons;

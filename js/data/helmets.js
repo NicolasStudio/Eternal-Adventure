@@ -36,7 +36,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-incomum.png",
 
         stats: {
-            armor: 5,
+            armor: 4,
             lifeSteal: 1
         },
 
@@ -56,7 +56,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-rare.png",
 
         stats: {
-            armor: 8,
+            armor: 6,
             lifeSteal: 3
         },
 
@@ -76,7 +76,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-mistico.png",
 
         stats: {
-            armor: 12,
+            armor: 8,
             lifeSteal: 5
         },
 
@@ -96,7 +96,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-lendario.png",
 
         stats: {
-            armor: 18,
+            armor: 14,
             lifeSteal: 7
         },
 
@@ -116,7 +116,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-ultraje.png",
 
         stats: {
-            armor: 25,
+            armor: 18,
             lifeSteal: 10
         },
 
@@ -199,7 +199,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-mage-rarity-mistico.png",
 
         stats: {
-            armor: 9,
+            armor: 8,
             penetration: 5
         },
 
@@ -239,7 +239,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-mage-rarity-ultraje.png",
 
         stats: {
-            armor: 20,
+            armor: 18,
             penetration: 10
         },
 
@@ -322,7 +322,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-archer-rarity-mistico.png",
 
         stats: {
-            armor: 9,
+            armor: 8,
             criticalChance: 5
         },
 
@@ -362,7 +362,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-archer-rarity-ultraje.png",
 
         stats: {
-            armor: 20,
+            armor: 18,
             criticalChance: 10
         },
 

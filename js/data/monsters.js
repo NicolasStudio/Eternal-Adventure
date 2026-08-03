@@ -495,7 +495,7 @@ const monsters = [
     },
 
     // ============================================
-    // NÍVEL 21 - Desafio Difícil
+    // NÍVEL 18 - Desafio Difícil
     // ============================================
     {
         id: "kid-zombie",
@@ -588,7 +588,7 @@ const monsters = [
     },
 
     // ============================================
-    // NÍVEL 25 - Boss Final (Desafio Épico)
+    // NÍVEL 20 - Boss (Desafio Épico)
     // ============================================
     {
         id: "skullKingIII",
@@ -619,6 +619,364 @@ const monsters = [
             }
         ]
     },
+
+    // ============================================
+    // NÍVEL 23 - Desafio Intermediário
+    // ============================================
+    {
+        id: "duende_1",
+        name: "Duende Sorrateiro",
+        level: 23,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_7/duende_1.png",
+
+        status: {
+            vidaMaxima: 130,
+            dano: 78,
+            nomeAtaque: "Arranhar",
+            armadura: 30,
+            agilidade: 40,
+            xp: 525,
+            ouro: 350
+        },
+
+        drops: [
+            {
+            },
+            {
+                item: items.smallPotion,
+                quantidade: 2
+            }
+        ]
+    },
+
+    {
+        id: "duende_2",
+        name: "Duende Traiçoeiro",
+        level: 23,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_7/duende_2.png",
+
+        status: {
+            vidaMaxima: 130,
+            dano: 80,
+            nomeAtaque: "Esfaquear",
+            armadura: 30,
+            agilidade: 40,
+            xp: 525,
+            ouro: 350
+        },
+
+        drops: [
+            {
+            },
+            {
+                item: items.smallPotion,
+                quantidade: 2
+            }
+        ]
+    },
+
+    {
+        id: "duende_3",
+        name: "Duende Noel",
+        level: 23,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_7/duende_3.png",
+
+        status: {
+            vidaMaxima: 130,
+            dano: 82,
+            nomeAtaque: "Presente de Grego",
+            armadura: 30,
+            agilidade: 40,
+            xp: 525,
+            ouro: 350
+        },
+
+        drops: [
+            {
+            },
+            {
+                item: items.smallPotion,
+                quantidade: 2
+            }
+        ]
+    },
+
+    {
+        id: "duende_4",
+        name: "Duende Emo",
+        level: 23,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_7/duende_4.png",
+
+        status: {
+            vidaMaxima: 130,
+            dano: 84,
+            nomeAtaque: "Farmar Aura",
+            armadura: 30,
+            agilidade: 40,
+            xp: 525,
+            ouro: 350
+        },
+
+        drops: [
+            {
+                type: ["boot"],
+                rarity: "rare"
+            },
+            {
+                item: items.smallPotion,
+                quantidade: 2
+            }
+        ]
+    },
+
+    // ============================================
+    // NÍVEL 25 - Desafio Intermediário
+    // ============================================
+    {
+        id: "scarab",
+        name: "Escaravelho",
+        level: 25,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_8/scarab.png",
+
+        status: {
+            vidaMaxima: 200,
+            dano: 90,
+            nomeAtaque: "Ferroar",
+            armadura: 40,
+            agilidade: 40,
+            xp: 725,
+            ouro: 500
+        },
+
+        drops: [
+            {
+
+            },
+            {
+                item: items.mediumPotion,
+                quantidade: 2
+            }
+        ]
+    },
+
+    {
+        id: "scorpion",
+        name: "Escorpião",
+        level: 25,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_8/scorpion.png",
+
+        status: {
+            vidaMaxima: 180,
+            dano: 95,
+            nomeAtaque: "Ferroar",
+            armadura: 35,
+            agilidade: 45,
+            xp: 755,
+            ouro: 520
+        },
+
+        drops: [
+            {
+                type: ["leg"],
+                rarity: "rare"
+            },
+            {
+                item: items.mediumPotion,
+                quantidade: 2
+            }
+        ]
+    },
+
+    {
+        id: "basilisk",
+        name: "Basilisco",
+        level: 25,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_8/basilisk.png",
+
+        status: {
+            vidaMaxima: 220,
+            dano: 98,
+            nomeAtaque: "Picar",
+            armadura: 35,
+            agilidade: 50,
+            xp: 855,
+            ouro: 570
+        },
+
+        drops: [
+            {
+                type: ["leg"],
+                rarity: "rare"
+            },
+            {
+                item: items.mediumPotion,
+                quantidade: 2
+            }
+        ]
+    },
+
+    // ============================================
+    // NÍVEL 27 - Desafio Intermediário
+    // ============================================
+    {
+        id: "goblin_donatello",
+        name: "Goblin Donatello",
+        level: 27,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_9/goblin_donatello.png",
+
+        status: {
+            vidaMaxima: 230,
+            dano: 95,
+            nomeAtaque: "Tacada de Bastão",
+            armadura: 45,
+            agilidade: 50,
+            xp: 825,
+            ouro: 700
+        },
+
+        drops: [
+            {
+            },
+            {
+                item: items.mediumPotion,
+                quantidade: 2
+            }
+        ]
+    },
+
+    {
+        id: "goblin_leonardo",
+        name: "Goblin Leonardo",
+        level: 27,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_9/goblin_leonardo.png",
+
+        status: {
+            vidaMaxima: 250,
+            dano: 95,
+            nomeAtaque: "Fatiar",
+            armadura: 45,
+            agilidade: 50,
+            xp: 825,
+            ouro: 700
+        },
+
+        drops: [
+            {
+                type: ["helmet"],
+                rarity: "rare"
+            },
+            {
+            }
+        ]
+    },
+
+    {
+        id: "goblin_rafael",
+        name: "Goblin Rafael",
+        level: 27,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_9/goblin_rafael.png",
+
+        status: {
+            vidaMaxima: 230,
+            dano: 95,
+            nomeAtaque: "Perfurar",
+            armadura: 45,
+            agilidade: 50,
+            xp: 825,
+            ouro: 700
+        },
+
+        drops: [
+            {
+            },
+            {
+                item: items.mediumPotion,
+                quantidade: 2
+            }
+        ]
+    },
+
+    {
+        id: "goblin_michelangelo",
+        name: "Goblin Michelangelo",
+        level: 27,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_9/goblin_michelangelo.png",
+
+        status: {
+            vidaMaxima: 220,
+            dano: 95,
+            nomeAtaque: "Golpear",
+            armadura: 45,
+            agilidade: 50,
+            xp: 825,
+            ouro: 700
+        },
+
+        drops: [
+            {
+            },
+            {
+                item: items.mediumPotion,
+                quantidade: 2
+            }
+        ]
+    },
+
+    // ============================================
+    // NÍVEL 30 - Boss (Desafio Épico)
+    // ============================================
+    {
+        id: "king-the-goblins",
+        name: "Rei dos Goblins",
+        level: 30,
+        type: "beast",
+
+        sprite: "assets/img/monsters/creature_boss_3/king-the-goblins.png",
+
+        status: {
+            vidaMaxima: 450,
+            dano: 120,
+            nomeAtaque: "Magia Negra",
+            armadura: 30,
+            agilidade: 54,
+            xp: 1075,
+            ouro: 880
+        },
+
+        drops: [
+            {
+                type: ["weapon"],
+                rarity: "rare"
+            },
+            {
+                item: items.mediumPotion,
+                quantidade: 2
+            }
+        ]
+    },
+
 
 ];
 

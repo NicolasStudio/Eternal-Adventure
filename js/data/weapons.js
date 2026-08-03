@@ -372,7 +372,7 @@ const weapons = {
         stats: {
             attack: 28,
             armor: 0,
-            agility: 10,
+            agility: 4,
             criticalChance: 7,
             lifeSteal: 0,
             penetration: 0
@@ -394,7 +394,7 @@ const weapons = {
         stats: {
             attack: 40,
             armor: 0,
-            agility: 13,
+            agility: 5,
             criticalChance: 12,
             lifeSteal: 0,
             penetration: 0
@@ -416,7 +416,7 @@ const weapons = {
         stats: {
             attack: 55,
             armor: 0,
-            agility: 16,
+            agility: 6,
             criticalChance: 18,
             lifeSteal: 0,
             penetration: 0
