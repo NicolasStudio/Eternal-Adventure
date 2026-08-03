@@ -36,7 +36,7 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-warrior-rarity-incomum.png",
 
         stats: {
-            armor: 8,
+            armor: 6,
             agility: 2
         },
 

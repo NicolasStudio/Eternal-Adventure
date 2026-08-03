@@ -1,3 +1,7 @@
+// Teto máximo de chance de esquiva, não importa o quanto a agilidade
+// de um lado supere a do outro — nunca "nunca é atingido".
+const DODGE_CAP = 40;
+
 export default class CombatEngine {
     constructor(player, monster) {
         this.player = player;
@@ -21,6 +25,18 @@ export default class CombatEngine {
         const playerTurn = this.currentTurn === "player";
         const attacker = playerTurn ? this.player.stats : this.monster.status;
         const defender = playerTurn ? this.monster.status : this.player.stats;
+
+        if (this.rollDodge(attacker, defender)) {
+            return {
+                attacker: playerTurn ? "player" : "monster",
+                target: playerTurn ? "monster" : "player",
+                dodged: true,
+                damage: 0,
+                critical: false,
+                lifeSteal: 0
+            };
+        }
+
         const result = this.calculateDamage(attacker, defender);
         if (playerTurn) {
             this.monster.status.vidaAtual -= result.damage;
@@ -35,10 +51,28 @@ export default class CombatEngine {
         return {
             attacker: playerTurn ? "player" : "monster",
             target: playerTurn ? "monster" : "player",
+            dodged: false,
             damage: result.damage,
             critical: result.critical,
             lifeSteal: result.lifeSteal
         };
+    }
+
+    // Esquiva: a diferença de agilidade entre quem defende e quem ataca
+    // vira % de chance de esquiva pra quem defende, sempre travada em
+    // DODGE_CAP — a chance nunca passa disso, não importa a diferença.
+    rollDodge(attacker, defender) {
+
+        const attackerAgility = attacker.agility ?? attacker.agilidade ?? 0;
+        const defenderAgility = defender.agility ?? defender.agilidade ?? 0;
+
+        const dodgeChance = Math.min(
+            DODGE_CAP,
+            Math.max(0, defenderAgility - attackerAgility)
+        );
+
+        return Math.random() * 100 < dodgeChance;
+
     }
 
     calculateDamage(attacker, defender) {
@@ -56,9 +90,15 @@ export default class CombatEngine {
 
         const effectiveArmor = armor * (1 - penetration / 100);
 
+        // Mitigação PROPORCIONAL (retorno decrescente): quanto mais
+        // armadura, menos dano passa, mas NUNCA chega a zero — ao
+        // contrário da subtração seca, aqui não existe "armadura alta
+        // demais" que anula o ataque por completo.
+        const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
+
         const damage = Math.max(
             1,
-            Math.floor((attack * criticalMultiplier) - effectiveArmor)
+            Math.floor(attack * criticalMultiplier * mitigation)
         );
 
         // ==========================
@@ -84,6 +124,13 @@ export default class CombatEngine {
     }
 
     createAttackMessage(result) {
+
+        if (result.dodged) {
+            return result.attacker === "player"
+                ? `<span class="combat-dodge">${this.monster.name} esquivou do seu ataque!</span>`
+                : `<span class="combat-dodge">Você esquivou do ataque!</span>`;
+        }
+
         if (result.attacker === "player") {
             let message = "";
             if (result.critical) {

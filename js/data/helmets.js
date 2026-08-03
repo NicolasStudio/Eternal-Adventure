@@ -37,7 +37,7 @@ const helmets = {
 
         stats: {
             armor: 5,
-            lifeSteal: 2
+            lifeSteal: 1
         },
 
         value: 200,
@@ -160,7 +160,7 @@ const helmets = {
 
         stats: {
             armor: 4,
-            penetration: 2
+            penetration: 1
         },
 
         value: 200,
@@ -180,7 +180,7 @@ const helmets = {
 
         stats: {
             armor: 6,
-            penetration: 4
+            penetration: 3
         },
 
         value: 720,
@@ -200,7 +200,7 @@ const helmets = {
 
         stats: {
             armor: 9,
-            penetration: 6
+            penetration: 5
         },
 
         value: 2160,
@@ -220,7 +220,7 @@ const helmets = {
 
         stats: {
             armor: 14,
-            penetration: 9
+            penetration: 7
         },
 
         value: 6480,
@@ -240,7 +240,7 @@ const helmets = {
 
         stats: {
             armor: 20,
-            penetration: 13
+            penetration: 10
         },
 
         value: 0,
@@ -283,7 +283,7 @@ const helmets = {
 
         stats: {
             armor: 4,
-            criticalChance: 4
+            criticalChance: 1
         },
 
         value: 200,
@@ -303,7 +303,7 @@ const helmets = {
 
         stats: {
             armor: 6,
-            criticalChance: 6
+            criticalChance: 3
         },
 
         value: 720,
@@ -323,7 +323,7 @@ const helmets = {
 
         stats: {
             armor: 9,
-            criticalChance: 9
+            criticalChance: 5
         },
 
         value: 2160,
@@ -343,7 +343,7 @@ const helmets = {
 
         stats: {
             armor: 14,
-            criticalChance: 13
+            criticalChance: 7
         },
 
         value: 6480,
@@ -363,7 +363,7 @@ const helmets = {
 
         stats: {
             armor: 20,
-            criticalChance: 18
+            criticalChance: 10
         },
 
         value: 0,

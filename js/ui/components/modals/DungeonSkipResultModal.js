@@ -17,45 +17,47 @@ export default class DungeonSkipResultModal {
 
             this.overlay.innerHTML = `
                 <div class="reward-modal">
-                    <h2 class="reward-title">${title}</h2>
-                    <hr>
-                    ${
-                        !result.success
-                            ? `
-                                <div class="reward-section">
-                                    <span class="reward-label">Andar alcançado</span>
-                                    <strong class="reward-value">${result.floorReached} / ${result.totalFloors}</strong>
-                                </div>
-                                <div class="reward-section">
-                                    <span class="reward-label">Derrotado por</span>
-                                    <strong class="reward-value">${result.diedTo ?? "?"}</strong>
-                                </div>
-                            `
-                            : ""
-                    }
-                    <div class="reward-section">
-                        <span class="reward-label">Experiência</span>
-                        <strong class="reward-value">+${result.xp} XP</strong>
-                    </div>
-                    <div class="reward-section">
-                        <span class="reward-label">Ouro</span>
-                        <strong class="reward-value">+${result.gold} Ouro</strong>
-                    </div>
-                    <div class="reward-section">
-                        <span class="reward-label">Itens Obtidos</span>
-                        <div class="reward-items">
-                            ${items.length
-                                ? items.map(item => `
-                                    <div class="reward-item">
-                                        <img src="${item.icon}" alt="${item.name}">
-                                        <span>${item.name}${item.quantity > 1 ? ` x${item.quantity}` : ""}</span>
+                    <div class="reward-modal-box">
+                        <h2 class="reward-title">${title}</h2>
+                        <hr>
+                        ${
+                            !result.success
+                                ? `
+                                    <div class="reward-section">
+                                        <span class="reward-label">Andar alcançado</span>
+                                        <strong class="reward-value">${result.floorReached} / ${result.totalFloors}</strong>
                                     </div>
-                                `).join("")
-                                : `<span class="reward-empty">Nenhum equipamento encontrado.</span>`
-                            }
+                                    <div class="reward-section">
+                                        <span class="reward-label">Derrotado por</span>
+                                        <strong class="reward-value">${result.diedTo ?? "?"}</strong>
+                                    </div>
+                                `
+                                : ""
+                        }
+                        <div class="reward-section">
+                            <span class="reward-label">Experiência</span>
+                            <strong class="reward-value">+${result.xp} XP</strong>
                         </div>
+                        <div class="reward-section">
+                            <span class="reward-label">Ouro</span>
+                            <strong class="reward-value">+${result.gold} Ouro</strong>
+                        </div>
+                        <div class="reward-section">
+                            <span class="reward-label">Itens Obtidos</span>
+                            <div class="reward-items">
+                                ${items.length
+                                    ? items.map(item => `
+                                        <div class="reward-item">
+                                            <img src="${item.icon}" alt="${item.name}">
+                                            <span>${item.name}${item.quantity > 1 ? ` x${item.quantity}` : ""}</span>
+                                        </div>
+                                    `).join("")
+                                    : `<span class="reward-empty">Nenhum equipamento encontrado.</span>`
+                                }
+                            </div>
+                        </div>
+                        <button class="reward-collect">Continuar</button>
                     </div>
-                    <button class="reward-collect">Continuar</button>
                 </div>
             `;
 

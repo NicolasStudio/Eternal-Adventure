@@ -136,13 +136,31 @@ export default class SaveService {
 
         const link = document.createElement("a");
         link.href = url;
-        link.download = `eternal-adventure-save.txt`;
+        link.download = this.buildFileName(data);
 
         document.body.appendChild(link);
         link.click();
         link.remove();
 
         URL.revokeObjectURL(url);
+
+    }
+
+    // Monta um nome de arquivo único por save — classe + data/hora —
+    // pra nunca repetir o mesmo nome (o navegador empilhava "(1)", "(2)"...
+    // toda vez que baixava com o nome fixo de antes).
+    static buildFileName(data) {
+
+        const className = classes[data.classId]?.name?.toLowerCase() ?? "personagem";
+
+        const date = new Date(data.savedAt ?? Date.now());
+
+        const pad = (n) => String(n).padStart(2, "0");
+
+        const dateStr = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+        const timeStr = `${pad(date.getHours())}-${pad(date.getMinutes())}-${pad(date.getSeconds())}`;
+
+        return `${className}-eternal-adventure-save-${dateStr}-${timeStr}.txt`;
 
     }
 

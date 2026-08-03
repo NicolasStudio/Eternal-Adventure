@@ -13,7 +13,7 @@ export default class Player {
     constructor(characterClass) {
         this.class = characterClass;
         this.level = 1;
-        this.gold = 0;
+        this.gold = 100;
         this.currentXP = 0;
         this.currentHP = 100;
         this.maxHP = 100;

@@ -17,8 +17,8 @@ export default class CombatView {
         this.engine = null;
         this.messages = [];
         this.pendingMessages = [];
-        this.messageDelay = 1000;
-        this.turnDelay = 900;
+        this.messageDelay = 1050;
+        this.turnDelay = 950;
         this.rewardModal = new RewardModal(game);
         this.levelUpModal = new LevelUpModal(this.game);
         this.continueDungeonModal = new ContinueDungeonModal();
@@ -142,7 +142,11 @@ export default class CombatView {
             ? "player"
             : "enemy";
 
-        if (result.attacker === "player") {
+        if (result.dodged) {
+
+            type += " dodge";
+
+        } else if (result.attacker === "player") {
 
             if (result.lifeSteal > 0) {
                 type = "lifeSteal player";

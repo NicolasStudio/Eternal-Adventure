@@ -154,7 +154,7 @@ const monsters = [
             },
             {
                 item: items.smallPotion,
-                quantidade: 1
+                quantidade: 2
             }
         ]
     },
@@ -292,10 +292,10 @@ const monsters = [
 
         status: {
             vidaMaxima: 150,
-            dano: 50,
+            dano: 40,
             nomeAtaque: "Dilacerar",
-            armadura: 9,
-            agilidade: 9,
+            armadura: 8,
+            agilidade: 12,
             xp: 438,
             ouro: 240
         },
@@ -383,7 +383,7 @@ const monsters = [
 
         status: {
             vidaMaxima: 130,
-            dano: 48,
+            dano: 42,
             nomeAtaque: "Porretada",
             armadura: 12,
             agilidade: 9,
@@ -474,7 +474,7 @@ const monsters = [
 
         status: {
             vidaMaxima: 150,
-            dano: 57,
+            dano: 38,
             nomeAtaque: "Arranhar",
             armadura: 16,
             agilidade: 15,
@@ -566,8 +566,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_6/big-zombie.png",
 
         status: {
-            vidaMaxima: 180,
-            dano: 55,
+            vidaMaxima: 162,
+            dano: 47,
             nomeAtaque: "Esmagar",
             armadura: 20,
             agilidade: 12,

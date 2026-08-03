@@ -35,7 +35,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-warrior-rarity-incomum.png",
 
         stats: {
-            armor: 10
+            armor: 9
         },
 
         value: 300,
