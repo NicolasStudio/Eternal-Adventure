@@ -967,7 +967,7 @@ const monsters = [
 
         drops: [
             {
-                type: ["weapon"],
+                type: ["chest"],
                 rarity: "rare"
             },
             {
