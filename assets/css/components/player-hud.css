@@ -1,0 +1,72 @@
+/* ==========================================================
+   PAINEL
+========================================================== */
+.hud-panel{
+    top:20px;
+    left:20px;
+    z-index:20;
+    width:280px;
+    padding:14px;
+    background:rgba(20,12,8,.22);
+    backdrop-filter:blur(5px);
+    border:1px solid rgba(212,163,115,.25);
+    border-radius:8px;
+}
+
+/* ==========================================================
+   CABEÇALHO
+========================================================== */
+.hud-player-header{
+    display:flex;
+    align-items:flex-start;
+}
+
+/* ==========================================================
+   RETRATO
+========================================================== */
+.hud-avatar{
+    width:95px;
+    height:95px;
+    image-rendering:pixelated;
+    border:2px solid #8b7355;
+    background:#2a1a12;
+    flex-shrink:0;
+}
+
+/* ==========================================================
+   INFORMAÇÕES
+========================================================== */
+.hud-info{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:8px;
+    margin-top:5px;
+}
+
+.hud-name{
+    font-family:"Cinzel",serif;
+    font-size:20px;
+    color:#f0d5b0;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin-left: 20px;
+}
+
+.hud-level{
+    font-family:"Cinzel",serif;
+    color:#d4a373;
+    margin-top:35px;
+    margin-left: 20px;
+    font-size:16px;
+}
+
+/* ==========================================================
+   BARRAS
+========================================================== */
+.hud-bars{
+    margin-top:15px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}

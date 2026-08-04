@@ -1,0 +1,348 @@
+/* BlacksmithModal.css */
+.blacksmith-window{
+    position:absolute;
+    inset:50% auto auto 50%;
+    transform:translate(-50%,-50%);
+    width:min(1100px,92vw);
+    height:min(700px,92vh);
+    display:flex;
+    z-index:50;
+    flex-direction:column;
+    overflow:hidden;
+    background:linear-gradient(rgba(0,0,0,.18),rgba(0,0,0,.18)),radial-gradient(circle at top,#24160d 0%,#120b07 70%,#0a0604 100%);
+    border:2px solid #8b7355;
+    border-radius:10px;
+    box-shadow:0 0 60px rgba(0,0,0,.6), inset 0 0 60px rgba(0,0,0,.35);
+}
+/*==========================================================
+ABAS DE SLOT (Ferreiro - Equipamentos)
+==========================================================*/
+.blacksmith-slot-tabs{
+    display:flex;
+    gap:10px;
+    padding:14px 22px 0;
+}
+.blacksmith-slot-tab{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:10px;
+    border:2px solid #5b4633;
+    border-radius:6px;
+    background:rgba(0,0,0,.18);
+    color:#bca46d;
+    font-family:"Cinzel",serif;
+    font-size:.9rem;
+    cursor:pointer;
+    transition:.18s;
+}
+.blacksmith-slot-tab:hover{
+    border-color:#8b7355;
+    color:#f3e0b7;
+}
+.blacksmith-slot-tab.active{
+    border-color:#c79b37;
+    background:linear-gradient(180deg,rgba(216,159,27,.25),rgba(155,102,4,.15));
+    color:#f1c75c;
+}
+
+.blacksmith-body{
+    flex:1;
+    display:grid;
+    grid-template-columns:320px 1fr;
+    gap:22px;
+    padding:22px;
+    overflow:hidden;
+}
+.blacksmith-left,.blacksmith-right{
+    display:flex;
+    flex-direction:column;
+    background:rgba(15,9,6,.82);
+    border:2px solid #8b7355;
+    border-radius:8px;
+    overflow:hidden;
+}
+
+.blacksmith-slot img {
+    margin: 10px;
+    width: 65px;
+    cursor: pointer;
+}
+
+/*==========================================================
+FOOTER
+==========================================================*/
+.blacksmith-footer{
+    margin-top:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:32px;
+    padding:20px 28px;
+    border-top:2px solid #8b7355;
+}
+.blacksmith-footer-info{
+    display:flex;
+    align-items:center;
+}
+.blacksmith-footer-divider{
+    width:1px;
+    height:42px;
+    margin:0 28px;
+    background:rgba(255,255,255,.12);
+}
+.blacksmith-footer-section{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+.blacksmith-footer-section i{
+    width:34px;
+    text-align:center;
+    font-size:22px;
+    color:#d9b35c;
+}
+.blacksmith-footer-text{
+    display:flex;
+    flex-direction:column;
+}
+.blacksmith-footer-text .label{
+    color:#bca46d;
+    font-size:.72rem;
+    letter-spacing:1px;
+}
+.blacksmith-footer-text .value{
+    color:#f1c75c;
+    font-size:1.15rem;
+    font-weight:700;
+}
+.blacksmith-upgrade-button, .blacksmith-remove-button{
+    width:220px;
+    height:52px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    border:2px solid #c79b37;
+    border-radius:6px;
+    background:linear-gradient(180deg,#d89f1b,#9b6604);
+    color:#fff7dc;
+    font-family:"Cinzel",serif;
+    font-size:1rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:.18s;
+    box-shadow:inset 0 0 18px rgba(255,255,255,.05), 0 0 18px rgba(214,168,55,.18);
+}
+.blacksmith-upgrade-button:hover:not(:disabled), .blacksmith-remove-button:hover:not(:disabled){
+    transform:translateY(-2px);
+    border-color:#f1c75c;
+    box-shadow:0 0 22px rgba(214,168,55,.35);
+}
+.blacksmith-upgrade-button:disabled, .blacksmith-remove-button:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+.blacksmith-empty{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    padding:30px;
+    text-align:center;
+    color:#bca46d;
+}
+.blacksmith-empty i{
+    font-size:2.4rem;
+    color:#bca46d;
+}
+
+/*==========================================================
+BIGORNA
+==========================================================*/
+.blacksmith-anvil{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    padding:28px;
+    overflow-y:auto;
+}
+.blacksmith-title{
+    margin:0;
+    color:#f1c75c;
+    font-family:"Cinzel",serif;
+    font-size:1.6rem;
+    text-align:center;
+}
+.blacksmith-subtitle{
+    margin:10px 0 30px;
+    color:#bca46d;
+    text-align:center;
+    line-height:1.5;
+    max-width:520px;
+}
+
+/*==========================================================
+SLOT DA BIGORNA
+==========================================================*/
+.blacksmith-anvil-slot{
+    width:100%;
+    min-height:250px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:18px;
+    padding:30px;
+    border:2px dashed #8b7355;
+    border-radius:8px;
+    background:radial-gradient(circle at center, rgba(255,180,0,.05), transparent 70%);
+}
+
+.blacksmith-anvil-slot img{
+    width: 90px;
+}
+.blacksmith-anvil-placeholder{
+    width:130px;
+    height:130px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border:2px dashed rgba(255,255,255,.15);
+    border-radius:8px;
+}
+.blacksmith-anvil-placeholder i{
+    font-size:3rem;
+    color:#8b7355;
+}
+.blacksmith-anvil-image{
+    width:120px;
+    height:120px;
+    object-fit:contain;
+    image-rendering:pixelated;
+}
+.blacksmith-anvil-slot h3{
+    margin:0;
+    color:#f3e0b7;
+    font-family:"Cinzel",serif;
+    font-size:1.3rem;
+    text-align:center;
+}
+
+/*==========================================================
+INFORMAÇÕES DA MELHORIA
+==========================================================*/
+.blacksmith-upgrade-info{
+    width:100%;
+    margin-top:28px;
+    padding:22px;
+    border:2px solid #5b4633;
+    border-radius:8px;
+    background:rgba(0,0,0,.18);
+}
+.blacksmith-info-line{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:#d8c39b;
+    font-size:1rem;
+}
+.blacksmith-info-line strong{
+    color:#f1c75c;
+    font-size:1.05rem;
+}
+.blacksmith-arrow{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:18px 0;
+    color:#d4a343;
+    font-size:1.3rem;
+}
+.blacksmith-upgrade-info hr{
+    margin:20px 0;
+    border:none;
+    border-top:1px solid rgba(255,255,255,.08);
+}
+
+/*==========================================================
+PREVIEW DOS ATRIBUTOS
+==========================================================*/
+.blacksmith-preview{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+.blacksmith-stat{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 14px;
+    border-radius:6px;
+    background:rgba(255,255,255,.03);
+    transition:.15s;
+}
+.blacksmith-stat:hover{
+    background:rgba(255,255,255,.05);
+}
+.blacksmith-stat span{
+    color:#c7b188;
+}
+.blacksmith-stat strong{
+    color:#76d66d;
+    font-weight:700;
+}
+
+/*==========================================================
+SCROLLBAR
+==========================================================*/
+.blacksmith-weapon-grid::-webkit-scrollbar,
+.blacksmith-anvil::-webkit-scrollbar{
+    width:8px;
+}
+.blacksmith-weapon-grid::-webkit-scrollbar-track,
+.blacksmith-anvil::-webkit-scrollbar-track{
+    background:#1b120c;
+}
+.blacksmith-weapon-grid::-webkit-scrollbar-thumb,
+.blacksmith-anvil::-webkit-scrollbar-thumb{
+    background:#6c543a;
+    border-radius:20px;
+}
+.blacksmith-weapon-grid::-webkit-scrollbar-thumb:hover,
+.blacksmith-anvil::-webkit-scrollbar-thumb:hover{
+    background:#8f704c;
+}
+
+/*==========================================================
+RESPONSIVO
+==========================================================*/
+@media (max-width:900px){
+    .blacksmith-body{
+        grid-template-columns:1fr;
+    }
+    .blacksmith-footer{
+        flex-direction:column;
+        align-items:stretch;
+        gap:20px;
+    }
+    .blacksmith-footer-info{
+        justify-content:center;
+    }
+    .blacksmith-footer-actions{
+        width:100%;
+    }
+    .blacksmith-select-button,
+    .blacksmith-remove-button,
+    .blacksmith-upgrade-button{
+        flex:1;
+        width:auto;
+    }
+}

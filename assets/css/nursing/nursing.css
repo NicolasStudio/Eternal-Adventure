@@ -1,0 +1,387 @@
+/* ==========================================================
+   OVERLAY
+========================================================== */
+.hospital-modal-overlay{
+    position:absolute;
+    inset:50% auto auto 50%;
+    transform:translate(-50%,-50%);
+    width:min(1000px,88vw);
+    background:rgba(20,12,8,.75);
+    backdrop-filter:blur(10px);
+    border:2px solid #8b7355;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 0 50px rgba(0,0,0,.45), inset 0 0 40px rgba(0,0,0,.35);
+    z-index:99;
+}
+
+/* ==========================================================
+   WINDOW
+========================================================== */
+.hospital-window{
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+}
+
+/* ==========================================================
+   HEADER
+========================================================== */
+.hospital-header{
+    height:60px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 20px;
+    border-bottom:1px solid rgba(212,163,115,.25);
+}
+.hospital-header h2{
+    font-family:"Cinzel",serif;
+    color:#f0d5b0;
+    font-size:clamp(20px,1.8vw,28px);
+    letter-spacing:2px;
+}
+
+/* ==========================================================
+   BOTÃO FECHAR
+========================================================== */
+.hospital-close{
+    position:relative;
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:50%;
+    cursor:pointer;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:20px;
+    color:#d4a373;
+    background:linear-gradient(180deg, #2c1810 0%, #1a0f0a 100%);
+    border:2px solid #8b7355;
+    transition:all .25s ease;
+    box-shadow:inset 0 0 18px rgba(0,0,0,.45), 0 4px 10px rgba(0,0,0,.45);
+}
+.hospital-close::before{
+    content:"";
+    position:absolute;
+    inset:4px;
+    border:1px solid rgba(139,115,85,.18);
+    border-radius:50%;
+    pointer-events:none;
+}
+.hospital-close:hover{
+    color:#fff;
+    border-color:#d4a373;
+    transform:scale(1.06);
+    background:linear-gradient(180deg, #3d2418 0%, #2c1810 100%);
+    box-shadow:inset 0 0 18px rgba(0,0,0,.45), 0 0 20px rgba(212,163,115,.18);
+}
+.hospital-close:active{
+    transform:scale(.95);
+}
+
+/* ==========================================================
+   BODY
+========================================================== */
+.hospital-body{
+    padding:24px;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+/* ==========================================================
+   TOP
+========================================================== */
+.hospital-top{
+    display:grid;
+    grid-template-columns:220px 1fr;
+    gap:24px;
+    align-items:start;
+}
+
+/* ==========================================================
+   IMAGE
+========================================================== */
+.hospital-image{
+    height:180px;
+    border-radius:8px;
+    overflow:hidden;
+    border:2px solid #5a4a3a;
+}
+.hospital-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* ==========================================================
+   DESCRIPTION
+========================================================== */
+.hospital-description{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+.hospital-description h3{
+    font-family:"Cinzel";
+    font-size:26px;
+    color:#ecd8b3;
+}
+.hospital-description p{
+    color:#ddd;
+    line-height:1.5;
+    font-size:15px;
+}
+
+/* ==========================================================
+   INFO
+========================================================== */
+.hospital-info{
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+}
+.hospital-info h3{
+    margin:0;
+    font-family:"Cinzel",serif;
+    font-size:26px;
+    color:#f0d5b0;
+}
+.hospital-info p{
+    margin:8px 0 18px;
+    color:#ddd;
+    font-size:16px;
+    line-height:1.6;
+}
+.hospital-info strong{
+    color:#fff;
+}
+
+/* ==========================================================
+   PLAYER INFO
+========================================================== */
+.hospital-player-info{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-top:8px;
+}
+.hospital-player-row{
+    display:grid;
+    grid-template-columns:170px 120px 170px 120px;
+    align-items:center;
+    column-gap:20px;
+}
+.hospital-player-label{
+    color:#c7b08b;
+    font-size:16px;
+}
+.hospital-player-value{
+    color:#fff;
+    font-size:16px;
+    font-weight:bold;
+}
+
+/* ==========================================================
+   DIVIDER
+========================================================== */
+.hospital-divider{
+    margin:22px 0;
+    border:none;
+    border-top:1px solid rgba(212,163,115,.18);
+}
+
+/* ==========================================================
+   TREATMENT
+========================================================== */
+.hospital-treatment-title{
+    text-align:center;
+    font-family:"Cinzel",serif;
+    font-size:24px;
+    color:#f0d5b0;
+    letter-spacing:2px;
+    margin-bottom:25px;
+}
+
+/* ==========================================================
+   RESPONSIVO
+========================================================== */
+@media(max-width:900px){
+    .hospital-top{
+        grid-template-columns:1fr;
+        gap:18px;
+    }
+    .hospital-image{
+        width:220px;
+        height:170px;
+        margin:auto;
+    }
+    .hospital-info{
+        text-align:center;
+    }
+    .hospital-player-row{
+        grid-template-columns:140px 1fr;
+        row-gap:10px;
+    }
+}
+@media(max-width:768px){
+    .hospital-player-row{
+        grid-template-columns:1fr;
+        text-align:center;
+        gap:4px;
+    }
+    .hospital-player-label{
+        margin-top:10px;
+    }
+    .hospital-player-value{
+        margin-bottom:6px;
+    }
+}
+
+/* ==========================================================
+   ACTIONS
+========================================================== */
+.hospital-actions{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+    flex:1;
+}
+
+/* ==========================================================
+   CARD
+========================================================== */
+.hospital-card{
+    display:flex;
+    flex-direction:column;
+    background:linear-gradient(180deg, #2c1810, #1a0f0a);
+    border:2px solid #5a4a3a;
+    border-radius:10px;
+    padding:20px;
+    transition:.25s;
+}
+.hospital-card:hover{
+    border-color:#d4a373;
+    transform:translateY(-2px);
+}
+.hospital-card h3{
+    margin:0 0 18px;
+    text-align:center;
+    font-family:"Cinzel";
+    font-size:22px;
+    color:#ecd8b3;
+}
+
+/* ==========================================================
+   INFO
+========================================================== */
+.hospital-card ul{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+.hospital-card li{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#ddd;
+    font-size:15px;
+}
+.hospital-card li strong{
+    color:#f0d5b0;
+}
+.hospital-card li i{
+    width:20px;
+    color:#d4a373;
+    text-align:center;
+}
+
+/* ==========================================================
+   COST
+========================================================== */
+.hospital-cost{
+    margin-top:auto;
+    padding-top:16px;
+    border-top:1px solid rgba(255,255,255,.08);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:#ddd;
+}
+.hospital-cost strong{
+    color:#69d823;
+    font-size:22px;
+}
+
+/* ==========================================================
+   BUTTON
+========================================================== */
+.hospital-card button{
+    margin-top:16px;
+    height:44px;
+    border:none;
+    cursor:pointer;
+    border-radius:6px;
+    background:linear-gradient(180deg, #3d2418, #2c1810);
+    border:2px solid #8b7355;
+    color:#d4a373;
+    font-family:"Cinzel";
+    font-size:16px;
+    letter-spacing:1px;
+    transition:.25s;
+}
+.hospital-card button:hover{
+    border-color:#d4a373;
+    color:#fff;
+    box-shadow:0 0 15px rgba(212,163,115,.25);
+}
+
+/* ==========================================================
+   RESPONSIVO
+========================================================== */
+@media(max-width:900px){
+    .hospital-modal-overlay{
+        width:96vw;
+        height:90vh;
+    }
+    .hospital-top{
+        grid-template-columns:1fr;
+    }
+    .hospital-image{
+        width:260px;
+        margin:auto;
+    }
+    .hospital-description{
+        text-align:center;
+    }
+    .hospital-status{
+        grid-template-columns:1fr;
+    }
+    .hospital-actions{
+        grid-template-columns:1fr;
+    }
+}
+@media(max-width:768px){
+    .hospital-body{
+        padding:18px;
+        gap:18px;
+    }
+    .hospital-header{
+        height:52px;
+    }
+    .hospital-header h2{
+        font-size:22px;
+    }
+    .hospital-card{
+        padding:16px;
+    }
+    .hospital-card h3{
+        font-size:20px;
+    }
+}

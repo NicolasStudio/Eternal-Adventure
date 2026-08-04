@@ -1,0 +1,19 @@
+.dungeon-tooltip{
+    position: fixed;
+    z-index: 99999;
+    pointer-events: none;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: opacity .12s;
+}
+
+.dungeon-tooltip.show{
+    opacity: 1;
+    visibility: visible;
+}
+
+.dungeon-tooltip .item-tooltip{
+    width: 290px;
+}

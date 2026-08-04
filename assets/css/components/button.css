@@ -1,0 +1,52 @@
+/* ==========================================================
+   Tooltips
+========================================================== */
+.hud-tool{
+    width:42px;
+    height:42px;
+    background:transparent;
+    border:none;
+    color:#d4a373;
+    cursor:pointer;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:20px;
+    transition:.2s;
+}
+
+.hud-tool:hover{
+    color:#f0d5b0;
+    transform:translateY(-2px);
+    text-shadow:0 0 12px rgba(212,163,115,.5);
+}
+
+/* ==========================================================
+   NAVIGATION
+========================================================== */
+.nav-item{
+    background:none;
+    border:none;
+    color:#d4a373;
+    font-family:"Cinzel";
+    font-size:16px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    transition:.2s;
+}
+
+.nav-item:hover{
+    color:#f0d5b0;
+}
+
+.nav-item.active{
+    color:#69d823;
+}
+
+.nav-item.disabled{
+    opacity: .4;
+    filter: grayscale(100%);
+    cursor: not-allowed;
+}
