@@ -4,17 +4,15 @@ export default class ItemTooltip {
     }
 
     render() {
-        return `
-            ${this.renderHeader()}
-            ${this.renderDivider()}
-            ${this.renderInfo()}
-            ${this.renderDivider()}
-            ${this.renderStats()}
-            ${this.renderDivider()}
-            ${this.renderEffect()}
-            ${this.renderDivider()}
-            ${this.renderFooter()}
-        `;
+        const sections = [
+            this.renderHeader(),
+            this.renderInfo(),
+            this.renderStats(),
+            this.renderEffect(),
+            this.renderFooter()
+        ].filter(section => section.trim() !== "");
+
+        return sections.join(this.renderDivider());
     }
 
     renderHeader() {
@@ -28,7 +26,6 @@ export default class ItemTooltip {
 
     renderInfo() {
         const rarity = this.item.rarity ?? { name: "Comum", color: "#FFFFFF" };
-        const quality = this.item.quality ?? { name: "Nenhuma", color: "#8f8578" };
         let itemClass;
         if (this.item.type === "item") {
             itemClass = "Consumível";
@@ -47,10 +44,16 @@ export default class ItemTooltip {
                     <span class="tooltip-label">Raridade</span>
                     <span class="tooltip-rarity" style="color:${rarity.color};">${rarity.name}</span>
                 </div>
-                <div class="tooltip-row">
-                    <span class="tooltip-label">Qualidade</span>
-                    <span class="tooltip-quality" style="color:${quality.color};">${quality.name}</span>
-                </div>
+                ${
+                    this.item.quality
+                        ? `
+                            <div class="tooltip-row">
+                                <span class="tooltip-label">Qualidade</span>
+                                <span class="tooltip-quality" style="color:${this.item.quality.color};">${this.item.quality.name}</span>
+                            </div>
+                        `
+                        : ""
+                }
             </div>
         `;
     }
@@ -82,12 +85,48 @@ export default class ItemTooltip {
     }
 
     renderEffect() {
+
+        // Pedra de encantamento — não tem "efeito" nesse sentido, então
+        // a seção inteira some (nada de "não possui efeitos especiais").
+        if (this.item.enchantPrice != null) {
+            return "";
+        }
+
+        const enchantments = this.item.enchantments
+            ? Object.entries(this.item.enchantments)
+            : [];
+
+        if (enchantments.length) {
+
+            const lines = enchantments
+                .map(([key, value]) => `<div class="tooltip-stat"><span>${this.getStatIcon(key)} ${this.getEnchantStatName(key)}</span><span class="tooltip-stat-positive">+${value}</span></div>`)
+                .join("");
+
+            return `
+                <div class="tooltip-section">
+                    <h3 class="tooltip-title">Encantamentos</h3>
+                    ${lines}
+                </div>
+            `;
+
+        }
+
         return `
             <div class="tooltip-section">
                 <h3 class="tooltip-title">Efeito</h3>
                 <p class="${this.item.effect ? "" : "tooltip-empty"}">${this.item.effect ?? "Este item não possui efeitos especiais."}</p>
             </div>
         `;
+    }
+
+    getEnchantStatName(stat) {
+        switch (stat) {
+            case "life": return "Vida";
+            case "armor": return "Armadura";
+            case "attack": return "Ataque";
+            case "agility": return "Agilidade";
+            default: return stat;
+        }
     }
 
     renderFooter() {
@@ -132,6 +171,7 @@ export default class ItemTooltip {
             case "criticalChance": return "🎯";
             case "lifeSteal": return "🩸";
             case "penetration": return "💥";
+            case "life": return "❤️";
             default: return "•";
         }
     }

@@ -49,12 +49,21 @@ export default class CharacterView {
         return `
             <div class="character-status">
 
-                <img
-                    class="character-avatar"
-                    src="${player.class.hud}"
-                    alt="${player.class.name}">
+                <div class="character-avatar-wrapper">
 
-                <h2 class="character-name">${player.class.name}</h2>
+                    <img
+                        class="character-avatar"
+                        src="${player.transcendence?.hud ?? player.class.hud}"
+                        alt="${player.transcendence?.name ?? player.class.name}">
+
+                    <img
+                        class="character-avatar character-avatar-full"
+                        src="${player.transcendence?.image ?? player.class.image}"
+                        alt="${player.transcendence?.name ?? player.class.name}">
+
+                </div>
+
+                <h2 class="character-name">${player.transcendence?.name ?? player.class.name}</h2>
 
                 <div class="box-info">
 
@@ -325,6 +334,15 @@ export default class CharacterView {
             return;
         }
 
+        // Nem consumível, nem equipamento (ex: pedra de encantamento) —
+        // essa ação não serve pra esse tipo de item.
+        if (!this.selectedItem.slot) {
+
+            Toast.show("Essa pedra só pode ser usada na Ferraria, em Encantar.");
+
+            return;
+        }
+
         // Equipamento
         this.game.player.equipItem(this.selectedItem);
 
@@ -494,8 +512,10 @@ export default class CharacterView {
 
                     if (this.selectedItem.heal) {
                         equipButton.textContent = "Usar";
-                    } else {
+                    } else if (this.selectedItem.slot) {
                         equipButton.textContent = "Equipar";
+                    } else {
+                        equipButton.textContent = "Encantar";
                     }
 
                 }

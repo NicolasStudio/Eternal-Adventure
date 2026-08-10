@@ -389,6 +389,39 @@
 }
 
 /* ==========================================================
+   FINAL SECRETO — PORTAL DE LUZ / TREVAS
+========================================================== */
+.soul-ending-card{
+    cursor:default;
+}
+.soul-ending-image{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:42px;
+}
+.soul-ending-card.light{
+    border-color:#f0d080;
+}
+.soul-ending-card.light .dungeon-name{
+    color:#f8e7b0;
+}
+.soul-ending-card.light .soul-ending-image{
+    color:#f8e7b0;
+    text-shadow:0 0 25px rgba(248,231,176,.6);
+}
+.soul-ending-card.dark{
+    border-color:#7a1f1f;
+}
+.soul-ending-card.dark .dungeon-name{
+    color:#e05a5a;
+}
+.soul-ending-card.dark .soul-ending-image{
+    color:#e05a5a;
+    text-shadow:0 0 25px rgba(224,90,90,.6);
+}
+
+/* ==========================================================
    IMAGEM
 ========================================================== */
 .dungeon-card-image{
@@ -531,6 +564,10 @@
 
     padding:18px 10px;
 
+}
+
+.drops-empty{
+    color: #d4a373;
 }
 
 .drops-title{

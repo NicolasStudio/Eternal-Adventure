@@ -170,6 +170,65 @@
     background:#6b4522;
 }
 
+.name-entry-input{
+    display:block;
+    width:100%;
+    margin:20px 0;
+    padding:12px 14px;
+    text-align:center;
+    font-family:"Cinzel", serif;
+    font-size:22px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:#f1c75c;
+    background:rgba(0,0,0,.3);
+    border:2px solid #8f7144;
+    border-radius:6px;
+    outline:none;
+}
+.name-entry-input:focus{
+    border-color:#c79b37;
+}
+.name-entry-hint{
+    margin:0 0 4px;
+    text-align:center;
+    font-size:13px;
+    color:#bca46d;
+}
+.name-entry-count{
+    text-align:center;
+    font-size:12px;
+    color:#8b7355;
+    margin-bottom:8px;
+}
+.continue-actions button:disabled{
+    opacity:.4;
+    cursor:not-allowed;
+}
+.continue-actions button:disabled:hover{
+    background:#50331a;
+}
+
+.soul-choice-overlay{
+    background:rgba(0,0,0,.82);
+}
+.soul-choice-modal{
+    border-color:#5b2020;
+    box-shadow:0 0 30px rgba(120,0,0,.35), inset 0 0 25px rgba(255,255,255,.03);
+}
+.soul-choice-message{
+    font-size:17px;
+    line-height:1.6;
+    font-style:italic;
+}
+.soul-choice-yes{
+    border-color:#7a1f1f !important;
+    background:#3a1010 !important;
+}
+.soul-choice-yes:hover{
+    background:#5c1818 !important;
+}
+
 .dungeon-complete-modal{
     position:relative;
     width:420px;

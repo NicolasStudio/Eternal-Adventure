@@ -43,6 +43,11 @@ export default class DungeonCard {
     }
 
     renderDrops() {
+
+        if (this.dungeon.id === "light_dungeon" || this.dungeon.id === "dark_dungeon") {
+            return `<span class="drops-empty">Melhoria de Classe</span>`;
+        }
+
         const drops = DungeonDropPreview.getDrops(this.dungeon, this.player);
         if (!drops.length) {
             return `<span class="drops-empty">Nenhum drop</span>`;

@@ -29,14 +29,51 @@ export default class LootSystem {
         for (const drop of monster.drops) {
 
             // ===============================
-            // Item garantido
+            // Pool ponderado (ex: pedra de encantamento nível 1/2/3
+            // — exatamente UM item cai, sorteado pelo peso de cada um)
+            // ===============================
+            if (drop.pool) {
+
+                const roll = Math.random() * 100;
+                let cumulative = 0;
+
+                for (const entry of drop.pool) {
+
+                    cumulative += entry.chance;
+
+                    if (roll < cumulative) {
+
+                        reward.items.push({
+                            ...structuredClone(entry.item),
+                            quantity: entry.quantidade ?? 1
+                        });
+
+                        break;
+
+                    }
+
+                }
+
+                continue;
+
+            }
+
+            // ===============================
+            // Item garantido (ou com chance própria — drop.chance,
+            // 0-100; sem esse campo, é sempre garantido como antes)
             // ===============================
             if (drop.item) {
 
-                reward.items.push({
-                    ...structuredClone(drop.item),
-                    quantity: drop.quantidade ?? 1
-                });
+                const chance = drop.chance ?? 100;
+
+                if (Math.random() * 100 < chance) {
+
+                    reward.items.push({
+                        ...structuredClone(drop.item),
+                        quantity: drop.quantidade ?? 1
+                    });
+
+                }
 
                 continue;
 

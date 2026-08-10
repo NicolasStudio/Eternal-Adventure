@@ -4,6 +4,7 @@ import DungeonTooltip from "./DungeonTooltip.js";
 import DungeonSkipService from "../services/DungeonSkipService.js";
 import DungeonSkipConfirmModal from "../ui/components/modals/DungeonSkipConfirmModal.js";
 import DungeonSkipResultModal from "../ui/components/modals/DungeonSkipResultModal.js";
+import SoulChoiceModal from "../ui/components/modals/SoulChoiceModal.js";
 
 export default class DungeonView {
     constructor(game) {
@@ -14,6 +15,8 @@ export default class DungeonView {
         this.skipConfirmModal = new DungeonSkipConfirmModal();
         this.skipResultModal = new DungeonSkipResultModal();
         this.skipping = false;
+        this.soulChoiceModal = new SoulChoiceModal();
+        this.checkingSoulChoice = false;
     }
 
     canEnterDungeon(requiredLevel) {
@@ -21,7 +24,42 @@ export default class DungeonView {
     }
 
     get maxPage() {
-        return Math.max(...dungeons.map(dungeon => dungeon.page));
+        const basePage = Math.max(...dungeons.filter(dungeon => !dungeon.hidden).map(dungeon => dungeon.page));
+        return this.game.player.progress.soulChoice ? basePage + 1 : basePage;
+    }
+
+    get soulChoicePage() {
+        return Math.max(...dungeons.filter(dungeon => !dungeon.hidden).map(dungeon => dungeon.page)) + 1;
+    }
+
+    getSoulChoiceDungeon() {
+        const dungeonId = this.game.player.progress.soulChoice === "dark" ? "dark_dungeon" : "light_dungeon";
+        return dungeons.find(dungeon => dungeon.id === dungeonId);
+    }
+
+    // Chamado toda vez que a tela de dungeons é aberta — só faz alguma
+    // coisa quando a condição secreta (nível 100 + bestiário completo)
+    // é atingida pela primeira vez.
+    async maybeShowSoulChoice() {
+
+        if (this.checkingSoulChoice) return;
+
+        const player = this.game.player;
+
+        if (!player.canMakeSoulChoice()) return;
+
+        this.checkingSoulChoice = true;
+
+        const choice = await this.soulChoiceModal.show();
+
+        player.makeSoulChoice(choice);
+
+        this.checkingSoulChoice = false;
+
+        this.currentPage = this.soulChoicePage;
+
+        this.game.hudScreen.refreshCurrentView();
+
     }
 
     nextPage() {
@@ -38,10 +76,13 @@ export default class DungeonView {
 
     render() {
         const player = this.game.player;
-        const pageDungeons = dungeons
-            .filter(dungeon => dungeon.page === this.currentPage)
-            .map(dungeon => new DungeonCard(dungeon, player).render())
-            .join("");
+        const isSoulChoicePage = player.progress.soulChoice && this.currentPage === this.soulChoicePage;
+        const pageDungeons = isSoulChoicePage
+            ? new DungeonCard(this.getSoulChoiceDungeon(), player).render()
+            : dungeons
+                .filter(dungeon => !dungeon.hidden && dungeon.page === this.currentPage)
+                .map(dungeon => new DungeonCard(dungeon, player).render())
+                .join("");
         return `
             <section class="dungeon-window">
                 ${this.renderHeader()}
@@ -103,6 +144,11 @@ export default class DungeonView {
         const skipButton = container.querySelector(".dungeon-skip");
         cards.forEach(card => {
             card.addEventListener("click", () => {
+
+                // Card da página secreta (luz/trevas) — não tem
+                // seleção nem painel de ações ainda, é só vitrine.
+                if (!enterButton || !card.dataset.id) return;
+
                 cards.forEach(c => {
                     c.classList.remove("selected");
                 });

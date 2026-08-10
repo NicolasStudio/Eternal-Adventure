@@ -21,12 +21,12 @@ export default class PlayerHUD {
 
                     <img
                         class="hud-avatar"
-                        src="${player.class.hud}"
-                        alt="${player.class.name}"
+                        src="${player.transcendence?.hud ?? player.class.hud}"
+                        alt="${player.transcendence?.name ?? player.class.name}"
                     >
 
                     <div class="hud-info">
-                        <h2 class="hud-name">${player.class.name}</h2>
+                        <h2 class="hud-name">${player.name ?? player.class.name}</h2>
                         <span id="hud-level" class="hud-level">
                             LV ${player.level}
                         </span>

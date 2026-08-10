@@ -1,5 +1,6 @@
 import classes from "../player/classes.js";
 import Player from "../player/Player.js";
+import enchantmentStone from "../data/enchantmentStone.js";
 
 const STORAGE_KEY = "eternal-adventure-save";
 const SAVE_VERSION = 1;
@@ -18,6 +19,7 @@ export default class SaveService {
             savedAt: Date.now(),
 
             classId: player.class.id,
+            name: player.name,
 
             level: player.level,
             gold: player.gold,
@@ -63,7 +65,7 @@ export default class SaveService {
 
         const characterClass = classes[data.classId] ?? Object.values(classes)[0];
 
-        const player = new Player(characterClass);
+        const player = new Player(characterClass, data.name);
 
         player.level = data.level ?? player.level;
         player.gold = data.gold ?? player.gold;
@@ -73,10 +75,28 @@ export default class SaveService {
 
         player.baseStats = data.baseStats ?? player.baseStats;
 
-        player.inventory = data.inventory ?? [];
+        player.inventory = this.repairStones(data.inventory ?? []);
         player.equipment = data.equipment ?? player.equipment;
 
         player.progress = data.progress ?? player.progress;
+
+        // Re-deriva a transcendência a partir da escolha salva (não guarda
+        // o objeto pesado no save, e sempre pega os dados/imagens atuais
+        // do upClasse.js, mesmo que ele mude depois).
+        //
+        // soulChoice sozinho só diz QUAL caminho foi escolhido — o bônus
+        // de status em si (já somado em baseStats/maxHP, esses sim salvos
+        // normalmente) só existe de verdade se a dungeon correspondente
+        // já foi vencida ao menos uma vez.
+        if (player.progress.soulChoice) {
+
+            const dungeonId = player.progress.soulChoice === "dark" ? "dark_dungeon" : "light_dungeon";
+
+            if (player.progress.dungeons?.[dungeonId]?.completed) {
+                player.transcendence = player.getTranscendenceFor(player.progress.soulChoice);
+            }
+
+        }
 
         player.chest = data.chest ?? player.chest;
         player.album = data.album ?? [];
@@ -89,6 +109,34 @@ export default class SaveService {
         }
 
         return player;
+
+    }
+
+    // Saves de antes da raridade/descrição existirem nas pedras de
+    // encantamento guardaram uma cópia "congelada" sem esses campos —
+    // isso reidrata qualquer pedra salva com os dados atuais do jogo
+    // (mantendo a quantidade que o jogador já tinha).
+    static repairStones(inventory) {
+
+        const stonesById = {};
+
+        Object.values(enchantmentStone).forEach(stone => {
+            stonesById[stone.id] = stone;
+        });
+
+        return inventory.map(item => {
+
+            const current = stonesById[item.id];
+
+            if (!current) return item;
+
+            return {
+                ...current,
+                uid: item.uid,
+                quantity: item.quantity
+            };
+
+        });
 
     }
 

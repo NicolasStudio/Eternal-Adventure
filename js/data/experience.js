@@ -148,5 +148,155 @@ export default {
     },
     50: {
         required: 27500,
-    }
+    },
+    51: {
+        required: 28000,
+    },
+    52: {
+        required: 28500,
+    },
+    53: {
+        required: 29000,
+    },
+    54: {
+        required: 29500,
+    },
+    55: {
+        required: 30000,
+    },
+    56: {
+        required: 30500,
+    },
+    57: {
+        required: 31000,
+    },
+    58: {
+        required: 31500,
+    },
+    59: {
+        required: 32000,
+    },
+    60: {
+        required: 32500,
+    },
+    61: {
+        required: 33000,
+    },
+    62: {
+        required: 33500,
+    },
+    63: {
+        required: 34000,
+    },
+    64: {
+        required: 34500,
+    },
+    65: {
+        required: 35000,
+    },
+    66: {
+        required: 35500,
+    },
+    67: {
+        required: 36000,
+    },
+    68: {
+        required: 36500,
+    },
+    69: {
+        required: 37000,
+    },
+    70: {
+        required: 37500,
+    },
+    71: {
+        required: 38000,
+    },
+    72: {
+        required: 38500,
+    },
+    73: {
+        required: 39000,
+    },
+    74: {
+        required: 39500,
+    },
+    75: {
+        required: 40000,
+    },
+    76: {
+        required: 40500,
+    },
+    77: {
+        required: 41000,
+    },
+    78: {
+        required: 41500,
+    },
+    79: {
+        required: 42000,
+    },
+    80: {
+        required: 42500,
+    },
+    81: {
+        required: 43000,
+    },
+    82: {
+        required: 43500,
+    },
+    83: {
+        required: 44000,
+    },
+    84: {
+        required: 44500,
+    },
+    85: {
+        required: 45000,
+    },
+    86: {
+        required: 45500,
+    },
+    87: {
+        required: 46000,
+    },
+    88: {
+        required: 46500,
+    },
+    89: {
+        required: 47000,
+    },
+    90: {
+        required: 47500,
+    },
+    91: {
+        required: 48000,
+    },
+    92: {
+        required: 48500,
+    },
+    93: {
+        required: 49000,
+    },
+    94: {
+        required: 49500,
+    },
+    95: {
+        required: 50000,
+    },
+    96: {
+        required: 50500,
+    },
+    97: {
+        required: 51000,
+    },
+    98: {
+        required: 51500,
+    },
+    99: {
+        required: 52000,
+    },
+    100: {
+        required: 52500,
+    },
 };

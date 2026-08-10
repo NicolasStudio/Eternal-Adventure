@@ -85,7 +85,7 @@
    COLUNAS
 ========================================================== */
 .market-left{
-    width:320px;
+    width:330px;
     flex-shrink:0;
 }
 .market-right{
@@ -155,12 +155,12 @@
         height:85vh;
     }
     .market-body{
-        grid-template-columns:300px 1fr;
+        grid-template-columns:350px 1fr;
         gap:18px;
         padding:18px;
     }
     .market-left{
-        width:300px;
+        width:350px;
     }
     .market-right{
         min-width:0;
@@ -194,7 +194,7 @@
         padding:16px;
     }
     .market-left{
-        width:280px;
+        width:350px;
     }
     .market-right{
         min-width:0;

@@ -48,7 +48,19 @@ export default class CityView {
 
     }
 
+    // Encantamento (pedras de TC/Marco/Olbap/Essência) só é mencionado a
+    // partir daqui — a mecânica em si ainda não existe, só o aviso muda
+    // conforme o jogador atinge o nível necessário.
+    static ENCHANT_UNLOCK_LEVEL = 50;
+
     renderBlacksmith() {
+
+        const level = this.game.player.level;
+        const enchantReady = level >= CityView.ENCHANT_UNLOCK_LEVEL;
+
+        const enchantMessage = enchantReady
+            ? "Você já atingiu o nível necessário! O encantamento chega em breve."
+            : `Disponível a partir do nível ${CityView.ENCHANT_UNLOCK_LEVEL} (você está no nível ${level}).`;
 
         return `
             <article class="city-card">
@@ -77,12 +89,25 @@ export default class CityView {
                         🛡️ Melhorar Armadura
                     </div>
 
-                    <div
-                        class="city-option city-action disabled"
-                        data-message="Os encantamentos estarão disponíveis em breve."
-                    >
-                        ✨ Encantar
-                    </div>
+                    ${
+                        enchantReady
+                            ? `
+                                <div
+                                    class="city-option city-action level-ready"
+                                    data-view="blacksmith-enchant"
+                                >
+                                    ✨ Encantar
+                                </div>
+                            `
+                            : `
+                                <div
+                                    class="city-option city-action disabled"
+                                    data-message="${enchantMessage}"
+                                >
+                                    ✨ Encantar
+                                </div>
+                            `
+                    }
 
                 </div>
 

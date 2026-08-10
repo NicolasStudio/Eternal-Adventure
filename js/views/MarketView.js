@@ -71,12 +71,13 @@ export default class MarketView {
 
     renderItem(item) {
         const selected = this.selectedItem?.uid === item.uid;
+        const rarity = item.rarity ?? { name: item.nivel ? `Nível ${item.nivel}` : "Comum", color: item.color ?? "#FFFFFF" };
         return `
             <button class="market-item ${selected ? "selected" : ""}" data-uid="${item.uid}">
                 <img src="${item.icon}" alt="${item.name}" class="market-item-icon">
                 <div class="market-item-content">
                     <span class="market-item-name">${item.name}</span>
-                    <span class="market-item-rarity" style="color:${item.rarity.color};">${item.rarity.name}</span>
+                    <span class="market-item-rarity" style="color:${rarity.color};">${rarity.name}</span>
                 </div>
                 <div class="market-item-price">
                     ${item.sellValue}
@@ -126,6 +127,8 @@ export default class MarketView {
 
         const item = this.selectedItem;
 
+        const rarity = item.rarity ?? { name: item.nivel ? `Nível ${item.nivel}` : "Comum", color: item.color ?? "#FFFFFF" };
+
         return `
 
             <div class="market-info">
@@ -148,25 +151,31 @@ export default class MarketView {
 
                     <span>Raridade</span>
 
-                    <strong style="color:${item.rarity.color}">
+                    <strong style="color:${rarity.color}">
 
-                        ${item.rarity.name}
-
-                    </strong>
-
-                </div>
-
-                <div class="market-info-row">
-
-                    <span>Qualidade</span>
-
-                    <strong>
-
-                        ${item.quality?.name ?? "Nenhuma"}
+                        ${rarity.name}
 
                     </strong>
 
                 </div>
+
+                ${
+                    item.quality
+                        ? `
+                            <div class="market-info-row">
+
+                                <span>Qualidade</span>
+
+                                <strong>
+
+                                    ${item.quality.name}
+
+                                </strong>
+
+                            </div>
+                        `
+                        : ""
+                }
 
             </div>
 

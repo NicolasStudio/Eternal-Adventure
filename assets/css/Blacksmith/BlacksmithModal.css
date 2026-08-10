@@ -56,6 +56,81 @@ ABAS DE SLOT (Ferreiro - Equipamentos)
     padding:22px;
     overflow:hidden;
 }
+.blacksmith-body.enchant-layout{
+    grid-template-columns:280px 1fr 280px;
+}
+.enchant-middle{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    background:rgba(15,9,6,.82);
+    border:2px solid #8b7355;
+    border-radius:8px;
+    padding:18px;
+    overflow-y:auto;
+}
+.enchant-slot-row{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    text-align:center;
+}
+.enchant-slot-label{
+    font-family:"Cinzel",serif;
+    font-size:.82rem;
+    color:#bca46d;
+}
+.enchant-slot-box{
+    width:96px;
+    height:96px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:2px dashed #5b4633;
+    border-radius:8px;
+    background:rgba(0,0,0,.25);
+    cursor:default;
+}
+.enchant-slot-box.filled{
+    border-style:solid;
+    border-color:#c79b37;
+    cursor:pointer;
+}
+.enchant-slot-box.filled:hover{
+    box-shadow:0 0 14px rgba(212,163,115,.35);
+}
+.enchant-slot-box img{
+    width:70px;
+    height:70px;
+    object-fit:contain;
+    pointer-events:none;
+}
+.enchant-slot-box .placeholder-icon{
+    font-size:1.6rem;
+    color:#5b4633;
+}
+.enchant-plus{
+    font-family:"Cinzel",serif;
+    font-size:1.4rem;
+    color:#8b7355;
+    text-align:center;
+}
+.enchant-stone-name{
+    font-size:.78rem;
+    color:#f1c75c;
+    min-height:16px;
+}
+.enchant-warning{
+    margin:0;
+    padding:10px 12px;
+    color:#f0a05a;
+    background:rgba(240,160,90,.1);
+    border:1px solid rgba(240,160,90,.35);
+    border-radius:6px;
+    font-size:.82rem;
+    line-height:1.4;
+}
 .blacksmith-left,.blacksmith-right{
     display:flex;
     flex-direction:column;
@@ -69,6 +144,9 @@ ABAS DE SLOT (Ferreiro - Equipamentos)
     margin: 10px;
     width: 65px;
     cursor: pointer;
+}
+.blacksmith-slot{
+    position:relative;
 }
 
 /*==========================================================

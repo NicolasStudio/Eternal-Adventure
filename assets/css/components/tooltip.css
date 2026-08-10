@@ -99,6 +99,13 @@
     color:#f4f1eb;
     font-weight:700;
 }
+.tooltip-description{
+    margin:0;
+    color:#d8c9b0;
+    font-size:13px;
+    line-height:1.5;
+    font-style:italic;
+}
 
 /* ==========================================================
    ATRIBUTOS

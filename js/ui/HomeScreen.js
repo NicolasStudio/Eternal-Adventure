@@ -2,6 +2,7 @@ import NewsModal from "../ui/NewsModal.js";
 import SaveService from "../services/SaveService.js";
 import SettingsModal from "./components/modals/SettingsModal.js";
 import MusicService from "../services/MusicService.js";
+import NameEntryModal from "./components/modals/NameEntryModal.js";
 
 export default class HomeScreen {
 
@@ -11,6 +12,7 @@ export default class HomeScreen {
 
         this.newsModal = new NewsModal();
         this.settingsModal = new SettingsModal(game);
+        this.nameEntryModal = new NameEntryModal();
 
         this.render();
         this.bindEvents();
@@ -38,7 +40,7 @@ export default class HomeScreen {
                     </button>
                 </div>
                 <small>
-                    Alpha v0.3
+                    Alpha v0.5
                 </small>
             </div>
         `;
@@ -48,7 +50,13 @@ export default class HomeScreen {
 
         this.element
             .querySelector("#btn-new-game")
-            .addEventListener("click", () => {
+            .addEventListener("click", async () => {
+
+                const name = await this.nameEntryModal.show();
+
+                if (!name) return;
+
+                this.game.pendingPlayerName = name;
 
                 this.game.showScreen("class");
 

@@ -75,21 +75,37 @@
 /* ==========================================================
    AVATAR
 ========================================================== */
-.character-avatar{
+.character-avatar-wrapper{
+    position:relative;
     width:120px;
     height:120px;
     margin:0 auto;
     border:2px solid #8b7355;
     background:#2a1a12;
-    image-rendering:pixelated;
-    display:flex;
-    justify-content:center;
-    align-items:center;
     flex-shrink:0;
+    overflow:hidden;
+    cursor:pointer;
 }
-.character-avatar img{
+.character-avatar{
     width:100%;
     height:100%;
+    display:block;
+    image-rendering:pixelated;
+    object-fit:cover;
+    transition:opacity .3s ease;
+}
+.character-avatar-full{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    object-fit:contain;
+    background:#1a0f0a;
+}
+.character-avatar-wrapper:hover .character-avatar-full{
+    opacity:1;
+}
+.character-avatar-wrapper:hover .character-avatar:not(.character-avatar-full){
+    opacity:0;
 }
 
 /* ==========================================================
@@ -305,7 +321,7 @@ hr{
         height:38px;
         font-size:14px;
     }
-    .character-avatar{
+    .character-avatar-wrapper{
         width:100px;
         height:100px;
     }

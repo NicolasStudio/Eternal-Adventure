@@ -154,7 +154,9 @@ export default class ClassSelectionScreen {
 
     startAdventure() {
 
-        this.game.player = new Player(this.selectedClass);
+        this.game.player = new Player(this.selectedClass, this.game.pendingPlayerName);
+
+        this.game.pendingPlayerName = null;
 
         this.game.player.addListener(() => {
             this.game.hudScreen.updateHUD();

@@ -94,6 +94,11 @@ export default class SettingsModal {
                     </button>
                 </section>
 
+                <section class="settings-section">
+                    <h3>Agradecimentos</h3>
+                    <a href="acknowledgments.html" class="acknowledgments" target="_blank">Agradecimentos</a>
+                </section>
+
                 <footer class="settings-footer">
                     <button class="settings-exit-button" id="settings-exit">
                         <i class="fa-solid fa-door-open"></i>

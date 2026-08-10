@@ -53,6 +53,7 @@ export default class DungeonTooltip {
     }
 
     render(item) {
+        const hasRarity = item.rarity != null;
         const rarityName = typeof item.rarity === "object" ? item.rarity.name : item.rarity;
         const rarityColor = typeof item.rarity === "object" ? item.rarity.color : item.color;
         return `
@@ -62,16 +63,30 @@ export default class DungeonTooltip {
             </div>
             <div class="tooltip-divider"></div>
             <div class="tooltip-section">
-                <div class="tooltip-row">
-                    <span class="tooltip-label">Raridade</span>
-                    <span class="tooltip-rarity" style="color:${rarityColor};">${rarityName}</span>
-                </div>
-                ${item.quality ? `
-                    <div class="tooltip-row">
-                        <span class="tooltip-label">Qualidade</span>
-                        <span class="tooltip-quality" style="color:${item.quality.color};">${item.quality.name}</span>
-                    </div>
-                ` : ""}
+                ${
+                    hasRarity
+                        ? `
+                            <div class="tooltip-row">
+                                <span class="tooltip-label">Raridade</span>
+                                <span class="tooltip-rarity" style="color:${rarityColor};">${rarityName}</span>
+                            </div>
+                            ${item.quality ? `
+                                <div class="tooltip-row">
+                                    <span class="tooltip-label">Qualidade</span>
+                                    <span class="tooltip-quality" style="color:${item.quality.color};">${item.quality.name}</span>
+                                </div>
+                            ` : ""}
+                        `
+                        : `
+                            ${item.nivel ? `
+                                <div class="tooltip-row">
+                                    <span class="tooltip-label">Nível</span>
+                                    <span class="tooltip-rarity" style="color:${item.color ?? "#f1c75c"};">${item.nivel}</span>
+                                </div>
+                            ` : ""}
+                            ${item.description ? `<p class="tooltip-description">${item.description}</p>` : ""}
+                        `
+                }
             </div>
             ${this.renderStats(item)}
         `;

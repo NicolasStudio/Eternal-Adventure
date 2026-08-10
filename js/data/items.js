@@ -48,29 +48,54 @@ const items = {
         sellValue: 20
     },
 
-    // largePotion: {
-    //     id: "largePotion",
-    //     name: "Poção Grande",
-    //     icon: "assets/img/assets/items/consumables/large_potion.png",
+    tripleMediumPotion: {
+        id: "tripleMediumPotion",
+        name: "Tripla Poção Média",
+        icon: "assets/img/assets/items/consumables/triple_medium_potion.png",
 
-    //     type: "item",
-    //     stackable: true,
+        type: "item",
+        stackable: true,
 
-    //     rarity: {
-    //         id: "rare",
-    //         name: "Raro",
-    //         color: "#0050fc"
-    //     },
+        rarity: {
+            id: "rare",
+            name: "Raro",
+            color: "#0050fc"
+        },
 
-    //     quality: null,
+        quality: null,
 
-    //     heal: 300,
+        heal: 300,
 
-    //     effect: "Recupera 300 pontos de Vida.",
+        effect: "Recupera 300 pontos de Vida.",
 
-    //     buyValue: 70,
-    //     sellValue: 35
-    // }
+        buyValue: 500,
+        sellValue: 150
+    },
+
+
+    largePotion: {
+        id: "largePotion",
+        name: "Poção Grande",
+        icon: "assets/img/assets/items/consumables/large_potion.png",
+
+        type: "item",
+        stackable: true,
+
+        rarity: {
+            id: "mystic",
+            name: "Místico",
+            color: "#a950f7"
+        },
+
+        quality: null,
+
+        heal: 500,
+
+        effect: "Recupera 500 pontos de Vida.",
+
+        buyValue: 800,
+        sellValue: 350
+    }
 
 };
 

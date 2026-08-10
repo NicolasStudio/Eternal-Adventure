@@ -44,10 +44,70 @@ export default class AlbumModal {
         }
     }
 
+    // Atualiza só o que realmente muda (cartas do meio, contador,
+    // setas, texto do botão de revelar) — nunca mais recria o
+    // "livro" (.album-modal) inteiro, que é o que causava a piscada
+    // ao trocar de página (a animação de abrir disparava de novo).
     refresh() {
+
         if (!this.modal) return;
-        this.modal.innerHTML = this.render();
-        this.registerEvents();
+
+        const grid = this.modal.querySelector(".album-grid");
+        if (grid) {
+            grid.innerHTML = `<div class="album-grid-page">${this.renderCards()}</div>`;
+        }
+
+        const totalPages = Math.ceil(cards.length / 4);
+
+        const prevButton = this.modal.querySelector("#album-prev");
+        if (prevButton) prevButton.disabled = this.index === 0;
+
+        const nextButton = this.modal.querySelector("#album-next");
+        if (nextButton) nextButton.disabled = this.index >= totalPages - 1;
+
+        const progress = this.modal.querySelector(".album-progress");
+        if (progress) progress.textContent = `${this.player.album.length} / ${cards.length}`;
+
+        const revealButton = this.modal.querySelector("#album-reveal");
+        if (revealButton) {
+            revealButton.innerHTML = `
+                <i class="fa-solid ${this.revealAll ? "fa-eye-slash" : "fa-eye"}"></i>
+                ${this.revealAll ? "Ocultar Cartas" : "Visualizar Cartas"}
+            `;
+        }
+
+        this.updateConfirmOverlay();
+
+    }
+
+    // O overlay de confirmação de spoiler é a única parte que ainda
+    // entra/sai do DOM dinamicamente — precisa rebindar os botões dele
+    // toda vez que é recriado, mas isso não afeta o resto do modal.
+    updateConfirmOverlay() {
+
+        const existing = this.modal.querySelector("#album-confirm-overlay");
+
+        if (this.confirming && !existing) {
+
+            this.modal.insertAdjacentHTML("beforeend", this.renderConfirm());
+
+            this.modal.querySelector("#album-confirm-yes")?.addEventListener("click", () => {
+                this.revealAll = true;
+                this.confirming = false;
+                this.refresh();
+            });
+
+            this.modal.querySelector("#album-confirm-no")?.addEventListener("click", () => {
+                this.confirming = false;
+                this.refresh();
+            });
+
+        } else if (!this.confirming && existing) {
+
+            existing.remove();
+
+        }
+
     }
 
     render() {
@@ -55,11 +115,7 @@ export default class AlbumModal {
         const total = cards.length;
         const discoveredCount = this.player.album.length;
 
-        const pageSize = 4;
-        const totalPages = Math.ceil(total / pageSize);
-
-        const start = this.index * pageSize;
-        const pageCards = cards.slice(start, start + pageSize);
+        const totalPages = Math.ceil(total / 4);
 
         return `
             <div class="album-modal">
@@ -96,43 +152,9 @@ export default class AlbumModal {
                     </button>
 
                     <div class="album-grid">
-
-                        ${pageCards.map(card => {
-
-                            const discovered = this.player.hasCard(card.id);
-
-                            const image = discovered
-                                ? card.image
-                                : CARD_BACK;
-
-                            const blur =
-                                discovered && !this.revealAll;
-
-                            return `
-
-                                <div class="album-card ${discovered ? "owned" : ""}">
-
-                                    <img
-                                        src="${image}"
-                                        class="${blur ? "blur" : ""}"
-                                        alt="${discovered ? card.name : "???"}">
-
-                                    <span class="album-card-name">
-
-                                        ${
-                                            discovered
-                                                ? (this.revealAll ? card.name : "?????")
-                                                : "???"
-                                        }
-
-                                    </span>
-
-                                </div>
-
-                            `;
-
-                        }).join("")}
-
+                        <div class="album-grid-page">
+                            ${this.renderCards()}
+                        </div>
                     </div>
 
                     <button
@@ -165,6 +187,50 @@ export default class AlbumModal {
             ${this.confirming ? this.renderConfirm() : ""}
 
         `;
+
+    }
+
+    renderCards() {
+
+        const pageSize = 4;
+        const start = this.index * pageSize;
+        const pageCards = cards.slice(start, start + pageSize);
+
+        return pageCards.map(card => {
+
+            const discovered = this.player.hasCard(card.id);
+
+            const image = discovered
+                ? card.image
+                : CARD_BACK;
+
+            const blur =
+                discovered && !this.revealAll;
+
+            return `
+
+                <div class="album-card ${discovered ? "owned" : ""}">
+
+                    <img
+                        src="${image}"
+                        class="${blur ? "blur" : ""}"
+                        alt="${discovered ? card.name : "???"}">
+
+                    <span class="album-card-name">
+
+                        ${
+                            discovered
+                                ? (this.revealAll ? card.name : "?????")
+                                : "???"
+                        }
+
+                    </span>
+
+                </div>
+
+            `;
+
+        }).join("");
 
     }
 
@@ -222,17 +288,6 @@ export default class AlbumModal {
 
         this.modal.querySelector("#album-reveal")?.addEventListener("click", () => {
             this.toggleRevealAll();
-        });
-
-        this.modal.querySelector("#album-confirm-yes")?.addEventListener("click", () => {
-            this.revealAll = true;
-            this.confirming = false;
-            this.refresh();
-        });
-
-        this.modal.querySelector("#album-confirm-no")?.addEventListener("click", () => {
-            this.confirming = false;
-            this.refresh();
         });
 
     }

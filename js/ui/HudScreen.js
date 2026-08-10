@@ -11,6 +11,7 @@ import MarketView from "../views/MarketView.js";
 import MarketViewBuy from "./components/modals/MarketViewBuy.js";
 import BlacksmithWeapon from "./../city/BlacksmithWeapon.js";
 import BlacksmithArmor from "./../city/BlacksmithArmor.js";
+import BlacksmithEnchant from "./../city/BlacksmithEnchant.js";
 import ChestHUD from "./components/ChestHUD.js";
 import ChestRewardModal from "./components/modals/ChestRewardModal.js";
 import AlbumModal from "./components/modals/AlbumModal.js";
@@ -30,6 +31,7 @@ export default class HudScreen {
         this.marketView = new MarketView(game);
         this.blacksmithWeapon = new BlacksmithWeapon(this.game);
         this.blacksmithArmor = new BlacksmithArmor(this.game);
+        this.blacksmithEnchant = new BlacksmithEnchant(this.game);
         this.playerHUD = new PlayerHUD(game);
         this.monsterHUD = new MonsterHUD(game);
         this.toolbarHUD = new ToolbarHUD(game);
@@ -120,6 +122,9 @@ export default class HudScreen {
             case "blacksmith-armor":
                 return this.blacksmithArmor.render();
 
+            case "blacksmith-enchant":
+                return this.blacksmithEnchant.render();
+
             default:
                 return "";
         }
@@ -204,6 +209,7 @@ export default class HudScreen {
             case "market-buy":
             case "blacksmith-weapon":
             case "blacksmith-armor":
+            case "blacksmith-enchant":
                 MusicService.play("city");
                 break;
 
@@ -230,6 +236,7 @@ export default class HudScreen {
                 break;
             case "dungeon":
                 this.dungeonView.registerEvents(document);
+                this.dungeonView.maybeShowSoulChoice();
                 break;
             case "city":
                 this.cityView.registerEvents(document);
@@ -245,6 +252,9 @@ export default class HudScreen {
                 break;
             case "blacksmith-armor":
                 this.blacksmithArmor.registerEvents(document);
+                break;
+            case "blacksmith-enchant":
+                this.blacksmithEnchant.registerEvents(document);
                 break;
 
         }
@@ -303,6 +313,7 @@ export default class HudScreen {
                 break;
             case "dungeon":
                 this.dungeonView.registerEvents(document);
+                this.dungeonView.maybeShowSoulChoice();
                 break;
             case "city":
                 this.cityView.registerEvents(document);
@@ -318,6 +329,9 @@ export default class HudScreen {
                 break;
             case "blacksmith-armor":
                 this.blacksmithArmor.registerEvents(document);
+                break;
+            case "blacksmith-enchant":
+                this.blacksmithEnchant.registerEvents(document);
                 break;
         }
         this.element.classList.remove("hidden");
