@@ -22,7 +22,7 @@ const enchantmentStone = {
         stats: {
             life: 7
         },
-        enchantPrice: 3000,
+        enchantPrice: 10000,
         sellValue: 500
     },
 
@@ -45,7 +45,7 @@ const enchantmentStone = {
         stats: {
             life: 10
         },
-        enchantPrice: 5000,
+        enchantPrice: 20000,
         sellValue: 1000
     },
 
@@ -68,7 +68,7 @@ const enchantmentStone = {
         stats: {
             life: 15
         },
-        enchantPrice: 7000,
+        enchantPrice: 30000,
         sellValue: 1500
     },
 
@@ -94,7 +94,7 @@ const enchantmentStone = {
         stats: {
             armor: 7
         },
-        enchantPrice: 3000,
+        enchantPrice: 10000,
         sellValue: 500
     },
 
@@ -117,7 +117,7 @@ const enchantmentStone = {
         stats: {
             armor: 10
         },
-        enchantPrice: 5000,
+        enchantPrice: 20000,
         sellValue: 1000
     },
 
@@ -140,7 +140,7 @@ const enchantmentStone = {
         stats: {
             armor: 15
         },
-        enchantPrice: 7000,
+        enchantPrice: 30000,
         sellValue: 1500
     },
 
@@ -166,7 +166,7 @@ const enchantmentStone = {
         stats: {
             attack: 7
         },
-        enchantPrice: 3000,
+        enchantPrice: 10000,
         sellValue: 500
     },
 
@@ -189,7 +189,7 @@ const enchantmentStone = {
         stats: {
             attack: 10
         },
-        enchantPrice: 5000,
+        enchantPrice: 20000,
         sellValue: 1000
     },
 
@@ -212,7 +212,7 @@ const enchantmentStone = {
         stats: {
             attack: 15
         },
-        enchantPrice: 7000,
+        enchantPrice: 30000,
         sellValue: 1500
     },
 
@@ -238,7 +238,7 @@ const enchantmentStone = {
         stats: {
             agility: 7
         },
-        enchantPrice: 3000,
+        enchantPrice: 10000,
         sellValue: 500
     },
 
@@ -261,7 +261,7 @@ const enchantmentStone = {
         stats: {
             agility: 10
         },
-        enchantPrice: 5000,
+        enchantPrice: 20000,
         sellValue: 1000
     },
 
@@ -284,7 +284,7 @@ const enchantmentStone = {
         stats: {
             agility: 15
         },
-        enchantPrice: 7000,
+        enchantPrice: 30000,
         sellValue: 1500
     }
 

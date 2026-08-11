@@ -75,7 +75,7 @@ export default class HealthSystem {
             this.heal(healAmount);
 
             if (this.burstMode) {
-                this.player.addXP(2);
+                this.player.addXP(5);
                 this.update();
             }
 
@@ -132,7 +132,7 @@ export default class HealthSystem {
     getInstantHealCost() {
         return Math.max(
             1,
-            this.getMissingHP() + this.player.level
+            (this.getMissingHP() * 2) + this.player.level
         );
     }
 
