@@ -952,11 +952,11 @@ const monsters = [
         sprite: "assets/img/monsters/creature_boss_3/king-the-goblins.png",
 
         status: {
-            vidaMaxima: 450,
-            dano: 120,
+            vidaMaxima: 420,
+            dano: 115,
             nomeAtaque: "Magia Negra",
             armadura: 35,
-            agilidade: 54,
+            agilidade: 50,
             xp: 1075,
             ouro: 880
         },
