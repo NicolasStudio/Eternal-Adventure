@@ -1,6 +1,7 @@
 import Toast from "../ui/components/Toast.js";
 import ItemTooltip from "../../js/views/ItemTooltip.js";
 import UpgradeService from "../services/UpgradeService.js";
+import SaveService from "../services/SaveService.js";
 
 export default class BlacksmithWeapon {
     constructor(game) {
@@ -361,6 +362,8 @@ export default class BlacksmithWeapon {
 
         Toast.show(`${this.anvilWeapon.name} melhorado para ${this.anvilWeapon.quality.name}!`);
 
+        SaveService.autoSave(this.player);
+
         this.refresh();
 
     }
@@ -381,6 +384,7 @@ export default class BlacksmithWeapon {
 
     registerEvents(container = document) {
         container.querySelector(".market-close")?.addEventListener("click", () => {
+            this.anvilWeapon = null;
             this.game.hudScreen.changeView("city");
         });
         container.querySelector(".blacksmith-select-button")?.addEventListener("click", () => {

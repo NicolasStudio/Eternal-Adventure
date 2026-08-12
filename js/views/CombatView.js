@@ -4,8 +4,6 @@ import LootSystem from "../combat/LootSystem.js";
 import LevelUpModal from "../ui/components/modals/LevelUpModal.js";
 import RewardModal from "../ui/components/modals/RewardModal.js";
 import CombatToast from "../combat/CombatToast.js";
-import ContinueDungeonModal from "../ui/components/modals/ContinueDungeonModal.js";
-import InventoryPromptModal from "../ui/components/modals/InventoryPromptModal.js";
 import DungeonCompleteModal from "../ui/components/modals/DungeonCompleteModal.js";
 
 export default class CombatView {
@@ -21,8 +19,6 @@ export default class CombatView {
         this.turnDelay = 950;
         this.rewardModal = new RewardModal(game);
         this.levelUpModal = new LevelUpModal(this.game);
-        this.continueDungeonModal = new ContinueDungeonModal();
-        this.inventoryPromptModal = new InventoryPromptModal();
         this.dungeonCompleteModal = new DungeonCompleteModal();
     }
 
@@ -97,27 +93,35 @@ export default class CombatView {
             await CombatToast.show(state.winner === "player" ? `${this.currentMonster.name} derrotado!` : "Você foi derrotado!", "system");
             if (state.winner === "player") {
                 const reward = LootSystem.generate(this.currentMonster, this.game.player);
-                await this.rewardModal.show(reward);
                 const levelUps = this.game.player.collectReward(reward);
                 this.game.hudScreen.refreshCurrentView();
-                for (const levelUp of levelUps) {
-                    await this.levelUpModal.show(levelUp.level, levelUp.bonus);
-                }
+
                 if (this.currentFloor >= this.currentDungeon.fights) {
+                    await this.rewardModal.show(reward);
+                    for (const levelUp of levelUps) {
+                        await this.levelUpModal.show(levelUp.level, levelUp.bonus);
+                    }
                     await this.finishDungeon();
                     return;
                 }
-                const openInventory = await this.inventoryPromptModal.show();
-                if (openInventory) {
-                    this.game.hudScreen.enterPreparationMode();
-                    await new Promise(resolve => {
-                        this.game.hudScreen.onPreparationFinished = resolve;
-                    });
-                    this.game.hudScreen.exitPreparationMode();
-                    this.game.hudScreen.currentView = "dungeon";
-                    this.game.hudScreen.refreshCurrentView();
+
+                for (const levelUp of levelUps) {
+                    await this.levelUpModal.show(levelUp.level, levelUp.bonus);
                 }
-                const continueDungeon = await this.continueDungeonModal.show();
+
+                const continueDungeon = await this.rewardModal.show(reward, {
+                    showActions: true,
+                    onOpenInventory: async () => {
+                        this.game.hudScreen.enterPreparationMode();
+                        await new Promise(resolve => {
+                            this.game.hudScreen.onPreparationFinished = resolve;
+                        });
+                        this.game.hudScreen.exitPreparationMode();
+                        this.game.hudScreen.currentView = "dungeon";
+                        this.game.hudScreen.refreshCurrentView();
+                    }
+                });
+
                 if (!continueDungeon) {
                     await this.closeCombat();
                     this.game.hudScreen.exitCombat();

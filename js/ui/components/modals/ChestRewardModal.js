@@ -3,12 +3,14 @@ export default class ChestRewardModal {
     constructor() {
         this.modal = null;
         this.resolve = null;
+        this.revealed = false;
     }
 
     show(card) {
 
         return new Promise(resolve => {
             this.resolve = resolve;
+            this.revealed = false;
             this.render(card);
         });
 
@@ -35,17 +37,36 @@ export default class ChestRewardModal {
                 <h2 class="chest-reward-title">Nova Carta!</h2>
 
                 <div class="chest-reward-card">
-                    <img src="${card.image}" alt="${card.name}">
+                    <img
+                        src="${card.image}"
+                        alt="${card.name}"
+                        class="${this.revealed ? "" : "blur"}">
                 </div>
 
-                <p class="chest-reward-name">${card.name}</p>
+                <p class="chest-reward-name">${this.revealed ? card.name : "?????"}</p>
 
-                <button class="chest-reward-button">Continuar</button>
+                <div class="chest-reward-actions">
+
+                    <button class="chest-reward-view">
+                        <i class="fa-solid ${this.revealed ? "fa-eye-slash" : "fa-eye"}"></i>
+                        ${this.revealed ? "Ocultar" : "Visualizar"}
+                    </button>
+
+                    <button class="chest-reward-button">Continuar</button>
+
+                </div>
 
             </div>
         `;
 
         document.body.appendChild(this.modal);
+
+        this.modal
+            .querySelector(".chest-reward-view")
+            .addEventListener("click", () => {
+                this.revealed = !this.revealed;
+                this.render(card);
+            });
 
         this.modal
             .querySelector(".chest-reward-button")

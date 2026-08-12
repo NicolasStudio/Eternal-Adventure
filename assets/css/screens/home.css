@@ -59,7 +59,7 @@
 }
 
 .menu button {
-    width:220px;
+    width:280px;
     height:46px;
     cursor: pointer;
     background: linear-gradient(180deg, #2c1810 0%, #1a0f0a 100%);
@@ -163,6 +163,10 @@
     box-shadow: 0 0 25px rgba(212,163,115,.25);
 }
 
+.btn-new-game, .btn-continue, .btn-settings{
+    width: 280px;
+}
+
 /* Efeito de fumaça/nevoeiro sutil no fundo */
 @keyframes fog {
     0% { transform: translateX(-10%) scale(1); opacity: 0.05; }
@@ -184,7 +188,8 @@
 @media (max-width:1366px), (max-height:768px){
 
     .home_logo{
-        width:430px;
+        width:450px;
+        margin-bottom: 15px;
     }
 
     .menu{
@@ -192,7 +197,7 @@
     }
 
     .menu button{
-        width:220px;
+        width:280px;
         height:46px;
         font-size:15px;
     }
@@ -206,11 +211,11 @@
 /* Responsividade */
 @media (max-width: 600px) {
     .home_logo {
-        width: 280px;
+        width: 220px;
     }
     
     .menu button {
-        width: 200px;
+        width: 250px;
         height: 45px;
         font-size: 14px;
     }

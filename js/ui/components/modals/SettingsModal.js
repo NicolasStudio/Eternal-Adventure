@@ -5,8 +5,9 @@ import Toast from "../Toast.js";
 
 export default class SettingsModal {
 
-    constructor(game) {
+    constructor(game, { inGame = false } = {}) {
         this.game = game;
+        this.inGame = inGame;
         this.modal = null;
         this.confirmingClear = false;
         this.settings = AudioSettings.get();
@@ -96,15 +97,17 @@ export default class SettingsModal {
 
                 <section class="settings-section">
                     <h3>Agradecimentos</h3>
-                    <a href="acknowledgments.html" class="acknowledgments" target="_blank">Agradecimentos</a>
+                    <a href="acknowledgments.html" class="acknowledgments" target="_blank">Ver sobre</a>
                 </section>
 
-                <footer class="settings-footer">
-                    <button class="settings-exit-button" id="settings-exit">
-                        <i class="fa-solid fa-door-open"></i>
-                        Sair
-                    </button>
-                </footer>
+                ${this.inGame ? `
+                    <footer class="settings-footer">
+                        <button class="settings-exit-button" id="settings-exit">
+                            <i class="fa-solid fa-door-open"></i>
+                            Sair do Jogo
+                        </button>
+                    </footer>
+                ` : ""}
 
             </div>
 

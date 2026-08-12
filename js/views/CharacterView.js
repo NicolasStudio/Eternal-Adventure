@@ -354,6 +354,45 @@ export default class CharacterView {
 
     }
 
+    // Cura de uma vez, usando quantas poções forem necessárias (e
+    // disponíveis) pra chegar o mais perto possível da vida máxima —
+    // sem gastar mais poções do que o necessário pra cobrir a vida
+    // que falta.
+    useMaxHeal() {
+
+        if (!this.selectedItem?.heal) return;
+
+        const player = this.game.player;
+
+        const missing = player.maxHP - player.currentHP;
+
+        if (missing <= 0) {
+            Toast.show("Sua vida já está cheia.");
+            return;
+        }
+
+        const item = this.selectedItem;
+
+        const potionsNeeded = Math.ceil(missing / item.heal);
+
+        const potionsToUse = Math.min(potionsNeeded, item.quantity ?? 1);
+
+        const healAmount = Math.min(missing, potionsToUse * item.heal);
+
+        player.health.heal(healAmount);
+
+        player.removeItem(item, potionsToUse);
+
+        Toast.show(
+            `${potionsToUse}x ${item.name} usada(s)! (+${healAmount} HP)`
+        );
+
+        this.selectedItem = null;
+
+        this.refresh();
+
+    }
+
     useSelectedItem() {
 
         if (!this.selectedItem) return;
@@ -389,6 +428,9 @@ export default class CharacterView {
                 <button class="inventory-button equip-button" disabled>
                 Equipar
             </button>
+                <button class="inventory-button max-heal-button" style="display:none;">
+                    Curar Vida Completa
+                </button>
                 <button class="inventory-button unequip-button" disabled>
                     Desequipar
                 </button>
@@ -482,6 +524,14 @@ export default class CharacterView {
             });
         }
 
+        const maxHealButton = container.querySelector(".max-heal-button");
+        if (maxHealButton) {
+            maxHealButton.addEventListener("click", () => {
+                if (maxHealButton.disabled) return;
+                this.useMaxHeal();
+            });
+        }
+
         const closeButton = container.querySelector(".character-close");
 
         if (closeButton) {
@@ -505,6 +555,7 @@ export default class CharacterView {
                 this.selectedItem = inventory[index];
                 this.selectedEquipment = null;
                 const equipButton = container.querySelector(".equip-button");
+                const maxHealButton = container.querySelector(".max-heal-button");
 
                 if (equipButton) {
 
@@ -516,6 +567,23 @@ export default class CharacterView {
                         equipButton.textContent = "Equipar";
                     } else {
                         equipButton.textContent = "Encantar";
+                    }
+
+                }
+
+                if (maxHealButton) {
+
+                    if (this.selectedItem.heal) {
+
+                        const missing = this.game.player.maxHP - this.game.player.currentHP;
+
+                        maxHealButton.style.display = "";
+                        maxHealButton.disabled = missing <= 0;
+
+                    } else {
+
+                        maxHealButton.style.display = "none";
+
                     }
 
                 }

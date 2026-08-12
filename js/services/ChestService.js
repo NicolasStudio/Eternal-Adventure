@@ -1,6 +1,6 @@
 import cards from "../data/cards.js";
 
-const COOLDOWN_MS = 5 * 60 * 60 * 1000; // 5 horas
+const COOLDOWN_MS = 3.5 * 60 * 60 * 1000; // 3h30
 
 export default class ChestService {
 

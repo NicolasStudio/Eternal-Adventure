@@ -378,6 +378,23 @@ PREVIEW DOS ATRIBUTOS
     font-weight:700;
 }
 
+/* ==========================================================
+    SCROLL
+========================================================== */
+.enchant-middle::-webkit-scrollbar{
+    width:8px;
+}
+.enchant-middle::-webkit-scrollbar-track{
+    background:#1d1512;
+}
+.enchant-middle::-webkit-scrollbar-thumb{
+    background:#7b5a2d;
+    border-radius:8px;
+}
+.enchant-middle::-webkit-scrollbar-thumb:hover{
+    background:#a67b3f;
+}
+
 /*==========================================================
 SCROLLBAR
 ==========================================================*/

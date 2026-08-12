@@ -1,5 +1,6 @@
 import Toast from "../ui/components/Toast.js";
 import ItemTooltip from "../../js/views/ItemTooltip.js";
+import SaveService from "../services/SaveService.js";
 
 export default class BlacksmithEnchant {
     constructor(game) {
@@ -252,6 +253,8 @@ export default class BlacksmithEnchant {
 
         Toast.show(`Encantamento aplicado! +${result.value} de ${this.player.getEnchantStatName(result.statKey)} permanente.`);
 
+        SaveService.autoSave(this.player);
+
         this.anvilWeapon = null;
         this.anvilStone = null;
 
@@ -282,6 +285,8 @@ export default class BlacksmithEnchant {
     registerEvents(container = document) {
 
         container.querySelector(".market-close")?.addEventListener("click", () => {
+            this.anvilWeapon = null;
+            this.anvilStone = null;
             this.game.hudScreen.changeView("city");
         });
 

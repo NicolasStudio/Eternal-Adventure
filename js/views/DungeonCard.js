@@ -20,11 +20,7 @@ export default class DungeonCard {
                 data-level="${level}"
                 data-boss="${boss}"
                 aria-label="${name}">
-                ${
-                    !boss
-                        ? `<span class="dungeon-clears-badge">${Math.min(clears, 3)}/3</span>`
-                        : ""
-                }
+                <span class="dungeon-clears-badge">${Math.min(clears, 3)}/3</span>
                 <div class="dungeon-card-header">
                     <span class="dungeon-name">${name}</span>
                 </div>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="assets/img/icons/espada.png">
+    <title>Eternal Adventure - Wiki</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/base/style-wiki.css">
+
+</head>
+
+<body>
+
+    <div class="wiki-layout">
+
+        <aside class="wiki-sidebar">
+
+            <div class="wiki-logo">
+                <i class="fa-solid fa-book-atlas"></i>
+                <span>Wiki</span>
+            </div>
+
+            <div class="wiki-search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="wiki-search" placeholder="Pesquisar..." autocomplete="off">
+            </div>
+
+            <nav class="wiki-nav" id="wiki-nav">
+
+                <a href="#classes" class="wiki-nav-item" data-keywords="classes guerreiro arqueiro mago">
+                    <i class="fa-solid fa-shield-halved"></i> Classes
+                </a>
+
+                <a href="#itens" class="wiki-nav-item" data-keywords="itens armas cabeça peitoral calça botas poções equipamento">
+                    <i class="fa-solid fa-shirt"></i> Itens
+                </a>
+
+                <a href="#raridade" class="wiki-nav-item" data-keywords="raridade comum incomum raro mistico místico">
+                    <i class="fa-solid fa-gem"></i> Raridade
+                </a>
+
+                <a href="#qualidade" class="wiki-nav-item" data-keywords="qualidade ordinario ordinário mediocre medíocre excepcional nenhuma">
+                    <i class="fa-solid fa-star"></i> Qualidade
+                </a>
+
+                <a href="#ferraria" class="wiki-nav-item" data-keywords="ferraria melhoria arma equipamento encantamento encantar pedras">
+                    <i class="fa-solid fa-hammer"></i> Ferraria
+                </a>
+
+                <a href="#mercado" class="wiki-nav-item" data-keywords="mercado comprar vender venda loja">
+                    <i class="fa-solid fa-coins"></i> Mercado
+                </a>
+
+                <a href="#enfermaria" class="wiki-nav-item" data-keywords="enfermaria cura curar burst vida instantanea instantânea">
+                    <i class="fa-solid fa-kit-medical"></i> Enfermaria
+                </a>
+
+                <a href="#dungeons" class="wiki-nav-item" data-keywords="dungeons combate farm nivel level andar chefe boss">
+                    <i class="fa-solid fa-dungeon"></i> Dungeons
+                </a>
+
+                <a href="#album" class="wiki-nav-item" data-keywords="album cartas bestiario bestiário criaturas baú chest">
+                    <i class="fa-solid fa-book-skull"></i> Álbum
+                </a>
+
+                <a href="#salvar" class="wiki-nav-item" data-keywords="salvar save backup arquivo txt">
+                    <i class="fa-solid fa-floppy-disk"></i> Salvar
+                </a>
+
+                <a href="#carregar" class="wiki-nav-item" data-keywords="carregar load loading arquivo backup">
+                    <i class="fa-solid fa-folder-open"></i> Carregar
+                </a>
+
+                <a href="#configuracoes" class="wiki-nav-item" data-keywords="configurações configuracoes maximizar tela cheia audio música volume">
+                    <i class="fa-solid fa-gears"></i> Configurações e Maximizar
+                </a>
+
+            </nav>
+
+        </aside>
+
+        <main class="wiki-content">
+
+            <header class="wiki-topbar">
+                <h1>Eternal Adventure — Guia do Jogador</h1>
+                <p>Tudo que você precisa saber pra jogar bem, sem estragar as surpresas do caminho.</p>
+            </header>
+
+            <section id="classes" class="wiki-section">
+
+                <h2><i class="fa-solid fa-shield-halved"></i> Classes</h2>
+                <p class="wiki-intro">Ao começar uma aventura, você escolhe uma entre três classes. Cada uma tem um jeito bem diferente de jogar — não existe "a melhor", existe a que combina com o seu estilo.</p>
+
+                <div class="wiki-cards">
+
+                    <article class="wiki-card">
+                        <h3><i class="fa-solid fa-shield"></i> Guerreiro</h3>
+                        <p>O tanque do grupo. Armadura alta e dano mais baixo — ele não é quem mais causa dano, mas é quem mais aguenta apanhar. Sua agilidade é baixa, então raramente age primeiro num combate. Os itens dele se apoiam bastante em <strong>Roubo de Vida</strong>, então mesmo batendo menos forte, ele consegue se manter vivo por muito mais tempo de luta.</p>
+                    </article>
+
+                    <article class="wiki-card">
+                        <h3><i class="fa-solid fa-bow-arrow"></i> Arqueiro</h3>
+                        <p>Focado em agilidade — na prática, isso significa que ele quase sempre age primeiro no combate, e tem mais chance de esquivar de ataques inimigos. O dano dele é mediano, mas a <strong>Chance Crítica</strong> alta faz ele estourar golpes bem mais fortes de vez em quando.</p>
+                    </article>
+
+                    <article class="wiki-card">
+                        <h3><i class="fa-solid fa-hat-wizard"></i> Mago</h3>
+                        <p>O maior dano do jogo, de longe. Em compensação, é a classe com menos armadura — os golpes que ele recebe doem de verdade. Jogar de Mago é um equilíbrio entre acabar com o inimigo rápido antes que ele acabe com você.</p>
+                    </article>
+
+                </div>
+
+            </section>
+
+            <section id="itens" class="wiki-section">
+
+                <h2><i class="fa-solid fa-shirt"></i> Itens</h2>
+                <p class="wiki-intro">Seu personagem tem 5 espaços de equipamento, além de itens consumíveis que ficam soltos no inventário.</p>
+
+                <div class="wiki-table">
+                    <div class="wiki-table-row"><span><i class="fa-solid fa-khanda"></i> Armas</span><span>Definem seu ataque principal. Cada classe usa um tipo de arma diferente (espada, arco ou cetro) e só pode equipar armas da própria classe.</span></div>
+                    <div class="wiki-table-row"><span><i class="fa-solid fa-hat-wizard"></i> Cabeça</span><span>Elmos e capacetes — contribuem principalmente pra sua armadura.</span></div>
+                    <div class="wiki-table-row"><span><i class="fa-solid fa-shirt"></i> Peitoral</span><span>A peça de armadura mais robusta do conjunto.</span></div>
+                    <div class="wiki-table-row"><span><i class="fa-solid fa-socks"></i> Calça</span><span>Mais um pedaço de armadura, com sua própria progressão de raridade.</span></div>
+                    <div class="wiki-table-row"><span><i class="fa-solid fa-shoe-prints"></i> Botas</span><span>Fecham o conjunto de armadura, e costumam contribuir também com Agilidade.</span></div>
+                    <div class="wiki-table-row"><span><i class="fa-solid fa-flask"></i> Poções</span><span>Consumíveis que recuperam vida na hora. Você pode usar uma de cada vez, ou usar o botão de "Curar Vida Completa" pra gastar automaticamente quantas forem necessárias e ficar com a vida cheia numa tacada só.</span></div>
+                </div>
+
+            </section>
+
+            <section id="raridade" class="wiki-section">
+
+                <h2><i class="fa-solid fa-gem"></i> Raridade</h2>
+                <p class="wiki-intro">Cada peça de equipamento tem uma raridade — quanto mais rara, melhores os atributos base dela. Você não escolhe a raridade: ela é definida por onde o item veio (drop de monstro, chefe, etc).</p>
+
+                <div class="wiki-tags">
+                    <span class="wiki-tag" style="--tag-color:#ffffff;">Comum</span>
+                    <span class="wiki-tag" style="--tag-color:#69d823;">Incomum</span>
+                    <span class="wiki-tag" style="--tag-color:#0050fc;">Raro</span>
+                    <span class="wiki-tag" style="--tag-color:#a950f7;">Místico</span>
+                </div>
+
+                <p>Existem raridades além dessas — mas essas são as que você vai encontrar com mais frequência no começo e no meio da sua jornada. O resto, você descobre jogando.</p>
+
+            </section>
+
+            <section id="qualidade" class="wiki-section">
+
+                <h2><i class="fa-solid fa-star"></i> Qualidade</h2>
+                <p class="wiki-intro">Diferente da raridade, a Qualidade você controla: é o quanto você já melhorou aquele item específico na Ferraria. Todo item começa em <strong>Nenhuma</strong> (sem melhoria nenhuma) e pode subir três estágios, gastando ouro em cada um.</p>
+
+                <div class="wiki-steps">
+                    <div class="wiki-step"><span class="wiki-step-num">1</span><div><h4>Ordinário</h4><p>O primeiro upgrade. Um reforço já perceptível nos atributos principais do item.</p></div></div>
+                    <div class="wiki-step"><span class="wiki-step-num">2</span><div><h4>Medíocre</h4><p>Segundo estágio — o item começa a ficar bem mais forte que a versão base.</p></div></div>
+                    <div class="wiki-step"><span class="wiki-step-num">3</span><div><h4>Excepcional</h4><p>O teto de qualidade daquele item. É aqui, inclusive, que atributos secundários (como Chance Crítica ou Roubo de Vida) finalmente recebem reforço — nos estágios anteriores, só os atributos principais melhoram.</p></div></div>
+                </div>
+
+                <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: itens mais raros custam mais caro pra melhorar, mas o ganho por estágio também é maior.</p>
+
+            </section>
+
+            <section id="ferraria" class="wiki-section">
+
+                <h2><i class="fa-solid fa-hammer"></i> Ferraria</h2>
+                <p class="wiki-intro">Fica na Cidade. É onde você investe seu ouro pra deixar seu equipamento mais forte.</p>
+
+                <h3>Melhoria de Arma</h3>
+                <p>Selecione a arma que você tem equipada (ou no inventário) e pague o custo pra subir a Qualidade dela em um estágio. Cada melhoria é permanente.</p>
+
+                <h3>Melhoria de Equipamento</h3>
+                <p>Mesma lógica da arma, só que pra Cabeça, Peitoral, Calça e Botas — cada peça de armadura melhora de forma independente.</p>
+
+                <h3>Encantamento</h3>
+                <p>Liberado a partir de um certo nível de personagem. Aqui você usa Pedras de Encantamento (que caem de monstros específicos) pra dar um bônus <strong>permanente</strong> no seu personagem através de uma arma.</p>
+
+                <div class="wiki-steps">
+                    <div class="wiki-step"><span class="wiki-step-num">I</span><div><h4>Pedra Nível I</h4><p>O encantamento mais fraco, e também o mais fácil de conseguir.</p></div></div>
+                    <div class="wiki-step"><span class="wiki-step-num">II</span><div><h4>Pedra Nível II</h4><p>Um bônus mais forte que o Nível I — usar essa numa arma que já tem o Nível I substitui o bônus antigo pelo novo (não soma os dois).</p></div></div>
+                    <div class="wiki-step"><span class="wiki-step-num">III</span><div><h4>Pedra Nível III</h4><p>O encantamento mais poderoso desse tipo de pedra.</p></div></div>
+                </div>
+
+                <p>Existem diferentes tipos de pedra, cada uma ligada a um atributo diferente do seu personagem — e cada arma pode acumular um encantamento de <em>cada tipo</em> ao mesmo tempo, só não pode repetir o mesmo tipo duas vezes sem ser um upgrade de verdade.</p>
+
+                <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: clicar numa pedra dentro do seu inventário já te leva direto pra essa tela.</p>
+
+            </section>
+
+            <section id="mercado" class="wiki-section">
+
+                <h2><i class="fa-solid fa-coins"></i> Mercado</h2>
+                <p class="wiki-intro">Também fica na Cidade, dividido em duas abas.</p>
+
+                <h3>Comprar</h3>
+                <p>Mostra os itens disponíveis pra compra direta com ouro — geralmente poções e alguns consumíveis. Selecione o item, veja o preço e confirme a compra. Nem tudo que existe no jogo está à venda aqui; muita coisa boa só vem de drop de monstro.</p>
+
+                <h3>Venda</h3>
+                <p>Selecione qualquer item do seu inventário pra vender por ouro. O valor de venda escala de forma exponencial de acordo com a raridade do item — ou seja, um item raro não vale só "um pouco mais" que um comum, vale bem mais mesmo.</p>
+                <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: depois de selecionar o item que quer vender, você pode apertar <strong>Enter</strong> pra confirmar a venda, sem precisar clicar no botão.</p>
+
+            </section>
+
+            <section id="enfermaria" class="wiki-section">
+
+                <h2><i class="fa-solid fa-kit-medical"></i> Enfermaria</h2>
+                <p class="wiki-intro">Onde você paga ouro pra recuperar vida sem precisar esperar a regeneração natural. Tem duas opções:</p>
+
+                <div class="wiki-cards">
+
+                    <article class="wiki-card">
+                        <h3><i class="fa-solid fa-hourglass-half"></i> Burst de Vida</h3>
+                        <p>Acelera sua regeneração natural por um tempo — você recupera uma porcentagem da vida máxima em ciclos curtos, e ainda ganha um pouco de experiência a cada ciclo. Ideal se você não está com pressa.</p>
+                    </article>
+
+                    <article class="wiki-card">
+                        <h3><i class="fa-solid fa-bolt"></i> Recuperação Instantânea</h3>
+                        <p>Cura toda a sua vida faltante na hora, de uma vez. Custa mais caro quanto mais vida você tiver perdido. Se sua vida já estiver cheia, as duas opções ficam de graça (ou melhor, nem custam nada, porque você não precisa delas).</p>
+                    </article>
+
+                </div>
+
+            </section>
+
+            <section id="dungeons" class="wiki-section">
+
+                <h2><i class="fa-solid fa-dungeon"></i> Dungeons</h2>
+
+                <p class="wiki-intro">Isso aqui é importante de entender cedo: <strong>Eternal Adventure é um jogo de farm</strong>. Você vai repetir combates — bastante — e isso é esperado, não é um defeito.</p>
+
+                <p>Cada dungeon tem um nível mínimo pra ser liberada, e pra chegar nesse nível você precisa upar. Como upar exige lutar, e as dungeons anteriores ficam mais fracas conforme você cresce, é bem comum (e válido!) voltar numa dungeon já conhecida só pra enfrentar um monstro específico repetidas vezes até bater o nível necessário pra seguir em frente, em vez de tentar forçar a passagem numa dungeon que ainda está difícil demais.</p>
+
+                <p>Alguns inimigos — principalmente os finais de cada dungeon e os chefes — são propositalmente duros. Se você está apanhando demais numa dungeon específica, o problema quase sempre não é "sorte", é equipamento: vale a pena voltar pra Ferraria e melhorar a Qualidade do que você já tem antes de insistir. Dependendo da classe que você escolheu, uma dungeon pode simplesmente não estar no seu alcance ainda — e tudo bem, ela vai estar, mais pra frente.</p>
+
+                <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: depois de vencer uma dungeon (não-chefe) três vezes, ela libera a opção de <strong>Skip</strong> — simula o combate inteiro instantaneamente, sem precisar jogar andar por andar de novo.</p>
+
+            </section>
+
+            <section id="album" class="wiki-section">
+
+                <h2><i class="fa-solid fa-book-skull"></i> Álbum</h2>
+                <p class="wiki-intro">Todo monstro do jogo tem uma carta correspondente no Álbum de Criaturas. Você ganha cartas aleatórias abrindo o Baú (que recarrega periodicamente), não necessariamente por derrotar aquele monstro específico.</p>
+                <p>Vale a pena ir completando aos poucos, mesmo sem pressa — o Álbum guarda mais importância no jogo do que parece à primeira vista.</p>
+
+            </section>
+
+            <section id="salvar" class="wiki-section">
+
+                <h2><i class="fa-solid fa-floppy-disk"></i> Salvar</h2>
+                <p class="wiki-intro">O botão de Salvar (na barra de ferramentas, durante o jogo) grava seu progresso no navegador <em>e</em> baixa um arquivo <code>.txt</code> com esse mesmo save.</p>
+                <p><strong>Guarde esse arquivo em algum lugar seguro.</strong> O navegador pode perder dados salvos localmente por vários motivos (limpou o cache, trocou de computador, reinstalou o navegador...) — o arquivo baixado é o seu backup de verdade. O jogo também salva automaticamente em alguns momentos (ao sair de uma dungeon, curar na enfermaria, melhorar um item), mas isso só atualiza o navegador, não gera um novo arquivo — pra ter um backup de fato, baixe o arquivo de vez em quando, principalmente antes de tentar algo arriscado.</p>
+
+            </section>
+
+            <section id="carregar" class="wiki-section">
+
+                <h2><i class="fa-solid fa-folder-open"></i> Carregar</h2>
+                <p class="wiki-intro">Use o botão de Carregar pra subir um arquivo <code>.txt</code> de save (o mesmo que o botão Salvar baixa) e continuar de onde parou.</p>
+                <p>Assim como no Salvar: tenha sempre um arquivo de backup à mão. Se você só depender do que está salvo automaticamente no navegador, corre o risco de perder progresso se algo acontecer com ele — o arquivo baixado é a garantia real da sua campanha.</p>
+
+            </section>
+
+            <section id="configuracoes" class="wiki-section">
+
+                <h2><i class="fa-solid fa-gears"></i> Configurações e Maximizar</h2>
+
+                <h3>Configurações</h3>
+                <p>Controla o volume da música ambiente (liga/desliga e volume), e tem a opção de limpar todos os dados salvos no navegador — use com cuidado, essa ação não tem volta.</p>
+
+                <h3>Maximizar</h3>
+                <p>Deixa o jogo em tela cheia no seu navegador. Clique de novo (ou aperte Esc) pra sair da tela cheia.</p>
+
+            </section>
+
+            <footer class="wiki-footer">
+                <p>Boa sorte na sua jornada, aventureiro.</p>
+            </footer>
+
+        </main>
+
+    </div>
+
+    <script>
+        const searchInput = document.getElementById("wiki-search");
+        const navItems = Array.from(document.querySelectorAll(".wiki-nav-item"));
+
+        searchInput.addEventListener("input", () => {
+            const query = searchInput.value.trim().toLowerCase();
+            navItems.forEach(item => {
+                const keywords = item.dataset.keywords || "";
+                const label = item.textContent.toLowerCase();
+                const matches = !query || keywords.includes(query) || label.includes(query);
+                item.style.display = matches ? "" : "none";
+            });
+        });
+
+        // Realça o item do menu correspondente à seção visível na tela.
+        const sections = Array.from(document.querySelectorAll(".wiki-section"));
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                navItems.forEach(item => item.classList.remove("active"));
+                const activeLink = document.querySelector(`.wiki-nav-item[href="#${entry.target.id}"]`);
+                activeLink?.classList.add("active");
+            });
+        }, { rootMargin: "-20% 0px -70% 0px" });
+
+        sections.forEach(section => observer.observe(section));
+    </script>
+
+</body>
+
+</html>

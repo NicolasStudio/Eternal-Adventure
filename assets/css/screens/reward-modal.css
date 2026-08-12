@@ -97,6 +97,45 @@
     background:#6b4522;
     transform:translateY(-1px);
 }
+
+/* ==========================================================
+   3 BOTÕES (meio da dungeon: inventário / continuar / sair)
+========================================================== */
+.reward-actions{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:24px;
+}
+.reward-action{
+    padding:13px;
+    cursor:pointer;
+    border:1px solid #8f7144;
+    border-radius:4px;
+    background:#50331a;
+    color:#f3e5b7;
+    font-family:"Cinzel", serif;
+    font-size:16px;
+    transition:.2s;
+}
+.reward-action:hover{
+    background:#6b4522;
+    transform:translateY(-1px);
+}
+.reward-action-continue{
+    border-color:#2f6b2f;
+    background:#173a17;
+}
+.reward-action-continue:hover{
+    background:#204e20;
+}
+.reward-action-exit{
+    border-color:#7a1f1f !important;
+    background:#3a1010 !important;
+}
+.reward-action-exit:hover{
+    background:#5c1818 !important;
+}
 .reward-collect:active{
     transform:translateY(1px);
 }

@@ -38,6 +38,7 @@ export default class AlbumModal {
     }
 
     hide() {
+        this.hideLightbox();
         if (this.modal) {
             this.modal.remove();
             this.modal = null;
@@ -55,15 +56,25 @@ export default class AlbumModal {
         const grid = this.modal.querySelector(".album-grid");
         if (grid) {
             grid.innerHTML = `<div class="album-grid-page">${this.renderCards()}</div>`;
+            this.bindCardClicks();
         }
 
         const totalPages = Math.ceil(cards.length / 4);
 
-        const prevButton = this.modal.querySelector("#album-prev");
-        if (prevButton) prevButton.disabled = this.index === 0;
+        const firstButton = this.modal.querySelector("#album-first");
+        if (firstButton) firstButton.disabled = this.index === 0;
 
-        const nextButton = this.modal.querySelector("#album-next");
-        if (nextButton) nextButton.disabled = this.index >= totalPages - 1;
+        const prevPageButton = this.modal.querySelector("#album-prev-page");
+        if (prevPageButton) prevPageButton.disabled = this.index === 0;
+
+        const nextPageButton = this.modal.querySelector("#album-next-page");
+        if (nextPageButton) nextPageButton.disabled = this.index >= totalPages - 1;
+
+        const lastButton = this.modal.querySelector("#album-last");
+        if (lastButton) lastButton.disabled = this.index >= totalPages - 1;
+
+        const pageLabel = this.modal.querySelector(".album-page-label");
+        if (pageLabel) pageLabel.textContent = `Página ${this.index + 1} de ${totalPages}`;
 
         const progress = this.modal.querySelector(".album-progress");
         if (progress) progress.textContent = `${this.player.album.length} / ${cards.length}`;
@@ -142,33 +153,51 @@ export default class AlbumModal {
 
                 <div class="album-body">
 
-                    <button
-                        class="album-nav"
-                        id="album-prev"
-                        ${this.index === 0 ? "disabled" : ""}>
-
-                        <i class="fa-solid fa-chevron-left"></i>
-
-                    </button>
-
                     <div class="album-grid">
                         <div class="album-grid-page">
                             ${this.renderCards()}
                         </div>
                     </div>
 
-                    <button
-                        class="album-nav"
-                        id="album-next"
-                        ${this.index >= totalPages - 1 ? "disabled" : ""}>
-
-                        <i class="fa-solid fa-chevron-right"></i>
-
-                    </button>
-
                 </div>
 
                 <footer class="album-footer">
+
+                    <div class="album-pagination">
+
+                        <button
+                            class="album-page-btn"
+                            id="album-first"
+                            ${this.index === 0 ? "disabled" : ""}>
+                            Primeira
+                        </button>
+
+                        <button
+                            class="album-page-btn"
+                            id="album-prev-page"
+                            ${this.index === 0 ? "disabled" : ""}>
+                            Anterior
+                        </button>
+
+                        <span class="album-page-label">
+                            Página ${this.index + 1} de ${totalPages}
+                        </span>
+
+                        <button
+                            class="album-page-btn"
+                            id="album-next-page"
+                            ${this.index >= totalPages - 1 ? "disabled" : ""}>
+                            Avançar
+                        </button>
+
+                        <button
+                            class="album-page-btn"
+                            id="album-last"
+                            ${this.index >= totalPages - 1 ? "disabled" : ""}>
+                            Última
+                        </button>
+
+                    </div>
 
                     <button
                         class="album-reveal-button"
@@ -209,7 +238,9 @@ export default class AlbumModal {
 
             return `
 
-                <div class="album-card ${discovered ? "owned" : ""}">
+                <div
+                    class="album-card ${discovered ? "owned" : ""}"
+                    ${discovered ? `data-card-id="${card.id}"` : ""}>
 
                     <img
                         src="${image}"
@@ -252,38 +283,101 @@ export default class AlbumModal {
         `;
     }
 
+    bindCardClicks() {
+
+        this.modal.querySelectorAll(".album-card[data-card-id]").forEach(cardEl => {
+
+            cardEl.addEventListener("click", () => {
+
+                const card = cards.find(c => c.id === cardEl.dataset.cardId);
+
+                if (card) this.showLightbox(card);
+
+            });
+
+        });
+
+    }
+
+    showLightbox(card) {
+
+        this.hideLightbox();
+
+        this.lightbox = document.createElement("div");
+        this.lightbox.className = "album-lightbox-overlay";
+        this.lightbox.innerHTML = `
+            <figure class="album-lightbox-figure">
+                <img src="${card.image}" alt="${card.name}">
+                <figcaption>${card.name}</figcaption>
+            </figure>
+        `;
+
+        document.body.appendChild(this.lightbox);
+
+        // Clicar fora da carta (no fundo) fecha — clicar na própria
+        // carta não deve fechar.
+        this.lightbox.addEventListener("click", (event) => {
+            if (event.target === this.lightbox) this.hideLightbox();
+        });
+
+        this.lightboxKeyHandler = (event) => {
+            if (event.key === "Escape") this.hideLightbox();
+        };
+
+        document.addEventListener("keydown", this.lightboxKeyHandler);
+
+    }
+
+    hideLightbox() {
+
+        if (this.lightbox) {
+            this.lightbox.remove();
+            this.lightbox = null;
+        }
+
+        if (this.lightboxKeyHandler) {
+            document.removeEventListener("keydown", this.lightboxKeyHandler);
+            this.lightboxKeyHandler = null;
+        }
+
+    }
+
     registerEvents() {
+
+        this.bindCardClicks();
 
         this.modal.querySelector("#album-close")?.addEventListener("click", () => {
             this.hide();
         });
 
-        this.modal.querySelector("#album-prev")
-        ?.addEventListener("click", () => {
-
-            if (this.index > 0) {
-
-                this.index--;
-
-                this.refresh();
-
-            }
-
-        });
-
         const totalPages = Math.ceil(cards.length / 4);
 
-        this.modal.querySelector("#album-next")
-        ?.addEventListener("click", () => {
-
-            if (this.index < totalPages - 1) {
-
-                this.index++;
-
+        this.modal.querySelector("#album-first")?.addEventListener("click", () => {
+            if (this.index !== 0) {
+                this.index = 0;
                 this.refresh();
-
             }
+        });
 
+        this.modal.querySelector("#album-prev-page")?.addEventListener("click", () => {
+            if (this.index > 0) {
+                this.index--;
+                this.refresh();
+            }
+        });
+
+        this.modal.querySelector("#album-next-page")?.addEventListener("click", () => {
+            if (this.index < totalPages - 1) {
+                this.index++;
+                this.refresh();
+            }
+        });
+
+        this.modal.querySelector("#album-last")?.addEventListener("click", () => {
+            if (this.index !== totalPages - 1) {
+                this.index = totalPages - 1;
+                this.refresh();
+            }
         });
 
         this.modal.querySelector("#album-reveal")?.addEventListener("click", () => {

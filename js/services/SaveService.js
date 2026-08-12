@@ -251,6 +251,29 @@ export default class SaveService {
 
     }
 
+    // Save silencioso — nunca baixa arquivo, só atualiza o localStorage.
+    // Chamado automaticamente em alguns momentos-chave (sair de uma
+    // dungeon, curar na enfermaria, melhorar/encantar um item), pra
+    // reduzir o risco de perder progresso se a página for recarregada
+    // sem o jogador ter clicado em "Salvar" manualmente.
+    static autoSave(player) {
+
+        if (!player) return;
+
+        try {
+
+            const data = this.serialize(player);
+
+            this.persist(data);
+
+        } catch (err) {
+
+            console.warn("Falha ao salvar automaticamente:", err);
+
+        }
+
+    }
+
     // Aplica um save (do localStorage ou de um arquivo carregado)
     // como o jogador atual da partida.
     static applyLoadedData(game, data) {

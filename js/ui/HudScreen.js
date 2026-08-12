@@ -18,6 +18,7 @@ import AlbumModal from "./components/modals/AlbumModal.js";
 import LoadGameModal from "./components/modals/LoadGameModal.js";
 import SettingsModal from "./components/modals/SettingsModal.js";
 import MusicService from "../services/MusicService.js";
+import SaveService from "../services/SaveService.js";
 
 export default class HudScreen {
     constructor(game) {
@@ -40,7 +41,7 @@ export default class HudScreen {
         this.chestRewardModal = new ChestRewardModal();
         this.albumModal = new AlbumModal(game);
         this.loadGameModal = new LoadGameModal(game);
-        this.settingsModal = new SettingsModal(game);
+        this.settingsModal = new SettingsModal(game, { inGame: true });
         this.currentView = "";
         this.characterVisible = true;
         this.inCombat = false;
@@ -159,7 +160,7 @@ export default class HudScreen {
                     <i class="fa-solid fa-city"></i>
                     <span>Cidade</span>
                 </button>
-                <button class="nav-item">
+                <button class="nav-item nav-item-soon" data-view="soon">
                     <i class="fa-solid fa-hourglass-half"></i>
                     <span>Em breve</span>
                 </button>
@@ -177,12 +178,37 @@ export default class HudScreen {
                     Toast.show("Você não pode trocar de tela durante um combate.");
                     return;
                 }
-                this.changeView(button.dataset.view);
+                const view = button.dataset.view;
+                if (view === "soon") {
+                    Toast.show("Em breve!");
+                    return;
+                }
+                // Clicar de novo no menu já ativo fecha/minimiza ele.
+                this.changeView(this.currentView === view ? "" : view);
             });
         });
     }
 
     changeView(view) {
+
+        // Sair da Cidade (por qualquer caminho: X, menu de navegação, etc)
+        // com a enfermaria aberta não pode deixar ela "presa" na tela.
+        if (this.currentView === "city" && view !== "city") {
+            this.cityView.hospitalModal?.hide();
+        }
+
+        // Sair de qualquer tela da Ferraria sem confirmar a melhoria/
+        // encantamento devolve o item pro inventário (nada fica "preso"
+        // no slot se o jogador fechar a aba no meio do caminho).
+        if (this.currentView !== view) {
+            if (this.currentView === "blacksmith-weapon") this.blacksmithWeapon.anvilWeapon = null;
+            if (this.currentView === "blacksmith-armor") this.blacksmithArmor.anvilItem = null;
+            if (this.currentView === "blacksmith-enchant") {
+                this.blacksmithEnchant.anvilWeapon = null;
+                this.blacksmithEnchant.anvilStone = null;
+            }
+        }
+
         this.currentView = view;
         this.refreshCurrentView();
         this.updateMusic();
@@ -275,6 +301,7 @@ export default class HudScreen {
         this.setBackground("assets/img/backgrounds/tela_inicial.png");
         this.refreshCurrentView();
         this.updateMusic();
+        SaveService.autoSave(this.game.player);
     }
 
     showCharacter() {

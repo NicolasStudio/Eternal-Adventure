@@ -1,6 +1,7 @@
 import Toast from "../ui/components/Toast.js";
 import ItemTooltip from "../../js/views/ItemTooltip.js";
 import UpgradeService from "../services/UpgradeService.js";
+import SaveService from "../services/SaveService.js";
 
 const ARMOR_SLOTS = [
     { id: "helmet", label: "Elmo", icon: "fa-solid fa-hat-wizard" },
@@ -301,6 +302,8 @@ export default class BlacksmithArmor {
 
         Toast.show(`${this.anvilItem.name} melhorado para ${this.anvilItem.quality.name}!`);
 
+        SaveService.autoSave(this.player);
+
         this.refresh();
 
     }
@@ -324,6 +327,7 @@ export default class BlacksmithArmor {
     registerEvents(container = document) {
 
         container.querySelector(".market-close")?.addEventListener("click", () => {
+            this.anvilItem = null;
             this.game.hudScreen.changeView("city");
         });
 

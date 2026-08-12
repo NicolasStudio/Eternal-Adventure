@@ -181,6 +181,14 @@
 .inventory-button.descartar:hover:not(:disabled){
     box-shadow:0 0 18px rgba(138,58,58,.22);
 }
+.inventory-button.max-heal-button{
+    border-color:#3a7a4f;
+    color:#a8d9b8;
+}
+.inventory-button.max-heal-button:hover:not(:disabled){
+    box-shadow:0 0 18px rgba(58,122,79,.28);
+    color:#c8f0d5;
+}
 
 /* ==========================================================
    NOTEBOOK

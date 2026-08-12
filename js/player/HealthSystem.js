@@ -123,6 +123,7 @@ export default class HealthSystem {
     }
 
     getBurstCost() {
+        if (this.getMissingHP() <= 0) return 0;
         return Math.max(
             1,
             this.getMissingHP() - this.player.level
@@ -130,6 +131,7 @@ export default class HealthSystem {
     }
 
     getInstantHealCost() {
+        if (this.getMissingHP() <= 0) return 0;
         return Math.max(
             1,
             (this.getMissingHP() * 2) + this.player.level

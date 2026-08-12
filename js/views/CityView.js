@@ -1,5 +1,6 @@
 import Toast from "../ui/components/Toast.js";
 import HospitalModal from "../ui/components/modals/HospitalModal.js";
+import SaveService from "../services/SaveService.js";
 
 export default class CityView {
 
@@ -206,7 +207,11 @@ registerEvents(container = document) {
                         break;
                     }
 
-                    this.game.player.health.handleHospitalAction(option);
+                    const succeeded = this.game.player.health.handleHospitalAction(option);
+
+                    if (succeeded) {
+                        SaveService.autoSave(this.game.player);
+                    }
 
                 } while (option);
 

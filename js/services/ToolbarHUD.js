@@ -12,6 +12,9 @@ export default class Toolbar {
                 <button class="hud-tool" id="btn-album" data-tooltip="Álbum ">
                     <i class="fa-solid fa-book-skull"></i>
                 </button>
+                <button class="hud-tool" id="btn-wiki" data-tooltip="Wiki">
+                    <i class="fa-brands fa-wikipedia-w"></i>
+                </button>
                 <button id="btn-save" class="hud-tool" data-tooltip="Salvar jogo">
                     <i class="fa-solid fa-floppy-disk"></i>
                 </button>
@@ -29,20 +32,29 @@ export default class Toolbar {
     }
 
     registerEvents(root = document) {
+
         const toolbar = root.querySelector(".hud-toolbar");
+
         if (!toolbar) {
             return;
         }
-        const btn = toolbar.querySelector("#btn-maximize");
-        if (!btn) {
-            return;
-        }
-        btn.addEventListener("click", () => {
+
+        // Cada botão é ligado de forma independente — se o de maximizar
+        // não for encontrado por qualquer motivo, os outros continuam
+        // funcionando (antes, um travava todos os demais).
+        const maximizeButton = toolbar.querySelector("#btn-maximize");
+
+        maximizeButton?.addEventListener("click", () => {
             this.toggleFullscreen();
         });
-        document.addEventListener("fullscreenchange", () => {
-            this.updateIcon(toolbar);
-        });
+
+        if (!Toolbar.fullscreenListenerBound) {
+            document.addEventListener("fullscreenchange", () => {
+                const currentToolbar = document.querySelector(".hud-toolbar");
+                if (currentToolbar) this.updateIcon(currentToolbar);
+            });
+            Toolbar.fullscreenListenerBound = true;
+        }
 
         toolbar.querySelector("#btn-save")?.addEventListener("click", () => {
             SaveService.save(this.game.player);
@@ -56,6 +68,13 @@ export default class Toolbar {
         toolbar.querySelector("#btn-settings")?.addEventListener("click", () => {
             this.game.hudScreen.settingsModal.show();
         });
+
+        // Abre a Wiki numa aba/janela nova — o jogo continua rodando
+        // normalmente por trás, nada é fechado ou recarregado.
+        toolbar.querySelector("#btn-wiki")?.addEventListener("click", () => {
+            window.open("wiki.html", "_blank");
+        });
+
     }
 
     async toggleFullscreen() {

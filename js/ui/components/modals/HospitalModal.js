@@ -114,11 +114,11 @@ export default class HospitalModal {
 
                             <ul>
                                 <li>❤️ Recupera <strong>5%</strong> da Vida Máxima a cada <strong>2 minutos</strong>.</li>
-                                <li>⭐ Ganha <strong>2 XP</strong> por ciclo de descanso.</li>
-                                <li>💰 Custo: <strong>${burstCost} Ouro</strong></li>
+                                <li>⭐ Ganha <strong>5 XP</strong> por ciclo de descanso.</li>
+                                <li>💰 Custo: <strong>${vida_atual <= 0 ? "Vida Completa" : `${burstCost} Ouro`}</strong></li>
                             </ul>
 
-                            <button class="hospital-burst">
+                            <button class="hospital-burst" ${vida_atual <= 0 ? "disabled" : ""}>
                                 Descansar
                             </button>
 
@@ -131,10 +131,10 @@ export default class HospitalModal {
                             <ul>
                                 <li>❤️ Recupera toda a Vida imediatamente.</li>
                                 <li>⚡ Cura instantânea.</li>
-                                <li>💰 Custo: <strong>${instantCost} Ouro</strong></li>
+                                <li>💰 Custo: <strong>${vida_atual <= 0 ? "Vida Completa" : `${instantCost} Ouro`}</strong></li>
                             </ul>
 
-                            <button class="hospital-instant">
+                            <button class="hospital-instant" ${vida_atual <= 0 ? "disabled" : ""}>
                                 Curar Agora
                             </button>
 
@@ -158,10 +158,6 @@ export default class HospitalModal {
         closeButton.addEventListener("click", () => {
 
             this.hide();
-
-            if (this.resolve) {
-                this.resolve(null);
-            }
 
         });
 
@@ -202,7 +198,13 @@ export default class HospitalModal {
 
         this.overlay.remove();
         this.overlay = null;
+
+        // Se tinha uma Promise pendente (alguém esperando o show() resolver)
+        // e o modal foi fechado de fora — ex: saiu da Cidade —, resolve
+        // como "cancelado" em vez de deixar o await pendurado pra sempre.
+        const resolve = this.resolve;
         this.resolve = null;
+        resolve?.(null);
 
     }
 

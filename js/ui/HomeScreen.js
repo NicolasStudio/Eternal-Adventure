@@ -29,13 +29,13 @@ export default class HomeScreen {
             <div class="fog"></div>
                 <img class="home_logo" src="assets/img/backgrounds/logo.png" alt="Eternal Adventure" >
                 <div class="menu">
-                    <button id="btn-new-game">
+                    <button id="btn-new-game" class="btn-new-game">
                         Novo Jogo
                     </button>
-                    <button id="btn-continue" ${SaveService.hasLocalSave() ? "" : "disabled"}>
+                    <button id="btn-continue" class="btn-continue" ${SaveService.hasLocalSave() ? "" : "disabled"}>
                         Continuar
                     </button>
-                    <button id="btn-settings">
+                    <button id="btn-settings" class="btn-settings">
                         Configurações
                     </button>
                 </div>
