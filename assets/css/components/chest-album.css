@@ -286,11 +286,17 @@
    CARTAS
 ========================================================== */
 .album-card{
+
     width:190px;
+    
     display:flex;
+
     flex-direction:column;
+
     align-items:center;
+
     gap:8px;
+
 }
 
 .album-card img{
@@ -302,7 +308,7 @@
 }
 
 .album-card img:hover{
-    transform:scale(1.5);
+    transform:scale(1.8);
 }
 
 .album-card img.blur{

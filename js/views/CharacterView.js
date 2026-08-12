@@ -320,6 +320,11 @@ export default class CharacterView {
         // Consumível
         if (this.selectedItem.heal) {
 
+            if (this.game.player.currentHP >= this.game.player.maxHP) {
+                Toast.show("Sua vida já está cheia.");
+                return;
+            }
+
             this.game.player.health.heal(this.selectedItem.heal);
             this.game.player.removeItem(this.selectedItem);
 
@@ -335,10 +340,15 @@ export default class CharacterView {
         }
 
         // Nem consumível, nem equipamento (ex: pedra de encantamento) —
-        // essa ação não serve pra esse tipo de item.
+        // atalho: fecha o inventário e já abre a Ferraria em Encantar.
         if (!this.selectedItem.slot) {
 
-            Toast.show("Essa pedra só pode ser usada na Ferraria, em Encantar.");
+            if (this.game.hudScreen.preparationMode) {
+                Toast.show("Você não pode ir até a Ferraria durante uma dungeon.");
+                return;
+            }
+
+            this.game.hudScreen.changeView("blacksmith-enchant");
 
             return;
         }
@@ -560,13 +570,21 @@ export default class CharacterView {
                 if (equipButton) {
 
                     equipButton.disabled = false;
+                    equipButton.classList.remove("use-potion-button", "enchant-shortcut-button");
 
                     if (this.selectedItem.heal) {
+
                         equipButton.textContent = "Usar";
+                        equipButton.classList.add("use-potion-button");
+
+                        const missing = this.game.player.maxHP - this.game.player.currentHP;
+                        equipButton.disabled = missing <= 0;
+
                     } else if (this.selectedItem.slot) {
                         equipButton.textContent = "Equipar";
                     } else {
                         equipButton.textContent = "Encantar";
+                        equipButton.classList.add("enchant-shortcut-button");
                     }
 
                 }

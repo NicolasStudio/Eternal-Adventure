@@ -7,7 +7,7 @@ const STORAGE_KEY = "eternal-adventure-audio";
 */
 const DEFAULTS = {
     musicEnabled: true,
-    musicVolume: 70,
+    musicVolume: 35,
     sfxEnabled: true,
     sfxVolume: 80
 };

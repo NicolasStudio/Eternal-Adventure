@@ -529,11 +529,11 @@ export default class Player {
 
     }
 
-    // Skip só libera depois de 3 conclusões reais, e nunca pra dungeons de chefe
-    // (fights === 1 já identifica isso, mas checar dungeon.boss é mais explícito).
+    // Skip só libera depois de 3 conclusões reais — inclusive em
+    // dungeons de chefe.
     canSkipDungeon(dungeon) {
 
-        if (!dungeon || dungeon.boss) return false;
+        if (!dungeon) return false;
 
         return this.getDungeonClears(dungeon.id) >= 3;
 

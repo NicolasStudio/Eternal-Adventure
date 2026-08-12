@@ -181,13 +181,25 @@
 .inventory-button.descartar:hover:not(:disabled){
     box-shadow:0 0 18px rgba(138,58,58,.22);
 }
+.inventory-button.use-potion-button{
+    border-color:#5fbf6f;
+    background:linear-gradient(180deg,#2a4a2c 0%,#1c331e 100%);
+    color:#c9f2ce;
+}
+.inventory-button.use-potion-button:hover:not(:disabled){
+    border-color:#7fd98d;
+    color:#e2fbe5;
+    box-shadow:0 0 18px rgba(95,191,111,.3);
+}
 .inventory-button.max-heal-button{
-    border-color:#3a7a4f;
-    color:#a8d9b8;
+    border-color:#1f5c34;
+    background:linear-gradient(180deg,#153a22 0%,#0c2415 100%);
+    color:#8fc9a0;
 }
 .inventory-button.max-heal-button:hover:not(:disabled){
-    box-shadow:0 0 18px rgba(58,122,79,.28);
-    color:#c8f0d5;
+    border-color:#2f7d47;
+    color:#aee0ba;
+    box-shadow:0 0 18px rgba(31,92,52,.32);
 }
 
 /* ==========================================================

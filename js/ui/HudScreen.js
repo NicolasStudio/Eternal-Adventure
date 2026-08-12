@@ -169,6 +169,17 @@ export default class HudScreen {
     }
 
     registerEvents() {
+
+        // Blindagem: se por algum motivo uma tooltip flutuante ficou
+        // "presa" na tela (não recebeu o mouseleave corretamente),
+        // encostar na barra de navegação/ferramentas já força ela a
+        // fechar, antes mesmo do clique.
+        const forceCloseStaleTooltip = () => {
+            document.getElementById("item-tooltip")?.remove();
+        };
+        this.element.querySelector(".hud-navigation")?.addEventListener("mouseenter", forceCloseStaleTooltip);
+        this.element.querySelector(".hud-toolbar")?.addEventListener("mouseenter", forceCloseStaleTooltip);
+
         this.element.querySelector("#btn-album")?.addEventListener("click", () => {
             this.albumModal.show();
         });
