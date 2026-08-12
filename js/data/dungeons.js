@@ -458,8 +458,8 @@ const dungeons = [
         monsters: [
             "tree_men",
             "sludge_men",
-            "sludge_men",
             "tree_men",
+            "sludge_men",
             "tree_men_warrior",
         ],
 

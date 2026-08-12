@@ -1412,7 +1412,7 @@ const monsters = [
 
     {
         id: "sludge_men",
-        name: "Homem Lama",
+        name: "Homem Musgo",
         level: 43,
         type: "beast",
 
