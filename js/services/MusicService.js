@@ -7,11 +7,11 @@ import AudioSettings from "./AudioSettings.js";
     abrir um modal ou o inventário por cima não reinicia nada.
 */
 const TRACKS = {
-    home: "assets/audio/tela-inicial.mp3",
-    dungeonMenu: "assets/audio/menu-combate.mp3",
-    combat: "assets/audio/combate.mp3",
-    city: "assets/audio/menu-cidade.mp3"
-    // pvp: "assets/audio/combate-pvp.mp3" — reservado, ainda não usado
+    home: "assets/audio/tela-inicial.ogg",
+    dungeonMenu: "assets/audio/menu-combate.ogg",
+    combat: "assets/audio/combate.ogg",
+    city: "assets/audio/menu-cidade.ogg"
+    // pvp: "assets/audio/combate-pvp.ogg" — reservado, ainda não usado
 };
 
 export default class MusicService {

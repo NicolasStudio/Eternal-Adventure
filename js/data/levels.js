@@ -125,9 +125,9 @@ export default {
         mage: { life: 9, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0 },
     },
     27: {
-        warrior: { life: 15, attack: 2, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0 },
-        archer: { life: 11, attack: 2, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0 },
-        mage: { life: 9, attack: 2, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0 },
+        warrior: { life: 15, attack: 1, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0 },
+        archer: { life: 11, attack: 1, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0 },
+        mage: { life: 9, attack: 1, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0 },
     },
     28: {
         warrior: { life: 15, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0 },
@@ -140,9 +140,9 @@ export default {
         mage: { life: 9, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0 },
     },
     30: {
-        warrior: { life: 15, attack: 1, armor: 2, agility: 0, criticalChance: 0, lifeSteal: 1, penetration: 0 },
-        archer: { life: 11, attack: 1, armor: 1, agility: 3, criticalChance: 1, lifeSteal: 0, penetration: 0 },
-        mage: { life: 9, attack: 3, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 1 }, // ajustado
+        warrior: { life: 15, attack: 0, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 1, penetration: 0 },
+        archer: { life: 11, attack: 1, armor: 1, agility: 2, criticalChance: 1, lifeSteal: 0, penetration: 0 },
+        mage: { life: 9, attack: 2, armor: 3, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 1 }, // ajustado
     },
     31: {
         warrior: { life: 15, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0 },
@@ -190,9 +190,9 @@ export default {
         mage: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 1, lifeSteal: 0, penetration: 0 },
     },
     40: {
-        warrior: { life: 15, attack: 2, armor: 2, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0 },
-        archer: { life: 11, attack: 1, armor: 1, agility: 3, criticalChance: 1, lifeSteal: 0, penetration: 0 },
-        mage: { life: 9, attack: 3, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 1 },
+        warrior: { life: 15, attack: 0, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0 },
+        archer: { life: 11, attack: 1, armor: 1, agility: 2, criticalChance: 1, lifeSteal: 0, penetration: 0 },
+        mage: { life: 9, attack: 2, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 1 },
     },
     41: {
         warrior: { life: 15, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0 },

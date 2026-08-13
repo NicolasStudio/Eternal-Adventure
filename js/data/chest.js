@@ -54,7 +54,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-warrior-rarity-rare.png",
 
         stats: {
-            armor: 18
+            armor: 16
         },
 
         value: 900,
@@ -73,7 +73,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-warrior-rarity-mistico.png",
 
         stats: {
-            armor: 22
+            armor: 20
         },
 
         value: 2700,
@@ -92,7 +92,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-warrior-rarity-lendario.png",
 
         stats: {
-            armor: 30
+            armor: 27
         },
 
         value: 8100,
@@ -111,7 +111,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-warrior-rarity-ultraje.png",
 
         stats: {
-            armor: 35
+            armor: 34
         },
 
         value: 0,
@@ -171,7 +171,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-mage-rarity-rare.png",
 
         stats: {
-            armor: 16
+            armor: 13
         },
 
         value: 900,
@@ -190,7 +190,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-mage-rarity-mistico.png",
 
         stats: {
-            armor: 20
+            armor: 18
         },
 
         value: 2700,
@@ -209,7 +209,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-mage-rarity-lendario.png",
 
         stats: {
-            armor: 25
+            armor: 24
         },
 
         value: 8100,
@@ -228,7 +228,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-mage-rarity-ultraje.png",
 
         stats: {
-            armor: 30
+            armor: 32
         },
 
         value: 0,
@@ -288,7 +288,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-archer-rarity-rare.png",
 
         stats: {
-            armor: 13
+            armor: 11
         },
 
         value: 900,
@@ -307,7 +307,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-archer-rarity-mistico.png",
 
         stats: {
-            armor: 17
+            armor: 16
         },
 
         value: 2700,
@@ -326,7 +326,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-archer-rarity-lendario.png",
 
         stats: {
-            armor: 23
+            armor: 22
         },
 
         value: 8100,

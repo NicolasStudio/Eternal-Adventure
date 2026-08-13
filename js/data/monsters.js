@@ -21,7 +21,7 @@ const monsters = [
             armadura: 3,
             agilidade: 3,
             xp: 25,
-            ouro: 10
+            ouro: 22
         },
 
         drops: [
@@ -51,7 +51,7 @@ const monsters = [
             armadura: 3,
             agilidade: 3,
             xp: 25,
-            ouro: 18
+            ouro: 22
         },
 
         drops: [
@@ -78,8 +78,8 @@ const monsters = [
             nomeAtaque: "Mordida Tripla",
             armadura: 3,
             agilidade: 3,
-            xp: 50,
-            ouro: 45
+            xp: 25,
+            ouro: 22
         },
 
         drops: [
@@ -112,7 +112,7 @@ const monsters = [
             armadura: 5,
             agilidade: 4,
             xp: 25,
-            ouro: 30
+            ouro: 66
         },
 
         drops: [
@@ -142,7 +142,7 @@ const monsters = [
             armadura: 2,
             agilidade: 4,
             xp: 25,
-            ouro: 35
+            ouro: 66
         },
 
         drops: [
@@ -169,8 +169,8 @@ const monsters = [
             nomeAtaque: "Picada",
             armadura: 4,
             agilidade: 5,
-            xp: 155,
-            ouro: 85
+            xp: 62,
+            ouro: 110
         },
 
         drops: [
@@ -202,8 +202,8 @@ const monsters = [
             nomeAtaque: "Dentada",
             armadura: 8,
             agilidade: 6,
-            xp: 63,
-            ouro: 80
+            xp: 62,
+            ouro: 154
         },
 
         drops: [
@@ -231,8 +231,8 @@ const monsters = [
             nomeAtaque: "Investida",
             armadura: 8,
             agilidade: 6,
-            xp: 70,
-            ouro: 100
+            xp: 62,
+            ouro: 154
         },
 
         drops: [
@@ -261,8 +261,8 @@ const monsters = [
             nomeAtaque: "Golpe de Garra",
             armadura: 7,
             agilidade: 6,
-            xp: 130,
-            ouro: 150
+            xp: 62,
+            ouro: 154
         },
 
         drops: [
@@ -292,8 +292,8 @@ const monsters = [
             nomeAtaque: "Dilacerar",
             armadura: 8,
             agilidade: 12,
-            xp: 438,
-            ouro: 240
+            xp: 219,
+            ouro: 770
         },
 
         drops: [
@@ -326,7 +326,7 @@ const monsters = [
             armadura: 10,
             agilidade: 9,
             xp: 125,
-            ouro: 150
+            ouro: 286
         },
 
         drops: [
@@ -356,7 +356,7 @@ const monsters = [
             armadura: 10,
             agilidade: 12,
             xp: 125,
-            ouro: 160
+            ouro: 286
         },
 
         drops: [
@@ -383,8 +383,8 @@ const monsters = [
             nomeAtaque: "Porretada",
             armadura: 12,
             agilidade: 9,
-            xp: 280,
-            ouro: 180
+            xp: 125,
+            ouro: 286
         },
 
         drops: [
@@ -417,7 +417,7 @@ const monsters = [
             armadura: 13,
             agilidade: 9,
             xp: 125,
-            ouro: 180
+            ouro: 330
         },
 
         drops: [
@@ -444,8 +444,8 @@ const monsters = [
             nomeAtaque: "Investida",
             armadura: 16,
             agilidade: 8,
-            xp: 185,
-            ouro: 220
+            xp: 125,
+            ouro: 396
         },
 
         drops: [
@@ -474,8 +474,8 @@ const monsters = [
             nomeAtaque: "Arranhar",
             armadura: 16,
             agilidade: 15,
-            xp: 280,
-            ouro: 230
+            xp: 125,
+            ouro: 396
         },
 
         drops: [
@@ -507,8 +507,8 @@ const monsters = [
             nomeAtaque: "Morder",
             armadura: 18,
             agilidade: 15,
-            xp: 280,
-            ouro: 220
+            xp: 125,
+            ouro: 462
         },
 
         drops: [
@@ -537,8 +537,8 @@ const monsters = [
             nomeAtaque: "Morder",
             armadura: 9,
             agilidade: 12,
-            xp: 290,
-            ouro: 230
+            xp: 125,
+            ouro: 462
         },
 
         drops: [
@@ -567,8 +567,8 @@ const monsters = [
             nomeAtaque: "Esmagar",
             armadura: 20,
             agilidade: 12,
-            xp: 500,
-            ouro: 250
+            xp: 125,
+            ouro: 462
         },
 
         drops: [
@@ -600,8 +600,8 @@ const monsters = [
             nomeAtaque: "Dilacerar",
             armadura: 28,
             agilidade: 14,
-            xp: 875,
-            ouro: 380
+            xp: 438,
+            ouro: 1925
         },
 
         drops: [
@@ -633,8 +633,8 @@ const monsters = [
             nomeAtaque: "Arranhar",
             armadura: 30,
             agilidade: 40,
-            xp: 525,
-            ouro: 350
+            xp: 125,
+            ouro: 506
         },
 
         drops: [
@@ -661,8 +661,8 @@ const monsters = [
             nomeAtaque: "Esfaquear",
             armadura: 30,
             agilidade: 40,
-            xp: 525,
-            ouro: 350
+            xp: 125,
+            ouro: 506
         },
 
         drops: [
@@ -689,8 +689,8 @@ const monsters = [
             nomeAtaque: "Presente de Grego",
             armadura: 30,
             agilidade: 40,
-            xp: 525,
-            ouro: 350
+            xp: 125,
+            ouro: 506
         },
 
         drops: [
@@ -717,8 +717,8 @@ const monsters = [
             nomeAtaque: "Farmar Aura",
             armadura: 30,
             agilidade: 40,
-            xp: 525,
-            ouro: 350
+            xp: 125,
+            ouro: 506
         },
 
         drops: [
@@ -750,8 +750,8 @@ const monsters = [
             nomeAtaque: "Ferroar",
             armadura: 40,
             agilidade: 40,
-            xp: 725,
-            ouro: 500
+            xp: 125,
+            ouro: 550
         },
 
         drops: [
@@ -779,8 +779,8 @@ const monsters = [
             nomeAtaque: "Ferroar",
             armadura: 35,
             agilidade: 45,
-            xp: 755,
-            ouro: 520
+            xp: 125,
+            ouro: 550
         },
 
         drops: [
@@ -809,8 +809,8 @@ const monsters = [
             nomeAtaque: "Picar",
             armadura: 35,
             agilidade: 50,
-            xp: 855,
-            ouro: 570
+            xp: 125,
+            ouro: 550
         },
 
         drops: [
@@ -842,8 +842,8 @@ const monsters = [
             nomeAtaque: "Tacada de Bastão",
             armadura: 45,
             agilidade: 50,
-            xp: 825,
-            ouro: 700
+            xp: 250,
+            ouro: 594
         },
 
         drops: [
@@ -870,8 +870,8 @@ const monsters = [
             nomeAtaque: "Fatiar",
             armadura: 45,
             agilidade: 50,
-            xp: 825,
-            ouro: 700
+            xp: 250,
+            ouro: 594
         },
 
         drops: [
@@ -898,8 +898,8 @@ const monsters = [
             nomeAtaque: "Perfurar",
             armadura: 45,
             agilidade: 50,
-            xp: 825,
-            ouro: 700
+            xp: 250,
+            ouro: 594
         },
 
         drops: [
@@ -926,8 +926,8 @@ const monsters = [
             nomeAtaque: "Golpear",
             armadura: 45,
             agilidade: 50,
-            xp: 825,
-            ouro: 700
+            xp: 250,
+            ouro: 594
         },
 
         drops: [
@@ -953,12 +953,12 @@ const monsters = [
 
         status: {
             vidaMaxima: 420,
-            dano: 115,
+            dano: 120,
             nomeAtaque: "Magia Negra",
             armadura: 35,
-            agilidade: 50,
-            xp: 1075,
-            ouro: 880
+            agilidade: 54,
+            xp: 875,
+            ouro: 2310
         },
 
         drops: [
@@ -991,7 +991,7 @@ const monsters = [
             armadura: 43,
             agilidade: 62,
             xp: 250,
-            ouro: 700
+            ouro: 726
         },
 
         drops: [
@@ -1019,7 +1019,7 @@ const monsters = [
             armadura: 41,
             agilidade: 64,
             xp: 250,
-            ouro: 720
+            ouro: 726
         },
 
         drops: [
@@ -1047,7 +1047,7 @@ const monsters = [
             armadura: 41,
             agilidade: 62,
             xp: 250,
-            ouro: 750
+            ouro: 726
         },
 
         drops: [
@@ -1078,7 +1078,7 @@ const monsters = [
             armadura: 42,
             agilidade: 64,
             xp: 250,
-            ouro: 750
+            ouro: 770
         },
 
         drops: [
@@ -1106,7 +1106,7 @@ const monsters = [
             armadura: 43,
             agilidade: 64,
             xp: 250,
-            ouro: 750
+            ouro: 770
         },
 
         drops: [
@@ -1134,7 +1134,7 @@ const monsters = [
             armadura: 44,
             agilidade: 64,
             xp: 250,
-            ouro: 800
+            ouro: 770
         },
 
         drops: [
@@ -1164,8 +1164,8 @@ const monsters = [
             nomeAtaque: "Perfurar",
             armadura: 42,
             agilidade: 69,
-            xp: 250,
-            ouro: 750
+            xp: 375,
+            ouro: 814
         },
 
         drops: [
@@ -1192,8 +1192,8 @@ const monsters = [
             nomeAtaque: "Perfurar",
             armadura: 43,
             agilidade: 66,
-            xp: 250,
-            ouro: 750
+            xp: 375,
+            ouro: 814
         },
 
         drops: [
@@ -1220,8 +1220,8 @@ const monsters = [
             nomeAtaque: "Cortar",
             armadura: 41,
             agilidade: 65,
-            xp: 250,
-            ouro: 750
+            xp: 375,
+            ouro: 814
         },
 
         drops: [
@@ -1248,8 +1248,8 @@ const monsters = [
             nomeAtaque: "Fatiar",
             armadura: 42,
             agilidade: 67,
-            xp: 250,
-            ouro: 750
+            xp: 375,
+            ouro: 814
         },
 
         drops: [
@@ -1276,8 +1276,8 @@ const monsters = [
             nomeAtaque: "Magia Negra dos Oceanos",
             armadura: 44,
             agilidade: 68,
-            xp: 250,
-            ouro: 750
+            xp: 375,
+            ouro: 814
         },
 
         drops: [
@@ -1304,8 +1304,8 @@ const monsters = [
             nomeAtaque: "Decepar",
             armadura: 43,
             agilidade: 69,
-            xp: 250,
-            ouro: 750
+            xp: 375,
+            ouro: 814
         },
 
         drops: [
@@ -1332,8 +1332,8 @@ const monsters = [
             nomeAtaque: "Pregar",
             armadura: 45,
             agilidade: 65,
-            xp: 250,
-            ouro: 750
+            xp: 375,
+            ouro: 814
         },
 
         drops: [
@@ -1361,10 +1361,10 @@ const monsters = [
             vidaMaxima: 405,
             dano: 119,
             nomeAtaque: "Fatiar",
-            armadura: 54,
-            agilidade: 79,
-            xp: 1108,
-            ouro: 880
+            armadura: 50,
+            agilidade: 60,
+            xp: 438,
+            ouro: 3080
         },
 
         drops: [
@@ -1396,8 +1396,8 @@ const monsters = [
             nomeAtaque: "Arranhar",
             armadura: 54,
             agilidade: 76,
-            xp: 525,
-            ouro: 850
+            xp: 125,
+            ouro: 946
         },
 
         drops: [
@@ -1424,8 +1424,8 @@ const monsters = [
             nomeAtaque: "Pancada",
             armadura: 57,
             agilidade: 75,
-            xp: 525,
-            ouro: 850
+            xp: 125,
+            ouro: 946
         },
 
         drops: [
@@ -1452,8 +1452,8 @@ const monsters = [
             nomeAtaque: "Fatiar",
             armadura: 53,
             agilidade: 78,
-            xp: 525,
-            ouro: 850
+            xp: 125,
+            ouro: 946
         },
 
         drops: [
@@ -1483,8 +1483,8 @@ const monsters = [
             nomeAtaque: "Morder",
             armadura: 57,
             agilidade: 80,
-            xp: 525,
-            ouro: 850
+            xp: 125,
+            ouro: 990
         },
 
         drops: [
@@ -1511,8 +1511,8 @@ const monsters = [
             nomeAtaque: "Pancada",
             armadura: 58,
             agilidade: 76,
-            xp: 525,
-            ouro: 850
+            xp: 125,
+            ouro: 990
         },
 
         drops: [
@@ -1539,8 +1539,8 @@ const monsters = [
             nomeAtaque: "Pancada",
             armadura: 55,
             agilidade: 77,
-            xp: 525,
-            ouro: 850
+            xp: 125,
+            ouro: 990
         },
 
         drops: [
@@ -1570,8 +1570,8 @@ const monsters = [
             nomeAtaque: "Rasgar",
             armadura: 54,
             agilidade: 78,
-            xp: 525,
-            ouro: 850
+            xp: 125,
+            ouro: 1034
         },
 
         drops: [
@@ -1598,8 +1598,8 @@ const monsters = [
             nomeAtaque: "Fatiar",
             armadura: 58,
             agilidade: 83,
-            xp: 525,
-            ouro: 850
+            xp: 125,
+            ouro: 1034
         },
 
         drops: [
@@ -1626,8 +1626,8 @@ const monsters = [
             nomeAtaque: "Pancada",
             armadura: 55,
             agilidade: 81,
-            xp: 505,
-            ouro: 850
+            xp: 125,
+            ouro: 1034
         },
 
         drops: [
@@ -1657,8 +1657,8 @@ const monsters = [
             nomeAtaque: "Fatiar",
             armadura: 68,
             agilidade: 86,
-            xp: 1408,
-            ouro: 880
+            xp: 438,
+            ouro: 3850
         },
 
         drops: [
@@ -1690,8 +1690,8 @@ const monsters = [
             nomeAtaque: "Coice",
             armadura: 62,
             agilidade: 96,
-            xp: 725,
-            ouro: 850
+            xp: 125,
+            ouro: 1166
         },
 
         drops: [
@@ -1725,8 +1725,8 @@ const monsters = [
             nomeAtaque: "Perfurar",
             armadura: 58,
             agilidade: 93,
-            xp: 725,
-            ouro: 850
+            xp: 125,
+            ouro: 1166
         },
 
         drops: [
@@ -1760,8 +1760,8 @@ const monsters = [
             nomeAtaque: "Dilacerar",
             armadura: 58,
             agilidade: 93,
-            xp: 725,
-            ouro: 850
+            xp: 125,
+            ouro: 1166
         },
 
         drops: [
@@ -1798,8 +1798,8 @@ const monsters = [
             nomeAtaque: "Arranhar",
             armadura: 60,
             agilidade: 94,
-            xp: 725,
-            ouro: 850
+            xp: 125,
+            ouro: 1210
         },
 
         drops: [
@@ -1834,7 +1834,7 @@ const monsters = [
             armadura: 62,
             agilidade: 98,
             xp: 125,
-            ouro: 850
+            ouro: 1210
         },
 
         drops: [
@@ -1868,8 +1868,8 @@ const monsters = [
             nomeAtaque: "Dilacerar",
             armadura: 59,
             agilidade: 96,
-            xp: 725,
-            ouro: 850
+            xp: 125,
+            ouro: 1210
         },
 
         drops: [
@@ -1906,8 +1906,8 @@ const monsters = [
             nomeAtaque: "Arranhar",
             armadura: 61,
             agilidade: 102,
-            xp: 725,
-            ouro: 850
+            xp: 125,
+            ouro: 1254
         },
 
         drops: [
@@ -1941,8 +1941,8 @@ const monsters = [
             nomeAtaque: "Perfurar",
             armadura: 59,
             agilidade: 95,
-            xp: 725,
-            ouro: 850
+            xp: 125,
+            ouro: 1254
         },
 
         drops: [
@@ -1976,8 +1976,8 @@ const monsters = [
             nomeAtaque: "Dilacerar",
             armadura: 59,
             agilidade: 104,
-            xp: 725,
-            ouro: 850
+            xp: 125,
+            ouro: 1254
         },
 
         drops: [
@@ -2014,8 +2014,8 @@ const monsters = [
             nomeAtaque: "Martelar",
             armadura: 70,
             agilidade: 103,
-            xp: 1638,
-            ouro: 880
+            xp: 438,
+            ouro: 4620
         },
 
         drops: [
@@ -2047,8 +2047,8 @@ const monsters = [
             nomeAtaque: "Arranhar",
             armadura: 71,
             agilidade: 104,
-            xp: 825,
-            ouro: 850
+            xp: 125,
+            ouro: 1386
         },
 
         drops: [
@@ -2082,8 +2082,8 @@ const monsters = [
             nomeAtaque: "Empalar",
             armadura: 68,
             agilidade: 102,
-            xp: 825,
-            ouro: 850
+            xp: 125,
+            ouro: 1386
         },
 
         drops: [
@@ -2117,8 +2117,8 @@ const monsters = [
             nomeAtaque: "Dilacerar",
             armadura: 71,
             agilidade: 109,
-            xp: 825,
-            ouro: 850
+            xp: 125,
+            ouro: 1386
         },
 
         drops: [
@@ -2155,8 +2155,8 @@ const monsters = [
             nomeAtaque: "Esfaquear",
             armadura: 75,
             agilidade: 107,
-            xp: 825,
-            ouro: 850
+            xp: 125,
+            ouro: 1430
         },
 
         drops: [
@@ -2190,8 +2190,8 @@ const monsters = [
             nomeAtaque: "Esfaquear",
             armadura: 68,
             agilidade: 108,
-            xp: 725,
-            ouro: 850
+            xp: 125,
+            ouro: 1430
         },
 
         drops: [
@@ -2225,8 +2225,8 @@ const monsters = [
             nomeAtaque: "Esfaquear",
             armadura: 68,
             agilidade: 106,
-            xp: 825,
-            ouro: 850
+            xp: 125,
+            ouro: 1430
         },
 
         drops: [
@@ -2263,8 +2263,8 @@ const monsters = [
             nomeAtaque: "Morder",
             armadura: 74,
             agilidade: 114,
-            xp: 525,
-            ouro: 850
+            xp: 125,
+            ouro: 1474
         },
 
         drops: [
@@ -2298,8 +2298,8 @@ const monsters = [
             nomeAtaque: "Morder",
             armadura: 72,
             agilidade: 110,
-            xp: 525,
-            ouro: 850
+            xp: 125,
+            ouro: 1474
         },
 
         drops: [
@@ -2333,8 +2333,8 @@ const monsters = [
             nomeAtaque: "Esfaquear",
             armadura: 68,
             agilidade: 109,
-            xp: 825,
-            ouro: 850
+            xp: 125,
+            ouro: 1474
         },
 
         drops: [
@@ -2368,8 +2368,8 @@ const monsters = [
             nomeAtaque: "Morder",
             armadura: 74,
             agilidade: 107,
-            xp: 825,
-            ouro: 850
+            xp: 125,
+            ouro: 1474
         },
 
         drops: [
@@ -2406,8 +2406,8 @@ const monsters = [
             nomeAtaque: "Fatiar",
             armadura: 77,
             agilidade: 114,
-            xp: 1638,
-            ouro: 880
+            xp: 438,
+            ouro: 5390
         },
 
         drops: [
@@ -2439,8 +2439,8 @@ const monsters = [
             nomeAtaque: "Arranhar",
             armadura: 59,
             agilidade: 94,
-            xp: 825,
-            ouro: 850
+            xp: 125,
+            ouro: 1606
         },
 
         drops: [
@@ -2474,8 +2474,8 @@ const monsters = [
             nomeAtaque: "Arranhar",
             armadura: 58,
             agilidade: 97,
-            xp: 825,
-            ouro: 850
+            xp: 125,
+            ouro: 1606
         },
 
         drops: [
@@ -2509,8 +2509,8 @@ const monsters = [
             nomeAtaque: "Arranhar",
             armadura: 57,
             agilidade: 89,
-            xp: 825,
-            ouro: 950
+            xp: 125,
+            ouro: 1606
         },
 
         drops: [
@@ -2547,8 +2547,8 @@ const monsters = [
             nomeAtaque: "Tiro de Zarabatana",
             armadura: 60,
             agilidade: 99,
-            xp: 925,
-            ouro: 950
+            xp: 125,
+            ouro: 1650
         },
 
         drops: [
@@ -2582,8 +2582,8 @@ const monsters = [
             nomeAtaque: "Devorar",
             armadura: 61,
             agilidade: 91,
-            xp: 925,
-            ouro: 850
+            xp: 125,
+            ouro: 1650
         },
 
         drops: [
@@ -2617,8 +2617,8 @@ const monsters = [
             nomeAtaque: "Pegar Mulher Casada",
             armadura: 60,
             agilidade: 90,
-            xp: 925,
-            ouro: 950
+            xp: 125,
+            ouro: 1650
         },
 
         drops: [
@@ -2655,8 +2655,8 @@ const monsters = [
             nomeAtaque: "Mordida Flamejante",
             armadura: 57,
             agilidade: 93,
-            xp: 925,
-            ouro: 1050
+            xp: 125,
+            ouro: 1694
         },
 
         drops: [
@@ -2690,8 +2690,8 @@ const monsters = [
             nomeAtaque: "Coice",
             armadura: 57,
             agilidade: 98,
-            xp: 925,
-            ouro: 1050
+            xp: 125,
+            ouro: 1694
         },
 
         drops: [
@@ -2725,8 +2725,8 @@ const monsters = [
             nomeAtaque: "Perufrar",
             armadura: 61,
             agilidade: 96,
-            xp: 925,
-            ouro: 1050
+            xp: 125,
+            ouro: 1694
         },
 
         drops: [
@@ -2763,8 +2763,8 @@ const monsters = [
             nomeAtaque: "Te pega daqui",
             armadura: 66,
             agilidade: 100,
-            xp: 1925,
-            ouro: 1050
+            xp: 438,
+            ouro: 6160
         },
 
         drops: [
@@ -2796,8 +2796,8 @@ const monsters = [
             nomeAtaque: "Espetar",
             armadura: 77,
             agilidade: 108,
-            xp: 1125,
-            ouro: 1050
+            xp: 125,
+            ouro: 1826
         },
 
         drops: [
@@ -2831,8 +2831,8 @@ const monsters = [
             nomeAtaque: "Chifrar",
             armadura: 73,
             agilidade: 105,
-            xp: 1125,
-            ouro: 1050
+            xp: 125,
+            ouro: 1826
         },
 
         drops: [
@@ -2866,8 +2866,8 @@ const monsters = [
             nomeAtaque: "Espetar",
             armadura: 74,
             agilidade: 112,
-            xp: 1125,
-            ouro: 1050
+            xp: 125,
+            ouro: 1826
         },
 
         drops: [
@@ -2901,8 +2901,8 @@ const monsters = [
             nomeAtaque: "Dilacerar",
             armadura: 78,
             agilidade: 112,
-            xp: 1125,
-            ouro: 1050
+            xp: 125,
+            ouro: 1826
         },
 
         drops: [
@@ -2939,8 +2939,8 @@ const monsters = [
             nomeAtaque: "Espetar",
             armadura: 77,
             agilidade: 109,
-            xp: 1125,
-            ouro: 1050
+            xp: 125,
+            ouro: 1870
         },
 
         drops: [
@@ -2974,8 +2974,8 @@ const monsters = [
             nomeAtaque: "Perfurar",
             armadura: 79,
             agilidade: 112,
-            xp: 1125,
-            ouro: 1050
+            xp: 125,
+            ouro: 1870
         },
 
         drops: [
@@ -3009,8 +3009,8 @@ const monsters = [
             nomeAtaque: "Empalar",
             armadura: 75,
             agilidade: 106,
-            xp: 1125,
-            ouro: 1050
+            xp: 125,
+            ouro: 1870
         },
 
         drops: [
@@ -3044,8 +3044,8 @@ const monsters = [
             nomeAtaque: "Dilacerar",
             armadura: 76,
             agilidade: 112,
-            xp: 1125,
-            ouro: 1050
+            xp: 125,
+            ouro: 1826
         },
 
         drops: [
@@ -3082,8 +3082,8 @@ const monsters = [
             nomeAtaque: "Cortar",
             armadura: 80,
             agilidade: 110,
-            xp: 1125,
-            ouro: 1050
+            xp: 125,
+            ouro: 1914
         },
 
         drops: [
@@ -3117,8 +3117,8 @@ const monsters = [
             nomeAtaque: "Magia de Fogo",
             armadura: 77,
             agilidade: 110,
-            xp: 1125,
-            ouro: 1050
+            xp: 125,
+            ouro: 1914
         },
 
         drops: [
@@ -3152,8 +3152,8 @@ const monsters = [
             nomeAtaque: "Dissecar",
             armadura: 74,
             agilidade: 116,
-            xp: 1125,
-            ouro: 1050
+            xp: 125,
+            ouro: 1914
         },
 
         drops: [
@@ -3187,8 +3187,8 @@ const monsters = [
             nomeAtaque: "Dilacerar",
             armadura: 72,
             agilidade: 108,
-            xp: 1125,
-            ouro: 1050
+            xp: 125,
+            ouro: 1914
         },
 
         drops: [
@@ -3225,8 +3225,8 @@ const monsters = [
             nomeAtaque: "Ataque Infernal",
             armadura: 77,
             agilidade: 115,
-            xp: 2125,
-            ouro: 1050
+            xp: 438,
+            ouro: 6930
         },
 
         drops: [
@@ -3259,8 +3259,8 @@ const monsters = [
             nomeAtaque: "Julgamento Divino",
             armadura: 95,
             agilidade: 117,
-            xp: 5000,
-            ouro: 5000
+            xp: 500,
+            ouro: 1000
         },
 
         drops: [
@@ -3284,8 +3284,8 @@ const monsters = [
             nomeAtaque: "Abraço Sombrio",
             armadura: 90,
             agilidade: 121,
-            xp: 5000,
-            ouro: 5000
+            xp: 500,
+            ouro: 1000
         },
 
         drops: [

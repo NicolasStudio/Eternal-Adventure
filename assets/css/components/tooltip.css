@@ -6,6 +6,25 @@
     z-index:99999;
     pointer-events:none;
 }
+#item-tooltip-compare{
+    position:fixed;
+    z-index:99999;
+    pointer-events:none;
+}
+.item-tooltip-compare{
+    border-color:#5b8f6b;
+}
+.item-tooltip-compare-label{
+    display:block;
+    margin-bottom:10px;
+    padding-bottom:8px;
+    border-bottom:1px solid rgba(91,143,107,.35);
+    color:#8fc9a0;
+    font-size:.78rem;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    text-align:center;
+}
 .item-tooltip{
     position:fixed;
     width:340px;

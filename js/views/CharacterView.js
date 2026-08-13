@@ -614,7 +614,7 @@ export default class CharacterView {
                 const inventory = this.getFilteredInventory();
                 const item = inventory[index];
                 if (!item) return;
-                this.showTooltip(item, event.clientX, event.clientY);
+                this.showTooltip(item, event.clientX, event.clientY, { compare: true });
             });
             slot.addEventListener("mouseleave", () => {
                 this.hideTooltip();
@@ -646,10 +646,29 @@ export default class CharacterView {
         }
         tooltip.style.left = `${left}px`;
         tooltip.style.top = `${top}px`;
+
+        // Tooltip de comparação (item equipado) — fica do outro lado da
+        // principal, pra ficarem lado a lado sem sobrepor.
+        const compareTooltip = document.getElementById("item-tooltip-compare");
+        if (compareTooltip) {
+            const compareWidth = compareTooltip.offsetWidth;
+            const gap = 12;
+            let compareLeft = left + tooltipWidth + gap;
+            if (compareLeft + compareWidth > window.innerWidth - margin) {
+                compareLeft = left - compareWidth - gap;
+            }
+            if (compareLeft < margin) {
+                compareLeft = margin;
+            }
+            compareTooltip.style.left = `${compareLeft}px`;
+            compareTooltip.style.top = `${top}px`;
+        }
     }
 
-    showTooltip(item, x, y) {
+    showTooltip(item, x, y, { compare = false } = {}) {
+
         this.hideTooltip();
+
         const tooltip = new ItemTooltip(item);
         const element = document.createElement("div");
         element.id = "item-tooltip";
@@ -659,13 +678,40 @@ export default class CharacterView {
         element.style.zIndex = "99999";
         element.style.pointerEvents = "none";
         document.body.appendChild(element);
+
+        // Comparação: só faz sentido pra equipamento (tem slot), e só
+        // se já existir algo equipado ali que não seja o próprio item.
+        const equippedItem = item.slot ? this.game.player.equipment[item.slot] : null;
+
+        if (compare && equippedItem && equippedItem.uid !== item.uid) {
+
+            const compareTooltip = new ItemTooltip(equippedItem);
+            const compareElement = document.createElement("div");
+            compareElement.id = "item-tooltip-compare";
+            compareElement.className = "item-tooltip item-tooltip-compare";
+            compareElement.innerHTML = `
+                <span class="item-tooltip-compare-label">Equipado atualmente</span>
+                ${compareTooltip.render()}
+            `;
+            compareElement.style.position = "fixed";
+            compareElement.style.zIndex = "99999";
+            compareElement.style.pointerEvents = "none";
+            document.body.appendChild(compareElement);
+
+        }
+
         this.updateTooltipPosition(x, y);
+
     }
 
     hideTooltip() {
         const tooltip = document.getElementById("item-tooltip");
         if (tooltip) {
             tooltip.remove();
+        }
+        const compareTooltip = document.getElementById("item-tooltip-compare");
+        if (compareTooltip) {
+            compareTooltip.remove();
         }
     }
 

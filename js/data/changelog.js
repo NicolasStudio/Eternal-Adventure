@@ -1,6 +1,59 @@
 export default [
 
     {
+        version: "Alpha v0.8",
+        date: "Agosto de 2026",
+        changes: [
+            "Balanceamento dos chefes de nível 30 e 40 (vida e defesa reduzidas) e reforço na armadura base do Mago no nível 30",
+            "XP e ouro de todos os monstros do jogo recalculados para escalar de verdade com o nível (antes travava em um valor fixo a partir do nível 43)",
+            "Corrigida uma inversão real de raridade: itens Raros estavam dando mais agilidade que os Místicos em armas de arqueiro, pernas e botas — agora a progressão de raridade é sempre crescente",
+            "Renomeada a criatura 'Homem Lama' para 'Homem Musgo'",
+            "Adicionado comparador de itens: passar o mouse num item do inventário agora mostra também a tooltip do item equipado no mesmo espaço, lado a lado",
+            "Nova tentativa de correção definitiva do bug de tooltip bloqueando cliques na barra de ferramentas",
+            "Músicas convertidas para um formato mais leve, reduzindo o tamanho total de áudio em mais de 60%",
+            "Limpeza de código: removidos 11 arquivos JavaScript e 2 arquivos CSS que não eram mais usados por nada no jogo"
+        ]
+    },
+
+    {
+        version: "Alpha v0.7",
+        date: "Agosto de 2026",
+        changes: [
+            "Botão Usar (poção) e Curar Vida Completa ganharam cores próprias (verde claro/escuro)",
+            "Poção não pode mais ser usada com a vida já cheia",
+            "Clicar em uma pedra de encantamento no inventário agora abre a Ferraria direto na aba Encantar",
+            "Volume padrão da música reduzido",
+            "Skip de Dungeon agora também pode ser usado em chefes, após três vitórias",
+            "Botão de sair das Configurações renomeado para 'Sair do Jogo', e só aparece quando as Configurações são abertas de dentro de uma partida",
+            "Corrigido contador de vitórias (badge) não aparecendo nos cards de dungeon de chefe",
+            "Corrigido botão 'Em breve' não avisando nada ao ser clicado, e reduzida sua opacidade para não parecer uma opção clicável normal",
+            "Clicar numa carta descoberta do Álbum agora abre ela em destaque na tela, com o fundo borrado — fecha clicando fora ou com Esc"
+        ]
+    },
+
+    {
+        version: "Alpha v0.6",
+        date: "Agosto de 2026",
+        changes: [
+            "Balanceamento geral: preços de melhoria de qualidade, pedras de encantamento e custo de cura na Enfermaria revisados",
+            "Corrigido bug onde itens sem raridade (poções, pedras) exibiam \"Nenhuma\" na Qualidade indevidamente",
+            "Corrigido crash no Mercado ao tentar vender pedras de encantamento",
+            "Corrigido bug que permitia \"equipar\" uma pedra de encantamento pelo inventário",
+            "Unificados os 3 pop-ups de fim de andar (recompensa, inventário e continuar) em um só, com atalho de Sair da Dungeon",
+            "Menus de navegação (Personagem, Dungeons, Cidade) agora minimizam ao clicar de novo neles",
+            "Reduzido o tempo de espera do Baú de 5h para 3h30",
+            "Adicionado blur e opção de visualizar na carta recém-obtida do Baú, igual ao Álbum",
+            "Adicionada paginação completa no Álbum (Primeira, Anterior, Avançar, Última), removidas as setas laterais redundantes",
+            "Corrigido item ficar \"preso\" no slot da Ferraria ao sair da aba sem confirmar a melhoria/encantamento",
+            "Corrigido modal da Enfermaria podendo ficar aberto na tela após sair da Cidade",
+            "Vida cheia não cobra mais (nem exibe) preço de cura na Enfermaria, e bloqueia o uso de poções",
+            "Adicionado botão de cura completa nas poções, além do uso unitário",
+            "Adicionado salvamento automático silencioso (localStorage) ao sair de uma dungeon, curar na Enfermaria ou melhorar/encantar um item",
+            "Adicionada a Wiki do jogo (acessível pela barra de ferramentas), com guia de classes, itens, raridade, qualidade, Ferraria, Mercado, Enfermaria, Dungeons, Álbum e mais"
+        ]
+    },
+
+    {
         version: "Alpha v0.5",
         date: "Agosto de 2026",
         changes: [

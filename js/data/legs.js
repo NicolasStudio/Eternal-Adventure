@@ -77,7 +77,7 @@ const legs = {
 
         stats: {
             armor: 10,
-            agility: 2
+            agility: 4
         },
 
         value: 2565,
@@ -97,7 +97,7 @@ const legs = {
 
         stats: {
             armor: 12,
-            agility: 3
+            agility: 5
         },
 
         value: 7695,
@@ -117,7 +117,7 @@ const legs = {
 
         stats: {
             armor: 15,
-            agility: 4
+            agility: 6
         },
 
         value: 0,
@@ -200,7 +200,7 @@ const legs = {
 
         stats: {
             armor: 12,
-            agility: 2
+            agility: 4
         },
 
         value: 2565,
@@ -220,7 +220,7 @@ const legs = {
 
         stats: {
             armor: 14,
-            agility: 3
+            agility: 5
         },
 
         value: 7695,
@@ -240,7 +240,7 @@ const legs = {
 
         stats: {
             armor: 18,
-            agility: 4
+            agility: 6
         },
 
         value: 0,
@@ -323,7 +323,7 @@ const legs = {
 
         stats: {
             armor: 12,
-            agility: 2
+            agility: 5
         },
 
         value: 2565,
@@ -343,7 +343,7 @@ const legs = {
 
         stats: {
             armor: 14,
-            agility: 3
+            agility: 6
         },
 
         value: 7695,
@@ -363,7 +363,7 @@ const legs = {
 
         stats: {
             armor: 18,
-            agility: 4
+            agility: 7
         },
 
         value: 0,
