@@ -1,6 +1,24 @@
 export default [
 
     {
+        version: "Alpha v0.9",
+        date: "Agosto de 2026",
+        changes: [
+            "Adicionado o modo PVP: lobby de espera, pareamento automático contra outro jogador e combate resolvido pelos status dos personagens",
+            "Cerimônia de início de partida: sorteio animado da arena entre os cenários de chefe do jogo",
+            "Combate PVP agora usa a mesma tela e as mesmas mensagens de ataque do combate contra monstros — o adversário aparece no lugar do monstro, com HUD de vida próprio",
+            "Corrigido botão de fechar (X) da Arena PVP não respondendo ao clique em algumas telas",
+            "Corrigido z-index da janela do PVP, que ficava escondida atrás do baú diário",
+            "Sair da Arena PVP (pelo X ou pelo botão Voltar) agora sempre fecha por completo e restaura o cenário padrão",
+            "Removida a trepidação da animação de sorteio da arena",
+            "Corrigido tooltip do botão de maximizar, que continuava dizendo 'Maximizar' mesmo em tela cheia",
+            "Corrigido clique em carta borrada do Álbum abrindo o destaque antes da carta ser revelada — agora só abre depois de 'Visualizar Cartas'",
+            "Poções agora aparecem no Mercado somente depois de vencer, ao menos uma vez, o chefe que as dropa",
+            "Valor de compra das poções reajustado, e valor de venda recalculado para 1/3 do valor de compra"
+        ]
+    },
+
+    {
         version: "Alpha v0.8",
         date: "Agosto de 2026",
         changes: [

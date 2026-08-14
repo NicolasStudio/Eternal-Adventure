@@ -240,7 +240,7 @@ export default class AlbumModal {
 
                 <div
                     class="album-card ${discovered ? "owned" : ""}"
-                    ${discovered ? `data-card-id="${card.id}"` : ""}>
+                    ${discovered && !blur ? `data-card-id="${card.id}"` : ""}>
 
                     <img
                         src="${image}"

@@ -22,7 +22,7 @@
    HEADER
 ========================================================== */
 .dungeon-header{
-    height:60px;
+    height:70px;
     flex-shrink:0;
     display:flex;
     align-items:center;

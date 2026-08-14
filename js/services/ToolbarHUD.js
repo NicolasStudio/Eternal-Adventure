@@ -93,12 +93,15 @@ export default class Toolbar {
     }
 
     updateIcon(toolbar) {
-        const icon = toolbar.querySelector("#btn-maximize i");
-        if (!icon) return;
+        const button = toolbar.querySelector("#btn-maximize");
+        const icon = button?.querySelector("i");
+        if (!button || !icon) return;
         if (document.fullscreenElement) {
             icon.className = "fa-solid fa-down-left-and-up-right-to-center";
+            button.dataset.tooltip = "Minimizar";
         } else {
             icon.className = "fa-solid fa-up-right-and-down-left-from-center";
+            button.dataset.tooltip = "Maximizar";
         }
     }
 }

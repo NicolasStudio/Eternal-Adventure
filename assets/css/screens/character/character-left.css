@@ -93,13 +93,14 @@
     image-rendering:pixelated;
     object-fit:cover;
     transition:opacity .3s ease;
+    background-color: transparent;
 }
 .character-avatar-full{
     position:absolute;
     inset:0;
     opacity:0;
     object-fit:contain;
-    background:#1a0f0a;
+    background:#2a1a12;
 }
 .character-avatar-wrapper:hover .character-avatar-full{
     opacity:1;

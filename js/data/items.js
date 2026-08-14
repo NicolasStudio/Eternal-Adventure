@@ -20,8 +20,8 @@ const items = {
 
         effect: "Recupera 25 pontos de Vida.",
 
-        buyValue: 25,
-        sellValue: 7
+        buyValue: 50,
+        sellValue: 17
     },
 
     mediumPotion: {
@@ -45,7 +45,7 @@ const items = {
         effect: "Recupera 100 pontos de Vida.",
 
         buyValue: 150,
-        sellValue: 20
+        sellValue: 50
     },
 
     tripleMediumPotion: {
@@ -68,7 +68,7 @@ const items = {
 
         effect: "Recupera 300 pontos de Vida.",
 
-        buyValue: 500,
+        buyValue: 450,
         sellValue: 150
     },
 
@@ -94,7 +94,7 @@ const items = {
         effect: "Recupera 500 pontos de Vida.",
 
         buyValue: 800,
-        sellValue: 350
+        sellValue: 267
     }
 
 };

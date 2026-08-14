@@ -1,5 +1,7 @@
 import CharacterView from "../views/CharacterView.js";
 import DungeonView from "../views/DungeonView.js";
+import PvpView from "../views/PvpView.js";
+import PvpLobbyService from "../services/PvpLobbyService.js";
 import CombatView from "../views/CombatView.js";
 import CityView from "../views/CityView.js";
 import PlayerHUD from "./components/PlayerHUD.js";
@@ -27,6 +29,7 @@ export default class HudScreen {
         this.marketViewBuy = new MarketViewBuy(this.game);
         this.characterView = new CharacterView(game);
         this.dungeonView = new DungeonView(game);
+        this.pvpView = new PvpView(game);
         this.combatView = new CombatView(game);
         this.cityView = new CityView(game);
         this.marketView = new MarketView(game);
@@ -45,6 +48,7 @@ export default class HudScreen {
         this.currentView = "";
         this.characterVisible = true;
         this.inCombat = false;
+        this.inPvpCombat = false;
         this.currentMonster = null;
         this.backgroundImage = "";
         this.preparationMode = false;
@@ -69,25 +73,29 @@ export default class HudScreen {
     }
 
     renderHeader() {
+        const anyCombat = this.inCombat || this.inPvpCombat;
         return `
-            <header class="hud-header ${this.inCombat ? "combat" : "exploration"}">
+            <header class="hud-header ${anyCombat ? "combat" : "exploration"}">
                 <div class="hud-left-column">
                     ${this.playerHUD.render()}
-                    ${!this.inCombat ? this.chestHUD.render() : ""}
+                    ${!anyCombat ? this.chestHUD.render() : ""}
                 </div>
                 ${this.inCombat ? this.dungeonHeader.render(this.combatView.currentDungeon, this.combatView.currentFloor) : ""}
+                ${this.inPvpCombat ? this.pvpView.renderArenaHeader() : ""}
                 ${this.renderRightPanel()}
             </header>
         `;
     }
 
     renderRightPanel() {
-        return this.inCombat ? this.monsterHUD.render(this.combatView.currentMonster) : this.toolbarHUD.render();
+        if (this.inCombat) return this.monsterHUD.render(this.combatView.currentMonster);
+        if (this.inPvpCombat) return this.monsterHUD.render(this.pvpView.opponentAsMonster());
+        return this.toolbarHUD.render();
     }
 
     updateHUD() {
         this.playerHUD.update();
-        if (this.inCombat) {
+        if (this.inCombat || this.inPvpCombat) {
             this.monsterHUD.update?.();
         }
         if (this.currentView === "character") {
@@ -110,6 +118,9 @@ export default class HudScreen {
                     : this.dungeonView.render();
             case "city":
                 return this.cityView.render();
+
+            case "pvp":
+                return this.pvpView.render();
 
             case "market":
                 return this.marketView.render();
@@ -143,26 +154,28 @@ export default class HudScreen {
     }
 
     renderNavigation() {
-        const characterDisabled = this.inCombat && !this.preparationMode;
-        const dungeonDisabled = this.inCombat || this.preparationMode;
-        const cityDisabled = this.inCombat || this.preparationMode;
+        const anyLockedCombat = (this.inCombat && !this.preparationMode) || this.inPvpCombat;
+        const characterDisabled = anyLockedCombat;
+        const dungeonDisabled = this.inCombat || this.preparationMode || this.inPvpCombat;
+        const cityDisabled = this.inCombat || this.preparationMode || this.inPvpCombat;
+        const pvpDisabled = this.inCombat || this.preparationMode || this.inPvpCombat;
         return `
             <nav class="hud-navigation">
                 <button class="nav-item ${this.currentView === "character" ? "active" : ""} ${characterDisabled ? "disabled" : ""}" data-view="character">
-                    <i class="fa-solid fa-user"></i>
+                    <span class="material-symbols-outlined">person</span>
                     <span>Personagem</span>
                 </button>
                 <button class="nav-item ${this.currentView === "dungeon" ? "active" : ""} ${dungeonDisabled ? "disabled" : ""}" data-view="dungeon">
-                    <i class="fa-solid fa-book-atlas"></i>
+                    <span class="material-symbols-outlined">castle</span>
                     <span>Dungeons</span>
                 </button>
                 <button class="nav-item ${this.currentView === "city" ? "active" : ""} ${cityDisabled ? "disabled" : ""}" data-view="city">
-                    <i class="fa-solid fa-city"></i>
+                    <span class="material-symbols-outlined">location_city</span>
                     <span>Cidade</span>
                 </button>
-                <button class="nav-item nav-item-soon" data-view="soon">
-                    <i class="fa-solid fa-hourglass-half"></i>
-                    <span>Em breve</span>
+                <button class="nav-item ${pvpDisabled ? "disabled" : ""}" data-view="pvp">
+                    <span class="material-symbols-outlined">swords</span>
+                    <span>PVP</span>
                 </button>
             </nav>
         `;
@@ -185,15 +198,11 @@ export default class HudScreen {
         });
         this.element.querySelectorAll(".nav-item").forEach(button => {
             button.addEventListener("click", () => {
-                if (this.inCombat && !this.preparationMode) {
+                if ((this.inCombat && !this.preparationMode) || this.inPvpCombat) {
                     Toast.show("Você não pode trocar de tela durante um combate.");
                     return;
                 }
                 const view = button.dataset.view;
-                if (view === "soon") {
-                    Toast.show("Em breve!");
-                    return;
-                }
                 // Clicar de novo no menu já ativo fecha/minimiza ele.
                 this.changeView(this.currentView === view ? "" : view);
             });
@@ -220,6 +229,30 @@ export default class HudScreen {
             }
         }
 
+        // Sair da tela de PVP por qualquer caminho (X, menu de
+        // navegação) sempre volta pra pergunta de modo na próxima vez
+        // que abrir — e sai da fila de espera do Firebase se estava
+        // procurando partida, pra não deixar "fantasma" pra trás.
+        if (this.currentView === "pvp" && view !== "pvp") {
+            if (this.pvpView.state === "searching") {
+                PvpLobbyService.leaveQueue();
+            }
+            this.pvpView.state = "mode";
+            this.pvpView.mode = null;
+            this.pvpView.matchData = null;
+            this.pvpView.combatResult = null;
+            this.pvpView.chosenBossDungeon = null;
+            this.pvpView.opponentHP = null;
+            this.inPvpCombat = false;
+            this.setBackground("assets/img/backgrounds/tela_inicial.png");
+        }
+
+        // Entrar na tela do PVP troca o fundo pra arena_pvp.png — sai
+        // dela (bloco acima) já restaura o tela_inicial.png.
+        if (this.currentView !== "pvp" && view === "pvp") {
+            this.setBackground("assets/img/backgrounds/arena_pvp.png");
+        }
+
         this.currentView = view;
         this.refreshCurrentView();
         this.updateMusic();
@@ -230,7 +263,7 @@ export default class HudScreen {
     // continua o que já estava tocando antes de abrir.
     updateMusic() {
 
-        if (this.inCombat) {
+        if (this.inCombat || this.inPvpCombat) {
             MusicService.play("combat");
             return;
         }
@@ -242,6 +275,7 @@ export default class HudScreen {
                 break;
 
             case "city":
+            case "pvp":
             case "market":
             case "market-buy":
             case "blacksmith-weapon":
@@ -277,6 +311,9 @@ export default class HudScreen {
                 break;
             case "city":
                 this.cityView.registerEvents(document);
+                break;
+            case "pvp":
+                this.pvpView.registerEvents(document);
                 break;
             case "market":
                 this.marketView.registerEvents(document);
@@ -355,6 +392,9 @@ export default class HudScreen {
                 break;
             case "city":
                 this.cityView.registerEvents(document);
+                break;
+            case "pvp":
+                this.pvpView.registerEvents(document);
                 break;
             case "market":
                 this.marketView.registerEvents(document);

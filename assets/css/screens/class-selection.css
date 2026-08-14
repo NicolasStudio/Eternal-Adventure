@@ -66,6 +66,7 @@
     display:block;
     margin:auto;
     image-rendering:pixelated;
+    background-color: #7B7C7D;
 }
 .class-card h2{
     margin-top:18px;

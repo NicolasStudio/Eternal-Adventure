@@ -4,6 +4,7 @@ import chests from "../../../data/chest.js";
 import legs from "../../../data/legs.js";
 import boots from "../../../data/boots.js";
 import dungeons from "../../../data/dungeons.js";
+import monsters from "../../../data/monsters.js";
 import Toast from "../Toast.js";
 import ItemTooltip from "../../../views/ItemTooltip.js";
 
@@ -60,6 +61,17 @@ export default class MarketViewBuy {
                     items.push(item);
                 });
             });
+            // Poções entram na loja assim que o chefe que a dropa for
+            // vencido pela primeira vez — não precisa ter caído a poção
+            // de verdade ainda, só ter vencido a luta uma vez.
+            if (!dungeon.boss) return;
+            const bossMonster = monsters.find(m => m.id === dungeon.monsters[0]);
+            (bossMonster?.drops ?? []).forEach(drop => {
+                if (!drop.item?.heal) return; // só poções (têm campo heal)
+                if (unlocked.has(drop.item.id)) return;
+                unlocked.add(drop.item.id);
+                items.push(drop.item);
+            });
         });
         return items;
     }
@@ -96,7 +108,7 @@ export default class MarketViewBuy {
             return `
                 <div class="market-buy-empty">
                     <i class="fa-solid fa-box-open"></i>
-                    <span>Nenhum equipamento disponível, vença uma Dungeon.</span>
+                    <span>Nenhum item disponível, vença uma Dungeon.</span>
                 </div>
             `;
         }

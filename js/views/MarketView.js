@@ -1,4 +1,5 @@
 import Toast from "../ui/components/Toast.js";
+import ItemValueService from "../services/ItemValueService.js";
 
 export default class MarketView {
     constructor(game) {
@@ -80,7 +81,7 @@ export default class MarketView {
                     <span class="market-item-rarity" style="color:${rarity.color};">${rarity.name}</span>
                 </div>
                 <div class="market-item-price">
-                    ${item.sellValue}
+                    ${ItemValueService.getSellValue(item)}
                     <i class="fa-solid fa-coins"></i>
                 </div>
             </button>
@@ -421,7 +422,7 @@ export default class MarketView {
         const ownedQuantity = item.quantity ?? 1;
         const isStackable = ownedQuantity > 1;
 
-        const totalValue = item.sellValue * this.sellQuantity;
+        const totalValue = ItemValueService.getSellValue(item) * this.sellQuantity;
 
         return `
 
@@ -510,7 +511,7 @@ export default class MarketView {
             const sellButton = container.querySelector(".market-sell-button");
 
             if (valueLabel) valueLabel.textContent = `${this.sellQuantity}/${item.quantity ?? 1}`;
-            if (priceValue) priceValue.innerHTML = `<i class="fa-solid fa-coins"></i> ${item.sellValue * this.sellQuantity}`;
+            if (priceValue) priceValue.innerHTML = `<i class="fa-solid fa-coins"></i> ${ItemValueService.getSellValue(item) * this.sellQuantity}`;
             if (sellButton) sellButton.innerHTML = `<i class="fa-solid fa-hand-holding-dollar"></i> Vender (${this.sellQuantity})`;
 
         });
@@ -551,7 +552,7 @@ export default class MarketView {
         const item = this.selectedItem;
 
         const actualQuantity = Math.min(quantity, item.quantity ?? 1);
-        const total = item.sellValue * actualQuantity;
+        const total = ItemValueService.getSellValue(item) * actualQuantity;
 
         const sold = this.player.sellItem(item, quantity);
 

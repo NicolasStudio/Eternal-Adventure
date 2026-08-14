@@ -10,6 +10,7 @@ import levels  from "../data/levels.js";
 import qualities from "../data/quality.js";
 import upClasse from "./upClasse.js";
 import cards from "../data/cards.js";
+import ItemValueService from "../services/ItemValueService.js";
 
 export default class Player {
     constructor(characterClass, name) {
@@ -306,7 +307,7 @@ export default class Player {
 
         const toSell = Math.min(amount, inventoryItem.quantity ?? 1);
 
-        this.addGold(inventoryItem.sellValue * toSell);
+        this.addGold(ItemValueService.getSellValue(inventoryItem) * toSell);
 
         this.removeItem(inventoryItem, toSell);
 

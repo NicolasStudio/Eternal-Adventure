@@ -41,6 +41,11 @@
     color:#f0d5b0;
 }
 
+.nav-item .material-symbols-outlined{
+    font-size:18px;
+    font-variation-settings:"FILL" 0, "wght" 400, "GRAD" 0, "opsz" 20;
+}
+
 .nav-item.active{
     color:#69d823;
 }

@@ -1,0 +1,334 @@
+.pvp-window{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:min(680px,92vw);
+    background:rgba(20,12,8,.9);
+    backdrop-filter:blur(12px);
+    border:2px solid #8b7355;
+    border-radius:8px;
+    box-shadow:0 0 40px rgba(0,0,0,.6);
+    display:flex;
+    flex-direction:column;
+    max-height:85vh;
+    z-index:50;
+}
+
+.pvp-close{
+    width:clamp(34px,2.5vw,42px);
+    height:clamp(34px,2.5vw,42px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    color:#d4a373;
+    font-size:clamp(16px,1.2vw,20px);
+    border-radius:50%;
+    border:2px solid #8b7355;
+    background:linear-gradient(180deg,#2c1810 0%,#1a0f0a 100%);
+    transition:
+        transform .20s,
+        border-color .20s,
+        color .20s,
+        box-shadow .20s;
+    box-shadow:inset 0 0 18px rgba(0,0,0,.55),0 4px 10px rgba(0,0,0,.35);
+    position:relative;
+    flex-shrink:0;
+}
+.pvp-close:hover{
+    color:#fff;
+    border-color:#d4a373;
+    transform:scale(1.06);
+    background:linear-gradient(180deg, #3d2418 0%, #2c1810 100%);
+    box-shadow:inset 0 0 18px rgba(0,0,0,.45), 0 0 20px rgba(212,163,115,.18);
+}
+.pvp-close:active{
+    transform:scale(.95);
+}
+
+.pvp-body{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px 32px;
+    overflow-y:auto;
+}
+
+.pvp-mode-select{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+    text-align:center;
+}
+
+.pvp-mode-options{
+    display:flex;
+    gap:16px;
+}
+
+.pvp-mode-btn{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    width:140px;
+    padding:18px 12px;
+    border:2px solid #8b7355;
+    border-radius:8px;
+    background:linear-gradient(180deg,rgba(216,159,27,.18),rgba(155,102,4,.1));
+    cursor:pointer;
+    transition:.2s;
+}
+.pvp-mode-btn:hover{
+    border-color:#c79b37;
+    box-shadow:0 0 18px rgba(199,155,55,.28);
+}
+.pvp-mode-label{
+    font-family:"Cinzel",serif;
+    font-size:1.3rem;
+    font-weight:700;
+    color:#f1c75c;
+}
+.pvp-mode-sub{
+    font-family:"MedievalSharp",cursive;
+    font-size:.8rem;
+    color:#bca46d;
+}
+
+.pvp-mode-btn.pvp-mode-locked{
+    opacity:.5;
+    border-style:dashed;
+    background:rgba(0,0,0,.2);
+}
+.pvp-mode-btn.pvp-mode-locked:hover{
+    border-color:#8b7355;
+    box-shadow:none;
+    opacity:.7;
+}
+.pvp-mode-btn.pvp-mode-locked .pvp-mode-label{
+    color:#8b7355;
+}
+
+/* ===== CERIMÔNIA (sorteio da arena) ===== */
+.pvp-ceremony-window{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:24px;
+    background:rgba(5,3,2,.75);
+    z-index:50;
+}
+.pvp-ceremony-label{
+    font-family:"Cinzel",serif;
+    font-size:1.1rem;
+    letter-spacing:2px;
+    color:#f1c75c;
+    text-transform:uppercase;
+    text-shadow:0 0 20px rgba(212,163,115,.4);
+    animation:pvpCeremonyPulse 1s ease-in-out infinite;
+}
+@keyframes pvpCeremonyPulse{
+    0%,100%{ opacity:.6; }
+    50%{ opacity:1; }
+}
+.pvp-ceremony-frame{
+    width:min(360px,80vw);
+    aspect-ratio:3/4;
+    border:3px solid #c79b37;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 0 50px rgba(199,155,55,.4), inset 0 0 30px rgba(0,0,0,.5);
+}
+.pvp-ceremony-frame img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* ===== IDLE ===== */
+.pvp-idle{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+    text-align:center;
+}
+.pvp-icon{
+    font-size:46px;
+    color:#c79b37;
+}
+.pvp-description{
+    max-width:420px;
+    color:#d8c39b;
+    font-family:"MedievalSharp",cursive;
+    font-size:.95rem;
+    line-height:1.6;
+}
+.pvp-join-button{
+    padding:13px 34px;
+    border:2px solid #c79b37;
+    border-radius:6px;
+    background:linear-gradient(180deg,rgba(216,159,27,.3),rgba(155,102,4,.18));
+    color:#f1c75c;
+    font-family:"Cinzel",serif;
+    font-size:1rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:.2s;
+}
+.pvp-join-button:hover{
+    box-shadow:0 0 20px rgba(199,155,55,.35);
+}
+
+/* ==========================================================
+    SCROLL
+========================================================== */
+.pvp-log::-webkit-scrollbar{
+    width:8px;
+}
+.pvp-log::-webkit-scrollbar-track{
+    background:#1d1512;
+}
+.pvp-log::-webkit-scrollbar-thumb{
+    background:#7b5a2d;
+    border-radius:8px;
+}
+.pvp-log::-webkit-scrollbar-thumb:hover{
+    background:#a67b3f;
+}
+
+/* ===== SEARCHING ===== */
+.pvp-searching{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+}
+.pvp-spinner{
+    width:46px;
+    height:46px;
+    border:3px solid rgba(199,155,55,.25);
+    border-top-color:#c79b37;
+    border-radius:50%;
+    animation:pvpSpin 1s linear infinite;
+}
+@keyframes pvpSpin{
+    to{ transform:rotate(360deg); }
+}
+.pvp-status-text{
+    color:#d8c39b;
+    font-family:"Cinzel",serif;
+    font-size:.95rem;
+}
+.pvp-cancel-button{
+    padding:10px 24px;
+    border:1px solid #5b4633;
+    border-radius:6px;
+    background:rgba(0,0,0,.25);
+    color:#d8c39b;
+    font-family:"Cinzel",serif;
+    cursor:pointer;
+    transition:.2s;
+}
+.pvp-cancel-button:hover{
+    border-color:#8a3a3a;
+    color:#f0a0a0;
+}
+
+/* ===== FOUND / RESULT (compartilham o "versus") ===== */
+.pvp-found, .pvp-result{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:20px;
+    width:100%;
+}
+.pvp-found-title{
+    font-family:"Cinzel",serif;
+    color:#f1c75c;
+    font-size:1.3rem;
+    text-shadow:0 0 20px rgba(212,163,115,.35);
+}
+.pvp-result-title{
+    font-family:"Cinzel",serif;
+    font-size:1.6rem;
+    letter-spacing:2px;
+}
+.pvp-result-title.win{
+    color:#7fd98d;
+    text-shadow:0 0 20px rgba(95,191,111,.4);
+}
+.pvp-result-title.lose{
+    color:#e05a5a;
+    text-shadow:0 0 20px rgba(224,90,90,.4);
+}
+
+.pvp-versus{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+.pvp-fighter-name{
+    font-family:"Cinzel",serif;
+    font-size:1.05rem;
+    color:#d8c39b;
+    padding:8px 16px;
+    border:1px solid #5b4633;
+    border-radius:6px;
+}
+.pvp-fighter-name.winner{
+    border-color:#c79b37;
+    color:#f1c75c;
+    box-shadow:0 0 16px rgba(199,155,55,.3);
+}
+.pvp-vs{
+    font-family:"Cinzel",serif;
+    color:#8b7355;
+    font-size:.85rem;
+}
+
+.pvp-log{
+    width:100%;
+    max-height:220px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    padding:14px 16px;
+    background:rgba(0,0,0,.25);
+    border:1px solid #5b4633;
+    border-radius:6px;
+}
+.pvp-log-line{
+    font-family:"MedievalSharp",cursive;
+    font-size:.85rem;
+    color:#c7b08d;
+}
+.pvp-log-dodge{
+    color:#8b7355;
+    font-style:italic;
+}
+.pvp-log-heal{
+    color:#7fd98d;
+}
+
+.pvp-back-button{
+    padding:10px 28px;
+    border:1px solid #8b7355;
+    border-radius:6px;
+    background:rgba(0,0,0,.25);
+    color:#d8c39b;
+    font-family:"Cinzel",serif;
+    cursor:pointer;
+    transition:.2s;
+}
+.pvp-back-button:hover{
+    border-color:#c79b37;
+    color:#f1c75c;
+}

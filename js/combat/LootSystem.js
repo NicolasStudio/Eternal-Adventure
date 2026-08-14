@@ -3,13 +3,28 @@ import helmets from "../data/helmets.js";
 import chests from "../data/chest.js";
 import legs from "../data/legs.js";
 import boots from "../data/boots.js";
+import dungeons from "../data/dungeons.js";
+import xpByLevel from "../data/xpByLevel.js";
+
+// Monta uma vez só (no carregamento) o conjunto de ids de monstro que
+// são chefe de alguma dungeon — evita depender de um campo solto
+// gravado em cada monstro individualmente, que já se perdeu sozinho
+// mais de uma vez no passado.
+const BOSS_MONSTER_IDS = new Set(
+    dungeons.filter(dungeon => dungeon.boss).flatMap(dungeon => dungeon.monsters)
+);
+
+const BOSS_XP_MULTIPLIER = 3.5;
 
 export default class LootSystem {
 
     static generate(monster, player) {
 
+        const isBoss = BOSS_MONSTER_IDS.has(monster.id);
+        const baseXp = xpByLevel[monster.level] ?? xpByLevel[100];
+
         const reward = {
-            xp: monster.status.xp,
+            xp: Math.round(baseXp * (isBoss ? BOSS_XP_MULTIPLIER : 1)),
             gold: monster.status.ouro,
             items: []
         };

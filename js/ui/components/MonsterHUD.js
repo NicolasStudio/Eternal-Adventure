@@ -41,7 +41,11 @@ export default class MonsterHUD {
 
     updateHP() {
 
-        const monster = this.game.hudScreen.combatView.currentMonster;
+        const hudScreen = this.game.hudScreen;
+
+        const monster = hudScreen.inPvpCombat
+            ? hudScreen.pvpView.opponentAsMonster()
+            : hudScreen.combatView.currentMonster;
 
         if (!monster) return;
 

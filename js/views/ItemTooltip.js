@@ -1,3 +1,5 @@
+import ItemValueService from "../services/ItemValueService.js";
+
 export default class ItemTooltip {
     constructor(item) {
         this.item = item;
@@ -133,7 +135,7 @@ export default class ItemTooltip {
         return `
             <div class="tooltip-footer">
                 <span>Valor de venda</span>
-                <span class="tooltip-gold">${this.item.sellValue ?? 0} Ouro</span>
+                <span class="tooltip-gold">${ItemValueService.getSellValue(this.item)} Ouro</span>
             </div>
         `;
     }
