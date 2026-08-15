@@ -728,7 +728,7 @@ const dungeons = [
         level: 67,
         boss: false,
         page: 13,
-        fights: 3,
+        fights: 4,
 
         monsters: [
             "boy_vampire",

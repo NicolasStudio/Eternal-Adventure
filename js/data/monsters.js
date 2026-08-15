@@ -2185,7 +2185,7 @@ const monsters = [
         sprite: "assets/img/monsters/creature_20/employee2_vampire.png",
 
         status: {
-            vidaMaxima: 442,
+            vidaMaxima: 482,
             dano: 142,
             nomeAtaque: "Esfaquear",
             armadura: 68,
@@ -2259,7 +2259,7 @@ const monsters = [
 
         status: {
             vidaMaxima: 525,
-            dano: 158,
+            dano: 167,
             nomeAtaque: "Morder",
             armadura: 74,
             agilidade: 114,
@@ -2293,8 +2293,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_21/girl_vampire.png",
 
         status: {
-            vidaMaxima: 448,
-            dano: 163,
+            vidaMaxima: 500,
+            dano: 170,
             nomeAtaque: "Morder",
             armadura: 72,
             agilidade: 110,
@@ -2328,8 +2328,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_21/vampire_2.png",
 
         status: {
-            vidaMaxima: 468,
-            dano: 161,
+            vidaMaxima: 620,
+            dano: 180,
             nomeAtaque: "Esfaquear",
             armadura: 68,
             agilidade: 109,
@@ -2363,8 +2363,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_21/vampire.png",
 
         status: {
-            vidaMaxima: 482,
-            dano: 168,
+            vidaMaxima: 682,
+            dano: 178,
             nomeAtaque: "Morder",
             armadura: 74,
             agilidade: 107,
@@ -2401,7 +2401,7 @@ const monsters = [
         sprite: "assets/img/monsters/creature_boss_7/dracula.png",
 
         status: {
-            vidaMaxima: 557,
+            vidaMaxima: 700,
             dano: 201,
             nomeAtaque: "Fatiar",
             armadura: 77,
@@ -2434,7 +2434,7 @@ const monsters = [
         sprite: "assets/img/monsters/creature_22/corpo_seco.png",
 
         status: {
-            vidaMaxima: 438,
+            vidaMaxima: 638,
             dano: 154,
             nomeAtaque: "Arranhar",
             armadura: 59,
@@ -2469,8 +2469,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_22/bradador.png",
 
         status: {
-            vidaMaxima: 470,
-            dano: 161,
+            vidaMaxima: 670,
+            dano: 170,
             nomeAtaque: "Arranhar",
             armadura: 58,
             agilidade: 97,
@@ -2504,8 +2504,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_22/jurupari.png",
 
         status: {
-            vidaMaxima: 483,
-            dano: 159,
+            vidaMaxima: 683,
+            dano: 179,
             nomeAtaque: "Arranhar",
             armadura: 57,
             agilidade: 89,
@@ -2542,8 +2542,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_23/saci.png",
 
         status: {
-            vidaMaxima: 488,
-            dano: 156,
+            vidaMaxima: 688,
+            dano: 196,
             nomeAtaque: "Tiro de Zarabatana",
             armadura: 60,
             agilidade: 99,
@@ -2577,7 +2577,7 @@ const monsters = [
         sprite: "assets/img/monsters/creature_23/bicho_papao.png",
 
         status: {
-            vidaMaxima: 497,
+            vidaMaxima: 697,
             dano: 165,
             nomeAtaque: "Devorar",
             armadura: 61,
@@ -2612,8 +2612,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_23/boto.png",
 
         status: {
-            vidaMaxima: 491,
-            dano: 159,
+            vidaMaxima: 720,
+            dano: 199,
             nomeAtaque: "Pegar Mulher Casada",
             armadura: 60,
             agilidade: 90,
@@ -2650,8 +2650,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_24/boitata.png",
 
         status: {
-            vidaMaxima: 483,
-            dano: 184,
+            vidaMaxima: 883,
+            dano: 174,
             nomeAtaque: "Mordida Flamejante",
             armadura: 57,
             agilidade: 93,
@@ -2685,8 +2685,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_24/headless_mule.png",
 
         status: {
-            vidaMaxima: 477,
-            dano: 158,
+            vidaMaxima: 777,
+            dano: 190,
             nomeAtaque: "Coice",
             armadura: 57,
             agilidade: 98,
@@ -2720,9 +2720,9 @@ const monsters = [
         sprite: "assets/img/monsters/creature_24/curupira.png",
 
         status: {
-            vidaMaxima: 520,
+            vidaMaxima: 800,
             dano: 185,
-            nomeAtaque: "Perufrar",
+            nomeAtaque: "Perfurar",
             armadura: 61,
             agilidade: 96,
             xp: 125,
@@ -2758,8 +2758,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_boss_8/cuca.png",
 
         status: {
-            vidaMaxima: 600,
-            dano: 226,
+            vidaMaxima: 880,
+            dano: 216,
             nomeAtaque: "Te pega daqui",
             armadura: 66,
             agilidade: 100,
@@ -2826,7 +2826,7 @@ const monsters = [
         sprite: "assets/img/monsters/creature_25/diabrete_dois.png",
 
         status: {
-            vidaMaxima: 624,
+            vidaMaxima: 824,
             dano: 205,
             nomeAtaque: "Chifrar",
             armadura: 73,
@@ -2861,7 +2861,7 @@ const monsters = [
         sprite: "assets/img/monsters/creature_25/diabrete_tres.png",
 
         status: {
-            vidaMaxima: 588,
+            vidaMaxima: 888,
             dano: 208,
             nomeAtaque: "Espetar",
             armadura: 74,
@@ -2896,7 +2896,7 @@ const monsters = [
         sprite: "assets/img/monsters/creature_25/diabrete_quatro.png",
 
         status: {
-            vidaMaxima: 603,
+            vidaMaxima: 803,
             dano: 207,
             nomeAtaque: "Dilacerar",
             armadura: 78,
@@ -2934,8 +2934,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_26/gargoyle_um.png",
 
         status: {
-            vidaMaxima: 570,
-            dano: 208,
+            vidaMaxima: 870,
+            dano: 228,
             nomeAtaque: "Espetar",
             armadura: 77,
             agilidade: 109,
@@ -2969,8 +2969,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_26/gargoyle_dois.png",
 
         status: {
-            vidaMaxima: 658,
-            dano: 221,
+            vidaMaxima: 888,
+            dano: 251,
             nomeAtaque: "Perfurar",
             armadura: 79,
             agilidade: 112,
@@ -3004,7 +3004,7 @@ const monsters = [
         sprite: "assets/img/monsters/creature_26/gargoyle_tres.png",
 
         status: {
-            vidaMaxima: 583,
+            vidaMaxima: 883,
             dano: 198,
             nomeAtaque: "Empalar",
             armadura: 75,
@@ -3039,8 +3039,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_26/gargoyle_quatro.png",
 
         status: {
-            vidaMaxima: 619,
-            dano: 222,
+            vidaMaxima: 819,
+            dano: 252,
             nomeAtaque: "Dilacerar",
             armadura: 76,
             agilidade: 112,
@@ -3077,7 +3077,7 @@ const monsters = [
         sprite: "assets/img/monsters/creature_27/boy_demoniac.png",
 
         status: {
-            vidaMaxima: 589,
+            vidaMaxima: 889,
             dano: 234,
             nomeAtaque: "Cortar",
             armadura: 80,
@@ -3112,8 +3112,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_27/girl_demoniac.png",
 
         status: {
-            vidaMaxima: 644,
-            dano: 223,
+            vidaMaxima: 844,
+            dano: 253,
             nomeAtaque: "Magia de Fogo",
             armadura: 77,
             agilidade: 110,
@@ -3147,8 +3147,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_27/woman_demoniac.png",
 
         status: {
-            vidaMaxima: 614,
-            dano: 212,
+            vidaMaxima: 924,
+            dano: 252,
             nomeAtaque: "Dissecar",
             armadura: 74,
             agilidade: 116,
@@ -3182,10 +3182,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_27/men_demoniac.png",
 
         status: {
-            vidaMaxima: 645,
-            dano: 222,
+            vidaMaxima: 985,
+            dano: 252,
             nomeAtaque: "Dilacerar",
-            armadura: 72,
+            armadura: 74,
             agilidade: 108,
             xp: 125,
             ouro: 1914
@@ -3220,8 +3220,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_boss_9/daibo.png",
 
         status: {
-            vidaMaxima: 646,
-            dano: 222,
+            vidaMaxima: 1000,
+            dano: 270,
             nomeAtaque: "Ataque Infernal",
             armadura: 77,
             agilidade: 115,
@@ -3254,11 +3254,11 @@ const monsters = [
         sprite: "assets/img/monsters/creature_up_class/fallen_angel_of_light.png",
 
         status: {
-            vidaMaxima: 745,
-            dano: 218,
+            vidaMaxima: 1300,
+            dano: 300,
             nomeAtaque: "Julgamento Divino",
             armadura: 95,
-            agilidade: 117,
+            agilidade: 150,
             xp: 500,
             ouro: 1000
         },
@@ -3279,11 +3279,11 @@ const monsters = [
         sprite: "assets/img/monsters/creature_up_class/dark_fallen_angel.png",
 
         status: {
-            vidaMaxima: 715,
-            dano: 228,
-            nomeAtaque: "Abraço Sombrio",
-            armadura: 90,
-            agilidade: 121,
+            vidaMaxima: 1300,
+            dano: 300,
+            nomeAtaque: "Aço Sombrio",
+            armadura: 95,
+            agilidade: 150,
             xp: 500,
             ouro: 1000
         },

@@ -23,7 +23,7 @@ const enchantmentStone = {
             life: 7
         },
         enchantPrice: 10000,
-        sellValue: 500
+        sellValue: 300
     },
 
     tcRubiDois: {
@@ -46,7 +46,7 @@ const enchantmentStone = {
             life: 10
         },
         enchantPrice: 20000,
-        sellValue: 1000
+        sellValue: 700
     },
 
     tcRubiTres: {
@@ -69,7 +69,7 @@ const enchantmentStone = {
             life: 15
         },
         enchantPrice: 30000,
-        sellValue: 1500
+        sellValue: 1000
     },
 
     /* ==========================================================
@@ -95,7 +95,7 @@ const enchantmentStone = {
             armor: 7
         },
         enchantPrice: 10000,
-        sellValue: 500
+        sellValue: 300
     },
 
     marcoSafiraDois: {
@@ -118,7 +118,7 @@ const enchantmentStone = {
             armor: 10
         },
         enchantPrice: 20000,
-        sellValue: 1000
+        sellValue: 700
     },
 
     marcoSafiraTres: {
@@ -141,7 +141,7 @@ const enchantmentStone = {
             armor: 15
         },
         enchantPrice: 30000,
-        sellValue: 1500
+        sellValue: 1000
     },
 
     /* ==========================================================
@@ -167,7 +167,7 @@ const enchantmentStone = {
             attack: 7
         },
         enchantPrice: 10000,
-        sellValue: 500
+        sellValue: 300
     },
 
     olbapImperialDois: {
@@ -190,7 +190,7 @@ const enchantmentStone = {
             attack: 10
         },
         enchantPrice: 20000,
-        sellValue: 1000
+        sellValue: 700
     },
 
     olbapImperialTres: {
@@ -213,7 +213,7 @@ const enchantmentStone = {
             attack: 15
         },
         enchantPrice: 30000,
-        sellValue: 1500
+        sellValue: 1000
     },
 
     /* ==========================================================
@@ -239,7 +239,7 @@ const enchantmentStone = {
             agility: 7
         },
         enchantPrice: 10000,
-        sellValue: 500
+        sellValue: 300
     },
 
     essenciaTurmalinaDois: {
@@ -262,7 +262,7 @@ const enchantmentStone = {
             agility: 10
         },
         enchantPrice: 20000,
-        sellValue: 1000
+        sellValue: 700
     },
 
     essenciaTurmalinaTres: {
@@ -285,7 +285,7 @@ const enchantmentStone = {
             agility: 15
         },
         enchantPrice: 30000,
-        sellValue: 1500
+        sellValue: 1000
     }
 
 };

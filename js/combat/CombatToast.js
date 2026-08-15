@@ -10,7 +10,7 @@ export default class CombatToast {
 
     }
 
-    static async show(message, type = "system") {
+    static async show(message, type = "system", extraSeconds = 0) {
 
         const container = this.getContainer();
 
@@ -41,6 +41,15 @@ export default class CombatToast {
 
                 toast.classList.add("show");
 
+                if (extraSeconds > 0) {
+                    // As mensagens do sistema (".system") usam uma
+                    // animação mais curta (.9s) que as de ataque normal
+                    // (1.4s) — soma o extra em cima da duração de base
+                    // certa, sem precisar duplicar a regra no CSS.
+                    const baseSeconds = type.includes("system") ? 0.9 : 1.4;
+                    toast.style.animationDuration = `${baseSeconds + extraSeconds}s`;
+                }
+
             });
 
             const finish = () => {
@@ -60,7 +69,7 @@ export default class CombatToast {
             toast.addEventListener("animationend", finish, { once: true });
 
             // Segurança caso a animação não dispare.
-            setTimeout(finish, 2000);
+            setTimeout(finish, 2000 + extraSeconds * 1000);
 
         });
 

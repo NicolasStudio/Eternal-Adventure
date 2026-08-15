@@ -429,12 +429,12 @@ export default class PvpView {
         this.state = "battle";
         this.refresh();
 
-        await CombatToast.show(`Partida contra ${opponent.name} começou!`, "system");
+        await CombatToast.show(`Partida contra ${opponent.name} começou!`, "system", 2);
 
         await this.playBattleLog(result.log);
 
         const iWon = (result.winner === "a") === this.isPlayerA;
-        await CombatToast.show(iWon ? `${opponent.name} derrotado!` : "Você foi derrotado!", "system");
+        await CombatToast.show(iWon ? `${opponent.name} derrotado!` : "Você foi derrotado!", "system", 2);
 
     }
 
@@ -453,12 +453,12 @@ export default class PvpView {
         this.refresh();
 
         const enemyNames = this.getEnemyTeamCombatants().map(c => c.name).join(" e ");
-        await CombatToast.show(`Partida contra ${enemyNames} começou!`, "system");
+        await CombatToast.show(`Partida contra ${enemyNames} começou!`, "system", 2);
 
         await this.playTeamBattleLog(result.log);
 
         const iWon = result.winner === this.myTeamKey;
-        await CombatToast.show(iWon ? "Sua dupla venceu!" : "Sua dupla foi derrotada!", "system");
+        await CombatToast.show(iWon ? "Sua dupla venceu!" : "Sua dupla foi derrotada!", "system", 2);
 
     }
 
@@ -649,7 +649,7 @@ export default class PvpView {
             this.game.hudScreen.playerHUD.updateHP?.();
             this.game.hudScreen.monsterHUD.updateHP();
 
-            await CombatToast.show(this.buildAttackMessage(entry), this.buildToastType(entry));
+            await CombatToast.show(this.buildAttackMessage(entry), this.buildToastType(entry), 2);
 
             await this.sleep(500);
 
@@ -711,7 +711,7 @@ export default class PvpView {
 
             this.game.hudScreen.playerHUD.updateHP?.();
 
-            await CombatToast.show(this.buildTeamAttackMessage(entry, nameOf), this.buildTeamToastType(entry));
+            await CombatToast.show(this.buildTeamAttackMessage(entry, nameOf), this.buildTeamToastType(entry), 2);
 
             await this.sleep(450);
 

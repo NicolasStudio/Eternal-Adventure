@@ -94,6 +94,14 @@ export default class ItemTooltip {
             return "";
         }
 
+        // Equipamento que não seja arma (cabeça, peitoral, calça, bota)
+        // não pode ser encantado nem tem "efeito" — a seção some por
+        // completo, em vez de mostrar "Este item não possui efeitos
+        // especiais." sem necessidade.
+        if (this.item.slot && this.item.slot !== "weapon") {
+            return "";
+        }
+
         const enchantments = this.item.enchantments
             ? Object.entries(this.item.enchantments)
             : [];

@@ -176,7 +176,7 @@ export default class HudScreen {
                     <span class="material-symbols-outlined">location_city</span>
                     <span>Cidade</span>
                 </button>
-                <button class="nav-item ${pvpDisabled ? "disabled" : ""}" data-view="pvp">
+                <button class="nav-item ${this.currentView === "pvp" ? "active" : ""} ${pvpDisabled ? "disabled" : ""}" data-view="pvp">
                     <span class="material-symbols-outlined">swords</span>
                     <span>PVP</span>
                 </button>
@@ -201,7 +201,13 @@ export default class HudScreen {
         });
         this.element.querySelectorAll(".nav-item").forEach(button => {
             button.addEventListener("click", () => {
-                if ((this.inCombat && !this.preparationMode) || this.inPvpCombat) {
+                // Cada botão já sabe se está desabilitado (calculado em
+                // renderNavigation, é a mesma fonte usada pro visual) —
+                // checar isso aqui, em vez de uma condição genérica
+                // única, evita que o "modo preparação" (que libera só
+                // o Personagem) deixe passar cliques em Dungeons,
+                // Cidade ou PVP também.
+                if (button.classList.contains("disabled")) {
                     Toast.show("Você não pode trocar de tela durante um combate.");
                     return;
                 }
