@@ -74,8 +74,10 @@ export default class HudScreen {
 
     renderHeader() {
         const anyCombat = this.inCombat || this.inPvpCombat;
+        const isPvp2v2 = this.inPvpCombat && this.pvpView.mode === "2v2";
+        const headerModeClass = isPvp2v2 ? "pvp2v2" : (anyCombat ? "combat" : "exploration");
         return `
-            <header class="hud-header ${anyCombat ? "combat" : "exploration"}">
+            <header class="hud-header ${headerModeClass}">
                 <div class="hud-left-column">
                     ${this.playerHUD.render()}
                     ${!anyCombat ? this.chestHUD.render() : ""}
@@ -89,7 +91,8 @@ export default class HudScreen {
 
     renderRightPanel() {
         if (this.inCombat) return this.monsterHUD.render(this.combatView.currentMonster);
-        if (this.inPvpCombat) return this.monsterHUD.render(this.pvpView.opponentAsMonster());
+        if (this.inPvpCombat && this.pvpView.mode !== "2v2") return this.monsterHUD.render(this.pvpView.opponentAsMonster());
+        if (this.inPvpCombat) return "";
         return this.toolbarHUD.render();
     }
 

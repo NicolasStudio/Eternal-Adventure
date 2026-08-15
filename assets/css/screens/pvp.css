@@ -293,6 +293,106 @@
     font-size:.85rem;
 }
 
+.pvp-versus-team{
+    align-items:stretch;
+}
+.pvp-team-column{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+.pvp-team-column.winner .pvp-fighter-name{
+    border-color:#c79b37;
+    color:#f1c75c;
+    box-shadow:0 0 16px rgba(199,155,55,.3);
+}
+
+/* ==========================================================
+   2x2 — ARENA E CABEÇALHO ISOLADOS (não reaproveitam nada do
+   combate PVE nem do PVP 1x1 — layout próprio, posicionado de
+   forma explícita, sem depender do fluxo natural da página)
+========================================================== */
+.pvp2v2-header-inline{
+    position:absolute;
+    top:15px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    z-index:20;
+    text-align:center;
+}
+.pvp2v2-title{
+    font-family:"Cinzel",serif;
+    font-size:32px;
+    color:#f0d5b0;
+    text-transform:uppercase;
+    text-shadow:0 3px 10px rgba(0,0,0,.8);
+    border-bottom:3px solid #2c1810;
+    padding-bottom:4px;
+}
+.pvp2v2-subtitle{
+    margin-top:8px;
+    font-family:"Cinzel";
+    font-size:18px;
+    color:#f0a0a0;
+}
+
+.pvp2v2-window{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:2;
+}
+.pvp2v2-arena{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+}
+.pvp2v2-portraits{
+    position:absolute;
+    left:50%;
+    top:62%;
+    transform:translate(-50%,-50%);
+    display:flex;
+    gap:70px;
+    z-index:10;
+}
+.pvp2v2-portrait-slot{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+}
+.pvp2v2-portrait-slot img{
+    width:200px;
+    height:auto;
+    image-rendering:pixelated;
+    object-fit:contain;
+    filter:drop-shadow(0 15px 18px rgba(0,0,0,.6));
+}
+.pvp2v2-portrait-name{
+    font-family:"Cinzel",serif;
+    font-size:.9rem;
+    color:#d8c39b;
+    text-shadow:0 2px 6px rgba(0,0,0,.8);
+}
+.pvp2v2-mini-hp{
+    width:140px;
+    height:9px;
+    border:1px solid #5b4633;
+    border-radius:4px;
+    background:rgba(0,0,0,.5);
+    overflow:hidden;
+}
+.pvp2v2-mini-hp-fill{
+    height:100%;
+    background:linear-gradient(180deg,#c0392b,#8a2418);
+    transition:width .3s ease;
+}
+
 .pvp-log{
     width:100%;
     max-height:220px;

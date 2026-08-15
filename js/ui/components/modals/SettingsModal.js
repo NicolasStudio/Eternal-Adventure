@@ -100,6 +100,16 @@ export default class SettingsModal {
                     <a href="acknowledgments.html" class="acknowledgments" target="_blank">Ver sobre</a>
                 </section>
 
+                <section class="settings-section">
+                    <h3>Reportar Bug</h3>
+                    <a
+                        href="mailto:Eternal.Adventure.Idle@gmail.com?subject=${encodeURIComponent("[Bug] Eternal Adventure")}&body=${encodeURIComponent("Descreva aqui o que aconteceu, e se possível, o que você esperava que acontecesse em vez disso:\n\n\n\n(Se puder, anexe um print depois de enviar este e-mail — ajuda bastante!)")}"
+                        class="report-bug-link">
+                        <i class="fa-solid fa-bug"></i>
+                        Enviar e-mail de report
+                    </a>
+                </section>
+
                 ${this.inGame ? `
                     <footer class="settings-footer">
                         <button class="settings-exit-button" id="settings-exit">

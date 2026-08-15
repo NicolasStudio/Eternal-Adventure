@@ -315,6 +315,38 @@ export default class Player {
 
     }
 
+    // Vende de uma vez todos os itens vendíveis de uma raridade —
+    // pensado pra inventários grandes, onde vender item por item fica
+    // impraticável. Retorna quantos itens (contando pilhas de
+    // consumível) e quanto ouro foram vendidos.
+    sellItemsByRarity(rarityId) {
+
+        const matching = this.inventory.filter(
+            item => item.sellValue > 0 && item.rarity?.id === rarityId && item.slot
+        );
+
+        let totalGold = 0;
+        let totalCount = 0;
+
+        // Vende de trás pra frente — cada sellItem() já remove o item
+        // do array this.inventory, então percorrer por índice
+        // crescente pularia itens depois de uma remoção.
+        for (let i = matching.length - 1; i >= 0; i--) {
+
+            const item = matching[i];
+            const quantity = item.quantity ?? 1;
+
+            totalGold += ItemValueService.getSellValue(item) * quantity;
+            totalCount += quantity;
+
+            this.sellItem(item, quantity);
+
+        }
+
+        return { count: totalCount, gold: totalGold };
+
+    }
+
     addXP(amount) {
 
         if (!amount || amount <= 0) return;

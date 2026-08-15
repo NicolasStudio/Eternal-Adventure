@@ -31,6 +31,102 @@
 }
 
 /* ==========================================================
+   VENDA EM MASSA POR RARIDADE
+========================================================== */
+.market-bulk-sell{
+    margin-bottom:14px;
+    padding-bottom:14px;
+    border-bottom:1px solid rgba(139,115,85,.25);
+}
+.market-bulk-sell-label{
+    display:block;
+    margin-bottom:8px;
+    font-size:11px;
+    color:#8b7355;
+    letter-spacing:1px;
+    text-transform:uppercase;
+}
+.market-bulk-sell-options{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+}
+.market-bulk-sell-button{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:2px;
+    padding:6px 10px;
+    border:1px solid var(--rarity-color,#8b7355);
+    border-radius:5px;
+    background:rgba(0,0,0,.25);
+    color:var(--rarity-color,#d8c39b);
+    font-family:"Cinzel",serif;
+    font-size:11px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.2s;
+}
+.market-bulk-sell-button:hover{
+    background:rgba(255,255,255,.06);
+    box-shadow:0 0 10px color-mix(in srgb, var(--rarity-color,#8b7355) 40%, transparent);
+}
+.market-bulk-sell-button span{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    font-size:10px;
+    font-weight:400;
+    color:#d8c39b;
+}
+.market-bulk-sell-confirm{
+    margin-top:10px;
+    padding:10px 12px;
+    background:rgba(139,58,58,.12);
+    border:1px solid #8a3a3a;
+    border-radius:6px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+.market-bulk-sell-confirm span{
+    font-family:"MedievalSharp",cursive;
+    font-size:.85rem;
+    color:#f0d5c8;
+}
+.market-bulk-sell-confirm-actions{
+    display:flex;
+    gap:8px;
+}
+.market-bulk-sell-confirm-yes{
+    padding:6px 14px;
+    border:1px solid #2f6b2f;
+    border-radius:5px;
+    background:rgba(47,107,47,.25);
+    color:#a8e0a8;
+    font-family:"Cinzel",serif;
+    font-size:12px;
+    cursor:pointer;
+}
+.market-bulk-sell-confirm-yes:hover{
+    background:rgba(47,107,47,.4);
+}
+.market-bulk-sell-confirm-no{
+    padding:6px 14px;
+    border:1px solid #5b4633;
+    border-radius:5px;
+    background:rgba(0,0,0,.25);
+    color:#d8c39b;
+    font-family:"Cinzel",serif;
+    font-size:12px;
+    cursor:pointer;
+}
+.market-bulk-sell-confirm-no:hover{
+    border-color:#8a3a3a;
+    color:#f0a0a0;
+}
+
+/* ==========================================================
    LISTA
 ========================================================== */
 .market-item-list{

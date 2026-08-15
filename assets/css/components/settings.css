@@ -189,6 +189,24 @@
     transition: 300ms;
 }
 
+.report-bug-link{
+    text-decoration: none;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:#d8c39b;
+    font-size:.92rem;
+    cursor:pointer;
+    white-space:nowrap;
+    transition: 300ms;
+}
+.report-bug-link i{
+    color:#c77b4f;
+}
+.report-bug-link:hover{
+    color:#f0a878;
+}
+
 /* ==========================================================
    CONFIRMAÇÃO DE LIMPEZA DE DADOS
 ========================================================== */

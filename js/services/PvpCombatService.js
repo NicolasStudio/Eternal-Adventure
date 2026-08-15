@@ -130,4 +130,107 @@ export default class PvpCombatService {
 
     }
 
+    // Versão 2x2: teamA e teamB são arrays com 2 combatentes cada, e
+    // cada combatente precisa ter um "id" próprio (pra distinguir os
+    // dois integrantes do mesmo time no log). Todos os 4 agem uma vez
+    // por rodada, na ordem da agilidade (do mais rápido pro mais
+    // lento) — cada ataque mira um alvo VIVO aleatório do time
+    // inimigo. Termina quando um time inteiro fica com HP 0.
+    static simulateTeam(teamA, teamB, seed) {
+
+        const rng = mulberry32(seed);
+
+        const a = teamA.map(c => ({ ...c, team: "a" }));
+        const b = teamB.map(c => ({ ...c, team: "b" }));
+        const all = [...a, ...b];
+
+        // Ordem de turno fixa por agilidade — decidida uma vez só, no
+        // início. Empate mantém a ordem de entrada (não usa o RNG
+        // aqui, pra reservar ele só pra esquiva/crítico/alvo — usar
+        // pra desempate também arriscaria o resultado desalinhar
+        // entre navegadores diferentes por causa de engine de sort).
+        const turnOrder = [...all].sort((x, y) => y.agility - x.agility);
+
+        const log = [];
+        let guard = 0;
+
+        const aliveOf = (team) => (team === "a" ? a : b).filter(c => c.currentHP > 0);
+
+        while (aliveOf("a").length > 0 && aliveOf("b").length > 0 && guard < 1000) {
+
+            guard++;
+
+            for (const attacker of turnOrder) {
+
+                if (attacker.currentHP <= 0) continue;
+
+                const enemyTeam = attacker.team === "a" ? "b" : "a";
+                const targets = aliveOf(enemyTeam);
+
+                if (targets.length === 0) break; // time inimigo já perdeu
+
+                const target = targets[Math.floor(rng() * targets.length)];
+
+                const dodgeChance = Math.min(
+                    DODGE_CAP,
+                    Math.max(0, target.agility - attacker.agility)
+                );
+
+                if (rng() * 100 < dodgeChance) {
+
+                    log.push({
+                        attackerId: attacker.id,
+                        attackerTeam: attacker.team,
+                        targetId: target.id,
+                        dodged: true
+                    });
+
+                    continue;
+
+                }
+
+                const isCritical = rng() * 100 < attacker.criticalChance;
+                const criticalMultiplier = isCritical ? 1.5 : 1;
+                const effectiveArmor = target.armor * (1 - attacker.penetration / 100);
+                const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
+                const damage = Math.max(1, Math.floor(attacker.attack * criticalMultiplier * mitigation));
+
+                target.currentHP = Math.max(0, target.currentHP - damage);
+
+                let lifeStealAmount = 0;
+
+                if (rng() * 100 < attacker.lifeSteal) {
+                    lifeStealAmount = Math.floor(damage * 0.20) + Math.floor(attacker.maxHP * 0.02);
+                    attacker.currentHP = Math.min(attacker.maxHP, attacker.currentHP + lifeStealAmount);
+                }
+
+                log.push({
+                    attackerId: attacker.id,
+                    attackerTeam: attacker.team,
+                    targetId: target.id,
+                    dodged: false,
+                    damage,
+                    critical: isCritical,
+                    lifeSteal: lifeStealAmount
+                });
+
+                if (aliveOf(enemyTeam).length === 0) break;
+
+            }
+
+        }
+
+        const winner = aliveOf("a").length > 0 ? "a" : "b";
+
+        return {
+            winner,
+            log,
+            finalState: {
+                a: a.map(c => ({ id: c.id, currentHP: c.currentHP })),
+                b: b.map(c => ({ id: c.id, currentHP: c.currentHP }))
+            }
+        };
+
+    }
+
 }

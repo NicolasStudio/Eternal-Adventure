@@ -7,6 +7,7 @@ export default class MarketView {
         this.selectedItem = null;
         this.sellQuantity = 1;
         this.keydownBound = false;
+        this.confirmBulkSellRarity = null;
     }
 
     get player() {
@@ -63,6 +64,7 @@ export default class MarketView {
                     Inventário
                     <span>${items.length} itens</span>
                 </div>
+                ${this.renderBulkSellPanel(items)}
                 <div class="market-item-list">
                     ${items.map(item => this.renderItem(item)).join("")}
                 </div>
@@ -323,6 +325,92 @@ export default class MarketView {
         return this.inventory.filter(item => item.sellValue > 0);
     }
 
+    // Agrupa os itens vendíveis por raridade, com contagem e valor
+    // total — a base do painel de "vender tudo de uma raridade".
+    // Só considera EQUIPAMENTO (tem .slot) — poções e pedras também
+    // têm raridade, mas já têm sua própria forma de vender por
+    // quantidade (o controle deslizante), então misturá-las aqui
+    // criaria o risco de vender poção/pedra sem querer junto com
+    // equipamento duplicado.
+    getBulkSellSummary(items) {
+
+        const groups = {};
+
+        items.forEach(item => {
+
+            if (!item.slot) return;
+
+            const rarityId = item.rarity?.id;
+
+            if (!rarityId) return;
+
+            if (!groups[rarityId]) {
+                groups[rarityId] = {
+                    rarity: item.rarity,
+                    count: 0,
+                    gold: 0
+                };
+            }
+
+            const quantity = item.quantity ?? 1;
+
+            groups[rarityId].count += quantity;
+            groups[rarityId].gold += ItemValueService.getSellValue(item) * quantity;
+
+        });
+
+        return Object.values(groups).sort((a, b) => b.gold - a.gold);
+
+    }
+
+    renderBulkSellPanel(items) {
+
+        const summary = this.getBulkSellSummary(items);
+
+        if (!summary.length) return "";
+
+        return `
+            <div class="market-bulk-sell">
+
+                <span class="market-bulk-sell-label">Vender tudo de uma raridade:</span>
+
+                <div class="market-bulk-sell-options">
+                    ${summary.map(group => `
+                        <button
+                            class="market-bulk-sell-button"
+                            style="--rarity-color:${group.rarity.color}"
+                            data-rarity="${group.rarity.id}">
+                            ${group.rarity.name}
+                            <span>${group.count}x · ${group.gold} <i class="fa-solid fa-coins"></i></span>
+                        </button>
+                    `).join("")}
+                </div>
+
+                ${this.confirmBulkSellRarity ? this.renderBulkSellConfirm(summary) : ""}
+
+            </div>
+        `;
+
+    }
+
+    renderBulkSellConfirm(summary) {
+
+        const group = summary.find(g => g.rarity.id === this.confirmBulkSellRarity);
+
+        if (!group) return "";
+
+        return `
+            <div class="market-bulk-sell-confirm">
+                <span>Vender ${group.count} itens ${group.rarity.name} por ${group.gold} ouro?</span>
+                <div class="market-bulk-sell-confirm-actions">
+                    <button class="market-bulk-sell-confirm-yes">Confirmar</button>
+                    <button class="market-bulk-sell-confirm-no">Cancelar</button>
+                </div>
+            </div>
+        `;
+
+    }
+
     renderStats() {
 
         const item = this.selectedItem;
@@ -487,6 +575,7 @@ export default class MarketView {
 
     registerEvents(container = document) {
         container.querySelector(".market-close")?.addEventListener("click", () => {
+            this.confirmBulkSellRarity = null;
             this.game.hudScreen.changeView("city");
         });
         container.querySelectorAll(".market-item").forEach(button => {
@@ -497,6 +586,36 @@ export default class MarketView {
                 this.sellQuantity = 1;
                 this.game.hudScreen.refreshCurrentView();
             });
+        });
+
+        container.querySelectorAll(".market-bulk-sell-button").forEach(button => {
+            button.addEventListener("click", () => {
+                this.confirmBulkSellRarity = button.dataset.rarity;
+                this.game.hudScreen.refreshCurrentView();
+            });
+        });
+
+        container.querySelector(".market-bulk-sell-confirm-yes")?.addEventListener("click", () => {
+
+            const rarityId = this.confirmBulkSellRarity;
+            this.confirmBulkSellRarity = null;
+
+            const result = this.player.sellItemsByRarity(rarityId);
+
+            if (result.count === 0) {
+                Toast.show("Nenhum item vendido.");
+            } else {
+                Toast.show(`${result.count} itens vendidos por ${result.gold} ouro.`);
+            }
+
+            this.selectedItem = null;
+            this.game.hudScreen.refreshCurrentView();
+
+        });
+
+        container.querySelector(".market-bulk-sell-confirm-no")?.addEventListener("click", () => {
+            this.confirmBulkSellRarity = null;
+            this.game.hudScreen.refreshCurrentView();
         });
 
         container.querySelector(".market-quantity-slider")?.addEventListener("input", (event) => {
