@@ -1,35 +1,28 @@
-import experience from "./experience.js";
-
 /*
     XP concedida por monstro, de acordo com o NÍVEL do monstro (não o
-    nível do jogador). Calculada a partir do que o jogo realmente
-    exige pra subir de nível (experience.js) — não é um número solto,
-    é o valor bruto exigido pra alcançar o PRÓXIMO nível, dividido
-    por um "ritmo de farm" (quantos monstros deveriam bastar pra
-    subir um nível).
+    nível do jogador) — fórmula simples: nível × 10.
 
-    Isso é importante: o campo "required" de experience.js NÃO é uma
-    diferença entre níveis, é o valor cheio que o jogo compara contra
-    a XP atual do personagem (que reseta a cada level up). Uma tabela
-    de recompensa que não seguir essa mesma escala deixa o jogo
-    ou impossível de upar (recompensa pequena demais) ou upando
-    instantaneamente (recompensa grande demais).
+    A partir do nível 70, a XP recebe um reforço extra em cima disso
+    (multiplicador crescente), pra compensar o quanto fica mais lento
+    upar no fim de jogo.
 
-    Pra ajustar o ritmo de XP do jogo inteiro, mexe só no
-    KILLS_PER_LEVEL abaixo — não precisa tocar em cada monstro.
+    Chefes de dungeon dão 3.5x esse valor (aplicado em
+    LootSystem.js, não aqui — essa tabela guarda só o valor "base").
 */
-const KILLS_PER_LEVEL = 8;
+const LATE_GAME_LEVEL = 70;
+const LATE_GAME_BONUS_PER_LEVEL = 0.02; // +2% por nível acima de 70
 
 const xpByLevel = {};
 
 for (let level = 1; level <= 100; level++) {
 
-    // XP exigida pra alcançar o PRÓXIMO nível a partir deste — é
-    // esse valor que precisa ser "dividido" entre os monstros mortos.
-    const nextLevelData = experience[level + 1] ?? experience[level];
-    const requiredForNext = nextLevelData?.required ?? experience[level].required;
+    const base = level * 10;
 
-    xpByLevel[level] = Math.max(10, Math.round(requiredForNext / KILLS_PER_LEVEL));
+    const lateGameMultiplier = level > LATE_GAME_LEVEL
+        ? 1 + (level - LATE_GAME_LEVEL) * LATE_GAME_BONUS_PER_LEVEL
+        : 1;
+
+    xpByLevel[level] = Math.round(base * lateGameMultiplier);
 
 }
 
