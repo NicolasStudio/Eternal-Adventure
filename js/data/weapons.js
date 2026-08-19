@@ -49,7 +49,7 @@ const weapons = {
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
-            absorption: 3
+            absorption: 5
         },
 
         value: 360,
@@ -75,7 +75,7 @@ const weapons = {
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
-            absorption: 4
+            absorption: 6
         },
 
         value: 1080,
@@ -101,7 +101,7 @@ const weapons = {
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
-            absorption: 5
+            absorption: 10
         },
 
         value: 3240,
@@ -127,7 +127,7 @@ const weapons = {
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
-            absorption: 8
+            absorption: 11
         },
 
         value: 9720,
@@ -153,7 +153,7 @@ const weapons = {
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
-            absorption: 10
+            absorption: 15
         },
 
         value: 0,
@@ -180,7 +180,7 @@ const weapons = {
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
-            penetration: 1
+            penetration: 2
         },
         value: 120,
         sellValue: 60
@@ -202,7 +202,7 @@ const weapons = {
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
-            penetration: 1
+            penetration: 5
         },
         value: 360,
         sellValue: 180
@@ -224,7 +224,7 @@ const weapons = {
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
-            penetration: 2
+            penetration: 6
         },
         value: 1080,
         sellValue: 540
@@ -246,7 +246,7 @@ const weapons = {
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
-            penetration: 2
+            penetration: 10
         },
         value: 3240,
         sellValue: 1620  
@@ -268,7 +268,7 @@ const weapons = {
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
-            penetration: 3
+            penetration: 11
         },
         value: 9720,
         sellValue: 4860
@@ -290,7 +290,7 @@ const weapons = {
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
-            penetration: 4
+            penetration: 15
         },
         value: 0,
         sellValue: 0
@@ -313,7 +313,7 @@ const weapons = {
             attack: 5,
             armor: 0,
             agility: 2,
-            criticalChance: 1,
+            criticalChance: 2,
             lifeSteal: 0,
             penetration: 0
         },
@@ -335,7 +335,7 @@ const weapons = {
             attack: 9,
             armor: 0,
             agility: 4,
-            criticalChance: 1,
+            criticalChance: 5,
             lifeSteal: 0,
             penetration: 0
         },
@@ -357,7 +357,7 @@ const weapons = {
             attack: 18,
             armor: 0,
             agility: 7,
-            criticalChance: 2,
+            criticalChance: 6,
             lifeSteal: 0,
             penetration: 0
         },
@@ -379,7 +379,7 @@ const weapons = {
             attack: 28,
             armor: 0,
             agility: 8,
-            criticalChance: 2,
+            criticalChance: 10,
             lifeSteal: 0,
             penetration: 0
         },
@@ -401,7 +401,7 @@ const weapons = {
             attack: 40,
             armor: 0,
             agility: 9,
-            criticalChance: 3,
+            criticalChance: 11,
             lifeSteal: 0,
             penetration: 0
         },
@@ -423,7 +423,7 @@ const weapons = {
             attack: 55,
             armor: 0,
             agility: 11,
-            criticalChance: 4,
+            criticalChance: 15,
             lifeSteal: 0,
             penetration: 0
         },
@@ -472,7 +472,7 @@ const weapons = {
             armor: 0,
             agility: 2,
             criticalChance: 0,
-            lifeSteal: 2,
+            lifeSteal: 5,
             penetration: 0,
             absorption: 0
         },
@@ -495,7 +495,7 @@ const weapons = {
             armor: 0,
             agility: 3,
             criticalChance: 0,
-            lifeSteal: 3,
+            lifeSteal: 6,
             penetration: 0,
             absorption: 0
         },
@@ -518,7 +518,7 @@ const weapons = {
             armor: 0,
             agility: 5,
             criticalChance: 0,
-            lifeSteal: 4,
+            lifeSteal: 10,
             penetration: 0,
             absorption: 0
         },
@@ -541,7 +541,7 @@ const weapons = {
             armor: 0,
             agility: 7,
             criticalChance: 0,
-            lifeSteal: 6,
+            lifeSteal: 11,
             penetration: 0,
             absorption: 0
         },
@@ -564,7 +564,7 @@ const weapons = {
             armor: 0,
             agility: 9,
             criticalChance: 0,
-            lifeSteal: 8,
+            lifeSteal: 15,
             penetration: 0,
             absorption: 0
         },

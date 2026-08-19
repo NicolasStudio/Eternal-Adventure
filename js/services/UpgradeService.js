@@ -12,22 +12,22 @@ const SECONDARY_STATS = ["criticalChance", "lifeSteal", "penetration", "absorpti
 // Bônus de "Excepcional" pra status SECUNDÁRIOS (% com teto por
 // raridade — ver rarities.js/secondaryCap), por raridade do item.
 // NÃO reaproveita a fórmula dos principais (qualityStep × stepMultiplier)
-// de propósito: pra um item místico isso daria +21 de uma vez só numa
-// única peça — sozinha já quase batendo no teto de 28%, fazendo
-// qualquer segunda peça com o mesmo status virar bônus jogado fora (o
-// teto descartava a maior parte do valor investido em melhoria/segunda
-// peça, o que sente errado pro jogador). Os itens (weapons.js/
-// helmets.js/boots.js) já foram recalibrados nos valores BASE contando
-// com esse bônus menor — a soma das peças relevantes só bate o teto da
-// raridade quando as DUAS pontas (base + as duas peças no Excepcional)
-// estão completas, nunca uma peça sozinha.
+// de propósito — daria um valor gigante de uma vez só numa única peça.
+//
+// Desde a v3 do balanceamento, Crítico/Roubo de Vida/Penetração/Absorção
+// não vêm mais de level up NENHUM — só de Arma + Chapéu (ou Arma + Elmo,
+// no caso do Bárbaro). Os valores BASE desses dois itens (weapons.js/
+// helmets.js) foram recalibrados junto com esse bônus pra que as DUAS
+// peças, completas E no Excepcional, cheguem exatamente no teto da
+// raridade (rarities.js/secondaryCap) — nem uma peça sozinha chega perto,
+// nem sobra bônus desperdiçado pelo teto.
 const SECONDARY_EXCEPTIONAL_BONUS = {
-    common: 1,
-    uncommon: 1,
-    rare: 1,
-    mystic: 2,
-    legendary: 3,
-    ultraje: 3
+    common: 2,
+    uncommon: 3,
+    rare: 5,
+    mystic: 6,
+    legendary: 8,
+    ultraje: 10
 };
 
 export default class UpgradeService {

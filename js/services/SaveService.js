@@ -2,9 +2,22 @@ import classes from "../player/classes.js";
 import Player from "../player/Player.js";
 import enchantmentStone from "../data/enchantmentStone.js";
 import StatsMigrationService, { CURRENT_BALANCE_VERSION } from "./StatsMigrationService.js";
+import UpgradeService from "./UpgradeService.js";
+import weapons from "../data/weapons.js";
+import helmets from "../data/helmets.js";
+import chests from "../data/chest.js";
+import legs from "../data/legs.js";
+import boots from "../data/boots.js";
 
 const STORAGE_KEY = "eternal-adventure-save";
 const SAVE_VERSION = 1;
+
+// Todo item de equipamento conhecido, indexado por id — usado só pra
+// "refrescar" itens salvos (ver refreshItemStats), nunca alterado.
+const EQUIPMENT_BY_ID = {};
+[weapons, helmets, chests, legs, boots].forEach(pool => {
+    Object.values(pool).forEach(item => { EQUIPMENT_BY_ID[item.id] = item; });
+});
 
 export default class SaveService {
 
@@ -110,8 +123,31 @@ export default class SaveService {
 
         }
 
+        // Rede de segurança independente da migração acima: nenhum
+        // atributo-base deveria existir como número negativo — nada no
+        // jogo tira pontos deles, só soma. Roda em TODO carregamento
+        // (não só quando a migração dispara), pra corrigir sozinho
+        // qualquer save que já tenha ficado com um valor negativo
+        // gravado (ex: de uma migração anterior), mesmo que o
+        // balanceVersion dele já esteja atualizado.
+        for (const key of Object.keys(player.baseStats)) {
+            player.baseStats[key] = Math.max(0, player.baseStats[key] ?? 0);
+        }
+
         player.inventory = this.repairStones(data.inventory ?? []);
         player.equipment = data.equipment ?? player.equipment;
+
+        // Arma/armadura guardam uma FOTO dos próprios atributos-base no
+        // momento em que foram coletadas (item.baseStats) — se os
+        // valores de weapons.js/helmets.js/etc. mudarem depois (ex: esse
+        // reequilíbrio movendo Crítico/Roubo de Vida/Penetração/Absorção
+        // pra dentro dos itens), um item que o jogador já tinha antes
+        // dessa mudança ficaria PRA SEMPRE com os números antigos, só
+        // itens NOVOS sairiam com os atuais. Isso re-sincroniza todo
+        // item já possuído (mantendo raridade/qualidade/encantamento)
+        // com a definição atual do jogo, toda vez que um save é
+        // carregado — barato e sempre seguro de repetir.
+        this.refreshAllItemStats(player);
 
         player.progress = data.progress ?? player.progress;
 
@@ -144,6 +180,37 @@ export default class SaveService {
         }
 
         return player;
+
+    }
+
+    // Recalcula item.baseStats/item.stats de UM item de equipamento a
+    // partir da definição atual do jogo (weapons.js/helmets.js/etc.),
+    // preservando tudo que é específico DESSE item salvo (raridade,
+    // qualidade, encantamentos, uid). Pedra de encantamento e item sem
+    // slot (ex: item genérico) não têm baseStats — ficam intocados.
+    static refreshItemStats(item) {
+
+        if (!item?.id || !item?.baseStats) return item;
+
+        const canonical = EQUIPMENT_BY_ID[item.id];
+
+        if (!canonical) return item;
+
+        item.baseStats = structuredClone(canonical.stats);
+
+        UpgradeService.applyStats(item);
+
+        return item;
+
+    }
+
+    static refreshAllItemStats(player) {
+
+        player.inventory.forEach(item => this.refreshItemStats(item));
+
+        Object.values(player.equipment).forEach(item => {
+            if (item) this.refreshItemStats(item);
+        });
 
     }
 

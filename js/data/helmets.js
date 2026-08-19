@@ -17,7 +17,7 @@ const helmets = {
 
         stats: {
             armor: 2,
-            absorption: 1
+            absorption: 2
         },
 
         value: 50,
@@ -37,7 +37,7 @@ const helmets = {
 
         stats: {
             armor: 4,
-            absorption: 2
+            absorption: 3
         },
 
         value: 200,
@@ -57,7 +57,7 @@ const helmets = {
 
         stats: {
             armor: 6,
-            absorption: 3
+            absorption: 4
         },
 
         value: 720,
@@ -77,7 +77,7 @@ const helmets = {
 
         stats: {
             armor: 8,
-            absorption: 3
+            absorption: 6
         },
 
         value: 2160,
@@ -97,7 +97,7 @@ const helmets = {
 
         stats: {
             armor: 14,
-            absorption: 5
+            absorption: 8
         },
 
         value: 6480,
@@ -117,7 +117,7 @@ const helmets = {
 
         stats: {
             armor: 18,
-            absorption: 6
+            absorption: 10
         },
 
         value: 0,
@@ -140,7 +140,7 @@ const helmets = {
 
         stats: {
             armor: 2,
-            penetration: 0
+            penetration: 2
         },
 
         value: 50,
@@ -160,7 +160,7 @@ const helmets = {
 
         stats: {
             armor: 4,
-            penetration: 1
+            penetration: 3
         },
 
         value: 200,
@@ -180,7 +180,7 @@ const helmets = {
 
         stats: {
             armor: 6,
-            penetration: 1
+            penetration: 4
         },
 
         value: 720,
@@ -200,7 +200,7 @@ const helmets = {
 
         stats: {
             armor: 8,
-            penetration: 1
+            penetration: 6
         },
 
         value: 2160,
@@ -220,7 +220,7 @@ const helmets = {
 
         stats: {
             armor: 14,
-            penetration: 2
+            penetration: 8
         },
 
         value: 6480,
@@ -240,7 +240,7 @@ const helmets = {
 
         stats: {
             armor: 18,
-            penetration: 3
+            penetration: 10
         },
 
         value: 0,
@@ -263,7 +263,7 @@ const helmets = {
 
         stats: {
             armor: 2,
-            criticalChance: 0
+            criticalChance: 2
         },
 
         value: 50,
@@ -283,7 +283,7 @@ const helmets = {
 
         stats: {
             armor: 4,
-            criticalChance: 1
+            criticalChance: 3
         },
 
         value: 200,
@@ -303,7 +303,7 @@ const helmets = {
 
         stats: {
             armor: 6,
-            criticalChance: 1
+            criticalChance: 4
         },
 
         value: 720,
@@ -323,7 +323,7 @@ const helmets = {
 
         stats: {
             armor: 8,
-            criticalChance: 1
+            criticalChance: 6
         },
 
         value: 2160,
@@ -343,7 +343,7 @@ const helmets = {
 
         stats: {
             armor: 14,
-            criticalChance: 2
+            criticalChance: 8
         },
 
         value: 6480,
@@ -363,7 +363,7 @@ const helmets = {
 
         stats: {
             armor: 18,
-            criticalChance: 3
+            criticalChance: 10
         },
 
         value: 0,
@@ -385,7 +385,8 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-barbarian-rarity-comum.png",
 
         stats: {
-            armor: 2
+            armor: 2,
+            lifeSteal: 2
         },
 
         value: 50,
@@ -404,7 +405,8 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-barbarian-rarity-incomum.png",
 
         stats: {
-            armor: 4
+            armor: 4,
+            lifeSteal: 3
         },
 
         value: 200,
@@ -423,7 +425,8 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-barbarian-rarity-rare.png",
 
         stats: {
-            armor: 5
+            armor: 5,
+            lifeSteal: 4
         },
 
         value: 720,
@@ -442,7 +445,8 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-barbarian-rarity-mistico.png",
 
         stats: {
-            armor: 7
+            armor: 7,
+            lifeSteal: 6
         },
 
         value: 2160,
@@ -461,7 +465,8 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-barbarian-rarity-lendario.png",
 
         stats: {
-            armor: 12
+            armor: 12,
+            lifeSteal: 8
         },
 
         value: 6480,
@@ -480,7 +485,8 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-barbarian-rarity-ultraje.png",
 
         stats: {
-            armor: 16
+            armor: 16,
+            lifeSteal: 10
         },
 
         value: 0,

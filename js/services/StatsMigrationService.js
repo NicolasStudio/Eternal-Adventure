@@ -1,5 +1,6 @@
 import levels from "../data/levels.js";
 import legacyLevels_v1 from "../data/legacyLevels_v1.js";
+import legacyLevels_v2 from "../data/legacyLevels_v2.js";
 import baseStatsL1 from "../data/baseStatsL1.js";
 
 // Sobe toda vez que a curva de levels.js (ou o formato de baseStats)
@@ -11,12 +12,18 @@ import baseStatsL1 from "../data/baseStatsL1.js";
 //     Absorção, sem Bárbaro).
 // v2: reequilíbrio — Guerreiro ganha Absorção como especial (Roubo de
 //     Vida vira secundário), Arqueiro/Mago suavizados, Bárbaro criado.
-export const CURRENT_BALANCE_VERSION = 2;
+//     Crítico/Roubo de Vida/Penetração/Absorção ainda vinham (em parte)
+//     de level up.
+// v3: Crítico/Roubo de Vida/Penetração/Absorção deixam de vir de level
+//     up — passam a vir 100% de Arma + Chapéu (Arma + Elmo, no caso do
+//     Bárbaro), pra ficar visível pro jogador de onde cada ponto vem.
+export const CURRENT_BALANCE_VERSION = 3;
 
 const STAT_KEYS = ["attack", "armor", "agility", "criticalChance", "lifeSteal", "penetration", "absorption"];
 
 const LEGACY_TABLES = {
-    1: legacyLevels_v1
+    1: legacyLevels_v1,
+    2: legacyLevels_v2
 };
 
 export default class StatsMigrationService {
@@ -81,7 +88,13 @@ export default class StatsMigrationService {
 
             const extra = (savedBaseStats?.[key] ?? 0) - (oldCumulative[key] ?? 0);
 
-            baseStats[key] = (newCumulative[key] ?? 0) + extra;
+            // Nenhum atributo-base deveria conseguir ficar negativo — nada
+            // no jogo tira pontos desses status, só soma. Se o "extra"
+            // calculado vier negativo por qualquer inconsistência no save
+            // (nível/baseStats fora de sincronia de uma sessão antiga,
+            // por exemplo), trava em 0 em vez de arrastar esse número
+            // negativo pra curva nova.
+            baseStats[key] = Math.max(0, (newCumulative[key] ?? 0) + extra);
 
         }
 

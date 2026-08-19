@@ -66,6 +66,13 @@ export default class PlayerStats {
         // cena quando há raridade de item pra basear o limite.
         const cap = this.getHighestEquippedRarity()?.secondaryCap;
 
+        // Math.min sozinho só trava o TETO — sem o Math.max(0, ...),
+        // qualquer coisa que deixasse base.X negativo (ex: uma migração
+        // de save antiga fora de sincronia) passava direto pro jogador
+        // como "-2%" em vez de simplesmente não existir. Nenhum desses
+        // quatro atributos tem uma fonte legítima de valor negativo.
+        const clamp = (raw) => cap != null ? Math.max(0, Math.min(raw, cap)) : Math.max(0, raw);
+
         return {
 
             attack: (base.attack || 0) + (equipment.attack || 0),
@@ -74,13 +81,13 @@ export default class PlayerStats {
 
             agility: (base.agility || 0) + (equipment.agility || 0),
 
-            criticalChance: cap != null ? Math.min(rawCriticalChance, cap) : rawCriticalChance,
+            criticalChance: clamp(rawCriticalChance),
 
-            lifeSteal: cap != null ? Math.min(rawLifeSteal, cap) : rawLifeSteal,
+            lifeSteal: clamp(rawLifeSteal),
 
-            penetration: cap != null ? Math.min(rawPenetration, cap) : rawPenetration,
+            penetration: clamp(rawPenetration),
 
-            absorption: cap != null ? Math.min(rawAbsorption, cap) : rawAbsorption
+            absorption: clamp(rawAbsorption)
 
         };
     }
