@@ -9,6 +9,27 @@ const QUALITY_ORDER = ["none", "ordinary", "mediocre", "exceptional"];
 // (attack, armor, agility) ganham pontos a cada melhoria.
 const SECONDARY_STATS = ["criticalChance", "lifeSteal", "penetration", "absorption"];
 
+// Bônus de "Excepcional" pra status SECUNDÁRIOS (% com teto por
+// raridade — ver rarities.js/secondaryCap), por raridade do item.
+// NÃO reaproveita a fórmula dos principais (qualityStep × stepMultiplier)
+// de propósito: pra um item místico isso daria +21 de uma vez só numa
+// única peça — sozinha já quase batendo no teto de 28%, fazendo
+// qualquer segunda peça com o mesmo status virar bônus jogado fora (o
+// teto descartava a maior parte do valor investido em melhoria/segunda
+// peça, o que sente errado pro jogador). Os itens (weapons.js/
+// helmets.js/boots.js) já foram recalibrados nos valores BASE contando
+// com esse bônus menor — a soma das peças relevantes só bate o teto da
+// raridade quando as DUAS pontas (base + as duas peças no Excepcional)
+// estão completas, nunca uma peça sozinha.
+const SECONDARY_EXCEPTIONAL_BONUS = {
+    common: 1,
+    uncommon: 1,
+    rare: 1,
+    mystic: 2,
+    legendary: 3,
+    ultraje: 3
+};
+
 export default class UpgradeService {
 
     // Retorna a qualidade atual do item (item recém dropado = "none").
@@ -65,13 +86,15 @@ export default class UpgradeService {
     // um valor maior que zero pros status principais.
     static getBonusForStat(item, quality, statKey) {
 
-        const bonus = this.getStatBonusFor(item, quality);
+        if (SECONDARY_STATS.includes(statKey)) {
 
-        if (SECONDARY_STATS.includes(statKey) && quality?.id !== "exceptional") {
-            return 0;
+            if (quality?.id !== "exceptional") return 0;
+
+            return SECONDARY_EXCEPTIONAL_BONUS[item?.rarity?.id] ?? 0;
+
         }
 
-        return bonus;
+        return this.getStatBonusFor(item, quality);
 
     }
 

@@ -18,7 +18,10 @@ export default class AlbumModal {
 
     show() {
         this.index = 0;
-        this.revealAll = false;
+        // Se o jogador já confirmou "revelar" alguma vez, o álbum abre
+        // direto revelado — não faz sentido pedir a mesma confirmação
+        // de spoiler de novo toda vez que ele reabre a tela.
+        this.revealAll = this.player.progress.albumRevealed === true;
         this.confirming = false;
         this.mount();
     }
@@ -104,6 +107,7 @@ export default class AlbumModal {
 
             this.modal.querySelector("#album-confirm-yes")?.addEventListener("click", () => {
                 this.revealAll = true;
+                this.player.progress.albumRevealed = true;
                 this.confirming = false;
                 this.refresh();
             });
@@ -400,6 +404,7 @@ export default class AlbumModal {
         // Já descobriu tudo -> não tem spoiler nenhum, revela direto.
         if (allDiscovered) {
             this.revealAll = true;
+            this.player.progress.albumRevealed = true;
             this.refresh();
             return;
         }

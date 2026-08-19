@@ -30,7 +30,12 @@ export default class Player {
         this.inventory = [];
         this.progress = {
             dungeons: {},
-            soulChoice: null
+            soulChoice: null,
+            // Uma vez que o jogador confirma "sim, quero ver mesmo com
+            // spoiler" no álbum, essa escolha fica valendo pra sempre —
+            // não faz sentido pedir a mesma confirmação de novo toda vez
+            // que o álbum é reaberto.
+            albumRevealed: false
         };
         this.equipment = {
             weapon: null,

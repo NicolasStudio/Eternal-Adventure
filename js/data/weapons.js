@@ -23,7 +23,7 @@ const weapons = {
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
-            absorption: 1
+            absorption: 2
         },
 
         value: 120,
@@ -49,7 +49,7 @@ const weapons = {
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
-            absorption: 2
+            absorption: 3
         },
 
         value: 360,
@@ -75,7 +75,7 @@ const weapons = {
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
-            absorption: 3
+            absorption: 4
         },
 
         value: 1080,
@@ -127,7 +127,7 @@ const weapons = {
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
-            absorption: 7
+            absorption: 8
         },
 
         value: 9720,
@@ -224,7 +224,7 @@ const weapons = {
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
-            penetration: 3
+            penetration: 2
         },
         value: 1080,
         sellValue: 540
@@ -246,7 +246,7 @@ const weapons = {
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
-            penetration: 7
+            penetration: 2
         },
         value: 3240,
         sellValue: 1620  
@@ -268,7 +268,7 @@ const weapons = {
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
-            penetration: 12
+            penetration: 3
         },
         value: 9720,
         sellValue: 4860
@@ -290,7 +290,7 @@ const weapons = {
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
-            penetration: 18
+            penetration: 4
         },
         value: 0,
         sellValue: 0
@@ -357,7 +357,7 @@ const weapons = {
             attack: 18,
             armor: 0,
             agility: 7,
-            criticalChance: 3,
+            criticalChance: 2,
             lifeSteal: 0,
             penetration: 0
         },
@@ -379,7 +379,7 @@ const weapons = {
             attack: 28,
             armor: 0,
             agility: 8,
-            criticalChance: 7,
+            criticalChance: 2,
             lifeSteal: 0,
             penetration: 0
         },
@@ -401,7 +401,7 @@ const weapons = {
             attack: 40,
             armor: 0,
             agility: 9,
-            criticalChance: 12,
+            criticalChance: 3,
             lifeSteal: 0,
             penetration: 0
         },
@@ -423,7 +423,7 @@ const weapons = {
             attack: 55,
             armor: 0,
             agility: 11,
-            criticalChance: 18,
+            criticalChance: 4,
             lifeSteal: 0,
             penetration: 0
         },
@@ -449,7 +449,7 @@ const weapons = {
             armor: 0,
             agility: 1,
             criticalChance: 0,
-            lifeSteal: 0,
+            lifeSteal: 2,
             penetration: 0,
             absorption: 0
         },
@@ -472,7 +472,7 @@ const weapons = {
             armor: 0,
             agility: 2,
             criticalChance: 0,
-            lifeSteal: 0,
+            lifeSteal: 2,
             penetration: 0,
             absorption: 0
         },
@@ -495,7 +495,7 @@ const weapons = {
             armor: 0,
             agility: 3,
             criticalChance: 0,
-            lifeSteal: 0,
+            lifeSteal: 3,
             penetration: 0,
             absorption: 0
         },
@@ -518,7 +518,7 @@ const weapons = {
             armor: 0,
             agility: 5,
             criticalChance: 0,
-            lifeSteal: 0,
+            lifeSteal: 4,
             penetration: 0,
             absorption: 0
         },
@@ -541,7 +541,7 @@ const weapons = {
             armor: 0,
             agility: 7,
             criticalChance: 0,
-            lifeSteal: 0,
+            lifeSteal: 6,
             penetration: 0,
             absorption: 0
         },
@@ -564,7 +564,7 @@ const weapons = {
             armor: 0,
             agility: 9,
             criticalChance: 0,
-            lifeSteal: 0,
+            lifeSteal: 8,
             penetration: 0,
             absorption: 0
         },

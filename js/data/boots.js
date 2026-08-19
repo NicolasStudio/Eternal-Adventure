@@ -408,7 +408,7 @@ const boots = {
         stats: {
             armor: 2,
             agility: 7,
-            lifeSteal: 3
+            lifeSteal: 2
         },
 
         value: 240,
@@ -429,7 +429,7 @@ const boots = {
         stats: {
             armor: 3,
             agility: 12,
-            lifeSteal: 6
+            lifeSteal: 3
         },
 
         value: 720,
@@ -450,7 +450,7 @@ const boots = {
         stats: {
             armor: 5,
             agility: 13,
-            lifeSteal: 7
+            lifeSteal: 3
         },
 
         value: 2160,
@@ -471,7 +471,7 @@ const boots = {
         stats: {
             armor: 7,
             agility: 14,
-            lifeSteal: 13
+            lifeSteal: 5
         },
 
         value: 6480,
@@ -492,7 +492,7 @@ const boots = {
         stats: {
             armor: 9,
             agility: 16,
-            lifeSteal: 19
+            lifeSteal: 6
         },
 
         value: 0,
