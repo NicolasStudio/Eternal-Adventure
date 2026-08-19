@@ -371,6 +371,129 @@ const legs = {
 
     },
 
+/* ==========================================
+       BARBARIAN
+========================================== */
+    legs_barbarian_common: {
+
+        id: "legs_barbarian_common",
+        name: "Calças",
+        type: "armor",
+        slot: "leg",
+        class: "barbarian",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/legs/legs-barbarian-rarity-comum.png",
+
+        stats: {
+            armor: 2,
+            agility: 1
+        },
+
+        value: 95,
+        sellValue: 45
+
+    },
+
+    legs_barbarian_uncommon: {
+
+        id: "legs_barbarian_uncommon",
+        name: "Calças",
+        type: "armor",
+        slot: "leg",
+        class: "barbarian",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/legs/legs-barbarian-rarity-incomum.png",
+
+        stats: {
+            armor: 4,
+            agility: 3
+        },
+
+        value: 285,
+        sellValue: 135
+
+    },
+
+    legs_barbarian_rare: {
+
+        id: "legs_barbarian_rare",
+        name: "Calças",
+        type: "armor",
+        slot: "leg",
+        class: "barbarian",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/legs/legs-barbarian-rarity-rare.png",
+
+        stats: {
+            armor: 7,
+            agility: 4
+        },
+
+        value: 855,
+        sellValue: 405
+
+    },
+
+    legs_barbarian_mystic: {
+
+        id: "legs_barbarian_mystic",
+        name: "Calças",
+        type: "armor",
+        slot: "leg",
+        class: "barbarian",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/legs/legs-barbarian-rarity-mistico.png",
+
+        stats: {
+            armor: 10,
+            agility: 7
+        },
+
+        value: 2565,
+        sellValue: 1215
+
+    },
+
+    legs_barbarian_legendary: {
+
+        id: "legs_barbarian_legendary",
+        name: "Calças",
+        type: "armor",
+        slot: "leg",
+        class: "barbarian",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/legs/legs-barbarian-rarity-lendario.png",
+
+        stats: {
+            armor: 13,
+            agility: 8
+        },
+
+        value: 7695,
+        sellValue: 3645
+
+    },
+
+    legs_barbarian_ultraje: {
+
+        id: "legs_barbarian_ultraje",
+        name: "Calças",
+        type: "armor",
+        slot: "leg",
+        class: "barbarian",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/legs/legs-barbarian-rarity-ultraje.png",
+
+        stats: {
+            armor: 16,
+            agility: 10
+        },
+
+        value: 0,
+        sellValue: 0
+
+    },
+
 };
 
 export default legs;

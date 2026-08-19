@@ -112,6 +112,8 @@ export default class MarketView {
 
             lifeSteal: "fa-droplet",
 
+            absorption: "fa-cubes",
+
             dodge: "fa-wind",
 
             accuracy: "fa-bullseye",
@@ -316,7 +318,8 @@ export default class MarketView {
         const classes = {
             warrior: "Guerreiro",
             archer: "Arqueiro",
-            mage: "Mago"
+            mage: "Mago",
+            barbarian: "Bárbaro"
         };
         return classes[playerClass] ?? playerClass;
     }
@@ -496,6 +499,7 @@ export default class MarketView {
             penetration: "Penetração",
             criticalChance: "Chance Crítica",
             lifeSteal: "Roubo de Vida",
+            absorption: "Absorção",
             dodge: "Esquiva",
             accuracy: "Precisão",
             health: "Vida",

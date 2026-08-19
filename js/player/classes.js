@@ -47,6 +47,22 @@ const classes = {
 
         lore: "Os magos dedicam suas vidas ao estudo dos antigos grimórios esquecidos. Canalizando a energia arcana que permeia o mundo, são capazes de devastar exércitos inteiros com feitiços poderosos."
 
+    },
+
+    barbarian: {
+
+        id: "barbarian",
+
+        name: "Bárbaro",
+
+        image: "assets/img/assets/character/class/barbarian.png",
+
+        hud: "assets/img/assets/character/class/barbarian-hud.png",
+
+        description: "Especialista em combate bruto e resistência.",
+
+        lore: "Vindos das terras geladas além das fronteiras de Asterion, os bárbaros transformam fúria em força. Onde outros recuam, eles avançam — absorvendo golpes que derrubariam qualquer guerreiro comum e devolvendo cada gota de dano em vida roubada."
+
     }
 
 };

@@ -17,7 +17,7 @@ const helmets = {
 
         stats: {
             armor: 2,
-            lifeSteal: 1
+            absorption: 1
         },
 
         value: 50,
@@ -37,7 +37,7 @@ const helmets = {
 
         stats: {
             armor: 4,
-            lifeSteal: 1
+            absorption: 1
         },
 
         value: 200,
@@ -57,7 +57,7 @@ const helmets = {
 
         stats: {
             armor: 6,
-            lifeSteal: 3
+            absorption: 2
         },
 
         value: 720,
@@ -77,7 +77,7 @@ const helmets = {
 
         stats: {
             armor: 8,
-            lifeSteal: 5
+            absorption: 2
         },
 
         value: 2160,
@@ -97,7 +97,7 @@ const helmets = {
 
         stats: {
             armor: 14,
-            lifeSteal: 7
+            absorption: 3
         },
 
         value: 6480,
@@ -117,14 +117,14 @@ const helmets = {
 
         stats: {
             armor: 18,
-            lifeSteal: 10
+            absorption: 4
         },
 
         value: 0,
         sellValue: 0
 
     },
-        
+
 /* ==========================================
        MAGE
 ========================================== */
@@ -364,6 +364,123 @@ const helmets = {
         stats: {
             armor: 18,
             criticalChance: 10
+        },
+
+        value: 0,
+        sellValue: 0
+
+    },
+
+/* ==========================================
+       BARBARIAN
+========================================== */
+    helmet_barbarian_common: {
+
+        id: "helmet_barbarian_common",
+        name: "Elmo",
+        type: "armor",
+        slot: "helmet",
+        class: "barbarian",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/helmets/helmets-barbarian-rarity-comum.png",
+
+        stats: {
+            armor: 2
+        },
+
+        value: 50,
+        sellValue: 20
+
+    },
+
+    helmet_barbarian_uncommon: {
+
+        id: "helmet_barbarian_uncommon",
+        name: "Elmo",
+        type: "armor",
+        slot: "helmet",
+        class: "barbarian",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/helmets/helmets-barbarian-rarity-incomum.png",
+
+        stats: {
+            armor: 4
+        },
+
+        value: 200,
+        sellValue: 120
+
+    },
+
+    helmet_barbarian_rare: {
+
+        id: "helmet_barbarian_rare",
+        name: "Elmo",
+        type: "armor",
+        slot: "helmet",
+        class: "barbarian",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/helmets/helmets-barbarian-rarity-rare.png",
+
+        stats: {
+            armor: 5
+        },
+
+        value: 720,
+        sellValue: 360
+
+    },
+
+    helmet_barbarian_mystic: {
+
+        id: "helmet_barbarian_mystic",
+        name: "Elmo",
+        type: "armor",
+        slot: "helmet",
+        class: "barbarian",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/helmets/helmets-barbarian-rarity-mistico.png",
+
+        stats: {
+            armor: 7
+        },
+
+        value: 2160,
+        sellValue: 1080
+
+    },
+
+    helmet_barbarian_legendary: {
+
+        id: "helmet_barbarian_legendary",
+        name: "Elmo",
+        type: "armor",
+        slot: "helmet",
+        class: "barbarian",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/helmets/helmets-barbarian-rarity-lendario.png",
+
+        stats: {
+            armor: 12
+        },
+
+        value: 6480,
+        sellValue: 3240
+
+    },
+
+    helmet_barbarian_ultraje: {
+
+        id: "helmet_barbarian_ultraje",
+        name: "Elmo",
+        type: "armor",
+        slot: "helmet",
+        class: "barbarian",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/helmets/helmets-barbarian-rarity-ultraje.png",
+
+        stats: {
+            armor: 16
         },
 
         value: 0,

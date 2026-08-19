@@ -156,7 +156,8 @@ export default class ItemTooltip {
         const classes = {
             warrior: "Guerreiro",
             mage: "Mago",
-            archer: "Arqueiro"
+            archer: "Arqueiro",
+            barbarian: "Bárbaro"
         };
         return classes[classId] || classId;
     }
@@ -169,6 +170,7 @@ export default class ItemTooltip {
             case "criticalChance": return "Chance Crítica";
             case "lifeSteal": return "Roubo de Vida";
             case "penetration": return "Penetração";
+            case "absorption": return "Absorção";
             default: return stat;
         }
     }
@@ -181,6 +183,7 @@ export default class ItemTooltip {
             case "criticalChance": return "🎯";
             case "lifeSteal": return "🩸";
             case "penetration": return "💥";
+            case "absorption": return "🪨";
             case "life": return "❤️";
             default: return "•";
         }

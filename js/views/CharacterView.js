@@ -145,6 +145,11 @@ export default class CharacterView {
                         <span>${stats.penetration}%</span>
                     </div>
 
+                    <div class="character-stat">
+                        <span>Absorção</span>
+                        <span>${stats.absorption}%</span>
+                    </div>
+
                 </div>
 
             </div>
@@ -591,7 +596,7 @@ export default class CharacterView {
 
                 if (maxHealButton) {
 
-                    if (this.selectedItem.heal) {
+                    if (this.selectedItem.heal && (this.selectedItem.quantity ?? 1) > 1) {
 
                         const missing = this.game.player.maxHP - this.game.player.currentHP;
 

@@ -353,6 +353,123 @@ const chests = {
 
     },
 
+/* ==========================================
+       BARBARIAN
+========================================== */
+    chest_barbarian_common: {
+
+        id: "chest_barbarian_common",
+        name: "Peitoral",
+        type: "armor",
+        slot: "chest",
+        class: "barbarian",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/chest/chest-barbarian-rarity-comum.png",
+
+        stats: {
+            armor: 4
+        },
+
+        value: 100,
+        sellValue: 50
+
+    },
+
+    chest_barbarian_uncommon: {
+
+        id: "chest_barbarian_uncommon",
+        name: "Peitoral",
+        type: "armor",
+        slot: "chest",
+        class: "barbarian",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/chest/chest-barbarian-rarity-incomum.png",
+
+        stats: {
+            armor: 7
+        },
+
+        value: 300,
+        sellValue: 150
+
+    },
+
+    chest_barbarian_rare: {
+
+        id: "chest_barbarian_rare",
+        name: "Peitoral",
+        type: "armor",
+        slot: "chest",
+        class: "barbarian",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/chest/chest-barbarian-rarity-rare.png",
+
+        stats: {
+            armor: 14
+        },
+
+        value: 900,
+        sellValue: 450
+
+    },
+
+    chest_barbarian_mystic: {
+
+        id: "chest_barbarian_mystic",
+        name: "Peitoral",
+        type: "armor",
+        slot: "chest",
+        class: "barbarian",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/chest/chest-barbarian-rarity-mistico.png",
+
+        stats: {
+            armor: 18
+        },
+
+        value: 2700,
+        sellValue: 1350
+
+    },
+
+    chest_barbarian_legendary: {
+
+        id: "chest_barbarian_legendary",
+        name: "Peitoral",
+        type: "armor",
+        slot: "chest",
+        class: "barbarian",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/chest/chest-barbarian-rarity-lendario.png",
+
+        stats: {
+            armor: 24
+        },
+
+        value: 8100,
+        sellValue: 4050
+
+    },
+
+    chest_barbarian_ultraje: {
+
+        id: "chest_barbarian_ultraje",
+        name: "Peitoral",
+        type: "armor",
+        slot: "chest",
+        class: "barbarian",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/chest/chest-barbarian-rarity-ultraje.png",
+
+        stats: {
+            armor: 31
+        },
+
+        value: 0,
+        sellValue: 0
+
+    },
+
 };
 
 export default chests;

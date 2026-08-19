@@ -371,6 +371,135 @@ const boots = {
 
     },
 
+/* ==========================================
+       BARBARIAN
+========================================== */
+    boots_barbarian_common: {
+
+        id: "boots_barbarian_common",
+        name: "Botas",
+        type: "armor",
+        slot: "boot",
+        class: "barbarian",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/boots/boots-barbarian-rarity-comum.png",
+
+        stats: {
+            armor: 1,
+            agility: 4,
+            lifeSteal: 1
+        },
+
+        value: 80,
+        sellValue: 40
+
+    },
+
+    boots_barbarian_uncommon: {
+
+        id: "boots_barbarian_uncommon",
+        name: "Botas",
+        type: "armor",
+        slot: "boot",
+        class: "barbarian",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/boots/boots-barbarian-rarity-incomum.png",
+
+        stats: {
+            armor: 2,
+            agility: 7,
+            lifeSteal: 3
+        },
+
+        value: 240,
+        sellValue: 120
+
+    },
+
+    boots_barbarian_rare: {
+
+        id: "boots_barbarian_rare",
+        name: "Botas",
+        type: "armor",
+        slot: "boot",
+        class: "barbarian",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/boots/boots-barbarian-rarity-rare.png",
+
+        stats: {
+            armor: 3,
+            agility: 12,
+            lifeSteal: 6
+        },
+
+        value: 720,
+        sellValue: 360
+
+    },
+
+    boots_barbarian_mystic: {
+
+        id: "boots_barbarian_mystic",
+        name: "Botas",
+        type: "armor",
+        slot: "boot",
+        class: "barbarian",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/boots/boots-barbarian-rarity-mistico.png",
+
+        stats: {
+            armor: 5,
+            agility: 13,
+            lifeSteal: 7
+        },
+
+        value: 2160,
+        sellValue: 1080
+
+    },
+
+    boots_barbarian_legendary: {
+
+        id: "boots_barbarian_legendary",
+        name: "Botas",
+        type: "armor",
+        slot: "boot",
+        class: "barbarian",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/boots/boots-barbarian-rarity-lendario.png",
+
+        stats: {
+            armor: 7,
+            agility: 14,
+            lifeSteal: 13
+        },
+
+        value: 6480,
+        sellValue: 3240
+
+    },
+
+    boots_barbarian_ultraje: {
+
+        id: "boots_barbarian_ultraje",
+        name: "Botas",
+        type: "armor",
+        slot: "boot",
+        class: "barbarian",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/boots/boots-barbarian-rarity-ultraje.png",
+
+        stats: {
+            armor: 9,
+            agility: 16,
+            lifeSteal: 19
+        },
+
+        value: 0,
+        sellValue: 0
+
+    },
+
 };
 
 export default boots;

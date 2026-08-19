@@ -18,8 +18,9 @@ const upClasse = {
             armor: 30,
             agility: 10,
             criticalChance: 0,
-            lifeSteal: 10,
-            penetration: 0
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 10
         }
 
     },
@@ -42,8 +43,9 @@ const upClasse = {
             armor: 20,
             agility: 12,
             criticalChance: 0,
-            lifeSteal: 8,
-            penetration: 0
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 8
         }
 
     },
@@ -67,7 +69,8 @@ const upClasse = {
             agility: 15,
             criticalChance: 0,
             lifeSteal: 0,
-            penetration: 15
+            penetration: 15,
+            absorption: 0
         }
 
     },
@@ -91,7 +94,8 @@ const upClasse = {
             agility: 10,
             criticalChance: 0,
             lifeSteal: 0,
-            penetration: 20
+            penetration: 20,
+            absorption: 0
         }
 
     },
@@ -115,7 +119,8 @@ const upClasse = {
             agility: 20,
             criticalChance: 15,
             lifeSteal: 0,
-            penetration: 0
+            penetration: 0,
+            absorption: 0
         }
 
     },
@@ -139,7 +144,8 @@ const upClasse = {
             agility: 25,
             criticalChance: 20,
             lifeSteal: 0,
-            penetration: 0
+            penetration: 0,
+            absorption: 0
         }
 
     },

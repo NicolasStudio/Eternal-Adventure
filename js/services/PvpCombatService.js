@@ -12,13 +12,20 @@ const DODGE_CAP = 40;
     resultado sai idêntico nos dois navegadores, sem precisar de um
     servidor calculando por eles.
 
-    As fórmulas (mitigação proporcional de armadura, teto de esquiva)
-    são as mesmas usadas em CombatEngine.js — não reaproveitamos a
-    classe em si porque ela tem uma assimetria (Roubo de Vida só é
-    aplicado de verdade pro lado "player", nunca pro lado "monster")
-    que não faz diferença nas dungeons (monstro não tem esse atributo),
-    mas seria injusta num PVP onde os dois lados são jogadores de
-    verdade.
+    A mitigação de armadura e a absorção são as mesmas usadas em
+    CombatEngine.js — não reaproveitamos a classe em si porque ela tem uma
+    assimetria (Roubo de Vida só é aplicado de verdade pro lado "player",
+    nunca pro lado "monster") que não faz diferença nas dungeons (monstro
+    não tem esse atributo), mas seria injusta num PVP onde os dois lados
+    são jogadores de verdade.
+
+    A ESQUIVA é diferente de propósito: aqui usa uma razão proporcional
+    (`dodgeChance()`, abaixo) em vez do `min(40, max(0, agiDef-agiAtk))`
+    do CombatEngine.js — esse "tudo ou nada" travava em 0% sempre que o
+    defensor não fosse o mais ágil dos dois, o que deixava classes lentas
+    (Guerreiro) matematicamente injogáveis contra qualquer oponente mais
+    ágil. Dungeons (CombatEngine.js) não usam essa mudança de propósito —
+    lá o monstro não tem "carreira" de PVP pra proteger.
 */
 
 function mulberry32(seed) {
@@ -52,8 +59,24 @@ export default class PvpCombatService {
             agility: stats.agility,
             criticalChance: stats.criticalChance ?? 0,
             lifeSteal: stats.lifeSteal ?? 0,
-            penetration: stats.penetration ?? 0
+            penetration: stats.penetration ?? 0,
+            absorption: stats.absorption ?? 0
         };
+
+    }
+
+    // Esquiva proporcional: quem defende mais ágil que quem ataca dodga
+    // mais, mas nunca zera de vez pro lado mais lento (ao contrário de
+    // `min(40, max(0, agiDef - agiAtk))`, que travava em 0% sempre que o
+    // defensor não fosse o mais ágil dos dois — impossível de reverter só
+    // empilhando armadura/vida). Continua limitada a DODGE_CAP no teto.
+    static dodgeChance(defenderAgility, attackerAgility) {
+
+        const total = defenderAgility + attackerAgility;
+
+        if (total <= 0) return 0;
+
+        return DODGE_CAP * defenderAgility / total;
 
     }
 
@@ -79,10 +102,7 @@ export default class PvpCombatService {
             const attacker = turn === "a" ? a : b;
             const defender = turn === "a" ? b : a;
 
-            const dodgeChance = Math.min(
-                DODGE_CAP,
-                Math.max(0, defender.agility - attacker.agility)
-            );
+            const dodgeChance = this.dodgeChance(defender.agility, attacker.agility);
 
             if (rng() * 100 < dodgeChance) {
 
@@ -94,7 +114,9 @@ export default class PvpCombatService {
                 const criticalMultiplier = isCritical ? 1.5 : 1;
                 const effectiveArmor = defender.armor * (1 - attacker.penetration / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
-                const damage = Math.max(1, Math.floor(attacker.attack * criticalMultiplier * mitigation));
+                const absorption = Math.min(95, defender.absorption ?? 0);
+                const preAbsorption = Math.max(1, Math.floor(attacker.attack * criticalMultiplier * mitigation));
+                const damage = Math.max(1, Math.floor(preAbsorption * (1 - absorption / 100)));
 
                 defender.currentHP = Math.max(0, defender.currentHP - damage);
 
@@ -171,10 +193,7 @@ export default class PvpCombatService {
 
                 const target = targets[Math.floor(rng() * targets.length)];
 
-                const dodgeChance = Math.min(
-                    DODGE_CAP,
-                    Math.max(0, target.agility - attacker.agility)
-                );
+                const dodgeChance = this.dodgeChance(target.agility, attacker.agility);
 
                 if (rng() * 100 < dodgeChance) {
 
@@ -193,7 +212,9 @@ export default class PvpCombatService {
                 const criticalMultiplier = isCritical ? 1.5 : 1;
                 const effectiveArmor = target.armor * (1 - attacker.penetration / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
-                const damage = Math.max(1, Math.floor(attacker.attack * criticalMultiplier * mitigation));
+                const absorption = Math.min(95, target.absorption ?? 0);
+                const preAbsorption = Math.max(1, Math.floor(attacker.attack * criticalMultiplier * mitigation));
+                const damage = Math.max(1, Math.floor(preAbsorption * (1 - absorption / 100)));
 
                 target.currentHP = Math.max(0, target.currentHP - damage);
 

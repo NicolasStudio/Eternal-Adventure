@@ -124,7 +124,8 @@ export default class DungeonTooltip {
             agility: "Agilidade",
             criticalChance: "Chance Crítica",
             lifeSteal: "Roubo de Vida",
-            penetration: "Penetração"
+            penetration: "Penetração",
+            absorption: "Absorção"
         };
         return stats[stat] ?? stat;
     }
@@ -136,7 +137,8 @@ export default class DungeonTooltip {
             agility: "👢",
             criticalChance: "🎯",
             lifeSteal: "🩸",
-            penetration: "💥"
+            penetration: "💥",
+            absorption: "🪨"
         };
         return icons[stat] ?? "•";
     }

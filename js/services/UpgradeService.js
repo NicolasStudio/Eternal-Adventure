@@ -7,7 +7,7 @@ const QUALITY_ORDER = ["none", "ordinary", "mediocre", "exceptional"];
 // Status secundários só passam a receber bônus de melhoria quando o
 // item chega em "Excepcional". Antes disso, só os principais
 // (attack, armor, agility) ganham pontos a cada melhoria.
-const SECONDARY_STATS = ["criticalChance", "lifeSteal", "penetration"];
+const SECONDARY_STATS = ["criticalChance", "lifeSteal", "penetration", "absorption"];
 
 export default class UpgradeService {
 

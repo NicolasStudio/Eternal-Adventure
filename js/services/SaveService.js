@@ -1,6 +1,7 @@
 import classes from "../player/classes.js";
 import Player from "../player/Player.js";
 import enchantmentStone from "../data/enchantmentStone.js";
+import StatsMigrationService, { CURRENT_BALANCE_VERSION } from "./StatsMigrationService.js";
 
 const STORAGE_KEY = "eternal-adventure-save";
 const SAVE_VERSION = 1;
@@ -28,6 +29,7 @@ export default class SaveService {
             maxHP: player.maxHP,
 
             baseStats: player.baseStats,
+            balanceVersion: player.balanceVersion ?? CURRENT_BALANCE_VERSION,
 
             inventory: player.inventory,
             equipment: player.equipment,
@@ -70,10 +72,43 @@ export default class SaveService {
         player.level = data.level ?? player.level;
         player.gold = data.gold ?? player.gold;
         player.currentXP = data.currentXP ?? player.currentXP;
-        player.currentHP = data.currentHP ?? player.currentHP;
-        player.maxHP = data.maxHP ?? player.maxHP;
 
-        player.baseStats = data.baseStats ?? player.baseStats;
+        // Saves gravados antes do campo balanceVersion existir são
+        // sempre da curva original (v1). Se a curva de levels.js mudou
+        // desde então, recalcula baseStats/maxHP na curva ATUAL —
+        // preservando qualquer bônus que o personagem já tinha ganho
+        // além do level up puro (pedra de encantamento, transcendência).
+        // Sem isso, um personagem de nível alto salvo antes de um
+        // reequilíbrio ficaria PRA SEMPRE com os números antigos, mesmo
+        // com o jogo já rebalanceado — só quem começasse do zero sentiria
+        // a mudança.
+        const savedBalanceVersion = data.balanceVersion ?? 1;
+        const savedBaseStats = data.baseStats ?? player.baseStats;
+        const savedMaxHP = data.maxHP ?? player.maxHP;
+
+        if (savedBalanceVersion < CURRENT_BALANCE_VERSION) {
+
+            const migrated = StatsMigrationService.migrate(
+                characterClass.id,
+                player.level,
+                savedBaseStats,
+                savedMaxHP,
+                savedBalanceVersion
+            );
+
+            player.baseStats = migrated.baseStats;
+            player.maxHP = migrated.maxHP;
+            player.currentHP = player.maxHP;
+            player.balanceVersion = CURRENT_BALANCE_VERSION;
+
+        } else {
+
+            player.baseStats = savedBaseStats;
+            player.maxHP = savedMaxHP;
+            player.currentHP = data.currentHP ?? player.currentHP;
+            player.balanceVersion = savedBalanceVersion;
+
+        }
 
         player.inventory = this.repairStones(data.inventory ?? []);
         player.equipment = data.equipment ?? player.equipment;
@@ -286,8 +321,11 @@ export default class SaveService {
             game.hudScreen.updateHUD();
         });
 
-        // mantém o localStorage sincronizado com o que acabou de carregar
-        this.persist(data);
+        // Persiste o ESTADO DO PLAYER recém-montado (não o `data` bruto
+        // que veio do arquivo/localStorage) — se o deserialize acabou de
+        // migrar os status pra uma curva de balanceamento mais nova, é
+        // essa versão migrada que precisa ficar salva, não a original.
+        this.persist(this.serialize(player));
 
         game.showScreen("hud");
 

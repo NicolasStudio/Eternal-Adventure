@@ -96,9 +96,20 @@ export default class CombatEngine {
         // demais" que anula o ataque por completo.
         const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
 
-        const damage = Math.max(
+        // Absorção: redução percentual GARANTIDA (não é chance de proc,
+        // como crítico/roubo de vida/penetração — vale em todo golpe
+        // recebido), aplicada depois da mitigação de armadura e do
+        // crítico. Empilha com armadura em vez de competir com ela.
+        const absorption = Math.min(95, defender.absorption ?? 0);
+
+        const preAbsorption = Math.max(
             1,
             Math.floor(attack * criticalMultiplier * mitigation)
+        );
+
+        const damage = Math.max(
+            1,
+            Math.floor(preAbsorption * (1 - absorption / 100))
         );
 
         // ==========================

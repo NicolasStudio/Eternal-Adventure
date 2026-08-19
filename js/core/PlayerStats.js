@@ -60,6 +60,7 @@ export default class PlayerStats {
         const rawCriticalChance = (base.criticalChance || 0) + (equipment.criticalChance || 0);
         const rawLifeSteal = (base.lifeSteal || 0) + (equipment.lifeSteal || 0);
         const rawPenetration = (base.penetration || 0) + (equipment.penetration || 0);
+        const rawAbsorption = (base.absorption || 0) + (equipment.absorption || 0);
 
         // Sem nenhum item equipado não existe teto — ele só entra em
         // cena quando há raridade de item pra basear o limite.
@@ -77,7 +78,9 @@ export default class PlayerStats {
 
             lifeSteal: cap != null ? Math.min(rawLifeSteal, cap) : rawLifeSteal,
 
-            penetration: cap != null ? Math.min(rawPenetration, cap) : rawPenetration
+            penetration: cap != null ? Math.min(rawPenetration, cap) : rawPenetration,
+
+            absorption: cap != null ? Math.min(rawAbsorption, cap) : rawAbsorption
 
         };
     }
@@ -104,6 +107,10 @@ export default class PlayerStats {
 
     get penetration() {
         return this.getFinalStats().penetration;
+    }
+
+    get absorption() {
+        return this.getFinalStats().absorption;
     }
 
 }

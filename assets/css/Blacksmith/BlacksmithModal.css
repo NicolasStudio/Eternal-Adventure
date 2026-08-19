@@ -137,7 +137,7 @@ ABAS DE SLOT (Ferreiro - Equipamentos)
     background:rgba(15,9,6,.82);
     border:2px solid #8b7355;
     border-radius:8px;
-    overflow:hidden;
+    overflow:auto;
 }
 
 .blacksmith-slot img {
@@ -392,6 +392,36 @@ PREVIEW DOS ATRIBUTOS
     border-radius:8px;
 }
 .enchant-middle::-webkit-scrollbar-thumb:hover{
+    background:#a67b3f;
+}
+
+
+.blacksmith-left::-webkit-scrollbar{
+    width:8px;
+}
+.blacksmith-left::-webkit-scrollbar-track{
+    background:#1d1512;
+}
+.blacksmith-left::-webkit-scrollbar-thumb{
+    background:#7b5a2d;
+    border-radius:8px;
+}
+.blacksmith-left::-webkit-scrollbar-thumb:hover{
+    background:#a67b3f;
+}
+
+
+.blacksmith-right::-webkit-scrollbar{
+    width:8px;
+}
+.blacksmith-right::-webkit-scrollbar-track{
+    background:#1d1512;
+}
+.blacksmith-right::-webkit-scrollbar-thumb{
+    background:#7b5a2d;
+    border-radius:8px;
+}
+.blacksmith-right::-webkit-scrollbar-thumb:hover{
     background:#a67b3f;
 }
 

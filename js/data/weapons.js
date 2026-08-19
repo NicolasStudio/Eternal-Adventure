@@ -21,8 +21,9 @@ const weapons = {
             armor: 0,
             agility: -4,
             criticalChance: 0,
-            lifeSteal: 1,
-            penetration: 0
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 1
         },
 
         value: 120,
@@ -46,8 +47,9 @@ const weapons = {
             armor: 0,
             agility: -2,
             criticalChance: 0,
-            lifeSteal: 1,
-            penetration: 0
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 2
         },
 
         value: 360,
@@ -71,8 +73,9 @@ const weapons = {
             armor: 0,
             agility: -2,
             criticalChance: 0,
-            lifeSteal: 3,
-            penetration: 0
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 3
         },
 
         value: 1080,
@@ -96,8 +99,9 @@ const weapons = {
             armor: 0,
             agility: -5,
             criticalChance: 0,
-            lifeSteal: 7,
-            penetration: 0
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 5
         },
 
         value: 3240,
@@ -121,8 +125,9 @@ const weapons = {
             armor: 0,
             agility: -6,
             criticalChance: 0,
-            lifeSteal: 12,
-            penetration: 0
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 7
         },
 
         value: 9720,
@@ -146,8 +151,9 @@ const weapons = {
             armor: 0,
             agility: -8,
             criticalChance: 0,
-            lifeSteal: 18,
-            penetration: 0
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 10
         },
 
         value: 0,
@@ -420,6 +426,147 @@ const weapons = {
             criticalChance: 18,
             lifeSteal: 0,
             penetration: 0
+        },
+        value: 0,
+        sellValue: 0
+    },
+
+/* ==========================================
+       BARBARIAN
+========================================== */
+    ax_common: {
+
+        id: "ax_common",
+        name: "Machado",
+        type: "weapon",
+        slot: "weapon",
+        class: "barbarian",
+        weaponType: "ax",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/weapons/ax-rarity-comum.png",
+        stats: {
+            attack: 4,
+            armor: 0,
+            agility: 1,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+        },
+        value: 120,
+        sellValue: 60
+    },
+
+    ax_uncommon: {
+
+        id: "ax_uncommon",
+        name: "Machado",
+        type: "weapon",
+        slot: "weapon",
+        class: "barbarian",
+        weaponType: "ax",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/weapons/ax-rarity-incomum.png",
+        stats: {
+            attack: 9,
+            armor: 0,
+            agility: 2,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+        },
+        value: 360,
+        sellValue: 180
+    },
+
+    ax_rare: {
+
+        id: "ax_rare",
+        name: "Machado",
+        type: "weapon",
+        slot: "weapon",
+        class: "barbarian",
+        weaponType: "ax",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/weapons/ax-rarity-raro.png",
+        stats: {
+            attack: 15,
+            armor: 0,
+            agility: 3,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+        },
+        value: 1080,
+        sellValue: 540
+    },
+
+    ax_mystic: {
+
+        id: "ax_mystic",
+        name: "Machado",
+        type: "weapon",
+        slot: "weapon",
+        class: "barbarian",
+        weaponType: "ax",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/weapons/ax-rarity-mistico.png",
+        stats: {
+            attack: 30,
+            armor: 0,
+            agility: 5,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+        },
+        value: 3240,
+        sellValue: 1620
+    },
+
+    ax_legendary: {
+
+        id: "ax_legendary",
+        name: "Machado",
+        type: "weapon",
+        slot: "weapon",
+        class: "barbarian",
+        weaponType: "ax",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/weapons/ax-rarity-lendario.png",
+        stats: {
+            attack: 42,
+            armor: 0,
+            agility: 7,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+        },
+        value: 9720,
+        sellValue: 4860
+    },
+
+    ax_ultraje: {
+
+        id: "ax_ultraje",
+        name: "Machado",
+        type: "weapon",
+        slot: "weapon",
+        class: "barbarian",
+        weaponType: "ax",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/weapons/ax-rarity-ultraje.png",
+        stats: {
+            attack: 57,
+            armor: 0,
+            agility: 9,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
         },
         value: 0,
         sellValue: 0

@@ -1,7 +1,15 @@
 import {
-    db, ref, set, remove, onValue, off, onDisconnect,
+    db, ref, set, update, remove, onValue, off, onDisconnect,
     get, runTransaction, serverTimestamp
 } from "./FirebaseService.js";
+
+// Tempo que um candidato reivindicado (claimedBy preenchido) espera
+// virar uma partida de verdade antes de se liberar sozinho. Cobre o
+// caso de quem estava montando o grupo cair da conexão bem entre
+// "reivindicar" e "terminar de montar" — sem isso, quem foi
+// reivindicado ficava invisível pra qualquer pareamento futuro pro
+// resto da sessão (ninguém mais tenta de novo por ele).
+const STALE_CLAIM_TIMEOUT_MS = 8000;
 
 /*
     Como o pareamento evita jogadores "roubarem" o mesmo adversário ao
@@ -33,6 +41,7 @@ export default class PvpLobbyService {
     static mode = null;
     static lobbyListener = null;
     static selfMatchListener = null;
+    static staleClaimTimer = null;
 
     static generateId() {
         return "p_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -46,11 +55,54 @@ export default class PvpLobbyService {
         return `pvpMatches/${this.mode}`;
     }
 
+    static scheduleStaleClaimRelease(selfPath) {
+
+        if (this.staleClaimTimer) return; // já tem um agendado, não empilha
+
+        this.staleClaimTimer = setTimeout(async () => {
+
+            this.staleClaimTimer = null;
+
+            const snapshot = await get(ref(db, selfPath));
+            const data = snapshot.val();
+
+            // Só libera se continuar "preso" do mesmo jeito — reivindicado,
+            // mas nunca virou partida de verdade. Se já foi pareado (ou
+            // já saiu da fila) nesse meio-tempo, não mexe em nada.
+            if (data?.claimedBy && !data?.matchedWith) {
+                await set(ref(db, `${selfPath}/claimedBy`), null);
+            }
+
+        }, STALE_CLAIM_TIMEOUT_MS);
+
+    }
+
+    static clearStaleClaimTimer() {
+
+        if (!this.staleClaimTimer) return;
+
+        clearTimeout(this.staleClaimTimer);
+        this.staleClaimTimer = null;
+
+    }
+
     // Entra na fila de espera de um MODO específico ("1v1" ou "2v2").
     // onMatchFound(matchData) é chamado quando uma partida envolvendo
     // este jogador é criada — seja porque ELE formou ela, seja porque
     // outra pessoa formou e o incluiu.
     static async joinQueue(mode, combatant, onMatchFound, onOpponentJoined) {
+
+        // Reentrada: se já existia uma busca ativa (ex.: o jogador saiu
+        // da tela de PVP e voltou sem cancelar, ou clicou em "Entrar na
+        // Fila" de novo antes da primeira chamada terminar) e ela não
+        // foi desfeita direito, isso deixava DUAS entradas na fila pro
+        // MESMO jogador físico — e se as duas caíssem no mesmo
+        // pareamento, o jogador via a si mesmo do lado inimigo (mesmo
+        // nome/status atacando ele próprio). Desfaz a anterior primeiro,
+        // sempre.
+        if (this.playerId) {
+            await this.leaveQueue();
+        }
 
         this.mode = mode;
         this.playerId = this.generateId();
@@ -78,6 +130,8 @@ export default class PvpLobbyService {
 
             if (data?.matchedWith) {
 
+                this.clearStaleClaimTimer();
+
                 const matchSnapshot = await get(ref(db, `${this.matchesPath()}/${data.matchId}`));
                 const match = matchSnapshot.val();
 
@@ -85,6 +139,20 @@ export default class PvpLobbyService {
                     this.stopListening();
                     onMatchFound(match, data.matchId);
                 }
+
+            } else if (data?.claimedBy) {
+
+                // Fui reivindicado por alguém que está montando um
+                // grupo (1x1 ou 2x2) — dá um tempo pra partida virar de
+                // verdade (matchedWith aparecer). Se não aparecer nesse
+                // prazo, quem reivindicou provavelmente caiu da conexão
+                // no meio do processo — libera a reivindicação sozinho
+                // pra não ficar invisível pro resto da sessão.
+                this.scheduleStaleClaimRelease(`${this.lobbyPath()}/${this.playerId}`);
+
+            } else {
+
+                this.clearStaleClaimTimer();
 
             }
 
@@ -171,19 +239,37 @@ export default class PvpLobbyService {
             return; // perdeu a corrida, tenta de novo no próximo tick
         }
 
-        // Passo 2: cria a partida de verdade.
-        await set(ref(db, `${this.matchesPath()}/${matchId}`), {
-            combatantA: { ...selfCombatant, id: this.playerId },
-            combatantB: { ...opponentCombatant, id: opponentId },
-            seed,
-            createdAt: serverTimestamp()
+        // Rede de segurança: se EU cair da conexão entre reivindicar o
+        // oponente e terminar de montar a partida (passo abaixo), o
+        // Firebase libera a reivindicação sozinho, do lado do servidor.
+        // Sem isso, o oponente ficava com "claimedBy" preso pra sempre —
+        // invisível pra qualquer pareamento futuro (o filtro em
+        // joinQueue ignora quem tem claimedBy), preso na fila "pra
+        // sempre procurando" sem ninguém tentar parear com ele de novo.
+        const opponentClaimRef = ref(db, `${this.lobbyPath()}/${opponentId}/claimedBy`);
+        onDisconnect(opponentClaimRef).remove();
+
+        // Passo 2+3 num commit atômico só (update multi-caminho) — ou
+        // a partida inteira é criada E os dois lados marcados como
+        // pareados de uma vez, ou (se a conexão cair no meio) nada
+        // disso é gravado. Antes eram 5 escritas sequenciais separadas;
+        // uma queda de conexão entre elas deixava a partida criada mas
+        // só UM dos dois lados marcado como pareado — o outro nunca
+        // recebia o aviso e ficava esperando pra sempre.
+        await update(ref(db), {
+            [`${this.matchesPath()}/${matchId}`]: {
+                combatantA: { ...selfCombatant, id: this.playerId },
+                combatantB: { ...opponentCombatant, id: opponentId },
+                seed,
+                createdAt: serverTimestamp()
+            },
+            [`${this.lobbyPath()}/${opponentId}/matchedWith`]: this.playerId,
+            [`${this.lobbyPath()}/${opponentId}/matchId`]: matchId,
+            [`${this.lobbyPath()}/${this.playerId}/matchedWith`]: opponentId,
+            [`${this.lobbyPath()}/${this.playerId}/matchId`]: matchId
         });
 
-        // Passo 3: SÓ AGORA marca os dois lados como pareados.
-        await set(ref(db, `${this.lobbyPath()}/${opponentId}/matchedWith`), this.playerId);
-        await set(ref(db, `${this.lobbyPath()}/${opponentId}/matchId`), matchId);
-        await set(ref(db, `${this.lobbyPath()}/${this.playerId}/matchedWith`), opponentId);
-        await set(ref(db, `${this.lobbyPath()}/${this.playerId}/matchId`), matchId);
+        onDisconnect(opponentClaimRef).cancel();
 
     }
 
@@ -195,6 +281,7 @@ export default class PvpLobbyService {
     static async tryMatchTeam(candidateIds, candidateData, selfCombatant) {
 
         const claimedIds = [];
+        const claimDisconnectRefs = [];
 
         for (const candidateId of candidateIds) {
 
@@ -218,9 +305,22 @@ export default class PvpLobbyService {
                     await set(ref(db, `${this.lobbyPath()}/${releasedId}/claimedBy`), null);
                 }
 
+                claimDisconnectRefs.forEach(disconnectRef => onDisconnect(disconnectRef).cancel());
+
                 return;
 
             }
+
+            // Rede de segurança: se EU cair da conexão entre reivindicar
+            // esse candidato e terminar de montar o grupo inteiro, o
+            // Firebase libera a reivindicação sozinho. Sem isso, um
+            // candidato já reivindicado quando a conexão de quem estava
+            // montando o grupo cai fica invisível pra qualquer
+            // pareamento futuro pelo resto da sessão — "preso pra
+            // sempre procurando".
+            const claimDisconnectRef = ref(db, `${this.lobbyPath()}/${candidateId}/claimedBy`);
+            onDisconnect(claimDisconnectRef).remove();
+            claimDisconnectRefs.push(claimDisconnectRef);
 
             claimedIds.push(candidateId);
 
@@ -249,19 +349,32 @@ export default class PvpLobbyService {
             [allCombatants[3].id]: allCombatants[3]
         };
 
-        await set(ref(db, `${this.matchesPath()}/${matchId}`), {
-            teamA,
-            teamB,
-            seed,
-            createdAt: serverTimestamp()
-        });
-
         const allIds = [this.playerId, ...claimedIds];
 
+        // Cria a partida E marca os 4 jogadores como pareados num
+        // commit atômico só (update multi-caminho: 1 + 4×2 = 9
+        // caminhos). Antes disso era uma sequência de 9 escritas
+        // separadas — se a conexão caísse no meio (ex: depois de
+        // marcar 2 dos 4 como pareados), os outros 2 ficavam com a
+        // partida já criada mas nunca marcados, esperando pra sempre
+        // sem ninguém mais tentar parear com eles.
+        const updates = {
+            [`${this.matchesPath()}/${matchId}`]: {
+                teamA,
+                teamB,
+                seed,
+                createdAt: serverTimestamp()
+            }
+        };
+
         for (const id of allIds) {
-            await set(ref(db, `${this.lobbyPath()}/${id}/matchedWith`), true);
-            await set(ref(db, `${this.lobbyPath()}/${id}/matchId`), matchId);
+            updates[`${this.lobbyPath()}/${id}/matchedWith`] = true;
+            updates[`${this.lobbyPath()}/${id}/matchId`] = matchId;
         }
+
+        await update(ref(db), updates);
+
+        claimDisconnectRefs.forEach(disconnectRef => onDisconnect(disconnectRef).cancel());
 
     }
 
@@ -279,6 +392,8 @@ export default class PvpLobbyService {
     }
 
     static stopListening() {
+
+        this.clearStaleClaimTimer();
 
         if (this.lobbyListener) {
             off(ref(db, this.lobbyPath()));

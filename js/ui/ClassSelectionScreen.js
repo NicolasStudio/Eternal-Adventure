@@ -112,6 +112,12 @@ export default class ClassSelectionScreen {
                 "✨ Alto Ataque",
                 "🗡️ Alta Penetração",
                 "🛡️ Baixa Armadura"
+            ],
+
+            barbarian: [
+                "🩸 Alto Roubo de Vida",
+                "💪 Ataque e Agilidade Equilibrados",
+                "🪨 Absorção Baixa"
             ]
 
         };

@@ -2614,7 +2614,7 @@ const monsters = [
         status: {
             vidaMaxima: 720,
             dano: 199,
-            nomeAtaque: "Pegar Mulher Casada",
+            nomeAtaque: "Robou sua mulher",
             armadura: 60,
             agilidade: 90,
             xp: 125,
@@ -2758,10 +2758,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_boss_8/cuca.png",
 
         status: {
-            vidaMaxima: 880,
+            vidaMaxima: 950,
             dano: 216,
-            nomeAtaque: "Te pega daqui",
-            armadura: 66,
+            nomeAtaque: "Te pega daqui, te pega de lá",
+            armadura: 90,
             agilidade: 100,
             xp: 438,
             ouro: 6160
@@ -2791,10 +2791,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_25/diabrete_um.png",
 
         status: {
-            vidaMaxima: 627,
+            vidaMaxima: 920,
             dano: 218,
             nomeAtaque: "Espetar",
-            armadura: 77,
+            armadura: 87,
             agilidade: 108,
             xp: 125,
             ouro: 1826
@@ -2826,10 +2826,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_25/diabrete_dois.png",
 
         status: {
-            vidaMaxima: 824,
-            dano: 205,
+            vidaMaxima: 954,
+            dano: 225,
             nomeAtaque: "Chifrar",
-            armadura: 73,
+            armadura: 83,
             agilidade: 105,
             xp: 125,
             ouro: 1826
@@ -2861,10 +2861,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_25/diabrete_tres.png",
 
         status: {
-            vidaMaxima: 888,
-            dano: 208,
+            vidaMaxima: 998,
+            dano: 230,
             nomeAtaque: "Espetar",
-            armadura: 74,
+            armadura: 84,
             agilidade: 112,
             xp: 125,
             ouro: 1826
@@ -2896,10 +2896,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_25/diabrete_quatro.png",
 
         status: {
-            vidaMaxima: 803,
-            dano: 207,
+            vidaMaxima: 1005,
+            dano: 257,
             nomeAtaque: "Dilacerar",
-            armadura: 78,
+            armadura: 85,
             agilidade: 112,
             xp: 125,
             ouro: 1826
@@ -2934,10 +2934,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_26/gargoyle_um.png",
 
         status: {
-            vidaMaxima: 870,
+            vidaMaxima: 1070,
             dano: 228,
             nomeAtaque: "Espetar",
-            armadura: 77,
+            armadura: 87,
             agilidade: 109,
             xp: 125,
             ouro: 1870
@@ -2969,10 +2969,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_26/gargoyle_dois.png",
 
         status: {
-            vidaMaxima: 888,
+            vidaMaxima: 1088,
             dano: 251,
             nomeAtaque: "Perfurar",
-            armadura: 79,
+            armadura: 99,
             agilidade: 112,
             xp: 125,
             ouro: 1870
@@ -3004,10 +3004,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_26/gargoyle_tres.png",
 
         status: {
-            vidaMaxima: 883,
+            vidaMaxima: 1103,
             dano: 198,
             nomeAtaque: "Empalar",
-            armadura: 75,
+            armadura: 95,
             agilidade: 106,
             xp: 125,
             ouro: 1870
@@ -3039,10 +3039,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_26/gargoyle_quatro.png",
 
         status: {
-            vidaMaxima: 819,
-            dano: 252,
+            vidaMaxima: 1119,
+            dano: 282,
             nomeAtaque: "Dilacerar",
-            armadura: 76,
+            armadura: 96,
             agilidade: 112,
             xp: 125,
             ouro: 1826
@@ -3077,10 +3077,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_27/boy_demoniac.png",
 
         status: {
-            vidaMaxima: 889,
+            vidaMaxima: 1209,
             dano: 234,
             nomeAtaque: "Cortar",
-            armadura: 80,
+            armadura: 90,
             agilidade: 110,
             xp: 125,
             ouro: 1914
@@ -3112,10 +3112,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_27/girl_demoniac.png",
 
         status: {
-            vidaMaxima: 844,
-            dano: 253,
+            vidaMaxima: 1209,
+            dano: 234,
             nomeAtaque: "Magia de Fogo",
-            armadura: 77,
+            armadura: 95,
             agilidade: 110,
             xp: 125,
             ouro: 1914
@@ -3147,10 +3147,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_27/woman_demoniac.png",
 
         status: {
-            vidaMaxima: 924,
+            vidaMaxima: 1254,
             dano: 252,
             nomeAtaque: "Dissecar",
-            armadura: 74,
+            armadura: 104,
             agilidade: 116,
             xp: 125,
             ouro: 1914
@@ -3182,11 +3182,11 @@ const monsters = [
         sprite: "assets/img/monsters/creature_27/men_demoniac.png",
 
         status: {
-            vidaMaxima: 985,
-            dano: 252,
+            vidaMaxima: 1260,
+            dano: 255,
             nomeAtaque: "Dilacerar",
-            armadura: 74,
-            agilidade: 108,
+            armadura: 104,
+            agilidade: 116,
             xp: 125,
             ouro: 1914
         },
@@ -3220,10 +3220,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_boss_9/daibo.png",
 
         status: {
-            vidaMaxima: 1000,
-            dano: 270,
+            vidaMaxima: 1500,
+            dano: 300,
             nomeAtaque: "Ataque Infernal",
-            armadura: 77,
+            armadura: 110,
             agilidade: 115,
             xp: 438,
             ouro: 6930
@@ -3254,10 +3254,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_up_class/fallen_angel_of_light.png",
 
         status: {
-            vidaMaxima: 1300,
+            vidaMaxima: 1800,
             dano: 300,
             nomeAtaque: "Julgamento Divino",
-            armadura: 95,
+            armadura: 150,
             agilidade: 150,
             xp: 500,
             ouro: 1000
@@ -3279,10 +3279,10 @@ const monsters = [
         sprite: "assets/img/monsters/creature_up_class/dark_fallen_angel.png",
 
         status: {
-            vidaMaxima: 1300,
+            vidaMaxima: 1800,
             dano: 300,
             nomeAtaque: "Aço Sombrio",
-            armadura: 95,
+            armadura: 150,
             agilidade: 150,
             xp: 500,
             ouro: 1000

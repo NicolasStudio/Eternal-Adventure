@@ -87,6 +87,11 @@ export default class LevelUpModal {
             penetration: {
                 icon: "🗡️",
                 label: "Penetração"
+            },
+
+            absorption: {
+                icon: "🪨",
+                label: "Absorção"
             }
 
         };
@@ -100,7 +105,7 @@ export default class LevelUpModal {
                         ${labels[key].label}
                     </span>
 
-                    <span>+${value}${key.includes("Chance") || key.includes("Steal") || key === "penetration" ? "%" : ""}</span>
+                    <span>+${value}${key.includes("Chance") || key.includes("Steal") || key === "penetration" || key === "absorption" ? "%" : ""}</span>
                 </div>
             `)
             .join("")

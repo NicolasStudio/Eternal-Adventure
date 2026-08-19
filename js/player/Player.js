@@ -11,6 +11,8 @@ import qualities from "../data/quality.js";
 import upClasse from "./upClasse.js";
 import cards from "../data/cards.js";
 import ItemValueService from "../services/ItemValueService.js";
+import baseStatsL1 from "../data/baseStatsL1.js";
+import { CURRENT_BALANCE_VERSION } from "../services/StatsMigrationService.js";
 
 export default class Player {
     constructor(characterClass, name) {
@@ -50,6 +52,12 @@ export default class Player {
         // Transcendência (final secreto): null até o jogador escolher.
         // Guarda o objeto inteiro de upClasse.js (imagem, hud, bônus).
         this.transcendence = null;
+
+        // Marca a curva de status (levels.js) usada pra construir esse
+        // personagem. Todo personagem NOVO já nasce na versão atual —
+        // só quem carrega um save de antes de uma mudança de balanceamento
+        // passa pelo StatsMigrationService (ver SaveService.deserialize).
+        this.balanceVersion = CURRENT_BALANCE_VERSION;
     }
 
     // Nível máximo + todas as cartas do bestiário coletadas — a condição
@@ -156,16 +164,10 @@ export default class Player {
     }
 
     createBaseStats() {
-        switch (this.class.id) {
-            case "warrior":
-                return { attack: 5, armor: 5, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0 };
-            case "archer":
-                return { attack: 6, armor: 3, agility: 7, criticalChance: 0, lifeSteal: 0, penetration: 0 };
-            case "mage":
-                return { attack: 8, armor: 2, agility: 5, criticalChance: 0, lifeSteal: 0, penetration: 0 };
-            default:
-                return { attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0 };
-        }
+        const stats = baseStatsL1[this.class.id];
+        return stats
+            ? { ...stats }
+            : { attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 };
     }
 
     getRequiredXP() {
