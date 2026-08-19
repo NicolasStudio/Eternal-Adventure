@@ -1,6 +1,22 @@
 export default [
 
     {
+        version: "Alpha v0.10",
+        date: "Agosto de 2026",
+        changes: [
+            "Adicionada uma quarta classe jogável: Bárbaro — foco em Roubo de Vida, com machado, elmo, peitoral, calças e botas próprios em todas as raridades",
+            "Adicionado um atributo novo, Absorção: uma redução de dano garantida em todo golpe recebido (ao contrário de Crítico/Roubo de Vida/Penetração, que são chance de acontecer) — virou o atributo especial do Guerreiro",
+            "Guerreiro reequilibrado: ataque, armadura, agilidade e a nova Absorção foram recalculados nível a nível; Roubo de Vida deixou de ser o especial dele e virou um atributo secundário",
+            "Corrigida a fórmula de esquiva do PVP: travava em 0% sempre que o defensor não fosse mais ágil que quem atacou, o que deixava o Guerreiro praticamente sem chance contra qualquer classe mais rápida, não importa o quanto investisse em vida e armadura",
+            "Personagens salvos antes desse reequilíbrio são recalculados automaticamente pra curva de status atual ao carregar o save, preservando qualquer bônus de pedra de encantamento ou transcendência já conquistado",
+            "Corrigido o PVP 2x2: em alguns casos um jogador acabava enfrentando a si mesmo, ou ficava preso 'procurando partida' pra sempre sem nunca ser pareado",
+            "Álbum de Criaturas: a escolha de revelar as cartas com spoiler agora fica salva — não pede a mesma confirmação toda vez que a tela é reaberta",
+            "Itens e melhoria de qualidade recalibrados: o bônus de 'Excepcional' em atributos secundários (Crítico, Roubo de Vida, Penetração, Absorção) não soma mais um valor enorme numa peça só — agora arma e capacete (ou machado e botas, no caso do Bárbaro) precisam estar as duas totalmente melhoradas pra alcançar o teto de cada raridade, sem desperdiçar metade do investimento como antes",
+            "Corrigido botão 'Curar Vida Completa' aparecendo mesmo com só uma poção no inventário"
+        ]
+    },
+
+    {
         version: "Alpha v0.9",
         date: "Agosto de 2026",
         changes: [
