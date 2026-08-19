@@ -417,6 +417,11 @@
 .pvp-log-heal{
     color:#7fd98d;
 }
+.pvp-log-critical{
+    color:#ffd24d;
+    font-weight:700;
+    text-shadow:0 0 6px rgba(255,210,77,.5);
+}
 
 .pvp-back-button{
     padding:10px 28px;

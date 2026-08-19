@@ -289,7 +289,7 @@ export default class PvpView {
         if (entry.dodged) {
             return `<div class="pvp-log-line pvp-log-dodge">${name} esquivou!</div>`;
         }
-        const crit = entry.critical ? " <strong>(Crítico!)</strong>" : "";
+        const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
         return `<div class="pvp-log-line">${name} causou ${entry.damage} de dano${crit}${steal}</div>`;
     }
@@ -300,7 +300,7 @@ export default class PvpView {
         if (entry.dodged) {
             return `<div class="pvp-log-line pvp-log-dodge">${targetName} esquivou de ${attackerName}!</div>`;
         }
-        const crit = entry.critical ? " <strong>(Crítico!)</strong>" : "";
+        const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
         return `<div class="pvp-log-line">${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${steal}</div>`;
     }
@@ -592,7 +592,7 @@ export default class PvpView {
 
         // Ataque entre outras duas pessoas que não sou eu (ex: meu
         // aliado atacando, ou o inimigo atacando meu aliado).
-        const crit = entry.critical ? " (Crítico!)" : "";
+        const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         return `${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}.`;
 
     }

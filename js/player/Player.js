@@ -356,7 +356,12 @@ export default class Player {
 
     addXP(amount) {
 
-        if (!amount || amount <= 0) return;
+        if (!amount || amount <= 0) return [];
+
+        // Sem próximo nível pra subir, XP acumulada nunca seria gasta —
+        // deixar currentXP crescer sem limite só deixaria a barra
+        // estranha. Nível máximo não ganha mais experiência.
+        if (this.getRequiredXP() <= 0) return [];
 
         this.currentXP += amount;
 

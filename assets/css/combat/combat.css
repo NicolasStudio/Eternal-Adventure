@@ -188,6 +188,19 @@
 }
 
 /* ==========================================================
+   DESTAQUES DENTRO DA MENSAGEM (crítico / life steal)
+========================================================== */
+.combat-critical{
+    color:#ffd24d;
+    font-weight:800;
+    text-shadow:0 0 6px rgba(255,210,77,.6);
+}
+.combat-life-steal{
+    color:#32d35a;
+    font-weight:800;
+}
+
+/* ==========================================================
    NOTEBOOK
 ========================================================== */
 @media (max-width:1366px), (max-height:768px){
