@@ -1,5 +1,9 @@
 const DODGE_CAP = 40;
 
+// Mesmo valor usado em CombatEngine.js — quando a Absorção ativa (chance,
+// não garantida), corta essa fração do dano daquele golpe.
+const ABSORPTION_MITIGATION_RATIO = 0.5;
+
 /*
     PVP precisa que os DOIS clientes (o do jogador A e o do jogador B)
     cheguem exatamente ao mesmo resultado de combate, sem depender de
@@ -114,11 +118,28 @@ export default class PvpCombatService {
                 const criticalMultiplier = isCritical ? 1.5 : 1;
                 const effectiveArmor = defender.armor * (1 - attacker.penetration / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
-                const absorption = Math.min(95, defender.absorption ?? 0);
                 const preAbsorption = Math.max(1, Math.floor(attacker.attack * criticalMultiplier * mitigation));
-                const damage = Math.max(1, Math.floor(preAbsorption * (1 - absorption / 100)));
+
+                // Absorção: CHANCE de quem defende absorver parte do golpe
+                // (mesma lógica de proc do Roubo de Vida, só que do lado
+                // de quem apanha) — quando ativa, mitiga uma fração do
+                // dano e cura parte do que foi absorvido.
+                const absorptionChance = Math.min(95, defender.absorption ?? 0);
+                let absorbed = 0;
+                let healedFromAbsorption = 0;
+
+                if (rng() * 100 < absorptionChance) {
+                    absorbed = Math.floor(preAbsorption * ABSORPTION_MITIGATION_RATIO);
+                    healedFromAbsorption = Math.floor(absorbed * 0.20) + Math.floor(defender.maxHP * 0.02);
+                }
+
+                const damage = Math.max(1, preAbsorption - absorbed);
 
                 defender.currentHP = Math.max(0, defender.currentHP - damage);
+
+                if (healedFromAbsorption > 0) {
+                    defender.currentHP = Math.min(defender.maxHP, defender.currentHP + healedFromAbsorption);
+                }
 
                 let lifeStealAmount = 0;
 
@@ -133,7 +154,9 @@ export default class PvpCombatService {
                     dodged: false,
                     damage,
                     critical: isCritical,
-                    lifeSteal: lifeStealAmount
+                    lifeSteal: lifeStealAmount,
+                    absorbed,
+                    healedFromAbsorption
                 });
 
             }
@@ -212,11 +235,24 @@ export default class PvpCombatService {
                 const criticalMultiplier = isCritical ? 1.5 : 1;
                 const effectiveArmor = target.armor * (1 - attacker.penetration / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
-                const absorption = Math.min(95, target.absorption ?? 0);
                 const preAbsorption = Math.max(1, Math.floor(attacker.attack * criticalMultiplier * mitigation));
-                const damage = Math.max(1, Math.floor(preAbsorption * (1 - absorption / 100)));
+
+                const absorptionChance = Math.min(95, target.absorption ?? 0);
+                let absorbed = 0;
+                let healedFromAbsorption = 0;
+
+                if (rng() * 100 < absorptionChance) {
+                    absorbed = Math.floor(preAbsorption * ABSORPTION_MITIGATION_RATIO);
+                    healedFromAbsorption = Math.floor(absorbed * 0.20) + Math.floor(target.maxHP * 0.02);
+                }
+
+                const damage = Math.max(1, preAbsorption - absorbed);
 
                 target.currentHP = Math.max(0, target.currentHP - damage);
+
+                if (healedFromAbsorption > 0) {
+                    target.currentHP = Math.min(target.maxHP, target.currentHP + healedFromAbsorption);
+                }
 
                 let lifeStealAmount = 0;
 
@@ -232,7 +268,9 @@ export default class PvpCombatService {
                     dodged: false,
                     damage,
                     critical: isCritical,
-                    lifeSteal: lifeStealAmount
+                    lifeSteal: lifeStealAmount,
+                    absorbed,
+                    healedFromAbsorption
                 });
 
                 if (aliveOf(enemyTeam).length === 0) break;

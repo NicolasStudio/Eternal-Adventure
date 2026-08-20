@@ -144,6 +144,20 @@
     color: #b31212;
     border: 2px solid #b31212;
 }
+
+/* ==========================================================
+   ENEMY - VOCÊ ABSORVEU PARTE DO GOLPE (mesmo visual do Life
+   Steal, só que do lado de quem apanha, não de quem ataca)
+========================================================== */
+.combat-toast.absorption.enemy {
+    left: 18%;
+    top: 42%;
+    background: #32d35a;
+    color: #ffffff;
+    border: 2px solid #0b8d2b;
+    font-size: 20px;
+}
+
 /* ==========================================================
    ESQUIVA
 ========================================================== */
@@ -189,15 +203,29 @@
 
 /* ==========================================================
    DESTAQUES DENTRO DA MENSAGEM (crítico / life steal)
+
+   O span de crítico só aparece dentro de toasts com fundo dourado
+   (".critico.player" e ".enemy" já usam #fad55d) — por isso NÃO usa
+   essa mesma cor no texto (dourado-em-dourado ficava ilegível, quase
+   invisível). Life Steal e Absorção sempre aparecem dentro do toast
+   verde (".lifeSteal.player" / ".absorption.enemy", ambos #32d35a),
+   por isso os dois usam o mesmo branco.
 ========================================================== */
 .combat-critical{
-    color:#ffd24d;
+    color:#b31212;
     font-weight:800;
-    text-shadow:0 0 6px rgba(255,210,77,.6);
+    letter-spacing:.5px;
+    text-transform:uppercase;
 }
 .combat-life-steal{
-    color:#32d35a;
+    color:#ffffff;
     font-weight:800;
+    text-shadow:0 0 6px rgba(0,0,0,.45);
+}
+.combat-absorption{
+    color:#ffffff;
+    font-weight:800;
+    text-shadow:0 0 6px rgba(0,0,0,.45);
 }
 
 /* ==========================================================

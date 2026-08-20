@@ -34,6 +34,13 @@ export default class PvpView {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    // Depois de 1 minuto de luta, a animação acelera pra 2x sozinha —
+    // de propósito sem nenhum botão/toggle pro jogador, só evita que
+    // um combate com muitos turnos arraste por tempo demais.
+    getBattleSpeedMultiplier(battleStartTime) {
+        return (Date.now() - battleStartTime) > 60000 ? 2 : 1;
+    }
+
     // Durante a cerimônia e a batalha, a tela sai do formato de modal
     // e ocupa a área de conteúdo inteira, igual ao combate normal
     // contra monstro.
@@ -286,12 +293,16 @@ export default class PvpView {
 
     renderLogLine(entry, combatantA, combatantB) {
         const name = entry.turn === "a" ? combatantA.name : combatantB.name;
+        const defenderName = entry.turn === "a" ? combatantB.name : combatantA.name;
         if (entry.dodged) {
             return `<div class="pvp-log-line pvp-log-dodge">${name} esquivou!</div>`;
         }
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
-        return `<div class="pvp-log-line">${name} causou ${entry.damage} de dano${crit}${steal}</div>`;
+        const absorbed = entry.healedFromAbsorption > 0
+            ? ` <span class="pvp-log-absorption">(${defenderName} absorveu ${entry.absorbed} e curou ${entry.healedFromAbsorption} HP)</span>`
+            : "";
+        return `<div class="pvp-log-line">${name} causou ${entry.damage} de dano${crit}${steal}${absorbed}</div>`;
     }
 
     renderLogLineTeam(entry, nameOf) {
@@ -302,7 +313,10 @@ export default class PvpView {
         }
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
-        return `<div class="pvp-log-line">${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${steal}</div>`;
+        const absorbed = entry.healedFromAbsorption > 0
+            ? ` <span class="pvp-log-absorption">(${targetName} absorveu ${entry.absorbed} e curou ${entry.healedFromAbsorption} HP)</span>`
+            : "";
+        return `<div class="pvp-log-line">${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}</div>`;
     }
 
     currentOpponentSnapshot() {
@@ -522,11 +536,19 @@ export default class PvpView {
 
         }
 
+        let hitMessage = "";
+
         if (entry.critical) {
-            return `<span class="combat-critical">Ataque Crítico!</span><br> Você recebeu um golpe de <strong>${opponentName}</strong>, <strong>${entry.damage}</strong> de dano.`;
+            hitMessage += `<span class="combat-critical">Ataque Crítico!</span><br>`;
         }
 
-        return `Você recebeu um golpe de <strong>${opponentName}</strong>, <strong>${entry.damage}</strong> de dano.`;
+        hitMessage += ` Você recebeu um golpe de <strong>${opponentName}</strong>, <strong>${entry.damage}</strong> de dano.`;
+
+        if (entry.healedFromAbsorption > 0) {
+            hitMessage += `<br><span class="combat-absorption">Você absorveu parte do ataque!</span> ${entry.absorbed} de dano mitigado, recuperou <strong>${entry.healedFromAbsorption}</strong> HP.`;
+        }
+
+        return hitMessage;
 
     }
 
@@ -541,6 +563,8 @@ export default class PvpView {
         } else if (isMe) {
             if (entry.lifeSteal > 0) type = "lifeSteal player";
             else if (entry.critical) type = "critico player";
+        } else if (entry.healedFromAbsorption > 0) {
+            type = "absorption enemy";
         }
 
         return type;
@@ -582,11 +606,19 @@ export default class PvpView {
 
         if (targetIsMe) {
 
+            let hitMessage = "";
+
             if (entry.critical) {
-                return `<span class="combat-critical">Ataque Crítico!</span><br> Você recebeu um golpe de <strong>${attackerName}</strong>, <strong>${entry.damage}</strong> de dano.`;
+                hitMessage += `<span class="combat-critical">Ataque Crítico!</span><br>`;
             }
 
-            return `Você recebeu um golpe de <strong>${attackerName}</strong>, <strong>${entry.damage}</strong> de dano.`;
+            hitMessage += ` Você recebeu um golpe de <strong>${attackerName}</strong>, <strong>${entry.damage}</strong> de dano.`;
+
+            if (entry.healedFromAbsorption > 0) {
+                hitMessage += `<br><span class="combat-absorption">Você absorveu parte do ataque!</span> ${entry.absorbed} de dano mitigado, recuperou <strong>${entry.healedFromAbsorption}</strong> HP.`;
+            }
+
+            return hitMessage;
 
         }
 
@@ -600,6 +632,7 @@ export default class PvpView {
     buildTeamToastType(entry) {
 
         const isMe = entry.attackerId === PvpLobbyService.playerId;
+        const targetIsMe = entry.targetId === PvpLobbyService.playerId;
         const isAlly = this.getMyTeamCombatants().some(c => c.id === entry.attackerId);
 
         let type = isAlly ? "player" : "enemy";
@@ -609,6 +642,8 @@ export default class PvpView {
         } else if (isMe) {
             if (entry.lifeSteal > 0) type = "lifeSteal player";
             else if (entry.critical) type = "critico player";
+        } else if (targetIsMe && entry.healedFromAbsorption > 0) {
+            type = "absorption enemy";
         }
 
         return type;
@@ -624,6 +659,7 @@ export default class PvpView {
     async playBattleLog(log) {
 
         const originalHP = this.game.player.currentHP;
+        const battleStartTime = Date.now();
 
         for (const entry of log) {
 
@@ -632,9 +668,28 @@ export default class PvpView {
             if (!entry.dodged) {
 
                 if (isMe) {
+
                     this.opponentHP = Math.max(0, this.opponentHP - entry.damage);
+
+                    // Quem apanhou fui EU atacando (o oponente é quem
+                    // defendeu/absorveu, nesse caso) — mantém a barra
+                    // dele fiel ao resultado já decidido pelo simulate().
+                    if (entry.healedFromAbsorption > 0) {
+                        const opponentMax = this.currentOpponentSnapshot()?.maxHP ?? this.opponentHP;
+                        this.opponentHP = Math.min(opponentMax, this.opponentHP + entry.healedFromAbsorption);
+                    }
+
                 } else {
+
                     this.game.player.currentHP = Math.max(0, this.game.player.currentHP - entry.damage);
+
+                    if (entry.healedFromAbsorption > 0) {
+                        this.game.player.currentHP = Math.min(
+                            this.game.player.maxHP,
+                            this.game.player.currentHP + entry.healedFromAbsorption
+                        );
+                    }
+
                 }
 
                 if (entry.lifeSteal > 0 && isMe) {
@@ -649,9 +704,11 @@ export default class PvpView {
             this.game.hudScreen.playerHUD.updateHP?.();
             this.game.hudScreen.monsterHUD.updateHP();
 
-            await CombatToast.show(this.buildAttackMessage(entry), this.buildToastType(entry), 2);
+            const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
-            await this.sleep(500);
+            await CombatToast.show(this.buildAttackMessage(entry), this.buildToastType(entry), 2, speed);
+
+            await this.sleep(500 / speed);
 
         }
 
@@ -669,12 +726,24 @@ export default class PvpView {
         const allCombatants = [...this.getMyTeamCombatants(), ...this.getEnemyTeamCombatants()];
         const nameOf = (id) => allCombatants.find(c => c.id === id)?.name ?? "???";
         const originalHP = this.game.player.currentHP;
+        const battleStartTime = Date.now();
 
         for (const entry of log) {
 
             if (!entry.dodged) {
 
                 this.teamHP[entry.targetId] = Math.max(0, (this.teamHP[entry.targetId] ?? 0) - entry.damage);
+
+                if (entry.healedFromAbsorption > 0) {
+
+                    const targetMax = allCombatants.find(c => c.id === entry.targetId)?.maxHP ?? 0;
+
+                    this.teamHP[entry.targetId] = Math.min(
+                        targetMax,
+                        (this.teamHP[entry.targetId] ?? 0) + entry.healedFromAbsorption
+                    );
+
+                }
 
                 if (entry.targetId === PvpLobbyService.playerId) {
                     this.game.player.currentHP = this.teamHP[entry.targetId];
@@ -711,9 +780,11 @@ export default class PvpView {
 
             this.game.hudScreen.playerHUD.updateHP?.();
 
-            await CombatToast.show(this.buildTeamAttackMessage(entry, nameOf), this.buildTeamToastType(entry), 2);
+            const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
-            await this.sleep(450);
+            await CombatToast.show(this.buildTeamAttackMessage(entry, nameOf), this.buildTeamToastType(entry), 2, speed);
+
+            await this.sleep(450 / speed);
 
         }
 

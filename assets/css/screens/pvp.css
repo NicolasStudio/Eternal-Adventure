@@ -422,6 +422,10 @@
     font-weight:700;
     text-shadow:0 0 6px rgba(255,210,77,.5);
 }
+.pvp-log-absorption{
+    color:#7ec8e3;
+    font-weight:700;
+}
 
 .pvp-back-button{
     padding:10px 28px;

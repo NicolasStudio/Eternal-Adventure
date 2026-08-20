@@ -2,6 +2,11 @@
 // de um lado supere a do outro — nunca "nunca é atingido".
 const DODGE_CAP = 40;
 
+// Quando a Absorção ativa (ver calculateDamage), ela corta essa fração
+// do dano daquele golpe — não é o valor cheio do atributo, só QUANTO
+// mitiga quando a chance realmente proc.
+const ABSORPTION_MITIGATION_RATIO = 0.5;
+
 export default class CombatEngine {
     constructor(player, monster) {
         this.player = player;
@@ -33,7 +38,9 @@ export default class CombatEngine {
                 dodged: true,
                 damage: 0,
                 critical: false,
-                lifeSteal: 0
+                lifeSteal: 0,
+                absorbed: 0,
+                healedFromAbsorption: 0
             };
         }
 
@@ -47,6 +54,13 @@ export default class CombatEngine {
         } else {
             this.player.currentHP -= result.damage;
             this.player.currentHP = Math.max(0, this.player.currentHP);
+            // Absorção cura quem DEFENDEU (o jogador, nesse ramo) — assim
+            // como o Roubo de Vida acima só é aplicado de verdade pro
+            // lado "player" (monstro não tem esse atributo), a cura da
+            // Absorção só é aplicada aqui, no golpe que o monstro deu.
+            if (result.healedFromAbsorption > 0) {
+                this.player.currentHP = Math.min(this.player.maxHP, this.player.currentHP + result.healedFromAbsorption);
+            }
         }
         return {
             attacker: playerTurn ? "player" : "monster",
@@ -54,7 +68,9 @@ export default class CombatEngine {
             dodged: false,
             damage: result.damage,
             critical: result.critical,
-            lifeSteal: result.lifeSteal
+            lifeSteal: result.lifeSteal,
+            absorbed: result.absorbed,
+            healedFromAbsorption: result.healedFromAbsorption
         };
     }
 
@@ -96,21 +112,33 @@ export default class CombatEngine {
         // demais" que anula o ataque por completo.
         const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
 
-        // Absorção: redução percentual GARANTIDA (não é chance de proc,
-        // como crítico/roubo de vida/penetração — vale em todo golpe
-        // recebido), aplicada depois da mitigação de armadura e do
-        // crítico. Empilha com armadura em vez de competir com ela.
-        const absorption = Math.min(95, defender.absorption ?? 0);
-
         const preAbsorption = Math.max(
             1,
             Math.floor(attack * criticalMultiplier * mitigation)
         );
 
-        const damage = Math.max(
-            1,
-            Math.floor(preAbsorption * (1 - absorption / 100))
-        );
+        // Absorção: CHANCE de o defensor absorver parte do golpe — igual
+        // ao Roubo de Vida (que é "chance de proc", não garantido), só
+        // que do lado de quem APANHA em vez de quem ataca. Quando ativa,
+        // mitiga uma fração do dano (ABSORPTION_MITIGATION_RATIO) e cura
+        // parte do que foi absorvido, na mesma proporção usada pelo
+        // Roubo de Vida (20% do valor absorvido + 2% da vida máxima).
+        const absorptionChance = Math.min(95, defender.absorption ?? 0);
+
+        let absorbed = 0;
+        let healedFromAbsorption = 0;
+
+        if (Math.random() * 100 < absorptionChance) {
+
+            absorbed = Math.floor(preAbsorption * ABSORPTION_MITIGATION_RATIO);
+
+            healedFromAbsorption =
+                Math.floor(absorbed * 0.20) +
+                Math.floor(this.player.maxHP * 0.02);
+
+        }
+
+        const damage = Math.max(1, preAbsorption - absorbed);
 
         // ==========================
         // LIFE STEAL
@@ -129,7 +157,9 @@ export default class CombatEngine {
         return {
             damage,
             critical: isCritical,
-            lifeSteal: recoveredHP
+            lifeSteal: recoveredHP,
+            absorbed,
+            healedFromAbsorption
         };
 
     }
@@ -153,10 +183,16 @@ export default class CombatEngine {
             }
             return message;
         }
+
+        let message = "";
         if (result.critical) {
-            return `<span class="combat-critical">Ataque Crítico!</span><br> Você recebeu <strong>${this.monster.status.nomeAtaque}</strong>, <strong>${result.damage}</strong> de dano.`;
+            message += `<span class="combat-critical">Ataque Crítico!</span><br>`;
         }
-        return `Você recebeu <strong>${this.monster.status.nomeAtaque}</strong>, <strong>${result.damage}</strong> de dano.`;
+        message += ` Você recebeu <strong>${this.monster.status.nomeAtaque}</strong>, <strong>${result.damage}</strong> de dano.`;
+        if (result.healedFromAbsorption > 0) {
+            message += `<br><span class="combat-absorption">Você absorveu parte do ataque!</span> ${result.absorbed} de dano mitigado, recuperou <strong>${result.healedFromAbsorption}</strong> HP.`;
+        }
+        return message;
     }
 
     checkCombatState() {

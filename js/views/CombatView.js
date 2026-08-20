@@ -159,6 +159,10 @@ export default class CombatView {
                 type = "critico player";
             }
 
+        } else if (result.healedFromAbsorption > 0) {
+
+            type = "absorption enemy";
+
         }
 
         await CombatToast.show(message, type);

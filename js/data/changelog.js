@@ -5,7 +5,7 @@ export default [
         date: "Agosto de 2026",
         changes: [
             "Adicionada uma quarta classe jogável: Bárbaro — foco em Roubo de Vida, com machado, elmo, peitoral, calças e botas próprios em todas as raridades",
-            "Adicionado um atributo novo, Absorção: uma redução de dano garantida em todo golpe recebido (ao contrário de Crítico/Roubo de Vida/Penetração, que são chance de acontecer) — virou o atributo especial do Guerreiro",
+            "Adicionado um atributo novo, Absorção: chance de mitigar parte do dano de um golpe recebido e recuperar HP proporcional ao que foi absorvido — igual ao Roubo de Vida, só que do lado de quem apanha em vez de quem ataca — virou o atributo especial do Guerreiro",
             "Guerreiro reequilibrado: ataque, armadura, agilidade e a nova Absorção foram recalculados nível a nível; Roubo de Vida deixou de ser o especial dele e virou um atributo secundário",
             "Corrigida a fórmula de esquiva do PVP: travava em 0% sempre que o defensor não fosse mais ágil que quem atacou, o que deixava o Guerreiro praticamente sem chance contra qualquer classe mais rápida, não importa o quanto investisse em vida e armadura",
             "Personagens salvos antes desse reequilíbrio são recalculados automaticamente pra curva de status atual ao carregar o save, preservando qualquer bônus de pedra de encantamento ou transcendência já conquistado",
