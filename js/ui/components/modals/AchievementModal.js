@@ -17,6 +17,11 @@ export default class AchievementModal {
     }
 
     show() {
+        // Reavalia antes de renderizar — garante que correções como a
+        // do "O FIM?" (ver AchievementService.REVALIDATED_EVERY_CHECK)
+        // já apareçam certas mesmo que nada mais tenha disparado
+        // notify() desde o carregamento do save.
+        AchievementService.evaluate(this.player);
         this.mount();
     }
 

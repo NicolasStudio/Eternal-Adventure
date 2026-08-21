@@ -448,6 +448,13 @@ export default class HudScreen {
                 break;
         }
         this.element.classList.remove("hidden");
+
+        // Roda uma vez logo ao entrar (carregar save ou começar do
+        // zero) — sem isso, uma correção como a do "O FIM?" (ver
+        // AchievementService) só se aplicava na PRÓXIMA ação que
+        // disparasse notify(), então quem abrisse o modal de Conquistas
+        // antes de fazer qualquer outra coisa ainda via o estado velho.
+        this.checkAchievements();
     }
 
     hide() {
