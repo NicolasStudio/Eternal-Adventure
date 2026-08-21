@@ -8,7 +8,6 @@ export default [
             "Absorção reformulada: agora é chance de ativar (como o Roubo de Vida), e quando ativa mitiga parte do dano recebido e cura HP proporcional ao que foi absorvido — antes era uma redução garantida em todo golpe, sem nenhuma cura",
             "Corrigido o contraste dos avisos de combate: crítico, roubo de vida e absorção às vezes ficavam com a cor do texto igual à do fundo da caixa, quase ilegíveis",
             "PVP: um combate que passa de 1 minuto acelera sozinho em 2x, sem precisar de nenhum controle manual",
-            "Nova condição pro final secreto (Portal da Luz/Trevas): além de nível 100 e álbum completo, agora também exige 3/3 conclusões em todas as dungeons",
             "Personagem no nível máximo não ganha mais experiência à toa",
             "Corrigido um caso raro em que um atributo secundário (ex: Penetração) podia ficar negativo em saves antigos, impedindo alcançar o teto real do item"
         ]
