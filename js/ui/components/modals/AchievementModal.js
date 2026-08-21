@@ -16,6 +16,16 @@ export default class AchievementModal {
         return !!this.modal;
     }
 
+    // Conta só ids que existem em achievements.js AGORA — nunca confia
+    // em player.progress.achievements.length puro (pode ter id órfão de
+    // uma conquista renomeada/removida, o que já deixou a barra passar
+    // de 100% uma vez). AchievementService.evaluate() já limpa isso na
+    // maioria dos casos; isso aqui é só uma segunda camada de segurança.
+    getUnlockedCount() {
+        const validIds = new Set(achievements.map(a => a.id));
+        return (this.player.progress.achievements ?? []).filter(id => validIds.has(id)).length;
+    }
+
     show() {
         // Reavalia antes de renderizar — garante que correções como a
         // do "O FIM?" (ver AchievementService.REVALIDATED_EVERY_CHECK)
@@ -56,7 +66,7 @@ export default class AchievementModal {
         const grid = this.modal.querySelector(".achievements-grid");
         if (grid) grid.innerHTML = this.renderCards();
 
-        const unlockedCount = this.player.progress.achievements?.length ?? 0;
+        const unlockedCount = this.getUnlockedCount();
         const total = achievements.length;
         const percent = total > 0 ? (unlockedCount / total) * 100 : 0;
 
@@ -70,7 +80,7 @@ export default class AchievementModal {
 
     render() {
 
-        const unlockedCount = this.player.progress.achievements?.length ?? 0;
+        const unlockedCount = this.getUnlockedCount();
         const total = achievements.length;
         const percent = total > 0 ? (unlockedCount / total) * 100 : 0;
 

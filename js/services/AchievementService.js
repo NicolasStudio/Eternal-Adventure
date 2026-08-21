@@ -131,12 +131,54 @@ export default class AchievementService {
         return player.progress.achievements?.includes(id) ?? false;
     }
 
+    // Ids salvos que não batem com NENHUM achievement.id atual — sobras
+    // de uma numeração antiga (ex: os "conquest_NN" de antes da migração
+    // pra ids semânticos, ver [[achievements-id-coupling]]) ou de uma
+    // conquista removida do jogo. Sem essa limpeza eles ficam presos no
+    // array pra sempre, inflando a contagem de "X/36" além de 100%.
+    //
+    // Pra cada um removido, reconfere SILENCIOSAMENTE (sem toast, sem
+    // entrar em newlyUnlocked) se o id NOVO correspondente já devia
+    // estar desbloqueado — não é uma conquista nova, é a mesma que o
+    // personagem já tinha, só sob outro nome. Idempotente: rodar de
+    // novo com o array já limpo não faz nada.
+    static sanitize(player) {
+
+        if (!player.progress.achievements) {
+            player.progress.achievements = [];
+            return;
+        }
+
+        const validIds = new Set(achievements.map(a => a.id));
+
+        const hasOrphans = player.progress.achievements.some(id => !validIds.has(id));
+
+        if (!hasOrphans) return;
+
+        player.progress.achievements = player.progress.achievements.filter(id => validIds.has(id));
+
+        for (const achievement of achievements) {
+
+            if (player.progress.achievements.includes(achievement.id)) continue;
+
+            const check = CHECKS[achievement.id];
+
+            if (check && check(player)) {
+                player.progress.achievements.push(achievement.id);
+            }
+
+        }
+
+    }
+
     // Roda todos os checadores, desbloqueia (de forma permanente) quem
     // ainda não estava e devolve só as conquistas NOVAS dessa chamada —
     // é essa lista que vira o pop-up de notificação.
     static evaluate(player) {
 
         if (!player.progress.achievements) player.progress.achievements = [];
+
+        this.sanitize(player);
 
         for (const id of REVALIDATED_EVERY_CHECK) {
 
