@@ -166,11 +166,13 @@ export default class SettingsModal {
             this.settings.musicVolume = Number(event.target.value);
             AudioSettings.save(this.settings);
             MusicService.refreshSettings();
+            this.checkSilenceAchievement();
         });
 
         this.modal.querySelector("#settings-sfx-volume")?.addEventListener("input", (event) => {
             this.settings.sfxVolume = Number(event.target.value);
             AudioSettings.save(this.settings);
+            this.checkSilenceAchievement();
         });
 
         this.modal.querySelector("#settings-clear-data")?.addEventListener("click", () => {
@@ -193,6 +195,20 @@ export default class SettingsModal {
             this.hide();
             this.game.showScreen("home");
         });
+
+    }
+
+    // Conquista "Shiii, faça silêncio..." mora em AchievementService,
+    // não em nenhuma ação do player — precisa desse gancho manual
+    // porque mudar o volume aqui nunca chama player.notify() (que é o
+    // que dispara checkAchievements() em todo o resto do jogo, via
+    // HudScreen.updateHUD()). Esse modal também abre direto da tela
+    // inicial (antes de existir personagem), daí o guard.
+    checkSilenceAchievement() {
+
+        if (!this.game.player) return;
+
+        this.game.hudScreen.checkAchievements();
 
     }
 

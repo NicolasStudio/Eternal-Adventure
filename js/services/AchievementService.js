@@ -1,6 +1,7 @@
 import achievements from "../data/achievements.js";
 import dungeons from "../data/dungeons.js";
 import cards from "../data/cards.js";
+import AudioSettings from "./AudioSettings.js";
 
 const EQUIPMENT_SLOTS = ["weapon", "helmet", "chest", "leg", "boot"];
 
@@ -30,6 +31,14 @@ function hasAnyExceptionalItem(player) {
 
 function hasAnyEnchantedItem(player) {
     return allEquippedAndInventoryItems(player).some(item => item.enchantments && Object.keys(item.enchantments).length > 0);
+}
+
+// Não depende do player — o volume mora em AudioSettings (localStorage),
+// não em progress. Basta a Música e os Efeitos sonoros estarem os DOIS
+// no 0 (o checkbox de liga/desliga não entra na conta, só o slider).
+function allSoundMuted() {
+    const settings = AudioSettings.get();
+    return settings.musicVolume === 0 && settings.sfxVolume === 0;
 }
 
 function allDungeonsMaxed(player) {
@@ -98,7 +107,9 @@ const CHECKS = {
     conquest_35: player =>
         player.level >= 100 &&
         player.album.length >= cards.length &&
-        allDungeonsMaxed(player)
+        allDungeonsMaxed(player),
+
+    conquest_36: () => allSoundMuted()
 };
 
 export default class AchievementService {

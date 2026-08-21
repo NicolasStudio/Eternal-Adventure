@@ -252,8 +252,16 @@ const achievements = [
     {
         id: 'conquest_35',
         name: 'O FIM?',
-        description: 'Colete todas as cartas, atinja a pontuação minima e esteja lv 100!', 
+        description: 'Colete todas as cartas, atinja a pontuação minima e esteja lv 100!',
         icon: 'assets/img/icons/achievements/ouro.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    // Configurações
+    {
+        id: 'conquest_36',
+        name: 'Shiii, faça silêncio...',
+        description: 'Diminua a Música e os Efeitos sonoros a 0 no menu de Configurações!',
+        icon: 'assets/img/icons/achievements/bronze.png',
         iconLocked:'assets/img/icons/achievements/bloqueado.png'
     }
 ];
