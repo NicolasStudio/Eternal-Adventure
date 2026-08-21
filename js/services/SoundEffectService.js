@@ -9,7 +9,8 @@ import AudioSettings from "./AudioSettings.js";
     nunca precisa de um refreshSettings() como o da música.
 */
 const SOUNDS = {
-    achievementUnlocked: "assets/audio/Achievements.mp3"
+    achievementUnlocked: "assets/audio/Achievements.mp3",
+    levelUp: "assets/audio/up.mp3"
 };
 
 export default class SoundEffectService {
@@ -28,7 +29,7 @@ export default class SoundEffectService {
 
         audio.volume = Math.max(0, Math.min(1, settings.sfxVolume / 100));
 
-        audio.play().catch(() => {});
+        audio.play().catch(err => console.warn(`Não foi possível tocar o efeito sonoro "${key}":`, err));
 
     }
 

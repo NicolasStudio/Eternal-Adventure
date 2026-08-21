@@ -1,3 +1,5 @@
+import SoundEffectService from "../../../services/SoundEffectService.js";
+
 export default class LevelUpModal {
 
     constructor(game) {
@@ -7,6 +9,8 @@ export default class LevelUpModal {
     show(level, bonuses) {
 
         return new Promise(resolve => {
+
+            SoundEffectService.play("levelUp");
 
             const overlay = document.createElement("div");
             overlay.className = "modal-overlay";
