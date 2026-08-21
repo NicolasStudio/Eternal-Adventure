@@ -47,69 +47,74 @@ function allDungeonsMaxed(player) {
         .every(dungeon => player.getDungeonClears(dungeon.id) >= 3);
 }
 
-// Um checador por conquista — cada um só olha pro estado ATUAL do
-// personagem (contadores em player.progress.stats, ou dados já
-// existentes como nível/álbum/equipamento). Uma vez que um checador
-// retorna true, AchievementService.evaluate() marca a conquista como
-// desbloqueada PRA SEMPRE — mesmo que o estado que a disparou mude
-// depois (ex: vender o item encantado, trocar de equipamento).
+// Um checador por conquista, indexado pelo MESMO id semântico usado em
+// achievements.js (kill_1, level_5, silence, the_end, etc.) — nunca
+// pela posição/ordem no array. Isso é o que evita o bug de reordenar
+// achievements.js e a lógica de uma conquista passar a valer pra outra.
+//
+// Cada um só olha pro estado ATUAL do personagem (contadores em
+// player.progress.stats, ou dados já existentes como nível/álbum/
+// equipamento). Uma vez que um checador retorna true,
+// AchievementService.evaluate() marca a conquista como desbloqueada
+// PRA SEMPRE — mesmo que o estado que a disparou mude depois (ex:
+// vender o item encantado, trocar de equipamento).
 const CHECKS = {
-    conquest_01: player => distinctKills(player) >= 1,
-    conquest_02: player => distinctKills(player) >= 10,
-    conquest_03: player => distinctKills(player) >= 25,
-    conquest_04: player => distinctKills(player) >= 50,
-    conquest_05: player => distinctKills(player) >= 75,
-    conquest_06: player => distinctKills(player) >= 99,
-    conquest_07: player => distinctKills(player) >= cards.length,
+    kill_1: player => distinctKills(player) >= 1,
+    kill_10: player => distinctKills(player) >= 10,
+    kill_25: player => distinctKills(player) >= 25,
+    kill_50: player => distinctKills(player) >= 50,
+    kill_75: player => distinctKills(player) >= 75,
+    kill_99: player => distinctKills(player) >= 99,
+    kill_all: player => distinctKills(player) >= cards.length,
 
-    conquest_08: player => (player.progress.stats?.deaths ?? 0) >= 1,
-    conquest_09: player => (player.progress.stats?.deaths ?? 0) >= 10,
-    conquest_10: player => (player.progress.stats?.deaths ?? 0) >= 30,
+    death_1: player => (player.progress.stats?.deaths ?? 0) >= 1,
+    death_10: player => (player.progress.stats?.deaths ?? 0) >= 10,
+    death_30: player => (player.progress.stats?.deaths ?? 0) >= 30,
 
-    conquest_11: player => player.level >= 5,
-    conquest_12: player => player.level >= 20,
-    conquest_13: player => player.level >= 30,
-    conquest_14: player => player.level >= 50,
-    conquest_15: player => player.level >= 70,
-    conquest_16: player => player.level >= 100,
+    level_5: player => player.level >= 5,
+    level_20: player => player.level >= 20,
+    level_30: player => player.level >= 30,
+    level_50: player => player.level >= 50,
+    level_70: player => player.level >= 70,
+    level_100: player => player.level >= 100,
 
-    conquest_17: player => hasFullSetOfRarity(player, "common"),
-    conquest_18: player => hasFullSetOfRarity(player, "rare"),
-    conquest_19: player => hasFullSetOfRarity(player, "mystic"),
+    equip_common: player => hasFullSetOfRarity(player, "common"),
+    equip_rare: player => hasFullSetOfRarity(player, "rare"),
+    equip_mystic: player => hasFullSetOfRarity(player, "mystic"),
 
-    conquest_20: player => hasAnyUpgradedItem(player),
-    conquest_21: player => hasAnyExceptionalItem(player),
+    upgrade_first: player => hasAnyUpgradedItem(player),
+    upgrade_exceptional: player => hasAnyExceptionalItem(player),
 
-    conquest_22: player => hasAnyEnchantedItem(player),
-    conquest_23: player => (player.progress.stats?.enchantStoneFamiliesUsed?.length ?? 0) >= 4,
-    conquest_24: player => player.progress.stats?.usedLevel3Stone === true,
+    enchant_first: player => hasAnyEnchantedItem(player),
+    enchant_all_families: player => (player.progress.stats?.enchantStoneFamiliesUsed?.length ?? 0) >= 4,
+    enchant_level3: player => player.progress.stats?.usedLevel3Stone === true,
 
-    conquest_25: player => (player.progress.stats?.hospitalHeals ?? 0) >= 100,
+    hospital_100: player => (player.progress.stats?.hospitalHeals ?? 0) >= 100,
 
-    conquest_26: player => (player.progress.stats?.goldFromSelling ?? 0) >= 100000,
+    sell_100k: player => (player.progress.stats?.goldFromSelling ?? 0) >= 100000,
 
-    conquest_27: player => allDungeonsMaxed(player),
+    dungeons_maxed: player => allDungeonsMaxed(player),
 
-    conquest_28: player => player.album.length >= 1,
-    conquest_29: player => player.album.length >= 10,
-    conquest_30: player => player.album.length >= 25,
-    conquest_31: player => player.album.length >= 50,
-    conquest_32: player => player.album.length >= 75,
-    conquest_33: player => player.album.length >= 100,
+    album_1: player => player.album.length >= 1,
+    album_10: player => player.album.length >= 10,
+    album_25: player => player.album.length >= 25,
+    album_50: player => player.album.length >= 50,
+    album_75: player => player.album.length >= 75,
+    album_100: player => player.album.length >= 100,
 
-    conquest_34: player => (player.progress.stats?.pvpWins ?? 0) >= 1,
+    pvp_first_win: player => (player.progress.stats?.pvpWins ?? 0) >= 1,
+
+    silence: () => allSoundMuted(),
 
     // Mesmas 3 condições de Player.canMakeSoulChoice() (nível 100 +
     // álbum completo + 3/3 em todas as dungeons) — só que sem o guard
     // de "progress.soulChoice já escolhido", porque aquele existe pra
     // parar de mostrar o MODAL de escolha de novo, não pra dizer que a
     // conquista deixou de valer depois que o jogador escolheu um lado.
-    conquest_35: player =>
+    the_end: player =>
         player.level >= 100 &&
         player.album.length >= cards.length &&
-        allDungeonsMaxed(player),
-
-    conquest_36: () => allSoundMuted()
+        allDungeonsMaxed(player)
 };
 
 // "O FIM?" depende só de nível, álbum e conclusões de dungeon — os
@@ -117,9 +122,8 @@ const CHECKS = {
 // tudo mais (que fica permanente de propósito, pra não punir quem
 // vende um item encantado ou troca de equipamento), re-conferir essa
 // de novo em toda avaliação não tira nada de quem ganhou de verdade —
-// só corrige, pra sempre, um desbloqueio indevido (ex: um bug antigo
-// que deu a conquista antes da hora).
-const REVALIDATED_EVERY_CHECK = new Set(["conquest_35"]);
+// só corrige, pra sempre, um desbloqueio indevido.
+const REVALIDATED_EVERY_CHECK = new Set(["the_end"]);
 
 export default class AchievementService {
 
