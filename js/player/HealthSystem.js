@@ -185,6 +185,8 @@ export default class HealthSystem {
 
         this.activateBurst();
 
+        this.player.progress.stats.hospitalHeals = (this.player.progress.stats.hospitalHeals ?? 0) + 1;
+
         Toast.show("Burst de Vida ativado.");
 
         return true;
@@ -207,6 +209,8 @@ export default class HealthSystem {
         this.player.gold -= cost;
 
         this.heal(this.getMissingHP());
+
+        this.player.progress.stats.hospitalHeals = (this.player.progress.stats.hospitalHeals ?? 0) + 1;
 
         Toast.show("Vida restaurada.");
 

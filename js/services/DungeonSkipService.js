@@ -56,8 +56,17 @@ export default class DungeonSkipService {
             if (state.winner !== "player") {
                 result.floorReached = floor - 1;
                 result.diedTo = monster.name;
+                // Só pra alimentar as conquistas de morte (ver
+                // AchievementService) — notify() explícito porque nada
+                // mais muda no player nesse ramo.
+                player.registerDeath();
+                player.notify();
                 return result;
             }
+
+            // Idem, mas de kill — collectReward() logo abaixo já chama
+            // notify() sozinho (soma XP/ouro), então não precisa repetir aqui.
+            player.registerKill(monster.id);
 
             const reward = LootSystem.generate(monster, player);
 

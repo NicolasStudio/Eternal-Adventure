@@ -10,6 +10,7 @@ import levels  from "../data/levels.js";
 import qualities from "../data/quality.js";
 import upClasse from "./upClasse.js";
 import cards from "../data/cards.js";
+import dungeons from "../data/dungeons.js";
 import ItemValueService from "../services/ItemValueService.js";
 import baseStatsL1 from "../data/baseStatsL1.js";
 import { CURRENT_BALANCE_VERSION } from "../services/StatsMigrationService.js";
@@ -35,7 +36,23 @@ export default class Player {
             // spoiler" no álbum, essa escolha fica valendo pra sempre —
             // não faz sentido pedir a mesma confirmação de novo toda vez
             // que o álbum é reaberto.
-            albumRevealed: false
+            albumRevealed: false,
+            // Ids das conquistas já desbloqueadas (ver AchievementService) —
+            // permanente: uma vez destravada, nunca volta a ficar bloqueada,
+            // mesmo que o estado que a disparou mude depois.
+            achievements: [],
+            // Contadores que nenhum outro lugar do jogo guarda sozinho —
+            // só existem pra alimentar as conquistas que dependem de
+            // HISTÓRICO (não de um snapshot do estado atual).
+            stats: {
+                killedMonsters: [],
+                deaths: 0,
+                hospitalHeals: 0,
+                goldFromSelling: 0,
+                pvpWins: 0,
+                enchantStoneFamiliesUsed: [],
+                usedLevel3Stone: false
+            }
         };
         this.equipment = {
             weapon: null,
@@ -65,8 +82,9 @@ export default class Player {
         this.balanceVersion = CURRENT_BALANCE_VERSION;
     }
 
-    // Nível máximo + todas as cartas do bestiário coletadas — a condição
-    // pro final secreto aparecer.
+    // Nível máximo + todas as cartas do bestiário coletadas + todas as
+    // fases (dungeons não-ocultas) em 3/3 conclusões — a condição pro
+    // final secreto aparecer.
     canMakeSoulChoice() {
 
         if (this.progress.soulChoice) return false;
@@ -75,7 +93,11 @@ export default class Player {
 
         const totalCards = cards.length;
 
-        return this.album.length >= totalCards;
+        if (this.album.length < totalCards) return false;
+
+        return dungeons
+            .filter(dungeon => !dungeon.hidden)
+            .every(dungeon => this.getDungeonClears(dungeon.id) >= 3);
 
     }
 
@@ -314,7 +336,11 @@ export default class Player {
 
         const toSell = Math.min(amount, inventoryItem.quantity ?? 1);
 
-        this.addGold(ItemValueService.getSellValue(inventoryItem) * toSell);
+        const soldValue = ItemValueService.getSellValue(inventoryItem) * toSell;
+
+        this.addGold(soldValue);
+
+        this.progress.stats.goldFromSelling = (this.progress.stats.goldFromSelling ?? 0) + soldValue;
 
         this.removeItem(inventoryItem, toSell);
 
@@ -521,6 +547,27 @@ export default class Player {
 
         weaponInstance.enchantments[statKey] = newValue;
 
+        // Rastreia a FAMÍLIA da pedra (rubi/safira/imperial/turmalina) e
+        // se algum dia já usou uma de nível 3 — só pra alimentar as
+        // conquistas de encantamento, nada aqui afeta o jogo em si.
+        const stoneMatch = inventoryStone.id?.match(/^(.+)-(\d)$/);
+
+        if (stoneMatch) {
+
+            const [, family, levelText] = stoneMatch;
+
+            this.progress.stats.enchantStoneFamiliesUsed ??= [];
+
+            if (!this.progress.stats.enchantStoneFamiliesUsed.includes(family)) {
+                this.progress.stats.enchantStoneFamiliesUsed.push(family);
+            }
+
+            if (Number(levelText) >= 3) {
+                this.progress.stats.usedLevel3Stone = true;
+            }
+
+        }
+
         this.removeItem(inventoryStone);
 
         return { success: true, statKey, value: newValue };
@@ -581,6 +628,26 @@ export default class Player {
         if (!dungeon) return false;
 
         return this.getDungeonClears(dungeon.id) >= 3;
+
+    }
+
+    // Só pra alimentar as conquistas de caça (ver AchievementService) —
+    // guarda o id sem duplicar, não afeta o combate em si.
+    registerKill(monsterId) {
+
+        if (!monsterId) return;
+
+        this.progress.stats.killedMonsters ??= [];
+
+        if (!this.progress.stats.killedMonsters.includes(monsterId)) {
+            this.progress.stats.killedMonsters.push(monsterId);
+        }
+
+    }
+
+    registerDeath() {
+
+        this.progress.stats.deaths = (this.progress.stats.deaths ?? 0) + 1;
 
     }
 }

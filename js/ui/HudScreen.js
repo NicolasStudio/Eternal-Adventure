@@ -21,6 +21,9 @@ import LoadGameModal from "./components/modals/LoadGameModal.js";
 import SettingsModal from "./components/modals/SettingsModal.js";
 import MusicService from "../services/MusicService.js";
 import SaveService from "../services/SaveService.js";
+import AchievementModal from "./components/modals/AchievementModal.js";
+import AchievementService from "../services/AchievementService.js";
+import AchievementToast from "./components/AchievementToast.js";
 
 export default class HudScreen {
     constructor(game) {
@@ -43,6 +46,7 @@ export default class HudScreen {
         this.chestHUD = new ChestHUD(game);
         this.chestRewardModal = new ChestRewardModal();
         this.albumModal = new AlbumModal(game);
+        this.achievementModal = new AchievementModal(game);
         this.loadGameModal = new LoadGameModal(game);
         this.settingsModal = new SettingsModal(game, { inGame: true });
         this.currentView = "";
@@ -104,6 +108,24 @@ export default class HudScreen {
         if (this.currentView === "character") {
             this.refreshCurrentView();
         }
+        this.checkAchievements();
+    }
+
+    // updateHUD() já roda depois de TODA mutação relevante do player
+    // (é o listener ligado em notify() — ver ClassSelectionScreen.js e
+    // SaveService.applyLoadedData), então esse é o único lugar que
+    // precisa chamar AchievementService.evaluate(): nunca precisa ficar
+    // caçando cada ação que poderia destravar uma conquista.
+    checkAchievements() {
+
+        const newlyUnlocked = AchievementService.evaluate(this.game.player);
+
+        newlyUnlocked.forEach(achievement => AchievementToast.show(achievement));
+
+        if (newlyUnlocked.length && this.achievementModal.isOpen) {
+            this.achievementModal.refresh();
+        }
+
     }
 
     renderContent() {
@@ -195,6 +217,10 @@ export default class HudScreen {
         };
         this.element.querySelector(".hud-navigation")?.addEventListener("mouseenter", forceCloseStaleTooltip);
         this.element.querySelector(".hud-toolbar")?.addEventListener("mouseenter", forceCloseStaleTooltip);
+
+        this.element.querySelector("#btn-conquistas")?.addEventListener("click", () => {
+            this.achievementModal.show();
+        });
 
         this.element.querySelector("#btn-album")?.addEventListener("click", () => {
             this.albumModal.show();

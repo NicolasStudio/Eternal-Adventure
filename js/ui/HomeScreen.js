@@ -40,7 +40,7 @@ export default class HomeScreen {
                     </button>
                 </div>
                 <small>
-                    Alpha v0.10
+                    Alpha v0.11
                 </small>
             </div>
         `;

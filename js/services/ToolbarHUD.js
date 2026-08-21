@@ -15,6 +15,9 @@ export default class Toolbar {
                 <button class="hud-tool" id="btn-wiki" data-tooltip="Wiki">
                     <i class="fa-brands fa-wikipedia-w"></i>
                 </button>
+                <button class="hud-tool" id="btn-conquistas" data-tooltip="Conquistas">
+                    <i class="fa-solid fa-medal"></i>
+                </button>
                 <button id="btn-save" class="hud-tool" data-tooltip="Salvar jogo">
                     <i class="fa-solid fa-floppy-disk"></i>
                 </button>

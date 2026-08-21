@@ -92,6 +92,15 @@ export default class CombatView {
             }
             await CombatToast.show(state.winner === "player" ? `${this.currentMonster.name} derrotado!` : "Você foi derrotado!", "system");
             if (state.winner === "player") {
+
+                // Só pra alimentar as conquistas de caça — não afeta o
+                // combate. notify() explícito porque, sozinho, registrar
+                // a morte não passa por nenhum outro caminho que já
+                // dispara notify() (diferente do collectReward logo
+                // abaixo, que soma XP/ouro e já notifica por conta própria).
+                this.game.player.registerKill(this.currentMonster.id);
+                this.game.player.notify();
+
                 const reward = LootSystem.generate(this.currentMonster, this.game.player);
                 const levelUps = this.game.player.collectReward(reward);
                 this.game.hudScreen.refreshCurrentView();
@@ -129,6 +138,12 @@ export default class CombatView {
                 }
                 return true;
             }
+
+            // Idem ao registerKill acima — só alimenta as conquistas de
+            // morte, notify() explícito pelo mesmo motivo.
+            this.game.player.registerDeath();
+            this.game.player.notify();
+
             await this.closeCombat();
             this.game.hudScreen.exitCombat();
             return false;

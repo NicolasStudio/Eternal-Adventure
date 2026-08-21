@@ -151,6 +151,24 @@ export default class SaveService {
 
         player.progress = data.progress ?? player.progress;
 
+        // Saves de antes das conquistas existirem não têm esses dois
+        // campos — sem isso, achievements/stats ficariam undefined pro
+        // resto da sessão (AchievementService.evaluate() já protege com
+        // "?? 0"/"?? []" em cada leitura, mas o registerKill/registerDeath/
+        // etc. abaixo escrevem direto em progress.stats.X, então precisa
+        // existir o objeto). Preserva qualquer contador que JÁ exista.
+        player.progress.achievements ??= [];
+        player.progress.stats = {
+            killedMonsters: [],
+            deaths: 0,
+            hospitalHeals: 0,
+            goldFromSelling: 0,
+            pvpWins: 0,
+            enchantStoneFamiliesUsed: [],
+            usedLevel3Stone: false,
+            ...player.progress.stats
+        };
+
         // Re-deriva a transcendência a partir da escolha salva (não guarda
         // o objeto pesado no save, e sempre pega os dados/imagens atuais
         // do upClasse.js, mesmo que ele mude depois).

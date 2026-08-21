@@ -450,6 +450,14 @@ export default class PvpView {
         const iWon = (result.winner === "a") === this.isPlayerA;
         await CombatToast.show(iWon ? `${opponent.name} derrotado!` : "Você foi derrotado!", "system", 2);
 
+        // Só pra alimentar a conquista de PVP — notify() explícito
+        // porque vencer uma partida, sozinho, não muda nada em
+        // player.gold/level/etc que já dispararia isso.
+        if (iWon) {
+            this.player.progress.stats.pvpWins = (this.player.progress.stats.pvpWins ?? 0) + 1;
+            this.player.notify();
+        }
+
     }
 
     async startTeamBattle() {
@@ -473,6 +481,11 @@ export default class PvpView {
 
         const iWon = result.winner === this.myTeamKey;
         await CombatToast.show(iWon ? "Sua dupla venceu!" : "Sua dupla foi derrotada!", "system", 2);
+
+        if (iWon) {
+            this.player.progress.stats.pvpWins = (this.player.progress.stats.pvpWins ?? 0) + 1;
+            this.player.notify();
+        }
 
     }
 
