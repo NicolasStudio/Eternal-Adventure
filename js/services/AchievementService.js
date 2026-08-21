@@ -112,6 +112,15 @@ const CHECKS = {
     conquest_36: () => allSoundMuted()
 };
 
+// "O FIM?" depende só de nível, álbum e conclusões de dungeon — os
+// três só CRESCEM, nada no jogo os diminui. Então, ao contrário de
+// tudo mais (que fica permanente de propósito, pra não punir quem
+// vende um item encantado ou troca de equipamento), re-conferir essa
+// de novo em toda avaliação não tira nada de quem ganhou de verdade —
+// só corrige, pra sempre, um desbloqueio indevido (ex: um bug antigo
+// que deu a conquista antes da hora).
+const REVALIDATED_EVERY_CHECK = new Set(["conquest_35"]);
+
 export default class AchievementService {
 
     static isUnlocked(player, id) {
@@ -124,6 +133,18 @@ export default class AchievementService {
     static evaluate(player) {
 
         if (!player.progress.achievements) player.progress.achievements = [];
+
+        for (const id of REVALIDATED_EVERY_CHECK) {
+
+            if (!player.progress.achievements.includes(id)) continue;
+
+            const check = CHECKS[id];
+
+            if (check && !check(player)) {
+                player.progress.achievements = player.progress.achievements.filter(existing => existing !== id);
+            }
+
+        }
 
         const newlyUnlocked = [];
 
