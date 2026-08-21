@@ -197,44 +197,52 @@ const achievements = [
         icon: 'assets/img/icons/achievements/ouro.png',
         iconLocked:'assets/img/icons/achievements/bloqueado.png'
     },
-    // Álbum
+    // Configurações
     {
         id: 'conquest_28',
+        name: 'Disse algo?',
+        description: 'Shiii, faça silêncio...',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    // Álbum
+    {
+        id: 'conquest_29',
         name: 'Primeira Figurinha',
         description: 'Colete seu primeiro card!', 
         icon: 'assets/img/icons/achievements/bronze.png',
         iconLocked:'assets/img/icons/achievements/bloqueado.png'
     },
     {
-        id: 'conquest_29',
+        id: 'conquest_30',
         name: 'Colecionador Iniciante',
         description: 'Colete 10 cards!', 
         icon: 'assets/img/icons/achievements/bronze.png',
         iconLocked:'assets/img/icons/achievements/bloqueado.png'
     },
     {
-        id: 'conquest_30',
+        id: 'conquest_31',
         name: 'Colecionador Amador',
         description: 'Colete 25 cards!', 
         icon: 'assets/img/icons/achievements/bronze.png',
         iconLocked:'assets/img/icons/achievements/bloqueado.png'
     },
     {
-        id: 'conquest_31',
+        id: 'conquest_32',
         name: 'Colecionador Intermediário',
         description: 'Colete 50 cards!', 
         icon: 'assets/img/icons/achievements/prata.png',
         iconLocked:'assets/img/icons/achievements/bloqueado.png'
     },
     {
-        id: 'conquest_32',
+        id: 'conquest_33',
         name: 'Colecionador Avançado',
         description: 'Colete 75 cards!', 
         icon: 'assets/img/icons/achievements/prata.png',
         iconLocked:'assets/img/icons/achievements/bloqueado.png'
     },
     {
-        id: 'conquest_33',
+        id: 'conquest_34',
         name: 'Colecionador René Doscards',
         description: 'Colete 100 cards!', 
         icon: 'assets/img/icons/achievements/ouro.png',
@@ -242,7 +250,7 @@ const achievements = [
     },
     // PVP
     {
-        id: 'conquest_34',
+        id: 'conquest_35',
         name: 'O pai ta on!',
         description: 'Vença seu primeiro combate pvp!', 
         icon: 'assets/img/icons/achievements/bronze.png',
@@ -250,20 +258,13 @@ const achievements = [
     },
     // Fim
     {
-        id: 'conquest_35',
+        id: 'conquest_36',
         name: 'O FIM?',
         description: 'Colete todas as cartas, atinja a pontuação minima e esteja lv 100!',
         icon: 'assets/img/icons/achievements/ouro.png',
         iconLocked:'assets/img/icons/achievements/bloqueado.png'
     },
-    // Configurações
-    {
-        id: 'conquest_36',
-        name: 'Shiii, faça silêncio...',
-        description: 'Diminua a Música e os Efeitos sonoros a 0 no menu de Configurações!',
-        icon: 'assets/img/icons/achievements/bronze.png',
-        iconLocked:'assets/img/icons/achievements/bloqueado.png'
-    }
+
 ];
 
 export default achievements;
