@@ -1,6 +1,17 @@
 export default [
 
     {
+        version: "Alpha v0.12",
+        date: "Agosto de 2026",
+        changes: [
+            "Adicionado sistema que conquistas ao todo 36 missões/tarefas",
+            "Realizado micro ajuste no dano do Guerreiro e do Mago, estavam muito abaixo do arquiro, +2 para o guerreiro e +3 no mago, SOMENTE na arma mística",
+            "Modo 2x2 está muito bugado devido a reclamações está indisponível momentâneamente",
+            "Adicionado novo menu Cooperativo, junte-se com seus amigos para derrotar o mais novo chefe"
+        ]
+    },
+
+    {
         version: "Alpha v0.11",
         date: "Agosto de 2026",
         changes: [

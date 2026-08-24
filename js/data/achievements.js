@@ -252,7 +252,7 @@ const achievements = [
     },
     {
         id: 'album_100',
-        name: 'Colecionador René Doscards',
+        name: 'Colecionador René DosCards',
         description: 'Colete 100 cards!',
         icon: 'assets/img/icons/achievements/ouro.png',
         iconLocked:'assets/img/icons/achievements/bloqueado.png'

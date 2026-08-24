@@ -2,6 +2,8 @@ import CharacterView from "../views/CharacterView.js";
 import DungeonView from "../views/DungeonView.js";
 import PvpView from "../views/PvpView.js";
 import PvpLobbyService from "../services/PvpLobbyService.js";
+import RaidView from "../views/RaidView.js";
+import RaidLobbyService from "../services/RaidLobbyService.js";
 import CombatView from "../views/CombatView.js";
 import CityView from "../views/CityView.js";
 import PlayerHUD from "./components/PlayerHUD.js";
@@ -33,6 +35,7 @@ export default class HudScreen {
         this.characterView = new CharacterView(game);
         this.dungeonView = new DungeonView(game);
         this.pvpView = new PvpView(game);
+        this.raidView = new RaidView(game);
         this.combatView = new CombatView(game);
         this.cityView = new CityView(game);
         this.marketView = new MarketView(game);
@@ -53,6 +56,7 @@ export default class HudScreen {
         this.characterVisible = true;
         this.inCombat = false;
         this.inPvpCombat = false;
+        this.inRaidCombat = false;
         this.currentMonster = null;
         this.backgroundImage = "";
         this.preparationMode = false;
@@ -77,13 +81,13 @@ export default class HudScreen {
     }
 
     renderHeader() {
-        const anyCombat = this.inCombat || this.inPvpCombat;
+        const anyCombat = this.inCombat || this.inPvpCombat || this.inRaidCombat;
         const isPvp2v2 = this.inPvpCombat && this.pvpView.mode === "2v2";
         const headerModeClass = isPvp2v2 ? "pvp2v2" : (anyCombat ? "combat" : "exploration");
         return `
             <header class="hud-header ${headerModeClass}">
                 <div class="hud-left-column">
-                    ${this.playerHUD.render()}
+                    ${!this.inRaidCombat ? this.playerHUD.render() : ""}
                     ${!anyCombat ? this.chestHUD.render() : ""}
                 </div>
                 ${this.inCombat ? this.dungeonHeader.render(this.combatView.currentDungeon, this.combatView.currentFloor) : ""}
@@ -97,6 +101,7 @@ export default class HudScreen {
         if (this.inCombat) return this.monsterHUD.render(this.combatView.currentMonster);
         if (this.inPvpCombat && this.pvpView.mode !== "2v2") return this.monsterHUD.render(this.pvpView.opponentAsMonster());
         if (this.inPvpCombat) return "";
+        if (this.inRaidCombat) return "";
         return this.toolbarHUD.render();
     }
 
@@ -147,6 +152,9 @@ export default class HudScreen {
             case "pvp":
                 return this.pvpView.render();
 
+            case "coop":
+                return this.raidView.render();
+
             case "market":
                 return this.marketView.render();
 
@@ -179,11 +187,12 @@ export default class HudScreen {
     }
 
     renderNavigation() {
-        const anyLockedCombat = (this.inCombat && !this.preparationMode) || this.inPvpCombat;
+        const anyLockedCombat = (this.inCombat && !this.preparationMode) || this.inPvpCombat || this.inRaidCombat;
         const characterDisabled = anyLockedCombat;
-        const dungeonDisabled = this.inCombat || this.preparationMode || this.inPvpCombat;
-        const cityDisabled = this.inCombat || this.preparationMode || this.inPvpCombat;
-        const pvpDisabled = this.inCombat || this.preparationMode || this.inPvpCombat;
+        const dungeonDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat;
+        const cityDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat;
+        const pvpDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat;
+        const coopDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat;
         return `
             <nav class="hud-navigation">
                 <button class="nav-item ${this.currentView === "character" ? "active" : ""} ${characterDisabled ? "disabled" : ""}" data-view="character">
@@ -201,6 +210,10 @@ export default class HudScreen {
                 <button class="nav-item ${this.currentView === "pvp" ? "active" : ""} ${pvpDisabled ? "disabled" : ""}" data-view="pvp">
                     <span class="material-symbols-outlined">swords</span>
                     <span>PVP</span>
+                </button>
+                <button class="nav-item ${this.currentView === "coop" ? "active" : ""} ${coopDisabled ? "disabled" : ""}" data-view="coop">
+                    <span class="material-symbols-outlined">groups</span>
+                    <span>Cooperativo</span>
                 </button>
             </nav>
         `;
@@ -288,6 +301,29 @@ export default class HudScreen {
             this.setBackground("assets/img/backgrounds/arena_pvp.png");
         }
 
+        // Mesma lógica do bloco de PVP acima, só que pro Cooperativo
+        // (Raid) — sai da fila do Firebase se estava procurando e some
+        // com qualquer resquício de partida ao fechar a tela.
+        if (this.currentView === "coop" && view !== "coop") {
+            if (this.raidView.state === "searching") {
+                RaidLobbyService.leaveQueue();
+            }
+            this.raidView.state = "idle";
+            this.raidView.matchData = null;
+            this.raidView.matchId = null;
+            this.raidView.combatResult = null;
+            this.raidView.bossData = null;
+            this.raidView.bossCombatant = null;
+            this.raidView.bossHP = null;
+            this.raidView.bossMaxHP = null;
+            this.inRaidCombat = false;
+            this.setBackground("assets/img/backgrounds/tela_inicial.png");
+        }
+
+        if (this.currentView !== "coop" && view === "coop") {
+            this.setBackground("assets/img/backgrounds/arena_pvp.png");
+        }
+
         this.currentView = view;
         this.refreshCurrentView();
         this.updateMusic();
@@ -298,7 +334,7 @@ export default class HudScreen {
     // continua o que já estava tocando antes de abrir.
     updateMusic() {
 
-        if (this.inCombat || this.inPvpCombat) {
+        if (this.inCombat || this.inPvpCombat || this.inRaidCombat) {
             MusicService.play("combat");
             return;
         }
@@ -311,6 +347,7 @@ export default class HudScreen {
 
             case "city":
             case "pvp":
+            case "coop":
             case "market":
             case "market-buy":
             case "blacksmith-weapon":
@@ -349,6 +386,9 @@ export default class HudScreen {
                 break;
             case "pvp":
                 this.pvpView.registerEvents(document);
+                break;
+            case "coop":
+                this.raidView.registerEvents(document);
                 break;
             case "market":
                 this.marketView.registerEvents(document);
@@ -430,6 +470,9 @@ export default class HudScreen {
                 break;
             case "pvp":
                 this.pvpView.registerEvents(document);
+                break;
+            case "coop":
+                this.raidView.registerEvents(document);
                 break;
             case "market":
                 this.marketView.registerEvents(document);

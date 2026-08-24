@@ -84,9 +84,9 @@ export default class PvpView {
                         <span class="pvp-mode-label">1x1</span>
                         <span class="pvp-mode-sub">Um contra um</span>
                     </button>
-                    <button class="pvp-mode-btn" data-mode="2v2">
+                    <button class="pvp-mode-btn pvp-mode-locked" data-mode="2v2" disabled>
                         <span class="pvp-mode-label">2x2</span>
-                        <span class="pvp-mode-sub">Dois contra dois</span>
+                        <span class="pvp-mode-sub">Em manutenção</span>
                     </button>
                 </div>
             </div>
@@ -828,6 +828,7 @@ export default class PvpView {
 
         container.querySelectorAll(".pvp-mode-btn").forEach(button => {
             button.addEventListener("click", () => {
+                if (button.disabled) return;
                 this.mode = button.dataset.mode;
                 this.state = "idle";
                 this.refresh();
