@@ -192,7 +192,11 @@ export default class HudScreen {
         const dungeonDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat;
         const cityDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat;
         const pvpDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat;
-        const coopDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat;
+        // Cooperativo só libera a partir do nível 100 — trava separada
+        // do bloqueio por combate, pra poder mostrar uma mensagem
+        // diferente pro jogador quando ele clicar.
+        const coopLevelLocked = this.game.player.level < 100;
+        const coopDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat || coopLevelLocked;
         return `
             <nav class="hud-navigation">
                 <button class="nav-item ${this.currentView === "character" ? "active" : ""} ${characterDisabled ? "disabled" : ""}" data-view="character">
@@ -211,8 +215,8 @@ export default class HudScreen {
                     <span class="material-symbols-outlined">swords</span>
                     <span>PVP</span>
                 </button>
-                <button class="nav-item ${this.currentView === "coop" ? "active" : ""} ${coopDisabled ? "disabled" : ""}" data-view="coop">
-                    <span class="material-symbols-outlined">groups</span>
+                <button class="nav-item ${this.currentView === "coop" ? "active" : ""} ${coopDisabled ? "disabled" : ""}" data-view="coop" data-level-locked="${coopLevelLocked}" title="${coopLevelLocked ? "Requer nível 100" : ""}">
+                    <span class="material-symbols-outlined">${coopLevelLocked ? "lock" : "groups"}</span>
                     <span>Cooperativo</span>
                 </button>
             </nav>
@@ -247,7 +251,11 @@ export default class HudScreen {
                 // o Personagem) deixe passar cliques em Dungeons,
                 // Cidade ou PVP também.
                 if (button.classList.contains("disabled")) {
-                    Toast.show("Você não pode trocar de tela durante um combate.");
+                    if (button.dataset.levelLocked === "true") {
+                        Toast.show("Modo Cooperativo disponível apenas a partir do nível 100.");
+                    } else {
+                        Toast.show("Você não pode trocar de tela durante um combate.");
+                    }
                     return;
                 }
                 const view = button.dataset.view;
