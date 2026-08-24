@@ -20,7 +20,7 @@ export default class Player {
         this.class = characterClass;
         this.name = name?.trim().slice(0, 8) || characterClass.name;
         this.level = 1;
-        this.gold = 100;
+        this.gold = 200;
         this.currentXP = 0;
         this.currentHP = 100;
         this.maxHP = 100;
