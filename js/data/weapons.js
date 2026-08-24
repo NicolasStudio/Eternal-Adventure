@@ -241,7 +241,7 @@ const weapons = {
         rarity: rarities.mystic,
         icon: "assets/img/assets/items/weapons/scepter-rarity-mistico.png",
         stats: {
-            attack: 40,
+            attack: 39,
             armor: 0,
             agility: 0,
             criticalChance: 0,
