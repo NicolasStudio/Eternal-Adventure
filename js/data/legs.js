@@ -199,7 +199,7 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-mage-rarity-mistico.png",
 
         stats: {
-            armor: 12,
+            armor: 13,
             agility: 4
         },
 

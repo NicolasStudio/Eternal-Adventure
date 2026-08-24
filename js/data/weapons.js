@@ -95,7 +95,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/sword-rarity-mistico.png",
 
         stats: {
-            attack: 34,
+            attack: 36,
             armor: 0,
             agility: -5,
             criticalChance: 0,
@@ -241,7 +241,7 @@ const weapons = {
         rarity: rarities.mystic,
         icon: "assets/img/assets/items/weapons/scepter-rarity-mistico.png",
         stats: {
-            attack: 34,
+            attack: 40,
             armor: 0,
             agility: 0,
             criticalChance: 0,
