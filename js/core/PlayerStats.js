@@ -57,21 +57,23 @@ export default class PlayerStats {
         const base = this.getBaseStats();
         const equipment = this.getEquipmentStats();
 
-        const rawCriticalChance = (base.criticalChance || 0) + (equipment.criticalChance || 0);
-        const rawLifeSteal = (base.lifeSteal || 0) + (equipment.lifeSteal || 0);
-        const rawPenetration = (base.penetration || 0) + (equipment.penetration || 0);
-        const rawAbsorption = (base.absorption || 0) + (equipment.absorption || 0);
-
         // Sem nenhum item equipado não existe teto — ele só entra em
         // cena quando há raridade de item pra basear o limite.
         const cap = this.getHighestEquippedRarity()?.secondaryCap;
 
         // Math.min sozinho só trava o TETO — sem o Math.max(0, ...),
-        // qualquer coisa que deixasse base.X negativo (ex: uma migração
-        // de save antiga fora de sincronia) passava direto pro jogador
-        // como "-2%" em vez de simplesmente não existir. Nenhum desses
-        // quatro atributos tem uma fonte legítima de valor negativo.
-        const clamp = (raw) => cap != null ? Math.max(0, Math.min(raw, cap)) : Math.max(0, raw);
+        // qualquer coisa que deixasse esses valores negativos (ex: uma
+        // migração de save antiga fora de sincronia) passava direto pro
+        // jogador como "-2%" em vez de simplesmente não existir. Nenhum
+        // desses quatro atributos tem uma fonte legítima de valor negativo.
+        //
+        // O teto só se aplica ao que vem do EQUIPAMENTO (o que a
+        // raridade atual permite rolar) — o bônus do Quartzo Rosa
+        // (base.X, permanente e ganho à parte, não vem do item) some por
+        // cima, sem limite, senão upar a pedra em uma arma já no teto de
+        // raridade simplesmente não fazia nada.
+        const clampEquipment = (raw) => cap != null ? Math.max(0, Math.min(raw, cap)) : Math.max(0, raw);
+        const withBaseBonus = (statKey) => clampEquipment(equipment[statKey] || 0) + Math.max(0, base[statKey] || 0);
 
         return {
 
@@ -81,13 +83,13 @@ export default class PlayerStats {
 
             agility: (base.agility || 0) + (equipment.agility || 0),
 
-            criticalChance: clamp(rawCriticalChance),
+            criticalChance: withBaseBonus("criticalChance"),
 
-            lifeSteal: clamp(rawLifeSteal),
+            lifeSteal: withBaseBonus("lifeSteal"),
 
-            penetration: clamp(rawPenetration),
+            penetration: withBaseBonus("penetration"),
 
-            absorption: clamp(rawAbsorption)
+            absorption: withBaseBonus("absorption")
 
         };
     }

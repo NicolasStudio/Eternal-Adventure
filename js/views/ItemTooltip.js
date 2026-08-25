@@ -130,6 +130,7 @@ export default class ItemTooltip {
     }
 
     getEnchantStatName(stat) {
+        if (stat === "special") return this.getStatName(stat);
         switch (stat) {
             case "life": return "Vida";
             case "armor": return "Armadura";
@@ -162,7 +163,24 @@ export default class ItemTooltip {
         return classes[classId] || classId;
     }
 
+    // Quartzo Rosa: fora de uma arma a pedra é genérica ("special" pura,
+    // qualquer classe pode usar); numa arma, this.item.class já diz qual
+    // atributo secundário real ela representa (mesma regra de
+    // Player.getSpecialStatKey).
+    getSpecialStatKey() {
+        return {
+            warrior: "absorption",
+            mage: "penetration",
+            archer: "criticalChance",
+            barbarian: "lifeSteal"
+        }[this.item.class] ?? null;
+    }
+
     getStatName(stat) {
+        if (stat === "special") {
+            const resolved = this.getSpecialStatKey();
+            return resolved ? this.getStatName(resolved) : "Atributo Especial";
+        }
         switch (stat) {
             case "attack": return "Ataque";
             case "armor": return "Armadura";
@@ -176,6 +194,10 @@ export default class ItemTooltip {
     }
 
     getStatIcon(stat) {
+        if (stat === "special") {
+            const resolved = this.getSpecialStatKey();
+            return resolved ? this.getStatIcon(resolved) : "💗";
+        }
         switch (stat) {
             case "attack": return "⚔️";
             case "armor": return "🛡️";

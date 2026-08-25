@@ -33,7 +33,7 @@ export default class BlacksmithEnchant {
     }
 
     getStones() {
-        this.stones = this.player.inventory.filter(item => item.id?.match(/^(tc-de-rubi|marco-de-safira|olbap-imperial|essencia-de-turmalina)-\d$/));
+        this.stones = this.player.inventory.filter(item => item.id?.match(/^(tc-de-rubi|marco-de-safira|olbap-imperial|essencia-de-turmalina|quartzo-rosa)-\d$/));
         return this.stones;
     }
 
@@ -262,22 +262,51 @@ export default class BlacksmithEnchant {
 
     }
 
+    // Quartzo Rosa: a pedra guarda o bônus como "special" — vira o
+    // atributo secundário real da classe da arma no anvil (mesma regra de
+    // Player.getSpecialStatKey).
+    getSpecialStatKey() {
+        const classId = this.anvilWeapon?.class ?? this.player?.class?.id;
+        return {
+            warrior: "absorption",
+            mage: "penetration",
+            archer: "criticalChance",
+            barbarian: "lifeSteal"
+        }[classId] ?? null;
+    }
+
     getStatName(stat) {
+        if (stat === "special") {
+            const resolved = this.getSpecialStatKey();
+            return resolved ? this.getStatName(resolved) : "Atributo Especial";
+        }
         switch (stat) {
             case "attack": return "Ataque";
             case "armor": return "Armadura";
             case "agility": return "Agilidade";
             case "life": return "Vida";
+            case "criticalChance": return "Chance Crítica";
+            case "lifeSteal": return "Roubo de Vida";
+            case "penetration": return "Penetração";
+            case "absorption": return "Absorção";
             default: return stat;
         }
     }
 
     getStatIcon(stat) {
+        if (stat === "special") {
+            const resolved = this.getSpecialStatKey();
+            return resolved ? this.getStatIcon(resolved) : "💗";
+        }
         switch (stat) {
             case "attack": return "⚔️";
             case "armor": return "🛡️";
             case "agility": return "👢";
             case "life": return "❤️";
+            case "criticalChance": return "🎯";
+            case "lifeSteal": return "🩸";
+            case "penetration": return "💥";
+            case "absorption": return "🪨";
             default: return "•";
         }
     }

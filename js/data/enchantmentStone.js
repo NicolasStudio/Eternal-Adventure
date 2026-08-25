@@ -286,8 +286,79 @@ const enchantmentStone = {
         },
         enchantPrice: 30000,
         sellValue: 1000
-    }
+    },
 
+    /* ==========================================================
+       Quartzo Rosa (Especial)
+    ========================================================== */
+    quartzoRosaUm: {
+        id: "quartzo-rosa-1",
+        name: "Quartzo Rosa Nível I",
+        icon: "assets/img/assets/items/enchantment_stone/special/quartzo-rosa-nivel1.png",
+        type: "item",
+        stackable: true,
+        color: "#ff00ea",
+        nivel: 1,
+        
+        rarity: {
+            id: "common",
+            name: "Comum",
+            color: "#FFFFFF"
+        },
+
+        description: "A pedra rosa mais popular do mundo. Capaz de aprimorar o atributo especial do jogador.",
+        stats: {
+            special: 1
+        },
+        enchantPrice: 50000,
+        sellValue: 10000
+    },
+
+    quartzoRosaDois: {
+        id: "quartzo-rosa-2",
+        name: "Quartzo Rosa Nível II",
+        icon: "assets/img/assets/items/enchantment_stone/special/quartzo-rosa-nivel2.png",
+        type: "item",
+        stackable: true,
+        color: "#ff00ea",
+        nivel: 2,
+        
+        rarity: {
+            id: "common",
+            name: "Comum",
+            color: "#FFFFFF"
+        },
+
+        description: "A pedra rosa mais popular do mundo. Capaz de aprimorar o atributo especial do jogador.",
+        stats: {
+            special: 2
+        },
+        enchantPrice: 70000,
+        sellValue: 30000
+    },
+
+    quartzoRosaTres: {
+        id: "quartzo-rosa-3",
+        name: "Quartzo Rosa Nível III",
+        icon: "assets/img/assets/items/enchantment_stone/special/quartzo-rosa-nivel3.png",
+        type: "item",
+        stackable: true,
+        color: "#ff00ea",
+        nivel: 3,
+        
+        rarity: {
+            id: "common",
+            name: "Comum",
+            color: "#FFFFFF"
+        },
+
+        description: "A pedra rosa mais popular do mundo. Capaz de aprimorar o atributo especial do jogador.",
+        stats: {
+            special: 3
+        },
+        enchantPrice: 100000,
+        sellValue: 50000
+    }
 };
 
 export default enchantmentStone;

@@ -542,6 +542,16 @@ export default class Player {
         if (statKey === "life") {
             this.maxHP += delta;
             this.currentHP += delta;
+        } else if (statKey === "special") {
+            // Quartzo Rosa: o bônus é sempre "special" na pedra/arma, mas
+            // vira o atributo secundário real da classe do jogador
+            // (Guerreiro = Absorção, Mago = Penetração, Bárbaro = Roubo de
+            // Vida, Arqueiro = Crítico) — mesmo teto de secondaryCap das
+            // demais fontes desse atributo (ver PlayerStats.getFinalStats).
+            const specialKey = this.getSpecialStatKey();
+            if (specialKey) {
+                this.baseStats[specialKey] = (this.baseStats[specialKey] ?? 0) + delta;
+            }
         } else {
             this.baseStats[statKey] = (this.baseStats[statKey] ?? 0) + delta;
         }
@@ -581,7 +591,29 @@ export default class Player {
             case "armor": return "Armadura";
             case "attack": return "Ataque";
             case "agility": return "Agilidade";
+            case "special": return this.getSpecialStatName();
             default: return stat;
+        }
+    }
+
+    // Atributo secundário que o Quartzo Rosa (pedra "special") aprimora
+    // pra classe atual do jogador.
+    getSpecialStatKey() {
+        return {
+            warrior: "absorption",
+            mage: "penetration",
+            archer: "criticalChance",
+            barbarian: "lifeSteal"
+        }[this.class.id] ?? null;
+    }
+
+    getSpecialStatName() {
+        switch (this.getSpecialStatKey()) {
+            case "absorption": return "Absorção";
+            case "penetration": return "Penetração";
+            case "criticalChance": return "Chance Crítica";
+            case "lifeSteal": return "Roubo de Vida";
+            default: return "Atributo Especial";
         }
     }
 

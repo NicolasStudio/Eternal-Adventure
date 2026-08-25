@@ -7,7 +7,8 @@ export default [
             "Adicionado sistema que conquistas ao todo 36 missões/tarefas",
             "Realizado micro ajuste no dano do Guerreiro e do Mago, estavam muito abaixo do arquiro, +2 para o guerreiro e +3 no mago, SOMENTE na arma mística",
             "Modo 2x2 está muito bugado devido a reclamações está indisponível momentâneamente",
-            "Adicionado novo menu Cooperativo, junte-se com seus amigos para derrotar o mais novo chefe"
+            "Adicionado novo menu Cooperativo, junte-se com seus amigos para derrotar o mais novo chefe", 
+            "Adicionado recompensa do modo Cooperativo"
         ]
     },
 

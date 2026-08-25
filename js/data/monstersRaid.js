@@ -1,4 +1,5 @@
 import items from "./items.js";
+import enchantmentStone from "./enchantmentStone.js";
 
 const monstersRaid = [
 
@@ -43,6 +44,13 @@ const monstersRaid = [
             {
                 item: items.largePotion,
                 quantidade: 10
+            },
+            {
+                pool: [
+                    { item: enchantmentStone.quartzoRosaUm, chance: 90 },
+                    { item: enchantmentStone.quartzoRosaDois, chance: 9 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 1 }
+                ]
             }
         ]
     },
