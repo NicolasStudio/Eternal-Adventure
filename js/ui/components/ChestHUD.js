@@ -19,6 +19,10 @@ export default class ChestHUD {
 
     render() {
 
+        if (ChestService.getDiscoveredCount(this.player) >= ChestService.getTotalCards()) {
+            return "";
+        }
+
         const ready = ChestService.isReady(this.player);
 
         return `

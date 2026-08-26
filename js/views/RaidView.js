@@ -305,6 +305,14 @@ export default class RaidView {
 
             this.player.progress.stats.raidWins = (this.player.progress.stats.raidWins ?? 0) + 1;
 
+            // Só pra alimentar as conquistas de dragão (ver AchievementService) —
+            // guarda o id do drake sem duplicar, distinto de raidWins (que conta
+            // toda vitória de andar, mesmo repetindo o mesmo drake em runs diferentes).
+            this.player.progress.stats.raidBossesDefeated ??= [];
+            if (!this.player.progress.stats.raidBossesDefeated.includes(this.bossData.id)) {
+                this.player.progress.stats.raidBossesDefeated.push(this.bossData.id);
+            }
+
             const reward = LootSystem.generate(this.bossData, this.player);
             const levelUps = this.player.collectReward(reward);
             this.game.hudScreen.refreshCurrentView();

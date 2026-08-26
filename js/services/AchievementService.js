@@ -1,6 +1,7 @@
 import achievements from "../data/achievements.js";
 import dungeons from "../data/dungeons.js";
 import cards from "../data/cards.js";
+import monstersRaid from "../data/monstersRaid.js";
 import AudioSettings from "./AudioSettings.js";
 
 const EQUIPMENT_SLOTS = ["weapon", "helmet", "chest", "leg", "boot"];
@@ -81,6 +82,7 @@ const CHECKS = {
     equip_common: player => hasFullSetOfRarity(player, "common"),
     equip_rare: player => hasFullSetOfRarity(player, "rare"),
     equip_mystic: player => hasFullSetOfRarity(player, "mystic"),
+    equip_legendary: player => hasFullSetOfRarity(player, "legendary"),
 
     upgrade_first: player => hasAnyUpgradedItem(player),
     upgrade_exceptional: player => hasAnyExceptionalItem(player),
@@ -103,6 +105,11 @@ const CHECKS = {
     album_100: player => player.album.length >= 100,
 
     pvp_first_win: player => (player.progress.stats?.pvpWins ?? 0) >= 1,
+
+    dragon_first: player => (player.progress.stats?.raidBossesDefeated?.length ?? 0) >= 1,
+    dragon_all: player => (player.progress.stats?.raidBossesDefeated?.length ?? 0) >= monstersRaid.length,
+
+    class_transcendence: player => player.transcendence != null,
 
     silence: () => allSoundMuted(),
 

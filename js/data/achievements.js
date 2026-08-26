@@ -145,6 +145,13 @@ const achievements = [
         icon: 'assets/img/icons/achievements/prata.png',
         iconLocked:'assets/img/icons/achievements/bloqueado.png'
     },
+    {
+        id: 'equip_legendary',
+        name: 'O Cintilante',
+        description: 'Equipe todos os itens de classe: Lendário',
+        icon: 'assets/img/icons/achievements/ouro.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
     // Fortificação
     {
         id: 'upgrade_first',
@@ -263,6 +270,29 @@ const achievements = [
         name: 'O pai ta on!',
         description: 'Vença seu primeiro combate pvp!',
         icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    // Cooperativo (dragões)
+    {
+        id: 'dragon_first',
+        name: 'Não seria "Como treinar seu dragão?"',
+        description: 'Derrote seu primeiro dragão.',
+        icon: 'assets/img/icons/achievements/prata.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'dragon_all',
+        name: 'Caçador de Dragões',
+        description: 'Derrote todos dragões existentes',
+        icon: 'assets/img/icons/achievements/ouro.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    // Transcendência
+    {
+        id: 'class_transcendence',
+        name: "Oto patamá",
+        description: 'Melhore sua classe',
+        icon: 'assets/img/icons/achievements/ouro.png',
         iconLocked:'assets/img/icons/achievements/bloqueado.png'
     },
     // Fim
