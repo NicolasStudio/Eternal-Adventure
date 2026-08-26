@@ -513,17 +513,21 @@
    BOTÃO ENTRAR
 ========================================================== */
 .dungeon-enter{
-    width:min(340px,100%);
-    height:42px;
-    font-size:16px;
+    width:min(420px,100%);
+    min-height:42px;
+    height:auto;
+    padding:8px 14px;
+    font-size:clamp(12px,3.6vw,16px);
     border:2px solid #8b7355;
     border-radius:6px;
     background:linear-gradient(180deg,#3d2418 0%,#2c1810 100%);
     color:#d4a373;
     font-family:"Cinzel",serif;
     font-weight:bold;
-    letter-spacing:3px;
+    letter-spacing:2px;
     text-transform:uppercase;
+    white-space:normal;
+    line-height:1.3;
     cursor:pointer;
     display:none;
     transition:all .25s ease;
@@ -757,8 +761,8 @@
 
     .dungeon-enter{
 
-        height:42px;
-        font-size:16px;
+        min-height:42px;
+        font-size:clamp(11px,4vw,15px);
 
     }
 

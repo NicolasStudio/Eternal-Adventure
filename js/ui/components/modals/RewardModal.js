@@ -11,7 +11,7 @@ export default class RewardModal {
     // reaparece depois, sem resolver a Promise (ela só resolve quando o
     // jogador escolhe Continuar ou Sair da Dungeon).
     show(reward, options = {}) {
-        const { showActions = false, onOpenInventory } = options;
+        const { showActions = false, onOpenInventory, exitLabel = "Sair da Dungeon" } = options;
         this.reward = reward;
         return new Promise(resolve => {
             this.overlay = document.createElement("div");
@@ -48,7 +48,7 @@ export default class RewardModal {
                                 <div class="reward-actions">
                                     <button class="reward-action reward-action-inventory">Abrir Inventário</button>
                                     <button class="reward-action reward-action-continue">Continuar</button>
-                                    <button class="reward-action reward-action-exit">Sair da Dungeon</button>
+                                    <button class="reward-action reward-action-exit">${exitLabel}</button>
                                 </div>
                             `
                             : `<button class="reward-collect">Coletar</button>`

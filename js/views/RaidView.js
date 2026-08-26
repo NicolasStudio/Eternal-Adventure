@@ -10,15 +10,20 @@ export default class RaidView {
 
     constructor(game) {
         this.game = game;
-        this.state = "idle"; // idle | searching | found | battle | result
+        this.state = "idle"; // idle | searching | found | battle | floor-wait | result
         this.opponentWaiting = false;
         this.matchData = null;
         this.matchId = null;
         this.combatResult = null;
+        this.currentFloor = 1;
+        this.leftSelf = false; // eu escolhi "Sair do Cooperativo" no meio dos andares
+        this.abandoned = false; // outro jogador saiu/caiu e o squad não pode prosseguir
+        this.floorWaitProgress = { ready: 0, total: 0 };
         this.bossData = null; // entrada crua de monstersRaid.js
         this.bossCombatant = null; // snapshot da simulação
         this.bossHP = null;
         this.bossMaxHP = null;
+        this.floorSquad = []; // squad ativo do andar atual (sem quem já saiu), com currentHP real
         this.squadHP = {}; // { [combatantId]: currentHP } pros 4
         this.rewardModal = new RewardModal(game);
         this.levelUpModal = new LevelUpModal(game);
@@ -62,9 +67,20 @@ export default class RaidView {
         switch (this.state) {
             case "searching": return this.renderSearching();
             case "found": return this.renderFound();
+            case "floor-wait": return this.renderFloorWait();
             case "result": return this.renderResult();
             default: return this.renderIdle();
         }
+    }
+
+    renderFloorWait() {
+        const { ready, total } = this.floorWaitProgress;
+        return `
+            <div class="raid-searching">
+                <div class="raid-spinner"></div>
+                <p class="raid-status-text">Aguardando os outros guerreiros... (${ready}/${total} prontos)</p>
+            </div>
+        `;
     }
 
     renderIdle() {
@@ -93,7 +109,7 @@ export default class RaidView {
         const squad = Object.values(this.matchData.squad);
         return `
             <div class="raid-found">
-                <h3 class="raid-found-title">Squad Formado!</h3>
+                <h3 class="raid-found-title">Squad Formado! — Andar ${this.currentFloor}</h3>
                 <div class="raid-versus">
                     <div class="raid-team-column">
                         ${squad.map(c => `<span class="raid-fighter-name">${c.name}</span>`).join("")}
@@ -107,7 +123,7 @@ export default class RaidView {
 
     renderBattleArena() {
 
-        const squad = Object.values(this.matchData.squad);
+        const squad = this.floorSquad;
         const bossPct = Math.max(0, (this.bossHP / this.bossMaxHP) * 100);
 
         return `
@@ -115,7 +131,7 @@ export default class RaidView {
                 <div class="raid-battle-arena">
                     <div class="raid-boss-header">
                         <div class="raid-boss-info">
-                            <span class="raid-boss-name">${this.bossData.name}</span>
+                            <span class="raid-boss-name">Andar ${this.currentFloor} — ${this.bossData.name}</span>
                             <div class="raid-boss-hp-colossal">
                                 <div class="raid-boss-hp-fill" id="raid-boss-hp-fill" style="width:${bossPct}%;"></div>
                                 <span class="raid-boss-hp-text" id="raid-boss-hp-text">${Math.max(0, this.bossHP)}/${this.bossMaxHP}</span>
@@ -134,8 +150,8 @@ export default class RaidView {
                                 </div>
                                 <img src="${c.image ?? ""}" alt="${c.name}">
                                 <div class="raid-sprite-hp">
-                                    <div class="raid-sprite-hp-fill" id="raid-hp-${c.id}" style="width:100%;"></div>
-                                    <span class="raid-sprite-hp-text" id="raid-hp-text-${c.id}">${c.maxHP} / ${c.maxHP}</span>
+                                    <div class="raid-sprite-hp-fill" id="raid-hp-${c.id}" style="width:${Math.max(0, (c.currentHP / c.maxHP) * 100)}%;"></div>
+                                    <span class="raid-sprite-hp-text" id="raid-hp-text-${c.id}">${Math.max(0, c.currentHP)} / ${c.maxHP}</span>
                                 </div>
                             </div>
                         `).join("")}
@@ -223,11 +239,12 @@ export default class RaidView {
 
         this.matchData = matchData;
         this.matchId = matchId;
+        this.leftSelf = false;
+        this.abandoned = false;
 
-        this.bossData = monstersRaid.find(m => m.id === matchData.bossId) ?? monstersRaid[0];
-        this.bossCombatant = RaidCombatService.snapshotBoss(this.bossData);
-        this.bossMaxHP = this.bossCombatant.maxHP;
-        this.bossHP = this.bossCombatant.maxHP;
+        RaidLobbyService.armLeaveOnDisconnect(matchId, RaidLobbyService.playerId);
+
+        this.setupFloor(matchData.floor ?? 1);
 
         this.state = "found";
         this.refresh();
@@ -237,39 +254,54 @@ export default class RaidView {
         this.game.hudScreen.inRaidCombat = true;
         this.game.hudScreen.setBackground("assets/img/backgrounds/arena_pvp.png");
 
-        await this.startBattle();
-
-        await this.sleep(900);
+        await this.runFloors();
 
         this.game.hudScreen.inRaidCombat = false;
-        this.state = "result";
+        this.state = (this.leftSelf || this.abandoned) ? "idle" : "result";
         this.refresh();
 
         RaidLobbyService.cleanupMatch(matchId);
 
     }
 
-    async startBattle() {
+    setupFloor(floor) {
+        this.currentFloor = floor;
+        this.bossData = monstersRaid.find(m => m.floor === floor) ?? monstersRaid[floor - 1] ?? monstersRaid[0];
+        this.bossCombatant = RaidCombatService.snapshotBoss(this.bossData);
+        this.bossMaxHP = this.bossCombatant.maxHP;
+        this.bossHP = this.bossCombatant.maxHP;
+    }
 
-        const squad = Object.values(this.matchData.squad);
+    // Monta o squad do andar atual a partir do roster original da
+    // partida, excluindo quem já saiu do cooperativo e usando o HP com
+    // que cada um confirmou "Continuar" no andar anterior (ou o HP
+    // cheio do snapshot, no andar 1).
+    buildSquadForFloor() {
 
-        const result = RaidCombatService.simulateRaid(squad, this.bossCombatant, this.matchData.seed);
-        this.combatResult = result;
+        const left = this.matchData.left ?? {};
+        const hp = this.matchData.hp ?? {};
 
-        this.squadHP = {};
-        squad.forEach(c => { this.squadHP[c.id] = c.maxHP; });
+        return Object.values(this.matchData.squad)
+            .filter(c => !left[c.id])
+            .map(c => ({ ...c, currentHP: hp[c.id] ?? c.currentHP ?? c.maxHP }));
 
-        this.state = "battle";
-        this.refresh();
+    }
 
-        await CombatToast.show(`A raid contra ${this.bossData.name} começou!`, "system", 2);
+    // Loop principal: luta o andar atual, entrega a recompensa e, se
+    // não for o último andar, espera todo mundo confirmar "Continuar"
+    // antes de avançar pro próximo drake. Termina em derrota, em vitória
+    // no último andar, ou se eu mesmo escolher sair no meio do caminho.
+    async runFloors() {
 
-        await this.playBattleLog(result.log);
+        while (true) {
 
-        const iWon = result.winner === "squad";
-        await CombatToast.show(iWon ? `${this.bossData.name} derrotado!` : "O squad foi derrotado!", "system", 2);
+            const squad = this.buildSquadForFloor();
 
-        if (iWon) {
+            const result = await this.fightFloor(squad);
+
+            if (result.winner !== "squad") {
+                return;
+            }
 
             this.player.progress.stats.raidWins = (this.player.progress.stats.raidWins ?? 0) + 1;
 
@@ -277,26 +309,129 @@ export default class RaidView {
             const levelUps = this.player.collectReward(reward);
             this.game.hudScreen.refreshCurrentView();
 
-            await this.rewardModal.show(reward);
+            const isLastFloor = this.currentFloor >= monstersRaid.length;
+
+            if (isLastFloor) {
+
+                await this.rewardModal.show(reward);
+
+                for (const levelUp of levelUps) {
+                    await this.levelUpModal.show(levelUp.level, levelUp.bonus);
+                }
+
+                return;
+
+            }
 
             for (const levelUp of levelUps) {
                 await this.levelUpModal.show(levelUp.level, levelUp.bonus);
             }
 
+            const continueRaid = await this.rewardModal.show(reward, {
+                showActions: true,
+                exitLabel: "Sair do Cooperativo",
+                onOpenInventory: async () => {
+                    this.game.hudScreen.enterPreparationMode();
+                    await new Promise(resolve => {
+                        this.game.hudScreen.onPreparationFinished = resolve;
+                    });
+                    this.game.hudScreen.exitPreparationMode();
+                    this.game.hudScreen.currentView = "coop";
+                    this.game.hudScreen.refreshCurrentView();
+                }
+            });
+
+            if (!continueRaid) {
+
+                await RaidLobbyService.leaveMatchFloor(
+                    this.matchId,
+                    RaidLobbyService.playerId,
+                    Object.keys(this.matchData.squad)
+                );
+
+                this.leftSelf = true;
+                return;
+
+            }
+
+            const outcome = await this.waitForNextFloor();
+
+            if (outcome.aborted) {
+                await CombatToast.show("Um jogador abandonou o cooperativo — não é possível continuar.", "system", 3);
+                this.abandoned = true;
+                return;
+            }
+
+            this.matchData = { ...this.matchData, ...outcome.data };
+            this.setupFloor(this.matchData.floor);
+
         }
+
+    }
+
+    // Grava minha confirmação (com meu HP atual) e espera o squad
+    // inteiro confirmar o andar atual antes de seguir — ver
+    // RaidLobbyService.waitForFloorAdvance para o mecanismo de sincronia.
+    async waitForNextFloor() {
+
+        const squadIds = Object.keys(this.matchData.squad);
+        const expectedFloor = this.currentFloor;
+
+        await RaidLobbyService.markFloorReady(this.matchId, RaidLobbyService.playerId, this.game.player.currentHP);
+
+        this.floorWaitProgress = { ready: 0, total: squadIds.length };
+        this.state = "floor-wait";
+        this.refresh();
+
+        return await RaidLobbyService.waitForFloorAdvance(
+            this.matchId,
+            squadIds,
+            expectedFloor,
+            (ready, total) => {
+                this.floorWaitProgress = { ready, total };
+                if (this.state === "floor-wait") this.refresh();
+            }
+        );
+
+    }
+
+    async fightFloor(squad) {
+
+        this.floorSquad = squad;
+
+        const floorSeed = RaidCombatService.deriveFloorSeed(this.matchData.seed, this.currentFloor);
+
+        const result = RaidCombatService.simulateRaid(squad, this.bossCombatant, floorSeed);
+        this.combatResult = result;
+
+        this.squadHP = {};
+        squad.forEach(c => { this.squadHP[c.id] = c.currentHP; });
+
+        this.state = "battle";
+        this.refresh();
+
+        await CombatToast.show(`Andar ${this.currentFloor}: ${this.bossData.name} apareceu!`, "system", 2);
+
+        await this.playBattleLog(result.log, squad);
+
+        const iWon = result.winner === "squad";
+        await CombatToast.show(iWon ? `${this.bossData.name} derrotado!` : "O squad foi derrotado!", "system", 2);
+
+        await this.sleep(900);
+
+        return result;
 
     }
 
     // Anima o resultado já calculado (determinístico, ver RaidCombatService)
     // turno por turno: barra colossal do boss e a barrinha do jogador
-    // certo (embaixo do card dele) reagem a cada golpe. A vida real do
-    // personagem, fora da arena, só é sincronizada quando é ELE que
-    // apanha/rouba vida — e é restaurada ao valor de antes assim que a
-    // raid acaba, igual ao playBattleLog do PvpView.
-    async playBattleLog(log) {
+    // certo (embaixo do card dele) reagem a cada golpe. Diferente do
+    // playBattleLog do PvpView, aqui a vida real do personagem NÃO volta
+    // ao valor de antes no final — ela é uma raid com andares, o dano
+    // (e a cura escolhida no inventário entre andares) precisa persistir
+    // de verdade, igual às dungeons de PVE.
+    async playBattleLog(log, squad) {
 
-        const squad = Object.values(this.matchData.squad);
-        const originalHP = this.game.player.currentHP;
         const battleStartTime = Date.now();
 
         for (const entry of log) {
@@ -365,9 +500,6 @@ export default class RaidView {
 
         }
 
-        this.game.player.currentHP = originalHP;
-        this.game.hudScreen.playerHUD.updateHP?.();
-
     }
 
     updateBossHPBar() {
@@ -432,7 +564,7 @@ export default class RaidView {
         }
 
         if (entry.healedFromAbsorption > 0) {
-            message += `<br><span class="combat-absorption">${targetName} absorveu parte do ataque!</span> recuperou <strong>${entry.healedFromAbsorption}</strong> HP.`;
+            message += `<br><span class="combat-absorption">Absorção!</span> ${targetName} curou <strong>${entry.healedFromAbsorption}</strong> HP.`;
         }
 
         return message;

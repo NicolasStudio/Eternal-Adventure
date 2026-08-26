@@ -44,8 +44,10 @@ export default class LootSystem {
         for (const drop of monster.drops) {
 
             // ===============================
-            // Pool ponderado (ex: pedra de encantamento nível 1/2/3
-            // — exatamente UM item cai, sorteado pelo peso de cada um)
+            // Pool ponderado (ex: pedra de encantamento nível 1/2/3,
+            // podendo incluir também um equipamento aleatório como uma
+            // das opções — ex: bota lendária — exatamente UM item cai,
+            // sorteado pelo peso de cada entrada)
             // ===============================
             if (drop.pool) {
 
@@ -58,10 +60,22 @@ export default class LootSystem {
 
                     if (roll < cumulative) {
 
-                        reward.items.push({
-                            ...structuredClone(entry.item),
-                            quantity: entry.quantidade ?? 1
-                        });
+                        if (entry.item) {
+
+                            reward.items.push({
+                                ...structuredClone(entry.item),
+                                quantity: entry.quantidade ?? 1
+                            });
+
+                        } else if (entry.type) {
+
+                            const equipment = this.pickEquipment(entry.type, entry.rarity, player, allItems);
+
+                            if (equipment) {
+                                reward.items.push({ ...equipment, quantity: 1 });
+                            }
+
+                        }
 
                         break;
 
@@ -99,40 +113,46 @@ export default class LootSystem {
             // ===============================
             if (drop.type) {
 
-                const possibleItems = allItems.filter(item =>
+                const equipment = this.pickEquipment(drop.type, drop.rarity, player, allItems);
 
-                    // weapon, helmet, chest...
-                    drop.type.includes(item.slot)
-
-                    // common, rare...
-                    && item.rarity.id === drop.rarity
-
-                    // warrior, mage, archer...
-                    && item.class === player.class.id
-
-                );
-
-                if (!possibleItems.length) {
-                    continue;
+                if (equipment) {
+                    reward.items.push({ ...equipment, quantity: 1 });
                 }
-
-                const randomItem =
-                    structuredClone(
-                        possibleItems[
-                            Math.floor(Math.random() * possibleItems.length)
-                        ]
-                    );
-
-                reward.items.push({
-                    ...randomItem,
-                    quantity: 1
-                });
 
             }
 
         }
 
         return reward;
+
+    }
+
+    // Sorteia um equipamento aleatório dentre os que batem com o(s)
+    // slot(s) em `type` (ex: ["boot"]), a raridade e a classe do
+    // jogador — usado tanto pelo drop.type "solto" quanto por uma
+    // entrada de equipamento dentro de um drop.pool.
+    static pickEquipment(type, rarity, player, allItems) {
+
+        const possibleItems = allItems.filter(item =>
+
+            // weapon, helmet, chest...
+            type.includes(item.slot)
+
+            // common, rare...
+            && item.rarity.id === rarity
+
+            // warrior, mage, archer...
+            && item.class === player.class.id
+
+        );
+
+        if (!possibleItems.length) {
+            return null;
+        }
+
+        return structuredClone(
+            possibleItems[Math.floor(Math.random() * possibleItems.length)]
+        );
 
     }
 

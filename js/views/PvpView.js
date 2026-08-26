@@ -558,7 +558,7 @@ export default class PvpView {
         hitMessage += ` Você recebeu um golpe de <strong>${opponentName}</strong>, <strong>${entry.damage}</strong> de dano.`;
 
         if (entry.healedFromAbsorption > 0) {
-            hitMessage += `<br><span class="combat-absorption">Você absorveu parte do ataque!</span> ${entry.absorbed} de dano mitigado, recuperou <strong>${entry.healedFromAbsorption}</strong> HP.`;
+            hitMessage += `<br><span class="combat-absorption">Absorção!</span> Mitigou <strong>${entry.absorbed}</strong>, curou <strong>${entry.healedFromAbsorption}</strong> HP.`;
         }
 
         return hitMessage;
@@ -628,7 +628,7 @@ export default class PvpView {
             hitMessage += ` Você recebeu um golpe de <strong>${attackerName}</strong>, <strong>${entry.damage}</strong> de dano.`;
 
             if (entry.healedFromAbsorption > 0) {
-                hitMessage += `<br><span class="combat-absorption">Você absorveu parte do ataque!</span> ${entry.absorbed} de dano mitigado, recuperou <strong>${entry.healedFromAbsorption}</strong> HP.`;
+                hitMessage += `<br><span class="combat-absorption">Absorção!</span> Mitigou <strong>${entry.absorbed}</strong>, curou <strong>${entry.healedFromAbsorption}</strong> HP.`;
             }
 
             return hitMessage;

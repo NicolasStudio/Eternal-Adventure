@@ -98,9 +98,15 @@ export default class ChestHUD {
         if (sprite) sprite.src = SPRITE_OPEN;
         await this.sleep(350);
 
+        const alreadyComplete = ChestService.getDiscoveredCount(this.player) >= ChestService.getTotalCards();
+
         const card = ChestService.open(this.player);
 
-        await this.game.hudScreen.chestRewardModal.show(card);
+        if (alreadyComplete) {
+            Toast.show("Você já possui todas as cartas!");
+        } else {
+            await this.game.hudScreen.chestRewardModal.show(card);
+        }
 
         const freshSprite = document.getElementById("chest-sprite");
         if (freshSprite) freshSprite.src = SPRITE_CLOSED;

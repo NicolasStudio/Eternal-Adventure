@@ -212,7 +212,11 @@ export default class RaidLobbyService {
         // do PvpView, que também é derivado da seed em vez de transmitido).
         const matchId = "m_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
         const seed = Math.floor(Math.random() * 2 ** 31);
-        const bossId = monstersRaid[seed % monstersRaid.length].id;
+
+        // O cooperativo agora é uma sequência fixa de andares (ver campo
+        // `floor` em monstersRaid.js) — o boss da partida sempre começa
+        // no andar 1, não é mais sorteado pela seed.
+        const bossId = (monstersRaid.find(m => m.floor === 1) ?? monstersRaid[0]).id;
 
         const allCombatants = [
             { ...selfCombatant, id: this.playerId },
@@ -232,6 +236,7 @@ export default class RaidLobbyService {
                 squad,
                 bossId,
                 seed,
+                floor: 1,
                 createdAt: serverTimestamp()
             }
         };
@@ -276,10 +281,161 @@ export default class RaidLobbyService {
     }
 
     static async cleanupMatch(matchId) {
+        if (this.playerId) {
+            this.disarmLeaveOnDisconnect(matchId, this.playerId);
+        }
         await remove(ref(db, `${this.matchesPath()}/${matchId}`));
         if (this.playerId) {
             await remove(ref(db, `${this.lobbyPath()}/${this.playerId}`));
         }
+    }
+
+    // Arma uma marcação automática de "saí" pro caso da minha conexão
+    // cair no meio dos andares (aba fechada, sem internet, crash) sem eu
+    // ter clicado em "Sair do Cooperativo" — sem isso, os outros 3
+    // ficariam esperando pra sempre um "pronto" que nunca chega.
+    static armLeaveOnDisconnect(matchId, playerId) {
+        onDisconnect(ref(db, `${this.matchesPath()}/${matchId}/left/${playerId}`)).set(true);
+    }
+
+    // Desarma o gatilho acima quando eu saio do jeito normal (terminei a
+    // raid, ou cliquei em "Sair do Cooperativo") — nesses casos já não
+    // preciso mais que uma queda de conexão futura escreva nada aqui.
+    static disarmLeaveOnDisconnect(matchId, playerId) {
+        onDisconnect(ref(db, `${this.matchesPath()}/${matchId}/left/${playerId}`)).cancel();
+    }
+
+    // Confirma "Continuar" no andar atual, junto com meu HP no momento
+    // (depois de eu decidir curar ou não no inventário) — é esse valor
+    // que os outros clientes vão usar como meu HP inicial no próximo
+    // andar, já que cada um só sabe da própria cura.
+    static async markFloorReady(matchId, playerId, currentHP) {
+
+        await update(ref(db, `${this.matchesPath()}/${matchId}`), {
+            [`floorReady/${playerId}`]: true,
+            [`hp/${playerId}`]: currentHP
+        });
+
+    }
+
+    // Marca que eu saí do cooperativo no meio dos andares — os outros
+    // continuam sem mim (não conto mais pro "todo mundo pronto"). Se eu
+    // for o último do squad a sair, apaga a partida inteira.
+    static async leaveMatchFloor(matchId, playerId, squadIds) {
+
+        await set(ref(db, `${this.matchesPath()}/${matchId}/left/${playerId}`), true);
+
+        if (this.playerId === playerId) {
+            this.disarmLeaveOnDisconnect(matchId, playerId);
+            await remove(ref(db, `${this.lobbyPath()}/${playerId}`));
+        }
+
+        const snapshot = await get(ref(db, `${this.matchesPath()}/${matchId}/left`));
+        const left = snapshot.val() ?? {};
+        const allLeft = squadIds.every(id => left[id]);
+
+        if (allLeft) {
+            await remove(ref(db, `${this.matchesPath()}/${matchId}`));
+        }
+
+    }
+
+    // Espera até que TODOS os 4 do squad original confirmem "Continuar"
+    // no andar `expectedFloor` pra então avançar de fase — não basta
+    // maioria: se qualquer um dos 4 sair (botão ou queda de conexão)
+    // antes de todos confirmarem, resolve como abandono e quem ainda
+    // está esperando não segue em frente.
+    //
+    // Só o primeiro cliente que perceber a condição cumprida tenta
+    // comitar a transaction (mesma ideia do tryMatchSquad acima); se a
+    // transaction dele perder a corrida pra outro cliente, busca o valor
+    // já atualizado direto do servidor em vez de confiar que o onValue
+    // vai disparar de novo sozinho.
+    //
+    // onProgress(readyCount, total) é chamado a cada atualização, pra
+    // alimentar o "aguardando X/4 jogadores" na tela. Resolve com
+    // { aborted: true } se alguém abandonou, ou { data } com a partida
+    // já no andar seguinte.
+    static waitForFloorAdvance(matchId, squadIds, expectedFloor, onProgress) {
+
+        return new Promise(resolve => {
+
+            const matchRef = ref(db, `${this.matchesPath()}/${matchId}`);
+            let settled = false;
+            let checking = false;
+
+            const finish = (value) => {
+                if (settled) return;
+                settled = true;
+                off(matchRef);
+                resolve(value);
+            };
+
+            onValue(matchRef, async (snapshot) => {
+
+                if (settled || checking) return;
+
+                const data = snapshot.val();
+
+                if (!data) {
+                    finish({ aborted: true });
+                    return;
+                }
+
+                if (data.floor > expectedFloor) {
+                    finish({ data });
+                    return;
+                }
+
+                const left = data.left ?? {};
+
+                if (squadIds.some(id => left[id])) {
+                    finish({ aborted: true });
+                    return;
+                }
+
+                const ready = data.floorReady ?? {};
+                const readyCount = squadIds.filter(id => ready[id]).length;
+
+                onProgress?.(readyCount, squadIds.length);
+
+                if (readyCount < squadIds.length) {
+                    return;
+                }
+
+                checking = true;
+
+                const result = await runTransaction(matchRef, (current) => {
+
+                    if (!current || current.floor !== expectedFloor) {
+                        return;
+                    }
+
+                    current.floor = expectedFloor + 1;
+                    current.floorReady = {};
+
+                    return current;
+
+                });
+
+                checking = false;
+
+                // Se minha transaction não comitou, outro cliente já
+                // avançou o andar antes de mim — busco o valor real
+                // direto do servidor em vez de esperar passivamente o
+                // onValue disparar de novo por conta própria.
+                const finalValue = result.committed
+                    ? result.snapshot.val()
+                    : (await get(matchRef)).val();
+
+                if (finalValue && finalValue.floor > expectedFloor) {
+                    finish({ data: finalValue });
+                }
+
+            });
+
+        });
+
     }
 
 }

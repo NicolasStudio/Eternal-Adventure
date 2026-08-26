@@ -190,7 +190,7 @@ export default class CombatEngine {
         }
         message += ` Você recebeu <strong>${this.monster.status.nomeAtaque}</strong>, <strong>${result.damage}</strong> de dano.`;
         if (result.healedFromAbsorption > 0) {
-            message += `<br><span class="combat-absorption">Você absorveu parte do ataque!</span> ${result.absorbed} de dano mitigado, recuperou <strong>${result.healedFromAbsorption}</strong> HP.`;
+            message += `<br><span class="combat-absorption">Absorção!</span> Mitigou <strong>${result.absorbed}</strong>, curou <strong>${result.healedFromAbsorption}</strong> HP.`;
         }
         return message;
     }

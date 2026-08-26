@@ -71,6 +71,14 @@ export default class RaidCombatService {
 
     }
 
+    // Deriva uma seed diferente por andar a partir da seed única da
+    // partida — evita que todo drake da sequência role exatamente a
+    // mesma sequência de esquiva/crítico/alvo só porque a seed base é
+    // igual, sem precisar gravar uma seed nova por andar no Firebase.
+    static deriveFloorSeed(seed, floor) {
+        return (seed + floor * 104729) >>> 0;
+    }
+
     // squad: array de até 4 combatentes (PvpCombatService.snapshotCombatant + id).
     // boss: RaidCombatService.snapshotBoss(...).
     // seed: mesmo valor gravado na partida pelos 4 clientes — garante
