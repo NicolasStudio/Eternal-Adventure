@@ -122,6 +122,10 @@ export default class HealthSystem {
         );
     }
 
+    getHpPercent() {
+        return (this.player.currentHP / this.player.maxHP) * 100;
+    }
+
     getBurstCost() {
         if (this.getMissingHP() <= 0) return 0;
         return Math.max(

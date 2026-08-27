@@ -721,6 +721,12 @@ export default class CharacterView {
     }
 
     refresh() {
+        // Sem isso, um refresh disparado enquanto o mouse ainda está em
+        // cima de um slot (ex: equipar/consumir o próprio item hovered)
+        // destrói o node antes do mouseleave disparar, e a tooltip fica
+        // "órfã" na tela — presa até o próximo clique ou até passar o
+        // mouse pela navegação/toolbar (ver HudScreen.registerEvents).
+        this.hideTooltip();
         const window = document.querySelector(".character-window");
         if (!window) return;
         window.outerHTML = this.render();
@@ -756,9 +762,14 @@ export default class CharacterView {
 
         this.game.hudScreen.currentView = "";
 
-        this.game.hudScreen.render();
-
-        this.game.hudScreen.registerEvents();
+        // refreshCurrentView() (não render()+registerEvents() na mão) —
+        // render() recria os botões da toolbar (Wiki/Salvar/Carregar/
+        // Maximizar/Configurações) do zero, e só refreshCurrentView()
+        // religa os listeners deles (toolbarHUD.registerEvents). Sem
+        // isso, os botões voltavam a existir na tela mas sem nenhuma
+        // ação — só "consertava" ao trocar de tela pelo menu, que já
+        // passa por refreshCurrentView().
+        this.game.hudScreen.refreshCurrentView();
 
         this.game.hudScreen.updateMusic();
 

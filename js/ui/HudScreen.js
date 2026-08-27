@@ -64,6 +64,16 @@ export default class HudScreen {
     }
 
     render() {
+        // render() reconstrói a tela inteira via innerHTML — inclusive
+        // quando disparado sem nenhuma ação do jogador (ex: tick de
+        // regeneração de vida a cada 2min, ver HealthSystem). Se o mouse
+        // estiver em cima de um item nesse momento, o slot morre sem
+        // disparar mouseleave, e a tooltip (anexada direto no body, fora
+        // do #hud-screen) sobrevive órfã — presa na tela até o próximo
+        // clique. Como toda reconstrução do HUD passa por aqui, esse é o
+        // único lugar que precisa dessa limpeza pra cobrir todos os casos.
+        document.getElementById("item-tooltip")?.remove();
+        document.getElementById("item-tooltip-compare")?.remove();
         this.element.innerHTML = `
             <div class="hud-background" style="background-image:url('${this.backgroundImage ?? ""}')"></div>
             ${this.renderHeader()}
@@ -189,21 +199,27 @@ export default class HudScreen {
     renderNavigation() {
         const anyLockedCombat = (this.inCombat && !this.preparationMode) || this.inPvpCombat || this.inRaidCombat;
         const characterDisabled = anyLockedCombat;
-        const dungeonDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat;
+        // Vida crítica (<=5%) trava Dungeons/PVP/Cooperativo — entrar em
+        // combate quase morto é praticamente uma derrota garantida, então
+        // barramos antes mesmo de abrir o menu (Personagem continua
+        // liberado, é de lá que o jogador acessa a enfermaria/poções).
+        const lowHealth = this.game.player.health.getHpPercent() <= 5;
+        const lowHealthTitle = "Sua vida está a baixo de 5%, vá a enfermaria ou use poções";
+        const dungeonDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat || lowHealth;
         const cityDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat;
-        const pvpDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat;
+        const pvpDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat || lowHealth;
         // Cooperativo só libera a partir do nível 100 — trava separada
         // do bloqueio por combate, pra poder mostrar uma mensagem
         // diferente pro jogador quando ele clicar.
         const coopLevelLocked = this.game.player.level < 100;
-        const coopDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat || coopLevelLocked;
+        const coopDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat || coopLevelLocked || lowHealth;
         return `
             <nav class="hud-navigation">
                 <button class="nav-item ${this.currentView === "character" ? "active" : ""} ${characterDisabled ? "disabled" : ""}" data-view="character">
                     <span class="material-symbols-outlined">person</span>
                     <span>Personagem</span>
                 </button>
-                <button class="nav-item ${this.currentView === "dungeon" ? "active" : ""} ${dungeonDisabled ? "disabled" : ""}" data-view="dungeon">
+                <button class="nav-item ${this.currentView === "dungeon" ? "active" : ""} ${dungeonDisabled ? "disabled" : ""}" data-view="dungeon" data-low-health="${lowHealth}" title="${lowHealth ? lowHealthTitle : ""}">
                     <span class="material-symbols-outlined">castle</span>
                     <span>Dungeons</span>
                 </button>
@@ -211,11 +227,11 @@ export default class HudScreen {
                     <span class="material-symbols-outlined">location_city</span>
                     <span>Cidade</span>
                 </button>
-                <button class="nav-item ${this.currentView === "pvp" ? "active" : ""} ${pvpDisabled ? "disabled" : ""}" data-view="pvp">
+                <button class="nav-item ${this.currentView === "pvp" ? "active" : ""} ${pvpDisabled ? "disabled" : ""}" data-view="pvp" data-low-health="${lowHealth}" title="${lowHealth ? lowHealthTitle : ""}">
                     <span class="material-symbols-outlined">swords</span>
                     <span>PVP</span>
                 </button>
-                <button class="nav-item ${this.currentView === "coop" ? "active" : ""} ${coopDisabled ? "disabled" : ""}" data-view="coop" data-level-locked="${coopLevelLocked}" title="${coopLevelLocked ? "Requer nível 100" : ""}">
+                <button class="nav-item ${this.currentView === "coop" ? "active" : ""} ${coopDisabled ? "disabled" : ""}" data-view="coop" data-level-locked="${coopLevelLocked}" data-low-health="${lowHealth}" title="${coopLevelLocked ? "Requer nível 100" : (lowHealth ? lowHealthTitle : "")}">
                     <span class="material-symbols-outlined">${coopLevelLocked ? "lock" : "groups"}</span>
                     <span>Cooperativo</span>
                 </button>
@@ -253,6 +269,8 @@ export default class HudScreen {
                 if (button.classList.contains("disabled")) {
                     if (button.dataset.levelLocked === "true") {
                         Toast.show("Modo Cooperativo disponível apenas a partir do nível 100.");
+                    } else if (button.dataset.lowHealth === "true") {
+                        Toast.show("Sua vida está a baixo de 5%, vá a enfermaria ou use poções.");
                     } else {
                         Toast.show("Você não pode trocar de tela durante um combate.");
                     }

@@ -1,6 +1,17 @@
 export default [
 
     {
+        version: "Alpha v0.13",
+        date: "Agosto de 2026",
+        changes: [
+            "Corrigido bug onde apertar Enter na confirmação de 'Pular Dungeon' reabria o modal ou entrava direto em combate, em vez de apenas confirmar a escolha",
+            "Ferraria: removida a confusa 'Próxima Qualidade: Máximo' ao melhorar um item já Excepcional — agora aparece um selo 'Máximo' centralizado",
+            "Adicionado bloqueio de Dungeons, PVP e Cooperativo com a vida abaixo de 5% — um aviso pede para ir à Enfermaria ou usar poções antes de entrar em combate",
+            "Corrigido os botões da barra de ferramentas (Wiki, Salvar, Carregar, Maximizar, Configurações) ficando sem nenhuma ação depois de fechar a tela de Personagem pelo X"
+        ]
+    },
+
+    {
         version: "Alpha v0.12",
         date: "Agosto de 2026",
         changes: [

@@ -52,7 +52,7 @@ export default class BlacksmithArmor {
 
     getNextQualityName(item) {
         const next = UpgradeService.getNextQuality(item);
-        return next ? next.name : "Máximo";
+        return next ? next.name : null;
     }
 
     render() {
@@ -157,19 +157,30 @@ export default class BlacksmithArmor {
                 </div>
             `;
         }
+        const nextQualityName = this.getNextQualityName(this.anvilItem);
         return `
             <div class="blacksmith-upgrade-info">
                 <div class="blacksmith-info-line">
                     <span>Qualidade Atual</span>
                     <strong>${this.getCurrentQualityName(this.anvilItem)}</strong>
                 </div>
-                <div class="blacksmith-arrow">
-                    <i class="fa-solid fa-arrow-down"></i>
-                </div>
-                <div class="blacksmith-info-line">
-                    <span>Próxima Qualidade</span>
-                    <strong>${this.getNextQualityName(this.anvilItem)}</strong>
-                </div>
+                ${nextQualityName
+                    ? `
+                        <div class="blacksmith-arrow">
+                            <i class="fa-solid fa-arrow-down"></i>
+                        </div>
+                        <div class="blacksmith-info-line">
+                            <span>Próxima Qualidade</span>
+                            <strong>${nextQualityName}</strong>
+                        </div>
+                    `
+                    : `
+                        <div class="blacksmith-max-badge">
+                            <i class="fa-solid fa-crown"></i>
+                            Máximo
+                        </div>
+                    `
+                }
                 <hr>
                 <div class="blacksmith-preview">
                     ${this.renderStatPreview()}

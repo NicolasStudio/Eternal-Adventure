@@ -24,13 +24,40 @@ export default class DungeonSkipConfirmModal {
                 </div>
             `;
             document.body.appendChild(this.overlay);
-            this.overlay.querySelector(".continue-no").addEventListener("click", () => {
+
+            // O botão que abriu o modal (ex: "Pular") continua com foco
+            // do navegador por baixo do overlay — sem isso, apertar Enter
+            // dispara um clique sintético nele de novo (reabrindo esse
+            // mesmo modal ou entrando direto no combate), em vez de
+            // confirmar a escolha feita aqui.
+            document.activeElement?.blur();
+
+            const finish = (result) => {
+                document.removeEventListener("keydown", handleKeydown, true);
                 this.hide();
-                resolve(false);
+                resolve(result);
+            };
+
+            // Fase de captura: intercepta Enter/Esc antes que cheguem a
+            // qualquer botão ainda focado por trás do overlay.
+            const handleKeydown = (event) => {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    finish(true);
+                } else if (event.key === "Escape") {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    finish(false);
+                }
+            };
+            document.addEventListener("keydown", handleKeydown, true);
+
+            this.overlay.querySelector(".continue-no").addEventListener("click", () => {
+                finish(false);
             });
             this.overlay.querySelector(".continue-yes").addEventListener("click", () => {
-                this.hide();
-                resolve(true);
+                finish(true);
             });
         });
     }

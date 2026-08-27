@@ -349,6 +349,19 @@ INFORMAÇÕES DA MELHORIA
     border:none;
     border-top:1px solid rgba(255,255,255,.08);
 }
+.blacksmith-max-badge{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    margin:18px 0;
+    color:#f1c75c;
+    font-size:1.1rem;
+    font-weight:700;
+    text-align:center;
+    letter-spacing:.5px;
+    text-transform:uppercase;
+}
 
 /*==========================================================
 PREVIEW DOS ATRIBUTOS
