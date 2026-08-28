@@ -8,7 +8,7 @@ const monstersRaid = [
     // ============================================
     {
         id: "drake_water",
-        name: "Dragão do Abissal",
+        name: "Dragão Abissal",
         level: 150,
         type: "beast",
 
@@ -44,9 +44,9 @@ const monstersRaid = [
             },
             {
                 pool: [
-                    { item: enchantmentStone.quartzoRosaUm, chance: 85 },
-                    { item: enchantmentStone.quartzoRosaDois, chance: 10 },
-                    { item: enchantmentStone.quartzoRosaTres, chance: 3 },
+                    { item: enchantmentStone.quartzoRosaUm, chance: 80 },
+                    { item: enchantmentStone.quartzoRosaDois, chance: 12 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 5 },
                     { type: ["boot"], rarity: "legendary", chance: 2 }
                 ]
             }
@@ -91,9 +91,9 @@ const monstersRaid = [
             },
             {
                 pool: [
-                    { item: enchantmentStone.quartzoRosaUm, chance: 85 },
-                    { item: enchantmentStone.quartzoRosaDois, chance: 10 },
-                    { item: enchantmentStone.quartzoRosaTres, chance: 3 },
+                    { item: enchantmentStone.quartzoRosaUm, chance: 80 },
+                    { item: enchantmentStone.quartzoRosaDois, chance: 12 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 5 },
                     { type: ["leg"], rarity: "legendary", chance: 2 }
                 ]
             }
@@ -138,9 +138,9 @@ const monstersRaid = [
             },
             {
                 pool: [
-                    { item: enchantmentStone.quartzoRosaUm, chance: 85 },
-                    { item: enchantmentStone.quartzoRosaDois, chance: 10 },
-                    { item: enchantmentStone.quartzoRosaTres, chance: 3 },
+                    { item: enchantmentStone.quartzoRosaUm, chance: 80 },
+                    { item: enchantmentStone.quartzoRosaDois, chance: 12 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 5 },
                     { type: ["chest"], rarity: "legendary", chance: 2 }
                 ]
             }
@@ -185,9 +185,9 @@ const monstersRaid = [
             },
             {
                 pool: [
-                    { item: enchantmentStone.quartzoRosaUm, chance: 85 },
-                    { item: enchantmentStone.quartzoRosaDois, chance: 10 },
-                    { item: enchantmentStone.quartzoRosaTres, chance: 3 },
+                    { item: enchantmentStone.quartzoRosaUm, chance: 80 },
+                    { item: enchantmentStone.quartzoRosaDois, chance: 12 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 5 },
                     { type: ["helmet"], rarity: "legendary", chance: 2 }
                 ]
             }
@@ -232,9 +232,9 @@ const monstersRaid = [
             },
             {
                 pool: [
-                    { item: enchantmentStone.quartzoRosaUm, chance: 85 },
-                    { item: enchantmentStone.quartzoRosaDois, chance: 10 },
-                    { item: enchantmentStone.quartzoRosaTres, chance: 3 },
+                    { item: enchantmentStone.quartzoRosaUm, chance: 80 },
+                    { item: enchantmentStone.quartzoRosaDois, chance: 12 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 5 },
                     { type: ["weapon"], rarity: "legendary", chance: 2 }
                 ]
             }

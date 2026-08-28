@@ -283,7 +283,12 @@ export default class RaidView {
 
         return Object.values(this.matchData.squad)
             .filter(c => !left[c.id])
-            .map(c => ({ ...c, currentHP: hp[c.id] ?? c.currentHP ?? c.maxHP }));
+            .map(c => ({ ...c, currentHP: hp[c.id] ?? c.currentHP ?? c.maxHP }))
+            // Visual: menor armadura fica na primeira posição, maior
+            // armadura na última — o boss é sempre ancorado do lado
+            // direito da arena (ver raid.css .raid-boss-portrait), então
+            // quem aguenta mais dano fica visualmente mais perto dele.
+            .sort((a, b) => a.armor - b.armor);
 
     }
 

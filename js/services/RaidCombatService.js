@@ -10,6 +10,34 @@ const ABSORPTION_MITIGATION_RATIO = 0.5;
 // pra não cortar a luta no meio antes do boss ou do squad morrerem.
 const MAX_ROUNDS = 3000;
 
+// Peso de "ameaça" por classe pra mira do boss: Guerreiro e Bárbaro têm
+// sustain próprio em combate (Guerreiro cura ao apanhar via Absorção,
+// Bárbaro rouba vida ao bater), então o boss prioriza bater neles; Mago
+// e Arqueiro não têm nenhuma forma de se manter vivos sozinhos, então
+// levam menos foco. Uma classe ausente do squad (ou desconhecida, ex:
+// snapshot antigo sem esse campo) simplesmente não entra na conta — o
+// peso dela não "sobra" pra ninguém, só deixa de existir, rebalanceando
+// o resto proporcionalmente (ex: só Mago e Arqueiro vivos = 20/20,
+// vira 50%/50%, já "equilibrado" como pedido).
+const BOSS_TARGET_WEIGHT = {
+    warrior: 35,
+    barbarian: 25,
+    mage: 20,
+    archer: 20
+};
+const DEFAULT_TARGET_WEIGHT = 25;
+
+function pickWeightedTarget(targets, rng) {
+    const weights = targets.map(c => BOSS_TARGET_WEIGHT[c.class] ?? DEFAULT_TARGET_WEIGHT);
+    const total = weights.reduce((sum, w) => sum + w, 0);
+    let roll = rng() * total;
+    for (let i = 0; i < targets.length; i++) {
+        roll -= weights[i];
+        if (roll < 0) return targets[i];
+    }
+    return targets[targets.length - 1];
+}
+
 function mulberry32(seed) {
     let a = seed;
     return function () {
@@ -118,7 +146,12 @@ export default class RaidCombatService {
 
                 if (targets.length === 0) break;
 
-                const target = targets[Math.floor(rng() * targets.length)];
+                // Só o boss mira com peso por classe — quando é o squad
+                // atacando, o alvo é sempre o próprio boss (targets.length
+                // é 1 nesse caso), então o peso não faz diferença ali.
+                const target = isBossTurn
+                    ? pickWeightedTarget(targets, rng)
+                    : targets[Math.floor(rng() * targets.length)];
 
                 // Só o boss sorteia entre múltiplos ataques nomeados —
                 // ele bate só 1 vez por turno, mas qual dos 3 golpes sai

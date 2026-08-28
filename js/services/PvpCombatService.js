@@ -56,6 +56,7 @@ export default class PvpCombatService {
         return {
             name: player.name,
             image: player.transcendence?.image ?? player.class.image,
+            class: player.class.id,
             maxHP: player.maxHP,
             currentHP: player.maxHP,
             attack: stats.attack,

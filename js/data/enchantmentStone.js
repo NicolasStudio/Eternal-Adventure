@@ -310,7 +310,7 @@ const enchantmentStone = {
         stats: {
             special: 1
         },
-        enchantPrice: 50000,
+        enchantPrice: 300000,
         sellValue: 10000
     },
 
@@ -333,7 +333,7 @@ const enchantmentStone = {
         stats: {
             special: 2
         },
-        enchantPrice: 70000,
+        enchantPrice: 200000,
         sellValue: 30000
     },
 
@@ -356,7 +356,7 @@ const enchantmentStone = {
         stats: {
             special: 3
         },
-        enchantPrice: 100000,
+        enchantPrice: 300000,
         sellValue: 50000
     }
 };
