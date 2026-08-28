@@ -45,9 +45,9 @@ const monstersRaid = [
             {
                 pool: [
                     { item: enchantmentStone.quartzoRosaUm, chance: 80 },
-                    { item: enchantmentStone.quartzoRosaDois, chance: 12 },
-                    { item: enchantmentStone.quartzoRosaTres, chance: 5 },
-                    { type: ["boot"], rarity: "legendary", chance: 2 }
+                    { item: enchantmentStone.quartzoRosaDois, chance: 10 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 6 },
+                    { type: ["boot"], rarity: "legendary", chance: 3 }
                 ]
             }
         ]
@@ -92,9 +92,9 @@ const monstersRaid = [
             {
                 pool: [
                     { item: enchantmentStone.quartzoRosaUm, chance: 80 },
-                    { item: enchantmentStone.quartzoRosaDois, chance: 12 },
-                    { item: enchantmentStone.quartzoRosaTres, chance: 5 },
-                    { type: ["leg"], rarity: "legendary", chance: 2 }
+                    { item: enchantmentStone.quartzoRosaDois, chance: 10 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 6 },
+                    { type: ["leg"], rarity: "legendary", chance: 3 }
                 ]
             }
         ]
@@ -139,9 +139,9 @@ const monstersRaid = [
             {
                 pool: [
                     { item: enchantmentStone.quartzoRosaUm, chance: 80 },
-                    { item: enchantmentStone.quartzoRosaDois, chance: 12 },
-                    { item: enchantmentStone.quartzoRosaTres, chance: 5 },
-                    { type: ["chest"], rarity: "legendary", chance: 2 }
+                    { item: enchantmentStone.quartzoRosaDois, chance: 10 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 6 },
+                    { type: ["chest"], rarity: "legendary", chance: 3 }
                 ]
             }
         ]
@@ -186,9 +186,9 @@ const monstersRaid = [
             {
                 pool: [
                     { item: enchantmentStone.quartzoRosaUm, chance: 80 },
-                    { item: enchantmentStone.quartzoRosaDois, chance: 12 },
-                    { item: enchantmentStone.quartzoRosaTres, chance: 5 },
-                    { type: ["helmet"], rarity: "legendary", chance: 2 }
+                    { item: enchantmentStone.quartzoRosaDois, chance: 10 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 6 },
+                    { type: ["helmet"], rarity: "legendary", chance: 3 }
                 ]
             }
         ]
@@ -233,9 +233,9 @@ const monstersRaid = [
             {
                 pool: [
                     { item: enchantmentStone.quartzoRosaUm, chance: 80 },
-                    { item: enchantmentStone.quartzoRosaDois, chance: 12 },
-                    { item: enchantmentStone.quartzoRosaTres, chance: 5 },
-                    { type: ["weapon"], rarity: "legendary", chance: 2 }
+                    { item: enchantmentStone.quartzoRosaDois, chance: 10 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 6 },
+                    { type: ["weapon"], rarity: "legendary", chance: 3 }
                 ]
             }
         ]
