@@ -95,7 +95,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/sword-rarity-mistico.png",
 
         stats: {
-            attack: 36,
+            attack: 40,
             armor: 0,
             agility: -5,
             criticalChance: 0,
@@ -121,9 +121,9 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/sword-rarity-lendario.png",
 
         stats: {
-            attack: 48,
+            attack: 52,
             armor: 0,
-            agility: -6,
+            agility: -8,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,

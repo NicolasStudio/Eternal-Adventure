@@ -1,9 +1,5 @@
 const DODGE_CAP = 40;
 
-// Mesmo valor usado em CombatEngine.js — quando a Absorção ativa (chance,
-// não garantida), corta essa fração do dano daquele golpe.
-const ABSORPTION_MITIGATION_RATIO = 0.5;
-
 /*
     PVP precisa que os DOIS clientes (o do jogador A e o do jogador B)
     cheguem exatamente ao mesmo resultado de combate, sem depender de
@@ -128,13 +124,15 @@ export default class PvpCombatService {
                 const absorptionChance = Math.min(95, defender.absorption ?? 0);
                 let absorbed = 0;
                 let healedFromAbsorption = 0;
+                let fullyAbsorbed = false;
 
                 if (rng() * 100 < absorptionChance) {
-                    absorbed = Math.floor(preAbsorption * ABSORPTION_MITIGATION_RATIO);
+                    fullyAbsorbed = true;
+                    absorbed = preAbsorption;
                     healedFromAbsorption = Math.floor(absorbed * 0.20) + Math.floor(defender.maxHP * 0.02);
                 }
 
-                const damage = Math.max(1, preAbsorption - absorbed);
+                const damage = fullyAbsorbed ? 0 : preAbsorption;
 
                 defender.currentHP = Math.max(0, defender.currentHP - damage);
 
@@ -241,13 +239,15 @@ export default class PvpCombatService {
                 const absorptionChance = Math.min(95, target.absorption ?? 0);
                 let absorbed = 0;
                 let healedFromAbsorption = 0;
+                let fullyAbsorbed = false;
 
                 if (rng() * 100 < absorptionChance) {
-                    absorbed = Math.floor(preAbsorption * ABSORPTION_MITIGATION_RATIO);
+                    fullyAbsorbed = true;
+                    absorbed = preAbsorption;
                     healedFromAbsorption = Math.floor(absorbed * 0.20) + Math.floor(target.maxHP * 0.02);
                 }
 
-                const damage = Math.max(1, preAbsorption - absorbed);
+                const damage = fullyAbsorbed ? 0 : preAbsorption;
 
                 target.currentHP = Math.max(0, target.currentHP - damage);
 

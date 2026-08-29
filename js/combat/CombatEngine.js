@@ -2,11 +2,6 @@
 // de um lado supere a do outro — nunca "nunca é atingido".
 const DODGE_CAP = 40;
 
-// Quando a Absorção ativa (ver calculateDamage), ela corta essa fração
-// do dano daquele golpe — não é o valor cheio do atributo, só QUANTO
-// mitiga quando a chance realmente proc.
-const ABSORPTION_MITIGATION_RATIO = 0.5;
-
 export default class CombatEngine {
     constructor(player, monster) {
         this.player = player;
@@ -117,20 +112,22 @@ export default class CombatEngine {
             Math.floor(attack * criticalMultiplier * mitigation)
         );
 
-        // Absorção: CHANCE de o defensor absorver parte do golpe — igual
-        // ao Roubo de Vida (que é "chance de proc", não garantido), só
-        // que do lado de quem APANHA em vez de quem ataca. Quando ativa,
-        // mitiga uma fração do dano (ABSORPTION_MITIGATION_RATIO) e cura
+        // Absorção: CHANCE de o defensor bloquear o golpe por completo —
+        // igual ao Roubo de Vida (que é "chance de proc", não garantido),
+        // só que do lado de quem APANHA em vez de quem ataca. Quando
+        // ativa, absorve o dano INTEIRO daquele golpe (0 de dano) e cura
         // parte do que foi absorvido, na mesma proporção usada pelo
         // Roubo de Vida (20% do valor absorvido + 2% da vida máxima).
         const absorptionChance = Math.min(95, defender.absorption ?? 0);
 
         let absorbed = 0;
         let healedFromAbsorption = 0;
+        let fullyAbsorbed = false;
 
         if (Math.random() * 100 < absorptionChance) {
 
-            absorbed = Math.floor(preAbsorption * ABSORPTION_MITIGATION_RATIO);
+            fullyAbsorbed = true;
+            absorbed = preAbsorption;
 
             healedFromAbsorption =
                 Math.floor(absorbed * 0.20) +
@@ -138,7 +135,7 @@ export default class CombatEngine {
 
         }
 
-        const damage = Math.max(1, preAbsorption - absorbed);
+        const damage = fullyAbsorbed ? 0 : preAbsorption;
 
         // ==========================
         // LIFE STEAL

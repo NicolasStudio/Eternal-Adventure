@@ -1,10 +1,5 @@
 import PvpCombatService from "./PvpCombatService.js";
 
-// Mesmo valor usado em PvpCombatService.js/CombatEngine.js — quando a
-// Absorção ativa (chance, não garantida), corta essa fração do dano
-// daquele golpe.
-const ABSORPTION_MITIGATION_RATIO = 0.5;
-
 // Boss tem HP colossal (milhares) contra só 4 atacantes por rodada —
 // precisa de bem mais rodadas que um duelo de PVP (que usa guard 500/1000)
 // pra não cortar a luta no meio antes do boss ou do squad morrerem.
@@ -190,13 +185,15 @@ export default class RaidCombatService {
                 const absorptionChance = Math.min(95, target.absorption ?? 0);
                 let absorbed = 0;
                 let healedFromAbsorption = 0;
+                let fullyAbsorbed = false;
 
                 if (rng() * 100 < absorptionChance) {
-                    absorbed = Math.floor(preAbsorption * ABSORPTION_MITIGATION_RATIO);
+                    fullyAbsorbed = true;
+                    absorbed = preAbsorption;
                     healedFromAbsorption = Math.floor(absorbed * 0.20) + Math.floor(target.maxHP * 0.02);
                 }
 
-                const damage = Math.max(1, preAbsorption - absorbed);
+                const damage = fullyAbsorbed ? 0 : preAbsorption;
 
                 target.currentHP = Math.max(0, target.currentHP - damage);
 
