@@ -11,6 +11,36 @@
 }
 
 /* ==========================================================
+   ABAS
+========================================================== */
+.market-buy-tabs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    flex-shrink:0;
+    margin-bottom:14px;
+}
+.market-buy-tab{
+    padding:8px 14px;
+    border:none;
+    border-radius:6px;
+    background:rgba(255,255,255,.04);
+    color:#d4a373;
+    font-family:"Cinzel",serif;
+    font-size:.85rem;
+    cursor:pointer;
+    transition:.2s;
+}
+.market-buy-tab:hover{
+    background:rgba(212,163,115,.12);
+    color:#f0d5b0;
+}
+.market-buy-tab.active{
+    background:rgba(212,163,115,.18);
+    border-bottom:2px solid #69d823;
+}
+
+/* ==========================================================
    GRID
 ========================================================== */
 .market-buy-grid{

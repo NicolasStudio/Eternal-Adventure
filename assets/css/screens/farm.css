@@ -1,0 +1,225 @@
+/* ==========================================================
+   FAZENDA
+========================================================== */
+.farm-screen{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:1;
+}
+
+/* ==========================================================
+   FERRAMENTAS (barra em elipse acima do menu de navegação)
+========================================================== */
+.farm-tools-ellipse{
+    position:absolute;
+    bottom:90px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:18px;
+    padding:12px 28px;
+    background:linear-gradient(180deg,#2c1810,#1a0f0a);
+    border:2px solid #8b7355;
+    border-radius:999px;
+    box-shadow:0 8px 24px rgba(0,0,0,.5), inset 0 0 20px rgba(0,0,0,.35);
+    z-index:15;
+}
+.farm-tool{
+    position:relative;
+    width:48px;
+    height:48px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,.25);
+    border:2px solid #5b4633;
+    border-radius:50%;
+    cursor:pointer;
+    transition:.15s;
+}
+.farm-tool img{
+    width:28px;
+    height:28px;
+    object-fit:contain;
+    image-rendering:pixelated;
+}
+.farm-tool:hover{
+    border-color:#d4a373;
+    background:rgba(212,163,115,.15);
+}
+.farm-tool.active{
+    border-color:#f1c75c;
+    background:rgba(241,199,92,.25);
+    box-shadow:0 0 12px rgba(241,199,92,.6);
+}
+.farm-tool::after{
+    content:attr(data-tooltip);
+    position:absolute;
+    bottom:120%;
+    left:50%;
+    transform:translateX(-50%);
+    background:#24140d;
+    border:1px solid #8b7355;
+    color:#f0d5b0;
+    font-family:"Cinzel",serif;
+    font-size:12px;
+    padding:6px 10px;
+    white-space:nowrap;
+    opacity:0;
+    pointer-events:none;
+    transition:.2s;
+}
+.farm-tool:hover::after{
+    opacity:1;
+}
+
+/* ==========================================================
+   GRADE DE CANTEIROS (6x4, centralizada e responsiva)
+========================================================== */
+.farm-plot-grid{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:10px;
+    width:min(680px,88vw);
+    padding:20px;
+    background:rgba(20,12,8,.55);
+    border:2px solid #8b7355;
+    border-radius:10px;
+    box-shadow:0 10px 35px rgba(0,0,0,.5);
+}
+.farm-plot{
+    position:relative;
+    aspect-ratio:1;
+    border-radius:4px;
+    overflow:hidden;
+    cursor:pointer;
+    border:1px solid rgba(139,115,85,.5);
+    transition:.15s;
+}
+.farm-plot:hover{
+    border-color:#f1c75c;
+    box-shadow:0 0 10px rgba(241,199,92,.5);
+}
+.farm-plot-soil,
+.farm-plot-seed{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    image-rendering:pixelated;
+    pointer-events:none;
+}
+.farm-plot-soil{
+    opacity: .95;
+}
+.farm-plot-seed{
+    z-index:2;
+    width:80%;
+    height:80%;
+    margin:auto;
+    top:0; left:0; bottom:0; right:0;
+    filter: drop-shadow(0 0 4px #fffefe77);
+}
+
+/* ==========================================================
+   SELETOR DE SEMENTE
+========================================================== */
+.farm-seed-picker-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.6);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:200;
+}
+.farm-seed-picker{
+    width:min(420px,90vw);
+    max-height:80vh;
+    overflow-y:auto;
+    background:linear-gradient(180deg,#2c1810,#1a0f0a);
+    border:2px solid #8b7355;
+    border-radius:10px;
+    padding:20px;
+    box-shadow:0 15px 40px rgba(0,0,0,.6);
+    text-align:center;
+}
+.farm-seed-picker h3{
+    margin:0 0 16px;
+    color:#f1c75c;
+    font-family:"Cinzel",serif;
+}
+.farm-seed-picker-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin-bottom:16px;
+}
+.farm-seed-picker-item{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    padding:10px;
+    background:rgba(0,0,0,.25);
+    border:2px solid #5b4633;
+    border-radius:6px;
+    color:#e6d2b5;
+    font-family:"Cinzel",serif;
+    font-size:.8rem;
+    cursor:pointer;
+    transition:.15s;
+}
+.farm-seed-picker-item:hover{
+    border-color:#f1c75c;
+    background:rgba(241,199,92,.15);
+}
+.farm-seed-picker-item img{
+    width:40px;
+    height:40px;
+    object-fit:contain;
+    image-rendering:pixelated;
+}
+.farm-seed-picker-qty{
+    color:#d4a373;
+    font-size:.72rem;
+}
+.farm-seed-picker-empty{
+    color:#c7b08d;
+    font-size:.85rem;
+    margin-bottom:16px;
+}
+.farm-seed-picker-cancel{
+    padding:8px 20px;
+    background:rgba(0,0,0,.3);
+    border:2px solid #5b4633;
+    border-radius:6px;
+    color:#e6d2b5;
+    font-family:"Cinzel",serif;
+    cursor:pointer;
+}
+.farm-seed-picker-cancel:hover{
+    border-color:#d4a373;
+}
+
+@media (max-width:640px){
+    .farm-plot-grid{
+        width:94vw;
+        gap:6px;
+        padding:12px;
+    }
+    .farm-tools-ellipse{
+        bottom:80px;
+        gap:12px;
+        padding:10px 20px;
+    }
+    .farm-tool{
+        width:40px;
+        height:40px;
+    }
+}

@@ -14,6 +14,7 @@ import dungeons from "../data/dungeons.js";
 import ItemValueService from "../services/ItemValueService.js";
 import baseStatsL1 from "../data/baseStatsL1.js";
 import { CURRENT_BALANCE_VERSION } from "../services/StatsMigrationService.js";
+import pets from "../data/pet.js";
 
 export default class Player {
     constructor(characterClass, name) {
@@ -59,8 +60,14 @@ export default class Player {
             helmet: null,
             chest: null,
             leg: null,
-            boot: null
+            boot: null,
+            pet: null
         };
+
+        // Bônus de Vida Máxima já aplicado pelo pet equipado (ver
+        // PetService.syncMaxHPBonus) — guardado aqui pra sincronizar
+        // sem acumular em dobro toda vez que a fome muda.
+        this.petLifeBonusApplied = 0;
         this.stats = new PlayerStats(this);
 
         // Baú diário (Pokébox): fica pronto imediatamente numa partida nova.
@@ -70,6 +77,23 @@ export default class Player {
 
         // Álbum/bestiário: ids das cartas já descobertas (sem duplicar).
         this.album = [];
+
+        // Fazenda: 24 canteiros (grade 6x4), todos como grama (não
+        // arados) numa partida nova. Cada canteiro só guarda os
+        // timestamps — estágio de crescimento, se está seco/molhado
+        // etc. é tudo derivado a partir deles (ver FarmService.js).
+        // petXP é só uma barra acumulada pra um futuro sistema de pet.
+        this.farm = {
+            plots: Array.from({ length: 24 }, () => ({
+                tilled: false,
+                tilledAt: null,
+                seedId: null,
+                plantedAt: null,
+                wateredAt: null,
+                growthModifier: null
+            })),
+            petXP: 0
+        };
 
         // Transcendência (final secreto): null até o jogador escolher.
         // Guarda o objeto inteiro de upClasse.js (imagem, hud, bônus).
@@ -263,7 +287,9 @@ export default class Player {
 
         if (!item) return false;
 
-        if (item.class !== this.class.id) {
+        // Itens sem `class` (ex: pet) valem pra qualquer classe — só
+        // barra quando o item REALMENTE exige uma classe específica.
+        if (item.class && item.class !== this.class.id) {
             return false;
         }
 
@@ -412,6 +438,26 @@ export default class Player {
                 level: this.level,
                 bonus
             });
+
+        }
+
+        // Ovo do primeiro pet, uma única vez, ao alcançar o nível 30 —
+        // usa >=30 (não ===30) pra cobrir o caso raro de uma XP grande
+        // pular direto de, por exemplo, 28 pro 35. Anexado no ÚLTIMO
+        // levelUp (o nível final alcançado) pra o modal de level up
+        // mostrar o ganho do ovo junto.
+        if (levelUps.length > 0 && this.level >= 30 && !this.progress.stats.wolfEggGranted) {
+
+            this.progress.stats.wolfEggGranted = true;
+
+            const eggTemplate = pets.wolfPet1;
+
+            this.addItem({ ...eggTemplate, icon: eggTemplate.image });
+
+            levelUps[levelUps.length - 1].petReward = {
+                name: eggTemplate.name,
+                image: eggTemplate.image
+            };
 
         }
 

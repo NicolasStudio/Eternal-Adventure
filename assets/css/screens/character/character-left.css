@@ -105,8 +105,21 @@
 .character-avatar-wrapper:hover .character-avatar-full{
     opacity:1;
 }
+
 .character-avatar-wrapper:hover .character-avatar:not(.character-avatar-full){
     opacity:0;
+}
+
+/* Pet só tem UMA imagem (sem "-full" pra trocar no hover) — em vez do
+   crossfade do jogador, um scale simples no hover. Mesma especificidade
+   da regra genérica logo acima (mesmos 4 seletores), então precisa vir
+   DEPOIS dela no arquivo pra realmente vencer o empate. */
+.character-avatar-wrapper-pet .character-avatar{
+    transition:opacity .3s ease, transform .3s ease;
+}
+.character-avatar-wrapper-pet:hover .character-avatar:not(.character-avatar-full){
+    opacity:1;
+    transform:scale(1.2);
 }
 
 /* ==========================================================
@@ -195,6 +208,12 @@
     background:linear-gradient(180deg,#4b8cff,#0050fc);
 }
 
+/* Fome do pet — verde de propósito, pra nunca confundir com a barra
+   de HP vermelha do jogador. */
+.character-fill.pet-hunger{
+    background:linear-gradient(180deg,#69d823,#3f9c0f);
+}
+
 /* ==========================
    TEXTO
 ========================== */
@@ -239,6 +258,35 @@ hr{
 .character-stat span:last-child{
     color:#fff;
     font-weight:bold;
+}
+
+/* ==========================================================
+   PETS
+========================================================== */
+.character-pets-empty{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    color:#8f8578;
+    text-align:center;
+}
+.character-pets-empty i{
+    font-size:42px;
+    color:#8b7355;
+}
+.pet-stars{
+    color:#f1c75c;
+    letter-spacing:1px;
+}
+.character-stat.pet-ability span:first-child{
+    color:#c9a8ff;
+    font-weight:bold;
+}
+.character-stat.pet-ability span:last-child{
+    color:#c9a8ff;
 }
 
 /* ==========================================================

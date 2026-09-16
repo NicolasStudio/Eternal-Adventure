@@ -175,6 +175,10 @@
     animation:rewardPopup .25s ease;
 }
 
+.continue-modal strong{
+    color:#f1c75c;
+}
+
 .continue-title{
     margin:0 0 12px;
     text-align:center;
@@ -246,6 +250,82 @@
 }
 .continue-actions button:disabled:hover{
     background:#50331a;
+}
+
+/* ==========================================================
+   MODAL DE ALIMENTAR/UPAR PET (range de quantidade)
+========================================================== */
+.pet-feed-item{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    margin:16px 0;
+}
+.pet-feed-item img{
+    width:48px;
+    height:48px;
+    object-fit:contain;
+    image-rendering:pixelated;
+}
+.pet-feed-item span{
+    font-size:18px;
+    color:#f1c75c;
+}
+.pet-feed-hint{
+    margin:0 0 16px;
+    font-size:14px;
+    color:#bca46d;
+    text-align:center;
+}
+.pet-feed-range{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    margin-bottom:20px;
+}
+.pet-feed-slider{
+    -webkit-appearance:none;
+    appearance:none;
+    width:100%;
+    height:6px;
+    border-radius:4px;
+    background:linear-gradient(180deg, rgba(60,40,20,.6), rgba(20,10,5,.75));
+    border:1px solid rgba(139,115,85,.35);
+    cursor:pointer;
+    accent-color:#69d823;
+}
+.pet-feed-slider:disabled{
+    cursor:not-allowed;
+    opacity:.5;
+}
+.pet-feed-slider::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    appearance:none;
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background:#ecd8b3;
+    border:2px solid #69d823;
+    box-shadow:0 0 8px rgba(105,216,35,.5);
+    cursor:pointer;
+    margin-top:-1px;
+}
+.pet-feed-slider::-moz-range-thumb{
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background:#ecd8b3;
+    border:2px solid #69d823;
+    box-shadow:0 0 8px rgba(105,216,35,.5);
+    cursor:pointer;
+}
+.pet-feed-amount{
+    font-family:"Cinzel",serif;
+    font-weight:bold;
+    color:#69d823;
+    font-size:16px;
 }
 
 .soul-choice-overlay{

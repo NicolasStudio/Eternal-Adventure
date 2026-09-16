@@ -10,8 +10,9 @@ const TRACKS = {
     home: "assets/audio/tela-inicial.ogg",
     dungeonMenu: "assets/audio/menu-combate.ogg",
     combat: "assets/audio/combate.ogg",
-    city: "assets/audio/menu-cidade.ogg"
-    // pvp: "assets/audio/combate-pvp.ogg" — reservado, ainda não usado
+    city: "assets/audio/menu-cidade.ogg",
+    pvp: "assets/audio/combate-pvp.ogg",
+    farm: "assets/audio/calm-ambient.ogg"
 };
 
 export default class MusicService {

@@ -5,14 +5,30 @@ import legs from "../../../data/legs.js";
 import boots from "../../../data/boots.js";
 import dungeons from "../../../data/dungeons.js";
 import monsters from "../../../data/monsters.js";
+import seeds from "../../../data/seeds.js";
 import Toast from "../Toast.js";
 import ItemTooltip from "../../../views/ItemTooltip.js";
+import SeedTooltip from "../../../views/SeedTooltip.js";
+
+const TABS = [
+    { id: "weapon", label: "Armas" },
+    { id: "helmet", label: "Cabeça" },
+    { id: "chest", label: "Peitoral" },
+    { id: "leg", label: "Calça" },
+    { id: "boot", label: "Botas" },
+    { id: "item", label: "Itens" },
+    { id: "seed", label: "Sementes" }
+];
+
+const FARM_UNLOCK_LEVEL = 30;
 
 export default class MarketViewBuy {
     constructor(game) {
         this.game = game;
         this.selectedItem = null;
         this.shopItems = [];
+        this.visibleItems = [];
+        this.activeTab = "weapon";
     }
 
     get player() {
@@ -73,19 +89,59 @@ export default class MarketViewBuy {
                 items.push(drop.item);
             });
         });
+
+        // Sementes: liberadas por nível, não por dungeon — todas as 4
+        // aparecem de uma vez a partir do nível 30 (ver Fazenda).
+        if (this.player.level >= FARM_UNLOCK_LEVEL) {
+            items.push(...Object.values(seeds));
+        }
+
         return items;
+    }
+
+    // Filtra this.shopItems pela aba ativa — mesmos ids/critérios de
+    // CharacterView.getFilteredInventory(), pra ficar consistente com
+    // o inventário do jogador (equipamento por slot, poção em "item",
+    // semente na aba própria).
+    getTabItems() {
+        return this.shopItems.filter(item => {
+            switch (this.activeTab) {
+                case "weapon": return item.slot === "weapon";
+                case "helmet": return item.slot === "helmet";
+                case "chest": return item.slot === "chest";
+                case "leg": return item.slot === "leg";
+                case "boot": return item.slot === "boot";
+                case "item": return item.type === "item" && item.category !== "seed";
+                case "seed": return item.category === "seed";
+                default: return false;
+            }
+        });
     }
 
     render() {
         this.shopItems = this.getShopItems();
+        this.visibleItems = this.getTabItems();
         return `
             <section class="market-window">
                 ${this.renderHeader()}
                 <div class="market-buy-body">
+                    ${this.renderTabs()}
                     ${this.renderItems()}
                     ${this.renderActions()}
                 </div>
             </section>
+        `;
+    }
+
+    renderTabs() {
+        return `
+            <div class="market-buy-tabs">
+                ${TABS.map(tab => `
+                    <button class="market-buy-tab ${this.activeTab === tab.id ? "active" : ""}" data-tab="${tab.id}">
+                        ${tab.label}
+                    </button>
+                `).join("")}
+            </div>
         `;
     }
 
@@ -104,17 +160,22 @@ export default class MarketViewBuy {
     }
 
     renderItems() {
-        if (!this.shopItems.length) {
+        if (!this.visibleItems.length) {
+
+            const message = (this.activeTab === "seed" && this.player.level < FARM_UNLOCK_LEVEL)
+                ? `Sementes disponíveis a partir do nível ${FARM_UNLOCK_LEVEL}.`
+                : "Nenhum item disponível, vença uma Dungeon.";
+
             return `
                 <div class="market-buy-empty">
                     <i class="fa-solid fa-box-open"></i>
-                    <span>Nenhum item disponível, vença uma Dungeon.</span>
+                    <span>${message}</span>
                 </div>
             `;
         }
         return `
             <div class="market-buy-grid">
-                ${this.shopItems.map(item => this.renderItem(item)).join("")}
+                ${this.visibleItems.map(item => this.renderItem(item)).join("")}
             </div>
         `;
     }
@@ -206,7 +267,7 @@ export default class MarketViewBuy {
     registerItemEvents(container) {
         const slots = container.querySelectorAll(".market-buy-slot");
         slots.forEach((slot, index) => {
-            const item = this.shopItems[index];
+            const item = this.visibleItems[index];
             slot.addEventListener("click", () => {
                 this.selectedItem = item;
                 this.refresh();
@@ -259,6 +320,13 @@ export default class MarketViewBuy {
             });
         }
         this.registerItemEvents(container);
+        container.querySelectorAll(".market-buy-tab").forEach(tab => {
+            tab.addEventListener("click", () => {
+                this.activeTab = tab.dataset.tab;
+                this.selectedItem = null;
+                this.refresh();
+            });
+        });
         const buyButton = container.querySelector(".market-buy-button");
         if (buyButton) {
             buyButton.addEventListener("click", () => {
@@ -296,7 +364,7 @@ export default class MarketViewBuy {
 
     showTooltip(item, x, y) {
         this.hideTooltip();
-        const tooltip = new ItemTooltip(item);
+        const tooltip = item.category === "seed" ? new SeedTooltip(item) : new ItemTooltip(item);
         const element = document.createElement("div");
         element.id = "item-tooltip";
         element.className = "item-tooltip";

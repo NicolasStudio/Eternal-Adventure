@@ -297,6 +297,10 @@ export default class PvpView {
         if (entry.dodged) {
             return `<div class="pvp-log-line pvp-log-dodge">${name} esquivou!</div>`;
         }
+        if (entry.petBite) {
+            const petName = (entry.turn === "a" ? combatantA : combatantB).petName ?? "O pet";
+            return `<div class="pvp-log-line pvp-log-pet-bite">${petName} mordeu! Causou ${entry.damage} de dano.</div>`;
+        }
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
         const absorbed = entry.healedFromAbsorption > 0
@@ -310,6 +314,9 @@ export default class PvpView {
         const targetName = nameOf(entry.targetId);
         if (entry.dodged) {
             return `<div class="pvp-log-line pvp-log-dodge">${targetName} esquivou de ${attackerName}!</div>`;
+        }
+        if (entry.petBite) {
+            return `<div class="pvp-log-line pvp-log-pet-bite">Pet de ${attackerName} mordeu! Causou ${entry.damage} de dano em ${targetName}.</div>`;
         }
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
@@ -401,6 +408,7 @@ export default class PvpView {
         this.chosenBossDungeon = BOSS_DUNGEONS[chosenIndex];
 
         this.game.hudScreen.inPvpCombat = true;
+        this.game.hudScreen.updateMusic();
         this.state = "ceremony";
         this.refresh();
 
@@ -417,6 +425,7 @@ export default class PvpView {
         await this.sleep(900);
 
         this.game.hudScreen.inPvpCombat = false;
+        this.game.hudScreen.updateMusic();
         this.state = "result";
         this.refresh();
 
@@ -531,6 +540,13 @@ export default class PvpView {
                 : `<span class="combat-dodge">Você esquivou do ataque!</span>`;
         }
 
+        if (entry.petBite) {
+            const petName = (isMe ? this.player.equipment.pet?.name : this.currentOpponentSnapshot()?.petName) ?? "O pet";
+            return isMe
+                ? `<span class="combat-pet-bite">${petName} mordeu!</span> Causou <strong>${entry.damage}</strong> de dano.`
+                : `<span class="combat-pet-bite">${petName} de ${opponentName} mordeu!</span> Você recebeu <strong>${entry.damage}</strong> de dano.`;
+        }
+
         if (isMe) {
 
             let message = "";
@@ -573,6 +589,8 @@ export default class PvpView {
 
         if (entry.dodged) {
             type += " dodge";
+        } else if (entry.petBite) {
+            type += " pet-bite";
         } else if (isMe) {
             if (entry.lifeSteal > 0) type = "lifeSteal player";
             else if (entry.critical) type = "critico player";
@@ -597,6 +615,13 @@ export default class PvpView {
         if (entry.dodged) {
             if (targetIsMe) return `<span class="combat-dodge">Você esquivou do ataque de ${attackerName}!</span>`;
             return `<span class="combat-dodge">${targetName} esquivou do ataque de ${attackerName}!</span>`;
+        }
+
+        if (entry.petBite) {
+            const petLabel = isMe ? "Seu pet" : `Pet de ${attackerName}`;
+            return targetIsMe
+                ? `<span class="combat-pet-bite">${petLabel} mordeu!</span> Você recebeu <strong>${entry.damage}</strong> de dano.`
+                : `<span class="combat-pet-bite">${petLabel} mordeu!</span> Causou <strong>${entry.damage}</strong> de dano em ${targetName}.`;
         }
 
         if (isMe) {
@@ -652,6 +677,8 @@ export default class PvpView {
 
         if (entry.dodged) {
             type += " dodge";
+        } else if (entry.petBite) {
+            type += " pet-bite";
         } else if (isMe) {
             if (entry.lifeSteal > 0) type = "lifeSteal player";
             else if (entry.critical) type = "critico player";

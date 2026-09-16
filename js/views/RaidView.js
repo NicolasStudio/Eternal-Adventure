@@ -253,10 +253,12 @@ export default class RaidView {
 
         this.game.hudScreen.inRaidCombat = true;
         this.game.hudScreen.setBackground("assets/img/backgrounds/arena_pvp.png");
+        this.game.hudScreen.updateMusic();
 
         await this.runFloors();
 
         this.game.hudScreen.inRaidCombat = false;
+        this.game.hudScreen.updateMusic();
         this.state = (this.leftSelf || this.abandoned) ? "idle" : "result";
         this.refresh();
 
@@ -329,7 +331,7 @@ export default class RaidView {
                 await this.rewardModal.show(reward);
 
                 for (const levelUp of levelUps) {
-                    await this.levelUpModal.show(levelUp.level, levelUp.bonus);
+                    await this.levelUpModal.show(levelUp.level, levelUp.bonus, levelUp.petReward);
                 }
 
                 return;
@@ -337,7 +339,7 @@ export default class RaidView {
             }
 
             for (const levelUp of levelUps) {
-                await this.levelUpModal.show(levelUp.level, levelUp.bonus);
+                await this.levelUpModal.show(levelUp.level, levelUp.bonus, levelUp.petReward);
             }
 
             const continueRaid = await this.rewardModal.show(reward, {
@@ -554,6 +556,11 @@ export default class RaidView {
                 : `<span class="combat-dodge">${targetName} esquivou do ataque de ${attackerName}!</span>`;
         }
 
+        if (entry.petBite) {
+            const petName = squad.find(c => c.id === entry.attackerId)?.petName ?? "O pet";
+            return `<span class="combat-pet-bite">${petName}</span> mordeu! Causou <strong>${entry.damage}</strong> de dano em ${targetName}.`;
+        }
+
         let message = "";
 
         if (isBossAttacker && entry.attackName) {
@@ -593,6 +600,8 @@ export default class RaidView {
 
         if (entry.dodged) {
             type += " dodge";
+        } else if (entry.petBite) {
+            type += " pet-bite";
         } else if (isMeAttacking) {
             if (entry.lifeSteal > 0) type = "lifeSteal player";
             else if (entry.critical) type = "critico player";

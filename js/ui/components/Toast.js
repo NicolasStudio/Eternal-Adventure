@@ -1,6 +1,6 @@
 export default class Toast {
 
-    static show(message, duration = 2000) {
+    static show(message, duration = 3500) {
 
         const oldToast = document.querySelector(".game-toast");
 

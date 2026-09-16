@@ -8,6 +8,8 @@ import helmets from "../data/helmets.js";
 import chests from "../data/chest.js";
 import legs from "../data/legs.js";
 import boots from "../data/boots.js";
+import pets from "../data/pet.js";
+import Toast from "../ui/components/Toast.js";
 
 const STORAGE_KEY = "eternal-adventure-save";
 const SAVE_VERSION = 1;
@@ -51,6 +53,8 @@ export default class SaveService {
 
             chest: player.chest,
             album: player.album,
+            farm: player.farm,
+            petLifeBonusApplied: player.petLifeBonusApplied,
 
             health: {
                 burstMode: player.health.burstMode,
@@ -136,6 +140,10 @@ export default class SaveService {
 
         player.inventory = this.repairStones(data.inventory ?? []);
         player.equipment = data.equipment ?? player.equipment;
+        // Saves de antes do slot de pet existir não têm essa chave —
+        // sem isso, `player.equipment.pet` fica undefined em vez de
+        // null (funciona igual em todo `if`, mas evita a chave sumir).
+        player.equipment.pet ??= null;
 
         // Arma/armadura guardam uma FOTO dos próprios atributos-base no
         // momento em que foram coletadas (item.baseStats) — se os
@@ -169,6 +177,23 @@ export default class SaveService {
             ...player.progress.stats
         };
 
+        // Concessão RETROATIVA do ovo do pet gratuito: quem já estava no
+        // nível 30+ antes desse sistema existir nunca vai subir aquele
+        // nível de novo, então o gancho ao vivo em Player.addXP() nunca
+        // dispararia pra esses jogadores — injusto contra quem alcançar
+        // o 30 dali pra frente e ganhar automaticamente. Roda uma vez só
+        // (mesma flag/mesma regra do addXP()), toda vez que um save é
+        // carregado, até pegar todo mundo que já passou do nível.
+        if (player.level >= 30 && !player.progress.stats.wolfEggGranted) {
+
+            player.progress.stats.wolfEggGranted = true;
+
+            const eggTemplate = pets.wolfPet1;
+
+            player.addItem({ ...eggTemplate, icon: eggTemplate.image });
+
+        }
+
         // Re-deriva a transcendência a partir da escolha salva (não guarda
         // o objeto pesado no save, e sempre pega os dados/imagens atuais
         // do upClasse.js, mesmo que ele mude depois).
@@ -189,6 +214,8 @@ export default class SaveService {
 
         player.chest = data.chest ?? player.chest;
         player.album = data.album ?? [];
+        player.farm = data.farm ?? player.farm;
+        player.petLifeBonusApplied = data.petLifeBonusApplied ?? 0;
 
         if (data.health) {
             player.health.burstMode = data.health.burstMode ?? false;
@@ -398,6 +425,11 @@ export default class SaveService {
     // como o jogador atual da partida.
     static applyLoadedData(game, data) {
 
+        // Antes do deserialize() mexer em nada — pra saber se a
+        // concessão retroativa do ovo (ver deserialize) é coisa NOVA
+        // desse carregamento ou já vinha do save.
+        const hadWolfEggAlready = data?.progress?.stats?.wolfEggGranted === true;
+
         const player = this.deserialize(game, data);
 
         game.player = player;
@@ -413,6 +445,13 @@ export default class SaveService {
         this.persist(this.serialize(player));
 
         game.showScreen("hud");
+
+        // A concessão em si já rodou dentro do deserialize() (silenciosa,
+        // sem popup de level up já que não é um level up de verdade) —
+        // esse Toast só avisa o jogador que ganhou algo novo ao entrar.
+        if (!hadWolfEggAlready && player.progress.stats.wolfEggGranted) {
+            Toast.show("Você ganhou um Ovo de Lobo!");
+        }
 
     }
 

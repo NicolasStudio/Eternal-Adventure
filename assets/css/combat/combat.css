@@ -159,6 +159,18 @@
 }
 
 /* ==========================================================
+   MORDIDA DO PET (dono ou adversário) — mesma posição de
+   .player/.enemy (não redefine left/top), só troca a cor pra
+   destacar como um golpe extra, separado do ataque principal.
+========================================================== */
+.combat-toast.pet-bite {
+    background: #7c4dff;
+    color: #ffffff;
+    border: 2px solid #4b2e99;
+    font-size: 19px;
+}
+
+/* ==========================================================
    ESQUIVA
 ========================================================== */
 .combat-toast.dodge{
@@ -224,6 +236,11 @@
 }
 .combat-absorption{
     color:#ffffff;
+    font-weight:800;
+    text-shadow:0 0 6px rgba(0,0,0,.45);
+}
+.combat-pet-bite{
+    color:#c9a8ff;
     font-weight:800;
     text-shadow:0 0 6px rgba(0,0,0,.45);
 }

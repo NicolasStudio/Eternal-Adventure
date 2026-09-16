@@ -1,6 +1,24 @@
 export default [
 
     {
+        version: "Alpha v0.14",
+        date: "Setembro de 2026",
+        changes: [
+            "Adicionada a Fazenda: novo menu (a partir do nível 30) com 24 canteiros, 3 ferramentas — enxada, regador e luva — e 4 sementes (Batata, Alho-Poró, Cebola e Morango) vendidas numa aba própria do Mercado",
+            "Fazenda: a umidade da terra no momento do plantio afeta o tempo de colheita — terra molhada acelera 50%, terra seca atrasa 50%, terra normal não muda nada",
+            "Fazenda: adicionada confirmação (com o custo e seu ouro atual) antes de arar um canteiro, e confirmação antes de remover uma semente já plantada",
+            "Adicionado o sistema de Pets: ao alcançar o nível 30 você ganha um Ovo de Lobo de graça, anunciado no próprio pop-up de level up — quem já estava acima do nível 30 antes dessa atualização também recebe, assim que carregar o save",
+            "Pets: choque o ovo, alimente com colheitas da Fazenda e equipe pela nova aba 'Pets' da tela de Personagem — ele evolui sozinho em 3 estágios (nível 1, 18 e 32), trocando de nome, imagem e atributos automaticamente",
+            "Pets: o pet equipado soma Vida, Ataque, Armadura e Agilidade ao personagem (escalados pela fome atual) e morde o inimigo a cada turno seu em Dungeons, PVP e Cooperativo",
+            "Inventário: alimentar o pet agora abre um seletor de quantidade (botões 'Alimentar', que usa só o necessário pra saciar a fome, e 'Upar Pet', que libera todo o estoque pra gerar XP de propósito)",
+            "Adicionadas músicas próprias para o combate de PVP/Cooperativo, para a Fazenda, e para a tela de Personagem — antes ela continuava tocando a música de onde o menu foi aberto",
+            "Corrigido item sem nenhum uso no inventário (ex: semente, colheita da Fazenda) exibindo 'Encantar' e levando pra Ferraria por engano",
+            "Aumentado em 1,5s o tempo de exibição das mensagens (toasts) do jogo",
+            "Limpeza de código: removidos arquivos legados sem nenhuma referência no jogo atual (uma pasta de dados antiga em JSON e um conjunto de estilos em SCSS não utilizado)"
+        ]
+    },
+
+    {
         version: "Alpha v0.13",
         date: "Agosto de 2026",
         changes: [

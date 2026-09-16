@@ -106,6 +106,22 @@
 .inventory-slot.selected .inventory-icon{
     filter:drop-shadow(0 0 10px rgba(212,163,115,.30));
 }
+
+/* Aba Pets: slots bem maiores — ovo/pet é único por slot, não uma
+   grade densa de equipamento comum, então não precisa competir por
+   espaço com dezenas de itens. */
+.inventory-grid-pet{
+    grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+    grid-auto-rows:120px;
+}
+.inventory-grid-pet .inventory-slot{
+    width:120px;
+    height:120px;
+}
+.inventory-grid-pet .inventory-icon{
+    width:100px;
+    height:100px;
+}
 .inventory-quantity{
     position:absolute;
     left:3px;
@@ -231,6 +247,20 @@
         min-width:120px;
         height:38px;
         font-size:12px;
+    }
+    /* Aba Pets continua grande mesmo nessa resolução — poucos itens
+       (não é uma grade densa como as de equipamento comum). */
+    .inventory-grid-pet{
+        grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+        grid-auto-rows:120px;
+    }
+    .inventory-grid-pet .inventory-slot{
+        width:120px;
+        height:120px;
+    }
+    .inventory-grid-pet .inventory-icon{
+        width:100px;
+        height:100px;
     }
 }
 

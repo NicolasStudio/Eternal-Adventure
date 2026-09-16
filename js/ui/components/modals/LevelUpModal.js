@@ -6,7 +6,7 @@ export default class LevelUpModal {
         this.game = game;
     }
 
-    show(level, bonuses) {
+    show(level, bonuses, petReward = null) {
 
         return new Promise(resolve => {
 
@@ -25,7 +25,7 @@ export default class LevelUpModal {
                     </button>
 
                     <h2 class="levelup-title">
-                         LEVEL UP 
+                         LEVEL UP
                     </h2>
 
                     <p class="levelup-level">
@@ -34,6 +34,7 @@ export default class LevelUpModal {
 
                     <div class="levelup-stats">
                         ${this.renderBonuses(bonuses)}
+                        ${petReward ? this.renderPetReward(petReward) : ""}
                     </div>
 
                 </div>
@@ -52,6 +53,15 @@ export default class LevelUpModal {
 
         });
 
+    }
+
+    renderPetReward(petReward) {
+        return `
+            <div class="levelup-stat levelup-pet-reward">
+                <span>🥚 Você ganhou</span>
+                <span>${petReward.name}!</span>
+            </div>
+        `;
     }
 
     renderBonuses(bonuses) {

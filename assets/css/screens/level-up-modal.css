@@ -46,6 +46,15 @@
     font-weight: bold;
 }
 
+.levelup-pet-reward {
+    background: rgba(201,168,255,.12);
+    border: 1px solid rgba(201,168,255,.35);
+}
+
+.levelup-pet-reward span:last-child {
+    color: #c9a8ff;
+}
+
 .modal-close {
     position:absolute;
     top:12px;

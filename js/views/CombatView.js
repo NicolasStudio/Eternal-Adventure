@@ -108,14 +108,14 @@ export default class CombatView {
                 if (this.currentFloor >= this.currentDungeon.fights) {
                     await this.rewardModal.show(reward);
                     for (const levelUp of levelUps) {
-                        await this.levelUpModal.show(levelUp.level, levelUp.bonus);
+                        await this.levelUpModal.show(levelUp.level, levelUp.bonus, levelUp.petReward);
                     }
                     await this.finishDungeon();
                     return;
                 }
 
                 for (const levelUp of levelUps) {
-                    await this.levelUpModal.show(levelUp.level, levelUp.bonus);
+                    await this.levelUpModal.show(levelUp.level, levelUp.bonus, levelUp.petReward);
                 }
 
                 const continueDungeon = await this.rewardModal.show(reward, {
@@ -181,6 +181,24 @@ export default class CombatView {
         }
 
         await CombatToast.show(message, type);
+
+        // Pet equipado morde JUNTO do turno do jogador — golpe extra,
+        // linha própria no log, sem esquiva/crítico. Roda antes do
+        // combatLoop() checar checkCombatState(), então um golpe que
+        // mate o monstro aqui já é detectado como vitória na sequência.
+        if (result.attacker === "player") {
+
+            const petResult = this.engine.petBite();
+
+            if (petResult) {
+
+                this.game.hudScreen.monsterHUD.updateHP();
+
+                await CombatToast.show(this.engine.createPetBiteMessage(petResult), "player pet-bite");
+
+            }
+
+        }
     }
 
     async closeCombat() {

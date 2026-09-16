@@ -6,6 +6,8 @@ import RaidView from "../views/RaidView.js";
 import RaidLobbyService from "../services/RaidLobbyService.js";
 import CombatView from "../views/CombatView.js";
 import CityView from "../views/CityView.js";
+import FarmView from "../views/FarmView.js";
+import PetService from "../services/PetService.js";
 import PlayerHUD from "./components/PlayerHUD.js";
 import MonsterHUD from "./components/MonsterHUD.js";
 import DungeonHeader from "./components/DungeonHeader.js";
@@ -38,6 +40,7 @@ export default class HudScreen {
         this.raidView = new RaidView(game);
         this.combatView = new CombatView(game);
         this.cityView = new CityView(game);
+        this.farmView = new FarmView(game);
         this.marketView = new MarketView(game);
         this.blacksmithWeapon = new BlacksmithWeapon(this.game);
         this.blacksmithArmor = new BlacksmithArmor(this.game);
@@ -108,6 +111,10 @@ export default class HudScreen {
     }
 
     renderRightPanel() {
+        // Fazenda não usa a toolbar (Wiki/Salvar/Carregar/Maximizar/
+        // Configurações) — diferente do combate (que troca ela pelo
+        // MonsterHUD), aqui ela simplesmente some.
+        if (this.currentView === "farm") return "";
         if (this.inCombat) return this.monsterHUD.render(this.combatView.currentMonster);
         if (this.inPvpCombat && this.pvpView.mode !== "2v2") return this.monsterHUD.render(this.pvpView.opponentAsMonster());
         if (this.inPvpCombat) return "";
@@ -116,6 +123,11 @@ export default class HudScreen {
     }
 
     updateHUD() {
+        // Roda a cada notify() (e a cada tick de regeneração de vida) —
+        // de graça, mantém a Vida Máxima/atributos do pet equipado em
+        // dia conforme a fome dele decai, sem precisar de um novo
+        // setInterval só pra isso.
+        PetService.syncEquippedPetContribution(this.game.player);
         this.playerHUD.update();
         if (this.inCombat || this.inPvpCombat) {
             this.monsterHUD.update?.();
@@ -158,6 +170,9 @@ export default class HudScreen {
                     : this.dungeonView.render();
             case "city":
                 return this.cityView.render();
+
+            case "farm":
+                return this.farmView.render();
 
             case "pvp":
                 return this.pvpView.render();
@@ -207,6 +222,11 @@ export default class HudScreen {
         const lowHealthTitle = "Sua vida está a baixo de 5%, vá a enfermaria ou use poções";
         const dungeonDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat || lowHealth;
         const cityDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat;
+        // Fazenda só libera a partir do nível 30 — mesma trava separada
+        // usada pro Cooperativo (nível 100), pra poder avisar com uma
+        // mensagem própria em vez do aviso genérico de combate.
+        const farmLevelLocked = this.game.player.level < 30;
+        const farmDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat || farmLevelLocked;
         const pvpDisabled = this.inCombat || this.preparationMode || this.inPvpCombat || this.inRaidCombat || lowHealth;
         // Cooperativo só libera a partir do nível 100 — trava separada
         // do bloqueio por combate, pra poder mostrar uma mensagem
@@ -226,6 +246,10 @@ export default class HudScreen {
                 <button class="nav-item ${this.currentView === "city" ? "active" : ""} ${cityDisabled ? "disabled" : ""}" data-view="city">
                     <span class="material-symbols-outlined">location_city</span>
                     <span>Cidade</span>
+                </button>
+                <button class="nav-item ${this.currentView === "farm" ? "active" : ""} ${farmDisabled ? "disabled" : ""}" data-view="farm" data-farm-level-locked="${farmLevelLocked}" title="${farmLevelLocked ? "Requer nível 30" : ""}">
+                    <span class="material-symbols-outlined">${farmLevelLocked ? "lock" : "agriculture"}</span>
+                    <span>Fazenda</span>
                 </button>
                 <button class="nav-item ${this.currentView === "pvp" ? "active" : ""} ${pvpDisabled ? "disabled" : ""}" data-view="pvp" data-low-health="${lowHealth}" title="${lowHealth ? lowHealthTitle : ""}">
                     <span class="material-symbols-outlined">swords</span>
@@ -269,6 +293,8 @@ export default class HudScreen {
                 if (button.classList.contains("disabled")) {
                     if (button.dataset.levelLocked === "true") {
                         Toast.show("Modo Cooperativo disponível apenas a partir do nível 100.");
+                    } else if (button.dataset.farmLevelLocked === "true") {
+                        Toast.show("A Fazenda libera a partir do nível 30.");
                     } else if (button.dataset.lowHealth === "true") {
                         Toast.show("Sua vida está a baixo de 5%, vá a enfermaria ou use poções.");
                     } else {
@@ -350,6 +376,16 @@ export default class HudScreen {
             this.setBackground("assets/img/backgrounds/arena_pvp.png");
         }
 
+        // Fazenda troca o fundo pro celeiro — sem fila/lobby pra
+        // limpar aqui (diferente de PVP/Coop), é só o background mesmo.
+        if (this.currentView === "farm" && view !== "farm") {
+            this.setBackground("assets/img/backgrounds/tela_inicial.png");
+        }
+
+        if (this.currentView !== "farm" && view === "farm") {
+            this.setBackground("assets/img/backgrounds/celeiro.png");
+        }
+
         this.currentView = view;
         this.refreshCurrentView();
         this.updateMusic();
@@ -360,7 +396,16 @@ export default class HudScreen {
     // continua o que já estava tocando antes de abrir.
     updateMusic() {
 
-        if (this.inCombat || this.inPvpCombat || this.inRaidCombat) {
+        // PVP e Cooperativo tocam a trilha própria de combate-pvp assim
+        // que a luta em si começa — antes disso (lobby, escolha de
+        // modo) ainda é música de cidade, junto com o resto das telas
+        // "administrativas" (ver switch abaixo).
+        if (this.inPvpCombat || this.inRaidCombat) {
+            MusicService.play("pvp");
+            return;
+        }
+
+        if (this.inCombat) {
             MusicService.play("combat");
             return;
         }
@@ -369,6 +414,10 @@ export default class HudScreen {
 
             case "dungeon":
                 MusicService.play("dungeonMenu");
+                break;
+
+            case "farm":
+                MusicService.play("farm");
                 break;
 
             case "city":
@@ -383,7 +432,7 @@ export default class HudScreen {
                 break;
 
             case "character":
-                // continua a música da tela de onde o personagem foi aberto
+                MusicService.play("home");
                 break;
 
             default:
@@ -409,6 +458,9 @@ export default class HudScreen {
                 break;
             case "city":
                 this.cityView.registerEvents(document);
+                break;
+            case "farm":
+                this.farmView.registerEvents(document);
                 break;
             case "pvp":
                 this.pvpView.registerEvents(document);
@@ -493,6 +545,9 @@ export default class HudScreen {
                 break;
             case "city":
                 this.cityView.registerEvents(document);
+                break;
+            case "farm":
+                this.farmView.registerEvents(document);
                 break;
             case "pvp":
                 this.pvpView.registerEvents(document);

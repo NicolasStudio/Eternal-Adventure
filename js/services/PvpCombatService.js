@@ -1,3 +1,5 @@
+import PetService from "./PetService.js";
+
 const DODGE_CAP = 40;
 
 /*
@@ -61,7 +63,14 @@ export default class PvpCombatService {
             criticalChance: stats.criticalChance ?? 0,
             lifeSteal: stats.lifeSteal ?? 0,
             penetration: stats.penetration ?? 0,
-            absorption: stats.absorption ?? 0
+            absorption: stats.absorption ?? 0,
+            // Mordida do pet equipado: ataque GARANTIDO extra a cada
+            // turno de quem tem o pet, resolvido junto do golpe
+            // principal (ver simulate()/simulateTeam() abaixo) — dano
+            // fixo, sem consumir nenhum rng() extra, pra não desalinhar
+            // a simulação determinística entre os clientes.
+            petBiteDamage: player.equipment.pet ? PetService.getScaledStats(player.equipment.pet).biteDamage : 0,
+            petName: player.equipment.pet?.name ?? null
         };
 
     }
@@ -157,6 +166,16 @@ export default class PvpCombatService {
                     absorbed,
                     healedFromAbsorption
                 });
+
+                // Mordida do pet: garantida, dano fixo, não consome rng().
+                if (attacker.petBiteDamage > 0 && defender.currentHP > 0) {
+
+                    const biteDamage = Math.min(defender.currentHP, attacker.petBiteDamage);
+                    defender.currentHP = Math.max(0, defender.currentHP - attacker.petBiteDamage);
+
+                    log.push({ turn, attacker: attacker.name, petBite: true, damage: biteDamage });
+
+                }
 
             }
 
@@ -273,6 +292,16 @@ export default class PvpCombatService {
                     absorbed,
                     healedFromAbsorption
                 });
+
+                // Mordida do pet: garantida, dano fixo, não consome rng().
+                if (attacker.petBiteDamage > 0 && target.currentHP > 0) {
+
+                    const biteDamage = Math.min(target.currentHP, attacker.petBiteDamage);
+                    target.currentHP = Math.max(0, target.currentHP - attacker.petBiteDamage);
+
+                    log.push({ attackerId: attacker.id, attackerTeam: attacker.team, targetId: target.id, petBite: true, damage: biteDamage });
+
+                }
 
                 if (aliveOf(enemyTeam).length === 0) break;
 

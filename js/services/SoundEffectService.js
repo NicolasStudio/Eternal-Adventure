@@ -9,8 +9,8 @@ import AudioSettings from "./AudioSettings.js";
     nunca precisa de um refreshSettings() como o da música.
 */
 const SOUNDS = {
-    achievementUnlocked: "assets/audio/Achievements.mp3",
-    levelUp: "assets/audio/up.mp3"
+    achievementUnlocked: "assets/audio/Achievements.ogg",
+    levelUp: "assets/audio/up.ogg"
 };
 
 export default class SoundEffectService {

@@ -1,3 +1,5 @@
+import PetService from "../services/PetService.js";
+
 // Teto máximo de chance de esquiva, não importa o quanto a agilidade
 // de um lado supere a do outro — nunca "nunca é atingido".
 const DODGE_CAP = 40;
@@ -190,6 +192,32 @@ export default class CombatEngine {
             message += `<br><span class="combat-absorption">Absorção!</span> Mitigou <strong>${result.absorbed}</strong>, curou <strong>${result.healedFromAbsorption}</strong> HP.`;
         }
         return message;
+    }
+
+    // Mordida do pet equipado — ataque GARANTIDO (sem esquiva/crítico)
+    // e de dano fixo, que acontece junto do turno do jogador, além do
+    // golpe normal dele. Retorna null sem pet equipado ou sem dano
+    // (fome zerada). Chamado por CombatView.playTurn() logo depois do
+    // attack() do jogador — não mexe em nextTurn()/checkCombatState(),
+    // só desconta a vida do monstro antes deles rodarem.
+    petBite() {
+
+        const pet = this.player.equipment.pet;
+
+        if (!pet) return null;
+
+        const damage = PetService.getScaledStats(pet).biteDamage;
+
+        if (damage <= 0) return null;
+
+        this.monster.status.vidaAtual = Math.max(0, this.monster.status.vidaAtual - damage);
+
+        return { petName: pet.name, damage };
+
+    }
+
+    createPetBiteMessage(result) {
+        return `<span class="combat-pet-bite">${result.petName} mordeu!</span> Causou <strong>${result.damage}</strong> de dano.`;
     }
 
     checkCombatState() {

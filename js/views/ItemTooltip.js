@@ -121,6 +121,26 @@ export default class ItemTooltip {
 
         }
 
+        // Alimento de pet (colheita da Fazenda) — em vez do texto
+        // genérico de "Efeito", mostra direto quanto enche de fome e
+        // quanto vira XP se exceder (a mesma régua usada por
+        // PetService.feedUnits: fome primeiro, sobra vira XP).
+        if (this.item.petFeedValue > 0) {
+            return `
+                <div class="tooltip-section">
+                    <h3 class="tooltip-title">Alimento de Pet</h3>
+                    <div class="tooltip-row">
+                        <span class="tooltip-label">Enche de fome</span>
+                        <span class="tooltip-value">${this.item.petFeedValue}</span>
+                    </div>
+                    <div class="tooltip-row">
+                        <span class="tooltip-label">Vira XP se exceder</span>
+                        <span class="tooltip-value">até ${this.item.petFeedValue}</span>
+                    </div>
+                </div>
+            `;
+        }
+
         return `
             <div class="tooltip-section">
                 <h3 class="tooltip-title">Efeito</h3>

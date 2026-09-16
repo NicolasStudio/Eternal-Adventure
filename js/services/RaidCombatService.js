@@ -221,6 +221,17 @@ export default class RaidCombatService {
                     attackName: chosenAttack?.name ?? null
                 });
 
+                // Mordida do pet: só quem está atacando o chefe (nunca o
+                // chefe mordendo alguém) — garantida, dano fixo, sem rng().
+                if (!isBossTurn && attacker.petBiteDamage > 0 && target.currentHP > 0) {
+
+                    const biteDamage = Math.min(target.currentHP, attacker.petBiteDamage);
+                    target.currentHP = Math.max(0, target.currentHP - attacker.petBiteDamage);
+
+                    log.push({ attackerId: attacker.id, attackerSide: attacker.side, targetId: target.id, petBite: true, damage: biteDamage });
+
+                }
+
                 if (isBossTurn ? aliveSquad().length === 0 : bossCombatant.currentHP <= 0) break;
 
             }

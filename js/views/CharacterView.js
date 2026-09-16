@@ -1,5 +1,9 @@
 import Toast from "../ui/components/Toast.js";
 import ItemTooltip from "../views/ItemTooltip.js";
+import SeedTooltip from "../views/SeedTooltip.js";
+import PetTooltip from "../views/PetTooltip.js";
+import PetService from "../services/PetService.js";
+import PetFeedModal from "../ui/components/modals/PetFeedModal.js";
 
 export default class CharacterView {
     constructor(game) {
@@ -9,6 +13,7 @@ export default class CharacterView {
         this.selectedSlot = null;
         this.selectedItem = null;
         this.selectedEquipment = null;
+        this.petFeedModal = new PetFeedModal();
     }
 
     getFilteredInventory() {
@@ -20,6 +25,7 @@ export default class CharacterView {
                 case "leg": return item.slot === "leg";
                 case "boot": return item.slot === "boot";
                 case "item": return item.type === "item";
+                case "pet": return item.type === "pet";
                 default:
                     // console.warn(`Aba desconhecida: ${this.rightTab}`);
                     return false;
@@ -170,6 +176,96 @@ export default class CharacterView {
         `;
     }
 
+    // Aba "Pets" — mostra o pet EQUIPADO (imagem/nome/nível/estrelas,
+    // barra de fome e de XP, os atributos já escalados pela fome que
+    // ele está dando ao jogador, e a habilidade). Sem pet equipado,
+    // estado vazio — igual o padrão de "Nenhum item nesta categoria."
+    renderPets() {
+
+        const pet = this.game.player.equipment.pet;
+
+        if (!pet) {
+            return `
+                <div class="character-pets-empty">
+                    <i class="fa-solid fa-paw"></i>
+                    <p>Nenhum pet equipado.</p>
+                </div>
+            `;
+        }
+
+        const scaled = PetService.getScaledStats(pet);
+        const hunger = PetService.getHunger(pet);
+        const xpRequired = PetService.getXpForNextLevel(pet.level);
+        const xpPercent = xpRequired > 0 ? Math.min((pet.xp / xpRequired) * 100, 100) : 100;
+        const ability = PetService.getCurrentStage(pet)?.habilities?.hability;
+
+        return `
+            <div class="character-status character-pets">
+
+                <div class="character-avatar-wrapper character-avatar-wrapper-pet">
+                    <img class="character-avatar" src="${pet.image ?? pet.icon}" alt="${pet.name}">
+                </div>
+
+                <h2 class="character-name">${pet.name}</h2>
+
+                <div class="box-info">
+                    <span class="character-level">Nível: ${pet.level}</span>
+                    <span class="pet-stars">${pet.stars ?? ""}</span>
+                </div>
+
+                <div class="character-bars">
+
+                    <div class="character-bar">
+                        <span class="character-label">Fome</span>
+                        <div class="character-fill pet-hunger" style="width:${hunger}%;"></div>
+                        <span class="character-text">${hunger} / 100</span>
+                    </div>
+
+                    <div class="character-bar">
+                        <span class="character-label">XP</span>
+                        <div class="character-fill xp" style="width:${xpPercent}%;"></div>
+                        <span class="character-text">${pet.xp} / ${xpRequired}</span>
+                    </div>
+
+                </div>
+
+                <div class="character-stats">
+
+                    <div class="character-stat">
+                        <span>Vida</span>
+                        <span>${scaled.life}</span>
+                    </div>
+
+                    <div class="character-stat">
+                        <span>Ataque</span>
+                        <span>${scaled.attack}</span>
+                    </div>
+
+                    <div class="character-stat">
+                        <span>Armadura</span>
+                        <span>${scaled.armor}</span>
+                    </div>
+
+                    <div class="character-stat">
+                        <span>Agilidade</span>
+                        <span>${scaled.agility}</span>
+                    </div>
+
+                    ${ability ? `
+                        <div class="character-divider"><hr></div>
+                        <div class="character-stat pet-ability">
+                            <span>${ability.name}</span>
+                            <span>${scaled.biteDamage} de dano</span>
+                        </div>
+                    ` : ""}
+
+                </div>
+
+            </div>
+        `;
+
+    }
+
     renderEquipmentSlot(slot, title, item) {
         return `
             <div class="equipment-slot ${item ? "filled" : ""}" data-slot="${slot}">
@@ -191,6 +287,7 @@ export default class CharacterView {
             <div class="character-tabs">
                 <button class="character-tab ${this.leftTab === "status" ? "active" : ""}" data-tab="status">Status</button>
                 <button class="character-tab ${this.leftTab === "equipped" ? "active" : ""}" data-tab="equipped">Equipados</button>
+                <button class="character-tab ${this.leftTab === "pets" ? "active" : ""}" data-tab="pets">Pets</button>
             </div>
         `;
     }
@@ -199,19 +296,58 @@ export default class CharacterView {
         switch (this.leftTab) {
             case "status": return this.renderStatus();
             case "equipped": return this.renderEquipped();
+            case "pets": return this.renderPets();
             default: return "";
         }
+    }
+
+    // Quais abas do inventário (lado direito) fazem sentido junto de
+    // cada aba do personagem (lado esquerdo) — evita poluir a tela com
+    // abas de equipamento normal enquanto o foco é Pets, e vice-versa.
+    static RIGHT_TABS = [
+        { id: "weapon", label: "Armas" },
+        { id: "helmet", label: "Cabeça" },
+        { id: "chest", label: "Peitoral" },
+        { id: "leg", label: "Calças" },
+        { id: "boot", label: "Botas" },
+        { id: "item", label: "Itens" },
+        { id: "pet", label: "Pets" }
+    ];
+
+    getVisibleRightTabs() {
+
+        if (this.leftTab === "pets") {
+            return CharacterView.RIGHT_TABS.filter(tab => tab.id === "item" || tab.id === "pet");
+        }
+
+        if (this.leftTab === "equipped") {
+            return CharacterView.RIGHT_TABS.filter(tab => tab.id !== "pet");
+        }
+
+        return CharacterView.RIGHT_TABS;
+
+    }
+
+    // Chamado ao trocar de aba esquerda — se a aba direita atual não
+    // faz mais parte do conjunto visível (ex: estava em "Armas" e foi
+    // pra Pets), cai pra primeira opção que ainda existe, em vez de
+    // ficar "presa" numa aba sem botão nenhum pra voltar pra ela.
+    syncRightTabVisibility() {
+
+        const visible = this.getVisibleRightTabs();
+
+        if (!visible.some(tab => tab.id === this.rightTab)) {
+            this.rightTab = visible[0]?.id ?? "item";
+        }
+
     }
 
     renderRightTabs() {
         return `
             <div class="inventory-tabs">
-                <button class="inventory-tab ${this.rightTab === "weapon" ? "active" : ""}" data-tab="weapon">Armas</button>
-                <button class="inventory-tab ${this.rightTab === "helmet" ? "active" : ""}" data-tab="helmet">Cabeça</button>
-                <button class="inventory-tab ${this.rightTab === "chest" ? "active" : ""}" data-tab="chest">Peitoral</button>
-                <button class="inventory-tab ${this.rightTab === "leg" ? "active" : ""}" data-tab="leg">Calças</button>
-                <button class="inventory-tab ${this.rightTab === "boot" ? "active" : ""}" data-tab="boot">Botas</button>
-                <button class="inventory-tab ${this.rightTab === "item" ? "active" : ""}" data-tab="item">Itens</button>
+                ${this.getVisibleRightTabs().map(tab => `
+                    <button class="inventory-tab ${this.rightTab === tab.id ? "active" : ""}" data-tab="${tab.id}">${tab.label}</button>
+                `).join("")}
             </div>
         `;
     }
@@ -241,7 +377,11 @@ export default class CharacterView {
         if (inventory.length === 0) {
             return `<div class="inventory-empty">Nenhum item nesta categoria.</div>`;
         }
-        return `<div class="inventory-grid">${html}</div>`;
+        // Aba Pets usa slots maiores (120px) — ovo/pet é único por
+        // slot, então não compete por espaço com uma grade densa como
+        // as de equipamento normal.
+        const gridClass = this.rightTab === "pet" ? "inventory-grid inventory-grid-pet" : "inventory-grid";
+        return `<div class="${gridClass}">${html}</div>`;
     }
 
     registerEquipmentEvents(container) {
@@ -283,6 +423,17 @@ export default class CharacterView {
                 if (unequipButton) {
                     unequipButton.disabled = false;
                 }
+
+                // Selecionar equipamento normal não é poção nem
+                // alimento de pet — esconde qualquer botão desses que
+                // tivesse ficado visível de uma seleção anterior.
+                const maxHealButton = container.querySelector(".max-heal-button");
+                const feedButton = container.querySelector(".feed-button");
+                const petLevelUpButton = container.querySelector(".pet-levelup-button");
+
+                if (maxHealButton) maxHealButton.style.display = "none";
+                if (feedButton) feedButton.style.display = "none";
+                if (petLevelUpButton) petLevelUpButton.style.display = "none";
 
             });
 
@@ -344,9 +495,11 @@ export default class CharacterView {
             return;
         }
 
-        // Nem consumível, nem equipamento (ex: pedra de encantamento) —
-        // atalho: fecha o inventário e já abre a Ferraria em Encantar.
-        if (!this.selectedItem.slot) {
+        // Pedra de encantamento — atalho: fecha o inventário e já abre
+        // a Ferraria em Encantar. Identificada por enchantPrice, não
+        // por "não tem slot" — sementes e colheitas da Fazenda também
+        // não têm slot, mas não são pedra nenhuma (ver bloco abaixo).
+        if (this.selectedItem.enchantPrice != null) {
 
             if (this.game.hudScreen.preparationMode) {
                 Toast.show("Você não pode ir até a Ferraria durante uma dungeon.");
@@ -358,10 +511,124 @@ export default class CharacterView {
             return;
         }
 
-        // Equipamento
-        this.game.player.equipItem(this.selectedItem);
+        // Ovo — choca (vira equipável, ganha slot:"pet" nesse momento;
+        // um pet JÁ chocado tem slot desde então e cai no bloco de
+        // Equipamento normal, logo abaixo).
+        if (this.selectedItem.type === "pet" && !this.selectedItem.shocked) {
 
-        Toast.show(`${this.selectedItem.name} equipado`);
+            const result = PetService.hatch(this.game.player, this.selectedItem);
+
+            Toast.show(result.message);
+
+            if (result.ok) this.selectedItem = null;
+
+            this.refresh();
+
+            return;
+
+        }
+
+        // Alimento pro pet (ex: colheita da Fazenda) — sem ação própria
+        // aqui, os botões dedicados "Alimentar"/"Upar Pet" é que cuidam
+        // disso (abrem o modal de quantidade).
+        if (this.selectedItem.petFeedValue > 0) {
+            return;
+        }
+
+        // Equipamento (inclui pet já chocado, que tem slot:"pet")
+        if (this.selectedItem.slot) {
+
+            this.game.player.equipItem(this.selectedItem);
+
+            Toast.show(`${this.selectedItem.name} equipado`);
+
+            this.selectedItem = null;
+
+            this.refresh();
+
+            return;
+
+        }
+
+        // Nem poção, nem pedra, nem equipamento, nem ovo, nem alimento
+        // de pet — nada a fazer com esse item por aqui.
+        Toast.show("Este item não pode ser usado.");
+
+    }
+
+    // "Alimentar": abre o modal de quantidade limitado ao que é JUSTO
+    // pra encher a fome (0 até o necessário) — não sugere desperdiçar
+    // alimento à toa.
+    async openFeedModal() {
+
+        if (!(this.selectedItem?.petFeedValue > 0)) return;
+
+        const pet = this.game.player.equipment.pet;
+
+        if (!pet) {
+            Toast.show("Equipe um pet pra poder alimentá-lo.");
+            return;
+        }
+
+        const max = PetService.getUnitsNeededToFillHunger(pet, this.selectedItem);
+
+        if (max <= 0) {
+            Toast.show("Esse pet já está sem fome.");
+            return;
+        }
+
+        const units = await this.petFeedModal.show({
+            title: "Alimentar",
+            item: this.selectedItem,
+            max,
+            hint: `Quantidade necessária pra encher a fome de ${pet.name}.`
+        });
+
+        if (!units) return;
+
+        const result = PetService.feedUnits(this.game.player, pet, this.selectedItem, units);
+
+        Toast.show(result.message);
+
+        this.selectedItem = null;
+
+        this.refresh();
+
+    }
+
+    // "Upar Pet": mesmo modal, mas libera até TODO o estoque do
+    // alimento selecionado — o jogador escolhe de propósito gastar
+    // mais do que precisa só pra render XP com a sobra.
+    async openPetLevelUpModal() {
+
+        if (!(this.selectedItem?.petFeedValue > 0)) return;
+
+        const pet = this.game.player.equipment.pet;
+
+        if (!pet) {
+            Toast.show("Equipe um pet pra poder alimentá-lo.");
+            return;
+        }
+
+        const max = PetService.getOwnedUnits(this.selectedItem);
+
+        if (max <= 0) {
+            Toast.show("Você não tem esse alimento.");
+            return;
+        }
+
+        const units = await this.petFeedModal.show({
+            title: "Upar Pet",
+            item: this.selectedItem,
+            max,
+            hint: `O que sobrar da fome vira XP pra ${pet.name}.`
+        });
+
+        if (!units) return;
+
+        const result = PetService.feedUnits(this.game.player, pet, this.selectedItem, units);
+
+        Toast.show(result.message);
 
         this.selectedItem = null;
 
@@ -446,6 +713,12 @@ export default class CharacterView {
                 <button class="inventory-button max-heal-button" style="display:none;">
                     Curar Vida Completa
                 </button>
+                <button class="inventory-button feed-button" style="display:none;">
+                    Alimentar
+                </button>
+                <button class="inventory-button pet-levelup-button" style="display:none;">
+                    Upar Pet
+                </button>
                 <button class="inventory-button unequip-button" disabled>
                     Desequipar
                 </button>
@@ -512,6 +785,7 @@ export default class CharacterView {
         tabs.forEach(tab => {
             tab.addEventListener("click", () => {
                 this.leftTab = tab.dataset.tab;
+                this.syncRightTabVisibility();
                 this.refresh();
             });
         });
@@ -524,6 +798,29 @@ export default class CharacterView {
             });
         });
         this.registerEquipmentEvents(container);
+
+        // Aba Pets não tem mais slot próprio em "Equipados" pra clicar
+        // e selecionar (removido de propósito — não fazia sentido um
+        // slot ali quando já existe a aba dedicada). Se já tem um pet
+        // equipado, o botão Desequipar compartilhado já nasce pronto
+        // pra desequipar ELE, sem precisar de nenhuma seleção antes.
+        if (this.leftTab === "pets") {
+
+            const pet = this.game.player.equipment.pet;
+
+            if (pet) {
+
+                this.selectedEquipment = { slot: "pet", item: pet };
+                this.selectedItem = null;
+
+                const petUnequipButton = container.querySelector(".unequip-button");
+
+                if (petUnequipButton) petUnequipButton.disabled = false;
+
+            }
+
+        }
+
         const equipButton = container.querySelector(".equip-button");
         if (equipButton) {
             equipButton.addEventListener("click", () => {
@@ -544,6 +841,22 @@ export default class CharacterView {
             maxHealButton.addEventListener("click", () => {
                 if (maxHealButton.disabled) return;
                 this.useMaxHeal();
+            });
+        }
+
+        const feedButton = container.querySelector(".feed-button");
+        if (feedButton) {
+            feedButton.addEventListener("click", () => {
+                if (feedButton.disabled) return;
+                this.openFeedModal();
+            });
+        }
+
+        const petLevelUpButton = container.querySelector(".pet-levelup-button");
+        if (petLevelUpButton) {
+            petLevelUpButton.addEventListener("click", () => {
+                if (petLevelUpButton.disabled) return;
+                this.openPetLevelUpModal();
             });
         }
 
@@ -571,6 +884,15 @@ export default class CharacterView {
                 this.selectedEquipment = null;
                 const equipButton = container.querySelector(".equip-button");
                 const maxHealButton = container.querySelector(".max-heal-button");
+                const feedButton = container.querySelector(".feed-button");
+                const petLevelUpButton = container.querySelector(".pet-levelup-button");
+                const unequipButton = container.querySelector(".unequip-button");
+                const equippedPet = this.game.player.equipment.pet;
+
+                // Selecionar um item do inventário nunca deixa o
+                // Desequipar ativo — ele só faz sentido sem nenhuma
+                // seleção, na aba Pets (ver registerEvents).
+                if (unequipButton) unequipButton.disabled = true;
 
                 if (equipButton) {
 
@@ -585,11 +907,31 @@ export default class CharacterView {
                         const missing = this.game.player.maxHP - this.game.player.currentHP;
                         equipButton.disabled = missing <= 0;
 
+                    } else if (this.selectedItem.type === "pet" && !this.selectedItem.shocked) {
+
+                        // Ovo — ainda não vira "Equipar" até chocar.
+                        equipButton.textContent = "Chocar";
+
+                    } else if (this.selectedItem.petFeedValue > 0) {
+
+                        // Alimento (colheita da Fazenda) — a ação fica
+                        // por conta dos botões dedicados Alimentar/Upar
+                        // Pet, abaixo.
+                        equipButton.textContent = "Sem ação";
+                        equipButton.disabled = true;
+
                     } else if (this.selectedItem.slot) {
+                        // Já cobre pet chocado (slot:"pet" desde o Chocar).
                         equipButton.textContent = "Equipar";
-                    } else {
+                    } else if (this.selectedItem.enchantPrice != null) {
                         equipButton.textContent = "Encantar";
                         equipButton.classList.add("enchant-shortcut-button");
+                    } else {
+                        // Semente etc — nada a fazer com esse item no
+                        // inventário, então o botão fica desabilitado
+                        // em vez de oferecer "Encantar" por engano.
+                        equipButton.textContent = "Sem ação";
+                        equipButton.disabled = true;
                     }
 
                 }
@@ -606,6 +948,38 @@ export default class CharacterView {
                     } else {
 
                         maxHealButton.style.display = "none";
+
+                    }
+
+                }
+
+                const isPetFood = equippedPet && this.selectedItem.petFeedValue > 0;
+
+                if (feedButton) {
+
+                    if (isPetFood) {
+
+                        feedButton.style.display = "";
+                        feedButton.disabled = PetService.getUnitsNeededToFillHunger(equippedPet, this.selectedItem) <= 0;
+
+                    } else {
+
+                        feedButton.style.display = "none";
+
+                    }
+
+                }
+
+                if (petLevelUpButton) {
+
+                    if (isPetFood) {
+
+                        petLevelUpButton.style.display = "";
+                        petLevelUpButton.disabled = PetService.getOwnedUnits(this.selectedItem) <= 0;
+
+                    } else {
+
+                        petLevelUpButton.style.display = "none";
 
                     }
 
@@ -674,7 +1048,11 @@ export default class CharacterView {
 
         this.hideTooltip();
 
-        const tooltip = new ItemTooltip(item);
+        const tooltip = item.type === "pet"
+            ? new PetTooltip(item)
+            : item.category === "seed"
+                ? new SeedTooltip(item)
+                : new ItemTooltip(item);
         const element = document.createElement("div");
         element.id = "item-tooltip";
         element.className = "item-tooltip";
