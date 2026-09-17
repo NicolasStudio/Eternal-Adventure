@@ -3,9 +3,7 @@ import seeds from "../data/seeds.js";
 import SaveService from "./SaveService.js";
 
 const PLOT_COUNT = 24;
-const BASE_PLOT_COST = 30000;
-const DOUBLE_PLOTS = 8; // canteiros 0..7 dobram de custo a cada um
-const SOFT_GROWTH = 1.5; // a partir do canteiro 8, cresce só 50% por canteiro
+const PLOT_COST_STEP = 100000; // cada canteiro custa +100k que o anterior
 
 // Ciclo de umidade em 2 estágios: molhada dura 4h e vira normal
 // sozinha; normal (seja por ter acabado de secar da rega, seja por
@@ -41,19 +39,10 @@ export default class FarmService {
         return PLOT_COUNT;
     }
 
-    // Custo em ouro pra arar CADA canteiro (índice 0-23): dobra nos 8
-    // primeiros (30k -> 3,84M), depois cresce só 50% por canteiro — sem
-    // isso, duplicar até o 24º chegaria a ~251 bilhões de ouro.
+    // Custo em ouro pra arar CADA canteiro (índice 0-23): cresce linear,
+    // +100k por canteiro (1º = 100k, 2º = 200k, ..., 24º = 2,4M).
     static getPlotCost(index) {
-
-        if (index < DOUBLE_PLOTS) {
-            return BASE_PLOT_COST * Math.pow(2, index);
-        }
-
-        const costAtSoftStart = BASE_PLOT_COST * Math.pow(2, DOUBLE_PLOTS - 1);
-
-        return Math.round(costAtSoftStart * Math.pow(SOFT_GROWTH, index - DOUBLE_PLOTS + 1));
-
+        return PLOT_COST_STEP * (index + 1);
     }
 
     static getCrop(seedId) {
