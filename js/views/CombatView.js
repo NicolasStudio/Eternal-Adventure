@@ -193,6 +193,7 @@ export default class CombatView {
             if (petResult) {
 
                 this.game.hudScreen.monsterHUD.updateHP();
+                this.game.hudScreen.playerHUD.updateHP();
 
                 await CombatToast.show(this.engine.createPetBiteMessage(petResult), "player pet-bite");
 

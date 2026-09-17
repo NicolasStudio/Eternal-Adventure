@@ -16,6 +16,13 @@ export default class CharacterView {
         this.petFeedModal = new PetFeedModal();
     }
 
+    // Semente (category:"seed") ou colheita da Fazenda (petFeedValue,
+    // ver farmCrops.js) — os dois tipos de "comida" que saem da aba
+    // "Itens" genérica e vão pra aba própria "Comidas".
+    static isFood(item) {
+        return item.category === "seed" || item.petFeedValue > 0;
+    }
+
     getFilteredInventory() {
         return this.game.player.inventory.filter(item => {
             switch (this.rightTab) {
@@ -24,7 +31,8 @@ export default class CharacterView {
                 case "chest": return item.slot === "chest";
                 case "leg": return item.slot === "leg";
                 case "boot": return item.slot === "boot";
-                case "item": return item.type === "item";
+                case "item": return item.type === "item" && !CharacterView.isFood(item);
+                case "food": return item.type === "item" && CharacterView.isFood(item);
                 case "pet": return item.type === "pet";
                 default:
                     // console.warn(`Aba desconhecida: ${this.rightTab}`);
@@ -257,6 +265,12 @@ export default class CharacterView {
                             <span>${ability.name}</span>
                             <span>${scaled.biteDamage} de dano</span>
                         </div>
+                        ${scaled.healAmount > 0 ? `
+                            <div class="character-stat pet-ability">
+                                <span>Cura</span>
+                                <span>+${scaled.healAmount} HP</span>
+                            </div>
+                        ` : ""}
                     ` : ""}
 
                 </div>
@@ -311,20 +325,26 @@ export default class CharacterView {
         { id: "leg", label: "Calças" },
         { id: "boot", label: "Botas" },
         { id: "item", label: "Itens" },
+        { id: "food", label: "Comidas" },
         { id: "pet", label: "Pets" }
     ];
 
     getVisibleRightTabs() {
 
+        // Pets: só Comidas (semente/colheita, pra alimentar) e Pets.
         if (this.leftTab === "pets") {
-            return CharacterView.RIGHT_TABS.filter(tab => tab.id === "item" || tab.id === "pet");
+            return CharacterView.RIGHT_TABS.filter(tab => tab.id === "food" || tab.id === "pet");
         }
 
+        // Equipados: só os 5 slots de equipamento — nem Itens, Comidas
+        // ou Pets fazem sentido junto de "o que estou usando agora".
         if (this.leftTab === "equipped") {
-            return CharacterView.RIGHT_TABS.filter(tab => tab.id !== "pet");
+            return CharacterView.RIGHT_TABS.filter(tab => tab.id !== "item" && tab.id !== "food" && tab.id !== "pet");
         }
 
-        return CharacterView.RIGHT_TABS;
+        // Status: equipamento + Itens — nem Comidas nem Pets aparecem
+        // aqui, só na aba Pets.
+        return CharacterView.RIGHT_TABS.filter(tab => tab.id !== "food" && tab.id !== "pet");
 
     }
 

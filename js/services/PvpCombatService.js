@@ -68,8 +68,11 @@ export default class PvpCombatService {
             // turno de quem tem o pet, resolvido junto do golpe
             // principal (ver simulate()/simulateTeam() abaixo) — dano
             // fixo, sem consumir nenhum rng() extra, pra não desalinhar
-            // a simulação determinística entre os clientes.
+            // a simulação determinística entre os clientes. Pets com
+            // habilidade de cura (ex: Duende) também curam quem mordeu
+            // (1v1) ou o time inteiro vivo de quem mordeu (2v2).
             petBiteDamage: player.equipment.pet ? PetService.getScaledStats(player.equipment.pet).biteDamage : 0,
+            petHealAmount: player.equipment.pet ? PetService.getScaledStats(player.equipment.pet).healAmount : 0,
             petName: player.equipment.pet?.name ?? null
         };
 
@@ -166,7 +169,16 @@ export default class PvpCombatService {
                     const biteDamage = Math.min(defender.currentHP, attacker.petBiteDamage);
                     defender.currentHP = Math.max(0, defender.currentHP - attacker.petBiteDamage);
 
-                    log.push({ turn, attacker: attacker.name, petBite: true, damage: biteDamage });
+                    // Cura da habilidade (ex: Duende) — 1v1 não tem
+                    // aliado, sempre volta pra quem mordeu.
+                    let petHeal = 0;
+
+                    if (attacker.petHealAmount > 0) {
+                        petHeal = attacker.petHealAmount;
+                        attacker.currentHP = Math.min(attacker.maxHP, attacker.currentHP + petHeal);
+                    }
+
+                    log.push({ turn, attacker: attacker.name, petBite: true, damage: biteDamage, heal: petHeal });
 
                 }
 
@@ -285,7 +297,31 @@ export default class PvpCombatService {
                     const biteDamage = Math.min(target.currentHP, attacker.petBiteDamage);
                     target.currentHP = Math.max(0, target.currentHP - attacker.petBiteDamage);
 
-                    log.push({ attackerId: attacker.id, attackerTeam: attacker.team, targetId: target.id, petBite: true, damage: biteDamage });
+                    // Cura da habilidade (ex: Duende) — todo o time VIVO
+                    // de quem mordeu (o próprio atacante incluso).
+                    let petHeal = 0;
+                    let healedIds = [];
+
+                    if (attacker.petHealAmount > 0) {
+
+                        petHeal = attacker.petHealAmount;
+
+                        for (const ally of aliveOf(attacker.team)) {
+                            ally.currentHP = Math.min(ally.maxHP, ally.currentHP + petHeal);
+                            healedIds.push(ally.id);
+                        }
+
+                    }
+
+                    log.push({
+                        attackerId: attacker.id,
+                        attackerTeam: attacker.team,
+                        targetId: target.id,
+                        petBite: true,
+                        damage: biteDamage,
+                        heal: petHeal,
+                        healedIds
+                    });
 
                 }
 

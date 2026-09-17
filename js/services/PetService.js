@@ -94,15 +94,19 @@ export default class PetService {
 
     // Stats fixos do estágio atual, escalados pela % de fome — sempre
     // arredondado pra baixo (nunca um valor quebrado passando pro
-    // jogador). biteDamage é a Mordida já escalada junto.
+    // jogador). biteDamage é a Mordida já escalada junto — pets com
+    // habilidade de cura (ex: Duende, campo `heal` em vez de `damage`)
+    // usam o mesmo número pros dois efeitos: a Mordida causa ESSE dano
+    // no inimigo E cura essa mesma quantidade (ver healAmount abaixo).
     static getScaledStats(petInstance) {
 
         const stage = this.getCurrentStage(petInstance);
         const multiplier = this.getHungerMultiplier(petInstance);
         const scale = (value) => Math.floor((value ?? 0) * multiplier);
+        const ability = stage?.habilities?.hability;
 
         if (!stage) {
-            return { life: 0, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0, biteDamage: 0 };
+            return { life: 0, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0, biteDamage: 0, healAmount: 0 };
         }
 
         return {
@@ -114,7 +118,8 @@ export default class PetService {
             lifeSteal: scale(stage.stats.lifeSteal),
             penetration: scale(stage.stats.penetration),
             absorption: scale(stage.stats.absorption),
-            biteDamage: scale(stage.habilities?.hability?.damage)
+            biteDamage: scale(ability?.damage ?? ability?.heal),
+            healAmount: scale(ability?.heal)
         };
 
     }

@@ -71,6 +71,7 @@ export default class PetTooltip {
                     <h3 class="tooltip-title">Habilidade</h3>
                     <p>${ability.description ?? ""}</p>
                     <div class="tooltip-stat"><span>${ability.name}</span><span class="tooltip-stat-positive">${scaled.biteDamage} de dano</span></div>
+                    ${scaled.healAmount > 0 ? `<div class="tooltip-stat"><span>Cura</span><span class="tooltip-stat-positive">+${scaled.healAmount} HP</span></div>` : ""}
                 </div>
             ` : ""}
         `;

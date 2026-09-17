@@ -191,18 +191,32 @@ export default class CombatEngine {
 
         if (!pet) return null;
 
-        const damage = PetService.getScaledStats(pet).biteDamage;
+        const scaled = PetService.getScaledStats(pet);
+        const damage = scaled.biteDamage;
+        const heal = scaled.healAmount;
 
-        if (damage <= 0) return null;
+        if (damage <= 0 && heal <= 0) return null;
 
-        this.monster.status.vidaAtual = Math.max(0, this.monster.status.vidaAtual - damage);
+        if (damage > 0) {
+            this.monster.status.vidaAtual = Math.max(0, this.monster.status.vidaAtual - damage);
+        }
 
-        return { petName: pet.name, damage };
+        // Sem aliados numa dungeon — a cura da habilidade (ex: Duende)
+        // sempre volta pro próprio jogador aqui.
+        if (heal > 0) {
+            this.player.currentHP = Math.min(this.player.maxHP, this.player.currentHP + heal);
+        }
+
+        return { petName: pet.name, damage, heal };
 
     }
 
     createPetBiteMessage(result) {
-        return `<span class="combat-pet-bite">${result.petName} mordeu!</span> Causou <strong>${result.damage}</strong> de dano.`;
+        let message = `<span class="combat-pet-bite">${result.petName} mordeu!</span> Causou <strong>${result.damage}</strong> de dano.`;
+        if (result.heal > 0) {
+            message += ` Curou <strong>${result.heal}</strong> HP.`;
+        }
+        return message;
     }
 
     checkCombatState() {

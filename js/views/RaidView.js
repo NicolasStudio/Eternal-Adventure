@@ -200,6 +200,11 @@ export default class RaidView {
             return `<div class="pvp-log-line pvp-log-dodge">${targetName} esquivou do ataque de ${attackerName}${attackTag}!</div>`;
         }
 
+        if (entry.petBite) {
+            const heal = entry.heal > 0 ? ` e curou o squad em ${entry.heal} HP` : "";
+            return `<div class="pvp-log-line pvp-log-pet-bite">Pet de ${attackerName} mordeu! Causou ${entry.damage} de dano em ${targetName}${heal}.</div>`;
+        }
+
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
         const absorbed = entry.absorbed > 0
@@ -486,6 +491,26 @@ export default class RaidView {
 
                 }
 
+                // Mordida do pet com cura (ex: Duende) — todo o squad
+                // vivo de quem mordeu (ver healedIds em RaidCombatService).
+                if (entry.heal > 0 && entry.healedIds?.length) {
+
+                    for (const id of entry.healedIds) {
+
+                        const maxHp = squad.find(c => c.id === id)?.maxHP ?? 0;
+
+                        this.squadHP[id] = Math.min(maxHp, (this.squadHP[id] ?? 0) + entry.heal);
+
+                        if (id === RaidLobbyService.playerId) {
+                            this.game.player.currentHP = this.squadHP[id];
+                        }
+
+                        this.updateSquadHPBar(squad, id);
+
+                    }
+
+                }
+
                 this.updateBossHPBar();
 
                 if (entry.attackerSide === "squad") {
@@ -549,7 +574,9 @@ export default class RaidView {
 
         if (entry.petBite) {
             const petName = squad.find(c => c.id === entry.attackerId)?.petName ?? "O pet";
-            return `<span class="combat-pet-bite">${petName}</span> mordeu! Causou <strong>${entry.damage}</strong> de dano em ${targetName}.`;
+            const iWasHealed = entry.healedIds?.includes(RaidLobbyService.playerId);
+            const heal = entry.heal > 0 ? ` Curou o squad em <strong>${entry.heal}</strong> HP${iWasHealed ? " (você incluso)" : ""}.` : "";
+            return `<span class="combat-pet-bite">${petName}</span> mordeu! Causou <strong>${entry.damage}</strong> de dano em ${targetName}.${heal}`;
         }
 
         let message = "";

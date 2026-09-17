@@ -221,7 +221,31 @@ export default class RaidCombatService {
                     const biteDamage = Math.min(target.currentHP, attacker.petBiteDamage);
                     target.currentHP = Math.max(0, target.currentHP - attacker.petBiteDamage);
 
-                    log.push({ attackerId: attacker.id, attackerSide: attacker.side, targetId: target.id, petBite: true, damage: biteDamage });
+                    // Cura da habilidade (ex: Duende) — todo o squad
+                    // VIVO (o próprio atacante incluso).
+                    let petHeal = 0;
+                    let healedIds = [];
+
+                    if (attacker.petHealAmount > 0) {
+
+                        petHeal = attacker.petHealAmount;
+
+                        for (const ally of aliveSquad()) {
+                            ally.currentHP = Math.min(ally.maxHP, ally.currentHP + petHeal);
+                            healedIds.push(ally.id);
+                        }
+
+                    }
+
+                    log.push({
+                        attackerId: attacker.id,
+                        attackerSide: attacker.side,
+                        targetId: target.id,
+                        petBite: true,
+                        damage: biteDamage,
+                        heal: petHeal,
+                        healedIds
+                    });
 
                 }
 

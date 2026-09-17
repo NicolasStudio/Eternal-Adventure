@@ -18,6 +18,14 @@ export default class DungeonDropPreview {
                 return;
             }
 
+            // Item com chance própria (ex: ovo de pet) — ver LootSystem.js.
+            // dropChance vai junto só pro preview mostrar no tooltip
+            // (DungeonTooltip.js), sem alterar o item de verdade.
+            if (drop.item) {
+                drops.push({ ...drop.item, dropChance: drop.chance ?? 100 });
+                return;
+            }
+
             // Equipamentos
             if (Array.isArray(drop.type)) {
 

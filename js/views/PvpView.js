@@ -299,7 +299,8 @@ export default class PvpView {
         }
         if (entry.petBite) {
             const petName = (entry.turn === "a" ? combatantA : combatantB).petName ?? "O pet";
-            return `<div class="pvp-log-line pvp-log-pet-bite">${petName} mordeu! Causou ${entry.damage} de dano.</div>`;
+            const heal = entry.heal > 0 ? ` e curou ${entry.heal} HP` : "";
+            return `<div class="pvp-log-line pvp-log-pet-bite">${petName} mordeu! Causou ${entry.damage} de dano${heal}.</div>`;
         }
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
@@ -316,7 +317,8 @@ export default class PvpView {
             return `<div class="pvp-log-line pvp-log-dodge">${targetName} esquivou de ${attackerName}!</div>`;
         }
         if (entry.petBite) {
-            return `<div class="pvp-log-line pvp-log-pet-bite">Pet de ${attackerName} mordeu! Causou ${entry.damage} de dano em ${targetName}.</div>`;
+            const heal = entry.heal > 0 ? ` e curou o time em ${entry.heal} HP` : "";
+            return `<div class="pvp-log-line pvp-log-pet-bite">Pet de ${attackerName} mordeu! Causou ${entry.damage} de dano em ${targetName}${heal}.</div>`;
         }
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
@@ -543,8 +545,8 @@ export default class PvpView {
         if (entry.petBite) {
             const petName = (isMe ? this.player.equipment.pet?.name : this.currentOpponentSnapshot()?.petName) ?? "O pet";
             return isMe
-                ? `<span class="combat-pet-bite">${petName} mordeu!</span> Causou <strong>${entry.damage}</strong> de dano.`
-                : `<span class="combat-pet-bite">${petName} de ${opponentName} mordeu!</span> Você recebeu <strong>${entry.damage}</strong> de dano.`;
+                ? `<span class="combat-pet-bite">${petName} mordeu!</span> Causou <strong>${entry.damage}</strong> de dano.${entry.heal > 0 ? ` Curou <strong>${entry.heal}</strong> HP.` : ""}`
+                : `<span class="combat-pet-bite">${petName} de ${opponentName} mordeu!</span> Você recebeu <strong>${entry.damage}</strong> de dano.${entry.heal > 0 ? ` ${opponentName} curou <strong>${entry.heal}</strong> HP.` : ""}`;
         }
 
         if (isMe) {
@@ -619,9 +621,11 @@ export default class PvpView {
 
         if (entry.petBite) {
             const petLabel = isMe ? "Seu pet" : `Pet de ${attackerName}`;
+            const iWasHealed = entry.healedIds?.includes(PvpLobbyService.playerId);
+            const heal = entry.heal > 0 ? ` Curou o time em <strong>${entry.heal}</strong> HP${iWasHealed ? " (você incluso)" : ""}.` : "";
             return targetIsMe
-                ? `<span class="combat-pet-bite">${petLabel} mordeu!</span> Você recebeu <strong>${entry.damage}</strong> de dano.`
-                : `<span class="combat-pet-bite">${petLabel} mordeu!</span> Causou <strong>${entry.damage}</strong> de dano em ${targetName}.`;
+                ? `<span class="combat-pet-bite">${petLabel} mordeu!</span> Você recebeu <strong>${entry.damage}</strong> de dano.${heal}`
+                : `<span class="combat-pet-bite">${petLabel} mordeu!</span> Causou <strong>${entry.damage}</strong> de dano em ${targetName}.${heal}`;
         }
 
         if (isMe) {
@@ -724,6 +728,17 @@ export default class PvpView {
                     );
                 }
 
+                // Mordida do pet com cura (ex: Duende) — sempre cura quem
+                // MORDEU, não quem apanhou (mesmo lado do Roubo de Vida).
+                if (entry.heal > 0) {
+                    if (isMe) {
+                        this.game.player.currentHP = Math.min(this.game.player.maxHP, this.game.player.currentHP + entry.heal);
+                    } else {
+                        const opponentMax = this.currentOpponentSnapshot()?.maxHP ?? this.opponentHP;
+                        this.opponentHP = Math.min(opponentMax, this.opponentHP + entry.heal);
+                    }
+                }
+
             }
 
             this.game.hudScreen.playerHUD.updateHP?.();
@@ -778,12 +793,31 @@ export default class PvpView {
 
                 }
 
+                // Mordida do pet com cura (ex: Duende) — cura TODO o time
+                // vivo de quem atacou (ver healedIds em simulateTeam()),
+                // não só quem mordeu.
+                if (entry.heal > 0 && entry.healedIds?.length) {
+
+                    for (const id of entry.healedIds) {
+
+                        const maxHp = allCombatants.find(c => c.id === id)?.maxHP ?? 0;
+
+                        this.teamHP[id] = Math.min(maxHp, (this.teamHP[id] ?? 0) + entry.heal);
+
+                        if (id === PvpLobbyService.playerId) {
+                            this.game.player.currentHP = this.teamHP[id];
+                        }
+
+                    }
+
+                }
+
                 // Atualiza a barrinha de vida mini embaixo do retrato,
                 // se esse combatente for um dos inimigos exibidos na
                 // arena (os aliados não têm retrato próprio na tela).
                 const enemyIds = this.getEnemyTeamCombatants().map(c => c.id);
 
-                [entry.attackerId, entry.targetId].forEach(id => {
+                [entry.attackerId, entry.targetId, ...(entry.healedIds ?? [])].forEach(id => {
                     if (!enemyIds.includes(id)) return;
                     const fill = document.getElementById(`pvp-hp-${id}`);
                     const maxHp = allCombatants.find(c => c.id === id)?.maxHP ?? 1;

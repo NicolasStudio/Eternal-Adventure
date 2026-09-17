@@ -18,7 +18,11 @@ export default [
             "Adicionadas 18 novas conquistas para os sistemas de Pet e Fazenda (chocar ovos, fome, nível e estrelas do pet; arar terrenos, plantar, colher, regar, solo árido, morango e remover semente por engano)",
             "Aumentado o tamanho do retrato do personagem e do pet na tela de Personagem, que ficava pequeno e cortado nos estágios maiores do pet",
             "Corrigido o retrato do pet não conseguindo aumentar além dos limites da própria moldura ao passar o mouse por cima",
-            "Absorção reformulada de novo: voltou a ser só mitigação (bloqueia o dano do golpe por completo, sem curar HP) — a versão anterior deixava quem tinha Absorção curando 2x no mesmo golpe (evitava o dano inteiro E ainda ganhava HP de bônus)"
+            "Absorção reformulada de novo: voltou a ser só mitigação (bloqueia o dano do golpe por completo, sem curar HP) — a versão anterior deixava quem tinha Absorção curando 2x no mesmo golpe (evitava o dano inteiro E ainda ganhava HP de bônus)",
+            "Adicionado novo pet: Duende, com chance de 20% de dropar (como Ovo de Duende) do chefe da Caverna (Rei dos Goblins) — sua Mordida causa dano E cura você na mesma quantidade a cada ataque; em PVP 2x2 e Cooperativo, cura o time inteiro vivo, não só quem tem o pet equipado",
+            "Adicionado texto de 'Chance de Drop' no tooltip de itens da tela de Dungeons, pra drops que não são 100% garantidos (ex: o novo Ovo de Duende)",
+            "Corrigido o Ovo de Duende não conseguindo ser chocado",
+            "Fazenda: adicionadas 4 novas sementes (Trigo, Milho, Uva e Abóbora) e rebalanceados tempo de colheita e preço de todas as 8 — de Batata (5min, 100$) até Abóbora (12h, 3000$)"
         ]
     },
 

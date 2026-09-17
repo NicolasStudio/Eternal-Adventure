@@ -1,5 +1,6 @@
 import items from "./items.js";
 import enchantmentStone from "./enchantmentStone.js";
+import pets from "./pet.js";
 
 const monsters = [
 
@@ -969,6 +970,10 @@ const monsters = [
             {
                 item: items.mediumPotion,
                 quantidade: 2
+            },
+            {
+                item: { ...pets.fairyPet1, icon: pets.fairyPet1.image },
+                chance: 20
             }
         ]
     },

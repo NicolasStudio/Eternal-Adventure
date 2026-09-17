@@ -1,5 +1,6 @@
 import items from "./items.js";
 import enchantmentStone from "./enchantmentStone.js";
+import pets from "./pet.js";
 
 const dungeons = [
 
@@ -332,7 +333,11 @@ const dungeons = [
                 type: ["chest"],
                 rarity: "rare"
             },
-            items.mediumPotion
+            items.mediumPotion,
+            {
+                item: { ...pets.fairyPet1, icon: pets.fairyPet1.image },
+                chance: 20
+            }
         ]
     },
 
