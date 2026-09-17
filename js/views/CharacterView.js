@@ -263,14 +263,8 @@ export default class CharacterView {
                         <div class="character-divider"><hr></div>
                         <div class="character-stat pet-ability">
                             <span>${ability.name}</span>
-                            <span>${scaled.biteDamage} de dano</span>
+                            <span>${scaled.biteDamage} de dano${scaled.healAmount > 0 ? ` + ${scaled.healAmount} de cura` : ""}</span>
                         </div>
-                        ${scaled.healAmount > 0 ? `
-                            <div class="character-stat pet-ability">
-                                <span>Cura</span>
-                                <span>+${scaled.healAmount} HP</span>
-                            </div>
-                        ` : ""}
                     ` : ""}
 
                 </div>

@@ -104,7 +104,8 @@
     box-shadow:0 0 10px rgba(241,199,92,.5);
 }
 .farm-plot-soil,
-.farm-plot-seed{
+.farm-plot-seed,
+.farm-plot-pest{
     position:absolute;
     inset:0;
     width:100%;
@@ -123,6 +124,14 @@
     margin:auto;
     top:0; left:0; bottom:0; right:0;
     filter: drop-shadow(0 0 4px #fffefe77);
+}
+.farm-plot-pest{
+    z-index:3;
+    width:70%;
+    height:70%;
+    margin:auto;
+    top:0; left:0; bottom:0; right:0;
+    filter: drop-shadow(0 0 5px #ff3b3b99);
 }
 
 /* ==========================================================

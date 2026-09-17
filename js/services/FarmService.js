@@ -15,6 +15,16 @@ const SOIL_GRASS = "assets/img/assets/farm/earth/grass.png";
 const SOIL_EARTH = "assets/img/assets/farm/earth/earth.png";
 const SOIL_WATER = "assets/img/assets/farm/earth/earth-water.png";
 const SOIL_DRY = "assets/img/assets/farm/earth/earth-dry.png";
+const PEST_IMAGE = "assets/img/assets/farm/earth/pest.png";
+
+const PEST_SPAWN_INTERVAL_MS = 5 * 60 * 60 * 1000; // 5h
+
+// Praga ativa atrasa o crescimento em 15% — não é um multiplicador
+// fixo tipo GROWTH_MODIFIER (aquele é travado no instante do plantio);
+// aqui o atraso só conta enquanto a praga está mesmo presente, então é
+// acumulado em plot.pestLostMs (ver getPestLostMs/removePest) toda vez
+// que uma infestação termina, e somado ao vivo enquanto está ativa.
+const PEST_GROWTH_PENALTY = 0.15;
 
 // Multiplicador de tempo de crescimento aplicado UMA VEZ, no instante
 // do plantio, conforme a umidade da terra NAQUELE momento — plantar em
@@ -89,7 +99,8 @@ export default class FarmService {
     }
 
     // Estágio atual (0-4 → stage-1..stage-5) a partir do tempo decorrido
-    // desde o plantio, ajustado pelo growthModifier fixado no plantio.
+    // desde o plantio, ajustado pelo growthModifier fixado no plantio e
+    // pelo tempo perdido pra praga (ver getPestLostMs).
     static getStageIndex(plot) {
 
         const crop = this.getCrop(plot.seedId);
@@ -97,7 +108,7 @@ export default class FarmService {
         if (!crop || !plot.plantedAt) return 0;
 
         const effectiveGrowTime = crop.growTimeMs * (plot.growthModifier ?? 1);
-        const elapsed = Date.now() - plot.plantedAt;
+        const elapsed = Math.max(0, (Date.now() - plot.plantedAt) - this.getPestLostMs(plot));
         const stepMs = effectiveGrowTime / 4;
 
         return Math.max(0, Math.min(4, Math.floor(elapsed / stepMs)));
@@ -106,6 +117,112 @@ export default class FarmService {
 
     static isReadyToHarvest(plot) {
         return !!plot.seedId && this.getStageIndex(plot) >= 4;
+    }
+
+    // Quanto falta (em ms) pra colheita — mesma conta de
+    // getStageIndex, só que sem truncar em estágios. 0 se já pronta,
+    // sem semente, ou sem plantedAt.
+    static getRemainingMs(plot) {
+
+        const crop = this.getCrop(plot.seedId);
+
+        if (!crop || !plot.plantedAt) return 0;
+
+        const effectiveGrowTime = crop.growTimeMs * (plot.growthModifier ?? 1);
+        const elapsed = Math.max(0, (Date.now() - plot.plantedAt) - this.getPestLostMs(plot));
+
+        return Math.max(0, effectiveGrowTime - elapsed);
+
+    }
+
+    /* =====================================================
+       PRAGA
+    ===================================================== */
+
+    static hasPest(plot) {
+        return !!plot.pestAt;
+    }
+
+    // Tempo total (ms) já perdido pra praga NESSE plantio: o que já foi
+    // fechado em infestações anteriores (plot.pestLostMs, gravado por
+    // removePest) + 15% do tempo da infestação ATUAL, se houver uma
+    // rolando agora. Nunca é guardado "ao vivo" — sempre derivado, igual
+    // todo o resto do FarmService.
+    static getPestLostMs(plot) {
+
+        const closed = plot.pestLostMs ?? 0;
+        const ongoing = plot.pestAt ? (Date.now() - plot.pestAt) * PEST_GROWTH_PENALTY : 0;
+
+        return closed + ongoing;
+
+    }
+
+    // Roda em todo tick da Fazenda (aberta ou não — decaimento preguiçoso
+    // igual PetService.applyHungerDecay): avança em blocos INTEIROS do
+    // intervalo, e cada bloco nasce uma praga em todo canteiro semeado
+    // que ainda não tem uma. Não reinfesta canteiro já com praga — só um
+    // por vez, até o jogador tirar com a Anti-Praga.
+    static applyPestSpawn(player) {
+
+        const now = Date.now();
+        const last = player.farm.lastPestSpawnAt ?? now;
+        const elapsed = now - last;
+        const ticks = Math.floor(elapsed / PEST_SPAWN_INTERVAL_MS);
+
+        if (ticks <= 0) return;
+
+        let spawned = false;
+
+        player.farm.plots.forEach(plot => {
+
+            if (plot.tilled && plot.seedId && !plot.pestAt) {
+                plot.pestAt = now;
+                spawned = true;
+            }
+
+        });
+
+        player.farm.lastPestSpawnAt = last + ticks * PEST_SPAWN_INTERVAL_MS;
+
+        if (spawned) {
+            player.notify();
+            SaveService.autoSave(player);
+        }
+
+    }
+
+    // Ação da ferramenta Anti-Praga: só funciona em canteiro COM praga —
+    // fecha a infestação atual (soma o que ela perdeu em pestLostMs) e
+    // libera o canteiro de novo.
+    static removePest(player, index) {
+
+        const plot = player.farm.plots[index];
+
+        if (!plot.pestAt) {
+            return { ok: false, message: "Só funciona em pragas!" };
+        }
+
+        plot.pestLostMs = (plot.pestLostMs ?? 0) + (Date.now() - plot.pestAt) * PEST_GROWTH_PENALTY;
+        plot.pestAt = null;
+
+        player.progress.stats.pestsRemoved = (player.progress.stats.pestsRemoved ?? 0) + 1;
+
+        player.notify();
+        SaveService.autoSave(player);
+
+        return { ok: true, message: "Você eliminou as Pragas!" };
+
+    }
+
+    static getPestImage() {
+        return PEST_IMAGE;
+    }
+
+    // "Noite" pra fins de conquista (ex: colher Abóbora à noite) —
+    // horário local do jogador, 18h-6h.
+    static isNightTime() {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 6;
     }
 
     static getSoilImage(plot) {
@@ -169,6 +286,8 @@ export default class FarmService {
         plot.seedId = null;
         plot.plantedAt = null;
         plot.growthModifier = null;
+        plot.pestAt = null;
+        plot.pestLostMs = null;
 
         player.progress.stats.removedPlantedSeed = true;
 
@@ -258,12 +377,23 @@ export default class FarmService {
         player.progress.stats.harvests = (player.progress.stats.harvests ?? 0) + 1;
         player.progress.stats.harvestedFoodCount = (player.progress.stats.harvestedFoodCount ?? 0) + crop.harvestYield;
 
+        // Contagem POR cultura (Mió/Pop corn/Intrigado/Seu-Bolinha/
+        // Abrobra — ver AchievementService) — cada crop.id vira uma
+        // chave nesse mapa, sem precisar de um contador solto por
+        // cultura no progress.stats.
+        player.progress.stats.harvestedByCrop ??= {};
+        player.progress.stats.harvestedByCrop[crop.id] = (player.progress.stats.harvestedByCrop[crop.id] ?? 0) + crop.harvestYield;
+
         if (moisture === "dry") player.progress.stats.harvestedWithDrySoil = true;
         if (crop.id === "strawberry") player.progress.stats.harvestedStrawberry = true;
+        if (crop.id === "corn") player.progress.stats.harvestedCorn = true;
+        if (crop.id === "pumpkin" && this.isNightTime()) player.progress.stats.harvestedPumpkinAtNight = true;
 
         plot.seedId = null;
         plot.plantedAt = null;
         plot.growthModifier = null;
+        plot.pestAt = null;
+        plot.pestLostMs = null;
 
         player.notify();
         SaveService.autoSave(player);

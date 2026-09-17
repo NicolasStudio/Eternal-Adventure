@@ -22,7 +22,15 @@ export default [
             "Adicionado novo pet: Duende, com chance de 20% de dropar (como Ovo de Duende) do chefe da Caverna (Rei dos Goblins) — sua Mordida causa dano E cura você na mesma quantidade a cada ataque; em PVP 2x2 e Cooperativo, cura o time inteiro vivo, não só quem tem o pet equipado",
             "Adicionado texto de 'Chance de Drop' no tooltip de itens da tela de Dungeons, pra drops que não são 100% garantidos (ex: o novo Ovo de Duende)",
             "Corrigido o Ovo de Duende não conseguindo ser chocado",
-            "Fazenda: adicionadas 4 novas sementes (Trigo, Milho, Uva e Abóbora) e rebalanceados tempo de colheita e preço de todas as 8 — de Batata (5min, 100$) até Abóbora (12h, 3000$)"
+            "Fazenda: adicionadas 4 novas sementes (Trigo, Milho, Uva e Abóbora) e rebalanceados tempo de colheita e preço de todas as 8 — de Batata (5min, 100$) até Abóbora (12h, 3000$)",
+            "Reduzida a chance de drop do Ovo de Duende de 20% para 5%",
+            "Unificada a exibição da habilidade do Duende no tooltip (antes mostrava 'dano' e 'cura' como duas linhas separadas, parecendo duas habilidades diferentes, sendo que é uma coisa só: tira do inimigo e dá a mesma quantidade pro(s) aliado(s))",
+            "Aumentada a chance de equipamento Lendário no Cooperativo (3% -> 5%) e da pedra Quartzo Rosa (Especial) nível 3, que dropa junto (6% -> 15%)",
+            "Fazenda: passar o mouse sobre uma plantação agora mostra um tooltip com o tempo restante até a colheita (contagem regressiva ao vivo)",
+            "Fazenda: adicionada a Praga — nasce sozinha em canteiros semeados (a cada 5h) e atrasa o crescimento em 15% até ser removida com a nova ferramenta Anti-Praga",
+            "Renomeada a habilidade do Duende de 'Toque Curativo' para 'Robin Hood' (tira do inimigo, dá pro aliado)",
+            "Corrigido o valor da cura do Duende não aparecendo na aba Pets da tela de Personagem (mostrava só '+ cura', sem o número)",
+            "Adicionadas 8 novas conquistas de Fazenda: colher Milho, Trigo, Cebola e Abóbora em quantidade, colher a primeira plantação de Milho, colher uma Abóbora à noite, ter ao menos um de cada alimento no inventário, e eliminar 100 Pragas"
         ]
     },
 

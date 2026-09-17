@@ -1,11 +1,13 @@
 import FarmService from "../services/FarmService.js";
 import Toast from "../ui/components/Toast.js";
 import FarmConfirmModal from "../ui/components/modals/FarmConfirmModal.js";
+import FarmPlotTooltip from "./FarmPlotTooltip.js";
 
 const TOOLS = [
     { id: "hoe", icon: "assets/img/assets/farm/tools-image/hoe.png", tooltip: "Abrir novo terreno" },
     { id: "water", icon: "assets/img/assets/farm/tools-image/watering-can.png", tooltip: "Regar" },
-    { id: "glove", icon: "assets/img/assets/farm/tools-image/glove.png", tooltip: "Colher" }
+    { id: "glove", icon: "assets/img/assets/farm/tools-image/glove.png", tooltip: "Colher" },
+    { id: "pest_control", icon: "assets/img/assets/farm/tools-image/pest-control.png", tooltip: "Anti-Praga" }
 ];
 
 const TICK_INTERVAL_MS = 5000;
@@ -21,6 +23,8 @@ export default class FarmView {
         this.seedPickerIndex = null; // índice do canteiro esperando escolha de semente
         this.tickInterval = null;
         this.confirmModal = new FarmConfirmModal();
+        this.plotTooltip = new FarmPlotTooltip();
+        this.hoveredPlotIndex = null; // canteiro sob o mouse agora, pro tick atualizar o tempo restante
     }
 
     get player() {
@@ -28,6 +32,12 @@ export default class FarmView {
     }
 
     render() {
+
+        // Preguiçoso igual a fome do pet: acerta as contas de quantas
+        // pragas nasceram desde a última vez que a Fazenda foi aberta
+        // (ela roda mesmo com a tela fechada — ver FarmService).
+        FarmService.applyPestSpawn(this.player);
+
         return `
             <section class="farm-screen">
                 ${this.renderTools()}
@@ -67,28 +77,13 @@ export default class FarmView {
         const soilImage = FarmService.getSoilImage(plot);
         const stageImage = plot.seedId ? FarmService.getStageImage(plot) : null;
         const crop = plot.seedId ? FarmService.getCrop(plot.seedId) : null;
-
-        let title = "";
-
-        if (crop) {
-
-            const modifier = plot.growthModifier ?? 1;
-            const modifierLabel = modifier < 1
-                ? " (crescimento acelerado — plantado em terra molhada)"
-                : modifier > 1
-                    ? " (crescimento atrasado — plantado em terra seca)"
-                    : "";
-
-            title = FarmService.isReadyToHarvest(plot)
-                ? `${crop.name} — pronto para colher!`
-                : `${crop.name} — em crescimento${modifierLabel}`;
-
-        }
+        const hasPest = FarmService.hasPest(plot);
 
         return `
-            <div class="farm-plot" data-index="${index}" title="${title}">
+            <div class="farm-plot" data-index="${index}">
                 <img class="farm-plot-soil" id="farm-soil-${index}" src="${soilImage}" alt="Terreno">
                 ${stageImage ? `<img class="farm-plot-seed" id="farm-seed-${index}" src="${stageImage}" alt="${crop?.name ?? ""}">` : ""}
+                <img class="farm-plot-pest" id="farm-pest-${index}" src="${FarmService.getPestImage()}" alt="Praga" style="display:${hasPest ? "block" : "none"};">
             </div>
         `;
 
@@ -144,10 +139,32 @@ export default class FarmView {
         });
 
         screen.querySelectorAll(".farm-plot").forEach(plotEl => {
+
+            const index = Number(plotEl.dataset.index);
+
             plotEl.addEventListener("click", (event) => {
                 event.stopPropagation();
-                this.handlePlotClick(Number(plotEl.dataset.index));
+                this.handlePlotClick(index);
             });
+
+            // Tooltip de tempo restante — só faz sentido com algo
+            // plantado (canteiro vazio/grama não mostra nada).
+            plotEl.addEventListener("mouseenter", (event) => {
+                const plot = this.player.farm.plots[index];
+                if (!plot.seedId) return;
+                this.hoveredPlotIndex = index;
+                this.plotTooltip.show(plot, event.clientX, event.clientY);
+            });
+
+            plotEl.addEventListener("mousemove", (event) => {
+                this.plotTooltip.move(event.clientX, event.clientY);
+            });
+
+            plotEl.addEventListener("mouseleave", () => {
+                this.hoveredPlotIndex = null;
+                this.plotTooltip.hide();
+            });
+
         });
 
         // Clicar em qualquer lugar fora de uma ferramenta/canteiro
@@ -216,6 +233,9 @@ export default class FarmView {
                 break;
             case "glove":
                 result = FarmService.harvest(this.player, index);
+                break;
+            case "pest_control":
+                result = FarmService.removePest(this.player, index);
                 break;
         }
 
@@ -290,8 +310,13 @@ export default class FarmView {
 
         if (!document.querySelector(".farm-screen")) {
             clearInterval(this.tickInterval);
+            this.plotTooltip.hide();
             return;
         }
+
+        // Pode nascer praga nova em qualquer canteiro semeado a cada
+        // tick — roda antes do loop abaixo pra já refletir na imagem.
+        FarmService.applyPestSpawn(this.player);
 
         this.player.farm.plots.forEach((plot, index) => {
 
@@ -303,6 +328,10 @@ export default class FarmView {
 
             if (soilImg && soilImg.getAttribute("src") !== soilSrc) soilImg.src = soilSrc;
 
+            const pestImg = document.getElementById(`farm-pest-${index}`);
+
+            if (pestImg) pestImg.style.display = FarmService.hasPest(plot) ? "block" : "none";
+
             if (!plot.seedId) return;
 
             const seedImg = document.getElementById(`farm-seed-${index}`);
@@ -311,6 +340,24 @@ export default class FarmView {
             if (seedImg && stageSrc && seedImg.getAttribute("src") !== stageSrc) seedImg.src = stageSrc;
 
         });
+
+        // Contagem regressiva do tooltip aberto (se o mouse não se
+        // moveu, mousemove não dispara pra atualizar o texto sozinho).
+        // Também cobre o canteiro ter sido colhido/removido embaixo do
+        // mouse por uma ação (refresh() troca os elementos sem disparar
+        // mouseleave no antigo) — sem semente, some o tooltip.
+        if (this.hoveredPlotIndex !== null) {
+
+            const hoveredPlot = this.player.farm.plots[this.hoveredPlotIndex];
+
+            if (hoveredPlot.seedId) {
+                this.plotTooltip.update(hoveredPlot);
+            } else {
+                this.plotTooltip.hide();
+                this.hoveredPlotIndex = null;
+            }
+
+        }
 
     }
 

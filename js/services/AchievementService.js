@@ -2,6 +2,7 @@ import achievements from "../data/achievements.js";
 import dungeons from "../data/dungeons.js";
 import cards from "../data/cards.js";
 import monstersRaid from "../data/monstersRaid.js";
+import farmCrops from "../data/farmCrops.js";
 import AudioSettings from "./AudioSettings.js";
 
 const EQUIPMENT_SLOTS = ["weapon", "helmet", "chest", "leg", "boot"];
@@ -69,6 +70,14 @@ function hasPetWithStars(player, minStars) {
 // por toda a cadeia de chamadas só pra registrar o decaimento.
 function hasPetHungerZero(player) {
     return ownedPets(player).some(pet => pet.hungerHitZero === true);
+}
+
+// "Quitandinha" — posse ATUAL (não histórico) de pelo menos 1 unidade
+// de cada uma das 8 colheitas da Fazenda ao mesmo tempo.
+function hasOneOfEachFood(player) {
+    return Object.values(farmCrops).every(crop =>
+        player.inventory.some(item => item.id === crop.harvestedItem.id && (item.quantity ?? 1) > 0)
+    );
 }
 
 // Um checador por conquista, indexado pelo MESMO id semântico usado em
@@ -167,6 +176,17 @@ const CHECKS = {
     // FarmView.handleHoeClick) — exatamente o misclick que dá nome à
     // conquista.
     farm_miss_click: player => player.progress.stats?.removedPlantedSeed === true,
+
+    farm_harvest_corn_first: player => player.progress.stats?.harvestedCorn === true,
+    farm_harvest_corn_1000: player => (player.progress.stats?.harvestedByCrop?.corn ?? 0) >= 1000,
+    farm_harvest_wheat_1000: player => (player.progress.stats?.harvestedByCrop?.wheat ?? 0) >= 1000,
+    farm_harvest_onion_1000: player => (player.progress.stats?.harvestedByCrop?.onion ?? 0) >= 1000,
+    farm_harvest_pumpkin_night: player => player.progress.stats?.harvestedPumpkinAtNight === true,
+    farm_harvest_pumpkin_1000: player => (player.progress.stats?.harvestedByCrop?.pumpkin ?? 0) >= 1000,
+
+    farm_food_collection: player => hasOneOfEachFood(player),
+
+    farm_pest_100: player => (player.progress.stats?.pestsRemoved ?? 0) >= 100,
 
     silence: () => allSoundMuted(),
 

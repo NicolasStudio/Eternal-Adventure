@@ -251,6 +251,62 @@ const achievements = [
         icon: 'assets/img/icons/achievements/bronze.png',
         iconLocked:'assets/img/icons/achievements/bloqueado.png'
     },
+    {
+        id: 'farm_harvest_corn_first',
+        name: 'Mió',
+        description: 'Colha uma plantação inteira de milho',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_harvest_corn_1000',
+        name: 'Pop corn, ice cream',
+        description: 'Colha 1000 milhos',
+        icon: 'assets/img/icons/achievements/prata.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_harvest_wheat_1000',
+        name: 'Intrigado',
+        description: 'Colha 1000 trigos',
+        icon: 'assets/img/icons/achievements/prata.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_harvest_onion_1000',
+        name: 'Seu-Bolinha',
+        description: 'Colha 1000 cebolas',
+        icon: 'assets/img/icons/achievements/prata.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_harvest_pumpkin_night',
+        name: 'Gostosuras e travessuras',
+        description: 'Colha uma abóbora durante a noite',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_harvest_pumpkin_1000',
+        name: 'Abrobra',
+        description: 'Colha 1000 Abóboras',
+        icon: 'assets/img/icons/achievements/ouro.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_food_collection',
+        name: 'Quitandinha',
+        description: 'Tenha ao menos um de cada alimento',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_pest_100',
+        name: '8ª Praga do Egito',
+        description: 'Elimine 100 pestes',
+        icon: 'assets/img/icons/achievements/prata.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
     // Itens equipados
     {
         id: 'equip_common',

@@ -183,6 +183,10 @@ export default class SaveService {
             harvestedWithDrySoil: false,
             harvestedStrawberry: false,
             removedPlantedSeed: false,
+            harvestedByCrop: {},
+            harvestedCorn: false,
+            harvestedPumpkinAtNight: false,
+            pestsRemoved: 0,
             ...player.progress.stats
         };
 
@@ -225,6 +229,18 @@ export default class SaveService {
         player.album = data.album ?? [];
         player.farm = data.farm ?? player.farm;
         player.petLifeBonusApplied = data.petLifeBonusApplied ?? 0;
+
+        // Saves de antes da Anti-Praga existir não têm esses campos —
+        // sem isso, applyPestSpawn() trataria "nunca nasceu nenhuma
+        // praga ainda" como se lastPestSpawnAt fosse `undefined`, o que
+        // já é tratado como "agora" (?? now) então nem precisaria, mas
+        // os campos por canteiro (pestAt/pestLostMs) sim, senão
+        // getPestLostMs quebraria tentando ler de undefined.
+        player.farm.lastPestSpawnAt ??= Date.now();
+        player.farm.plots.forEach(plot => {
+            plot.pestAt ??= null;
+            plot.pestLostMs ??= null;
+        });
 
         if (data.health) {
             player.health.burstMode = data.health.burstMode ?? false;

@@ -195,7 +195,7 @@ const pets = {
         },
         habilities: {
             hability: {
-                name: "Toque Curativo",
+                name: "Robin Hood",
                 description: "Causa dano ao alvo e cura você (e seus aliados, se houver) na mesma quantidade a cada ataque.",
                 heal: 2,
             }
@@ -230,7 +230,7 @@ const pets = {
         },
         habilities: {
             hability: {
-                name: "Toque Curativo",
+                name: "Robin Hood",
                 description: "Causa dano ao alvo e cura você (e seus aliados, se houver) na mesma quantidade a cada ataque.",
                 heal: 8,
             }
@@ -265,7 +265,7 @@ const pets = {
         },
         habilities: {
             hability: {
-                name: "Toque Curativo",
+                name: "Robin Hood",
                 description: "Causa dano ao alvo e cura você (e seus aliados, se houver) na mesma quantidade a cada ataque.",
                 heal: 20,
             }

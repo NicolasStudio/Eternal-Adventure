@@ -61,7 +61,11 @@ export default class Player {
                 waterCount: 0,
                 harvestedWithDrySoil: false,
                 harvestedStrawberry: false,
-                removedPlantedSeed: false
+                removedPlantedSeed: false,
+                harvestedByCrop: {},
+                harvestedCorn: false,
+                harvestedPumpkinAtNight: false,
+                pestsRemoved: 0
             }
         };
         this.equipment = {
@@ -99,8 +103,14 @@ export default class Player {
                 seedId: null,
                 plantedAt: null,
                 wateredAt: null,
-                growthModifier: null
+                growthModifier: null,
+                pestAt: null,
+                pestLostMs: null
             })),
+            // Relógio preguiçoso do nascimento de pragas — mesmo espírito
+            // do lastHungerTickAt do pet (ver PetService), roda mesmo com
+            // a Fazenda fechada (ver FarmService.applyPestSpawn).
+            lastPestSpawnAt: Date.now(),
             petXP: 0
         };
 
