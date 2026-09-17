@@ -52,7 +52,16 @@ export default class Player {
                 goldFromSelling: 0,
                 pvpWins: 0,
                 enchantStoneFamiliesUsed: [],
-                usedLevel3Stone: false
+                usedLevel3Stone: false,
+                eggsHatched: 0,
+                petFeedCount: 0,
+                seedsPlanted: 0,
+                harvests: 0,
+                harvestedFoodCount: 0,
+                waterCount: 0,
+                harvestedWithDrySoil: false,
+                harvestedStrawberry: false,
+                removedPlantedSeed: false
             }
         };
         this.equipment = {

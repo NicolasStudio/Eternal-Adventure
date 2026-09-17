@@ -14,7 +14,11 @@ export default [
             "Adicionadas músicas próprias para o combate de PVP/Cooperativo, para a Fazenda, e para a tela de Personagem — antes ela continuava tocando a música de onde o menu foi aberto",
             "Corrigido item sem nenhum uso no inventário (ex: semente, colheita da Fazenda) exibindo 'Encantar' e levando pra Ferraria por engano",
             "Aumentado em 1,5s o tempo de exibição das mensagens (toasts) do jogo",
-            "Limpeza de código: removidos arquivos legados sem nenhuma referência no jogo atual (uma pasta de dados antiga em JSON e um conjunto de estilos em SCSS não utilizado)"
+            "Limpeza de código: removidos arquivos legados sem nenhuma referência no jogo atual (uma pasta de dados antiga em JSON e um conjunto de estilos em SCSS não utilizado)",
+            "Adicionadas 18 novas conquistas para os sistemas de Pet e Fazenda (chocar ovos, fome, nível e estrelas do pet; arar terrenos, plantar, colher, regar, solo árido, morango e remover semente por engano)",
+            "Aumentado o tamanho do retrato do personagem e do pet na tela de Personagem, que ficava pequeno e cortado nos estágios maiores do pet",
+            "Corrigido o retrato do pet não conseguindo aumentar além dos limites da própria moldura ao passar o mouse por cima",
+            "Absorção reformulada de novo: voltou a ser só mitigação (bloqueia o dano do golpe por completo, sem curar HP) — a versão anterior deixava quem tinha Absorção curando 2x no mesmo golpe (evitava o dano inteiro E ainda ganhava HP de bônus)"
         ]
     },
 

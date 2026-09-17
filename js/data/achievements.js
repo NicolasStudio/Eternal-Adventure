@@ -123,6 +123,134 @@ const achievements = [
         icon: 'assets/img/icons/achievements/ouro.png',
         iconLocked:'assets/img/icons/achievements/bloqueado.png'
     },
+    // Pet
+    {
+        id: 'egg_hatch_1',
+        name: 'Quem nasceu primeiro?',
+        description: 'Choque seu primeiro ovo!',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'egg_hatch_5',
+        name: 'Filho de chocadeira',
+        description: 'Choque 5 ovos!',
+        icon: 'assets/img/icons/achievements/prata.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'pet_hunger_zero',
+        name: 'Jejum intermitente?',
+        description: 'Fique com 0 de fome!',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'pet_feed_first',
+        name: 'De grão em grão...',
+        description: 'Alimente-se',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'pet_level_up',
+        name: 'Fase de crescimento',
+        description: 'Ganhe um nível com seu PET.',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'pet_level_18',
+        name: 'Nossas crianças crescem tão rápido...',
+        description: 'Atinja nível 18 com seu PET.',
+        icon: 'assets/img/icons/achievements/prata.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'pet_level_32',
+        name: 'De repente 30...',
+        description: 'Atinja nível 32 com seu PET.',
+        icon: 'assets/img/icons/achievements/prata.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'pet_5_stars',
+        name: 'Aclamado pela crítica',
+        description: 'Consiga um PET 5 estrelas',
+        icon: 'assets/img/icons/achievements/ouro.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    // Fazenda
+    {
+        id: 'farm_till_first',
+        name: 'Fazendeiro',
+        description: 'Libere seu primeiro terreno',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_till_all',
+        name: 'Arador do ano',
+        description: 'Libere todos os terrenos',
+        icon: 'assets/img/icons/achievements/ouro.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_seed_first',
+        name: 'Cultivador',
+        description: 'Plante sua primeira semente',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_seed_100',
+        name: 'Máquina de Plantio',
+        description: 'Plante 100 sementes',
+        icon: 'assets/img/icons/achievements/prata.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_harvest_first',
+        name: 'Coletor',
+        description: 'Colha seu primeiro alimento.',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_harvest_1000',
+        name: 'Quase uma colheitadeira',
+        description: 'Adquira 1000 alimentos colhidos.',
+        icon: 'assets/img/icons/achievements/prata.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_water_50',
+        name: 'Seria bom se chovesse...',
+        description: 'Regue a plantação 50 vezes.',
+        icon: 'assets/img/icons/achievements/prata.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_harvest_dry_soil',
+        name: 'Isso não é um Cacto',
+        description: 'Colha um alimento com o solo árido.',
+        icon: 'assets/img/icons/achievements/prata.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_harvest_strawberry',
+        name: 'Morango do nordeste',
+        description: 'Colha uma plantação de morango',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_miss_click',
+        name: 'Miss Click',
+        description: 'Are uma terra que já foi semeada.',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
     // Itens equipados
     {
         id: 'equip_common',

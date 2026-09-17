@@ -174,7 +174,7 @@ export default class CombatView {
                 type = "critico player";
             }
 
-        } else if (result.healedFromAbsorption > 0) {
+        } else if (result.absorbed > 0) {
 
             type = "absorption enemy";
 

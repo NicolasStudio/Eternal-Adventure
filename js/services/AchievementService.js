@@ -48,6 +48,29 @@ function allDungeonsMaxed(player) {
         .every(dungeon => player.getDungeonClears(dungeon.id) >= 3);
 }
 
+// Ovos (não chocados) e pets (chocados) são o MESMO tipo de item
+// ("pet") — cobre inventário e o que está equipado, sem duplicar caso
+// o equipado também apareça em inventory (não aparece, mas por via
+// das dúvidas não custa nada).
+function ownedPets(player) {
+    return [...player.inventory, player.equipment.pet].filter(item => item?.type === "pet");
+}
+
+function hasPetAtLevel(player, level) {
+    return ownedPets(player).some(pet => (pet.level ?? 0) >= level);
+}
+
+function hasPetWithStars(player, minStars) {
+    return ownedPets(player).some(pet => (pet.stars?.length ?? 0) >= minStars);
+}
+
+// hungerHitZero mora no PRÓPRIO pet (ver PetService.applyHungerDecay),
+// não em progress.stats — mais simples que ter que encanar `player`
+// por toda a cadeia de chamadas só pra registrar o decaimento.
+function hasPetHungerZero(player) {
+    return ownedPets(player).some(pet => pet.hungerHitZero === true);
+}
+
 // Um checador por conquista, indexado pelo MESMO id semântico usado em
 // achievements.js (kill_1, level_5, silence, the_end, etc.) — nunca
 // pela posição/ordem no array. Isso é o que evita o bug de reordenar
@@ -110,6 +133,40 @@ const CHECKS = {
     dragon_all: player => (player.progress.stats?.raidBossesDefeated?.length ?? 0) >= monstersRaid.length,
 
     class_transcendence: player => player.transcendence != null,
+
+    egg_hatch_1: player => (player.progress.stats?.eggsHatched ?? 0) >= 1,
+    egg_hatch_5: player => (player.progress.stats?.eggsHatched ?? 0) >= 5,
+
+    pet_hunger_zero: player => hasPetHungerZero(player),
+    pet_feed_first: player => (player.progress.stats?.petFeedCount ?? 0) >= 1,
+
+    // Ovos chocam já no nível 1 (ver PetService.hatch) — "ganhar um
+    // nível" só conta a partir do 2, senão desbloquearia no mesmo
+    // instante do choco.
+    pet_level_up: player => hasPetAtLevel(player, 2),
+    pet_level_18: player => hasPetAtLevel(player, 18),
+    pet_level_32: player => hasPetAtLevel(player, 32),
+    pet_5_stars: player => hasPetWithStars(player, 5),
+
+    farm_till_first: player => player.farm.plots.some(plot => plot.tilled),
+    farm_till_all: player => player.farm.plots.every(plot => plot.tilled),
+
+    farm_seed_first: player => (player.progress.stats?.seedsPlanted ?? 0) >= 1,
+    farm_seed_100: player => (player.progress.stats?.seedsPlanted ?? 0) >= 100,
+
+    farm_harvest_first: player => (player.progress.stats?.harvests ?? 0) >= 1,
+    farm_harvest_1000: player => (player.progress.stats?.harvestedFoodCount ?? 0) >= 1000,
+
+    farm_water_50: player => (player.progress.stats?.waterCount ?? 0) >= 50,
+
+    farm_harvest_dry_soil: player => player.progress.stats?.harvestedWithDrySoil === true,
+    farm_harvest_strawberry: player => player.progress.stats?.harvestedStrawberry === true,
+
+    // Clicar a enxada numa terra que já tem semente dispara a
+    // confirmação de "Remover Semente" em vez de arar (ver
+    // FarmView.handleHoeClick) — exatamente o misclick que dá nome à
+    // conquista.
+    farm_miss_click: player => player.progress.stats?.removedPlantedSeed === true,
 
     silence: () => allSoundMuted(),
 

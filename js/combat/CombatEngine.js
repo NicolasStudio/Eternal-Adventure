@@ -36,8 +36,7 @@ export default class CombatEngine {
                 damage: 0,
                 critical: false,
                 lifeSteal: 0,
-                absorbed: 0,
-                healedFromAbsorption: 0
+                absorbed: 0
             };
         }
 
@@ -51,13 +50,6 @@ export default class CombatEngine {
         } else {
             this.player.currentHP -= result.damage;
             this.player.currentHP = Math.max(0, this.player.currentHP);
-            // Absorção cura quem DEFENDEU (o jogador, nesse ramo) — assim
-            // como o Roubo de Vida acima só é aplicado de verdade pro
-            // lado "player" (monstro não tem esse atributo), a cura da
-            // Absorção só é aplicada aqui, no golpe que o monstro deu.
-            if (result.healedFromAbsorption > 0) {
-                this.player.currentHP = Math.min(this.player.maxHP, this.player.currentHP + result.healedFromAbsorption);
-            }
         }
         return {
             attacker: playerTurn ? "player" : "monster",
@@ -66,8 +58,7 @@ export default class CombatEngine {
             damage: result.damage,
             critical: result.critical,
             lifeSteal: result.lifeSteal,
-            absorbed: result.absorbed,
-            healedFromAbsorption: result.healedFromAbsorption
+            absorbed: result.absorbed
         };
     }
 
@@ -117,23 +108,18 @@ export default class CombatEngine {
         // Absorção: CHANCE de o defensor bloquear o golpe por completo —
         // igual ao Roubo de Vida (que é "chance de proc", não garantido),
         // só que do lado de quem APANHA em vez de quem ataca. Quando
-        // ativa, absorve o dano INTEIRO daquele golpe (0 de dano) e cura
-        // parte do que foi absorvido, na mesma proporção usada pelo
-        // Roubo de Vida (20% do valor absorvido + 2% da vida máxima).
+        // ativa, absorve o dano INTEIRO daquele golpe (0 de dano) — só
+        // isso, sem cura adicional (a mitigação completa já É o
+        // benefício).
         const absorptionChance = Math.min(95, defender.absorption ?? 0);
 
         let absorbed = 0;
-        let healedFromAbsorption = 0;
         let fullyAbsorbed = false;
 
         if (Math.random() * 100 < absorptionChance) {
 
             fullyAbsorbed = true;
             absorbed = preAbsorption;
-
-            healedFromAbsorption =
-                Math.floor(absorbed * 0.20) +
-                Math.floor(this.player.maxHP * 0.02);
 
         }
 
@@ -157,8 +143,7 @@ export default class CombatEngine {
             damage,
             critical: isCritical,
             lifeSteal: recoveredHP,
-            absorbed,
-            healedFromAbsorption
+            absorbed
         };
 
     }
@@ -188,8 +173,8 @@ export default class CombatEngine {
             message += `<span class="combat-critical">Ataque Crítico!</span><br>`;
         }
         message += ` Você recebeu <strong>${this.monster.status.nomeAtaque}</strong>, <strong>${result.damage}</strong> de dano.`;
-        if (result.healedFromAbsorption > 0) {
-            message += `<br><span class="combat-absorption">Absorção!</span> Mitigou <strong>${result.absorbed}</strong>, curou <strong>${result.healedFromAbsorption}</strong> HP.`;
+        if (result.absorbed > 0) {
+            message += `<br><span class="combat-absorption">Absorção!</span> Mitigou <strong>${result.absorbed}</strong> de dano por completo.`;
         }
         return message;
     }

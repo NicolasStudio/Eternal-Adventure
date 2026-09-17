@@ -6,14 +6,14 @@ import PvpCombatService from "./PvpCombatService.js";
 const MAX_ROUNDS = 3000;
 
 // Peso de "ameaça" por classe pra mira do boss: Guerreiro e Bárbaro têm
-// sustain próprio em combate (Guerreiro cura ao apanhar via Absorção,
-// Bárbaro rouba vida ao bater), então o boss prioriza bater neles; Mago
-// e Arqueiro não têm nenhuma forma de se manter vivos sozinhos, então
-// levam menos foco. Uma classe ausente do squad (ou desconhecida, ex:
-// snapshot antigo sem esse campo) simplesmente não entra na conta — o
-// peso dela não "sobra" pra ninguém, só deixa de existir, rebalanceando
-// o resto proporcionalmente (ex: só Mago e Arqueiro vivos = 20/20,
-// vira 50%/50%, já "equilibrado" como pedido).
+// mitigação própria em combate (Guerreiro anula o golpe inteiro via
+// Absorção, Bárbaro rouba vida ao bater), então o boss prioriza bater
+// neles; Mago e Arqueiro não têm nenhuma forma de se manter vivos
+// sozinhos, então levam menos foco. Uma classe ausente do squad (ou
+// desconhecida, ex: snapshot antigo sem esse campo) simplesmente não
+// entra na conta — o peso dela não "sobra" pra ninguém, só deixa de
+// existir, rebalanceando o resto proporcionalmente (ex: só Mago e
+// Arqueiro vivos = 20/20, vira 50%/50%, já "equilibrado" como pedido).
 const BOSS_TARGET_WEIGHT = {
     warrior: 35,
     barbarian: 25,
@@ -184,22 +184,16 @@ export default class RaidCombatService {
 
                 const absorptionChance = Math.min(95, target.absorption ?? 0);
                 let absorbed = 0;
-                let healedFromAbsorption = 0;
                 let fullyAbsorbed = false;
 
                 if (rng() * 100 < absorptionChance) {
                     fullyAbsorbed = true;
                     absorbed = preAbsorption;
-                    healedFromAbsorption = Math.floor(absorbed * 0.20) + Math.floor(target.maxHP * 0.02);
                 }
 
                 const damage = fullyAbsorbed ? 0 : preAbsorption;
 
                 target.currentHP = Math.max(0, target.currentHP - damage);
-
-                if (healedFromAbsorption > 0) {
-                    target.currentHP = Math.min(target.maxHP, target.currentHP + healedFromAbsorption);
-                }
 
                 let lifeStealAmount = 0;
 
@@ -217,7 +211,6 @@ export default class RaidCombatService {
                     critical: isCritical,
                     lifeSteal: lifeStealAmount,
                     absorbed,
-                    healedFromAbsorption,
                     attackName: chosenAttack?.name ?? null
                 });
 

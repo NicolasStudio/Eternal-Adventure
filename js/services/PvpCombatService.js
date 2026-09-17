@@ -126,28 +126,22 @@ export default class PvpCombatService {
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
                 const preAbsorption = Math.max(1, Math.floor(attacker.attack * criticalMultiplier * mitigation));
 
-                // Absorção: CHANCE de quem defende absorver parte do golpe
-                // (mesma lógica de proc do Roubo de Vida, só que do lado
-                // de quem apanha) — quando ativa, mitiga uma fração do
-                // dano e cura parte do que foi absorvido.
+                // Absorção: CHANCE de quem defende absorver o golpe por
+                // completo (mesma lógica de proc do Roubo de Vida, só que
+                // do lado de quem apanha) — sem cura extra, a mitigação
+                // total do dano já é o benefício.
                 const absorptionChance = Math.min(95, defender.absorption ?? 0);
                 let absorbed = 0;
-                let healedFromAbsorption = 0;
                 let fullyAbsorbed = false;
 
                 if (rng() * 100 < absorptionChance) {
                     fullyAbsorbed = true;
                     absorbed = preAbsorption;
-                    healedFromAbsorption = Math.floor(absorbed * 0.20) + Math.floor(defender.maxHP * 0.02);
                 }
 
                 const damage = fullyAbsorbed ? 0 : preAbsorption;
 
                 defender.currentHP = Math.max(0, defender.currentHP - damage);
-
-                if (healedFromAbsorption > 0) {
-                    defender.currentHP = Math.min(defender.maxHP, defender.currentHP + healedFromAbsorption);
-                }
 
                 let lifeStealAmount = 0;
 
@@ -163,8 +157,7 @@ export default class PvpCombatService {
                     damage,
                     critical: isCritical,
                     lifeSteal: lifeStealAmount,
-                    absorbed,
-                    healedFromAbsorption
+                    absorbed
                 });
 
                 // Mordida do pet: garantida, dano fixo, não consome rng().
@@ -257,22 +250,16 @@ export default class PvpCombatService {
 
                 const absorptionChance = Math.min(95, target.absorption ?? 0);
                 let absorbed = 0;
-                let healedFromAbsorption = 0;
                 let fullyAbsorbed = false;
 
                 if (rng() * 100 < absorptionChance) {
                     fullyAbsorbed = true;
                     absorbed = preAbsorption;
-                    healedFromAbsorption = Math.floor(absorbed * 0.20) + Math.floor(target.maxHP * 0.02);
                 }
 
                 const damage = fullyAbsorbed ? 0 : preAbsorption;
 
                 target.currentHP = Math.max(0, target.currentHP - damage);
-
-                if (healedFromAbsorption > 0) {
-                    target.currentHP = Math.min(target.maxHP, target.currentHP + healedFromAbsorption);
-                }
 
                 let lifeStealAmount = 0;
 
@@ -289,8 +276,7 @@ export default class PvpCombatService {
                     damage,
                     critical: isCritical,
                     lifeSteal: lifeStealAmount,
-                    absorbed,
-                    healedFromAbsorption
+                    absorbed
                 });
 
                 // Mordida do pet: garantida, dano fixo, não consome rng().

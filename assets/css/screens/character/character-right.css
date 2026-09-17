@@ -84,7 +84,7 @@
 }
 .inventory-slot.has-item{
     background:transparent;
-    border:none;
+    border: 1px solid rgba(139, 115, 85, .5);
     box-shadow:none;
 }
 .inventory-slot:hover{

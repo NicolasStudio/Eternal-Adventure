@@ -303,8 +303,8 @@ export default class PvpView {
         }
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
-        const absorbed = entry.healedFromAbsorption > 0
-            ? ` <span class="pvp-log-absorption">(${defenderName} absorveu ${entry.absorbed} e curou ${entry.healedFromAbsorption} HP)</span>`
+        const absorbed = entry.absorbed > 0
+            ? ` <span class="pvp-log-absorption">(${defenderName} absorveu ${entry.absorbed} por completo)</span>`
             : "";
         return `<div class="pvp-log-line">${name} causou ${entry.damage} de dano${crit}${steal}${absorbed}</div>`;
     }
@@ -320,8 +320,8 @@ export default class PvpView {
         }
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
-        const absorbed = entry.healedFromAbsorption > 0
-            ? ` <span class="pvp-log-absorption">(${targetName} absorveu ${entry.absorbed} e curou ${entry.healedFromAbsorption} HP)</span>`
+        const absorbed = entry.absorbed > 0
+            ? ` <span class="pvp-log-absorption">(${targetName} absorveu ${entry.absorbed} por completo)</span>`
             : "";
         return `<div class="pvp-log-line">${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}</div>`;
     }
@@ -573,8 +573,8 @@ export default class PvpView {
 
         hitMessage += ` Você recebeu um golpe de <strong>${opponentName}</strong>, <strong>${entry.damage}</strong> de dano.`;
 
-        if (entry.healedFromAbsorption > 0) {
-            hitMessage += `<br><span class="combat-absorption">Absorção!</span> Mitigou <strong>${entry.absorbed}</strong>, curou <strong>${entry.healedFromAbsorption}</strong> HP.`;
+        if (entry.absorbed > 0) {
+            hitMessage += `<br><span class="combat-absorption">Absorção!</span> Mitigou <strong>${entry.absorbed}</strong> de dano por completo.`;
         }
 
         return hitMessage;
@@ -594,7 +594,7 @@ export default class PvpView {
         } else if (isMe) {
             if (entry.lifeSteal > 0) type = "lifeSteal player";
             else if (entry.critical) type = "critico player";
-        } else if (entry.healedFromAbsorption > 0) {
+        } else if (entry.absorbed > 0) {
             type = "absorption enemy";
         }
 
@@ -652,8 +652,8 @@ export default class PvpView {
 
             hitMessage += ` Você recebeu um golpe de <strong>${attackerName}</strong>, <strong>${entry.damage}</strong> de dano.`;
 
-            if (entry.healedFromAbsorption > 0) {
-                hitMessage += `<br><span class="combat-absorption">Absorção!</span> Mitigou <strong>${entry.absorbed}</strong>, curou <strong>${entry.healedFromAbsorption}</strong> HP.`;
+            if (entry.absorbed > 0) {
+                hitMessage += `<br><span class="combat-absorption">Absorção!</span> Mitigou <strong>${entry.absorbed}</strong> de dano por completo.`;
             }
 
             return hitMessage;
@@ -682,7 +682,7 @@ export default class PvpView {
         } else if (isMe) {
             if (entry.lifeSteal > 0) type = "lifeSteal player";
             else if (entry.critical) type = "critico player";
-        } else if (targetIsMe && entry.healedFromAbsorption > 0) {
+        } else if (targetIsMe && entry.absorbed > 0) {
             type = "absorption enemy";
         }
 
@@ -711,24 +711,9 @@ export default class PvpView {
 
                     this.opponentHP = Math.max(0, this.opponentHP - entry.damage);
 
-                    // Quem apanhou fui EU atacando (o oponente é quem
-                    // defendeu/absorveu, nesse caso) — mantém a barra
-                    // dele fiel ao resultado já decidido pelo simulate().
-                    if (entry.healedFromAbsorption > 0) {
-                        const opponentMax = this.currentOpponentSnapshot()?.maxHP ?? this.opponentHP;
-                        this.opponentHP = Math.min(opponentMax, this.opponentHP + entry.healedFromAbsorption);
-                    }
-
                 } else {
 
                     this.game.player.currentHP = Math.max(0, this.game.player.currentHP - entry.damage);
-
-                    if (entry.healedFromAbsorption > 0) {
-                        this.game.player.currentHP = Math.min(
-                            this.game.player.maxHP,
-                            this.game.player.currentHP + entry.healedFromAbsorption
-                        );
-                    }
 
                 }
 
@@ -773,17 +758,6 @@ export default class PvpView {
             if (!entry.dodged) {
 
                 this.teamHP[entry.targetId] = Math.max(0, (this.teamHP[entry.targetId] ?? 0) - entry.damage);
-
-                if (entry.healedFromAbsorption > 0) {
-
-                    const targetMax = allCombatants.find(c => c.id === entry.targetId)?.maxHP ?? 0;
-
-                    this.teamHP[entry.targetId] = Math.min(
-                        targetMax,
-                        (this.teamHP[entry.targetId] ?? 0) + entry.healedFromAbsorption
-                    );
-
-                }
 
                 if (entry.targetId === PvpLobbyService.playerId) {
                     this.game.player.currentHP = this.teamHP[entry.targetId];

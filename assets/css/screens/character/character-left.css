@@ -77,8 +77,8 @@
 ========================================================== */
 .character-avatar-wrapper{
     position:relative;
-    width:120px;
-    height:120px;
+    width:150px;
+    height:150px;
     margin:0 auto;
     border:2px solid #8b7355;
     background:#2a1a12;
@@ -117,9 +117,11 @@
 .character-avatar-wrapper-pet .character-avatar{
     transition:opacity .3s ease, transform .3s ease;
 }
+.character-avatar-wrapper-pet:hover{
+    overflow:visible;
+}
 .character-avatar-wrapper-pet:hover .character-avatar:not(.character-avatar-full){
     opacity:1;
-    transform:scale(1.2);
 }
 
 /* ==========================================================
@@ -371,8 +373,8 @@ hr{
         font-size:14px;
     }
     .character-avatar-wrapper{
-        width:100px;
-        height:100px;
+        width:140px;
+        height:140px;
     }
     .character-name{
         font-size:20px;

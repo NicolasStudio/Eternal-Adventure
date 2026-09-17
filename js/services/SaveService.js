@@ -174,6 +174,15 @@ export default class SaveService {
             pvpWins: 0,
             enchantStoneFamiliesUsed: [],
             usedLevel3Stone: false,
+            eggsHatched: 0,
+            petFeedCount: 0,
+            seedsPlanted: 0,
+            harvests: 0,
+            harvestedFoodCount: 0,
+            waterCount: 0,
+            harvestedWithDrySoil: false,
+            harvestedStrawberry: false,
+            removedPlantedSeed: false,
             ...player.progress.stats
         };
 

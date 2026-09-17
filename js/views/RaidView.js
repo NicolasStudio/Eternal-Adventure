@@ -202,8 +202,8 @@ export default class RaidView {
 
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
-        const absorbed = entry.healedFromAbsorption > 0
-            ? ` <span class="pvp-log-absorption">(${targetName} absorveu ${entry.absorbed} e curou ${entry.healedFromAbsorption} HP)</span>`
+        const absorbed = entry.absorbed > 0
+            ? ` <span class="pvp-log-absorption">(${targetName} absorveu ${entry.absorbed} por completo)</span>`
             : "";
 
         return `<div class="pvp-log-line">${attackerName}${attackTag} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}</div>`;
@@ -457,18 +457,9 @@ export default class RaidView {
 
                     this.bossHP = Math.max(0, this.bossHP - entry.damage);
 
-                    if (entry.healedFromAbsorption > 0) {
-                        this.bossHP = Math.min(this.bossMaxHP, this.bossHP + entry.healedFromAbsorption);
-                    }
-
                 } else {
 
                     this.squadHP[entry.targetId] = Math.max(0, (this.squadHP[entry.targetId] ?? 0) - entry.damage);
-
-                    if (entry.healedFromAbsorption > 0) {
-                        const targetMax = squad.find(c => c.id === entry.targetId)?.maxHP ?? 0;
-                        this.squadHP[entry.targetId] = Math.min(targetMax, (this.squadHP[entry.targetId] ?? 0) + entry.healedFromAbsorption);
-                    }
 
                     if (entry.targetId === RaidLobbyService.playerId) {
                         this.game.player.currentHP = this.squadHP[entry.targetId];
@@ -583,8 +574,8 @@ export default class RaidView {
             message += `<br><span class="combat-life-steal">Life Steal!</span> ${attackerName} recuperou <strong>${entry.lifeSteal}</strong> HP.`;
         }
 
-        if (entry.healedFromAbsorption > 0) {
-            message += `<br><span class="combat-absorption">Absorção!</span> ${targetName} curou <strong>${entry.healedFromAbsorption}</strong> HP.`;
+        if (entry.absorbed > 0) {
+            message += `<br><span class="combat-absorption">Absorção!</span> ${targetName} mitigou <strong>${entry.absorbed}</strong> de dano por completo.`;
         }
 
         return message;
@@ -605,7 +596,7 @@ export default class RaidView {
         } else if (isMeAttacking) {
             if (entry.lifeSteal > 0) type = "lifeSteal player";
             else if (entry.critical) type = "critico player";
-        } else if (isMeTarget && entry.healedFromAbsorption > 0) {
+        } else if (isMeTarget && entry.absorbed > 0) {
             type = "absorption enemy";
         }
 

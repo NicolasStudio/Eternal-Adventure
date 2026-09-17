@@ -181,6 +181,8 @@ export default class FarmService {
         plot.plantedAt = null;
         plot.growthModifier = null;
 
+        player.progress.stats.removedPlantedSeed = true;
+
         player.notify();
         SaveService.autoSave(player);
 
@@ -211,6 +213,8 @@ export default class FarmService {
         plot.plantedAt = Date.now();
         plot.growthModifier = GROWTH_MODIFIER[moisture] ?? 1;
 
+        player.progress.stats.seedsPlanted = (player.progress.stats.seedsPlanted ?? 0) + 1;
+
         player.notify();
         SaveService.autoSave(player);
 
@@ -232,6 +236,8 @@ export default class FarmService {
 
         plot.wateredAt = Date.now();
 
+        player.progress.stats.waterCount = (player.progress.stats.waterCount ?? 0) + 1;
+
         player.notify();
         SaveService.autoSave(player);
 
@@ -252,12 +258,19 @@ export default class FarmService {
         }
 
         const crop = this.getCrop(plot.seedId);
+        const moisture = this.getMoistureState(plot);
 
         for (let i = 0; i < crop.harvestYield; i++) {
             player.addItem(crop.harvestedItem);
         }
 
         player.farm.petXP = (player.farm.petXP ?? 0) + crop.petXP;
+
+        player.progress.stats.harvests = (player.progress.stats.harvests ?? 0) + 1;
+        player.progress.stats.harvestedFoodCount = (player.progress.stats.harvestedFoodCount ?? 0) + crop.harvestYield;
+
+        if (moisture === "dry") player.progress.stats.harvestedWithDrySoil = true;
+        if (crop.id === "strawberry") player.progress.stats.harvestedStrawberry = true;
 
         plot.seedId = null;
         plot.plantedAt = null;

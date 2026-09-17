@@ -71,6 +71,12 @@ export default class PetService {
         petInstance.fome = Math.max(0, petInstance.fome - ticks * HUNGER_DECAY_AMOUNT);
         petInstance.lastHungerTickAt = last + ticks * HUNGER_DECAY_STEP_MS;
 
+        // Guardado no PRÓPRIO pet (igual xp/fome/lastHungerTickAt) em vez
+        // de progress.stats — assim a conquista "Jejum intermitente?" olha
+        // qualquer pet já possuído (inventário + equipado), sem precisar
+        // encanar `player` por toda a cadeia de chamadas só de decaimento.
+        if (petInstance.fome === 0) petInstance.hungerHitZero = true;
+
     }
 
     static getHunger(petInstance) {
@@ -189,6 +195,8 @@ export default class PetService {
         eggItem.lastHungerTickAt = Date.now();
 
         this.syncDisplayFromStage(eggItem);
+
+        player.progress.stats.eggsHatched = (player.progress.stats.eggsHatched ?? 0) + 1;
 
         player.notify();
         SaveService.autoSave(player);
@@ -324,6 +332,8 @@ export default class PetService {
         }
 
         player.removeItem(foodItem, requestedUnits);
+
+        player.progress.stats.petFeedCount = (player.progress.stats.petFeedCount ?? 0) + 1;
 
         if (player.equipment.pet?.uid === petInstance.uid) {
             this.syncEquippedPetContribution(player);
