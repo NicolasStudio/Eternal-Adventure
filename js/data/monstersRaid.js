@@ -20,21 +20,21 @@ const monstersRaid = [
             ataque:[
                 {
                     nomeAtaque: "Mordida",
-                    dano: 250,
-                },
-                {
-                    nomeAtaque: "Jato d'gua",
                     dano: 280,
                 },
                 {
+                    nomeAtaque: "Jato d'gua",
+                    dano: 300,
+                },
+                {
                     nomeAtaque: "Hidro Bomba",
-                    dano: 320,
+                    dano: 340,
                 },
             ],
             armadura: 220,
             agilidade: 200,
             xp: 0,
-            ouro: 10000
+            ouro: 70000
         },
 
         drops: [
@@ -63,25 +63,25 @@ const monstersRaid = [
         floor: 2,
 
         status: {
-            vidaMaxima: 16000,
+            vidaMaxima: 17000,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
-                    dano: 250,
+                    dano: 300,
                 },
                 {
                     nomeAtaque: "Baforada",
-                    dano: 280,
+                    dano: 320,
                 },
                 {
                     nomeAtaque: "Chamas infernais",
                     dano: 320,
                 },
             ],
-            armadura: 220,
-            agilidade: 200,
+            armadura: 230,
+            agilidade: 240,
             xp: 0,
-            ouro: 10000
+            ouro: 70000
         },
 
         drops: [
@@ -114,21 +114,21 @@ const monstersRaid = [
             ataque:[
                 {
                     nomeAtaque: "Mordida",
-                    dano: 270,
+                    dano: 330,
                 },
                 {
                     nomeAtaque: "Iluminar",
-                    dano: 300,
+                    dano: 350,
                 },
                 {
                     nomeAtaque: "Raio Aurora",
-                    dano: 340,
+                    dano: 380,
                 },
             ],
-            armadura: 230,
+            armadura: 240,
             agilidade: 200,
             xp: 0,
-            ouro: 10000
+            ouro: 80000
         },
 
         drops: [
@@ -161,21 +161,21 @@ const monstersRaid = [
             ataque:[
                 {
                     nomeAtaque: "Mordida",
-                    dano: 270,
+                    dano: 350,
                 },
                 {
                     nomeAtaque: "Ofuscar",
-                    dano: 300,
+                    dano: 360,
                 },
                 {
                     nomeAtaque: "Raio Negro",
-                    dano: 340,
+                    dano: 380,
                 },
             ],
-            armadura: 230,
-            agilidade: 200,
+            armadura: 250,
+            agilidade: 250,
             xp: 0,
-            ouro: 10000
+            ouro: 80000
         },
 
         drops: [
@@ -204,11 +204,11 @@ const monstersRaid = [
         floor: 5,
 
         status: {
-            vidaMaxima: 20000,
+            vidaMaxima: 22000,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
-                    dano: 250,
+                    dano: 340,
                 },
                 {
                     nomeAtaque: "Chicote de Vinha",
@@ -219,10 +219,10 @@ const monstersRaid = [
                     dano: 400,
                 },
             ],
-            armadura: 235,
-            agilidade: 220,
+            armadura: 255,
+            agilidade: 280,
             xp: 0,
-            ouro: 10000
+            ouro: 100000
         },
 
         drops: [
