@@ -209,7 +209,7 @@ export default class MarketViewBuy {
                         <i class="fa-solid fa-coins"></i>
 
                         <div class="market-buy-text">
-                            <span class="label">OURO</span>
+                            <span class="label">SEU OURO</span>
                             <span class="value">${this.player.gold.toLocaleString("pt-BR")}</span>
                         </div>
 

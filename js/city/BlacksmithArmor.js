@@ -254,7 +254,7 @@ export default class BlacksmithArmor {
                     <div class="blacksmith-footer-section">
                         <i class="fa-solid fa-coins"></i>
                         <div class="blacksmith-footer-text">
-                            <span class="label">OURO</span>
+                            <span class="label">SEU OURO</span>
                             <span class="value">${this.player.gold.toLocaleString("pt-BR")}</span>
                         </div>
                     </div>
@@ -375,15 +375,19 @@ export default class BlacksmithArmor {
                 this.refresh();
             });
 
-            slot.addEventListener("mouseenter", (event) => {
+            // Hover só no ÍCONE (não no slot inteiro) — senão passar o
+            // mouse no espaço vazio ao redor do item já mostra o tooltip.
+            const icon = slot.querySelector(".blacksmith-slot-icon") ?? slot;
+
+            icon.addEventListener("mouseenter", (event) => {
                 this.showTooltip(item, event.clientX, event.clientY);
             });
 
-            slot.addEventListener("mousemove", (event) => {
+            icon.addEventListener("mousemove", (event) => {
                 this.updateTooltipPosition(event.clientX, event.clientY);
             });
 
-            slot.addEventListener("mouseleave", () => {
+            icon.addEventListener("mouseleave", () => {
                 this.hideTooltip();
             });
         });

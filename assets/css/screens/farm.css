@@ -7,7 +7,14 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    z-index:1;
+    /* Antes z-index:1 — ficava embaixo do hud-header (z-index:10, em
+       hud.css), que sempre fica por cima de todo o conteúdo de
+       propósito. As outras telas (Dungeon/PVP/Cooperativo/Cidade) já
+       usam 50+ no próprio elemento raiz por serem irmãs diretas do
+       header no DOM (não há nenhum wrapper ".hud-content" entre elas —
+       essa classe existe em hud.css mas não é usada em lugar nenhum).
+       Farm ficou pra trás nesse padrão. */
+    z-index:50;
 }
 
 /* ==========================================================

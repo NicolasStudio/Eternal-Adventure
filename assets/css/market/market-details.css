@@ -62,7 +62,7 @@
 
     font-family:"Cinzel",serif;
 
-    font-size:24px;
+    font-size:20px;
 
     color:#ecd8b3;
 
@@ -78,7 +78,7 @@
 
     color:#c8ae84;
 
-    font-size:18px;
+    font-size:14px;
 
     text-transform:uppercase;
 
@@ -114,7 +114,7 @@
 
     color:#b89c70;
 
-    font-size:17px;
+    font-size:14px;
 
 }
 
@@ -122,7 +122,7 @@
 
     color:#f2f2f2;
 
-    font-size:17px;
+    font-size:14px;
 
     font-weight:600;
 
@@ -139,7 +139,7 @@
 
     font-family:"Cinzel",serif;
 
-    font-size:19px;
+    font-size:16px;
 
     color:#cfa36a;
 
@@ -202,13 +202,13 @@
 
     color:#d6c0a2;
 
-    font-size:16px;
+    font-size:14px;
 
 }
 
 .market-stat-value{
 
-    font-size:16px;
+    font-size:14px;
 
     font-weight:bold;
 
@@ -246,11 +246,11 @@
 
     margin:0;
 
-    line-height:1.7;
+    line-height:1.6;
 
     color:#bda57d;
 
-    font-size:15px;
+    font-size:13px;
 
 }
 
@@ -286,7 +286,7 @@
 
     font-family:"Cinzel",serif;
 
-    font-size:17px;
+    font-size:14px;
 
 }
 
@@ -298,7 +298,7 @@
 
     gap:8px;
 
-    font-size:30px;
+    font-size:24px;
 
     font-weight:bold;
 
@@ -308,7 +308,7 @@
 
 .market-price-value i{
 
-    font-size:22px;
+    font-size:18px;
 
     color:#d6a36a;
 
@@ -336,7 +336,7 @@
 
     font-family:"Cinzel",serif;
 
-    font-size:17px;
+    font-size:15px;
 
     letter-spacing:1px;
 
@@ -378,6 +378,12 @@
 
 @media(max-width:900px){
 
+    .market-details{
+
+        padding:16px 18px;
+
+    }
+
     .market-item-header{
 
         flex-direction:column;
@@ -386,9 +392,29 @@
 
     }
 
+    .market-item-header img{
+
+        width:64px;
+
+        height:64px;
+
+    }
+
     .market-item-info{
 
         align-items:center;
+
+    }
+
+    .market-item-info h2{
+
+        font-size:17px;
+
+    }
+
+    .market-price-value{
+
+        font-size:20px;
 
     }
 

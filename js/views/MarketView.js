@@ -79,7 +79,7 @@ export default class MarketView {
             <button class="market-item ${selected ? "selected" : ""}" data-uid="${item.uid}">
                 <img src="${item.icon}" alt="${item.name}" class="market-item-icon">
                 <div class="market-item-content">
-                    <span class="market-item-name">${item.name}</span>
+                    <span class="market-item-name" title="${item.name}">${item.name}</span>
                     <span class="market-item-rarity" style="color:${rarity.color};">${rarity.name}</span>
                 </div>
                 <div class="market-item-price">

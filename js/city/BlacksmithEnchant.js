@@ -116,30 +116,34 @@ export default class BlacksmithEnchant {
                 Selecione uma arma e uma pedra para canalizar o encantamento.
             </p>
 
-            <div class="enchant-slot-row">
-                <span class="enchant-slot-label">Arma</span>
-                <div class="enchant-slot-box ${this.anvilWeapon ? "filled" : ""}" data-slot="weapon">
-                    ${
-                        this.anvilWeapon
-                            ? `<img src="${this.anvilWeapon.icon}" alt="${this.anvilWeapon.name}">`
-                            : `<i class="fa-solid fa-sword placeholder-icon"></i>`
-                    }
-                </div>
-                <span class="enchant-stone-name">${this.anvilWeapon?.name ?? ""}</span>
-            </div>
+            <div class="enchant-slots-row">
 
-            <div class="enchant-plus">+</div>
-
-            <div class="enchant-slot-row">
-                <span class="enchant-slot-label">Pedra</span>
-                <div class="enchant-slot-box ${this.anvilStone ? "filled" : ""}" data-slot="stone">
-                    ${
-                        this.anvilStone
-                            ? `<img src="${this.anvilStone.icon}" alt="${this.anvilStone.name}">`
-                            : `<i class="fa-solid fa-gem placeholder-icon"></i>`
-                    }
+                <div class="enchant-slot-row">
+                    <span class="enchant-slot-label">Arma</span>
+                    <div class="enchant-slot-box ${this.anvilWeapon ? "filled" : ""}" data-slot="weapon">
+                        ${
+                            this.anvilWeapon
+                                ? `<img src="${this.anvilWeapon.icon}" alt="${this.anvilWeapon.name}">`
+                                : `<i class="fa-solid fa-sword placeholder-icon"></i>`
+                        }
+                    </div>
+                    <span class="enchant-stone-name">${this.anvilWeapon?.name ?? ""}</span>
                 </div>
-                <span class="enchant-stone-name">${this.anvilStone?.name ?? ""}</span>
+
+                <div class="enchant-plus">+</div>
+
+                <div class="enchant-slot-row">
+                    <span class="enchant-slot-label">Pedra</span>
+                    <div class="enchant-slot-box ${this.anvilStone ? "filled" : ""}" data-slot="stone">
+                        ${
+                            this.anvilStone
+                                ? `<img src="${this.anvilStone.icon}" alt="${this.anvilStone.name}">`
+                                : `<i class="fa-solid fa-gem placeholder-icon"></i>`
+                        }
+                    </div>
+                    <span class="enchant-stone-name">${this.anvilStone?.name ?? ""}</span>
+                </div>
+
             </div>
 
             ${this.renderPreview()}
@@ -187,7 +191,7 @@ export default class BlacksmithEnchant {
                     <div class="blacksmith-footer-section">
                         <i class="fa-solid fa-coins"></i>
                         <div class="blacksmith-footer-text">
-                            <span class="label">OURO</span>
+                            <span class="label">SEU OURO</span>
                             <span class="value">${this.player.gold.toLocaleString("pt-BR")}</span>
                         </div>
                     </div>
@@ -359,14 +363,17 @@ export default class BlacksmithEnchant {
 
     }
 
+    // O hover fica só no ÍCONE (não no slot inteiro) — senão passar o
+    // mouse no espaço vazio ao redor do item já dispara o tooltip dele.
     bindTooltip(slot, item) {
-        slot.addEventListener("mouseenter", (event) => {
+        const icon = slot.querySelector(".blacksmith-slot-icon") ?? slot;
+        icon.addEventListener("mouseenter", (event) => {
             this.showTooltip(item, event.clientX, event.clientY);
         });
-        slot.addEventListener("mousemove", (event) => {
+        icon.addEventListener("mousemove", (event) => {
             this.updateTooltipPosition(event.clientX, event.clientY);
         });
-        slot.addEventListener("mouseleave", () => {
+        icon.addEventListener("mouseleave", () => {
             this.hideTooltip();
         });
     }

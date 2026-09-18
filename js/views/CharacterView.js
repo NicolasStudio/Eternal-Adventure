@@ -1062,7 +1062,9 @@ export default class CharacterView {
 
         this.hideTooltip();
 
-        const tooltip = item.type === "pet"
+        const isPet = item.type === "pet";
+
+        const tooltip = isPet
             ? new PetTooltip(item)
             : item.category === "seed"
                 ? new SeedTooltip(item)
@@ -1078,11 +1080,14 @@ export default class CharacterView {
 
         // Comparação: só faz sentido pra equipamento (tem slot), e só
         // se já existir algo equipado ali que não seja o próprio item.
+        // Pet também tem `slot` ("pet"), mas precisa comparar com
+        // PetTooltip — o formato de equipamento (raridade/qualidade/
+        // atributos fixos) não se aplica a ele.
         const equippedItem = item.slot ? this.game.player.equipment[item.slot] : null;
 
         if (compare && equippedItem && equippedItem.uid !== item.uid) {
 
-            const compareTooltip = new ItemTooltip(equippedItem);
+            const compareTooltip = isPet ? new PetTooltip(equippedItem) : new ItemTooltip(equippedItem);
             const compareElement = document.createElement("div");
             compareElement.id = "item-tooltip-compare";
             compareElement.className = "item-tooltip item-tooltip-compare";

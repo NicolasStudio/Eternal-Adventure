@@ -69,6 +69,18 @@ ABAS DE SLOT (Ferreiro - Equipamentos)
     padding:18px;
     overflow-y:auto;
 }
+/* Arma e Pedra lado a lado (label em cima, caixa no meio, nome embaixo
+   de cada uma) — em vez de empilhados, que era o motivo da barra de
+   rolagem do meio aparecer sem necessidade. */
+.enchant-slots-row{
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    gap:28px;
+}
+.enchant-slots-row .enchant-plus{
+    margin-top:48px;
+}
 .enchant-slot-row{
     display:flex;
     flex-direction:column;
@@ -140,13 +152,41 @@ ABAS DE SLOT (Ferreiro - Equipamentos)
     overflow:auto;
 }
 
-.blacksmith-slot img {
-    margin: 10px;
-    width: 65px;
-    cursor: pointer;
+/*==========================================================
+GRID DE ITENS (3 por linha) — a área clicável de cada slot é do
+tamanho do próprio ícone, não da célula inteira, pra o hover (e o
+tooltip que ele dispara) só ativar em cima do item de verdade.
+==========================================================*/
+.blacksmith-weapon-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    align-content:start;
+    padding:4px;
 }
 .blacksmith-slot{
     position:relative;
+    width:100%;
+    aspect-ratio:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border-radius:6px;
+    border:1px solid rgba(139,115,85,.5);
+    background:rgba(0,0,0,.2);
+    transition:.18s;
+}
+.blacksmith-slot:hover{
+    border-color:#8b7355;
+}
+.blacksmith-slot.selected{
+    border-color:#d4a373;
+    box-shadow:0 0 14px rgba(212,163,115,.3);
+}
+.blacksmith-slot img {
+    width: 65px;
+    max-width:80%;
+    cursor: pointer;
 }
 
 /*==========================================================
@@ -320,7 +360,7 @@ INFORMAÇÕES DA MELHORIA
 .blacksmith-upgrade-info{
     width:100%;
     margin-top:28px;
-    padding:22px;
+    padding:18px;
     border:2px solid #5b4633;
     border-radius:8px;
     background:rgba(0,0,0,.18);

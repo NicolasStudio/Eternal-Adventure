@@ -30,7 +30,13 @@ export default [
             "Fazenda: adicionada a Praga — nasce sozinha em canteiros semeados (a cada 5h) e atrasa o crescimento em 15% até ser removida com a nova ferramenta Anti-Praga",
             "Renomeada a habilidade do Duende de 'Toque Curativo' para 'Robin Hood' (tira do inimigo, dá pro aliado)",
             "Corrigido o valor da cura do Duende não aparecendo na aba Pets da tela de Personagem (mostrava só '+ cura', sem o número)",
-            "Adicionadas 8 novas conquistas de Fazenda: colher Milho, Trigo, Cebola e Abóbora em quantidade, colher a primeira plantação de Milho, colher uma Abóbora à noite, ter ao menos um de cada alimento no inventário, e eliminar 100 Pragas"
+            "Adicionadas 8 novas conquistas de Fazenda: colher Milho, Trigo, Cebola e Abóbora em quantidade, colher a primeira plantação de Milho, colher uma Abóbora à noite, ter ao menos um de cada alimento no inventário, e eliminar 100 Pragas",
+            "Corrigido o Mercado (aba de venda) quebrando o layout com nomes de item longos (ex: pedras de encantamento) — agora trunca com reticências, e reduzido o tamanho das fontes do painel de detalhes, que também quebrava em telas menores",
+            "Ferreiro - Encantar: layout do meio reorganizado — Arma e Pedra ficam lado a lado (com '+' no meio) em vez de empilhadas, removendo a barra de rolagem que aparecia sem necessidade",
+            "Corrigido, nas telas do Ferreiro (Melhorar e Encantar), o hover do tooltip ativando no espaço vazio ao redor do item, não só em cima dele — e as listas de itens agora usam uma grade de 3 por linha, em vez de uma coluna única com bastante espaço morto",
+            "Corrigida a label 'OURO' do Ferreiro de Armas, que tinha ficado pra trás — agora é 'SEU OURO', igual nas telas de Equipamentos e Encantar",
+            "Corrigida a grade de canteiros da Fazenda ficando escondida atrás do HUD do personagem em janelas mais baixas/estreitas",
+            "Corrigido o tooltip de comparação de pets (aba Pets, hover no inventário) usando o formato de equipamento por engano (raridade/qualidade/atributos zerados) — agora usa o mesmo formato do pet principal, e removida a repetição de texto na Habilidade dos pets que curam"
         ]
     },
 

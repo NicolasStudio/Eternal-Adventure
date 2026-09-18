@@ -93,11 +93,16 @@
 }
 .tooltip-title{
     margin:0;
+    margin-top: 10px;
     color:#d4a373;
     font-size:11px;
     font-weight:700;
     text-transform:uppercase;
     letter-spacing:1px;
+}
+
+.tooltip-section p{
+    font-size:12px;
 }
 
 /* ==========================================================

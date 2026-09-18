@@ -207,6 +207,7 @@
 ========================================================== */
 .market-item-content{
     flex:1;
+    min-width:0;
     display:flex;
     flex-direction:column;
     justify-content:center;
@@ -218,6 +219,9 @@
     font-weight:bold;
     color:#ecd8b3;
     font-family:"Cinzel",serif;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 .market-item-rarity{
     font-size:13px;
@@ -231,6 +235,7 @@
 .market-item-price{
     display:flex;
     align-items:center;
+    flex-shrink:0;
     gap:8px;
     margin-left:auto;
     font-size:15px;

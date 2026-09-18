@@ -192,7 +192,12 @@ export default class BlacksmithWeapon {
                 this.refresh();
 
             });
-            slot.addEventListener("mouseenter", (event) => {
+
+            // Hover só no ÍCONE (não no slot inteiro) — senão passar o
+            // mouse no espaço vazio ao redor do item já mostra o tooltip.
+            const icon = slot.querySelector(".blacksmith-slot-icon") ?? slot;
+
+            icon.addEventListener("mouseenter", (event) => {
 
                 this.showTooltip(
                     weapon,
@@ -202,7 +207,7 @@ export default class BlacksmithWeapon {
 
             });
 
-            slot.addEventListener("mousemove", (event) => {
+            icon.addEventListener("mousemove", (event) => {
 
                 this.updateTooltipPosition(
                     event.clientX,
@@ -211,7 +216,7 @@ export default class BlacksmithWeapon {
 
             });
 
-            slot.addEventListener("mouseleave", () => {
+            icon.addEventListener("mouseleave", () => {
 
                 this.hideTooltip();
 
@@ -238,7 +243,7 @@ export default class BlacksmithWeapon {
                         <div class="blacksmith-footer-text">
 
                             <span class="label">
-                                OURO
+                                SEU OURO
                             </span>
 
                             <span class="value">
