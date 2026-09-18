@@ -35,7 +35,7 @@ export default [
             "Ferreiro - Encantar: layout do meio reorganizado — Arma e Pedra ficam lado a lado (com '+' no meio) em vez de empilhadas, removendo a barra de rolagem que aparecia sem necessidade",
             "Corrigido, nas telas do Ferreiro (Melhorar e Encantar), o hover do tooltip ativando no espaço vazio ao redor do item, não só em cima dele — e as listas de itens agora usam uma grade de 3 por linha, em vez de uma coluna única com bastante espaço morto",
             "Corrigida a label 'OURO' do Ferreiro de Armas, que tinha ficado pra trás — agora é 'SEU OURO', igual nas telas de Equipamentos e Encantar",
-            "Corrigida a grade de canteiros da Fazenda ficando escondida atrás do HUD do personagem em janelas mais baixas/estreitas",
+            "Corrigida a grade de canteiros da Fazenda ficando escondida atrás do HUD do personagem em janelas mais baixas/estreitas, sem bloquear o clique no menu de navegação de baixo",
             "Corrigido o tooltip de comparação de pets (aba Pets, hover no inventário) usando o formato de equipamento por engano (raridade/qualidade/atributos zerados) — agora usa o mesmo formato do pet principal, e removida a repetição de texto na Habilidade dos pets que curam"
         ]
     },

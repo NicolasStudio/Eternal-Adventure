@@ -7,14 +7,16 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    /* Antes z-index:1 — ficava embaixo do hud-header (z-index:10, em
-       hud.css), que sempre fica por cima de todo o conteúdo de
-       propósito. As outras telas (Dungeon/PVP/Cooperativo/Cidade) já
-       usam 50+ no próprio elemento raiz por serem irmãs diretas do
-       header no DOM (não há nenhum wrapper ".hud-content" entre elas —
-       essa classe existe em hud.css mas não é usada em lugar nenhum).
-       Farm ficou pra trás nesse padrão. */
-    z-index:50;
+    /* MESMO z-index do hud-header e do hud-navigation (ambos 10, em
+       hud.css) — farm-screen é irmã direta dos dois no DOM (renderizada
+       entre eles: header, depois farm-screen, depois navigation), e com
+       z-index empatado quem desenha por cima é quem vem DEPOIS no DOM.
+       Isso faz a grade ficar acima do header (pra não sumir atrás do
+       HUD do personagem em janelas mais baixas) mas ainda abaixo do
+       menu de navegação (pra não bloquear o clique nos botões de
+       baixo). Um valor MAIOR que 10 (ex: 50, como Dungeon/PVP/Cidade)
+       resolveria o header mas cobriria o menu de novo. */
+    z-index:10;
 }
 
 /* ==========================================================
