@@ -1678,6 +1678,10 @@ const monsters = [
             {
                 item: items.tripleMediumPotion,
                 quantidade: 2
+            },
+            {
+                item: { ...pets.bearPet1, icon: "assets/img/assets/eggs_drop/egg-bear.png"},
+                chance: 2
             }
         ]
     },

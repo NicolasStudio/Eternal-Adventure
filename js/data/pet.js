@@ -409,6 +409,140 @@ const pets = {
         }
     },
 
+    /* ==========================================================
+       Urso
+    ========================================================== */
+    bearPet1: {
+        id: "bear-pet1",
+        name: "Ovo de Urso",
+        image: "assets/img/assets/pet/egg-bear.png",
+        type: "pet",
+        family: "bear",
+        shocked: false,
+        color: "#8B4513",
+        stars: "★★★★",
+        nivel: 0,
+        description: "Um ovo de urso. Quem sabe o que pode sair dele?",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 0,
+            attack: 0,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+
+        },
+
+    },
+
+    bearPet2: {
+        id: "bear-pet2",
+        name: "Urso Filhote",
+        image: "assets/img/assets/pet/bear-stage-1.png",
+        type: "pet",
+        family: "bear",
+        shocked: true,
+        color: "#8B4513",
+        stars: "★★★★",
+        nivel: 1,
+        description: "Um urso filhote. Ele ainda é pequeno, mas tem potencial para crescer forte.",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 9,
+            attack: 1,
+            armor: 4,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+
+        },
+        habilities: {
+            hability: {
+                name: "Mitigador",
+                description: "Não ataca nem participa do turno de combate, só aumenta sua vida e armadura, passivamente.",
+            }
+        }
+    },
+
+    bearPet3: {
+        id: "bear-pet3",
+        name: "Urso jovem",
+        image: "assets/img/assets/pet/bear-stage-2.png",
+        type: "pet",
+        family: "bear",
+        shocked: true,
+        color: "#8B4513",
+        stars: "★★★★",
+        nivel: 18,
+        description: "Um urso jovem. Ele está em sua fase de crescimento e tem muito potencial.",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 19,
+            attack: 4,
+            armor: 12,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+
+        },
+        habilities: {
+            hability: {
+                name: "Mitigador",
+                description: "Não ataca nem participa do turno de combate, só aumenta sua vida e armadura, passivamente.",
+            }
+        }
+    },
+
+    bearPet4: {
+        id: "bear-pet4",
+        name: "Urso Adulto",
+        image: "assets/img/assets/pet/bear-stage-3.png",
+        type: "pet",
+        family: "bear",
+        shocked: true,
+        color: "#8B4513",
+        stars: "★★★★",
+        nivel: 32,
+        description: "Um urso adulto. Sua experiência e habilidades são notáveis, tornando-o um aliado valioso.",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 29,
+            attack: 7,
+            armor: 19,
+            agility: 1,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+
+        },
+        habilities: {
+            hability: {
+                name: "Mitigador",
+                description: "Não ataca nem participa do turno de combate, só aumenta sua vida e armadura, passivamente.",
+            }
+        }
+    },
+
 };
 
 export default pets;

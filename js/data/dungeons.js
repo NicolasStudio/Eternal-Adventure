@@ -557,7 +557,11 @@ const dungeons = [
                 type: ["leg"],
                 rarity: "mystic"
             },
-            items.tripleMediumPotion
+            items.tripleMediumPotion,
+            {
+                item: { ...pets.bearPet1, icon: "assets/img/assets/eggs_drop/egg-bear.png"},
+                chance: 2
+            }
         ]
     },
 

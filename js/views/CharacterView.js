@@ -211,6 +211,18 @@ export default class CharacterView {
         const xpPercent = xpRequired > 0 ? Math.min((pet.xp / xpRequired) * 100, 100) : 100;
         const ability = PetService.getCurrentStage(pet)?.habilities?.hability;
 
+        // Sem dano/cura/mímico pra mostrar (ex: Urso — só armadura
+        // passiva, já contabilizada na Armadura acima) mostra "Passiva"
+        // em vez de um valor vazio.
+        const abilityValue = ability ? [
+            scaled.biteDamage > 0 ? `${scaled.biteDamage} de dano` : null,
+            scaled.healAmount > 0 ? `${scaled.healAmount} de cura` : null,
+            // Mímico não tem dano fixo pra mostrar (é uma fração do
+            // golpe de cada turno, só sabida em combate) — mostra a
+            // fração em vez de um número inventado.
+            ability.mimicRatio > 0 ? `1/${Math.round(1 / ability.mimicRatio)} do dano causado` : null
+        ].filter(Boolean).join(" + ") || "Passiva" : "";
+
         return `
             <div class="character-status character-pets">
 
@@ -267,15 +279,7 @@ export default class CharacterView {
                         <div class="character-divider"><hr></div>
                         <div class="character-stat pet-ability">
                             <span>${ability.name}</span>
-                            <span>${[
-                                scaled.biteDamage > 0 ? `${scaled.biteDamage} de dano` : null,
-                                scaled.healAmount > 0 ? `${scaled.healAmount} de cura` : null,
-                                // Mímico não tem dano fixo pra mostrar (é uma
-                                // fração do golpe de cada turno, só sabida em
-                                // combate) — mostra a fração em vez de um
-                                // número inventado.
-                                ability.mimicRatio > 0 ? `1/${Math.round(1 / ability.mimicRatio)} do dano causado` : null
-                            ].filter(Boolean).join(" + ")}</span>
+                            <span>${abilityValue}</span>
                         </div>
                     ` : ""}
 
