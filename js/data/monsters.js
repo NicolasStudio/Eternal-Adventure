@@ -1380,6 +1380,10 @@ const monsters = [
             {
                 item: items.tripleMediumPotion,
                 quantidade: 1
+            },
+            {
+                item: { ...pets.spiderPet1, icon: "assets/img/assets/eggs_drop/egg-spider.png"},
+                chance: 3
             }
         ]
     },
@@ -3264,8 +3268,8 @@ const monsters = [
             nomeAtaque: "Julgamento Divino",
             armadura: 150,
             agilidade: 150,
-            xp: 500,
-            ouro: 1000
+            xp: 0,
+            ouro: 10000
         },
 
         drops: [
@@ -3289,8 +3293,8 @@ const monsters = [
             nomeAtaque: "Aço Sombrio",
             armadura: 150,
             agilidade: 150,
-            xp: 500,
-            ouro: 1000
+            xp: 0,
+            ouro: 10000
         },
 
         drops: [

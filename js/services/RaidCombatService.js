@@ -215,14 +215,31 @@ export default class RaidCombatService {
                 });
 
                 // Mordida do pet: só quem está atacando o chefe (nunca o
-                // chefe mordendo alguém) — garantida, dano fixo, sem rng().
-                if (!isBossTurn && attacker.petBiteDamage > 0 && target.currentHP > 0) {
+                // chefe mordendo alguém) — garantida, sem rng(). Dano e
+                // cura são efeitos independentes: um pet de cura pura
+                // (ex: Duende, sem dano nenhum) ainda precisa disparar
+                // esse bloco só pra curar. petMimicRatio (ex: Aranha)
+                // copia uma fração do `damage` que ACABOU de ser
+                // causado nesse mesmo golpe no chefe (já mitigado pela
+                // armadura dele) — nunca do ataque bruto do atacante.
+                const petBiteAmount = attacker.petMimicRatio > 0
+                    ? Math.floor(damage * attacker.petMimicRatio)
+                    : attacker.petBiteDamage;
 
-                    const biteDamage = Math.min(target.currentHP, attacker.petBiteDamage);
-                    target.currentHP = Math.max(0, target.currentHP - attacker.petBiteDamage);
+                if (!isBossTurn && (petBiteAmount > 0 || attacker.petHealAmount > 0)) {
 
-                    // Cura da habilidade (ex: Duende) — todo o squad
-                    // VIVO (o próprio atacante incluso).
+                    let biteDamage = 0;
+
+                    if (petBiteAmount > 0 && target.currentHP > 0) {
+                        biteDamage = Math.min(target.currentHP, petBiteAmount);
+                        target.currentHP = Math.max(0, target.currentHP - petBiteAmount);
+                    }
+
+                    // Cura da habilidade (ex: Duende) — sorteia UM alvo
+                    // vivo do squad (o próprio atacante pode ser
+                    // sorteado) em vez de curar todo mundo, senão
+                    // ninguém perde vida com o squad cheio de pets
+                    // curativos.
                     let petHeal = 0;
                     let healedIds = [];
 
@@ -230,10 +247,10 @@ export default class RaidCombatService {
 
                         petHeal = attacker.petHealAmount;
 
-                        for (const ally of aliveSquad()) {
-                            ally.currentHP = Math.min(ally.maxHP, ally.currentHP + petHeal);
-                            healedIds.push(ally.id);
-                        }
+                        const healTargets = aliveSquad();
+                        const healTarget = healTargets[Math.floor(rng() * healTargets.length)];
+                        healTarget.currentHP = Math.min(healTarget.maxHP, healTarget.currentHP + petHeal);
+                        healedIds.push(healTarget.id);
 
                     }
 

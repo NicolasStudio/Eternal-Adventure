@@ -41,6 +41,7 @@ export default class PetTooltip {
 
         const scaled = PetService.getScaledStats(this.item);
         const hunger = PetService.getHunger(this.item);
+        const maxHunger = PetService.getMaxHunger(this.item);
         const xpRequired = PetService.getXpForNextLevel(this.item.level);
         const ability = PetService.getCurrentStage(this.item)?.habilities?.hability;
 
@@ -52,7 +53,7 @@ export default class PetTooltip {
                 </div>
                 <div class="tooltip-row">
                     <span class="tooltip-label">Fome</span>
-                    <span class="tooltip-value">${hunger} / 100</span>
+                    <span class="tooltip-value">${hunger} / ${maxHunger}</span>
                 </div>
                 <div class="tooltip-row">
                     <span class="tooltip-label">XP</span>
@@ -70,8 +71,9 @@ export default class PetTooltip {
                 <div class="tooltip-section">
                     <h3 class="tooltip-title">Habilidade</h3>
                     <p>${ability.description ?? ""}</p>
-                    <div class="tooltip-stat"><span>${ability.name}</span><span class="tooltip-stat-positive">${scaled.biteDamage} de dano</span></div>
-                    ${scaled.healAmount > 0 ? `<div class="tooltip-stat"><span>❤️ Cura (você e aliados)</span><span class="tooltip-stat-positive">+${scaled.healAmount}</span></div>` : ""}
+                    ${scaled.biteDamage > 0 ? `<div class="tooltip-stat"><span>${ability.name}</span><span class="tooltip-stat-positive">${scaled.biteDamage} de dano</span></div>` : ""}
+                    ${ability.mimicRatio > 0 ? `<div class="tooltip-stat"><span>${ability.name}</span><span class="tooltip-stat-positive">1/${Math.round(1 / ability.mimicRatio)} do dano causado</span></div>` : ""}
+                    ${scaled.healAmount > 0 ? `<div class="tooltip-stat"><span>❤️ Cura (um alvo aleatório)</span><span class="tooltip-stat-positive">+${scaled.healAmount}</span></div>` : ""}
                 </div>
             ` : ""}
         `;

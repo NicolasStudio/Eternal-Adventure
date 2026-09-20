@@ -180,19 +180,25 @@ export default class CombatEngine {
     }
 
     // Mordida do pet equipado — ataque GARANTIDO (sem esquiva/crítico)
-    // e de dano fixo, que acontece junto do turno do jogador, além do
-    // golpe normal dele. Retorna null sem pet equipado ou sem dano
-    // (fome zerada). Chamado por CombatView.playTurn() logo depois do
+    // e de dano fixo (ou uma fração do golpe do jogador, no caso do
+    // Mímico), que acontece junto do turno do jogador, além do golpe
+    // normal dele. Retorna null sem pet equipado ou sem dano/cura (fome
+    // zerada). Chamado por CombatView.playTurn() logo depois do
     // attack() do jogador — não mexe em nextTurn()/checkCombatState(),
     // só desconta a vida do monstro antes deles rodarem.
-    petBite() {
+    //
+    // playerHitDamage: dano de verdade que o golpe PRINCIPAL do jogador
+    // acabou de causar (já com armadura/crítico/absorção aplicados) —
+    // é isso que o Mímico copia uma fração de, nunca o ataque bruto.
+    petBite(playerHitDamage = 0) {
 
         const pet = this.player.equipment.pet;
 
         if (!pet) return null;
 
         const scaled = PetService.getScaledStats(pet);
-        const damage = scaled.biteDamage;
+        const mimicDamage = scaled.mimicRatio > 0 ? Math.floor(playerHitDamage * scaled.mimicRatio) : 0;
+        const damage = scaled.biteDamage > 0 ? scaled.biteDamage : mimicDamage;
         const heal = scaled.healAmount;
 
         if (damage <= 0 && heal <= 0) return null;
@@ -212,7 +218,10 @@ export default class CombatEngine {
     }
 
     createPetBiteMessage(result) {
-        let message = `<span class="combat-pet-bite">${result.petName} mordeu!</span> Causou <strong>${result.damage}</strong> de dano.`;
+        let message = `<span class="combat-pet-bite">${result.petName} agiu!</span>`;
+        if (result.damage > 0) {
+            message += ` Causou <strong>${result.damage}</strong> de dano.`;
+        }
         if (result.heal > 0) {
             message += ` Curou <strong>${result.heal}</strong> HP.`;
         }

@@ -299,8 +299,10 @@ export default class PvpView {
         }
         if (entry.petBite) {
             const petName = (entry.turn === "a" ? combatantA : combatantB).petName ?? "O pet";
-            const heal = entry.heal > 0 ? ` e curou ${entry.heal} HP` : "";
-            return `<div class="pvp-log-line pvp-log-pet-bite">${petName} mordeu! Causou ${entry.damage} de dano${heal}.</div>`;
+            const parts = [];
+            if (entry.damage > 0) parts.push(`causou ${entry.damage} de dano`);
+            if (entry.heal > 0) parts.push(`curou ${entry.heal} HP`);
+            return `<div class="pvp-log-line pvp-log-pet-bite">${petName} agiu! ${parts.join(" e ")}.</div>`;
         }
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
@@ -317,8 +319,11 @@ export default class PvpView {
             return `<div class="pvp-log-line pvp-log-dodge">${targetName} esquivou de ${attackerName}!</div>`;
         }
         if (entry.petBite) {
-            const heal = entry.heal > 0 ? ` e curou o time em ${entry.heal} HP` : "";
-            return `<div class="pvp-log-line pvp-log-pet-bite">Pet de ${attackerName} mordeu! Causou ${entry.damage} de dano em ${targetName}${heal}.</div>`;
+            const healTargetName = entry.healedIds?.[0] ? nameOf(entry.healedIds[0]) : null;
+            const parts = [];
+            if (entry.damage > 0) parts.push(`causou ${entry.damage} de dano em ${targetName}`);
+            if (entry.heal > 0 && healTargetName) parts.push(`curou ${healTargetName} em ${entry.heal} HP`);
+            return `<div class="pvp-log-line pvp-log-pet-bite">Pet de ${attackerName} agiu! ${parts.join(" e ")}.</div>`;
         }
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
@@ -544,9 +549,15 @@ export default class PvpView {
 
         if (entry.petBite) {
             const petName = (isMe ? this.player.equipment.pet?.name : this.currentOpponentSnapshot()?.petName) ?? "O pet";
+            const damage = entry.damage > 0
+                ? (isMe ? ` Causou <strong>${entry.damage}</strong> de dano.` : ` Você recebeu <strong>${entry.damage}</strong> de dano.`)
+                : "";
+            const heal = entry.heal > 0
+                ? (isMe ? ` Curou <strong>${entry.heal}</strong> HP.` : ` ${opponentName} curou <strong>${entry.heal}</strong> HP.`)
+                : "";
             return isMe
-                ? `<span class="combat-pet-bite">${petName} mordeu!</span> Causou <strong>${entry.damage}</strong> de dano.${entry.heal > 0 ? ` Curou <strong>${entry.heal}</strong> HP.` : ""}`
-                : `<span class="combat-pet-bite">${petName} de ${opponentName} mordeu!</span> Você recebeu <strong>${entry.damage}</strong> de dano.${entry.heal > 0 ? ` ${opponentName} curou <strong>${entry.heal}</strong> HP.` : ""}`;
+                ? `<span class="combat-pet-bite">${petName} agiu!</span>${damage}${heal}`
+                : `<span class="combat-pet-bite">${petName} de ${opponentName} agiu!</span>${damage}${heal}`;
         }
 
         if (isMe) {
@@ -621,11 +632,14 @@ export default class PvpView {
 
         if (entry.petBite) {
             const petLabel = isMe ? "Seu pet" : `Pet de ${attackerName}`;
-            const iWasHealed = entry.healedIds?.includes(PvpLobbyService.playerId);
-            const heal = entry.heal > 0 ? ` Curou o time em <strong>${entry.heal}</strong> HP${iWasHealed ? " (você incluso)" : ""}.` : "";
-            return targetIsMe
-                ? `<span class="combat-pet-bite">${petLabel} mordeu!</span> Você recebeu <strong>${entry.damage}</strong> de dano.${heal}`
-                : `<span class="combat-pet-bite">${petLabel} mordeu!</span> Causou <strong>${entry.damage}</strong> de dano em ${targetName}.${heal}`;
+            const healTargetId = entry.healedIds?.[0];
+            const healTargetIsMe = healTargetId === PvpLobbyService.playerId;
+            const healTargetName = healTargetId ? (healTargetIsMe ? "você" : nameOf(healTargetId)) : null;
+            const damage = entry.damage > 0
+                ? (targetIsMe ? ` Você recebeu <strong>${entry.damage}</strong> de dano.` : ` Causou <strong>${entry.damage}</strong> de dano em ${targetName}.`)
+                : "";
+            const heal = entry.heal > 0 && healTargetName ? ` Curou ${healTargetName} em <strong>${entry.heal}</strong> HP.` : "";
+            return `<span class="combat-pet-bite">${petLabel} agiu!</span>${damage}${heal}`;
         }
 
         if (isMe) {
@@ -793,9 +807,9 @@ export default class PvpView {
 
                 }
 
-                // Mordida do pet com cura (ex: Duende) — cura TODO o time
-                // vivo de quem atacou (ver healedIds em simulateTeam()),
-                // não só quem mordeu.
+                // Cura da habilidade do pet (ex: Duende) — só o alvo
+                // sorteado em healedIds (ver simulateTeam()), nunca o
+                // time inteiro.
                 if (entry.heal > 0 && entry.healedIds?.length) {
 
                     for (const id of entry.healedIds) {

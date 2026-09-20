@@ -10,8 +10,10 @@
 //   e assim por diante — quanto mais devagar a cultura, mais XP ela
 //   rende, mas sempre na mesma proporção: 1xp por minuto de espera).
 // - harvestedItem.sellValue = preço da semente (seeds.js `value`) + 20%.
-// - harvestedItem.petFeedValue = preço da semente / 10 (contínua o valor
-//   original da Batata, que já era 10 com semente a 100).
+// - harvestedItem.petFeedValue = preço da semente / 50 (era /10; com 24
+//   canteiros e o pet limitado ao nível 32, o valor antigo deixava a
+//   fazenda upar um pet inteiro em poucos dias — reduzido pra virar um
+//   objetivo de mais longo prazo. Batata: 100/50 = 2).
 const farmCrops = {
 
     potato: {
@@ -35,7 +37,7 @@ const farmCrops = {
             icon: "assets/img/assets/farm/seed/potato.png",
             effect: "Um alimento colhido na Fazenda. Pode ser consumido por um pet.",
             sellValue: 120, // preço da semente (100) + 20%
-            petFeedValue: 10
+            petFeedValue: 2 // preço da semente (100) / 50
         }
     },
 
@@ -60,7 +62,7 @@ const farmCrops = {
             icon: "assets/img/assets/farm/seed/wheat.png",
             effect: "Um alimento colhido na Fazenda. Pode ser consumido por um pet.",
             sellValue: 180, // preço da semente (150) + 20%
-            petFeedValue: 15
+            petFeedValue: 3 // preço da semente (150) / 50
         }
     },
 
@@ -85,7 +87,7 @@ const farmCrops = {
             icon: "assets/img/assets/farm/seed/leek.png",
             effect: "Um alimento colhido na Fazenda. Pode ser consumido por um pet.",
             sellValue: 384, // preço da semente (320) + 20%
-            petFeedValue: 32
+            petFeedValue: 6 // preço da semente (320) / 50, arredondado
         }
     },
 
@@ -110,7 +112,7 @@ const farmCrops = {
             icon: "assets/img/assets/farm/seed/onion.png",
             effect: "Um alimento colhido na Fazenda. Pode ser consumido por um pet.",
             sellValue: 768, // preço da semente (640) + 20%
-            petFeedValue: 64
+            petFeedValue: 13 // preço da semente (640) / 50, arredondado
         }
     },
 
@@ -135,7 +137,7 @@ const farmCrops = {
             icon: "assets/img/assets/farm/seed/corn.png",
             effect: "Um alimento colhido na Fazenda. Pode ser consumido por um pet.",
             sellValue: 960, // preço da semente (800) + 20%
-            petFeedValue: 80
+            petFeedValue: 16 // preço da semente (800) / 50
         }
     },
 
@@ -160,7 +162,7 @@ const farmCrops = {
             icon: "assets/img/assets/farm/seed/grape.png",
             effect: "Um alimento colhido na Fazenda. Pode ser consumido por um pet.",
             sellValue: 1560, // preço da semente (1300) + 20%
-            petFeedValue: 130
+            petFeedValue: 26 // preço da semente (1300) / 50
         }
     },
 
@@ -185,7 +187,7 @@ const farmCrops = {
             icon: "assets/img/assets/farm/seed/strawberry.png",
             effect: "Um alimento colhido na Fazenda. Pode ser consumido por um pet.",
             sellValue: 2160, // preço da semente (1800) + 20%
-            petFeedValue: 180
+            petFeedValue: 36 // preço da semente (1800) / 50
         }
     },
 
@@ -210,7 +212,7 @@ const farmCrops = {
             icon: "assets/img/assets/farm/seed/pumpkin.png",
             effect: "Um alimento colhido na Fazenda. Pode ser consumido por um pet.",
             sellValue: 3600, // preço da semente (3000) + 20%
-            petFeedValue: 300
+            petFeedValue: 60 // preço da semente (3000) / 50
         }
     }
 

@@ -95,8 +95,8 @@ const chests = {
             armor: 27
         },
 
-        value: 8100,
-        sellValue: 4050
+        value: 0,
+        sellValue: 14050
 
     },
 
@@ -212,8 +212,8 @@ const chests = {
             armor: 24
         },
 
-        value: 8100,
-        sellValue: 4050
+        value: 0,
+        sellValue: 14050
 
     },
 
@@ -329,8 +329,8 @@ const chests = {
             armor: 22
         },
 
-        value: 8100,
-        sellValue: 4050
+        value: 0,
+        sellValue: 14050
 
     },
 
@@ -446,9 +446,8 @@ const chests = {
             armor: 24
         },
 
-        value: 8100,
-        sellValue: 4050
-
+        value: 0,
+        sellValue: 14050
     },
 
     chest_barbarian_ultraje: {
@@ -467,9 +466,7 @@ const chests = {
 
         value: 0,
         sellValue: 0
-
     },
-
 };
 
 export default chests;

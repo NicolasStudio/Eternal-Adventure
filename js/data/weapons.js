@@ -130,8 +130,8 @@ const weapons = {
             absorption: 11
         },
 
-        value: 9720,
-        sellValue: 4860
+        value: 0,
+        sellValue: 18860
 
     },
 
@@ -270,8 +270,8 @@ const weapons = {
             lifeSteal: 0,
             penetration: 11
         },
-        value: 9720,
-        sellValue: 4860
+        value: 0,
+        sellValue: 18860
     },
 
     scepter_ultraje: {
@@ -405,8 +405,8 @@ const weapons = {
             lifeSteal: 0,
             penetration: 0
         },
-        value: 9720,
-        sellValue: 4860
+        value: 0,
+        sellValue: 18860
     },
 
     arch_ultraje: {
@@ -545,8 +545,8 @@ const weapons = {
             penetration: 0,
             absorption: 0
         },
-        value: 9720,
-        sellValue: 4860
+        value: 0,
+        sellValue: 18860
     },
 
     ax_ultraje: {

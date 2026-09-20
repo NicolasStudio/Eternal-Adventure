@@ -100,8 +100,8 @@ const helmets = {
             absorption: 8
         },
 
-        value: 6480,
-        sellValue: 3240
+        value: 0,
+        sellValue: 13240
 
     },
 
@@ -223,9 +223,8 @@ const helmets = {
             penetration: 8
         },
 
-        value: 6480,
-        sellValue: 3240
-
+        value: 0,
+        sellValue: 13240
     },
 
     helmet_mage_ultraje: {
@@ -346,8 +345,8 @@ const helmets = {
             criticalChance: 8
         },
 
-        value: 6480,
-        sellValue: 3240
+        value: 0,
+        sellValue: 13240
 
     },
 
@@ -469,9 +468,8 @@ const helmets = {
             lifeSteal: 8
         },
 
-        value: 6480,
-        sellValue: 3240
-
+        value: 0,
+        sellValue: 13240
     },
 
     helmet_barbarian_ultraje: {
@@ -491,7 +489,6 @@ const helmets = {
 
         value: 0,
         sellValue: 0
-
     },
 };
 

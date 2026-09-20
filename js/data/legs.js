@@ -100,8 +100,8 @@ const legs = {
             agility: 5
         },
 
-        value: 7695,
-        sellValue: 3645
+        value: 0,
+        sellValue: 13645
 
     },
 
@@ -223,8 +223,8 @@ const legs = {
             agility: 5
         },
 
-        value: 7695,
-        sellValue: 3645
+        value: 0,
+        sellValue: 13645
 
     },
 
@@ -346,8 +346,8 @@ const legs = {
             agility: 6
         },
 
-        value: 7695,
-        sellValue: 3645
+        value: 0,
+        sellValue: 13645
 
     },
 
@@ -469,8 +469,8 @@ const legs = {
             agility: 8
         },
 
-        value: 7695,
-        sellValue: 3645
+        value: 0,
+        sellValue: 13645
 
     },
 

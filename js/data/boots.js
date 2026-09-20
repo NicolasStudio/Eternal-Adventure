@@ -100,8 +100,8 @@ const boots = {
             agility: 10
         },
 
-        value: 6480,
-        sellValue: 3240
+        value: 0,
+        sellValue: 13240
 
     },
 
@@ -223,9 +223,8 @@ const boots = {
             agility: 11
         },
 
-        value: 6480,
-        sellValue: 3240
-
+        value: 0,
+        sellValue: 13240
     },
 
     boots_mage_ultraje: {
@@ -346,8 +345,8 @@ const boots = {
             agility: 14
         },
 
-        value: 6480,
-        sellValue: 3240
+        value: 0,
+        sellValue: 13240
 
     },
 
@@ -469,8 +468,8 @@ const boots = {
             agility: 14
         },
 
-        value: 6480,
-        sellValue: 3240
+        value: 0,
+        sellValue: 13240
 
     },
 

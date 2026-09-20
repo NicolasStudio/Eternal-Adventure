@@ -61,7 +61,7 @@ const pets = {
         habilities: {
             hability: {
                 name: "Mordida",
-                description: "Uma mordida poderosa que causa dano físico.",
+                description: "Uma mordida poderosa que causa dano verdadeiro.",
                 damage: 2,
             }
         }
@@ -95,7 +95,7 @@ const pets = {
         habilities: {
             hability: {
                 name: "Mordida",
-                description: "Uma mordida poderosa que causa dano físico.",
+                description: "Uma mordida poderosa que causa dano verdadeiro.",
                 damage: 7,
             }
         }
@@ -129,7 +129,7 @@ const pets = {
         habilities: {
             hability: {
                 name: "Mordida",
-                description: "Uma mordida poderosa que causa dano físico.",
+                description: "Uma mordida poderosa que causa dano verdadeiro.",
                 damage: 14,
             }
         }
@@ -196,8 +196,8 @@ const pets = {
         habilities: {
             hability: {
                 name: "Robin Hood",
-                description: "Causa dano ao alvo e cura você (e seus aliados, se houver) na mesma quantidade a cada ataque.",
-                heal: 2,
+                description: "A cada ataque, cura um alvo sorteado entre você e seus aliados (se houver) — não causa dano.",
+                heal: 12,
             }
         }
     },
@@ -231,8 +231,8 @@ const pets = {
         habilities: {
             hability: {
                 name: "Robin Hood",
-                description: "Causa dano ao alvo e cura você (e seus aliados, se houver) na mesma quantidade a cada ataque.",
-                heal: 8,
+                description: "A cada ataque, cura um alvo sorteado entre você e seus aliados (se houver) — não causa dano.",
+                heal: 22,
             }
         }
     },
@@ -266,12 +266,148 @@ const pets = {
         habilities: {
             hability: {
                 name: "Robin Hood",
-                description: "Causa dano ao alvo e cura você (e seus aliados, se houver) na mesma quantidade a cada ataque.",
-                heal: 20,
+                description: "A cada ataque, cura um alvo sorteado entre você e seus aliados (se houver) — não causa dano.",
+                heal: 32,
             }
         }
     },
 
+    /* ==========================================================
+       Aranha
+    ========================================================== */
+    spiderPet1: {
+        id: "spider-pet1",
+        name: "Ovo de Aranha",
+        image: "assets/img/assets/pet/egg-spider.png",
+        type: "pet",
+        family: "spider",
+        shocked: false,
+        color: "#8B4513",
+        stars: "★★★★",
+        nivel: 0,
+        description: "Um ovo de aranha. Quem sabe o que pode sair dele?",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 0,
+            attack: 0,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+
+        },
+
+    },
+
+    spiderPet2: {
+        id: "spider-pet2",
+        name: "Aranha Filhote",
+        image: "assets/img/assets/pet/spider-stage-1.png",
+        type: "pet",
+        family: "spider",
+        shocked: true,
+        color: "#8B4513",
+        stars: "★★★★",
+        nivel: 1,
+        description: "Uma aranha filhote. Ela ainda é pequena, mas tem potencial para crescer forte.",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 2,
+            attack: 2,
+            armor: 0,
+            agility: 3,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+
+        },
+        habilities: {
+            hability: {
+                name: "Mímico",
+                description: "Copia 1/8 do dano do jogador e aplica no inimigo, causando dano verdadeiro.",
+                mimicRatio: 0.125,
+            }
+        }
+    },
+
+    spiderPet3: {
+        id: "spider-pet3",
+        name: "Aranha jovem",
+        image: "assets/img/assets/pet/spider-stage-2.png",
+        type: "pet",
+        family: "spider",
+        shocked: true,
+        color: "#8B4513",
+        stars: "★★★★",
+        nivel: 18,
+        description: "Uma aranha jovem. Ela está em sua fase de crescimento e tem muito potencial.",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 4,
+            attack: 5,
+            armor: 0,
+            agility: 8,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+
+        },
+        habilities: {
+            hability: {
+                name: "Mímico",
+                description: "Copia 1/4 do dano do jogador e aplica no inimigo, causando dano verdadeiro.",
+                mimicRatio: 0.25,
+            }
+        }
+    },
+
+    spiderPet4: {
+        id: "spider-pet4",
+        name: "Aranha Adulta",
+        image: "assets/img/assets/pet/spider-stage-3.png",
+        type: "pet",
+        family: "spider",
+        shocked: true,
+        color: "#8B4513",
+        stars: "★★★★",
+        nivel: 32,
+        description: "Uma aranha adulta. Sua experiência e habilidades são notáveis, tornando-o um aliado valioso.",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 8,
+            attack: 9,
+            armor: 0,
+            agility: 15,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+
+        },
+        habilities: {
+            hability: {
+                name: "Mímico",
+                description: "Copia 1/2 do dano do jogador e aplica no inimigo, causando dano verdadeiro.",
+                mimicRatio: 0.5,
+            }
+        }
+    },
 
 };
 

@@ -1,5 +1,6 @@
 import RaidLobbyService from "../services/RaidLobbyService.js";
 import RaidCombatService from "../services/RaidCombatService.js";
+import PetService from "../services/PetService.js";
 import monstersRaid from "../data/monstersRaid.js";
 import LootSystem from "../combat/LootSystem.js";
 import LevelUpModal from "../ui/components/modals/LevelUpModal.js";
@@ -201,8 +202,10 @@ export default class RaidView {
         }
 
         if (entry.petBite) {
-            const heal = entry.heal > 0 ? ` e curou o squad em ${entry.heal} HP` : "";
-            return `<div class="pvp-log-line pvp-log-pet-bite">Pet de ${attackerName} mordeu! Causou ${entry.damage} de dano em ${targetName}${heal}.</div>`;
+            const healTargetName = entry.healedIds?.[0] ? nameOf(entry.healedIds[0]) : null;
+            const damage = entry.damage > 0 ? `Causou ${entry.damage} de dano em ${targetName}.` : "";
+            const heal = entry.heal > 0 && healTargetName ? ` Curou ${healTargetName} em ${entry.heal} HP.` : "";
+            return `<div class="pvp-log-line pvp-log-pet-bite">Pet de ${attackerName} agiu! ${damage}${heal}</div>`;
         }
 
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
@@ -287,15 +290,36 @@ export default class RaidView {
 
         const left = this.matchData.left ?? {};
         const hp = this.matchData.hp ?? {};
+        const selfId = RaidLobbyService.playerId;
 
         return Object.values(this.matchData.squad)
             .filter(c => !left[c.id])
             .map(c => ({ ...c, currentHP: hp[c.id] ?? c.currentHP ?? c.maxHP }))
+            // O snapshot original do squad (feito uma única vez ao
+            // entrar na fila) congela a mordida/cura do pet com a fome
+            // de então — recalcula com a fome ATUAL só pra mim antes de
+            // cada andar, senão alimentar o pet no intervalo entre
+            // andares não faz efeito nenhum na luta.
+            .map(c => c.id === selfId ? { ...c, ...this.currentPetContribution() } : c)
             // Visual: menor armadura fica na primeira posição, maior
             // armadura na última — o boss é sempre ancorado do lado
             // direito da arena (ver raid.css .raid-boss-portrait), então
             // quem aguenta mais dano fica visualmente mais perto dele.
             .sort((a, b) => a.armor - b.armor);
+
+    }
+
+    // Mordida/cura do pet recalculadas com a fome ATUAL, não a do
+    // momento em que entrei na fila — ver buildSquadForFloor acima.
+    currentPetContribution() {
+
+        const pet = this.player.equipment.pet;
+
+        if (!pet) return { petBiteDamage: 0, petHealAmount: 0, petMimicRatio: 0 };
+
+        const scaled = PetService.getScaledStats(pet);
+
+        return { petBiteDamage: scaled.biteDamage, petHealAmount: scaled.healAmount, petMimicRatio: scaled.mimicRatio };
 
     }
 
@@ -491,8 +515,9 @@ export default class RaidView {
 
                 }
 
-                // Mordida do pet com cura (ex: Duende) — todo o squad
-                // vivo de quem mordeu (ver healedIds em RaidCombatService).
+                // Cura da habilidade do pet (ex: Duende) — só o alvo
+                // sorteado em healedIds (ver RaidCombatService), nunca
+                // o squad inteiro.
                 if (entry.heal > 0 && entry.healedIds?.length) {
 
                     for (const id of entry.healedIds) {
@@ -574,9 +599,12 @@ export default class RaidView {
 
         if (entry.petBite) {
             const petName = squad.find(c => c.id === entry.attackerId)?.petName ?? "O pet";
-            const iWasHealed = entry.healedIds?.includes(RaidLobbyService.playerId);
-            const heal = entry.heal > 0 ? ` Curou o squad em <strong>${entry.heal}</strong> HP${iWasHealed ? " (você incluso)" : ""}.` : "";
-            return `<span class="combat-pet-bite">${petName}</span> mordeu! Causou <strong>${entry.damage}</strong> de dano em ${targetName}.${heal}`;
+            const healTargetName = entry.healedIds?.[0] ? nameOf(entry.healedIds[0]) : null;
+            const damage = entry.damage > 0 ? `Causou <strong>${entry.damage}</strong> de dano em ${targetName}.` : "";
+            const heal = entry.heal > 0 && healTargetName
+                ? ` Curou ${healTargetName === "Você" ? "você" : healTargetName} em <strong>${entry.heal}</strong> HP.`
+                : "";
+            return `<span class="combat-pet-bite">${petName}</span> agiu! ${damage}${heal}`;
         }
 
         let message = "";

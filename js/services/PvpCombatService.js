@@ -51,6 +51,20 @@ export default class PvpCombatService {
 
         const stats = player.stats.getFinalStats();
 
+        // Mordida do pet equipado: efeito GARANTIDO extra a cada turno
+        // de quem tem o pet, resolvido junto do golpe principal (ver
+        // simulate()/simulateTeam() abaixo), sem consumir nenhum rng()
+        // extra, pra não desalinhar a simulação determinística entre os
+        // clientes. Pets com habilidade de cura (ex: Duende) não causam
+        // dano nenhum, só curam UM alvo sorteado (você ou um aliado, se
+        // houver). petMimicRatio (ex: Aranha) não é um dano fixo — é a
+        // FRAÇÃO do dano real que o golpe principal daquele turno
+        // acabou de causar (já mitigado pela armadura do alvo), então
+        // só pode ser resolvido dentro do loop de combate, não aqui.
+        const scaledPet = player.equipment.pet
+            ? PetService.getScaledStats(player.equipment.pet)
+            : null;
+
         return {
             name: player.name,
             image: player.transcendence?.image ?? player.class.image,
@@ -64,15 +78,9 @@ export default class PvpCombatService {
             lifeSteal: stats.lifeSteal ?? 0,
             penetration: stats.penetration ?? 0,
             absorption: stats.absorption ?? 0,
-            // Mordida do pet equipado: ataque GARANTIDO extra a cada
-            // turno de quem tem o pet, resolvido junto do golpe
-            // principal (ver simulate()/simulateTeam() abaixo) — dano
-            // fixo, sem consumir nenhum rng() extra, pra não desalinhar
-            // a simulação determinística entre os clientes. Pets com
-            // habilidade de cura (ex: Duende) também curam quem mordeu
-            // (1v1) ou o time inteiro vivo de quem mordeu (2v2).
-            petBiteDamage: player.equipment.pet ? PetService.getScaledStats(player.equipment.pet).biteDamage : 0,
-            petHealAmount: player.equipment.pet ? PetService.getScaledStats(player.equipment.pet).healAmount : 0,
+            petBiteDamage: scaledPet?.biteDamage ?? 0,
+            petHealAmount: scaledPet?.healAmount ?? 0,
+            petMimicRatio: scaledPet?.mimicRatio ?? 0,
             petName: player.equipment.pet?.name ?? null
         };
 
@@ -163,11 +171,25 @@ export default class PvpCombatService {
                     absorbed
                 });
 
-                // Mordida do pet: garantida, dano fixo, não consome rng().
-                if (attacker.petBiteDamage > 0 && defender.currentHP > 0) {
+                // Mordida do pet: garantida, não consome rng(). Dano e
+                // cura são efeitos independentes — um pet de cura pura
+                // (ex: Duende, sem dano nenhum) ainda precisa disparar
+                // esse bloco só pra curar. petMimicRatio (ex: Aranha)
+                // copia uma fração do `damage` que ACABOU de ser
+                // causado nesse mesmo golpe (já mitigado pela armadura
+                // do alvo) — nunca do ataque bruto do atacante.
+                const petBiteAmount = attacker.petMimicRatio > 0
+                    ? Math.floor(damage * attacker.petMimicRatio)
+                    : attacker.petBiteDamage;
 
-                    const biteDamage = Math.min(defender.currentHP, attacker.petBiteDamage);
-                    defender.currentHP = Math.max(0, defender.currentHP - attacker.petBiteDamage);
+                if (petBiteAmount > 0 || attacker.petHealAmount > 0) {
+
+                    let biteDamage = 0;
+
+                    if (petBiteAmount > 0 && defender.currentHP > 0) {
+                        biteDamage = Math.min(defender.currentHP, petBiteAmount);
+                        defender.currentHP = Math.max(0, defender.currentHP - petBiteAmount);
+                    }
 
                     // Cura da habilidade (ex: Duende) — 1v1 não tem
                     // aliado, sempre volta pra quem mordeu.
@@ -291,14 +313,31 @@ export default class PvpCombatService {
                     absorbed
                 });
 
-                // Mordida do pet: garantida, dano fixo, não consome rng().
-                if (attacker.petBiteDamage > 0 && target.currentHP > 0) {
+                // Mordida do pet: garantida, não consome rng(). Dano e
+                // cura são efeitos independentes — um pet de cura pura
+                // (ex: Duende, sem dano nenhum) ainda precisa disparar
+                // esse bloco só pra curar. petMimicRatio (ex: Aranha)
+                // copia uma fração do `damage` que ACABOU de ser
+                // causado nesse mesmo golpe (já mitigado pela armadura
+                // do alvo) — nunca do ataque bruto do atacante.
+                const petBiteAmount = attacker.petMimicRatio > 0
+                    ? Math.floor(damage * attacker.petMimicRatio)
+                    : attacker.petBiteDamage;
 
-                    const biteDamage = Math.min(target.currentHP, attacker.petBiteDamage);
-                    target.currentHP = Math.max(0, target.currentHP - attacker.petBiteDamage);
+                if (petBiteAmount > 0 || attacker.petHealAmount > 0) {
 
-                    // Cura da habilidade (ex: Duende) — todo o time VIVO
-                    // de quem mordeu (o próprio atacante incluso).
+                    let biteDamage = 0;
+
+                    if (petBiteAmount > 0 && target.currentHP > 0) {
+                        biteDamage = Math.min(target.currentHP, petBiteAmount);
+                        target.currentHP = Math.max(0, target.currentHP - petBiteAmount);
+                    }
+
+                    // Cura da habilidade (ex: Duende) — sorteia UM alvo
+                    // vivo do time de quem mordeu (o próprio atacante
+                    // pode ser sorteado) em vez de curar o time inteiro,
+                    // senão ninguém perde vida com 2 pets curativos em
+                    // campo.
                     let petHeal = 0;
                     let healedIds = [];
 
@@ -306,10 +345,10 @@ export default class PvpCombatService {
 
                         petHeal = attacker.petHealAmount;
 
-                        for (const ally of aliveOf(attacker.team)) {
-                            ally.currentHP = Math.min(ally.maxHP, ally.currentHP + petHeal);
-                            healedIds.push(ally.id);
-                        }
+                        const healTargets = aliveOf(attacker.team);
+                        const healTarget = healTargets[Math.floor(rng() * healTargets.length)];
+                        healTarget.currentHP = Math.min(healTarget.maxHP, healTarget.currentHP + petHeal);
+                        healedIds.push(healTarget.id);
 
                     }
 

@@ -188,7 +188,7 @@ export default class CombatView {
         // mate o monstro aqui já é detectado como vitória na sequência.
         if (result.attacker === "player") {
 
-            const petResult = this.engine.petBite();
+            const petResult = this.engine.petBite(result.damage);
 
             if (petResult) {
 

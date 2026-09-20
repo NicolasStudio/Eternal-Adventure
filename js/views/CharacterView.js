@@ -203,6 +203,8 @@ export default class CharacterView {
 
         const scaled = PetService.getScaledStats(pet);
         const hunger = PetService.getHunger(pet);
+        const maxHunger = PetService.getMaxHunger(pet);
+        const hungerPercent = maxHunger > 0 ? Math.min((hunger / maxHunger) * 100, 100) : 100;
         const xpRequired = PetService.getXpForNextLevel(pet.level);
         const xpPercent = xpRequired > 0 ? Math.min((pet.xp / xpRequired) * 100, 100) : 100;
         const ability = PetService.getCurrentStage(pet)?.habilities?.hability;
@@ -225,8 +227,8 @@ export default class CharacterView {
 
                     <div class="character-bar">
                         <span class="character-label">Fome</span>
-                        <div class="character-fill pet-hunger" style="width:${hunger}%;"></div>
-                        <span class="character-text">${hunger} / 100</span>
+                        <div class="character-fill pet-hunger" style="width:${hungerPercent}%;"></div>
+                        <span class="character-text">${hunger} / ${maxHunger}</span>
                     </div>
 
                     <div class="character-bar">
@@ -263,7 +265,15 @@ export default class CharacterView {
                         <div class="character-divider"><hr></div>
                         <div class="character-stat pet-ability">
                             <span>${ability.name}</span>
-                            <span>${scaled.biteDamage} de dano${scaled.healAmount > 0 ? ` + ${scaled.healAmount} de cura` : ""}</span>
+                            <span>${[
+                                scaled.biteDamage > 0 ? `${scaled.biteDamage} de dano` : null,
+                                scaled.healAmount > 0 ? `${scaled.healAmount} de cura` : null,
+                                // Mímico não tem dano fixo pra mostrar (é uma
+                                // fração do golpe de cada turno, só sabida em
+                                // combate) — mostra a fração em vez de um
+                                // número inventado.
+                                ability.mimicRatio > 0 ? `1/${Math.round(1 / ability.mimicRatio)} do dano causado` : null
+                            ].filter(Boolean).join(" + ")}</span>
                         </div>
                     ` : ""}
 

@@ -3,7 +3,14 @@ import SaveService from "./SaveService.js";
 
 const HUNGER_DECAY_STEP_MS = 50 * 60 * 1000; // 50min
 const HUNGER_DECAY_AMOUNT = 10;
-const MAX_HUNGER = 100;
+
+// Teto de fome por raridade — pet de mais estrelas aguenta mais fome
+// acumulada (maior "reservatório"), não decai mais devagar. Contagem de
+// estrelas lida direto do campo `stars` ("★★★" = 3, etc.), então basta
+// dar o número certo de estrelas ao pet em pet.js pra ele cair na faixa
+// certa, sem precisar mexer aqui a cada pet novo.
+const MAX_HUNGER_BY_STARS = { 3: 100, 4: 250, 5: 500 };
+const DEFAULT_MAX_HUNGER = 100;
 
 // Curva de XP genérica — funciona pra QUALQUER pet/família sem precisar
 // de uma tabela de XP própria por espécie.
@@ -84,8 +91,13 @@ export default class PetService {
         return petInstance.fome;
     }
 
+    static getMaxHunger(petInstance) {
+        const starCount = (petInstance?.stars?.match(/★/g) ?? []).length;
+        return MAX_HUNGER_BY_STARS[starCount] ?? DEFAULT_MAX_HUNGER;
+    }
+
     static getHungerMultiplier(petInstance) {
-        return this.getHunger(petInstance) / MAX_HUNGER;
+        return this.getHunger(petInstance) / this.getMaxHunger(petInstance);
     }
 
     /* =====================================================
@@ -94,10 +106,21 @@ export default class PetService {
 
     // Stats fixos do estágio atual, escalados pela % de fome — sempre
     // arredondado pra baixo (nunca um valor quebrado passando pro
-    // jogador). biteDamage é a Mordida já escalada junto — pets com
-    // habilidade de cura (ex: Duende, campo `heal` em vez de `damage`)
-    // usam o mesmo número pros dois efeitos: a Mordida causa ESSE dano
-    // no inimigo E cura essa mesma quantidade (ver healAmount abaixo).
+    // jogador). biteDamage é a Mordida já escalada junto — SÓ pets com
+    // habilidade de dano FIXO (campo `damage`, ex: Lobo) têm um valor
+    // aqui; pets de cura pura (campo `heal`, ex: Duende) não têm mais
+    // dano nenhum embutido na mordida, só o efeito de cura (ver
+    // healAmount abaixo).
+    //
+    // mimicRatio é diferente: a habilidade de Mímico (ex: Aranha) não
+    // tem dano fixo nenhum, ela copia uma FRAÇÃO do dano que o golpe
+    // PRINCIPAL daquele turno realmente causou (já com armadura/crítico/
+    // absorção aplicados — "os 50 que bateram", não o ataque bruto).
+    // Por isso não dá pra resolver esse número aqui: quem chama
+    // getScaledStats não sabe ainda quanto vai bater. Só devolvemos a
+    // fração (já reduzida pela fome, igual todo o resto) — cada combate
+    // (CombatEngine.petBite, PvpCombatService.simulate*, RaidCombatService.
+    // simulateRaid) multiplica isso pelo dano de verdade daquele golpe.
     static getScaledStats(petInstance) {
 
         const stage = this.getCurrentStage(petInstance);
@@ -106,7 +129,7 @@ export default class PetService {
         const ability = stage?.habilities?.hability;
 
         if (!stage) {
-            return { life: 0, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0, biteDamage: 0, healAmount: 0 };
+            return { life: 0, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0, biteDamage: 0, healAmount: 0, mimicRatio: 0 };
         }
 
         return {
@@ -118,8 +141,9 @@ export default class PetService {
             lifeSteal: scale(stage.stats.lifeSteal),
             penetration: scale(stage.stats.penetration),
             absorption: scale(stage.stats.absorption),
-            biteDamage: scale(ability?.damage ?? ability?.heal),
-            healAmount: scale(ability?.heal)
+            biteDamage: scale(ability?.damage),
+            healAmount: scale(ability?.heal),
+            mimicRatio: (ability?.mimicRatio ?? 0) * multiplier
         };
 
     }
@@ -196,10 +220,15 @@ export default class PetService {
         eggItem.slot = "pet";
         eggItem.level = firstStage.nivel;
         eggItem.xp = 0;
-        eggItem.fome = MAX_HUNGER;
         eggItem.lastHungerTickAt = Date.now();
 
+        // Precisa vir ANTES de setar `fome`: syncDisplayFromStage é
+        // quem atualiza `stars` pro estágio já chocado, e getMaxHunger
+        // lê `stars` pra saber o teto de fome certo (pet de 4/5
+        // estrelas tem reservatório maior — ver MAX_HUNGER_BY_STARS).
         this.syncDisplayFromStage(eggItem);
+
+        eggItem.fome = this.getMaxHunger(eggItem);
 
         player.progress.stats.eggsHatched = (player.progress.stats.eggsHatched ?? 0) + 1;
 
@@ -265,9 +294,9 @@ export default class PetService {
 
     }
 
-    // Quantas unidades faltam pra fome bater 100 (arredondado pra cima,
-    // nunca mais que o que o jogador tem) — teto do range do botão
-    // "Alimentar", pra nunca sugerir desperdiçar alimento à toa.
+    // Quantas unidades faltam pra fome bater no teto do pet (arredondado
+    // pra cima, nunca mais que o que o jogador tem) — teto do range do
+    // botão "Alimentar", pra nunca sugerir desperdiçar alimento à toa.
     static getUnitsNeededToFillHunger(petInstance, foodItem) {
 
         const feedValue = foodItem?.petFeedValue ?? 0;
@@ -276,7 +305,7 @@ export default class PetService {
 
         this.applyHungerDecay(petInstance);
 
-        const missing = MAX_HUNGER - petInstance.fome;
+        const missing = this.getMaxHunger(petInstance) - petInstance.fome;
 
         if (missing <= 0) return 0;
 
@@ -292,8 +321,8 @@ export default class PetService {
     }
 
     // Consome EXATAMENTE `units` do alimento selecionado — a fome sobe
-    // primeiro em cada unidade, o que sobrar (se a fome já bater 100)
-    // vira XP direto. Usado tanto por "Alimentar" (o jogador escolhe
+    // primeiro em cada unidade, o que sobrar (se a fome já bater no
+    // teto do pet) vira XP direto. Usado tanto por "Alimentar" (o jogador escolhe
     // até a quantidade JUSTA pra encher a fome) quanto por "Upar Pet"
     // (o jogador escolhe livremente até todo o estoque, de propósito
     // gerando XP com a sobra).
@@ -318,16 +347,18 @@ export default class PetService {
 
         this.applyHungerDecay(petInstance);
 
+        const maxHunger = this.getMaxHunger(petInstance);
+
         let hungerGained = 0;
         let xpGained = 0;
 
         for (let i = 0; i < requestedUnits; i++) {
 
-            const missingNow = MAX_HUNGER - petInstance.fome;
+            const missingNow = maxHunger - petInstance.fome;
             const usedForHunger = Math.min(feedValue, missingNow);
             const overflow = feedValue - usedForHunger;
 
-            petInstance.fome = Math.min(MAX_HUNGER, petInstance.fome + usedForHunger);
+            petInstance.fome = Math.min(maxHunger, petInstance.fome + usedForHunger);
 
             if (overflow > 0) this.applyPetXP(petInstance, overflow);
 
@@ -338,7 +369,12 @@ export default class PetService {
 
         player.removeItem(foodItem, requestedUnits);
 
-        player.progress.stats.petFeedCount = (player.progress.stats.petFeedCount ?? 0) + 1;
+        // Só conta como "alimentar" de verdade se a fome subiu — usar
+        // "Upar Pet" com a fome já no teto (puro XP via sobra) não pode
+        // contar pra achievement/estatística de alimentação.
+        if (hungerGained > 0) {
+            player.progress.stats.petFeedCount = (player.progress.stats.petFeedCount ?? 0) + 1;
+        }
 
         if (player.equipment.pet?.uid === petInstance.uid) {
             this.syncEquippedPetContribution(player);
