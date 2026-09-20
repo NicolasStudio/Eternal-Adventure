@@ -4,6 +4,7 @@ import SeedTooltip from "../views/SeedTooltip.js";
 import PetTooltip from "../views/PetTooltip.js";
 import PetService from "../services/PetService.js";
 import PetFeedModal from "../ui/components/modals/PetFeedModal.js";
+import FarmConfirmModal from "../ui/components/modals/FarmConfirmModal.js";
 
 export default class CharacterView {
     constructor(game) {
@@ -14,6 +15,7 @@ export default class CharacterView {
         this.selectedItem = null;
         this.selectedEquipment = null;
         this.petFeedModal = new PetFeedModal();
+        this.releasePetModal = new FarmConfirmModal();
     }
 
     // Semente (category:"seed") ou colheita da Fazenda (petFeedValue,
@@ -454,10 +456,12 @@ export default class CharacterView {
                 const maxHealButton = container.querySelector(".max-heal-button");
                 const feedButton = container.querySelector(".feed-button");
                 const petLevelUpButton = container.querySelector(".pet-levelup-button");
+                const releasePetButton = container.querySelector(".release-pet-button");
 
                 if (maxHealButton) maxHealButton.style.display = "none";
                 if (feedButton) feedButton.style.display = "none";
                 if (petLevelUpButton) petLevelUpButton.style.display = "none";
+                if (releasePetButton) releasePetButton.style.display = "none";
 
             });
 
@@ -727,6 +731,48 @@ export default class CharacterView {
         this.refresh();
     }
 
+    // "Liberar Pet": some com o pet/ovo selecionado (equipado ou não)
+    // de vez, sem devolver nada — irreversível, por isso passa pelo
+    // modal de confirmação em vermelho antes. Pet equipado precisa
+    // reverter o bônus de Vida já aplicado (ver PetService.
+    // syncEquippedPetContribution); pet/ovo no inventário é só um
+    // removeItem normal, já que nunca empilha (quantity sempre 1).
+    async releaseSelectedPet() {
+
+        const pet = this.selectedEquipment?.slot === "pet"
+            ? this.selectedEquipment.item
+            : (this.selectedItem?.type === "pet" ? this.selectedItem : null);
+
+        if (!pet) return;
+
+        const confirmed = await this.releasePetModal.show({
+            title: "Liberar Pet",
+            message: `Você realmente deseja libertar <strong>${pet.name}</strong>?<span class="continue-warning">Essa ação é irreversível.</span>`,
+            confirmLabel: "Sim",
+            cancelLabel: "Não",
+            danger: true
+        });
+
+        if (!confirmed) return;
+
+        if (this.game.player.equipment.pet?.uid === pet.uid) {
+            this.game.player.equipment.pet = null;
+            PetService.syncEquippedPetContribution(this.game.player);
+        } else {
+            this.game.player.removeItem(pet);
+        }
+
+        Toast.show(`${pet.name} foi libertado.`);
+
+        this.selectedItem = null;
+        this.selectedEquipment = null;
+
+        this.game.player.notify();
+
+        this.refresh();
+
+    }
+
     renderInventoryActions() {
 
         return `
@@ -745,6 +791,9 @@ export default class CharacterView {
                 </button>
                 <button class="inventory-button unequip-button" disabled>
                     Desequipar
+                </button>
+                <button class="inventory-button release-pet-button" style="display:none;">
+                    Liberar Pet
                 </button>
             </div>
         `;
@@ -838,8 +887,10 @@ export default class CharacterView {
                 this.selectedItem = null;
 
                 const petUnequipButton = container.querySelector(".unequip-button");
+                const petReleaseButton = container.querySelector(".release-pet-button");
 
                 if (petUnequipButton) petUnequipButton.disabled = false;
+                if (petReleaseButton) petReleaseButton.style.display = "";
 
             }
 
@@ -884,6 +935,14 @@ export default class CharacterView {
             });
         }
 
+        const releasePetButton = container.querySelector(".release-pet-button");
+        if (releasePetButton) {
+            releasePetButton.addEventListener("click", () => {
+                if (releasePetButton.disabled) return;
+                this.releaseSelectedPet();
+            });
+        }
+
         const closeButton = container.querySelector(".character-close");
 
         if (closeButton) {
@@ -911,12 +970,19 @@ export default class CharacterView {
                 const feedButton = container.querySelector(".feed-button");
                 const petLevelUpButton = container.querySelector(".pet-levelup-button");
                 const unequipButton = container.querySelector(".unequip-button");
+                const releasePetButton = container.querySelector(".release-pet-button");
                 const equippedPet = this.game.player.equipment.pet;
 
                 // Selecionar um item do inventário nunca deixa o
                 // Desequipar ativo — ele só faz sentido sem nenhuma
                 // seleção, na aba Pets (ver registerEvents).
                 if (unequipButton) unequipButton.disabled = true;
+
+                // Liberar Pet: ovo ou pet já chocado (ainda não
+                // equipado) selecionado no inventário.
+                if (releasePetButton) {
+                    releasePetButton.style.display = this.selectedItem.type === "pet" ? "" : "none";
+                }
 
                 if (equipButton) {
 

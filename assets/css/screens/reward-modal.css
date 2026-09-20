@@ -213,6 +213,22 @@
     background:#6b4522;
 }
 
+.continue-yes-danger{
+    border-color:#7a1f1f !important;
+    background:#3a1010 !important;
+}
+.continue-yes-danger:hover{
+    background:#5c1818 !important;
+}
+
+.continue-warning{
+    display:block;
+    margin-top:8px;
+    font-style:italic;
+    font-size:15px;
+    color:#e06a6a;
+}
+
 .name-entry-input{
     display:block;
     width:100%;

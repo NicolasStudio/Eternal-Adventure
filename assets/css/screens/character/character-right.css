@@ -217,6 +217,16 @@
     color:#aee0ba;
     box-shadow:0 0 18px rgba(31,92,52,.32);
 }
+.inventory-button.release-pet-button{
+    border-color:#7a1f1f !important;
+    background:#3a1010 !important;
+    color:#f0b0b0;
+}
+.inventory-button.release-pet-button:hover:not(:disabled){
+    background:#5c1818 !important;
+    color:#ffd0d0;
+    box-shadow:0 0 18px rgba(122,31,31,.35);
+}
 
 /* ==========================================================
    NOTEBOOK

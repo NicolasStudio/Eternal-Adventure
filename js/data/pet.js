@@ -196,7 +196,7 @@ const pets = {
         habilities: {
             hability: {
                 name: "Robin Hood",
-                description: "A cada ataque, cura um alvo sorteado entre você e seus aliados (se houver) — não causa dano.",
+                description: "Cura um alvo sorteado entre você e seus aliados (se houver).",
                 heal: 12,
             }
         }
@@ -231,7 +231,7 @@ const pets = {
         habilities: {
             hability: {
                 name: "Robin Hood",
-                description: "A cada ataque, cura um alvo sorteado entre você e seus aliados (se houver) — não causa dano.",
+                description: "Cura um alvo sorteado entre você e seus aliados (se houver).",
                 heal: 22,
             }
         }
@@ -266,7 +266,7 @@ const pets = {
         habilities: {
             hability: {
                 name: "Robin Hood",
-                description: "A cada ataque, cura um alvo sorteado entre você e seus aliados (se houver) — não causa dano.",
+                description: "Cura um alvo sorteado entre você e seus aliados (se houver).",
                 heal: 32,
             }
         }

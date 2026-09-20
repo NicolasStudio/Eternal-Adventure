@@ -9,6 +9,7 @@ import chests from "../data/chest.js";
 import legs from "../data/legs.js";
 import boots from "../data/boots.js";
 import pets from "../data/pet.js";
+import farmCrops from "../data/farmCrops.js";
 import Toast from "../ui/components/Toast.js";
 
 const STORAGE_KEY = "eternal-adventure-save";
@@ -20,6 +21,12 @@ const EQUIPMENT_BY_ID = {};
 [weapons, helmets, chests, legs, boots].forEach(pool => {
     Object.values(pool).forEach(item => { EQUIPMENT_BY_ID[item.id] = item; });
 });
+
+// Todo alimento de pet (colheita da Fazenda) conhecido, indexado por
+// id — usado só pra "refrescar" os já colhidos (ver refreshFoodItems),
+// nunca alterado.
+const FOOD_ITEM_BY_ID = {};
+Object.values(farmCrops).forEach(crop => { FOOD_ITEM_BY_ID[crop.harvestedItem.id] = crop.harvestedItem; });
 
 export default class SaveService {
 
@@ -138,7 +145,7 @@ export default class SaveService {
             player.baseStats[key] = Math.max(0, player.baseStats[key] ?? 0);
         }
 
-        player.inventory = this.repairStones(data.inventory ?? []);
+        player.inventory = this.refreshFoodItems(this.repairStones(data.inventory ?? []));
         player.equipment = data.equipment ?? player.equipment;
         // Saves de antes do slot de pet existir não têm essa chave —
         // sem isso, `player.equipment.pet` fica undefined em vez de
@@ -299,6 +306,32 @@ export default class SaveService {
         return inventory.map(item => {
 
             const current = stonesById[item.id];
+
+            if (!current) return item;
+
+            return {
+                ...current,
+                uid: item.uid,
+                quantity: item.quantity
+            };
+
+        });
+
+    }
+
+    // Alimento de pet (colheita da Fazenda) guarda uma FOTO congelada
+    // de petFeedValue/sellValue/etc. no momento em que foi colhido — se
+    // farmCrops.js mudar esses números depois (ex: o rebalanceamento
+    // que reduziu quanto cada colheita enche de fome/vira XP), um item
+    // já colhido antes ficaria PRA SEMPRE com o valor antigo, só
+    // colheitas NOVAS sairiam com o atual. Isso re-sincroniza todo
+    // alimento já possuído (mantendo uid/quantidade) com a definição
+    // atual do jogo, mesmo padrão de refreshAllItemStats pra equipamento.
+    static refreshFoodItems(inventory) {
+
+        return inventory.map(item => {
+
+            const current = FOOD_ITEM_BY_ID[item.id];
 
             if (!current) return item;
 

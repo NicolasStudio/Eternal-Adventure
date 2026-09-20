@@ -10,7 +10,11 @@ export default class FarmConfirmModal {
         this.overlay = null;
     }
 
-    show({ title, message, confirmLabel = "Sim", cancelLabel = "Não" }) {
+    // danger: true deixa o botão de confirmação vermelho (ver
+    // .continue-yes-danger em reward-modal.css) — pra ações destrutivas
+    // e irreversíveis (ex: liberar um pet), em vez do marrom padrão
+    // usado pra confirmações neutras (arar terreno, pular dungeon).
+    show({ title, message, confirmLabel = "Sim", cancelLabel = "Não", danger = false }) {
         return new Promise(resolve => {
             this.overlay = document.createElement("div");
             this.overlay.className = "continue-modal-overlay";
@@ -21,7 +25,7 @@ export default class FarmConfirmModal {
                     <p class="continue-message">${message}</p>
                     <div class="continue-actions">
                         <button class="continue-no">${cancelLabel}</button>
-                        <button class="continue-yes">${confirmLabel}</button>
+                        <button class="continue-yes ${danger ? "continue-yes-danger" : ""}">${confirmLabel}</button>
                     </div>
                 </div>
             `;
