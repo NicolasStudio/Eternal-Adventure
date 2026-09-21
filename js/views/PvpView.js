@@ -2,6 +2,7 @@ import PvpLobbyService from "../services/PvpLobbyService.js";
 import PvpCombatService from "../services/PvpCombatService.js";
 import Toast from "../ui/components/Toast.js";
 import CombatToast from "../combat/CombatToast.js";
+import HealFlash from "../combat/HealFlash.js";
 import dungeons from "../data/dungeons.js";
 
 // Só os chefes "normais" (não o final secreto, que fica de fora da
@@ -740,6 +741,7 @@ export default class PvpView {
                         this.game.player.maxHP,
                         this.game.player.currentHP + entry.lifeSteal
                     );
+                    HealFlash.play(".hud-avatar");
                 }
 
                 // Mordida do pet com cura (ex: Duende) — sempre cura quem
@@ -747,9 +749,11 @@ export default class PvpView {
                 if (entry.heal > 0) {
                     if (isMe) {
                         this.game.player.currentHP = Math.min(this.game.player.maxHP, this.game.player.currentHP + entry.heal);
+                        HealFlash.play(".hud-avatar");
                     } else {
                         const opponentMax = this.currentOpponentSnapshot()?.maxHP ?? this.opponentHP;
                         this.opponentHP = Math.min(opponentMax, this.opponentHP + entry.heal);
+                        HealFlash.play(".combat-monster");
                     }
                 }
 
@@ -805,6 +809,8 @@ export default class PvpView {
                         this.game.player.currentHP = this.teamHP[entry.attackerId];
                     }
 
+                    this.flashTeamCombatantHeal(entry.attackerId);
+
                 }
 
                 // Cura da habilidade do pet (ex: Duende) — só o alvo
@@ -821,6 +827,8 @@ export default class PvpView {
                         if (id === PvpLobbyService.playerId) {
                             this.game.player.currentHP = this.teamHP[id];
                         }
+
+                        this.flashTeamCombatantHeal(id);
 
                     }
 
@@ -852,6 +860,24 @@ export default class PvpView {
 
         this.game.player.currentHP = originalHP;
         this.game.hudScreen.playerHUD.updateHP?.();
+
+    }
+
+    // Pisca a sprite de quem foi curado no 2x2: eu (avatar do HUD) ou
+    // um inimigo (retrato na arena). Aliados não têm sprite própria
+    // na tela, então não há o que piscar nesse caso.
+    flashTeamCombatantHeal(combatantId) {
+
+        if (combatantId === PvpLobbyService.playerId) {
+            HealFlash.play(".hud-avatar");
+            return;
+        }
+
+        const isEnemy = this.getEnemyTeamCombatants().some(c => c.id === combatantId);
+
+        if (isEnemy) {
+            HealFlash.play(`.pvp2v2-portrait-slot[data-combatant-id="${combatantId}"] img`);
+        }
 
     }
 

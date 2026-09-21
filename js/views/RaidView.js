@@ -6,6 +6,7 @@ import LootSystem from "../combat/LootSystem.js";
 import LevelUpModal from "../ui/components/modals/LevelUpModal.js";
 import RewardModal from "../ui/components/modals/RewardModal.js";
 import CombatToast from "../combat/CombatToast.js";
+import HealFlash from "../combat/HealFlash.js";
 
 export default class RaidView {
 
@@ -507,9 +508,13 @@ export default class RaidView {
                             this.game.player.currentHP = this.squadHP[entry.attackerId];
                         }
 
+                        HealFlash.play(`.raid-sprite-slot[data-combatant-id="${entry.attackerId}"] img`);
+
                     } else {
 
                         this.bossHP = Math.min(this.bossMaxHP, this.bossHP + entry.lifeSteal);
+
+                        HealFlash.play(".raid-boss-portrait img");
 
                     }
 
@@ -529,6 +534,8 @@ export default class RaidView {
                         if (id === RaidLobbyService.playerId) {
                             this.game.player.currentHP = this.squadHP[id];
                         }
+
+                        HealFlash.play(`.raid-sprite-slot[data-combatant-id="${id}"] img`);
 
                         this.updateSquadHPBar(squad, id);
 

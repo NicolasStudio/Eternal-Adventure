@@ -5,6 +5,7 @@ import LevelUpModal from "../ui/components/modals/LevelUpModal.js";
 import RewardModal from "../ui/components/modals/RewardModal.js";
 import CombatToast from "../combat/CombatToast.js";
 import DungeonCompleteModal from "../ui/components/modals/DungeonCompleteModal.js";
+import HealFlash from "../combat/HealFlash.js";
 
 export default class CombatView {
     constructor(game) {
@@ -184,6 +185,10 @@ export default class CombatView {
             this.flashMonsterHit();
         }
 
+        if (result.attacker === "player" && result.lifeSteal > 0) {
+            HealFlash.play(".hud-avatar");
+        }
+
         await CombatToast.show(message, type);
 
         // Pet equipado morde JUNTO do turno do jogador — golpe extra,
@@ -201,6 +206,10 @@ export default class CombatView {
 
                 if (petResult.damage > 0) {
                     this.flashMonsterHit();
+                }
+
+                if (petResult.heal > 0) {
+                    HealFlash.play(".hud-avatar");
                 }
 
                 await CombatToast.show(this.engine.createPetBiteMessage(petResult), "player pet-bite");

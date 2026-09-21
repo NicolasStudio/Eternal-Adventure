@@ -97,6 +97,44 @@
     100%{ opacity:0; }
 }
 
+/* Cópia flutuante do sprite (posição/tamanho calculados em
+   HealFlash.js), recortada com a própria imagem como máscara —
+   fica com a silhueta exata do personagem — e tingida de verde.
+   O clip-path revela essa silhueta de baixo pra cima, como uma luz
+   de cura subindo pelo corpo, piscando 2x num ritmo mais lento que
+   o flash de dano. Genérica: usada em qualquer sprite do jogo
+   (avatar do HUD, monstro, retrato de PVP/raid). */
+.heal-flash-overlay{
+    position:fixed;
+    z-index:55;
+    pointer-events:none;
+    background:linear-gradient(0deg, #16e85a 0%, #8dffba 100%);
+    mask-repeat:no-repeat;
+    -webkit-mask-repeat:no-repeat;
+    mask-size:100% 100%;
+    -webkit-mask-size:100% 100%;
+    mask-position:center;
+    -webkit-mask-position:center;
+    filter:drop-shadow(0 0 6px #29ff6ecc);
+    opacity:0;
+    animation:healRise .9s ease-in-out 2;
+}
+@keyframes healRise{
+    0%{
+        opacity:0;
+        clip-path:inset(100% 0 0 0);
+    }
+    12%{ opacity:1; }
+    78%{
+        opacity:1;
+        clip-path:inset(0 0 0 0);
+    }
+    100%{
+        opacity:0;
+        clip-path:inset(0 0 0 0);
+    }
+}
+
 /* ==========================================================
    TOASTS
 ========================================================== */
