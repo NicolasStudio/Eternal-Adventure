@@ -180,6 +180,10 @@ export default class CombatView {
 
         }
 
+        if (result.attacker === "player" && !result.dodged && result.damage > 0) {
+            this.flashMonsterHit();
+        }
+
         await CombatToast.show(message, type);
 
         // Pet equipado morde JUNTO do turno do jogador — golpe extra,
@@ -195,11 +199,32 @@ export default class CombatView {
                 this.game.hudScreen.monsterHUD.updateHP();
                 this.game.hudScreen.playerHUD.updateHP();
 
+                if (petResult.damage > 0) {
+                    this.flashMonsterHit();
+                }
+
                 await CombatToast.show(this.engine.createPetBiteMessage(petResult), "player pet-bite");
 
             }
 
         }
+    }
+
+    // Faz o sprite do monstro "piscar" em branco ao ser atingido
+    // (efeito clássico de hit-flash). Reinicia a animação via reflow
+    // forçado caso o monstro já esteja piscando de um golpe anterior.
+    flashMonsterHit() {
+
+        const flashSprite = document.querySelector(".combat-monster-flash");
+
+        if (!flashSprite) {
+            return;
+        }
+
+        flashSprite.classList.remove("hit");
+        void flashSprite.offsetWidth;
+        flashSprite.classList.add("hit");
+
     }
 
     async closeCombat() {
@@ -252,6 +277,7 @@ export default class CombatView {
             <section class="combat-arena">
                 <div class="monster-stage">
                     <img class="combat-monster" src="${this.currentMonster.sprite}" alt="${this.currentMonster.name}">
+                    <img class="combat-monster-flash" src="${this.currentMonster.sprite}" alt="" aria-hidden="true">
                 </div>
                 <div id="combat-toast-container"></div>
             </section>
