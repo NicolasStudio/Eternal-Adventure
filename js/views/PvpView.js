@@ -3,6 +3,7 @@ import PvpCombatService from "../services/PvpCombatService.js";
 import Toast from "../ui/components/Toast.js";
 import CombatToast from "../combat/CombatToast.js";
 import HealFlash from "../combat/HealFlash.js";
+import HitFlash from "../combat/HitFlash.js";
 import dungeons from "../data/dungeons.js";
 
 // Só os chefes "normais" (não o final secreto, que fica de fora da
@@ -734,6 +735,8 @@ export default class PvpView {
 
                     this.game.player.currentHP = Math.max(0, this.game.player.currentHP - entry.damage);
 
+                    HitFlash.play(".hud-avatar");
+
                 }
 
                 if (entry.lifeSteal > 0 && isMe) {
@@ -794,6 +797,7 @@ export default class PvpView {
 
                 if (entry.targetId === PvpLobbyService.playerId) {
                     this.game.player.currentHP = this.teamHP[entry.targetId];
+                    HitFlash.play(".hud-avatar");
                 }
 
                 if (entry.lifeSteal > 0) {

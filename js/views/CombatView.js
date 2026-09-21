@@ -6,6 +6,7 @@ import RewardModal from "../ui/components/modals/RewardModal.js";
 import CombatToast from "../combat/CombatToast.js";
 import DungeonCompleteModal from "../ui/components/modals/DungeonCompleteModal.js";
 import HealFlash from "../combat/HealFlash.js";
+import HitFlash from "../combat/HitFlash.js";
 
 export default class CombatView {
     constructor(game) {
@@ -187,6 +188,10 @@ export default class CombatView {
 
         if (result.attacker === "player" && result.lifeSteal > 0) {
             HealFlash.play(".hud-avatar");
+        }
+
+        if (result.attacker === "monster" && !result.dodged && result.damage > 0) {
+            HitFlash.play(".hud-avatar");
         }
 
         await CombatToast.show(message, type);

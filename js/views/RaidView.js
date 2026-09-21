@@ -7,6 +7,7 @@ import LevelUpModal from "../ui/components/modals/LevelUpModal.js";
 import RewardModal from "../ui/components/modals/RewardModal.js";
 import CombatToast from "../combat/CombatToast.js";
 import HealFlash from "../combat/HealFlash.js";
+import HitFlash from "../combat/HitFlash.js";
 
 export default class RaidView {
 
@@ -494,6 +495,8 @@ export default class RaidView {
                     if (entry.targetId === RaidLobbyService.playerId) {
                         this.game.player.currentHP = this.squadHP[entry.targetId];
                     }
+
+                    HitFlash.play(`.raid-sprite-slot[data-combatant-id="${entry.targetId}"] img`);
 
                 }
 

@@ -135,6 +135,33 @@
     }
 }
 
+/* Mesma ideia da .heal-flash-overlay (cópia flutuante recortada com
+   a própria imagem como máscara), só que branca e piscando rápido —
+   o "flash de dano" de quem apanha (jogador, aliado ou squad do
+   cooperativo). O flash do monstro/adversário já tem o seu próprio
+   efeito acima (.combat-monster-flash); este aqui é genérico e
+   dispensa markup extra, então serve pro avatar do HUD, retrato de
+   PVP ou sprite do raid. */
+.hit-flash-overlay{
+    position:fixed;
+    z-index:55;
+    pointer-events:none;
+    background:#fff;
+    mask-repeat:no-repeat;
+    -webkit-mask-repeat:no-repeat;
+    mask-size:100% 100%;
+    -webkit-mask-size:100% 100%;
+    mask-position:center;
+    -webkit-mask-position:center;
+    opacity:0;
+    animation:hitBlink .18s steps(1,end) 4;
+}
+@keyframes hitBlink{
+    0%, 49%{ opacity:0; }
+    50%, 99%{ opacity:.9; }
+    100%{ opacity:0; }
+}
+
 /* ==========================================================
    TOASTS
 ========================================================== */
