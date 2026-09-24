@@ -1,4 +1,5 @@
-import PvpLobbyService from "../services/PvpLobbyService.js";
+import PvpLobbyService, { PVP_POWER_RANGE } from "../services/PvpLobbyService.js";
+import PowerService from "../services/PowerService.js";
 import PvpCombatService from "../services/PvpCombatService.js";
 import Toast from "../ui/components/Toast.js";
 import CombatToast from "../combat/CombatToast.js";
@@ -118,6 +119,7 @@ export default class PvpView {
                         ? (this.mode === "2v2" ? "Jogadores encontrados, preparando a partida..." : "Oponente encontrado, preparando a partida...")
                         : (this.mode === "2v2" ? "Procurando outros jogadores..." : "Procurando um oponente...")}
                 </p>
+                ${this.renderPowerRange()}
                 <button class="pvp-cancel-button">Cancelar</button>
             </div>
         `;
@@ -366,6 +368,18 @@ export default class PvpView {
                 vidaMaxima: opponent.maxHP
             }
         };
+    }
+
+    renderPowerRange() {
+        const power = PowerService.getPower(this.player);
+        const format = value => value.toLocaleString("pt-BR");
+        return `
+            <p class="pvp-power-range">
+                <i class="fa-solid fa-fire-flame-curved"></i>
+                Seu Poder: <strong>${format(power)}</strong>
+                <span>Buscando entre ${format(Math.max(0, power - PVP_POWER_RANGE))} e ${format(power + PVP_POWER_RANGE)}</span>
+            </p>
+        `;
     }
 
     async joinQueue() {

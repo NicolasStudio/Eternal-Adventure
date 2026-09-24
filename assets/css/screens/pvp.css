@@ -226,6 +226,27 @@
     font-family:"Cinzel",serif;
     font-size:.95rem;
 }
+.pvp-power-range{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    margin:0;
+    color:#d4a373;
+    font-family:"Cinzel",serif;
+    font-size:.85rem;
+    text-align:center;
+}
+.pvp-power-range i{
+    color:#f1c75c;
+}
+.pvp-power-range strong{
+    color:#f1c75c;
+}
+.pvp-power-range span{
+    color:#8f8578;
+    font-size:.75rem;
+}
 .pvp-cancel-button{
     padding:10px 24px;
     border:1px solid #5b4633;

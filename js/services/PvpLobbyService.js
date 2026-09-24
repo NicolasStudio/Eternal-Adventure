@@ -11,6 +11,22 @@ import {
 // resto da sessão (ninguém mais tenta de novo por ele).
 const STALE_CLAIM_TIMEOUT_MS = 8000;
 
+// Matchmaking por Poder (PowerService): só pareia quem estiver a no
+// máximo essa diferença de Poder — ex: com 10k, aceita de 5k a 15k.
+// No 2x2 vale entre TODOS os 4 (maior - menor <= limite).
+export const PVP_POWER_RANGE = 5000;
+
+// Entrada sem `power` (cliente desatualizado) nunca é compatível —
+// melhor não parear do que colocar um nível 100 contra um nível 1.
+function isPowerCompatible(a, b) {
+    if (typeof a?.power !== "number" || typeof b?.power !== "number") return false;
+    return Math.abs(a.power - b.power) <= PVP_POWER_RANGE;
+}
+
+// Limita a busca de grupos 2x2 (combinações de 3 entre os candidatos)
+// pra não explodir se a fila ficar grande.
+const MAX_TEAM_CANDIDATES = 30;
+
 /*
     Como o pareamento evita jogadores "roubarem" o mesmo adversário ao
     mesmo tempo:
@@ -30,6 +46,16 @@ const STALE_CLAIM_TIMEOUT_MS = 8000;
     fila ou foi pego por outra tentativa), as que já tinham sido
     feitas são liberadas e a formação é abandonada — tenta de novo no
     próximo jogador que entrar ou sair da fila.
+
+    Poder: só entram como candidatos os jogadores dentro de
+    PVP_POWER_RANGE do meu Poder. No 1x1 a regra do "ID menor inicia"
+    continua valendo, só que entre os COMPATÍVEIS — sempre há alguém
+    que inicia: o menor ID que tenha qualquer par compatível. No 2x2,
+    cada jogador procura um grupo de 4 (ele + 3) em que todos estejam
+    dentro do limite entre si, e só tenta montar se for o menor ID
+    DAQUELE grupo — assim o menor ID de qualquer grupo válido sempre
+    tenta, e ninguém fica travado esperando alguém que não consegue
+    formar grupo.
 
     Cada MODO tem sua própria fila, separada por caminho
     (pvpLobby/1v1, pvpLobby/2v2) — um jogador procurando 1x1 nunca
@@ -167,6 +193,7 @@ export default class PvpLobbyService {
             const all = snapshot.val() ?? {};
             const others = Object.entries(all)
                 .filter(([id, entry]) => id !== this.playerId && !entry.matchedWith && !entry.claimedBy)
+                .filter(([, entry]) => isPowerCompatible(combatant, entry))
                 .sort(([idA], [idB]) => idA < idB ? -1 : 1);
 
             const requiredOthers = this.mode === "2v2" ? 3 : 1;
@@ -183,15 +210,14 @@ export default class PvpLobbyService {
 
             if (this.mode === "2v2") {
 
-                // Só quem tem o ID "menor" entre TODOS os candidatos
-                // (incluindo eu mesmo) tenta montar o grupo de 4 —
-                // evita que duas pessoas tentem formar times ao
-                // mesmo tempo com gente sobreposta.
-                const allWaitingIds = [this.playerId, ...others.map(([id]) => id)].sort();
+                // Só tenta montar se EU for o menor ID do grupo
+                // encontrado — evita que duas pessoas tentem formar o
+                // mesmo time ao mesmo tempo (se ainda assim correrem,
+                // as transações de claim resolvem).
+                const candidateEntries = this.findTeamCandidates(combatant, others);
 
-                if (allWaitingIds[0] !== this.playerId) return;
+                if (!candidateEntries) return;
 
-                const candidateEntries = others.slice(0, 3);
                 const candidateIds = candidateEntries.map(([id]) => id);
                 const candidateData = Object.fromEntries(candidateEntries);
 
@@ -210,6 +236,64 @@ export default class PvpLobbyService {
             }
 
         });
+
+    }
+
+    // Procura 3 candidatos que, junto comigo, fiquem todos dentro do
+    // limite de Poder entre si, e em que eu seja o menor ID. Entre os
+    // grupos válidos prefere o de menor diferença de Poder. Devolve as
+    // 3 entradas [id, data] ou null.
+    static findTeamCandidates(selfCombatant, others) {
+
+        const pool = others
+            .filter(([id]) => id > this.playerId)
+            .slice(0, MAX_TEAM_CANDIDATES);
+
+        let best = null;
+        let bestSpread = Infinity;
+
+        for (let i = 0; i < pool.length; i++) {
+            for (let j = i + 1; j < pool.length; j++) {
+                for (let k = j + 1; k < pool.length; k++) {
+
+                    const group = [pool[i], pool[j], pool[k]];
+                    const powers = [selfCombatant.power, ...group.map(([, data]) => data.power)];
+                    const spread = Math.max(...powers) - Math.min(...powers);
+
+                    if (spread <= PVP_POWER_RANGE && spread < bestSpread) {
+                        best = group;
+                        bestSpread = spread;
+                    }
+
+                }
+            }
+        }
+
+        return best;
+
+    }
+
+    // Das 3 formas de dividir 4 jogadores em 2 duplas, escolhe a de
+    // menor diferença de Poder somado entre os times.
+    static splitBalancedTeams(combatants) {
+
+        const [first, ...rest] = combatants;
+        const total = team => team.reduce((sum, c) => sum + (c.power ?? 0), 0);
+
+        let bestSplit = null;
+        let bestDiff = Infinity;
+
+        rest.forEach((partner, index) => {
+            const teamA = [first, partner];
+            const teamB = rest.filter((_, i) => i !== index);
+            const diff = Math.abs(total(teamA) - total(teamB));
+            if (diff < bestDiff) {
+                bestDiff = diff;
+                bestSplit = { teamA, teamB };
+            }
+        });
+
+        return bestSplit;
 
     }
 
@@ -326,8 +410,8 @@ export default class PvpLobbyService {
 
         }
 
-        // Reivindicou os 3 — monta os times (eu + o 1º candidato vs
-        // os outros 2) e cria a partida de verdade.
+        // Reivindicou os 3 — monta os times equilibrando o Poder somado
+        // de cada dupla e cria a partida de verdade.
         const matchId = "m_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
         const seed = Math.floor(Math.random() * 2 ** 31);
 
@@ -340,14 +424,11 @@ export default class PvpLobbyService {
             ...claimedIds.map(id => ({ ...candidateData[id], id }))
         ];
 
-        const teamA = {
-            [allCombatants[0].id]: allCombatants[0],
-            [allCombatants[1].id]: allCombatants[1]
-        };
-        const teamB = {
-            [allCombatants[2].id]: allCombatants[2],
-            [allCombatants[3].id]: allCombatants[3]
-        };
+        const split = this.splitBalancedTeams(allCombatants);
+        const toTeamObject = team => Object.fromEntries(team.map(c => [c.id, c]));
+
+        const teamA = toTeamObject(split.teamA);
+        const teamB = toTeamObject(split.teamB);
 
         const allIds = [this.playerId, ...claimedIds];
 

@@ -1,4 +1,5 @@
 import PetService from "./PetService.js";
+import PowerService from "./PowerService.js";
 
 const DODGE_CAP = 40;
 
@@ -81,7 +82,9 @@ export default class PvpCombatService {
             petBiteDamage: scaledPet?.biteDamage ?? 0,
             petHealAmount: scaledPet?.healAmount ?? 0,
             petMimicRatio: scaledPet?.mimicRatio ?? 0,
-            petName: player.equipment.pet?.name ?? null
+            petName: player.equipment.pet?.name ?? null,
+            // Só pro matchmaking (PvpLobbyService) — não entra no combate.
+            power: PowerService.getPower(player)
         };
 
     }
