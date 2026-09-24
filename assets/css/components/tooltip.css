@@ -224,3 +224,65 @@
 .hud-tool:hover::after{
     opacity:1;
 }
+
+/* ==========================================================
+   TOOLTIP DO PODER (Status do personagem)
+========================================================== */
+.power-tooltip{
+    width:280px;
+    border-color:#b8913f;
+    box-shadow:0 10px 35px rgba(0,0,0,.75), 0 0 18px rgba(241,199,92,.15), inset 0 0 40px rgba(241,199,92,.04);
+}
+.power-tooltip-header{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:2px;
+}
+.power-tooltip-header i{
+    font-size:26px;
+    color:#f1c75c;
+    filter:drop-shadow(0 0 8px rgba(241,120,40,.6));
+}
+.power-tooltip-title{
+    color:#d4a373;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:2px;
+    text-transform:uppercase;
+}
+.power-tooltip-total{
+    color:#f1c75c;
+    font-size:24px;
+    font-weight:700;
+    text-shadow:0 0 10px rgba(241,199,92,.35);
+}
+.power-tooltip-parts{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+.power-tooltip-part .tooltip-label i{
+    width:14px;
+    margin-right:4px;
+    color:#d4a373;
+    text-align:center;
+}
+.power-tooltip-bar{
+    height:4px;
+    margin-top:4px;
+    background:rgba(255,255,255,.06);
+    border-radius:2px;
+    overflow:hidden;
+}
+.power-tooltip-bar-fill{
+    height:100%;
+    background:linear-gradient(90deg, #b8742a, #f1c75c);
+    border-radius:2px;
+}
+.power-tooltip-items{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    margin-top:6px;
+}

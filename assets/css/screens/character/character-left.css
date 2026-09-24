@@ -261,6 +261,19 @@ hr{
     color:#fff;
     font-weight:bold;
 }
+.character-stat.character-power{
+    background:rgba(241,199,92,.08);
+    border:1px solid rgba(241,199,92,.35);
+    cursor:default;
+}
+.character-stat.character-power span:first-child{
+    color:#f1c75c;
+    font-weight:bold;
+}
+.character-stat.character-power span:last-child{
+    color:#f1c75c;
+    font-size:1.1em;
+}
 
 /* ==========================================================
    PETS

@@ -3,6 +3,7 @@ import ItemTooltip from "../views/ItemTooltip.js";
 import SeedTooltip from "../views/SeedTooltip.js";
 import PetTooltip from "../views/PetTooltip.js";
 import PetService from "../services/PetService.js";
+import PowerService from "../services/PowerService.js";
 import PetFeedModal from "../ui/components/modals/PetFeedModal.js";
 import FarmConfirmModal from "../ui/components/modals/FarmConfirmModal.js";
 
@@ -47,6 +48,7 @@ export default class CharacterView {
 
         const player = this.game.player;
         const stats = player.stats.getFinalStats();
+        const power = PowerService.getBreakdown(player);
 
         const requiredXP = player.getRequiredXP();
 
@@ -164,6 +166,13 @@ export default class CharacterView {
                     <div class="character-stat">
                         <span>Absorção</span>
                         <span>${stats.absorption}%</span>
+                    </div>
+
+                    <div class="character-divider"><hr></div>
+
+                    <div class="character-stat character-power">
+                        <span><i class="fa-solid fa-fire-flame-curved"></i> Poder</span>
+                        <span>${power.total.toLocaleString("pt-BR")}</span>
                     </div>
 
                 </div>
@@ -875,6 +884,7 @@ export default class CharacterView {
             });
         });
         this.registerEquipmentEvents(container);
+        this.registerPowerTooltipEvents(container);
 
         // Aba Pets não tem mais slot próprio em "Equipados" pra clicar
         // e selecionar (removido de propósito — não fazia sentido um
@@ -1093,6 +1103,109 @@ export default class CharacterView {
                 this.hideTooltip();
             });
         });
+    }
+
+    /* =====================================================
+       TOOLTIP DO PODER — mesmo container/posicionamento do
+       tooltip de item (#item-tooltip), conteúdo próprio.
+    ===================================================== */
+
+    registerPowerTooltipEvents(container) {
+
+        const powerStat = container.querySelector(".character-power");
+
+        if (!powerStat) return;
+
+        powerStat.addEventListener("mouseenter", (event) => {
+            this.showPowerTooltip(event.clientX, event.clientY);
+        });
+
+        powerStat.addEventListener("mousemove", (event) => {
+            this.updateTooltipPosition(event.clientX, event.clientY);
+        });
+
+        powerStat.addEventListener("mouseleave", () => {
+            this.hideTooltip();
+        });
+
+    }
+
+    showPowerTooltip(x, y) {
+
+        this.hideTooltip();
+
+        const element = document.createElement("div");
+        element.id = "item-tooltip";
+        element.className = "item-tooltip power-tooltip";
+        element.innerHTML = this.renderPowerTooltip();
+        document.body.appendChild(element);
+
+        this.updateTooltipPosition(x, y);
+
+    }
+
+    renderPowerTooltip() {
+
+        const player = this.game.player;
+        const power = PowerService.getBreakdown(player);
+        const format = (value) => value.toLocaleString("pt-BR");
+        const percent = (value) => power.total > 0 ? Math.round((value / power.total) * 100) : 0;
+
+        const parts = [
+            { icon: "fa-user-shield", label: "Atributos base", value: power.base },
+            { icon: "fa-arrow-trend-up", label: `Nível ${player.level}`, value: power.level },
+            { icon: "fa-shield-halved", label: "Equipamentos", value: power.equipment },
+            { icon: "fa-paw", label: "Pet", value: power.pet }
+        ];
+
+        const equipped = Object.entries(player.equipment)
+            .filter(([slot, item]) => slot !== "pet" && item)
+            .map(([, item]) => item);
+
+        return `
+            <div class="power-tooltip-header">
+                <i class="fa-solid fa-fire-flame-curved"></i>
+                <span class="power-tooltip-title">Poder</span>
+                <span class="power-tooltip-total">${format(power.total)}</span>
+            </div>
+
+            <div class="tooltip-divider"></div>
+
+            <div class="power-tooltip-parts">
+                ${parts.map(part => `
+                    <div class="power-tooltip-part">
+                        <div class="tooltip-row">
+                            <span class="tooltip-label">
+                                <i class="fa-solid ${part.icon}"></i> ${part.label}
+                            </span>
+                            <span class="tooltip-value">${format(part.value)}</span>
+                        </div>
+                        <div class="power-tooltip-bar">
+                            <div class="power-tooltip-bar-fill" style="width:${percent(part.value)}%;"></div>
+                        </div>
+                    </div>
+                `).join("")}
+            </div>
+
+            ${equipped.length ? `
+                <div class="tooltip-divider"></div>
+                <h4 class="tooltip-title">Por equipamento</h4>
+                <div class="power-tooltip-items">
+                    ${equipped.map(item => `
+                        <div class="tooltip-row">
+                            <span style="color:${item.rarity?.color ?? "#e6d2b5"};">${item.name}</span>
+                            <span class="tooltip-value">${format(PowerService.getItemPower(item))}</span>
+                        </div>
+                    `).join("")}
+                </div>
+            ` : ""}
+
+            <div class="tooltip-divider"></div>
+            <p class="tooltip-description">
+                Ataque, Armadura e Agilidade somados, valorizados pela raridade dos itens. Não altera o dano em combate.
+            </p>
+        `;
+
     }
 
     updateTooltipPosition(x, y) {
