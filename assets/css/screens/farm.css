@@ -22,11 +22,51 @@
 /* ==========================================================
    FERRAMENTAS (barra em elipse acima do menu de navegação)
 ========================================================== */
-.farm-tools-ellipse{
+.farm-tools-dock{
     position:absolute;
     bottom:90px;
     left:50%;
-    transform:translateX(-50%);
+    transform:translate(-50%,0);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    z-index:15;
+    transition:transform .3s ease;
+}
+/* Recolhida: desce tudo menos a aba fina, que fica onde era a base
+   da elipse. A elipse some atrás do menu de navegação. */
+.farm-tools-dock.collapsed{
+    transform:translate(-50%,calc(100% - 14px));
+}
+.farm-tools-toggle{
+    width:72px;
+    height:14px;
+    padding:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(180deg,#2c1810,#1a0f0a);
+    border:1px solid #8b7355;
+    border-radius:8px;
+    color:#d4a373;
+    font-size:10px;
+    line-height:1;
+    cursor:pointer;
+    transition:.15s;
+}
+.farm-tools-toggle:hover{
+    border-color:#f1c75c;
+    color:#f1c75c;
+}
+.farm-tools-ellipse{
+    transition:opacity .3s ease;
+}
+.farm-tools-dock.collapsed .farm-tools-ellipse{
+    opacity:0;
+    pointer-events:none;
+}
+.farm-tools-ellipse{
     display:flex;
     gap:18px;
     padding:12px 28px;
@@ -34,7 +74,6 @@
     border:2px solid #8b7355;
     border-radius:999px;
     box-shadow:0 8px 24px rgba(0,0,0,.5), inset 0 0 20px rgba(0,0,0,.35);
-    z-index:15;
 }
 .farm-tool{
     position:relative;
@@ -231,8 +270,10 @@
         gap:6px;
         padding:12px;
     }
-    .farm-tools-ellipse{
+    .farm-tools-dock{
         bottom:80px;
+    }
+    .farm-tools-ellipse{
         gap:12px;
         padding:10px 20px;
     }

@@ -20,6 +20,7 @@ export default class FarmView {
     constructor(game) {
         this.game = game;
         this.selectedTool = null; // "hoe" | "water" | "glove" | null
+        this.toolsCollapsed = false; // barra de ferramentas recolhida pra baixo
         this.seedPickerIndex = null; // índice do canteiro esperando escolha de semente
         this.tickInterval = null;
         this.confirmModal = new FarmConfirmModal();
@@ -49,6 +50,13 @@ export default class FarmView {
 
     renderTools() {
         return `
+            <div class="farm-tools-dock ${this.toolsCollapsed ? "collapsed" : ""}">
+            <button
+                class="farm-tools-toggle"
+                aria-label="${this.toolsCollapsed ? "Mostrar ferramentas" : "Recolher ferramentas"}"
+            >
+                <i class="fa-solid fa-chevron-${this.toolsCollapsed ? "up" : "down"}"></i>
+            </button>
             <div class="farm-tools-ellipse">
                 ${TOOLS.map(tool => `
                     <button
@@ -59,6 +67,7 @@ export default class FarmView {
                         <img src="${tool.icon}" alt="${tool.tooltip}">
                     </button>
                 `).join("")}
+            </div>
             </div>
         `;
     }
@@ -128,6 +137,17 @@ export default class FarmView {
         const screen = container.querySelector(".farm-screen");
 
         if (!screen) return;
+
+        // Recolhe/mostra a barra sem re-renderizar a tela inteira, pra
+        // animação de deslizar funcionar.
+        screen.querySelector(".farm-tools-toggle")?.addEventListener("click", (event) => {
+            event.stopPropagation();
+            this.toolsCollapsed = !this.toolsCollapsed;
+            const dock = event.currentTarget.closest(".farm-tools-dock");
+            dock.classList.toggle("collapsed", this.toolsCollapsed);
+            event.currentTarget.setAttribute("aria-label", this.toolsCollapsed ? "Mostrar ferramentas" : "Recolher ferramentas");
+            event.currentTarget.querySelector("i").className = `fa-solid fa-chevron-${this.toolsCollapsed ? "up" : "down"}`;
+        });
 
         screen.querySelectorAll(".farm-tool").forEach(button => {
             button.addEventListener("click", (event) => {
