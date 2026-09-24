@@ -4,6 +4,7 @@ import cards from "../data/cards.js";
 import monstersRaid from "../data/monstersRaid.js";
 import farmCrops from "../data/farmCrops.js";
 import AudioSettings from "./AudioSettings.js";
+import PowerService from "./PowerService.js";
 
 const EQUIPMENT_SLOTS = ["weapon", "helmet", "chest", "leg", "boot"];
 
@@ -142,6 +143,11 @@ const CHECKS = {
     dragon_all: player => (player.progress.stats?.raidBossesDefeated?.length ?? 0) >= monstersRaid.length,
 
     class_transcendence: player => player.transcendence != null,
+
+    // "Acima de" = estritamente maior. Uma vez atingido fica pra
+    // sempre, mesmo que o Poder caia (pet com fome, trocar item).
+    power_8k: player => PowerService.getPower(player) > 8000,
+    power_25k: player => PowerService.getPower(player) > 25000,
 
     egg_hatch_1: player => (player.progress.stats?.eggsHatched ?? 0) >= 1,
     egg_hatch_5: player => (player.progress.stats?.eggsHatched ?? 0) >= 5,

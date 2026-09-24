@@ -471,6 +471,21 @@ const achievements = [
         icon: 'assets/img/icons/achievements/ouro.png',
         iconLocked:'assets/img/icons/achievements/bloqueado.png'
     },
+    // Poder
+    {
+        id: 'power_8k',
+        name: 'É mais de 8 mil',
+        description: 'Atinja Poder acima de 8 mil',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'power_25k',
+        name: 'O miserável é um miserável',
+        description: 'Atinja Poder acima de 25 mil',
+        icon: 'assets/img/icons/achievements/prata.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
     // Transcendência
     {
         id: 'class_transcendence',
