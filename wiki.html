@@ -46,11 +46,15 @@
                     <i class="fa-solid fa-star"></i> Qualidade
                 </a>
 
+                <a href="#poder" class="wiki-nav-item" data-keywords="poder fc força forca total atributos status nivel nível pet equipamento raridade">
+                    <i class="fa-solid fa-fire-flame-curved"></i> Poder
+                </a>
+
                 <a href="#ferraria" class="wiki-nav-item" data-keywords="ferraria melhoria arma equipamento encantamento encantar pedras">
                     <i class="fa-solid fa-hammer"></i> Ferraria
                 </a>
 
-                <a href="#mercado" class="wiki-nav-item" data-keywords="mercado comprar vender venda loja">
+                <a href="#mercado" class="wiki-nav-item" data-keywords="mercado comprar vender venda loja quantidade qtd máx max poção poções semente sementes">
                     <i class="fa-solid fa-coins"></i> Mercado
                 </a>
 
@@ -58,7 +62,7 @@
                     <i class="fa-solid fa-kit-medical"></i> Enfermaria
                 </a>
 
-                <a href="#fazenda" class="wiki-nav-item" data-keywords="fazenda farm plantar plantio semente sementes colher colheita regar enxada regador luva terra molhada seca praga pragas anti-praga trigo milho uva abobora abóbora">
+                <a href="#fazenda" class="wiki-nav-item" data-keywords="fazenda farm plantar plantio semente sementes colher colheita regar enxada regador luva terra molhada seca praga pragas anti-praga trigo milho uva abobora abóbora recolher esconder barra">
                     <i class="fa-solid fa-tractor"></i> Fazenda
                 </a>
 
@@ -187,6 +191,35 @@
 
             </section>
 
+            <section id="poder" class="wiki-section">
+
+                <h2><i class="fa-solid fa-fire-flame-curved"></i> Poder</h2>
+                <p class="wiki-intro">O Poder é um número único que resume a força do seu personagem. Ele aparece no Status, logo abaixo dos atributos especiais (Chance Crítica, Roubo de Vida, Penetração e Absorção). É só um indicador: <strong>não altera o dano nem nenhum cálculo de combate</strong>.</p>
+
+                <p>Só os atributos primários entram na conta — <strong>Ataque</strong>, <strong>Armadura</strong> e <strong>Agilidade</strong> — somados de quatro fontes:</p>
+
+                <div class="wiki-table">
+                    <div class="wiki-table-row"><span><i class="fa-solid fa-user-shield"></i> Atributos base</span><span>Os atributos do seu personagem (os de nível 1 mais os bônus de cada level up), multiplicados por 10.</span></div>
+                    <div class="wiki-table-row"><span><i class="fa-solid fa-arrow-trend-up"></i> Nível</span><span>Cada nível do personagem soma 80 de Poder.</span></div>
+                    <div class="wiki-table-row"><span><i class="fa-solid fa-shield-halved"></i> Equipamentos</span><span>Atributos primários de cada peça equipada, multiplicados pela raridade dela (tabela abaixo). Melhorias de <a href="#qualidade">Qualidade</a> e encantamentos aumentam os atributos, e por isso aumentam o Poder também.</span></div>
+                    <div class="wiki-table-row"><span><i class="fa-solid fa-paw"></i> Pet</span><span>Atributos do pet equipado mais o dano da habilidade dele, multiplicados pelas estrelas (3★ x12, 4★ x15, 5★ x18), mais um bônus pelo estágio: Filhote +25, Jovem +75, Adulto +150. Ovo não conta.</span></div>
+                </div>
+
+                <h3>Multiplicador por raridade</h3>
+                <div class="wiki-table">
+                    <div class="wiki-table-row"><span style="color:#ffffff;">Comum</span><span>x10</span></div>
+                    <div class="wiki-table-row"><span style="color:#69d823;">Incomum</span><span>x12</span></div>
+                    <div class="wiki-table-row"><span style="color:#0050fc;">Raro</span><span>x25</span></div>
+                    <div class="wiki-table-row"><span style="color:#a950f7;">Místico</span><span>x35</span></div>
+                    <div class="wiki-table-row"><span style="color:#ff711f;">Lendário</span><span>x50</span></div>
+                </div>
+
+                <p>Exemplo: uma arma lendária com 10 de Ataque vale 10 x 50 = <strong>500</strong> de Poder. Atributos negativos (como a Agilidade reduzida de algumas armas) não diminuem o Poder do item.</p>
+
+                <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: passe o mouse sobre o Poder no Status pra ver quanto vem de cada fonte e quanto cada equipamento está somando. O pet conta com a fome atual, então pet com fome baixa mostra menos Poder. Alimente pra recuperar.</p>
+
+            </section>
+
             <section id="ferraria" class="wiki-section">
 
                 <h2><i class="fa-solid fa-hammer"></i> Ferraria</h2>
@@ -220,6 +253,7 @@
 
                 <h3>Comprar</h3>
                 <p>Mostra os itens disponíveis pra compra direta com ouro, organizados em abas (Armas, Cabeça, Peitoral, Calça, Botas, Itens e Sementes — essa última só a partir do nível 30, veja a seção <a href="#fazenda">Fazenda</a>). Selecione o item, veja o preço e confirme a compra. Nem tudo que existe no jogo está à venda aqui; muita coisa boa só vem de drop de monstro.</p>
+                <p>Poções e sementes podem ser compradas em quantidade: ao selecionar uma delas, aparece o campo <strong>QTD</strong> no rodapé. Use <strong>−</strong> e <strong>+</strong>, digite o número direto (até 999) ou clique em <strong>Máx</strong> pra comprar o máximo que seu ouro permite. O preço mostrado já é o total. Equipamentos continuam sendo comprados um por vez.</p>
 
                 <h3>Venda</h3>
                 <p>Selecione qualquer item do seu inventário pra vender por ouro. O valor de venda escala de forma exponencial de acordo com a raridade do item — ou seja, um item raro não vale só "um pouco mais" que um comum, vale bem mais mesmo.</p>
@@ -255,6 +289,7 @@
 
                 <h3>Ferramentas</h3>
                 <p>Uma barra em elipse, acima do menu de navegação, mostra as quatro ferramentas disponíveis. Clique numa pra selecionar — clique nela de novo, em outra ferramenta, ou em qualquer lugar fora de um canteiro pra desmarcar.</p>
+                <p>A aba fina logo acima da barra (com a setinha) recolhe as ferramentas pra baixo, deixando a grade livre. Clique nela de novo pra trazer a barra de volta, do jeito que estava.</p>
 
                 <div class="wiki-table">
                     <div class="wiki-table-row"><span><i class="fa-solid fa-tractor"></i> Enxada</span><span>Numa grama, ara o terreno (cobra ouro — o preço sobe 100.000 a cada canteiro: o 1º custa 100k, o 2º 200k, e assim por diante até o 24º). Numa terra com semente plantada, remove a semente antes da colheita.</span></div>
