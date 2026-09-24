@@ -36,7 +36,14 @@ export default [
             "Corrigido, nas telas do Ferreiro (Melhorar e Encantar), o hover do tooltip ativando no espaço vazio ao redor do item, não só em cima dele — e as listas de itens agora usam uma grade de 3 por linha, em vez de uma coluna única com bastante espaço morto",
             "Corrigida a label 'OURO' do Ferreiro de Armas, que tinha ficado pra trás — agora é 'SEU OURO', igual nas telas de Equipamentos e Encantar",
             "Corrigida a grade de canteiros da Fazenda ficando escondida atrás do HUD do personagem em janelas mais baixas/estreitas, sem bloquear o clique no menu de navegação de baixo",
-            "Corrigido o tooltip de comparação de pets (aba Pets, hover no inventário) usando o formato de equipamento por engano (raridade/qualidade/atributos zerados) — agora usa o mesmo formato do pet principal, e removida a repetição de texto na Habilidade dos pets que curam"
+            "Corrigido o tooltip de comparação de pets (aba Pets, hover no inventário) usando o formato de equipamento por engano (raridade/qualidade/atributos zerados) — agora usa o mesmo formato do pet principal, e removida a repetição de texto na Habilidade dos pets que curam",
+            "Fazenda: a barra de ferramentas agora pode ser recolhida pra baixo por uma aba fina logo acima dela, deixando a grade livre — clique de novo pra trazer de volta como estava",
+            "Mercado: poções e sementes agora podem ser compradas em quantidade (botões -/+, digitar até 999 ou 'Máx' pra comprar o máximo que o ouro permite), com o preço total atualizado na hora",
+            "Adicionado o Poder: um número que resume a força do personagem (Ataque, Armadura e Agilidade da base, do nível, dos equipamentos valorizados pela raridade e do pet), exibido no Status abaixo dos atributos especiais — só indicativo, não altera o combate",
+            "Poder: passar o mouse mostra um tooltip com quanto vem de cada fonte e quanto cada equipamento equipado está somando",
+            "Adicionadas 2 novas conquistas de Poder: 'É mais de 8 mil' (Poder acima de 8 mil) e 'O miserável é um miserável' (Poder acima de 25 mil)",
+            "PVP: adicionado matchmaking por Poder — só enfrenta jogadores com até 5 mil de Poder de diferença (pra cima ou pra baixo), acabando com lutas de nível 100 contra nível 1; no 2x2 a regra vale entre os 4 jogadores, e os times são montados equilibrando o Poder de cada dupla",
+            "Wiki: adicionada a seção Poder e atualizadas as seções de Mercado (compra em quantidade) e Fazenda (recolher ferramentas)"
         ]
     },
 
