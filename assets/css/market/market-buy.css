@@ -205,6 +205,67 @@
 }
 
 /* ==========================================================
+   QUANTIDADE (poções/sementes)
+========================================================== */
+.market-buy-quantity{
+    gap:10px;
+}
+
+.market-buy-qty-btn,
+.market-buy-qty-max{
+    height:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,.3);
+    border:1px solid #8b7355;
+    border-radius:6px;
+    color:#ecd8b3;
+    font-family:"Cinzel",serif;
+    cursor:pointer;
+    transition:.15s;
+}
+
+.market-buy-qty-btn{
+    width:32px;
+}
+
+.market-buy-section.market-buy-quantity .market-buy-qty-btn i{
+    font-size:.8rem;
+    color:inherit;
+}
+
+.market-buy-qty-max{
+    padding:0 10px;
+    font-size:.78rem;
+    font-weight:700;
+}
+
+.market-buy-qty-btn:hover,
+.market-buy-qty-max:hover{
+    border-color:#f1c75c;
+    color:#f1c75c;
+}
+
+.market-buy-qty-input{
+    display:block;
+    width:64px;
+    padding:2px 4px;
+    background:rgba(0,0,0,.3);
+    border:1px solid #5b4633;
+    border-radius:4px;
+    color:#f1c75c;
+    font-size:1.05rem;
+    font-weight:700;
+    text-align:center;
+}
+
+.market-buy-qty-input:focus{
+    outline:none;
+    border-color:#f1c75c;
+}
+
+/* ==========================================================
    BOTÃO
 ========================================================== */
 .market-buy-button{
@@ -261,6 +322,10 @@
     .market-buy-footer{
         flex-direction:column;
         gap:16px;
+    }
+    .market-buy-info{
+        flex-wrap:wrap;
+        row-gap:12px;
     }
     .market-buy-button{
         width:100%;

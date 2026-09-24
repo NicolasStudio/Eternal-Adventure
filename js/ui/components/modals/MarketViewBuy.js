@@ -21,6 +21,7 @@ const TABS = [
 ];
 
 const FARM_UNLOCK_LEVEL = 30;
+const MAX_BUY_QUANTITY = 999;
 
 export default class MarketViewBuy {
     constructor(game) {
@@ -29,6 +30,7 @@ export default class MarketViewBuy {
         this.shopItems = [];
         this.visibleItems = [];
         this.activeTab = "weapon";
+        this.quantity = 1; // só usado com item empilhável (poção/semente)
     }
 
     get player() {
@@ -189,10 +191,53 @@ export default class MarketViewBuy {
         `;
     }
 
+    // Poções e sementes empilham no inventário (Player.addItem), então
+    // dá pra comprar várias de uma vez. Equipamento é sempre 1.
+    isStackable(item) {
+        return item?.type === "item";
+    }
+
+    getMaxAffordable() {
+        const unitPrice = this.getItemPrice(this.selectedItem);
+        if (unitPrice <= 0) return MAX_BUY_QUANTITY;
+        return Math.max(1, Math.min(MAX_BUY_QUANTITY, Math.floor(this.player.gold / unitPrice)));
+    }
+
+    getBuyQuantity() {
+        return this.isStackable(this.selectedItem) ? this.quantity : 1;
+    }
+
+    renderQuantity() {
+        if (!this.isStackable(this.selectedItem)) return "";
+        return `
+            <div class="market-buy-divider"></div>
+
+            <div class="market-buy-section market-buy-quantity">
+                <button class="market-buy-qty-btn" data-qty="-1" aria-label="Diminuir">
+                    <i class="fa-solid fa-minus"></i>
+                </button>
+                <div class="market-buy-text">
+                    <span class="label">QUANTIDADE</span>
+                    <input
+                        class="market-buy-qty-input"
+                        type="number"
+                        min="1"
+                        max="${MAX_BUY_QUANTITY}"
+                        value="${this.quantity}"
+                    >
+                </div>
+                <button class="market-buy-qty-btn" data-qty="1" aria-label="Aumentar">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+                <button class="market-buy-qty-max">Máx</button>
+            </div>
+        `;
+    }
+
     renderActions() {
 
         const price = this.selectedItem
-            ? this.getItemPrice(this.selectedItem)
+            ? this.getItemPrice(this.selectedItem) * this.getBuyQuantity()
             : 0;
 
         const canBuy =
@@ -223,12 +268,14 @@ export default class MarketViewBuy {
 
                         <div class="market-buy-text">
                             <span class="label">PREÇO</span>
-                            <span class="value">
+                            <span class="value market-buy-price">
                                 ${this.selectedItem ? price.toLocaleString("pt-BR") : "--"}
                             </span>
                         </div>
 
                     </div>
+
+                    ${this.renderQuantity()}
 
                 </div>
 
@@ -269,6 +316,7 @@ export default class MarketViewBuy {
         slots.forEach((slot, index) => {
             const item = this.visibleItems[index];
             slot.addEventListener("click", () => {
+                if (this.selectedItem?.id !== item.id) this.quantity = 1;
                 this.selectedItem = item;
                 this.refresh();
             });
@@ -294,7 +342,8 @@ export default class MarketViewBuy {
 
         }
 
-        const price = this.getItemPrice(this.selectedItem);
+        const quantity = this.getBuyQuantity();
+        const price = this.getItemPrice(this.selectedItem) * quantity;
 
         if (!this.player.removeGold(price)) {
 
@@ -304,9 +353,13 @@ export default class MarketViewBuy {
 
         }
 
-        this.player.addItem(this.selectedItem);
+        this.player.addItem(this.selectedItem, quantity);
 
-        Toast.show(`${this.selectedItem.name} comprado com sucesso!`);
+        Toast.show(
+            quantity > 1
+                ? `${quantity}x ${this.selectedItem.name} comprados com sucesso!`
+                : `${this.selectedItem.name} comprado com sucesso!`
+        );
 
         this.refresh();
 
@@ -324,9 +377,11 @@ export default class MarketViewBuy {
             tab.addEventListener("click", () => {
                 this.activeTab = tab.dataset.tab;
                 this.selectedItem = null;
+                this.quantity = 1;
                 this.refresh();
             });
         });
+        this.registerQuantityEvents(container);
         const buyButton = container.querySelector(".market-buy-button");
         if (buyButton) {
             buyButton.addEventListener("click", () => {
@@ -334,6 +389,64 @@ export default class MarketViewBuy {
                 this.buySelectedItem();
             });
         }
+    }
+
+    registerQuantityEvents(container) {
+
+        const input = container.querySelector(".market-buy-qty-input");
+
+        if (!input) return;
+
+        container.querySelectorAll(".market-buy-qty-btn").forEach(button => {
+            button.addEventListener("click", () => {
+                this.setQuantity(this.quantity + Number(button.dataset.qty));
+                input.value = this.quantity;
+            });
+        });
+
+        container.querySelector(".market-buy-qty-max")?.addEventListener("click", () => {
+            this.setQuantity(this.getMaxAffordable());
+            input.value = this.quantity;
+        });
+
+        // Enquanto digita só atualiza preço/botão (sem re-renderizar,
+        // pra não perder o foco); ao sair do campo normaliza o valor.
+        input.addEventListener("input", () => {
+            if (input.value === "") return;
+            this.setQuantity(Number(input.value));
+        });
+
+        input.addEventListener("change", () => {
+            this.setQuantity(Number(input.value));
+            input.value = this.quantity;
+        });
+
+    }
+
+    setQuantity(value) {
+        const quantity = Number.isFinite(value) ? Math.floor(value) : 1;
+        this.quantity = Math.max(1, Math.min(MAX_BUY_QUANTITY, quantity));
+        this.updateFooterState();
+    }
+
+    // Atualiza preço total e o botão de comprar sem refresh().
+    updateFooterState() {
+
+        const priceEl = document.querySelector(".market-buy-price");
+        const buyButton = document.querySelector(".market-buy-button");
+
+        if (!priceEl || !buyButton || !this.selectedItem) return;
+
+        const price = this.getItemPrice(this.selectedItem) * this.getBuyQuantity();
+        const canBuy = this.player.gold >= price;
+
+        priceEl.textContent = price.toLocaleString("pt-BR");
+        buyButton.disabled = !canBuy;
+        buyButton.innerHTML = `
+            <i class="fa-solid fa-cart-shopping"></i>
+            ${canBuy ? "Comprar" : "Ouro insuficiente"}
+        `;
+
     }
 
     updateTooltipPosition(x, y) {

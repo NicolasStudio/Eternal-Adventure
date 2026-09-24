@@ -249,7 +249,9 @@ export default class Player {
 
     }
 
-    addItem(item) {
+    // quantity > 1 só faz sentido pra itens empilháveis (poções,
+    // sementes) — equipamento sempre entra como 1 unidade.
+    addItem(item, quantity = 1) {
 
         if (!item) return;
 
@@ -263,7 +265,7 @@ export default class Player {
 
             if (existingItem) {
 
-                existingItem.quantity++;
+                existingItem.quantity += quantity;
 
                 this.notify();
 
@@ -294,7 +296,7 @@ export default class Player {
 
             uid: crypto.randomUUID(),
 
-            quantity:1
+            quantity: stackable ? quantity : 1
 
         });
 
