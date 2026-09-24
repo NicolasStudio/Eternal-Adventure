@@ -213,23 +213,25 @@ export default class MarketViewBuy {
             <div class="market-buy-divider"></div>
 
             <div class="market-buy-section market-buy-quantity">
-                <button class="market-buy-qty-btn" data-qty="-1" aria-label="Diminuir">
-                    <i class="fa-solid fa-minus"></i>
-                </button>
-                <div class="market-buy-text">
-                    <span class="label">QUANTIDADE</span>
+                <i class="fa-solid fa-layer-group"></i>
+                <span class="market-buy-text"><span class="label">QTD</span></span>
+                <div class="market-buy-qty-stepper">
+                    <button class="market-buy-qty-btn" data-qty="-1" aria-label="Diminuir">
+                        <i class="fa-solid fa-minus"></i>
+                    </button>
                     <input
                         class="market-buy-qty-input"
                         type="number"
                         min="1"
                         max="${MAX_BUY_QUANTITY}"
                         value="${this.quantity}"
+                        aria-label="Quantidade"
                     >
+                    <button class="market-buy-qty-btn" data-qty="1" aria-label="Aumentar">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                    <button class="market-buy-qty-max">Máx</button>
                 </div>
-                <button class="market-buy-qty-btn" data-qty="1" aria-label="Aumentar">
-                    <i class="fa-solid fa-plus"></i>
-                </button>
-                <button class="market-buy-qty-max">Máx</button>
             </div>
         `;
     }
@@ -268,7 +270,7 @@ export default class MarketViewBuy {
 
                         <div class="market-buy-text">
                             <span class="label">PREÇO</span>
-                            <span class="value market-buy-price">
+                            <span class="value market-buy-total">
                                 ${this.selectedItem ? price.toLocaleString("pt-BR") : "--"}
                             </span>
                         </div>
@@ -432,7 +434,7 @@ export default class MarketViewBuy {
     // Atualiza preço total e o botão de comprar sem refresh().
     updateFooterState() {
 
-        const priceEl = document.querySelector(".market-buy-price");
+        const priceEl = document.querySelector(".market-buy-total");
         const buyButton = document.querySelector(".market-buy-button");
 
         if (!priceEl || !buyButton || !this.selectedItem) return;
