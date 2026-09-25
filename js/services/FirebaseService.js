@@ -16,7 +16,15 @@ import {
     push,
     get,
     runTransaction,
-    serverTimestamp
+    serverTimestamp,
+    query as rtdbQuery,
+    orderByChild,
+    startAt,
+    endAt,
+    limitToLast,
+    limitToFirst,
+    onChildAdded,
+    onChildRemoved
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 import {
     getAuth,
@@ -78,6 +86,14 @@ export {
     get,
     runTransaction,
     serverTimestamp,
+    rtdbQuery,
+    orderByChild,
+    startAt,
+    endAt,
+    limitToLast,
+    limitToFirst,
+    onChildAdded,
+    onChildRemoved,
     auth,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,

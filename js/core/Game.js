@@ -80,6 +80,10 @@ export default class Game {
 
     showScreen(screen) {
 
+        // O painel do chat vive no body, fora do #hud-screen — sem isso
+        // ficaria aberto por cima da Home/Login depois de sair do jogo.
+        if (screen !== "hud") this.hudScreen.chatHUD.close();
+
         document.getElementById("login-screen").classList.add("hidden");
         document.getElementById("home-screen").classList.add("hidden");
         document.getElementById("class-selection-screen").classList.add("hidden");

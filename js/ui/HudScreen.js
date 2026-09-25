@@ -19,6 +19,7 @@ import BlacksmithWeapon from "./../city/BlacksmithWeapon.js";
 import BlacksmithArmor from "./../city/BlacksmithArmor.js";
 import BlacksmithEnchant from "./../city/BlacksmithEnchant.js";
 import ChestHUD from "./components/ChestHUD.js";
+import ChatHUD from "./components/ChatHUD.js";
 import ChestRewardModal from "./components/modals/ChestRewardModal.js";
 import AlbumModal from "./components/modals/AlbumModal.js";
 import LoadGameModal from "./components/modals/LoadGameModal.js";
@@ -51,6 +52,7 @@ export default class HudScreen {
         this.toolbarHUD = new ToolbarHUD(game);
         this.dungeonHeader = new DungeonHeader(game);
         this.chestHUD = new ChestHUD(game);
+        this.chatHUD = new ChatHUD(game);
         this.chestRewardModal = new ChestRewardModal();
         this.albumModal = new AlbumModal(game);
         this.achievementModal = new AchievementModal(game);
@@ -103,6 +105,7 @@ export default class HudScreen {
             <header class="hud-header ${headerModeClass}">
                 <div class="hud-left-column">
                     ${!this.inRaidCombat ? this.playerHUD.render() : ""}
+                    ${!anyCombat ? this.chatHUD.renderButton() : ""}
                     ${!anyCombat ? this.chestHUD.render() : ""}
                 </div>
                 ${this.inCombat ? this.dungeonHeader.render(this.combatView.currentDungeon, this.combatView.currentFloor) : ""}
@@ -449,6 +452,7 @@ export default class HudScreen {
         this.render();
         this.toolbarHUD.registerEvents(this.element);
         if (!this.inCombat) this.chestHUD.registerEvents(this.element);
+        this.chatHUD.registerEvents(this.element);
         this.registerEvents();
         switch (this.currentView) {
             case "character":
@@ -535,6 +539,7 @@ export default class HudScreen {
         this.render();
         this.toolbarHUD.registerEvents(this.element);
         if (!this.inCombat) this.chestHUD.registerEvents(this.element);
+        this.chatHUD.registerEvents(this.element);
         this.registerEvents();
         this.updateMusic();
         switch (this.currentView) {
