@@ -26,6 +26,10 @@ export default class Player {
         this.currentHP = 100;
         this.maxHP = 100;
         this.listeners = [];
+        // Enquanto true, notify() vira no-op — usado pra agrupar várias
+        // mutações (ex: os itens de uma recompensa) numa única
+        // notificação no final, em vez de uma por item/ouro/XP.
+        this.suppressNotify = false;
         this.health = new HealthSystem(this, () => this.notify());
         this.health.startRegeneration();
         this.baseStats = this.createBaseStats();
@@ -230,6 +234,7 @@ export default class Player {
     }
 
     notify() {
+        if (this.suppressNotify) return;
         this.listeners.forEach(listener => listener(this));
 
     }
@@ -540,19 +545,36 @@ export default class Player {
 
         if (!reward) return [];
 
-        const levelUps = this.addXP(reward.xp);
+        // addXP/addGold/addItem cada um chama notify() sozinho — uma
+        // recompensa com vários itens dispararia uma leva de checagens
+        // de conquista (uma por unidade) antes mesmo de terminar de
+        // aplicar a recompensa inteira. Suprime todas e notifica uma
+        // vez só no final, já com o estado completo.
+        this.suppressNotify = true;
 
-        this.addGold(reward.gold);
+        let levelUps;
 
-        reward.items.forEach(item => {
+        try {
 
-            for (let i = 0; i < item.quantity; i++) {
+            levelUps = this.addXP(reward.xp);
 
-                this.addItem(item);
+            this.addGold(reward.gold);
 
-            }
+            reward.items.forEach(item => {
 
-        });
+                for (let i = 0; i < item.quantity; i++) {
+
+                    this.addItem(item);
+
+                }
+
+            });
+
+        } finally {
+
+            this.suppressNotify = false;
+
+        }
 
         this.notify();
 

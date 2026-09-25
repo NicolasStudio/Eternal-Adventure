@@ -63,19 +63,20 @@ export default class AssetLoader {
 
         let loaded = 0;
 
-        for (const asset of this.assets) {
+        // Em paralelo — antes era um `await` por imagem, em sequência,
+        // então o tempo de boot somava a latência de todas ao invés de
+        // esperar só a mais lenta.
+        await Promise.all(this.assets.map(asset =>
+            this.preloadImage(asset).then(() => {
 
-            await this.preloadImage(asset);
+                loaded++;
 
-            loaded++;
+                if (onProgress) {
+                    onProgress(Math.floor((loaded / total) * 100));
+                }
 
-            if (onProgress) {
-
-                onProgress(Math.floor((loaded / total) * 100));
-
-            }
-
-        }
+            })
+        ));
 
     }
 
