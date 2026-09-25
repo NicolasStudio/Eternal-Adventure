@@ -141,6 +141,8 @@
     padding:14px 20px 20px;
     display:flex;
     justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
 }
 
 .settings-exit-button{

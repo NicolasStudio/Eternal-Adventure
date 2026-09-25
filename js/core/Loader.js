@@ -15,6 +15,18 @@ export default class Loader {
 
     async start() {
 
+        await this.load();
+
+        await this.hide();
+
+    }
+
+    // Mostra a tela de loading e carrega os assets, mas NÃO esconde
+    // no final — quem chama decide quando esconder (dá tempo de
+    // resolver coisas em paralelo, tipo checar login, sem piscar a
+    // tela de trás antes da hora).
+    async load() {
+
         // Exibe a tela de loading
         this.loadingScreen.show();
 
@@ -34,9 +46,10 @@ export default class Loader {
         // Tempo mínimo para que o usuário veja o logo
         await this.delay(1200);
 
-        // Esconde a tela de loading
-        await this.loadingScreen.hide();
+    }
 
+    async hide() {
+        await this.loadingScreen.hide();
     }
 
     delay(ms) {

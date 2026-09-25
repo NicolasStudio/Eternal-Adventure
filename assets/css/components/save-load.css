@@ -52,6 +52,14 @@
     flex-shrink:0;
 }
 
+.load-game-close::before{
+    content:"";
+    position:absolute;
+    inset:4px;
+    border:1px solid rgba(139,115,85,.18);
+    border-radius:50%;
+    pointer-events:none;
+}
 .load-game-close:hover{
     color:#fff;
     border-color:#d4a373;
@@ -59,8 +67,7 @@
     background:linear-gradient(180deg, #3d2418 0%, #2c1810 100%);
     box-shadow:inset 0 0 18px rgba(0,0,0,.45), 0 0 20px rgba(212,163,115,.18);
 }
-
-.load-game-close:hover{
+.load-game-close:active{
     transform:scale(.95);
 }
 
@@ -78,24 +85,11 @@
     color:#bca46d;
     font-size:.85rem;
     text-align:center;
-    cursor:pointer;
-    transition:.15s;
 }
 
 .load-game-dropzone i{
     font-size:1.8rem;
     color:#8b7355;
-}
-
-.load-game-dropzone:hover,
-.load-game-dropzone.dragover{
-    border-color:#c79b37;
-    background:rgba(216,159,27,.08);
-    color:#f3e0b7;
-}
-
-.load-game-dropzone.dragover i{
-    color:#f1c75c;
 }
 
 .load-game-footer{

@@ -3,21 +3,15 @@ import SaveService from "../../../services/SaveService.js";
 const MAX_LENGTH = 8;
 const MIN_LENGTH = 5;
 const VALID_NAME = /^[A-Za-zÀ-ÿ0-9]+$/;
+const CHECK_DEBOUNCE_MS = 450;
 
 export default class NameEntryModal {
     constructor() {
         this.overlay = null;
     }
 
-    // Enquanto não existir backend, a única "base" pra checar nome
-    // repetido é o save local — dá pra trocar por uma chamada real
-    // ao banco no futuro sem mexer no resto do fluxo.
-    isNameTaken(value) {
-        const existing = SaveService.loadFromLocalStorage();
-        return !!existing?.name && existing.name.toLowerCase() === value.toLowerCase();
-    }
-
-    validate(value) {
+    // Só o formato — instantâneo, sem rede.
+    validateFormat(value) {
 
         if (value.length < MIN_LENGTH) {
             return "Seu nome tem que ter mais de 4 caracteres.";
@@ -25,10 +19,6 @@ export default class NameEntryModal {
 
         if (!VALID_NAME.test(value)) {
             return "Não pode caractere especial.";
-        }
-
-        if (this.isNameTaken(value)) {
-            return "Esse nome já está sendo usado.";
         }
 
         return null;
@@ -68,26 +58,86 @@ export default class NameEntryModal {
             const errorLabel = this.overlay.querySelector(".name-entry-error");
             const closeButton = this.overlay.querySelector("#name-entry-close");
 
+            // Evita que a resposta de uma checagem antiga (nome já
+            // trocado enquanto a rede respondia) sobrescreva o estado
+            // atual do campo.
+            let checkToken = 0;
+            let debounceTimer = null;
+
+            const setError = (message) => {
+                errorLabel.textContent = message ?? "";
+                errorLabel.hidden = !message;
+            };
+
+            const checkAvailability = async (value) => {
+
+                const myToken = ++checkToken;
+
+                setError("Verificando nome...");
+                confirmButton.disabled = true;
+
+                const taken = await SaveService.isCharacterNameTaken(value);
+
+                if (myToken !== checkToken) return;
+
+                if (taken) {
+                    setError("Esse nome já está sendo usado.");
+                    confirmButton.disabled = true;
+                } else {
+                    setError(null);
+                    confirmButton.disabled = false;
+                }
+
+            };
+
             const updateState = () => {
 
                 const value = input.value.trim();
                 counter.textContent = `${input.value.length}/${MAX_LENGTH}`;
 
-                const error = value.length === 0 ? null : this.validate(value);
+                clearTimeout(debounceTimer);
+                checkToken++; // invalida qualquer checagem de rede em andamento
 
-                errorLabel.textContent = error ?? "";
-                errorLabel.hidden = !error;
-                confirmButton.disabled = value.length === 0 || !!error;
+                if (value.length === 0) {
+                    setError(null);
+                    confirmButton.disabled = true;
+                    return;
+                }
+
+                const formatError = this.validateFormat(value);
+
+                if (formatError) {
+                    setError(formatError);
+                    confirmButton.disabled = true;
+                    return;
+                }
+
+                confirmButton.disabled = true;
+                debounceTimer = setTimeout(() => checkAvailability(value), CHECK_DEBOUNCE_MS);
 
             };
 
             input.addEventListener("input", updateState);
 
-            const confirm = () => {
+            const confirm = async () => {
+
                 const value = input.value.trim();
-                if (!value || this.validate(value)) return;
+
+                if (!value || this.validateFormat(value)) return;
+
+                clearTimeout(debounceTimer);
+                confirmButton.disabled = true;
+
+                const taken = await SaveService.isCharacterNameTaken(value);
+
+                if (taken) {
+                    setError("Esse nome já está sendo usado.");
+                    return;
+                }
+
                 this.hide();
                 resolve(value);
+
             };
 
             const cancel = () => {

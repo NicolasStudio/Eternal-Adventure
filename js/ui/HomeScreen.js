@@ -40,7 +40,7 @@ export default class HomeScreen {
                     </button>
                 </div>
                 <small>
-                    Alpha v0.14
+                    Beta 0.1
                 </small>
             </div>
         `;
@@ -51,6 +51,10 @@ export default class HomeScreen {
         this.element
             .querySelector("#btn-new-game")
             .addEventListener("click", async () => {
+
+                const confirmed = await this.confirmNewGame();
+
+                if (!confirmed) return;
 
                 const name = await this.nameEntryModal.show();
 
@@ -89,6 +93,39 @@ export default class HomeScreen {
                 this.settingsModal.show();
 
             });
+
+    }
+
+    // "Novo Jogo" sobrepõe o save da conta (só existe um por conta) —
+    // confirma antes de deixar seguir pro nome/classe, pra não perder
+    // progresso por engano.
+    confirmNewGame() {
+
+        return new Promise(resolve => {
+
+            const overlay = document.createElement("div");
+            overlay.className = "home-confirm-overlay";
+            overlay.innerHTML = `
+                <div class="home-confirm-modal">
+                    <p>Ao criar um novo jogo, os dados salvos serão sobrepostos/perdidos. Tem certeza?</p>
+                    <div class="home-confirm-actions">
+                        <button class="home-confirm-yes" id="home-confirm-yes">Sim</button>
+                        <button class="home-confirm-no" id="home-confirm-no">Não</button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(overlay);
+
+            const cleanup = (result) => {
+                overlay.remove();
+                resolve(result);
+            };
+
+            overlay.querySelector("#home-confirm-yes").addEventListener("click", () => cleanup(true));
+            overlay.querySelector("#home-confirm-no").addEventListener("click", () => cleanup(false));
+
+        });
 
     }
 

@@ -18,6 +18,27 @@ import {
     runTransaction,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    sendPasswordResetEmail,
+    fetchSignInMethodsForEmail
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    updateDoc,
+    collection,
+    query,
+    orderBy,
+    limit,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 // A apiKey abaixo é segura de deixar pública — a proteção de verdade
 // do banco vem das Regras de Segurança configuradas no console do
@@ -34,9 +55,18 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const auth = getAuth(app);
+const firestore = getFirestore(app);
+
+// Alias explícito pro Realtime Database — só pra deixar claro, em
+// código novo, que "db" aqui é o RTDB do lobby, não o Firestore das
+// contas/saves ("firestore" abaixo). O nome "db" continua exportado
+// como estava pra não quebrar o PVP/Raid.
+const rtdb = db;
 
 export {
     db,
+    rtdb,
     ref,
     set,
     update,
@@ -47,5 +77,22 @@ export {
     push,
     get,
     runTransaction,
-    serverTimestamp
+    serverTimestamp,
+    auth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    sendPasswordResetEmail,
+    fetchSignInMethodsForEmail,
+    firestore,
+    doc,
+    getDoc,
+    setDoc,
+    updateDoc,
+    collection,
+    query,
+    orderBy,
+    limit,
+    getDocs
 };

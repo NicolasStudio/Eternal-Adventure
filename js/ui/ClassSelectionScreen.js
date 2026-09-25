@@ -1,5 +1,7 @@
 import classes from "../player/classes.js";
 import Player  from "../player/Player.js";
+import AuthService from "../services/AuthService.js";
+import SaveService from "../services/SaveService.js";
 
 export default class ClassSelectionScreen {
 
@@ -160,9 +162,17 @@ export default class ClassSelectionScreen {
 
     startAdventure() {
 
-        this.game.player = new Player(this.selectedClass, this.game.pendingPlayerName);
+        const name = this.game.pendingPlayerName;
+
+        this.game.player = new Player(this.selectedClass, name);
 
         this.game.pendingPlayerName = null;
+
+        const user = AuthService.getCurrentUser();
+
+        if (user) {
+            SaveService.reserveCharacterName(name, user.uid);
+        }
 
         this.game.player.addListener(() => {
             this.game.hudScreen.updateHUD();

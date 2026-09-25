@@ -1,4 +1,5 @@
 import SaveService from "../../../services/SaveService.js";
+import AuthService from "../../../services/AuthService.js";
 import AudioSettings from "../../../services/AudioSettings.js";
 import MusicService from "../../../services/MusicService.js";
 import Toast from "../Toast.js";
@@ -110,14 +111,18 @@ export default class SettingsModal {
                     </a>
                 </section>
 
-                ${this.inGame ? `
-                    <footer class="settings-footer">
+                <footer class="settings-footer">
+                    ${this.inGame ? `
                         <button class="settings-exit-button" id="settings-exit">
                             <i class="fa-solid fa-door-open"></i>
                             Sair do Jogo
                         </button>
-                    </footer>
-                ` : ""}
+                    ` : ""}
+                    <button class="settings-exit-button" id="settings-logout">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        Sair da conta
+                    </button>
+                </footer>
 
             </div>
 
@@ -194,6 +199,20 @@ export default class SettingsModal {
         this.modal.querySelector("#settings-exit")?.addEventListener("click", () => {
             this.hide();
             this.game.showScreen("home");
+        });
+
+        this.modal.querySelector("#settings-logout")?.addEventListener("click", async () => {
+
+            if (this.game.player) {
+                SaveService.autoSave(this.game.player);
+            }
+
+            await AuthService.signOut();
+
+            this.hide();
+            this.game.player = null;
+            this.game.showScreen("login");
+
         });
 
     }

@@ -50,6 +50,65 @@
     filter: drop-shadow(0 0 50px rgba(180, 120, 70, 0.5));
 }
 
+.home-confirm-overlay{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,.8);
+    z-index:9999;
+}
+.home-confirm-modal{
+    width:340px;
+    max-width:88%;
+    padding:22px;
+    border:1px solid #7a2e2e;
+    border-radius:8px;
+    background:rgba(24,16,11,.98);
+    font-family:"Cinzel",serif;
+    box-shadow:0 0 20px rgba(0,0,0,.7);
+}
+.home-confirm-modal p{
+    margin:0 0 20px;
+    text-align:center;
+    font-size:.95rem;
+    line-height:1.5;
+    color:#e8d9b8;
+}
+.home-confirm-actions{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+}
+.home-confirm-yes,
+.home-confirm-no{
+    padding:9px 26px;
+    border-radius:6px;
+    font-family:"Cinzel",serif;
+    font-weight:700;
+    font-size:.9rem;
+    cursor:pointer;
+    transition:.15s;
+}
+.home-confirm-yes{
+    border:2px solid #c04b4b;
+    background:rgba(122,46,46,.25);
+    color:#ffb3b3;
+}
+.home-confirm-yes:hover{
+    border-color:#e36868;
+}
+.home-confirm-no{
+    border:2px solid #5b4633;
+    background:rgba(0,0,0,.25);
+    color:#d8c39b;
+}
+.home-confirm-no:hover{
+    border-color:#8b7355;
+    color:#f3e0b7;
+}
+
 .menu {
     display: flex;
     flex-direction: column;

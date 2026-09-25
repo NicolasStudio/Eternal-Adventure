@@ -11,9 +11,15 @@ import boots from "../data/boots.js";
 import pets from "../data/pet.js";
 import farmCrops from "../data/farmCrops.js";
 import Toast from "../ui/components/Toast.js";
+import AuthService from "./AuthService.js";
+import PowerService from "./PowerService.js";
+import { firestore, doc, getDoc, setDoc, collection, query, orderBy, limit, getDocs } from "./FirebaseService.js";
 
 const STORAGE_KEY = "eternal-adventure-save";
 const SAVE_VERSION = 1;
+const SAVES_COLLECTION = "saves";
+const CHARACTER_NAMES_COLLECTION = "characterNames";
+const LEADERBOARD_COLLECTION = "leaderboard";
 
 // Todo item de equipamento conhecido, indexado por id — usado só pra
 // "refrescar" itens salvos (ver refreshItemStats), nunca alterado.
@@ -346,6 +352,129 @@ export default class SaveService {
     }
 
     /* =====================================================
+       NUVEM (Firestore) — espelha o localStorage quando logado
+    ===================================================== */
+
+    // Best-effort: nunca trava o jogo se a rede/o Firestore falhar,
+    // o localStorage continua sendo a fonte confiável imediata.
+    static async saveToCloud(uid, data) {
+
+        try {
+            await setDoc(doc(firestore, SAVES_COLLECTION, uid), data);
+        } catch (err) {
+            console.warn("Falha ao sincronizar save com a nuvem:", err);
+        }
+
+    }
+
+    static async loadFromCloud(uid) {
+
+        try {
+
+            const snapshot = await getDoc(doc(firestore, SAVES_COLLECTION, uid));
+
+            return snapshot.exists() ? snapshot.data() : null;
+
+        } catch (err) {
+
+            console.warn("Falha ao carregar save da nuvem:", err);
+            return null;
+
+        }
+
+    }
+
+    // Coleção separada, indexada pelo nome (minúsculo) do personagem —
+    // só guarda quem reservou (uid), nada sensível. É o que permite
+    // checar "nome já em uso" contra qualquer conta, não só o save
+    // local desta máquina.
+    static async isCharacterNameTaken(name) {
+
+        try {
+
+            const snapshot = await getDoc(doc(firestore, CHARACTER_NAMES_COLLECTION, name.trim().toLowerCase()));
+
+            return snapshot.exists();
+
+        } catch (err) {
+
+            console.warn("Falha ao checar nome do personagem:", err);
+            return false;
+
+        }
+
+    }
+
+    static async reserveCharacterName(name, uid) {
+
+        try {
+            await setDoc(doc(firestore, CHARACTER_NAMES_COLLECTION, name.trim().toLowerCase()), { uid });
+        } catch (err) {
+            console.warn("Falha ao reservar nome do personagem:", err);
+        }
+
+    }
+
+    // Dispara a sincronização em paralelo, sem esperar — só se tiver
+    // alguém logado no momento (fora do fluxo de login, save local
+    // continua funcionando normalmente sem conta nenhuma).
+    static syncCloudIfLoggedIn(player, data) {
+
+        const user = AuthService.getCurrentUser();
+
+        if (!user) return;
+
+        this.saveToCloud(user.uid, data);
+        this.updateLeaderboardEntry(user.uid, player);
+
+    }
+
+    // Entrada "leve" (sem inventário/progresso) só com o que o ranking
+    // precisa mostrar — pública pra qualquer jogador logado poder ler,
+    // ao contrário do save completo que é privado do dono.
+    static async updateLeaderboardEntry(uid, player) {
+
+        try {
+
+            await setDoc(doc(firestore, LEADERBOARD_COLLECTION, uid), {
+                name: player.name ?? player.class.name,
+                level: player.level,
+                classId: player.class.id,
+                power: PowerService.getPower(player)
+            });
+
+        } catch (err) {
+
+            console.warn("Falha ao atualizar o ranking:", err);
+
+        }
+
+    }
+
+    static async getTopLeaderboard(count = 10) {
+
+        try {
+
+            const leaderboardQuery = query(
+                collection(firestore, LEADERBOARD_COLLECTION),
+                orderBy("power", "desc"),
+                limit(count)
+            );
+
+            const snapshot = await getDocs(leaderboardQuery);
+
+            return snapshot.docs.map(entry => entry.data());
+
+        } catch (err) {
+
+            console.warn("Falha ao carregar o ranking:", err);
+            return [];
+
+        }
+
+    }
+
+    /* =====================================================
        LOCALSTORAGE
     ===================================================== */
 
@@ -376,81 +505,18 @@ export default class SaveService {
     }
 
     /* =====================================================
-       ARQUIVO (.txt em JSON)
-    ===================================================== */
-
-    static downloadFile(data) {
-
-        const json = JSON.stringify(data, null, 2);
-
-        const blob = new Blob([json], { type: "text/plain" });
-
-        const url = URL.createObjectURL(blob);
-
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = this.buildFileName(data);
-
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-
-        URL.revokeObjectURL(url);
-
-    }
-
-    // Monta um nome de arquivo único por save — classe + data/hora —
-    // pra nunca repetir o mesmo nome (o navegador empilhava "(1)", "(2)"...
-    // toda vez que baixava com o nome fixo de antes).
-    static buildFileName(data) {
-
-        const className = classes[data.classId]?.name?.toLowerCase() ?? "personagem";
-
-        const date = new Date(data.savedAt ?? Date.now());
-
-        const pad = (n) => String(n).padStart(2, "0");
-
-        const dateStr = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-        const timeStr = `${pad(date.getHours())}-${pad(date.getMinutes())}-${pad(date.getSeconds())}`;
-
-        return `${className}-eternal-adventure-save-${dateStr}-${timeStr}.txt`;
-
-    }
-
-    static readFile(file) {
-
-        return new Promise((resolve, reject) => {
-
-            const reader = new FileReader();
-
-            reader.onload = () => {
-                try {
-                    resolve(JSON.parse(reader.result));
-                } catch (err) {
-                    reject(err);
-                }
-            };
-
-            reader.onerror = () => reject(reader.error);
-
-            reader.readAsText(file);
-
-        });
-
-    }
-
-    /* =====================================================
        AÇÕES DE ALTO NÍVEL
     ===================================================== */
 
-    // Botão "Salvar": grava no localStorage E baixa o .txt
+    // Botão "Salvar": grava no localStorage e sincroniza com a conta
+    // na nuvem (Firestore) — não gera mais arquivo .txt.
     static save(player) {
 
         const data = this.serialize(player);
 
         this.persist(data);
 
-        this.downloadFile(data);
+        this.syncCloudIfLoggedIn(player, data);
 
         return data;
 
@@ -470,6 +536,8 @@ export default class SaveService {
             const data = this.serialize(player);
 
             this.persist(data);
+
+            this.syncCloudIfLoggedIn(player, data);
 
         } catch (err) {
 

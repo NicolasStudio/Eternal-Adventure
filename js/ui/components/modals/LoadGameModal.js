@@ -1,4 +1,5 @@
 import SaveService from "../../../services/SaveService.js";
+import AuthService from "../../../services/AuthService.js";
 import Toast from "../Toast.js";
 
 export default class LoadGameModal {
@@ -6,14 +7,15 @@ export default class LoadGameModal {
     constructor(game) {
         this.game = game;
         this.modal = null;
-        this.selectedFile = null;
-        this.pendingData = null;
+        this.status = "loading";
+        this.cloudData = null;
     }
 
     show() {
-        this.selectedFile = null;
-        this.pendingData = null;
+        this.status = "loading";
+        this.cloudData = null;
         this.mount();
+        this.fetchCloudSave();
     }
 
     mount() {
@@ -43,6 +45,29 @@ export default class LoadGameModal {
         this.registerEvents();
     }
 
+    async fetchCloudSave() {
+
+        const user = AuthService.getCurrentUser();
+
+        if (!user) {
+            this.status = "error";
+            this.refresh();
+            return;
+        }
+
+        const data = await SaveService.loadFromCloud(user.uid);
+
+        if (data && SaveService.isValidSave(data)) {
+            this.cloudData = data;
+            this.status = "found";
+        } else {
+            this.status = "empty";
+        }
+
+        this.refresh();
+
+    }
+
     render() {
         return `
             <div class="load-game-modal">
@@ -54,25 +79,49 @@ export default class LoadGameModal {
                     </button>
                 </header>
 
-                <label class="load-game-dropzone" id="load-game-dropzone" for="load-game-input">
-                    <i class="fa-solid fa-file-arrow-up"></i>
-                    <span>
-                        ${this.selectedFile
-                            ? this.selectedFile.name
-                            : "Arraste seu arquivo .txt aqui ou clique para escolher"}
-                    </span>
-                    <input type="file" id="load-game-input" accept=".txt" hidden>
-                </label>
+                <div class="load-game-dropzone">
+                    ${this.renderStatus()}
+                </div>
 
                 <footer class="load-game-footer">
                     <button class="load-game-cancel" id="load-game-cancel">Cancelar</button>
-                    <button class="load-game-confirm" id="load-game-confirm" ${this.pendingData ? "" : "disabled"}>
-                        Confirmar
+                    <button class="load-game-confirm" id="load-game-confirm" ${this.status === "found" ? "" : "disabled"}>
+                        Carregar
                     </button>
                 </footer>
 
             </div>
         `;
+    }
+
+    renderStatus() {
+
+        if (this.status === "loading") {
+            return `
+                <i class="fa-solid fa-circle-notch fa-spin"></i>
+                <span>Buscando seu save na nuvem...</span>
+            `;
+        }
+
+        if (this.status === "found") {
+            return `
+                <i class="fa-solid fa-cloud-arrow-down"></i>
+                <span>Encontramos um save salvo na sua conta. Carregar agora substitui o progresso atual desta sessão.</span>
+            `;
+        }
+
+        if (this.status === "error") {
+            return `
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span>Não foi possível conectar à nuvem. Tente novamente em instantes.</span>
+            `;
+        }
+
+        return `
+            <i class="fa-solid fa-cloud"></i>
+            <span>Nenhum save encontrado na nuvem para esta conta.</span>
+        `;
+
     }
 
     registerEvents() {
@@ -85,70 +134,17 @@ export default class LoadGameModal {
             this.hide();
         });
 
-        const dropzone = this.modal.querySelector("#load-game-dropzone");
-        const input = this.modal.querySelector("#load-game-input");
-
-        input?.addEventListener("change", () => {
-            if (input.files?.[0]) {
-                this.handleFile(input.files[0]);
-            }
-        });
-
-        dropzone?.addEventListener("dragover", (event) => {
-            event.preventDefault();
-            dropzone.classList.add("dragover");
-        });
-
-        dropzone?.addEventListener("dragleave", () => {
-            dropzone.classList.remove("dragover");
-        });
-
-        dropzone?.addEventListener("drop", (event) => {
-
-            event.preventDefault();
-            dropzone.classList.remove("dragover");
-
-            const file = event.dataTransfer.files?.[0];
-
-            if (file) {
-                this.handleFile(file);
-            }
-
-        });
-
         this.modal.querySelector("#load-game-confirm")?.addEventListener("click", () => {
             this.confirmLoad();
         });
 
     }
 
-    async handleFile(file) {
-
-        try {
-
-            const data = await SaveService.readFile(file);
-
-            if (!SaveService.isValidSave(data)) {
-                Toast.show("Esse arquivo não é um save válido.");
-                return;
-            }
-
-            this.selectedFile = file;
-            this.pendingData = data;
-
-            this.refresh();
-
-        } catch (err) {
-            Toast.show("Não foi possível ler esse arquivo.");
-        }
-
-    }
-
     confirmLoad() {
 
-        if (!this.pendingData) return;
+        if (!this.cloudData) return;
 
-        SaveService.applyLoadedData(this.game, this.pendingData);
+        SaveService.applyLoadedData(this.game, this.cloudData);
 
         this.hide();
 

@@ -1,6 +1,24 @@
 export default [
 
     {
+        version: "Beta 0.1",
+        date: "Setembro de 2026",
+        changes: [
+            "Eternal Adventure sai da fase Alpha e entra em Beta — o jogo agora é lançado ao público para receber feedback e opiniões da comunidade",
+            "Adicionado sistema de conta: login e cadastro agora são obrigatórios pra jogar (e-mail, senha, nome completo, telefone, data de nascimento e Palavra de Recuperação)",
+            "Adicionada recuperação de senha: confirme data de nascimento, telefone e Palavra de Recuperação pra receber o e-mail de redefinição",
+            "Progresso agora é salvo na nuvem, vinculado à sua conta — não depende mais de baixar nem guardar nenhum arquivo .txt",
+            "Botão Salvar (barra de ferramentas) sincroniza com a nuvem na hora; botão Carregar busca o save mais recente salvo na sua conta",
+            "Adicionada verificação de nome de personagem já em uso, contra todas as contas do jogo (não só o save local do navegador)",
+            "Adicionada confirmação ao clicar em 'Novo Jogo', avisando que os dados salvos serão sobrepostos",
+            "Adicionado o Ranking: mostra os 10 jogadores com maior Poder entre todas as contas, com Nome, Nível, Classe e Poder",
+            "Adicionado efeito visual de dano (flash branco) nos personagens ao apanhar, e de cura (luz verde subindo pelo corpo) ao receber cura, em Dungeons, PVP e Cooperativo",
+            "Corrigido o carregamento inicial do jogo mostrando rapidamente a tela de login antes de corrigir pra quem já estava logado",
+            "Wiki: seções Salvar e Carregar reescritas para o novo sistema de conta e nuvem, e adicionada a seção Ranking"
+        ]
+    },
+
+    {
         version: "Alpha v0.14",
         date: "Setembro de 2026",
         changes: [

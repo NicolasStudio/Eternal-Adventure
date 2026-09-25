@@ -9,6 +9,9 @@ export default class Toolbar {
     render() {
         return `
             <div class="hud-toolbar">
+                <button class="hud-tool" id="btn-ranking" data-tooltip="Rankings">
+                    <i class="fa-solid fa-ranking-star"></i>
+                </button>
                 <button class="hud-tool" id="btn-album" data-tooltip="Álbum ">
                     <i class="fa-solid fa-book-skull"></i>
                 </button>
@@ -66,6 +69,10 @@ export default class Toolbar {
 
         toolbar.querySelector("#btn-load")?.addEventListener("click", () => {
             this.game.hudScreen.loadGameModal.show();
+        });
+
+        toolbar.querySelector("#btn-ranking")?.addEventListener("click", () => {
+            this.game.hudScreen.rankingModal.show();
         });
 
         toolbar.querySelector("#btn-settings")?.addEventListener("click", () => {
