@@ -1,29 +1,25 @@
 /* ==========================================================
    CHAT GLOBAL — botão no HUD + painel
 ========================================================== */
-.chat-toggle{
-    width:44px;
-    height:44px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    color:#d4a373;
-    font-size:18px;
-    border-radius:50%;
+/* Usa .hud-tool (cor, hover e tooltip iguais aos ícones da toolbar) —
+   aqui só muda o tamanho e o fundo escuro, pro ícone não sumir em cima
+   do cenário. */
+.hud-tool.chat-toggle{
+    position:relative;
+    z-index:5;
+    width:34px;
+    height:34px;
+    font-size:15px;
     border:2px solid #8b7355;
-    background:linear-gradient(180deg,#2c1810 0%,#1a0f0a 100%);
-    box-shadow:inset 0 0 18px rgba(0,0,0,.55), 0 4px 10px rgba(0,0,0,.35);
-    transition:transform .2s, border-color .2s, color .2s, box-shadow .2s;
+    border-radius:50%;
+    background:linear-gradient(180deg,#2c1810,#1a0f0a);
+    box-shadow:inset 0 0 12px rgba(0,0,0,.45), 0 3px 8px rgba(0,0,0,.4);
+    margin-left:10px;
 }
-.chat-toggle:hover{
-    color:#fff;
-    border-color:#d4a373;
-    transform:scale(1.06);
-    box-shadow:inset 0 0 18px rgba(0,0,0,.45), 0 0 20px rgba(212,163,115,.18);
-}
-.chat-toggle:active{
-    transform:scale(.95);
+
+/* Sem o "pulinho" do hover dos ícones da toolbar — só a cor muda. */
+.hud-tool.chat-toggle:hover{
+    transform:none;
 }
 
 .chat-panel{

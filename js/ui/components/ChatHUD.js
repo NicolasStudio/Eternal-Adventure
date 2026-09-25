@@ -16,7 +16,7 @@ export default class ChatHUD {
     // as mensagens, o texto digitado e a posição da rolagem.
     renderButton() {
         return `
-            <button class="chat-toggle" id="chat-toggle" title="Chat global">
+            <button class="hud-tool chat-toggle" id="chat-toggle" data-tooltip="Chat">
                 <i class="fa-solid fa-comments"></i>
             </button>
         `;
