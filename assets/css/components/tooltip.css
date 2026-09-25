@@ -123,6 +123,11 @@
     color:#f4f1eb;
     font-weight:700;
 }
+.tooltip-percent{
+    color:#f1c75c;
+    font-weight:400;
+    font-size:11px;
+}
 .tooltip-description{
     margin:0;
     color:#d8c9b0;

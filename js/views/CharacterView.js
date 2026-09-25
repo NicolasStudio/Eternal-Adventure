@@ -1178,7 +1178,7 @@ export default class CharacterView {
                             <span class="tooltip-label">
                                 <i class="fa-solid ${part.icon}"></i> ${part.label}
                             </span>
-                            <span class="tooltip-value">${format(part.value)}</span>
+                            <span class="tooltip-value">${format(part.value)} <small class="tooltip-percent">(${percent(part.value)}%)</small></span>
                         </div>
                         <div class="power-tooltip-bar">
                             <div class="power-tooltip-bar-fill" style="width:${percent(part.value)}%;"></div>
