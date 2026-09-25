@@ -146,7 +146,7 @@ export default class AlbumModal {
                     </span>
 
                     <button
-                        class="album-close"
+                        class="close-btn album-close"
                         id="album-close">
 
                         <i class="fa-solid fa-xmark"></i>

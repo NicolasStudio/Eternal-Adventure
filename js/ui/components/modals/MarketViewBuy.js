@@ -154,7 +154,7 @@ export default class MarketViewBuy {
                     <h2>Mercado</h2>
                     <span>Compre equipamentos desbloqueados nas dungeons.</span>
                 </div>
-                <button class="market-close">
+                <button class="close-btn market-close">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </header>

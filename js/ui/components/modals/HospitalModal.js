@@ -48,7 +48,7 @@ export default class HospitalModal {
 
                     <h2>Enfermaria</h2>
 
-                    <button class="hospital-close">
+                    <button class="close-btn hospital-close">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
 

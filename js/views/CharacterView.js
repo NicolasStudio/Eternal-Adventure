@@ -818,7 +818,7 @@ export default class CharacterView {
             <section class="character-window">
                 <header class="character-header">
                     <h2>Personagem</h2>
-                    <button class="character-close">
+                    <button class="close-btn character-close">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </header>

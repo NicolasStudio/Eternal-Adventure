@@ -96,29 +96,6 @@
 }
 
 /* ==========================================================
-    BOTÃO FECHAR
-========================================================== */
-.news-close{
-    width:40px;
-    height:40px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    border:1px solid transparent;
-    border-radius:50%;
-    background:transparent;
-    color:#ccb48c;
-    cursor:pointer;
-    font-size:18px;
-    transition:.2s;
-}
-.news-close:hover{
-    background:#4b2f20;
-    border-color:#8c6b36;
-    color:#ffd56a;
-}
-
-/* ==========================================================
     CORPO
 ========================================================== */
 .news-body{

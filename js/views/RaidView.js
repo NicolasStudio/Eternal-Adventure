@@ -55,7 +55,7 @@ export default class RaidView {
             <section class="raid-window">
                 <header class="dungeon-header">
                     <h2>Modo Cooperativo</h2>
-                    <button class="dungeon-close raid-close">
+                    <button class="close-btn dungeon-close raid-close">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </header>

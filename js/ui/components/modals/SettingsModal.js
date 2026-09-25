@@ -53,7 +53,7 @@ export default class SettingsModal {
 
                 <header class="settings-header">
                     <h2>Configurações</h2>
-                    <button class="settings-close" id="settings-close">
+                    <button class="close-btn settings-close" id="settings-close">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </header>

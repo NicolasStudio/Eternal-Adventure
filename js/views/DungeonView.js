@@ -101,7 +101,7 @@ export default class DungeonView {
         return `
             <header class="dungeon-header">
                 <h2>Dungeons</h2>
-                <button class="dungeon-close">
+                <button class="close-btn dungeon-close">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </header>

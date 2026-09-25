@@ -63,7 +63,7 @@ export default class BlacksmithArmor {
                     <div>
                         <h2>Ferreiro - Equipamentos</h2>
                     </div>
-                    <button class="market-close">
+                    <button class="close-btn market-close">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </header>

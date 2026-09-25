@@ -19,9 +19,9 @@ export default class LevelUpModal {
                 <div class="reward-modal levelup-modal">
 
                     <button
-                        class="modal-close"
+                        class="close-btn close-btn--corner modal-close"
                         id="close-levelup">
-                        ✕
+                        <i class="fa-solid fa-xmark"></i>
                     </button>
 
                     <h2 class="levelup-title">

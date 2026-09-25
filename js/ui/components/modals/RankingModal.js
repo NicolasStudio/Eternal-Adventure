@@ -60,7 +60,7 @@ export default class RankingModal {
 
                 <header class="ranking-header">
                     <h2>Ranking — Top 10 mais fortes</h2>
-                    <button class="load-game-close" id="ranking-close">
+                    <button class="close-btn load-game-close" id="ranking-close">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </header>

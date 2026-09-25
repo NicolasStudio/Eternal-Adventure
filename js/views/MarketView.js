@@ -41,7 +41,7 @@ export default class MarketView {
                     <h2>Mercado</h2>
                     <span>Venda seus equipamentos e itens.</span>
                 </div>
-                <button class="market-close">
+                <button class="close-btn market-close">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </header>

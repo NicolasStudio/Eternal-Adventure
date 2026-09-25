@@ -50,7 +50,7 @@ export default class BlacksmithWeapon {
                     <div>
                         <h2>Ferreiro - Armas</h2>
                     </div>
-                    <button class="market-close">
+                    <button class="close-btn market-close">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </header>

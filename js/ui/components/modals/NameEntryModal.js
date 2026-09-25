@@ -32,7 +32,7 @@ export default class NameEntryModal {
             this.overlay.className = "continue-modal-overlay";
             this.overlay.innerHTML = `
                 <div class="continue-modal">
-                    <button class="reward-close" id="name-entry-close">✕</button>
+                    <button class="close-btn close-btn--corner reward-close" id="name-entry-close"><i class="fa-solid fa-xmark"></i></button>
                     <h2 class="continue-title">Nova Aventura</h2>
                     <p class="name-entry-hint">Como devemos te chamar?</p>
                     <input

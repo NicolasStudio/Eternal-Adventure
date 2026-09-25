@@ -14,8 +14,8 @@ export default class NewsModal {
                             <i class="fas fa-scroll"></i>
                             Atualizações
                         </h2>
-                        <button class="news-close" id="close-news">
-                            <i class="fas fa-times"></i>
+                        <button class="close-btn news-close" id="close-news">
+                            <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
                     <div class="news-body">

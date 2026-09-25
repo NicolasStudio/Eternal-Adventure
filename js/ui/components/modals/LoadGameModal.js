@@ -74,7 +74,7 @@ export default class LoadGameModal {
 
                 <header class="load-game-header">
                     <h2>Carregar Jogo</h2>
-                    <button class="load-game-close" id="load-game-close">
+                    <button class="close-btn load-game-close" id="load-game-close">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </header>

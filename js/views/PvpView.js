@@ -56,7 +56,7 @@ export default class PvpView {
             <section class="pvp-window">
                 <header class="dungeon-header">
                     <h2>Arena PVP</h2>
-                    <button class="dungeon-close pvp-close">
+                    <button class="close-btn dungeon-close pvp-close">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </header>

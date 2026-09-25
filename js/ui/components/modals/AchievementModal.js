@@ -95,7 +95,7 @@ export default class AchievementModal {
                     </h2>
 
                     <button
-                        class="achievements-close"
+                        class="close-btn achievements-close"
                         id="achievements-close">
 
                         <i class="fa-solid fa-xmark"></i>

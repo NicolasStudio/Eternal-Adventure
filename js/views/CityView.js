@@ -20,7 +20,7 @@ export default class CityView {
 
                     <h2>Cidade</h2>
 
-                    <button class="city-close">
+                    <button class="close-btn city-close">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
 
