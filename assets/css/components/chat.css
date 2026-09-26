@@ -25,23 +25,23 @@
 /* Aviso de mensagem nova: contador vermelho + brilho pulsando suave. */
 .chat-badge{
     position:absolute;
-    top:-6px;
-    right:-6px;
-    min-width:17px;
-    height:17px;
-    padding:0 4px;
+    top:-7px;
+    right:-7px;
+    min-width:19px;
+    height:19px;
+    padding:0 5px;
+    box-sizing:border-box;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-family:"Cinzel",serif;
-    font-size:10px;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:11px;
     font-weight:700;
     line-height:1;
     color:#fff;
-    background:#c0392b;
-    border:1px solid #f1c75c;
-    border-radius:9px;
-    box-shadow:0 0 6px rgba(0,0,0,.6);
+    background:#e53935;
+    border-radius:10px;
+    box-shadow:0 1px 4px rgba(0,0,0,.6);
     pointer-events:none;
 }
 .chat-badge[hidden]{

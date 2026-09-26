@@ -1,5 +1,6 @@
 import pets from "../data/pet.js";
 import levelsPet, { PET_MAX_LEVEL, LIFE_PER_POINT } from "../data/levelsPet.js";
+import SoundEffectService from "./SoundEffectService.js";
 import SaveService from "./SaveService.js";
 
 const HUNGER_DECAY_STEP_MS = 50 * 60 * 1000; // 50min
@@ -366,6 +367,10 @@ export default class PetService {
         // o pet só ganha XP sem chegar a subir de nível.
         if (leveledUp) {
             this.syncDisplayFromStage(petInstance);
+
+            // Mesmo som de "up" do personagem (uma vez por subida, mesmo
+            // que tenha passado vários níveis de uma vez).
+            SoundEffectService.play("levelUp");
         }
 
     }
