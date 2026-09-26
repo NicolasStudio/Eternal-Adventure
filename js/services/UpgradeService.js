@@ -4,6 +4,16 @@ import upgradeCosts from "../data/upgradeCosts.js";
 // Ordem fixa de progressão da qualidade de um item.
 const QUALITY_ORDER = ["none", "ordinary", "mediocre", "exceptional"];
 
+// Itens de raridade Lendária ganham mais um grau depois de Excepcional.
+// As outras raridades continuam parando em Excepcional.
+const LEGENDARY_EXTRA_QUALITY = "lendary";
+const LEGENDARY_RARITY = "legendary";
+
+// Qualidades em que os status SECUNDÁRIOS recebem o bônus de melhoria.
+// "lendary" mantém o mesmo bônus de "Excepcional" (não soma mais nada
+// — o teto de cada raridade já foi calibrado pra esse valor).
+const SECONDARY_BONUS_QUALITIES = ["exceptional", LEGENDARY_EXTRA_QUALITY];
+
 // Status secundários só passam a receber bônus de melhoria quando o
 // item chega em "Excepcional". Antes disso, só os principais
 // (attack, armor, agility) ganham pontos a cada melhoria.
@@ -39,18 +49,29 @@ export default class UpgradeService {
 
     }
 
+    // Ordem de qualidades que ESSE item pode percorrer.
+    static getQualityOrder(item) {
+
+        return item?.rarity?.id === LEGENDARY_RARITY
+            ? [...QUALITY_ORDER, LEGENDARY_EXTRA_QUALITY]
+            : QUALITY_ORDER;
+
+    }
+
     // Retorna o objeto da PRÓXIMA qualidade, ou null se já está no máximo.
     static getNextQuality(item) {
 
         const current = this.getCurrentQuality(item);
 
-        const index = QUALITY_ORDER.indexOf(current.id);
+        const order = this.getQualityOrder(item);
 
-        if (index === -1 || index >= QUALITY_ORDER.length - 1) {
+        const index = order.indexOf(current.id);
+
+        if (index === -1 || index >= order.length - 1) {
             return null;
         }
 
-        return qualities[QUALITY_ORDER[index + 1]];
+        return qualities[order[index + 1]];
 
     }
 
@@ -88,7 +109,7 @@ export default class UpgradeService {
 
         if (SECONDARY_STATS.includes(statKey)) {
 
-            if (quality?.id !== "exceptional") return 0;
+            if (!SECONDARY_BONUS_QUALITIES.includes(quality?.id)) return 0;
 
             return SECONDARY_EXCEPTIONAL_BONUS[item?.rarity?.id] ?? 0;
 

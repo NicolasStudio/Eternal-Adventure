@@ -25,7 +25,15 @@ const qualities = {
         name: "Excepcional",
         color: "#00d800",
         stepMultiplier: 3
-    }
+    },
+
+    lendary: {
+        id: "lendary",
+        name: "Lendário",
+        color: "#ff711f",
+        stepMultiplier: 4
+    },
+
 };
 
 export default qualities;

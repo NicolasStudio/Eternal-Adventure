@@ -29,7 +29,7 @@ function hasAnyUpgradedItem(player) {
 }
 
 function hasAnyExceptionalItem(player) {
-    return allEquippedAndInventoryItems(player).some(item => item.quality?.id === "exceptional");
+    return allEquippedAndInventoryItems(player).some(item => ["exceptional", "lendary"].includes(item.quality?.id));
 }
 
 function hasAnyEnchantedItem(player) {

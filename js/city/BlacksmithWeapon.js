@@ -19,11 +19,11 @@ export default class BlacksmithWeapon {
         const weapons = [];
         this.player.inventory.forEach(item => {
             if (item.type !== "weapon") return;
-            if (item.quality?.id === "exceptional") return;
+            if (!UpgradeService.canUpgrade(item)) return;
             weapons.push(item);
         });
         const equippedWeapon = this.player.equipment.weapon;
-        if (equippedWeapon && equippedWeapon.quality?.id !== "exceptional") {
+        if (equippedWeapon && UpgradeService.canUpgrade(equippedWeapon)) {
             const alreadyExists = weapons.some(weapon => weapon.uid === equippedWeapon.uid);
             if (!alreadyExists) {
                 weapons.unshift(equippedWeapon);

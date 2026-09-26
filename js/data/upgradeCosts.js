@@ -5,8 +5,10 @@
     Ex: upgradeCosts.weapon.ordinary é o custo para ir de
     "ordinary" -> "mediocre".
 
-    "exceptional" é a qualidade máxima, por isso custa 0
-    (não existe próxima melhoria).
+    "exceptional" -> "lendary" só existe pra itens de raridade Lendária
+    (ver UpgradeService.getQualityOrder) — nas outras raridades
+    "exceptional" é o máximo e esse custo nunca é cobrado.
+    "lendary" é a qualidade máxima de todas, por isso custa 0.
 */
 const upgradeCosts = {
 
@@ -14,14 +16,16 @@ const upgradeCosts = {
         none: 800,
         ordinary: 1500,
         mediocre: 3000,
-        exceptional: 0
+        exceptional: 125000,
+        lendary: 0
     },
 
     armor: {
         none: 800,
         ordinary: 1500,
         mediocre: 3000,
-        exceptional: 0
+        exceptional: 125000,
+        lendary: 0
     }
 
 };

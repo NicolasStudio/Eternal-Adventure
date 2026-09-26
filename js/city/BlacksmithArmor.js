@@ -29,13 +29,13 @@ export default class BlacksmithArmor {
 
         this.player.inventory.forEach(item => {
             if (item.slot !== this.activeSlot) return;
-            if (item.quality?.id === "exceptional") return;
+            if (!UpgradeService.canUpgrade(item)) return;
             items.push(item);
         });
 
         const equippedItem = this.player.equipment[this.activeSlot];
 
-        if (equippedItem && equippedItem.quality?.id !== "exceptional") {
+        if (equippedItem && UpgradeService.canUpgrade(equippedItem)) {
             const alreadyExists = items.some(i => i.uid === equippedItem.uid);
             if (!alreadyExists) {
                 items.unshift(equippedItem);
