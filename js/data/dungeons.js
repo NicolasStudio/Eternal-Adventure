@@ -336,7 +336,7 @@ const dungeons = [
             items.mediumPotion,
             {
                 item: { ...pets.fairyPet1, icon: "assets/img/assets/eggs_drop/egg-duende.png"},
-                chance: 3
+                chance: 2
             }
         ]
     },

@@ -74,6 +74,7 @@ export default class PetTooltip {
                     ${scaled.biteDamage > 0 ? `<div class="tooltip-stat"><span>${ability.name}</span><span class="tooltip-stat-positive">${scaled.biteDamage} de dano</span></div>` : ""}
                     ${ability.mimicRatio > 0 ? `<div class="tooltip-stat"><span>${ability.name}</span><span class="tooltip-stat-positive">1/${Math.round(1 / ability.mimicRatio)} do dano causado</span></div>` : ""}
                     ${scaled.healAmount > 0 ? `<div class="tooltip-stat"><span>❤️ Cura (um alvo aleatório)</span><span class="tooltip-stat-positive">+${scaled.healAmount}</span></div>` : ""}
+                    ${scaled.burnDamage > 0 ? `<div class="tooltip-stat"><span>🔥 ${ability.name}</span><span class="tooltip-stat-positive">${scaled.burnDamage} de queimadura</span></div>` : ""}
                 </div>
             ` : ""}
         `;

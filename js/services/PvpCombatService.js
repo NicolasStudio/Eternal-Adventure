@@ -1,5 +1,6 @@
 import PetService from "./PetService.js";
 import PowerService from "./PowerService.js";
+import BoitataBurn from "./BoitataBurn.js";
 
 const DODGE_CAP = 40;
 
@@ -82,6 +83,7 @@ export default class PvpCombatService {
             petBiteDamage: scaledPet?.biteDamage ?? 0,
             petHealAmount: scaledPet?.healAmount ?? 0,
             petMimicRatio: scaledPet?.mimicRatio ?? 0,
+            petBurnDamage: scaledPet?.burnDamage ?? 0,
             petName: player.equipment.pet?.name ?? null,
             // Só pro matchmaking (PvpLobbyService) — não entra no combate.
             power: PowerService.getPower(player)
@@ -118,6 +120,11 @@ export default class PvpCombatService {
 
         let turn = a.agility >= b.agility ? "a" : "b";
         let guard = 0;
+
+        // Queimadura do Boitatá ativa POR DONO (ver BoitataBurn.js) —
+        // chave = quem tem o pet ("a"/"b"), o alvo é sempre o outro.
+        // Não consome rng(), então não dessincroniza os dois clientes.
+        const burns = { a: null, b: null };
 
         while (a.currentHP > 0 && b.currentHP > 0 && guard < 500) {
 
@@ -206,6 +213,35 @@ export default class PvpCombatService {
                     log.push({ turn, attacker: attacker.name, petBite: true, damage: biteDamage, heal: petHeal });
 
                 }
+
+                // Boitatá: a queimadura liga no primeiro golpe que acerta.
+                if (attacker.petBurnDamage > 0 && !burns[turn]) {
+                    burns[turn] = { first: true };
+                }
+
+            }
+
+            // Fim do turno: a queimadura só cobra na vez do próprio DONO
+            // (quem acabou de agir), nunca no turno do adversário.
+            const burn = burns[turn];
+
+            if (burn && a.currentHP > 0 && b.currentHP > 0) {
+
+                const tickDamage = BoitataBurn.getTickDamage(attacker.petBurnDamage);
+                const applied = Math.min(defender.currentHP, tickDamage);
+
+                defender.currentHP = Math.max(0, defender.currentHP - tickDamage);
+
+                log.push({
+                    turn,
+                    attacker: attacker.name,
+                    burn: true,
+                    burnStart: burn.first,
+                    burnTarget: turn === "a" ? "b" : "a",
+                    damage: applied
+                });
+
+                burn.first = false;
 
             }
 

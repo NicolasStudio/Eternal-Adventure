@@ -221,6 +221,25 @@ export default class CombatView {
 
             }
 
+            // Boitatá: a queimadura liga no primeiro golpe que acerta e
+            // cobra um tick só na VEZ DO JOGADOR (nunca no turno do
+            // monstro). Roda antes do combatLoop() checar o estado, então
+            // se o fogo matar o monstro a vitória é detectada na sequência.
+            if (!result.dodged) {
+                this.engine.startBurn();
+            }
+
+            const burnResult = this.engine.burnTick();
+
+            if (burnResult) {
+
+                this.game.hudScreen.monsterHUD.updateHP();
+                this.flashMonsterHit();
+
+                await CombatToast.show(this.engine.createBurnMessage(burnResult), "player pet-bite");
+
+            }
+
         }
     }
 

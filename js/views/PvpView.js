@@ -5,6 +5,7 @@ import Toast from "../ui/components/Toast.js";
 import CombatToast from "../combat/CombatToast.js";
 import HealFlash from "../combat/HealFlash.js";
 import HitFlash from "../combat/HitFlash.js";
+import BoitataBurn from "../services/BoitataBurn.js";
 import dungeons from "../data/dungeons.js";
 
 // Só os chefes "normais" (não o final secreto, que fica de fora da
@@ -301,6 +302,10 @@ export default class PvpView {
         if (entry.dodged) {
             return `<div class="pvp-log-line pvp-log-dodge">${name} esquivou!</div>`;
         }
+        if (entry.burn) {
+            const petName = (entry.turn === "a" ? combatantA : combatantB).petName ?? "O pet";
+            return `<div class="pvp-log-line pvp-log-pet-bite">${petName} queimou ${defenderName}: ${entry.damage} de dano.</div>`;
+        }
         if (entry.petBite) {
             const petName = (entry.turn === "a" ? combatantA : combatantB).petName ?? "O pet";
             const parts = [];
@@ -563,6 +568,16 @@ export default class PvpView {
                 : `<span class="combat-dodge">Você esquivou do ataque!</span>`;
         }
 
+        if (entry.burn) {
+            const petName = (isMe ? this.player.equipment.pet?.name : this.currentOpponentSnapshot()?.petName) ?? "O pet";
+            return BoitataBurn.buildMessage({
+                petName: isMe ? petName : `${petName} de ${opponentName}`,
+                targetName: isMe ? opponentName : "você",
+                damage: entry.damage,
+                first: entry.burnStart
+            });
+        }
+
         if (entry.petBite) {
             const petName = (isMe ? this.player.equipment.pet?.name : this.currentOpponentSnapshot()?.petName) ?? "O pet";
             const damage = entry.damage > 0
@@ -618,7 +633,7 @@ export default class PvpView {
 
         if (entry.dodged) {
             type += " dodge";
-        } else if (entry.petBite) {
+        } else if (entry.petBite || entry.burn) {
             type += " pet-bite";
         } else if (isMe) {
             if (entry.lifeSteal > 0) type = "lifeSteal player";

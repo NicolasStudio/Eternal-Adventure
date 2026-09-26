@@ -1,4 +1,5 @@
 import PetService from "../services/PetService.js";
+import BoitataBurn from "../services/BoitataBurn.js";
 
 // Teto máximo de chance de esquiva, não importa o quanto a agilidade
 // de um lado supere a do outro — nunca "nunca é atingido".
@@ -10,6 +11,10 @@ export default class CombatEngine {
         this.monster = monster;
         this.currentTurn = null;
         this.initiative = null;
+        // Queimadura do Boitatá (ver BoitataBurn.js) — null até o
+        // primeiro golpe do jogador que acerta; o engine é recriado a
+        // cada andar, então a queimadura sempre acaba junto do combate.
+        this.burn = null;
     }
 
     rollInitiative() {
@@ -226,6 +231,50 @@ export default class CombatEngine {
             message += ` Curou <strong>${result.heal}</strong> HP.`;
         }
         return message;
+    }
+
+    // Liga a queimadura (uma vez por combate) — chamado no golpe do
+    // jogador que acerta, se o pet equipado tiver a habilidade.
+    startBurn() {
+
+        if (this.burn) return;
+
+        const pet = this.player.equipment.pet;
+
+        if (!pet) return;
+
+        const scaled = PetService.getScaledStats(pet);
+
+        if (scaled.burnDamage <= 0) return;
+
+        this.burn = { petName: pet.name, burnDamage: scaled.burnDamage, first: true };
+
+    }
+
+    // Um tick da queimadura, ao final do turno do JOGADOR (nunca do
+    // monstro). Não cobra depois que o combate já acabou.
+    burnTick() {
+
+        if (!this.burn) return null;
+
+        if (this.checkCombatState().finished) return null;
+
+        const element = this.monster.element ?? null;
+        const damage = BoitataBurn.getTickDamage(this.burn.burnDamage, element);
+        const applied = Math.min(this.monster.status.vidaAtual, damage);
+
+        this.monster.status.vidaAtual = Math.max(0, this.monster.status.vidaAtual - damage);
+
+        const result = { petName: this.burn.petName, damage: applied, element, first: this.burn.first };
+
+        this.burn.first = false;
+
+        return result;
+
+    }
+
+    createBurnMessage(result) {
+        return BoitataBurn.buildMessage({ ...result, targetName: this.monster.name });
     }
 
     checkCombatState() {

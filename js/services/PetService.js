@@ -129,7 +129,7 @@ export default class PetService {
         const ability = stage?.habilities?.hability;
 
         if (!stage) {
-            return { life: 0, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0, biteDamage: 0, healAmount: 0, mimicRatio: 0 };
+            return { life: 0, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0, biteDamage: 0, healAmount: 0, mimicRatio: 0, burnDamage: 0 };
         }
 
         return {
@@ -143,7 +143,9 @@ export default class PetService {
             absorption: scale(stage.stats.absorption),
             biteDamage: scale(ability?.damage),
             healAmount: scale(ability?.heal),
-            mimicRatio: (ability?.mimicRatio ?? 0) * multiplier
+            mimicRatio: (ability?.mimicRatio ?? 0) * multiplier,
+            // Boitatá: dano de UM tick da queimadura (ver BoitataBurn.js).
+            burnDamage: scale(ability?.burnDamage)
         };
 
     }

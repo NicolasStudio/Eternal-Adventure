@@ -1,7 +1,7 @@
 const pets = {
 
     /* ==========================================================
-       Lobo
+       Lobo - Dano verdadeiro
     ========================================================== */
     wolfPet1: {
         id: "wolf-pet1",
@@ -13,7 +13,7 @@ const pets = {
         color: "#8B4513",
         stars: "★★★",
         nivel: 0,
-        description: "Um ovo de lobo. Quem sabe o que pode sair dele?",
+        description: "Um ovo de lobo. ",
 
         xp: 0,
         fome: 0,
@@ -136,7 +136,7 @@ const pets = {
     },
     
     /* ==========================================================
-       Duende
+       Duende - Cura um aliado aleatório
     ========================================================== */
     fairyPet1: {
         id: "fairy-pet1",
@@ -148,7 +148,7 @@ const pets = {
         color: "#8B4513",
         stars: "★★★",
         nivel: 0,
-        description: "Um ovo de duende. Quem sabe o que pode sair dele?",
+        description: "Um ovo de duende. ",
 
         xp: 0,
         fome: 0,
@@ -273,7 +273,7 @@ const pets = {
     },
 
     /* ==========================================================
-       Aranha
+       Aranha - Dano conforme o dano do jogador
     ========================================================== */
     spiderPet1: {
         id: "spider-pet1",
@@ -285,7 +285,7 @@ const pets = {
         color: "#8B4513",
         stars: "★★★★",
         nivel: 0,
-        description: "Um ovo de aranha. Quem sabe o que pode sair dele?",
+        description: "Um ovo de aranha. ",
 
         xp: 0,
         fome: 0,
@@ -410,7 +410,7 @@ const pets = {
     },
 
     /* ==========================================================
-       Urso
+       Urso - Mitigador, só aumenta sua vida e armadura, passivamente.
     ========================================================== */
     bearPet1: {
         id: "bear-pet1",
@@ -422,7 +422,7 @@ const pets = {
         color: "#8B4513",
         stars: "★★★★",
         nivel: 0,
-        description: "Um ovo de urso. Quem sabe o que pode sair dele?",
+        description: "Um ovo de urso. ",
 
         xp: 0,
         fome: 0,
@@ -539,6 +539,143 @@ const pets = {
             hability: {
                 name: "Mitigador",
                 description: "Não ataca nem participa do turno de combate, só aumenta sua vida e armadura, passivamente.",
+            }
+        }
+    },
+
+    /* ==========================================================
+       Snake - Dano de queimação
+    ========================================================== */
+    boitataPet1: {
+        id: "boitata-pet1",
+        name: "Ovo de Boitata",
+        image: "assets/img/assets/pet/egg-snake.png",
+        type: "pet",
+        family: "snake",
+        shocked: false,
+        color: "#ff711f",
+        stars: "★★★★★",
+        nivel: 0,
+        description: "Um ovo do Boitata.",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 0,
+            attack: 0,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+
+        },
+
+    },
+
+    boitataPet2: {
+        id: "boitata-pet2",
+        name: "Boitata Filhote",
+        image: "assets/img/assets/pet/snake-stage-1.png",
+        type: "pet",
+        family: "snake",
+        shocked: true,
+        color: "#ff711f",
+        stars: "★★★★★",
+        nivel: 1,
+        description: "Um boitata filhote. Ele ainda é pequeno, mas tem potencial para crescer forte.",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 20,
+            attack: 7,
+            armor: 7,
+            agility: 12,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+
+        },
+        habilities: {
+            hability: {
+                name: "Lança chamas",
+                description: "Seu ataque causa dano de queimação no inimigo, entre turnos.",
+                burnDamage: 10,
+            }
+        }
+    },
+
+    boitataPet3: {
+        id: "boitata-pet3",
+        name: "Boitata Jovem",
+        image: "assets/img/assets/pet/snake-stage-2.png",
+        type: "pet",
+        family: "snake",
+        shocked: true,
+        color: "#ff711f",
+        stars: "★★★★★",
+        nivel: 18,
+        description: "Um boitata jovem. Ele já é mais forte e pode causar dano significativo em combate.",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 30,
+            attack: 12,
+            armor: 12,
+            agility: 18,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+
+        },
+        habilities: {
+            hability: {
+                name: "Lança chamas",
+                description: "Seu ataque causa dano de queimação no inimigo, entre turnos.",
+                burnDamage: 20,
+            }
+        }
+    },
+
+    boitataPet4: {
+        id: "boitata-pet4",
+        name: "Boitata Adulto",
+        image: "assets/img/assets/pet/snake-stage-3.png",
+        type: "pet",
+        family: "snake",
+        shocked: true,
+        color: "#ff711f",
+        stars: "★★★★★",
+        nivel: 32,
+        description: "Um boitata adulto. Ele é muito forte e pode causar dano significativo em combate.",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 40,
+            attack: 18,
+            armor: 18,
+            agility: 24,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+
+        },
+        habilities: {
+            hability: {
+                name: "Lança chamas",
+                description: "Seu ataque causa dano de queimação no inimigo, entre turnos.",
+                burnDamage: 30,
             }
         }
     },

@@ -226,6 +226,7 @@ export default class CharacterView {
         const abilityValue = ability ? [
             scaled.biteDamage > 0 ? `${scaled.biteDamage} de dano` : null,
             scaled.healAmount > 0 ? `${scaled.healAmount} de cura` : null,
+            scaled.burnDamage > 0 ? `${scaled.burnDamage} de queimadura` : null,
             // Mímico não tem dano fixo pra mostrar (é uma fração do
             // golpe de cada turno, só sabida em combate) — mostra a
             // fração em vez de um número inventado.

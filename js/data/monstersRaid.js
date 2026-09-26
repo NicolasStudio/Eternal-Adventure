@@ -1,5 +1,6 @@
 import items from "./items.js";
 import enchantmentStone from "./enchantmentStone.js";
+import pets from "./pet.js";
 
 const monstersRaid = [
 
@@ -8,6 +9,7 @@ const monstersRaid = [
     // ============================================
     {
         id: "drake_water",
+        element: "water",
         name: "Dragão Abissal",
         level: 150,
         type: "beast",
@@ -44,10 +46,11 @@ const monstersRaid = [
             },
             {
                 pool: [
-                    { item: enchantmentStone.quartzoRosaUm, chance: 69 },
-                    { item: enchantmentStone.quartzoRosaDois, chance: 10 },
-                    { item: enchantmentStone.quartzoRosaTres, chance: 15 },
-                    { type: ["boot"], rarity: "legendary", chance: 5 }
+                    { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
+                    { type: ["boot"], rarity: "legendary", chance: 5 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 10 },
+                    { item: enchantmentStone.quartzoRosaDois, chance: 13 },
+                    { item: enchantmentStone.quartzoRosaUm, chance: 67 }
                 ]
             }
         ]
@@ -55,6 +58,7 @@ const monstersRaid = [
 
     {
         id: "drake_fire",
+        element: "fire",
         name: "Dragão Infernal",
         level: 150,
         type: "beast",
@@ -91,10 +95,11 @@ const monstersRaid = [
             },
             {
                 pool: [
-                    { item: enchantmentStone.quartzoRosaUm, chance: 69 },
-                    { item: enchantmentStone.quartzoRosaDois, chance: 10 },
-                    { item: enchantmentStone.quartzoRosaTres, chance: 15 },
-                    { type: ["leg"], rarity: "legendary", chance: 5 }
+                    { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
+                    { type: ["leg"], rarity: "legendary", chance: 5 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 10 },
+                    { item: enchantmentStone.quartzoRosaDois, chance: 13 },
+                    { item: enchantmentStone.quartzoRosaUm, chance: 67 }
                 ]
             }
         ]
@@ -102,6 +107,7 @@ const monstersRaid = [
 
     {
         id: "drake_light",
+        element: "light",
         name: "Dragão Solaria",
         level: 150,
         type: "beast",
@@ -138,10 +144,11 @@ const monstersRaid = [
             },
             {
                 pool: [
-                    { item: enchantmentStone.quartzoRosaUm, chance: 69 },
-                    { item: enchantmentStone.quartzoRosaDois, chance: 10 },
-                    { item: enchantmentStone.quartzoRosaTres, chance: 15 },
-                    { type: ["chest"], rarity: "legendary", chance: 5 }
+                    { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
+                    { type: ["chest"], rarity: "legendary", chance: 5 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 10 },
+                    { item: enchantmentStone.quartzoRosaDois, chance: 13 },
+                    { item: enchantmentStone.quartzoRosaUm, chance: 67 }
                 ]
             }
         ]
@@ -149,6 +156,7 @@ const monstersRaid = [
 
     {
         id: "drake_dark",
+        element: "dark",
         name: "Dragão de Tenebris",
         level: 150,
         type: "beast",
@@ -185,10 +193,11 @@ const monstersRaid = [
             },
             {
                 pool: [
-                    { item: enchantmentStone.quartzoRosaUm, chance: 69 },
-                    { item: enchantmentStone.quartzoRosaDois, chance: 10 },
-                    { item: enchantmentStone.quartzoRosaTres, chance: 15 },
-                    { type: ["helmet"], rarity: "legendary", chance: 5 }
+                    { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
+                    { type: ["helmet"], rarity: "legendary", chance: 5 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 10 },
+                    { item: enchantmentStone.quartzoRosaDois, chance: 13 },
+                    { item: enchantmentStone.quartzoRosaUm, chance: 67 }
                 ]
             }
         ]
@@ -196,6 +205,7 @@ const monstersRaid = [
 
     {
         id: "drake_plant",
+        element: "plant",
         name: "Dragão Yggdrasil",
         level: 180,
         type: "beast",
@@ -232,10 +242,11 @@ const monstersRaid = [
             },
             {
                 pool: [
-                    { item: enchantmentStone.quartzoRosaUm, chance: 69 },
-                    { item: enchantmentStone.quartzoRosaDois, chance: 10 },
-                    { item: enchantmentStone.quartzoRosaTres, chance: 15 },
-                    { type: ["weapon"], rarity: "legendary", chance: 5 }
+                    { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
+                    { type: ["weapon"], rarity: "legendary", chance: 5 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 10 },
+                    { item: enchantmentStone.quartzoRosaDois, chance: 13 },
+                    { item: enchantmentStone.quartzoRosaUm, chance: 67 }
                 ]
             }
         ]

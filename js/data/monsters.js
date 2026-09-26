@@ -973,7 +973,7 @@ const monsters = [
             },
             {
                 item: { ...pets.fairyPet1, icon: pets.fairyPet1.image },
-                chance: 5
+                chance: 2
             }
         ]
     },
@@ -1383,7 +1383,7 @@ const monsters = [
             },
             {
                 item: { ...pets.spiderPet1, icon: "assets/img/assets/eggs_drop/egg-spider.png"},
-                chance: 3
+                chance: 2
             }
         ]
     },

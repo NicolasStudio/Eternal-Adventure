@@ -8,6 +8,7 @@ import RewardModal from "../ui/components/modals/RewardModal.js";
 import CombatToast from "../combat/CombatToast.js";
 import HealFlash from "../combat/HealFlash.js";
 import HitFlash from "../combat/HitFlash.js";
+import BoitataBurn from "../services/BoitataBurn.js";
 
 export default class RaidView {
 
@@ -203,6 +204,10 @@ export default class RaidView {
             return `<div class="pvp-log-line pvp-log-dodge">${targetName} esquivou do ataque de ${attackerName}${attackTag}!</div>`;
         }
 
+        if (entry.burn) {
+            return `<div class="pvp-log-line pvp-log-pet-bite">Pet de ${attackerName} queimou ${targetName}: ${entry.damage} de dano.</div>`;
+        }
+
         if (entry.petBite) {
             const healTargetName = entry.healedIds?.[0] ? nameOf(entry.healedIds[0]) : null;
             const damage = entry.damage > 0 ? `Causou ${entry.damage} de dano em ${targetName}.` : "";
@@ -317,11 +322,16 @@ export default class RaidView {
 
         const pet = this.player.equipment.pet;
 
-        if (!pet) return { petBiteDamage: 0, petHealAmount: 0, petMimicRatio: 0 };
+        if (!pet) return { petBiteDamage: 0, petHealAmount: 0, petMimicRatio: 0, petBurnDamage: 0 };
 
         const scaled = PetService.getScaledStats(pet);
 
-        return { petBiteDamage: scaled.biteDamage, petHealAmount: scaled.healAmount, petMimicRatio: scaled.mimicRatio };
+        return {
+            petBiteDamage: scaled.biteDamage,
+            petHealAmount: scaled.healAmount,
+            petMimicRatio: scaled.mimicRatio,
+            petBurnDamage: scaled.burnDamage
+        };
 
     }
 
@@ -607,6 +617,17 @@ export default class RaidView {
                 : `<span class="combat-dodge">${targetName} esquivou do ataque de ${attackerName}!</span>`;
         }
 
+        if (entry.burn) {
+            const petName = squad.find(c => c.id === entry.attackerId)?.petName ?? "O pet";
+            return BoitataBurn.buildMessage({
+                petName,
+                targetName,
+                damage: entry.damage,
+                element: entry.element,
+                first: entry.burnStart
+            });
+        }
+
         if (entry.petBite) {
             const petName = squad.find(c => c.id === entry.attackerId)?.petName ?? "O pet";
             const healTargetName = entry.healedIds?.[0] ? nameOf(entry.healedIds[0]) : null;
@@ -656,7 +677,7 @@ export default class RaidView {
 
         if (entry.dodged) {
             type += " dodge";
-        } else if (entry.petBite) {
+        } else if (entry.petBite || entry.burn) {
             type += " pet-bite";
         } else if (isMeAttacking) {
             if (entry.lifeSteal > 0) type = "lifeSteal player";

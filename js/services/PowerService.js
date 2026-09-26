@@ -76,9 +76,13 @@ export default class PowerService {
         const stageIndex = PetService.getStages(pet.family).indexOf(stage);
         const starCount = (pet.stars?.match(/★/g) ?? []).length;
         const multiplier = PET_STAR_MULTIPLIER[starCount] ?? DEFAULT_PET_STAR_MULTIPLIER;
-        const biteDamage = PetService.getScaledStats(pet).biteDamage;
+        const scaled = PetService.getScaledStats(pet);
 
-        const statsPower = (sumPrimary(pet.stats) + biteDamage) * multiplier;
+        // A queimadura do Boitatá entra na conta igual à mordida dos
+        // outros pets (senão ele apareceria bem mais fraco do que é).
+        const abilityDamage = scaled.biteDamage + scaled.burnDamage;
+
+        const statsPower = (sumPrimary(pet.stats) + abilityDamage) * multiplier;
 
         return statsPower + (PET_STAGE_BONUS[stageIndex] ?? 0);
 

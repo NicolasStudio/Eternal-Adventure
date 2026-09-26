@@ -1,4 +1,5 @@
 import PvpCombatService from "./PvpCombatService.js";
+import BoitataBurn from "./BoitataBurn.js";
 
 // Boss tem HP colossal (milhares) contra só 4 atacantes por rodada —
 // precisa de bem mais rodadas que um duelo de PVP (que usa guard 500/1000)
@@ -80,6 +81,9 @@ export default class RaidCombatService {
         return {
             id: "boss",
             name: raidMonster.name,
+            // Elemento do chefe (water/fire/light/dark/plant) — usado pela
+            // efetividade da queimadura do Boitatá (ver BoitataBurn.js).
+            element: raidMonster.element ?? null,
             image: raidMonster.sprite,
             maxHP: status.vidaMaxima,
             currentHP: status.vidaMaxima,
@@ -125,6 +129,37 @@ export default class RaidCombatService {
 
         const aliveSquad = () => players.filter(c => c.currentHP > 0);
 
+        // Queimadura do Boitatá (ver BoitataBurn.js): uma por DONO de
+        // pet, ligada no primeiro golpe dele que acerta o chefe e
+        // cobrada só na VEZ DO PRÓPRIO DONO (nunca no turno dos outros
+        // nem do chefe). Não consome rng().
+        const burns = new Map();
+
+        const tickBurn = (owner) => {
+
+            const burn = burns.get(owner.id);
+
+            if (!burn || bossCombatant.currentHP <= 0) return;
+
+            const tickDamage = BoitataBurn.getTickDamage(owner.petBurnDamage, bossCombatant.element);
+            const applied = Math.min(bossCombatant.currentHP, tickDamage);
+
+            bossCombatant.currentHP = Math.max(0, bossCombatant.currentHP - tickDamage);
+
+            log.push({
+                attackerId: owner.id,
+                attackerSide: "squad",
+                targetId: bossCombatant.id,
+                burn: true,
+                burnStart: burn.first,
+                damage: applied,
+                element: bossCombatant.element ?? null
+            });
+
+            burn.first = false;
+
+        };
+
         while (aliveSquad().length > 0 && bossCombatant.currentHP > 0 && guard < MAX_ROUNDS) {
 
             guard++;
@@ -169,6 +204,12 @@ export default class RaidCombatService {
                         dodged: true,
                         attackName: chosenAttack?.name ?? null
                     });
+
+                    // Turno esquivado também é turno do dono: a queimadura
+                    // (já ligada) cobra.
+                    if (!isBossTurn) tickBurn(attacker);
+
+                    if (bossCombatant.currentHP <= 0) break;
 
                     continue;
 
@@ -266,7 +307,16 @@ export default class RaidCombatService {
 
                 }
 
+                // Boitatá: liga a queimadura no primeiro golpe que acerta.
+                if (!isBossTurn && attacker.petBurnDamage > 0 && !burns.has(attacker.id)) {
+                    burns.set(attacker.id, { first: true });
+                }
+
                 if (isBossTurn ? aliveSquad().length === 0 : bossCombatant.currentHP <= 0) break;
+
+                if (!isBossTurn) tickBurn(attacker);
+
+                if (bossCombatant.currentHP <= 0) break;
 
             }
 
