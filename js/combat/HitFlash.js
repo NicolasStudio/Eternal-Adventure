@@ -1,3 +1,5 @@
+import mountFlashOverlay from "./mountFlashOverlay.js";
+
 export default class HitFlash {
 
     // Mesma técnica do HealFlash (cópia flutuante do sprite, recortada
@@ -13,23 +15,15 @@ export default class HitFlash {
             return;
         }
 
-        const rect = sprite.getBoundingClientRect();
-
-        if (!rect.width || !rect.height) {
-            return;
-        }
-
         const overlay = document.createElement("div");
 
         overlay.className = "hit-flash-overlay";
-        overlay.style.top = `${rect.top}px`;
-        overlay.style.left = `${rect.left}px`;
-        overlay.style.width = `${rect.width}px`;
-        overlay.style.height = `${rect.height}px`;
         overlay.style.maskImage = `url("${sprite.src}")`;
         overlay.style.webkitMaskImage = `url("${sprite.src}")`;
 
-        document.body.appendChild(overlay);
+        if (!mountFlashOverlay(sprite, overlay)) {
+            return;
+        }
 
         const remove = () => overlay.remove();
 

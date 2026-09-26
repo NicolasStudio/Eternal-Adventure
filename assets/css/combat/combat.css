@@ -162,6 +162,15 @@
     100%{ opacity:0; }
 }
 
+/* Dentro da arena o efeito é posicionado em relação a ela (não à
+   tela) e fica abaixo das mensagens de ataque (#combat-toast-container,
+   z-index 50), mas acima dos sprites (5 a 20). */
+.heal-flash-overlay.in-arena,
+.hit-flash-overlay.in-arena{
+    position:absolute;
+    z-index:40;
+}
+
 /* ==========================================================
    TOASTS
 ========================================================== */
