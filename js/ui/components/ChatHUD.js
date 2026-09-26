@@ -9,17 +9,40 @@ export default class ChatHUD {
         this.game = game;
         this.panel = null;
         this.nodes = new Map();
+        this.unread = 0;
+        this.stopPanel = null;
+        this.stopWatching = null;
     }
 
     // Só o botão fica no HUD (que é reconstruído com frequência) — o
     // painel vive fora dele, no body, senão cada reconstrução apagaria
-    // as mensagens, o texto digitado e a posição da rolagem.
+    // as mensagens, o texto digitado e a posição da rolagem. O contador
+    // de não lidas também fica guardado aqui (não no botão) e é
+    // redesenhado junto com ele.
     renderButton() {
         return `
-            <button class="hud-tool chat-toggle" id="chat-toggle" data-tooltip="Chat">
+            <button class="hud-tool chat-toggle ${this.unread > 0 ? "has-unread" : ""}" id="chat-toggle" data-tooltip="Chat">
                 <i class="fa-solid fa-comments"></i>
+                <span class="chat-badge" id="chat-badge" ${this.unread > 0 ? "" : "hidden"}>${this.badgeText()}</span>
             </button>
         `;
+    }
+
+    badgeText() {
+        return this.unread > 9 ? "9+" : String(this.unread);
+    }
+
+    updateBadge() {
+
+        const button = document.getElementById("chat-toggle");
+        const badge = document.getElementById("chat-badge");
+
+        if (!button || !badge) return;
+
+        badge.textContent = this.badgeText();
+        badge.hidden = this.unread === 0;
+        button.classList.toggle("has-unread", this.unread > 0);
+
     }
 
     registerEvents(container = document) {
@@ -27,14 +50,53 @@ export default class ChatHUD {
         const button = container.querySelector("#chat-toggle");
 
         // Sem botão = tela sem chat (combate, PVP, Cooperativo): fecha
-        // o painel se ele tinha ficado aberto.
+        // o painel se ele tinha ficado aberto e para de ouvir.
         if (!button) {
             this.close();
+            this.watch(false);
             return;
         }
 
         button.addEventListener("click", () => this.toggle());
 
+        this.watch(true);
+
+    }
+
+    // Fica ouvindo o chat enquanto o botão está na tela, só pra avisar
+    // de mensagem nova quando o painel está fechado. Compartilha a
+    // mesma conexão do painel (ver ChatService.subscribe).
+    watch(active) {
+
+        if (!active) {
+            this.stopWatching?.();
+            this.stopWatching = null;
+            return;
+        }
+
+        if (this.stopWatching) return;
+
+        const myUid = AuthService.getCurrentUser()?.uid;
+
+        this.stopWatching = ChatService.subscribe(
+            (message, isNew) => {
+
+                if (!isNew || this.isOpen || message.uid === myUid) return;
+
+                this.unread++;
+                this.updateBadge();
+
+            },
+            () => {}
+        );
+
+    }
+
+    // Sair do jogo/deslogar: fecha tudo e zera o aviso.
+    shutdown() {
+        this.close();
+        this.watch(false);
+        this.unread = 0;
     }
 
     get isOpen() {
@@ -84,7 +146,11 @@ export default class ChatHUD {
         this.positionPanel();
         this.bindPanelEvents();
 
-        ChatService.start(
+        // Abrir o painel = leu tudo.
+        this.unread = 0;
+        this.updateBadge();
+
+        this.stopPanel = ChatService.subscribe(
             message => this.addMessage(message),
             id => this.removeMessage(id)
         );
@@ -97,7 +163,8 @@ export default class ChatHUD {
 
         if (!this.panel) return;
 
-        ChatService.stop();
+        this.stopPanel?.();
+        this.stopPanel = null;
 
         this.panel.remove();
         this.panel = null;
