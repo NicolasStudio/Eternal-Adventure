@@ -258,7 +258,7 @@ export default class CharacterView {
                     <div class="character-bar">
                         <span class="character-label">XP</span>
                         <div class="character-fill xp" style="width:${xpPercent}%;"></div>
-                        <span class="character-text">${pet.xp} / ${xpRequired}</span>
+                        <span class="character-text">${xpRequired > 0 ? `${pet.xp} / ${xpRequired}` : "NÍVEL MÁXIMO"}</span>
                     </div>
 
                 </div>
@@ -649,6 +649,11 @@ export default class CharacterView {
 
         if (!pet) {
             Toast.show("Equipe um pet pra poder alimentá-lo.");
+            return;
+        }
+
+        if (PetService.isMaxLevel(pet)) {
+            Toast.show("Seu pet já está no nível máximo.");
             return;
         }
 
@@ -1080,7 +1085,8 @@ export default class CharacterView {
                     if (isPetFood) {
 
                         petLevelUpButton.style.display = "";
-                        petLevelUpButton.disabled = PetService.getOwnedUnits(this.selectedItem) <= 0;
+                        petLevelUpButton.disabled = PetService.getOwnedUnits(this.selectedItem) <= 0
+                            || PetService.isMaxLevel(equippedPet);
 
                     } else {
 

@@ -13,6 +13,7 @@ import farmCrops from "../data/farmCrops.js";
 import Toast from "../ui/components/Toast.js";
 import AuthService from "./AuthService.js";
 import PowerService from "./PowerService.js";
+import { PET_MAX_LEVEL } from "../data/levelsPet.js";
 import { firestore, doc, getDoc, setDoc, collection, query, orderBy, limit, getDocs } from "./FirebaseService.js";
 
 const STORAGE_KEY = "eternal-adventure-save";
@@ -287,12 +288,31 @@ export default class SaveService {
 
     }
 
+    // Pet salvo antes da trava de nível (PET_MAX_LEVEL) volta pro nível
+    // máximo, sem XP sobrando — os atributos dele são sempre calculados
+    // a partir do nível, então não precisa de mais nenhum ajuste.
+    static clampPetLevel(item) {
+
+        if (item?.type !== "pet" || !item.shocked) return;
+
+        if ((item.level ?? 0) > PET_MAX_LEVEL) {
+            item.level = PET_MAX_LEVEL;
+            item.xp = 0;
+        }
+
+    }
+
     static refreshAllItemStats(player) {
 
-        player.inventory.forEach(item => this.refreshItemStats(item));
+        player.inventory.forEach(item => {
+            this.clampPetLevel(item);
+            this.refreshItemStats(item);
+        });
 
         Object.values(player.equipment).forEach(item => {
-            if (item) this.refreshItemStats(item);
+            if (!item) return;
+            this.clampPetLevel(item);
+            this.refreshItemStats(item);
         });
 
     }

@@ -37,16 +37,49 @@ export default class ChatService {
     static lastText = "";
     static lastSentAt = 0;
 
+    // Várias partes da tela (o painel do chat e o aviso de mensagem
+    // nova no balão) compartilham UMA só conexão com o banco: ela liga
+    // quando entra o primeiro assinante e desliga quando sai o último.
+    static subscribers = new Set();
+    static messages = new Map();
+    static attachedAt = 0;
+    static session = 0;
+
     // Horário do servidor (o relógio do jogador não é confiável).
     static serverNow() {
         return Date.now() + this.offset;
     }
 
-    // Escuta as mensagens da última hora + as novas em tempo real.
-    // Só fica conectado enquanto o painel do chat está aberto.
-    static async start(onAdd, onRemove) {
+    // onAdd(mensagem, isNova): isNova = false pro histórico (o que já
+    // existia quando a conexão abriu, ou que veio do cache); true pro
+    // que chegou depois. Devolve a função pra cancelar a assinatura.
+    static subscribe(onAdd, onRemove) {
 
-        this.stop();
+        const subscriber = { onAdd, onRemove };
+
+        this.subscribers.add(subscriber);
+
+        this.messages.forEach(message => onAdd(message, false));
+
+        if (this.subscribers.size === 1) {
+            this.attach();
+        }
+
+        return () => {
+
+            this.subscribers.delete(subscriber);
+
+            if (this.subscribers.size === 0) {
+                this.detach();
+            }
+
+        };
+
+    }
+
+    static async attach() {
+
+        const session = ++this.session;
 
         try {
             const snapshot = await get(ref(rtdb, ".info/serverTimeOffset"));
@@ -55,25 +88,53 @@ export default class ChatService {
             this.offset = 0;
         }
 
+        // Alguém pode ter cancelado a assinatura enquanto esperava.
+        if (session !== this.session || this.subscribers.size === 0) return;
+
+        this.attachedAt = this.serverNow();
+
         const messagesQuery = rtdbQuery(
             ref(rtdb, CHAT_PATH),
             orderByChild("ts"),
-            startAt(this.serverNow() - MESSAGE_TTL_MS),
+            startAt(this.attachedAt - MESSAGE_TTL_MS),
             limitToLast(HISTORY_LIMIT)
         );
 
         this.unsubscribers = [
-            onChildAdded(messagesQuery, snapshot => onAdd({ id: snapshot.key, ...snapshot.val() })),
-            onChildRemoved(messagesQuery, snapshot => onRemove(snapshot.key))
+            onChildAdded(messagesQuery, snapshot => {
+
+                const message = { id: snapshot.key, ...snapshot.val() };
+
+                this.messages.set(message.id, message);
+
+                // ts ainda nulo = mensagem que eu acabei de mandar (o
+                // servidor ainda não carimbou) — conta como nova.
+                const isNew = message.ts == null || message.ts > this.attachedAt;
+
+                this.subscribers.forEach(s => s.onAdd(message, isNew));
+
+            }),
+            onChildRemoved(messagesQuery, snapshot => {
+
+                this.messages.delete(snapshot.key);
+
+                this.subscribers.forEach(s => s.onRemove(snapshot.key));
+
+            })
         ];
 
         this.cleanupExpired();
 
     }
 
-    static stop() {
+    static detach() {
+
+        this.session++;
+
         this.unsubscribers.forEach(unsubscribe => unsubscribe());
         this.unsubscribers = [];
+        this.messages.clear();
+
     }
 
     // Não existe relógio no servidor pra apagar sozinho (sem Cloud

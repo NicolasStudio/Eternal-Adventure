@@ -1,4 +1,5 @@
 import pets from "../data/pet.js";
+import levelsPet, { PET_MAX_LEVEL, LIFE_PER_POINT } from "../data/levelsPet.js";
 import SaveService from "./SaveService.js";
 
 const HUNGER_DECAY_STEP_MS = 50 * 60 * 1000; // 50min
@@ -55,8 +56,65 @@ export default class PetService {
 
     }
 
+    // 0 no nível máximo (não existe próximo nível) — a tela usa isso
+    // pra mostrar "MAX" em vez de uma barra de XP.
     static getXpForNextLevel(level) {
+
+        if (level >= PET_MAX_LEVEL) return 0;
+
         return Math.round(XP_BASE * Math.pow(Math.max(1, level), XP_EXPONENT));
+
+    }
+
+    static isMaxLevel(petInstance) {
+        return (petInstance?.level ?? 0) >= PET_MAX_LEVEL;
+    }
+
+    // Pet salvo antes da trava (ex: nível 60) volta pro nível máximo,
+    // sem XP sobrando. Os stats são sempre calculados a partir do nível,
+    // então nada mais precisa ser corrigido.
+    static normalizeLevel(petInstance) {
+
+        if (!petInstance || (petInstance.level ?? 0) <= PET_MAX_LEVEL) return;
+
+        petInstance.level = PET_MAX_LEVEL;
+        petInstance.xp = 0;
+
+        this.syncDisplayFromStage(petInstance);
+
+    }
+
+    // Atributos do pet NO NÍVEL dado: os do nível 1 (primeiro estágio em
+    // pet.js) + tudo que js/data/levelsPet.js dá até esse nível. Sempre
+    // calculado do nível atual — um pet nível 17 já recebe na hora
+    // tudo até o 17, e mudar a tabela vale pra todos os pets existentes
+    // sem precisar migrar save nenhum.
+    static getStatsForLevel(family, level) {
+
+        const base = this.getStages(family)[0]?.stats ?? {};
+        const capped = Math.min(level ?? 1, PET_MAX_LEVEL);
+        const points = { life: 0, attack: 0, armor: 0, agility: 0 };
+
+        for (const [gainLevel, byFamily] of Object.entries(levelsPet)) {
+
+            if (Number(gainLevel) > capped) continue;
+
+            const gain = byFamily[family];
+
+            if (!gain) continue;
+
+            Object.keys(points).forEach(key => { points[key] += gain[key] ?? 0; });
+
+        }
+
+        return {
+            ...base,
+            life: (base.life ?? 0) + points.life * LIFE_PER_POINT,
+            attack: (base.attack ?? 0) + points.attack,
+            armor: (base.armor ?? 0) + points.armor,
+            agility: (base.agility ?? 0) + points.agility
+        };
+
     }
 
     /* =====================================================
@@ -127,20 +185,21 @@ export default class PetService {
         const multiplier = this.getHungerMultiplier(petInstance);
         const scale = (value) => Math.floor((value ?? 0) * multiplier);
         const ability = stage?.habilities?.hability;
+        const stats = this.getStatsForLevel(petInstance.family, petInstance.level);
 
         if (!stage) {
             return { life: 0, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0, biteDamage: 0, healAmount: 0, mimicRatio: 0, burnDamage: 0 };
         }
 
         return {
-            life: scale(stage.stats.life),
-            attack: scale(stage.stats.attack),
-            armor: scale(stage.stats.armor),
-            agility: scale(stage.stats.agility),
-            criticalChance: scale(stage.stats.criticalChance),
-            lifeSteal: scale(stage.stats.lifeSteal),
-            penetration: scale(stage.stats.penetration),
-            absorption: scale(stage.stats.absorption),
+            life: scale(stats.life),
+            attack: scale(stats.attack),
+            armor: scale(stats.armor),
+            agility: scale(stats.agility),
+            criticalChance: scale(stats.criticalChance),
+            lifeSteal: scale(stats.lifeSteal),
+            penetration: scale(stats.penetration),
+            absorption: scale(stats.absorption),
             biteDamage: scale(ability?.damage),
             healAmount: scale(ability?.heal),
             mimicRatio: (ability?.mimicRatio ?? 0) * multiplier,
@@ -168,6 +227,9 @@ export default class PetService {
     static syncEquippedPetContribution(player) {
 
         const pet = player.equipment.pet;
+
+        this.normalizeLevel(pet);
+
         const scaled = pet ? this.getScaledStats(pet) : null;
 
         if (pet && scaled) {
@@ -263,7 +325,7 @@ export default class PetService {
         // (escalada pela fome) quando equipado, ver
         // syncEquippedPetContribution; isso evita ficar com números
         // desatualizados enquanto o pet não está equipado.
-        petInstance.stats = { ...stage.stats };
+        petInstance.stats = this.getStatsForLevel(petInstance.family, petInstance.level);
 
     }
 
@@ -271,11 +333,19 @@ export default class PetService {
     // de um nível de uma vez, igual Player.addXP.
     static applyPetXP(petInstance, amount) {
 
+        this.normalizeLevel(petInstance);
+
+        // No nível máximo não existe mais XP a ganhar.
+        if (this.isMaxLevel(petInstance)) {
+            petInstance.xp = 0;
+            return;
+        }
+
         petInstance.xp = (petInstance.xp ?? 0) + amount;
 
         let leveledUp = false;
 
-        while (true) {
+        while (!this.isMaxLevel(petInstance)) {
 
             const required = this.getXpForNextLevel(petInstance.level);
 
@@ -285,6 +355,10 @@ export default class PetService {
             petInstance.level++;
             leveledUp = true;
 
+        }
+
+        if (this.isMaxLevel(petInstance)) {
+            petInstance.xp = 0;
         }
 
         // Só resincroniza nome/imagem/stats quando o nível realmente
@@ -341,7 +415,21 @@ export default class PetService {
         }
 
         const owned = foodItem.quantity ?? 1;
-        const requestedUnits = Math.max(0, Math.min(Math.floor(units), owned));
+        let requestedUnits = Math.max(0, Math.min(Math.floor(units), owned));
+
+        // No nível máximo a sobra de alimento não vira XP, então só
+        // gasta o necessário pra encher a fome (nunca desperdiça).
+        if (this.isMaxLevel(petInstance)) {
+
+            const needed = this.getUnitsNeededToFillHunger(petInstance, foodItem);
+
+            if (needed <= 0) {
+                return { ok: false, message: "Seu pet já está no nível máximo e com a fome cheia." };
+            }
+
+            requestedUnits = Math.min(requestedUnits, needed);
+
+        }
 
         if (requestedUnits <= 0) {
             return { ok: false, message: "Escolha ao menos 1 unidade." };

@@ -57,7 +57,7 @@ export default class PetTooltip {
                 </div>
                 <div class="tooltip-row">
                     <span class="tooltip-label">XP</span>
-                    <span class="tooltip-value">${this.item.xp ?? 0} / ${xpRequired}</span>
+                    <span class="tooltip-value">${xpRequired > 0 ? `${this.item.xp ?? 0} / ${xpRequired}` : "Nível máximo"}</span>
                 </div>
             </div>
             <div class="tooltip-section">
