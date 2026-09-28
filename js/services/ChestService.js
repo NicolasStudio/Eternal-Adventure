@@ -1,6 +1,6 @@
 import cards from "../data/cards.js";
 
-const COOLDOWN_MS = 3.5 * 60 * 60 * 1000; // 3h30
+const COOLDOWN_MS = 3 * 60 * 60 * 1000; // 3h
 
 export default class ChestService {
 
@@ -28,7 +28,7 @@ export default class ChestService {
     }
 
     // Sorteia uma carta aleatória (pode repetir, sem problema),
-    // registra no álbum do player e reinicia o cooldown de 5h.
+    // registra no álbum do player e reinicia o cooldown (COOLDOWN_MS).
     static open(player) {
 
         if (!this.isReady(player)) return null;
