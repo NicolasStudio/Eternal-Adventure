@@ -7,6 +7,8 @@ import Loader from "./Loader.js";
 import AuthService from "../services/AuthService.js";
 import SaveService from "../services/SaveService.js";
 
+const AUTO_SAVE_INTERVAL_MS = 60 * 60 * 1000; // 1h
+
 export default class Game {
 
     constructor() {
@@ -43,6 +45,30 @@ export default class Game {
         }
 
         await loader.hide();
+
+        this.startAutoSave();
+
+    }
+
+    // Salva sozinho de hora em hora (local + nuvem + ranking), além dos
+    // saves que já acontecem em momentos-chave — cobre quem fica muito
+    // tempo jogando sem clicar em "Salvar".
+    startAutoSave() {
+
+        clearInterval(this.autoSaveTimer);
+
+        this.autoSaveTimer = setInterval(() => {
+
+            if (!this.player) return;
+
+            // No PVP a vida do personagem é alterada só durante a
+            // animação da luta e restaurada no fim — salvar nesse meio
+            // gravaria a vida "de mentira".
+            if (this.hudScreen.inPvpCombat) return;
+
+            SaveService.autoSave(this.player);
+
+        }, AUTO_SAVE_INTERVAL_MS);
 
     }
 

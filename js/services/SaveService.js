@@ -449,6 +449,75 @@ export default class SaveService {
 
     }
 
+    // Foto do que o jogador tem equipado e dos status finais, pra tela de
+    // detalhe do ranking. Só o necessário pra montar os tooltips (nada de
+    // inventário, ouro ou progresso) — tudo com null em vez de undefined,
+    // porque o Firestore recusa undefined.
+    static buildProfileSnapshot(player) {
+
+        const stats = player.stats.getFinalStats();
+        const equipment = {};
+
+        ["weapon", "helmet", "chest", "leg", "boot", "pet"].forEach(slot => {
+            equipment[slot] = this.compactEquippedItem(player.equipment[slot]);
+        });
+
+        return {
+            stats: {
+                life: player.maxHP,
+                attack: stats.attack,
+                armor: stats.armor,
+                agility: stats.agility,
+                criticalChance: stats.criticalChance,
+                lifeSteal: stats.lifeSteal,
+                penetration: stats.penetration,
+                absorption: stats.absorption
+            },
+            equipment
+        };
+
+    }
+
+    static compactEquippedItem(item) {
+
+        if (!item) return null;
+
+        if (item.type === "pet") {
+
+            return {
+                type: "pet",
+                shocked: item.shocked === true,
+                slot: "pet",
+                name: item.name,
+                image: item.image ?? item.icon ?? null,
+                icon: item.icon ?? item.image ?? null,
+                stars: item.stars ?? null,
+                family: item.family ?? null,
+                level: item.level ?? 1,
+                xp: 0,
+                fome: item.fome ?? 0,
+                description: item.description ?? null
+            };
+
+        }
+
+        const pickInfo = info => info ? { id: info.id ?? null, name: info.name, color: info.color } : null;
+
+        return {
+            id: item.id ?? null,
+            type: item.type ?? null,
+            slot: item.slot ?? null,
+            class: item.class ?? null,
+            name: item.name,
+            icon: item.icon ?? null,
+            rarity: pickInfo(item.rarity),
+            quality: pickInfo(item.quality),
+            stats: item.stats ? { ...item.stats } : null,
+            enchantments: item.enchantments ? { ...item.enchantments } : null
+        };
+
+    }
+
     // Entrada "leve" (sem inventário/progresso) só com o que o ranking
     // precisa mostrar — pública pra qualquer jogador logado poder ler,
     // ao contrário do save completo que é privado do dono.
@@ -460,7 +529,8 @@ export default class SaveService {
                 name: player.name ?? player.class.name,
                 level: player.level,
                 classId: player.class.id,
-                power: PowerService.getPower(player)
+                power: PowerService.getPower(player),
+                ...this.buildProfileSnapshot(player)
             });
 
         } catch (err) {

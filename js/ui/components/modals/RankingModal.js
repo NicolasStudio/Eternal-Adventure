@@ -1,5 +1,13 @@
 import SaveService from "../../../services/SaveService.js";
 import classes from "../../../player/classes.js";
+import PlayerProfileModal from "./PlayerProfileModal.js";
+
+// O nome vem do banco (de outro jogador) — nunca pode entrar como HTML.
+function escapeHtml(text) {
+    return String(text ?? "").replace(/[&<>"']/g, char => (
+        { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]
+    ));
+}
 
 export default class RankingModal {
 
@@ -8,6 +16,7 @@ export default class RankingModal {
         this.modal = null;
         this.status = "loading";
         this.entries = [];
+        this.profileModal = new PlayerProfileModal();
     }
 
     show() {
@@ -32,6 +41,7 @@ export default class RankingModal {
     }
 
     hide() {
+        this.profileModal.hide();
         if (this.modal) {
             this.modal.remove();
             this.modal = null;
@@ -112,13 +122,21 @@ export default class RankingModal {
 
         const className = classes[entry.classId]?.name ?? "???";
 
+        // Quem ainda não salvou depois da atualização não tem
+        // equipamento/status publicados: a lupa aparece do mesmo jeito,
+        // mas mais apagada, e o modal explica o motivo.
+        const hasDetails = !!entry.equipment && !!entry.stats;
+
         return `
             <div class="ranking-row">
-                <span class="ranking-position">#${position}</span>
-                <span class="ranking-name">${entry.name}</span>
-                <span class="ranking-level">Nv. ${entry.level}</span>
+                <span class="ranking-position has-details ${hasDetails ? "" : "no-data"}" data-index="${position - 1}" title="Ver equipamentos e status">
+                    <i class="fa-solid fa-magnifying-glass ranking-lens"></i>
+                    <span class="ranking-rank">#${position}</span>
+                </span>
+                <span class="ranking-name">${escapeHtml(entry.name)}</span>
+                <span class="ranking-level">Nv. ${Number(entry.level) || 0}</span>
                 <span class="ranking-class">${className}</span>
-                <span class="ranking-power">${entry.power.toLocaleString("pt-BR")}</span>
+                <span class="ranking-power">${(Number(entry.power) || 0).toLocaleString("pt-BR")}</span>
             </div>
         `;
 
@@ -128,6 +146,12 @@ export default class RankingModal {
 
         this.modal.querySelector("#ranking-close")?.addEventListener("click", () => {
             this.hide();
+        });
+
+        this.modal.querySelectorAll(".ranking-position.has-details").forEach(cell => {
+            cell.addEventListener("click", () => {
+                this.profileModal.show(this.entries[Number(cell.dataset.index)]);
+            });
         });
 
     }

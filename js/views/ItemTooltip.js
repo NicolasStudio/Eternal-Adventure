@@ -1,8 +1,11 @@
 import ItemValueService from "../services/ItemValueService.js";
 
 export default class ItemTooltip {
-    constructor(item) {
+    // showFooter=false esconde o "Valor de venda" — não faz sentido pro
+    // item equipado de OUTRO jogador (ver o detalhe do ranking).
+    constructor(item, { showFooter = true } = {}) {
         this.item = item;
+        this.showFooter = showFooter;
     }
 
     render() {
@@ -11,7 +14,7 @@ export default class ItemTooltip {
             this.renderInfo(),
             this.renderStats(),
             this.renderEffect(),
-            this.renderFooter()
+            this.showFooter ? this.renderFooter() : ""
         ].filter(section => section.trim() !== "");
 
         return sections.join(this.renderDivider());
