@@ -105,6 +105,7 @@ export default class HudScreen {
             <header class="hud-header ${headerModeClass}">
                 <div class="hud-left-column">
                     ${!this.inRaidCombat ? this.playerHUD.render() : ""}
+                    ${isPvp2v2 ? this.pvpView.renderAllyCard() : ""}
                     ${!anyCombat ? this.chatHUD.renderButton() : ""}
                     ${!anyCombat ? this.chestHUD.render() : ""}
                 </div>
@@ -122,7 +123,7 @@ export default class HudScreen {
         if (this.currentView === "farm") return "";
         if (this.inCombat) return this.monsterHUD.render(this.combatView.currentMonster);
         if (this.inPvpCombat && this.pvpView.mode !== "2v2") return this.monsterHUD.render(this.pvpView.opponentAsMonster());
-        if (this.inPvpCombat) return "";
+        if (this.inPvpCombat) return this.pvpView.renderEnemyCards();
         if (this.inRaidCombat) return "";
         return this.toolbarHUD.render();
     }
@@ -339,6 +340,9 @@ export default class HudScreen {
         // que abrir — e sai da fila de espera do Firebase se estava
         // procurando partida, pra não deixar "fantasma" pra trás.
         if (this.currentView === "pvp" && view !== "pvp") {
+            // 2x2: interrompe a cerimônia/luta em andamento (senão ela
+            // continuava rodando "por baixo" e travava o jogador).
+            this.pvpView.abortFlow();
             if (this.pvpView.state === "searching") {
                 PvpLobbyService.leaveQueue();
             }

@@ -368,18 +368,20 @@
     color:#d8c39b;
     text-shadow:0 2px 6px rgba(0,0,0,.8);
 }
-.pvp2v2-mini-hp{
-    width:140px;
-    height:9px;
-    border:1px solid #5b4633;
-    border-radius:4px;
-    background:rgba(0,0,0,.5);
-    overflow:hidden;
+/* Cartões de vida do 2x2: mesmo visual do HUD do jogador. O aliado
+   entra na coluna da esquerda (embaixo do meu HUD) e os dois inimigos
+   ficam empilhados no canto direito. */
+.pvp2v2-enemy-cards{
+    position:absolute;
+    top:20px;
+    right:25px;
+    z-index:20;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
 }
-.pvp2v2-mini-hp-fill{
-    height:100%;
-    background:linear-gradient(180deg,#c0392b,#8a2418);
-    transition:width .3s ease;
+.pvp2v2-card{
+    box-sizing:border-box;
 }
 
 .pvp-log{

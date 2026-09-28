@@ -4,6 +4,12 @@ import BoitataBurn from "./BoitataBurn.js";
 
 const DODGE_CAP = 40;
 
+// Versão da simulação do 2x2. Como os 4 clientes calculam a luta cada um
+// no seu navegador, dois jogadores em versões diferentes chegariam a
+// resultados diferentes — o pareamento do 2x2 só junta quem tem o MESMO
+// número (ver PvpLobbyService). Aumente sempre que mudar a simulação.
+export const TEAM_SIM_VERSION = 2;
+
 /*
     PVP precisa que os DOIS clientes (o do jogador A e o do jogador B)
     cheguem exatamente ao mesmo resultado de combate, sem depender de
@@ -70,6 +76,9 @@ export default class PvpCombatService {
         return {
             name: player.name,
             image: player.transcendence?.image ?? player.class.image,
+            // Só pra exibição (cartões de vida do 2x2) — não entram na luta.
+            hud: player.transcendence?.hud ?? player.class.hud,
+            level: player.level,
             class: player.class.id,
             maxHP: player.maxHP,
             currentHP: player.maxHP,
@@ -85,6 +94,7 @@ export default class PvpCombatService {
             petMimicRatio: scaledPet?.mimicRatio ?? 0,
             petBurnDamage: scaledPet?.burnDamage ?? 0,
             petName: player.equipment.pet?.name ?? null,
+            simVersion: TEAM_SIM_VERSION,
             // Só pro matchmaking (PvpLobbyService) — não entra no combate.
             power: PowerService.getPower(player)
         };
@@ -285,6 +295,45 @@ export default class PvpCombatService {
 
         const aliveOf = (team) => (team === "a" ? a : b).filter(c => c.currentHP > 0);
 
+        // Queimadura do Boitatá (ver BoitataBurn.js): uma por DONO, ligada
+        // no primeiro golpe dele que acerta e cobrada só na vez do
+        // próprio dono. Não consome rng(); o alvo é sempre o mesmo
+        // enquanto estiver vivo, senão o primeiro inimigo vivo na ordem
+        // do time — igual nos 4 clientes.
+        const burns = new Map();
+
+        const tickBurn = (owner, enemyTeam) => {
+
+            const burn = burns.get(owner.id);
+
+            if (!burn) return;
+
+            const enemies = aliveOf(enemyTeam);
+
+            if (enemies.length === 0) return;
+
+            const target = enemies.find(c => c.id === burn.targetId) ?? enemies[0];
+
+            burn.targetId = target.id;
+
+            const tickDamage = BoitataBurn.getTickDamage(owner.petBurnDamage);
+            const applied = Math.min(target.currentHP, tickDamage);
+
+            target.currentHP = Math.max(0, target.currentHP - tickDamage);
+
+            log.push({
+                attackerId: owner.id,
+                attackerTeam: owner.team,
+                targetId: target.id,
+                burn: true,
+                burnStart: burn.first,
+                damage: applied
+            });
+
+            burn.first = false;
+
+        };
+
         while (aliveOf("a").length > 0 && aliveOf("b").length > 0 && guard < 1000) {
 
             guard++;
@@ -310,6 +359,12 @@ export default class PvpCombatService {
                         targetId: target.id,
                         dodged: true
                     });
+
+                    // Turno esquivado também é turno do dono: a
+                    // queimadura (já ligada) cobra.
+                    tickBurn(attacker, enemyTeam);
+
+                    if (aliveOf(enemyTeam).length === 0) break;
 
                     continue;
 
@@ -403,13 +458,36 @@ export default class PvpCombatService {
 
                 }
 
+                // Boitatá: liga a queimadura no primeiro golpe que acerta.
+                if (attacker.petBurnDamage > 0 && !burns.has(attacker.id)) {
+                    burns.set(attacker.id, { first: true, targetId: target.id });
+                }
+
+                if (aliveOf(enemyTeam).length === 0) break;
+
+                tickBurn(attacker, enemyTeam);
+
                 if (aliveOf(enemyTeam).length === 0) break;
 
             }
 
         }
 
-        const winner = aliveOf("a").length > 0 ? "a" : "b";
+        // Se o limite de rodadas estourar com os dois times ainda vivos,
+        // vence quem tem mais vida restante (proporcional) — antes o time
+        // "a" (o de quem montou a partida) ganhava sempre nesse caso.
+        const hpRatio = (team) => {
+            const members = team === "a" ? a : b;
+            const current = members.reduce((sum, c) => sum + c.currentHP, 0);
+            const max = members.reduce((sum, c) => sum + c.maxHP, 0);
+            return max > 0 ? current / max : 0;
+        };
+
+        let winner;
+
+        if (aliveOf("b").length === 0) winner = "a";
+        else if (aliveOf("a").length === 0) winner = "b";
+        else winner = hpRatio("a") >= hpRatio("b") ? "a" : "b";
 
         return {
             winner,

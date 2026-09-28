@@ -13,6 +13,23 @@ import dungeons from "../data/dungeons.js";
 // antes da hora numa luta de PVP comum).
 const BOSS_DUNGEONS = dungeons.filter(dungeon => dungeon.boss && !dungeon.hidden);
 
+// Nome/imagem dos outros jogadores vêm do banco — no 2x2 nunca entram
+// como HTML sem passar por aqui.
+function escapeHtml(text) {
+    return String(text ?? "").replace(/[&<>"']/g, char => (
+        { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]
+    ));
+}
+
+// Os 4 clientes precisam montar os times na MESMA ordem (a simulação é
+// determinística e depende dela) — não confia na ordem em que o Firebase
+// devolve as chaves.
+function sortedTeam(team) {
+    return Object.entries(team ?? {})
+        .sort(([idA], [idB]) => idA < idB ? -1 : 1)
+        .map(([id, combatant]) => ({ ...combatant, id }));
+}
+
 export default class PvpView {
 
     constructor(game) {
@@ -28,6 +45,11 @@ export default class PvpView {
         this.chosenBossDungeon = null;
         this.opponentHP = null; // 1v1
         this.teamHP = {}; // 2v2: { [combatantId]: currentHP } pros 4
+        this.flowId = 0; // 2v2: muda quando o jogador sai no meio da partida
+        this.flowActive = false;
+        this.candidateCount = 0; // 2v2: jogadores compatíveis na fila
+        this.searchTimer = null;
+        this.searchStartedAt = 0;
     }
 
     get player() {
@@ -88,9 +110,9 @@ export default class PvpView {
                         <span class="pvp-mode-label">1x1</span>
                         <span class="pvp-mode-sub">Um contra um</span>
                     </button>
-                    <button class="pvp-mode-btn pvp-mode-locked" data-mode="2v2" disabled>
+                    <button class="pvp-mode-btn" data-mode="2v2">
                         <span class="pvp-mode-label">2x2</span>
-                        <span class="pvp-mode-sub">Em manutenção</span>
+                        <span class="pvp-mode-sub">Duplas</span>
                     </button>
                 </div>
             </div>
@@ -103,7 +125,7 @@ export default class PvpView {
                 <i class="fa-solid fa-swords pvp-icon"></i>
                 <p class="pvp-description">
                     ${this.mode === "2v2"
-                        ? "Entre na fila e você será agrupado automaticamente com outro jogador contra uma dupla adversária, decidido pelos status de cada personagem no momento da partida."
+                        ? "Entre na fila e você será agrupado automaticamente com outro jogador contra uma dupla adversária, decidido pelos status de cada personagem no momento da partida. Quanto mais você espera, mais ampla fica a busca por Poder."
                         : "Entre na fila e enfrente outro jogador em um combate automático, decidido pelos status do seu personagem no momento da partida."}
                 </p>
                 <button class="pvp-join-button">Entrar na Fila</button>
@@ -112,6 +134,7 @@ export default class PvpView {
     }
 
     renderSearching() {
+        if (this.mode === "2v2") return this.renderSearchingTeam();
         return `
             <div class="pvp-searching">
                 <div class="pvp-spinner"></div>
@@ -124,6 +147,86 @@ export default class PvpView {
                 <button class="pvp-cancel-button">Cancelar</button>
             </div>
         `;
+    }
+
+    // 2x2: mostra quantos jogadores compatíveis já estão na fila (precisa
+    // de 3 além de você), o tempo de espera e o limite de Poder atual —
+    // que cresce sozinho com a espera. Só esses três trechos são
+    // atualizados depois (updateSearchInfo), sem refazer a tela toda.
+    renderSearchingTeam() {
+        return `
+            <div class="pvp-searching">
+                <div class="pvp-spinner"></div>
+                <p class="pvp-status-text" id="pvp-search-status">${this.getTeamSearchStatus()}</p>
+                <p class="pvp-power-range">
+                    <i class="fa-regular fa-clock"></i>
+                    Tempo de espera: <strong id="pvp-search-elapsed">${this.getSearchElapsed()}</strong>
+                </p>
+                ${this.renderPowerRange(PvpLobbyService.getPowerRange())}
+                <button class="pvp-cancel-button">Cancelar</button>
+            </div>
+        `;
+    }
+
+    getTeamSearchStatus() {
+        return `Procurando jogadores compatíveis... (${Math.min(this.candidateCount, 3)}/3 na fila)`;
+    }
+
+    getSearchElapsed() {
+        const seconds = Math.max(0, Math.floor((Date.now() - this.searchStartedAt) / 1000));
+        return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+    }
+
+    updateSearchInfo() {
+
+        if (this.state !== "searching" || this.mode !== "2v2") return;
+
+        const status = document.getElementById("pvp-search-status");
+        const elapsed = document.getElementById("pvp-search-elapsed");
+        const range = document.getElementById("pvp-power-range");
+
+        if (status) status.textContent = this.getTeamSearchStatus();
+        if (elapsed) elapsed.textContent = this.getSearchElapsed();
+        if (range) range.outerHTML = this.renderPowerRange(PvpLobbyService.getPowerRange());
+
+    }
+
+    startSearchTimer() {
+
+        this.stopSearchTimer();
+
+        this.searchStartedAt = Date.now();
+        this.searchTimer = setInterval(() => this.updateSearchInfo(), 1000);
+
+    }
+
+    stopSearchTimer() {
+
+        if (!this.searchTimer) return;
+
+        clearInterval(this.searchTimer);
+        this.searchTimer = null;
+
+    }
+
+    // Chamado pelo HudScreen ao sair da tela de PVP. No 2x2, interrompe a
+    // cerimônia/luta em andamento (os passos assíncronos conferem o
+    // flowId e param sozinhos) e libera a partida no banco. No 1x1 não
+    // faz nada.
+    abortFlow() {
+
+        if (this.mode !== "2v2") return;
+
+        this.stopSearchTimer();
+
+        if (!this.flowActive) return;
+
+        this.flowId++;
+        this.flowActive = false;
+
+        // Ainda dentro do mesmo tick, com o modo/jogador de agora.
+        if (this.matchId) PvpLobbyService.cleanupMatch(this.matchId);
+
     }
 
     renderFound() {
@@ -141,18 +244,18 @@ export default class PvpView {
     }
 
     renderFoundTeam() {
-        const teamA = Object.values(this.matchData.teamA);
-        const teamB = Object.values(this.matchData.teamB);
+        const teamA = sortedTeam(this.matchData.teamA);
+        const teamB = sortedTeam(this.matchData.teamB);
         return `
             <div class="pvp-found">
                 <h3 class="pvp-found-title">Partida Encontrada!</h3>
                 <div class="pvp-versus pvp-versus-team">
                     <div class="pvp-team-column">
-                        ${teamA.map(c => `<span class="pvp-fighter-name">${c.name}</span>`).join("")}
+                        ${teamA.map(c => `<span class="pvp-fighter-name">${escapeHtml(c.name)}</span>`).join("")}
                     </div>
                     <span class="pvp-vs">VS</span>
                     <div class="pvp-team-column">
-                        ${teamB.map(c => `<span class="pvp-fighter-name">${c.name}</span>`).join("")}
+                        ${teamB.map(c => `<span class="pvp-fighter-name">${escapeHtml(c.name)}</span>`).join("")}
                     </div>
                 </div>
             </div>
@@ -170,13 +273,84 @@ export default class PvpView {
         `;
     }
 
+    // 2x2: cartão de vida no mesmo estilo do HUD do jogador (retrato,
+    // nome, nível e barra de HP). Meu cartão é o próprio PlayerHUD; aqui
+    // ficam o do meu aliado (coluna da esquerda) e os dos dois inimigos
+    // (coluna da direita).
+    renderTeamCard(combatant) {
+
+        const id = escapeHtml(combatant.id);
+        const maxHP = Math.max(1, Math.floor(Number(combatant.maxHP)) || 1);
+        const hp = Math.max(0, Math.min(maxHP, Math.round(this.teamHP[combatant.id] ?? maxHP)));
+        const level = Math.floor(Number(combatant.level)) || 0;
+
+        return `
+            <aside class="hud-panel pvp2v2-card" data-combatant-id="${id}">
+                <div class="hud-player-header">
+                    <img class="hud-avatar" src="${escapeHtml(combatant.hud ?? combatant.image ?? "")}" alt="">
+                    <div class="hud-info">
+                        <h2 class="hud-name">${escapeHtml(combatant.name)}</h2>
+                        ${level ? `<span class="hud-level">LV ${level}</span>` : ""}
+                    </div>
+                </div>
+                <div class="hud-bar">
+                    <span class="hud-label">HP</span>
+                    <div id="pvp-card-fill-${id}" class="hud-fill hp" style="width:${(hp / maxHP) * 100}%;"></div>
+                    <span id="pvp-card-text-${id}" class="hud-text">${hp} / ${maxHP}</span>
+                </div>
+            </aside>
+        `;
+
+    }
+
+    renderAllyCard() {
+
+        if (this.mode !== "2v2" || !this.matchData) return "";
+
+        const ally = this.getMyTeamCombatants().find(c => c.id !== PvpLobbyService.playerId);
+
+        return ally ? this.renderTeamCard(ally) : "";
+
+    }
+
+    renderEnemyCards() {
+
+        if (this.mode !== "2v2" || !this.matchData) return "";
+
+        return `
+            <div class="pvp2v2-enemy-cards">
+                ${this.getEnemyTeamCombatants().map(c => this.renderTeamCard(c)).join("")}
+            </div>
+        `;
+
+    }
+
+    // Atualiza a barra do cartão de um aliado/inimigo (o meu é o PlayerHUD).
+    updateTeamCard(combatantId) {
+
+        const combatant = [...this.getMyTeamCombatants(), ...this.getEnemyTeamCombatants()]
+            .find(c => c.id === combatantId);
+
+        if (!combatant || combatantId === PvpLobbyService.playerId) return;
+
+        const maxHP = Math.max(1, Math.floor(Number(combatant.maxHP)) || 1);
+        const hp = Math.max(0, Math.min(maxHP, Math.round(this.teamHP[combatantId] ?? maxHP)));
+
+        const fill = document.getElementById(`pvp-card-fill-${combatantId}`);
+        const text = document.getElementById(`pvp-card-text-${combatantId}`);
+
+        if (fill) fill.style.width = `${(hp / maxHP) * 100}%`;
+        if (text) text.textContent = `${hp} / ${maxHP}`;
+
+    }
+
     // Chamado pelo HudScreen enquanto this.game.hudScreen.inPvpCombat
     // estiver true — mesmo espírito do DungeonHeader durante combate PVE.
     renderArenaHeader() {
 
         if (this.mode === "2v2") {
             const enemyTeam = this.getEnemyTeamCombatants();
-            const names = enemyTeam.map(c => c.name).join(" & ");
+            const names = enemyTeam.map(c => escapeHtml(c.name)).join(" & ");
             return `
                 <section class="pvp2v2-header-inline">
                     <h2 class="pvp2v2-title">Arena PVP · 2x2</h2>
@@ -209,12 +383,9 @@ export default class PvpView {
                     <div class="pvp2v2-arena">
                         <div class="pvp2v2-portraits">
                             ${enemyTeam.map(c => `
-                                <div class="pvp2v2-portrait-slot" data-combatant-id="${c.id}">
-                                    <img src="${c.image ?? ""}" alt="${c.name}">
-                                    <span class="pvp2v2-portrait-name">${c.name}</span>
-                                    <div class="pvp2v2-mini-hp">
-                                        <div class="pvp2v2-mini-hp-fill" id="pvp-hp-${c.id}" style="width:100%;"></div>
-                                    </div>
+                                <div class="pvp2v2-portrait-slot" data-combatant-id="${escapeHtml(c.id)}">
+                                    <img src="${escapeHtml(c.image ?? "")}" alt="${escapeHtml(c.name)}">
+                                    <span class="pvp2v2-portrait-name">${escapeHtml(c.name)}</span>
                                 </div>
                             `).join("")}
                         </div>
@@ -266,12 +437,13 @@ export default class PvpView {
 
     renderResultTeam() {
 
-        const teamA = Object.values(this.matchData.teamA);
-        const teamB = Object.values(this.matchData.teamB);
+        const teamA = sortedTeam(this.matchData.teamA);
+        const teamB = sortedTeam(this.matchData.teamB);
         const iWon = this.combatResult.winner === this.myTeamKey;
 
         const allCombatants = [...teamA, ...teamB];
-        const nameOf = (id) => allCombatants.find(c => c.id === id)?.name ?? "???";
+        const nameOf = (id) => escapeHtml(allCombatants.find(c => c.id === id)?.name ?? "???");
+        const petNameOf = (id) => escapeHtml(allCombatants.find(c => c.id === id)?.petName ?? "O pet");
 
         return `
             <div class="pvp-result">
@@ -280,15 +452,15 @@ export default class PvpView {
                 </h3>
                 <div class="pvp-versus pvp-versus-team">
                     <div class="pvp-team-column ${this.combatResult.winner === "a" ? "winner" : ""}">
-                        ${teamA.map(c => `<span class="pvp-fighter-name">${c.name}</span>`).join("")}
+                        ${teamA.map(c => `<span class="pvp-fighter-name">${escapeHtml(c.name)}</span>`).join("")}
                     </div>
                     <span class="pvp-vs">VS</span>
                     <div class="pvp-team-column ${this.combatResult.winner === "b" ? "winner" : ""}">
-                        ${teamB.map(c => `<span class="pvp-fighter-name">${c.name}</span>`).join("")}
+                        ${teamB.map(c => `<span class="pvp-fighter-name">${escapeHtml(c.name)}</span>`).join("")}
                     </div>
                 </div>
                 <div class="pvp-log">
-                    ${this.combatResult.log.slice(-12).map(entry => this.renderLogLineTeam(entry, nameOf)).join("")}
+                    ${this.combatResult.log.slice(-12).map(entry => this.renderLogLineTeam(entry, nameOf, petNameOf)).join("")}
                 </div>
                 <button class="pvp-back-button">Voltar</button>
             </div>
@@ -321,11 +493,14 @@ export default class PvpView {
         return `<div class="pvp-log-line">${name} causou ${entry.damage} de dano${crit}${steal}${absorbed}</div>`;
     }
 
-    renderLogLineTeam(entry, nameOf) {
+    renderLogLineTeam(entry, nameOf, petNameOf) {
         const attackerName = nameOf(entry.attackerId);
         const targetName = nameOf(entry.targetId);
         if (entry.dodged) {
             return `<div class="pvp-log-line pvp-log-dodge">${targetName} esquivou de ${attackerName}!</div>`;
+        }
+        if (entry.burn) {
+            return `<div class="pvp-log-line pvp-log-pet-bite">${petNameOf(entry.attackerId)} de ${attackerName} queimou ${targetName}: ${entry.damage} de dano.</div>`;
         }
         if (entry.petBite) {
             const healTargetName = entry.healedIds?.[0] ? nameOf(entry.healedIds[0]) : null;
@@ -350,13 +525,13 @@ export default class PvpView {
     getMyTeamCombatants() {
         if (!this.matchData) return [];
         const team = this.myTeamKey === "a" ? this.matchData.teamA : this.matchData.teamB;
-        return Object.values(team ?? {});
+        return sortedTeam(team);
     }
 
     getEnemyTeamCombatants() {
         if (!this.matchData) return [];
         const team = this.myTeamKey === "a" ? this.matchData.teamB : this.matchData.teamA;
-        return Object.values(team ?? {});
+        return sortedTeam(team);
     }
 
     // Adapta o combatente pro formato que o MonsterHUD já sabe
@@ -375,14 +550,14 @@ export default class PvpView {
         };
     }
 
-    renderPowerRange() {
+    renderPowerRange(range = PVP_POWER_RANGE) {
         const power = PowerService.getPower(this.player);
         const format = value => value.toLocaleString("pt-BR");
         return `
-            <p class="pvp-power-range">
+            <p class="pvp-power-range" id="pvp-power-range">
                 <i class="fa-solid fa-fire-flame-curved"></i>
                 Seu Poder: <strong>${format(power)}</strong>
-                <span>Buscando entre ${format(Math.max(0, power - PVP_POWER_RANGE))} e ${format(power + PVP_POWER_RANGE)}</span>
+                <span>Buscando entre ${format(Math.max(0, power - range))} e ${format(power + range)}</span>
             </p>
         `;
     }
@@ -391,6 +566,10 @@ export default class PvpView {
 
         this.state = "searching";
         this.opponentWaiting = false;
+        this.candidateCount = 0;
+
+        if (this.mode === "2v2") this.startSearchTimer();
+
         this.refresh();
 
         const combatant = PvpCombatService.snapshotCombatant(this.player);
@@ -399,8 +578,14 @@ export default class PvpView {
             this.mode,
             combatant,
             (matchData, matchId) => this.onMatchFound(matchData, matchId),
-            (waiting) => {
+            (waiting, count) => {
                 this.opponentWaiting = waiting;
+                if (this.mode === "2v2") {
+                    // Só atualiza os textos (sem refazer a tela toda).
+                    this.candidateCount = count ?? 0;
+                    this.updateSearchInfo();
+                    return;
+                }
                 if (this.state === "searching") this.refresh();
             }
         );
@@ -408,6 +593,7 @@ export default class PvpView {
     }
 
     async cancelQueue() {
+        this.stopSearchTimer();
         await PvpLobbyService.leaveQueue();
         this.state = "idle";
         this.refresh();
@@ -415,14 +601,14 @@ export default class PvpView {
 
     async onMatchFound(matchData, matchId) {
 
+        if (this.mode === "2v2") {
+            return this.onTeamMatchFound(matchData, matchId);
+        }
+
         this.matchData = matchData;
         this.matchId = matchId;
 
-        if (this.mode === "2v2") {
-            this.myTeamKey = Object.keys(matchData.teamA).includes(PvpLobbyService.playerId) ? "a" : "b";
-        } else {
-            this.isPlayerA = matchData.combatantA.id === PvpLobbyService.playerId;
-        }
+        this.isPlayerA = matchData.combatantA.id === PvpLobbyService.playerId;
 
         this.state = "found";
         this.refresh();
@@ -444,11 +630,7 @@ export default class PvpView {
 
         this.game.hudScreen.setBackground(this.chosenBossDungeon.background);
 
-        if (this.mode === "2v2") {
-            await this.startTeamBattle();
-        } else {
-            await this.startSoloBattle();
-        }
+        await this.startSoloBattle();
 
         await this.sleep(900);
 
@@ -458,6 +640,97 @@ export default class PvpView {
         this.refresh();
 
         PvpLobbyService.cleanupMatch(matchId);
+
+    }
+
+    // Fluxo do 2x2 (separado do 1x1 de propósito): confere que a partida
+    // é válida e que eu faço parte dela, e a cada etapa assíncrona confere
+    // se o jogador não saiu da tela (abortFlow) — se saiu, para sem
+    // mexer em mais nada.
+    async onTeamMatchFound(matchData, matchId) {
+
+        this.stopSearchTimer();
+
+        const flow = ++this.flowId;
+        const aborted = () => flow !== this.flowId;
+        const myId = PvpLobbyService.playerId;
+
+        const teamAIds = Object.keys(matchData?.teamA ?? {});
+        const teamBIds = Object.keys(matchData?.teamB ?? {});
+
+        if (teamAIds.length !== 2 || teamBIds.length !== 2
+            || !(teamAIds.includes(myId) || teamBIds.includes(myId))) {
+
+            Toast.show("Não foi possível iniciar a partida. Entre na fila de novo.");
+            PvpLobbyService.cleanupMatch(matchId);
+            this.state = "idle";
+            this.refresh();
+            return;
+
+        }
+
+        this.matchData = matchData;
+        this.matchId = matchId;
+        this.teamHP = {};
+        this.myTeamKey = teamAIds.includes(myId) ? "a" : "b";
+        this.flowActive = true;
+
+        let finished = false;
+
+        try {
+
+            this.state = "found";
+            this.refresh();
+
+            await this.sleep(1500);
+            if (aborted()) return;
+
+            // Mesma semente da partida — todos veem o mesmo cenário.
+            const chosenIndex = Math.abs(matchData.seed) % BOSS_DUNGEONS.length;
+            this.chosenBossDungeon = BOSS_DUNGEONS[chosenIndex];
+
+            this.game.hudScreen.inPvpCombat = true;
+            this.game.hudScreen.updateMusic();
+            this.state = "ceremony";
+            this.refresh();
+
+            await this.runCeremonyAnimation(chosenIndex);
+            if (aborted()) return;
+
+            this.game.hudScreen.setBackground(this.chosenBossDungeon.background);
+
+            await this.startTeamBattle(aborted);
+            if (aborted()) return;
+
+            await this.sleep(900);
+            if (aborted()) return;
+
+            finished = true;
+
+        } catch (error) {
+
+            console.error("Erro na partida 2x2:", error);
+
+        }
+
+        // O jogador saiu da tela no meio: o abortFlow já limpou tudo.
+        if (aborted()) return;
+
+        this.flowActive = false;
+        this.game.hudScreen.inPvpCombat = false;
+        this.game.hudScreen.updateMusic();
+
+        PvpLobbyService.cleanupMatch(matchId);
+
+        if (!finished) {
+            Toast.show("A partida foi interrompida por um erro.");
+            this.state = "idle";
+            this.refresh();
+            return;
+        }
+
+        this.state = "result";
+        this.refresh();
 
     }
 
@@ -497,10 +770,10 @@ export default class PvpView {
 
     }
 
-    async startTeamBattle() {
+    async startTeamBattle(aborted = () => false) {
 
-        const teamA = Object.values(this.matchData.teamA);
-        const teamB = Object.values(this.matchData.teamB);
+        const teamA = sortedTeam(this.matchData.teamA);
+        const teamB = sortedTeam(this.matchData.teamB);
 
         const result = PvpCombatService.simulateTeam(teamA, teamB, this.matchData.seed);
         this.combatResult = result;
@@ -511,13 +784,16 @@ export default class PvpView {
         this.state = "battle";
         this.refresh();
 
-        const enemyNames = this.getEnemyTeamCombatants().map(c => c.name).join(" e ");
+        const enemyNames = this.getEnemyTeamCombatants().map(c => escapeHtml(c.name)).join(" e ");
         await CombatToast.show(`Partida contra ${enemyNames} começou!`, "system", 2);
+        if (aborted()) return;
 
-        await this.playTeamBattleLog(result.log);
+        await this.playTeamBattleLog(result.log, aborted);
+        if (aborted()) return;
 
         const iWon = result.winner === this.myTeamKey;
         await CombatToast.show(iWon ? "Sua dupla venceu!" : "Sua dupla foi derrotada!", "system", 2);
+        if (aborted()) return;
 
         if (iWon) {
             this.player.progress.stats.pvpWins = (this.player.progress.stats.pvpWins ?? 0) + 1;
@@ -649,12 +925,22 @@ export default class PvpView {
     // Versões do texto/tipo de mensagem pro 2x2 — os nomes envolvidos
     // vêm de attackerId/targetId (não mais "a"/"b" genérico), e "isMe"
     // agora compara o id de verdade, não o lado inteiro do combate.
-    buildTeamAttackMessage(entry, nameOf) {
+    buildTeamAttackMessage(entry, nameOf, petNameOf) {
 
         const isMe = entry.attackerId === PvpLobbyService.playerId;
         const targetIsMe = entry.targetId === PvpLobbyService.playerId;
         const attackerName = nameOf(entry.attackerId);
         const targetName = nameOf(entry.targetId);
+
+        if (entry.burn) {
+            const petName = petNameOf(entry.attackerId);
+            return BoitataBurn.buildMessage({
+                petName: isMe ? petName : `${petName} de ${attackerName}`,
+                targetName: targetIsMe ? "você" : targetName,
+                damage: entry.damage,
+                first: entry.burnStart
+            });
+        }
 
         if (entry.dodged) {
             if (targetIsMe) return `<span class="combat-dodge">Você esquivou do ataque de ${attackerName}!</span>`;
@@ -726,7 +1012,7 @@ export default class PvpView {
 
         if (entry.dodged) {
             type += " dodge";
-        } else if (entry.petBite) {
+        } else if (entry.petBite || entry.burn) {
             type += " pet-bite";
         } else if (isMe) {
             if (entry.lifeSteal > 0) type = "lifeSteal player";
@@ -811,94 +1097,118 @@ export default class PvpView {
     // vida de um combatente específico (attackerId/targetId), não só
     // "eu" e "o oponente" — e a barrinha de vida embaixo do retrato
     // certo, não a MonsterHUD genérica.
-    async playTeamBattleLog(log) {
+    async playTeamBattleLog(log, aborted = () => false) {
 
         const allCombatants = [...this.getMyTeamCombatants(), ...this.getEnemyTeamCombatants()];
-        const nameOf = (id) => allCombatants.find(c => c.id === id)?.name ?? "???";
+        const nameOf = (id) => escapeHtml(allCombatants.find(c => c.id === id)?.name ?? "???");
+        const petNameOf = (id) => escapeHtml(allCombatants.find(c => c.id === id)?.petName ?? "O pet");
         const originalHP = this.game.player.currentHP;
         const battleStartTime = Date.now();
 
-        for (const entry of log) {
+        try {
+            for (const entry of log) {
 
-            if (!entry.dodged) {
+                if (aborted()) return;
 
-                this.teamHP[entry.targetId] = Math.max(0, (this.teamHP[entry.targetId] ?? 0) - entry.damage);
+                if (!entry.dodged) {
 
-                if (entry.targetId === PvpLobbyService.playerId) {
-                    this.game.player.currentHP = this.teamHP[entry.targetId];
-                    HitFlash.play(".hud-avatar");
-                }
+                    this.teamHP[entry.targetId] = Math.max(0, (this.teamHP[entry.targetId] ?? 0) - entry.damage);
 
-                if (entry.lifeSteal > 0) {
+                    // Só pisca quando entrou dano de verdade (mordida de pet
+                    // que só cura não é golpe).
+                    if (entry.damage > 0) this.flashTeamCombatantHit(entry.targetId);
 
-                    const attackerMax = allCombatants.find(c => c.id === entry.attackerId)?.maxHP ?? 0;
-
-                    this.teamHP[entry.attackerId] = Math.min(
-                        attackerMax,
-                        (this.teamHP[entry.attackerId] ?? 0) + entry.lifeSteal
-                    );
-
-                    if (entry.attackerId === PvpLobbyService.playerId) {
-                        this.game.player.currentHP = this.teamHP[entry.attackerId];
+                    if (entry.targetId === PvpLobbyService.playerId) {
+                        this.game.player.currentHP = this.teamHP[entry.targetId];
                     }
 
-                    this.flashTeamCombatantHeal(entry.attackerId);
+                    if (entry.lifeSteal > 0) {
 
-                }
+                        const attackerMax = allCombatants.find(c => c.id === entry.attackerId)?.maxHP ?? 0;
 
-                // Cura da habilidade do pet (ex: Duende) — só o alvo
-                // sorteado em healedIds (ver simulateTeam()), nunca o
-                // time inteiro.
-                if (entry.heal > 0 && entry.healedIds?.length) {
+                        this.teamHP[entry.attackerId] = Math.min(
+                            attackerMax,
+                            (this.teamHP[entry.attackerId] ?? 0) + entry.lifeSteal
+                        );
 
-                    for (const id of entry.healedIds) {
-
-                        const maxHp = allCombatants.find(c => c.id === id)?.maxHP ?? 0;
-
-                        this.teamHP[id] = Math.min(maxHp, (this.teamHP[id] ?? 0) + entry.heal);
-
-                        if (id === PvpLobbyService.playerId) {
-                            this.game.player.currentHP = this.teamHP[id];
+                        if (entry.attackerId === PvpLobbyService.playerId) {
+                            this.game.player.currentHP = this.teamHP[entry.attackerId];
                         }
 
-                        this.flashTeamCombatantHeal(id);
+                        this.flashTeamCombatantHeal(entry.attackerId);
 
                     }
 
+                    // Cura da habilidade do pet (ex: Duende) — só o alvo
+                    // sorteado em healedIds (ver simulateTeam()), nunca o
+                    // time inteiro.
+                    if (entry.heal > 0 && entry.healedIds?.length) {
+
+                        for (const id of entry.healedIds) {
+
+                            const maxHp = allCombatants.find(c => c.id === id)?.maxHP ?? 0;
+
+                            this.teamHP[id] = Math.min(maxHp, (this.teamHP[id] ?? 0) + entry.heal);
+
+                            if (id === PvpLobbyService.playerId) {
+                                this.game.player.currentHP = this.teamHP[id];
+                            }
+
+                            this.flashTeamCombatantHeal(id);
+
+                        }
+
+                    }
+
+                    // Atualiza os cartões de vida (aliado e inimigos) de
+                    // quem participou do golpe.
+                    [entry.attackerId, entry.targetId, ...(entry.healedIds ?? [])]
+                        .forEach(id => this.updateTeamCard(id));
+
                 }
 
-                // Atualiza a barrinha de vida mini embaixo do retrato,
-                // se esse combatente for um dos inimigos exibidos na
-                // arena (os aliados não têm retrato próprio na tela).
-                const enemyIds = this.getEnemyTeamCombatants().map(c => c.id);
+                this.game.hudScreen.playerHUD.updateHP?.();
 
-                [entry.attackerId, entry.targetId, ...(entry.healedIds ?? [])].forEach(id => {
-                    if (!enemyIds.includes(id)) return;
-                    const fill = document.getElementById(`pvp-hp-${id}`);
-                    const maxHp = allCombatants.find(c => c.id === id)?.maxHP ?? 1;
-                    if (fill) fill.style.width = `${Math.max(0, (this.teamHP[id] / maxHp) * 100)}%`;
-                });
+                const speed = this.getBattleSpeedMultiplier(battleStartTime);
+
+                await CombatToast.show(this.buildTeamAttackMessage(entry, nameOf, petNameOf), this.buildTeamToastType(entry), 2, speed);
+
+                await this.sleep(450 / speed);
 
             }
 
+        } finally {
+
+            // Termina, dá erro ou o jogador sai no meio: a vida real do
+            // personagem sempre volta ao valor de antes da luta.
+            this.game.player.currentHP = originalHP;
             this.game.hudScreen.playerHUD.updateHP?.();
-
-            const speed = this.getBattleSpeedMultiplier(battleStartTime);
-
-            await CombatToast.show(this.buildTeamAttackMessage(entry, nameOf), this.buildTeamToastType(entry), 2, speed);
-
-            await this.sleep(450 / speed);
 
         }
 
-        this.game.player.currentHP = originalHP;
-        this.game.hudScreen.playerHUD.updateHP?.();
+    }
+
+    // Pisca quem levou dano no 2x2: eu (avatar do HUD), o cartão do
+    // aliado/inimigo e, no caso do inimigo, também o retrato na arena.
+    flashTeamCombatantHit(combatantId) {
+
+        if (combatantId === PvpLobbyService.playerId) {
+            HitFlash.play(".hud-avatar");
+            return;
+        }
+
+        HitFlash.play(`.pvp2v2-card[data-combatant-id="${CSS.escape(combatantId)}"] .hud-avatar`);
+
+        const isEnemy = this.getEnemyTeamCombatants().some(c => c.id === combatantId);
+
+        if (isEnemy) {
+            HitFlash.play(`.pvp2v2-portrait-slot[data-combatant-id="${CSS.escape(combatantId)}"] img`);
+        }
 
     }
 
-    // Pisca a sprite de quem foi curado no 2x2: eu (avatar do HUD) ou
-    // um inimigo (retrato na arena). Aliados não têm sprite própria
-    // na tela, então não há o que piscar nesse caso.
+    // Pisca quem foi curado no 2x2: eu (avatar do HUD), o cartão do
+    // aliado/inimigo e, no caso do inimigo, também o retrato na arena.
     flashTeamCombatantHeal(combatantId) {
 
         if (combatantId === PvpLobbyService.playerId) {
@@ -906,10 +1216,12 @@ export default class PvpView {
             return;
         }
 
+        HealFlash.play(`.pvp2v2-card[data-combatant-id="${CSS.escape(combatantId)}"] .hud-avatar`);
+
         const isEnemy = this.getEnemyTeamCombatants().some(c => c.id === combatantId);
 
         if (isEnemy) {
-            HealFlash.play(`.pvp2v2-portrait-slot[data-combatant-id="${combatantId}"] img`);
+            HealFlash.play(`.pvp2v2-portrait-slot[data-combatant-id="${CSS.escape(combatantId)}"] img`);
         }
 
     }
