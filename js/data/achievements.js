@@ -498,7 +498,7 @@ const achievements = [
     {
         id: 'the_end',
         name: 'O FIM?',
-        description: 'Colete todas as cartas, atinja a pontuação minima e esteja lv 100!',
+        description: 'Colete 50 cartas, conclua todas as fases 3 vezes e esteja lv 100!',
         icon: 'assets/img/icons/achievements/ouro.png',
         iconLocked:'assets/img/icons/achievements/bloqueado.png'
     },

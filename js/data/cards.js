@@ -17,3 +17,7 @@ const cards = monsters
     }));
 
 export default cards;
+
+// Mínimo de cartas no álbum pra liberar o final secreto (escolha da
+// alma + conquista "O FIM?") — não precisa mais completar o bestiário.
+export const MIN_CARDS_FOR_SECRET_ENDING = 50;

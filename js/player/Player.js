@@ -9,7 +9,7 @@ import experience from "../data/experience.js";
 import levels  from "../data/levels.js";
 import qualities from "../data/quality.js";
 import upClasse from "./upClasse.js";
-import cards from "../data/cards.js";
+import { MIN_CARDS_FOR_SECRET_ENDING } from "../data/cards.js";
 import dungeons from "../data/dungeons.js";
 import ItemValueService from "../services/ItemValueService.js";
 import baseStatsL1 from "../data/baseStatsL1.js";
@@ -129,18 +129,16 @@ export default class Player {
         this.balanceVersion = CURRENT_BALANCE_VERSION;
     }
 
-    // Nível máximo + todas as cartas do bestiário coletadas + todas as
-    // fases (dungeons não-ocultas) em 3/3 conclusões — a condição pro
-    // final secreto aparecer.
+    // Nível máximo + o mínimo de cartas no álbum (MIN_CARDS_FOR_SECRET_ENDING)
+    // + todas as fases (dungeons não-ocultas) em 3/3 conclusões — a
+    // condição pro final secreto aparecer.
     canMakeSoulChoice() {
 
         if (this.progress.soulChoice) return false;
 
         if (this.level < 100) return false;
 
-        const totalCards = cards.length;
-
-        if (this.album.length < totalCards) return false;
+        if (this.album.length < MIN_CARDS_FOR_SECRET_ENDING) return false;
 
         return dungeons
             .filter(dungeon => !dungeon.hidden)

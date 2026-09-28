@@ -203,7 +203,7 @@ export default class LoginScreen {
     validateSignup({ email, fullName, phone, birthDate, recoveryWord, password, passwordConfirm }) {
 
         if (!EMAIL_REGEX.test(email)) return "E-mail inválido.";
-        if (!NAME_REGEX.test(fullName)) return "Digite seu nome completo, só letras.";
+        if (!NAME_REGEX.test(fullName)) return "Você precisa informar Nome e Sobrenome, somente letras.";
         if (digitsOnly(phone).length < 10 || digitsOnly(phone).length > 11) return "Telefone inválido.";
 
         if (!birthDate) return "Informe sua data de nascimento.";

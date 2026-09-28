@@ -1,6 +1,6 @@
 import achievements from "../data/achievements.js";
 import dungeons from "../data/dungeons.js";
-import cards from "../data/cards.js";
+import cards, { MIN_CARDS_FOR_SECRET_ENDING } from "../data/cards.js";
 import monstersRaid from "../data/monstersRaid.js";
 import farmCrops from "../data/farmCrops.js";
 import AudioSettings from "./AudioSettings.js";
@@ -197,13 +197,13 @@ const CHECKS = {
     silence: () => allSoundMuted(),
 
     // Mesmas 3 condições de Player.canMakeSoulChoice() (nível 100 +
-    // álbum completo + 3/3 em todas as dungeons) — só que sem o guard
+    // mínimo de cartas no álbum + 3/3 em todas as dungeons) — só que sem o guard
     // de "progress.soulChoice já escolhido", porque aquele existe pra
     // parar de mostrar o MODAL de escolha de novo, não pra dizer que a
     // conquista deixou de valer depois que o jogador escolheu um lado.
     the_end: player =>
         player.level >= 100 &&
-        player.album.length >= cards.length &&
+        player.album.length >= MIN_CARDS_FOR_SECRET_ENDING &&
         allDungeonsMaxed(player)
 };
 

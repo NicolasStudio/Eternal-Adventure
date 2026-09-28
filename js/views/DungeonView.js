@@ -38,7 +38,7 @@ export default class DungeonView {
     }
 
     // Chamado toda vez que a tela de dungeons é aberta — só faz alguma
-    // coisa quando a condição secreta (nível 100 + bestiário completo)
+    // coisa quando a condição secreta (nível 100 + cartas mínimas no álbum + fases 3/3)
     // é atingida pela primeira vez.
     async maybeShowSoulChoice() {
 
