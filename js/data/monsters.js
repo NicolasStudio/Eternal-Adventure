@@ -1,6 +1,7 @@
 import items from "./items.js";
 import enchantmentStone from "./enchantmentStone.js";
 import pets from "./pet.js";
+import { scaleMonsters } from "./monsterScaling.js";
 
 const monsters = [
 
@@ -3308,4 +3309,5 @@ const monsters = [
     },
 ];
 
-export default monsters;
+// Vida/dano de nível 35+ escalados centralmente (ver monsterScaling.js).
+export default scaleMonsters(monsters);
