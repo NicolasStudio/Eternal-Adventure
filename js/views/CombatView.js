@@ -4,6 +4,7 @@ import LootSystem from "../combat/LootSystem.js";
 import LevelUpModal from "../ui/components/modals/LevelUpModal.js";
 import RewardModal from "../ui/components/modals/RewardModal.js";
 import CombatToast from "../combat/CombatToast.js";
+import MiasmaService from "../services/MiasmaService.js";
 import DungeonCompleteModal from "../ui/components/modals/DungeonCompleteModal.js";
 import HealFlash from "../combat/HealFlash.js";
 import HitFlash from "../combat/HitFlash.js";
@@ -198,7 +199,7 @@ export default class CombatView {
             HitFlash.play(".hud-avatar");
         }
 
-        await CombatToast.show(message, type);
+        await CombatToast.show(message, type, MiasmaService.extraToastSeconds(result));
 
         // Pet equipado morde JUNTO do turno do jogador — golpe extra,
         // linha própria no log, sem esquiva/crítico. Roda antes do

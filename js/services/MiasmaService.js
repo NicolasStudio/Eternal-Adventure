@@ -72,6 +72,13 @@ export default class MiasmaService {
         return message;
     }
 
+    // Segundos a mais na caixa de ataque quando ela traz texto de
+    // Miasma (ativou ou foi consumido) — é mensagem longa, não dava
+    // tempo de ler no tempo normal do golpe.
+    static extraToastSeconds(entry) {
+        return entry?.miasmaProc || entry?.miasmaAttackWeakened || entry?.miasmaDefendWeakened ? 1.5 : 0;
+    }
+
     static buildProcMessage(targetName) {
         return `<span class="combat-miasma">Miasma!</span> ${targetName} foi intoxicado — os atributos especiais dele saem pela metade no próximo golpe.`;
     }

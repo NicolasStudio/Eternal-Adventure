@@ -571,7 +571,7 @@ export default class RaidView {
 
             const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
-            await CombatToast.show(this.buildAttackMessage(entry, squad), this.buildToastType(entry), 2, speed);
+            await CombatToast.show(this.buildAttackMessage(entry, squad), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry), speed);
 
             await this.sleep(450 / speed);
 

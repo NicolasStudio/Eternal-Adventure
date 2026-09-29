@@ -1112,7 +1112,7 @@ export default class PvpView {
 
             const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
-            await CombatToast.show(this.buildAttackMessage(entry), this.buildToastType(entry), 2, speed);
+            await CombatToast.show(this.buildAttackMessage(entry), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry), speed);
 
             await this.sleep(500 / speed);
 
@@ -1201,7 +1201,7 @@ export default class PvpView {
 
                 const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
-                await CombatToast.show(this.buildTeamAttackMessage(entry, nameOf, petNameOf), this.buildTeamToastType(entry), 2, speed);
+                await CombatToast.show(this.buildTeamAttackMessage(entry, nameOf, petNameOf), this.buildTeamToastType(entry), 2 + MiasmaService.extraToastSeconds(entry), speed);
 
                 await this.sleep(450 / speed);
 

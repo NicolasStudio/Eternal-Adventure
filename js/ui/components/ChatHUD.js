@@ -1,5 +1,6 @@
 import ChatService, { MAX_LENGTH } from "../../services/ChatService.js";
 import AuthService from "../../services/AuthService.js";
+import TabBadge from "../TabBadge.js";
 
 const MAX_RENDERED_MESSAGES = 100;
 
@@ -12,6 +13,15 @@ export default class ChatHUD {
         this.unread = 0;
         this.stopPanel = null;
         this.stopWatching = null;
+
+        // Voltou pra aba com o painel aberto = leu o que chegou enquanto
+        // estava em outra aba.
+        document.addEventListener("visibilitychange", () => {
+            if (!document.hidden && this.isOpen && this.unread > 0) {
+                this.unread = 0;
+                this.updateBadge();
+            }
+        });
     }
 
     // Só o botão fica no HUD (que é reconstruído com frequência) — o
@@ -33,6 +43,10 @@ export default class ChatHUD {
     }
 
     updateBadge() {
+
+        // Título/ícone da aba do navegador (ver TabBadge.js) — atualiza
+        // mesmo sem o botão na tela.
+        TabBadge.set(this.unread);
 
         const button = document.getElementById("chat-toggle");
         const badge = document.getElementById("chat-badge");
@@ -82,7 +96,10 @@ export default class ChatHUD {
         this.stopWatching = ChatService.subscribe(
             (message, isNew) => {
 
-                if (!isNew || this.isOpen || message.uid === myUid) return;
+                // Painel aberto só conta como "lido" se a aba estiver
+                // visível — em outra aba, conta igual painel fechado.
+                if (!isNew || message.uid === myUid) return;
+                if (this.isOpen && !document.hidden) return;
 
                 this.unread++;
                 this.updateBadge();
@@ -98,6 +115,7 @@ export default class ChatHUD {
         this.close();
         this.watch(false);
         this.unread = 0;
+        TabBadge.set(0);
     }
 
     get isOpen() {
