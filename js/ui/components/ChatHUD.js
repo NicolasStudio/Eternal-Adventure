@@ -49,8 +49,9 @@ export default class ChatHUD {
 
         const button = container.querySelector("#chat-toggle");
 
-        // Sem botão = tela sem chat (combate, PVP, Cooperativo): fecha
-        // o painel se ele tinha ficado aberto e para de ouvir.
+        // Sem botão = HUD fora da tela: fecha o painel se ele tinha
+        // ficado aberto e para de ouvir. (O botão aparece em todas as
+        // telas do jogo, inclusive combate, PVP e Cooperativo.)
         if (!button) {
             this.close();
             this.watch(false);
@@ -172,18 +173,25 @@ export default class ChatHUD {
 
     }
 
-    // Encaixa o painel logo abaixo do HUD do jogador.
+    // Fora de combate encaixa logo abaixo do HUD do jogador. Em combate
+    // encaixa abaixo do próprio botão, pra não cobrir o HUD/aliado do
+    // 2x2 — e no Cooperativo, que nem tem HUD do jogador, é o único
+    // ponto de referência que existe.
     positionPanel() {
 
-        const hud = document.querySelector(".hud-panel");
-        const rect = hud?.getBoundingClientRect();
+        const inCombat = !document.querySelector(".hud-header.exploration");
+        const anchor = inCombat
+            ? document.getElementById("chat-toggle")
+            : document.querySelector(".hud-panel");
+        const rect = anchor?.getBoundingClientRect();
+        const width = document.querySelector(".hud-panel")?.getBoundingClientRect().width ?? 0;
 
         const top = (rect?.bottom ?? 120) + 12;
         const left = rect?.left ?? 20;
 
         this.panel.style.top = `${top}px`;
         this.panel.style.left = `${left}px`;
-        this.panel.style.width = `${Math.max(rect?.width ?? 0, 280)}px`;
+        this.panel.style.width = `${Math.max(width, 280)}px`;
         this.panel.style.maxHeight = `calc(100vh - ${top}px - 20px)`;
 
     }

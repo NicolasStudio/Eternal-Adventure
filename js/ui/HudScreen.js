@@ -106,7 +106,7 @@ export default class HudScreen {
                 <div class="hud-left-column">
                     ${!this.inRaidCombat ? this.playerHUD.render() : ""}
                     ${isPvp2v2 ? this.pvpView.renderAllyCard() : ""}
-                    ${!anyCombat ? this.chatHUD.renderButton() : ""}
+                    ${this.chatHUD.renderButton()}
                     ${!anyCombat ? this.chestHUD.render() : ""}
                 </div>
                 ${this.inCombat ? this.dungeonHeader.render(this.combatView.currentDungeon, this.combatView.currentFloor) : ""}
