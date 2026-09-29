@@ -497,7 +497,7 @@ const helmets = {
     helmet_putrid_common: {
 
         id: "helmet_putrid_common",
-        name: "Máscara",
+        name: "Touca",
         type: "armor",
         slot: "helmet",
         class: "putrid",
@@ -517,7 +517,7 @@ const helmets = {
     helmet_putrid_uncommon: {
 
         id: "helmet_putrid_uncommon",
-        name: "Máscara",
+        name: "Touca",
         type: "armor",
         slot: "helmet",
         class: "putrid",
@@ -537,7 +537,7 @@ const helmets = {
     helmet_putrid_rare: {
 
         id: "helmet_putrid_rare",
-        name: "Máscara",
+        name: "Touca",
         type: "armor",
         slot: "helmet",
         class: "putrid",
@@ -557,7 +557,7 @@ const helmets = {
     helmet_putrid_mystic: {
 
         id: "helmet_putrid_mystic",
-        name: "Máscara",
+        name: "Touca",
         type: "armor",
         slot: "helmet",
         class: "putrid",
@@ -577,7 +577,7 @@ const helmets = {
     helmet_putrid_legendary: {
 
         id: "helmet_putrid_legendary",
-        name: "Máscara",
+        name: "Touca",
         type: "armor",
         slot: "helmet",
         class: "putrid",
@@ -597,7 +597,7 @@ const helmets = {
     helmet_putrid_ultraje: {
 
         id: "helmet_putrid_ultraje",
-        name: "Máscara",
+        name: "Touca",
         type: "armor",
         slot: "helmet",
         class: "putrid",
