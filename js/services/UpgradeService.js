@@ -17,8 +17,8 @@ const SECONDARY_BONUS_QUALITIES = ["exceptional", LEGENDARY_EXTRA_QUALITY];
 // Status secundários só passam a receber bônus de melhoria quando o
 // item chega em "Excepcional". Antes disso, só os principais
 // (attack, armor, agility) ganham pontos a cada melhoria. Inclui
-// miasmaChance (só existe nas Botas do Pútrido) — sem isso, a única
-// peça dele com esse atributo nunca melhorava com a Qualidade.
+// miasmaChance (especial do Pútrido, na arma e na touca) — sem isso, o
+// Miasma nunca melhorava com a Qualidade.
 const SECONDARY_STATS = ["criticalChance", "lifeSteal", "penetration", "absorption", "miasmaChance"];
 
 // Bônus de "Excepcional" pra status SECUNDÁRIOS (% com teto por

@@ -482,8 +482,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-putrid-rarity-comum.png",
 
         stats: {
-            armor: 4,
-            miasmaChance: 2
+            armor: 4
         },
 
         value: 100,
@@ -502,8 +501,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-putrid-rarity-incomum.png",
 
         stats: {
-            armor: 8,
-            miasmaChance: 3
+            armor: 8
         },
 
         value: 300,
@@ -522,8 +520,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-putrid-rarity-rare.png",
 
         stats: {
-            armor: 14,
-            miasmaChance: 4
+            armor: 14
         },
 
         value: 900,
@@ -542,8 +539,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-putrid-rarity-mistico.png",
 
         stats: {
-            armor: 18,
-            miasmaChance: 6
+            armor: 18
         },
 
         value: 2700,
@@ -562,8 +558,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-putrid-rarity-lendario.png",
 
         stats: {
-            armor: 24,
-            miasmaChance: 8
+            armor: 24
         },
 
         value: 0,
@@ -582,8 +577,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-putrid-rarity-ultraje.png",
 
         stats: {
-            armor: 31,
-            miasmaChance: 10
+            armor: 31
         },
 
         value: 0,

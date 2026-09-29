@@ -509,8 +509,7 @@ const boots = {
 
         stats: {
             armor: 1,
-            agility: 4,
-            miasmaChance: 2
+            agility: 4
         },
 
         value: 80,
@@ -530,8 +529,7 @@ const boots = {
 
         stats: {
             armor: 2,
-            agility: 7,
-            miasmaChance: 3
+            agility: 7
         },
 
         value: 240,
@@ -551,8 +549,7 @@ const boots = {
 
         stats: {
             armor: 3,
-            agility: 10,
-            miasmaChance: 4
+            agility: 10
         },
 
         value: 720,
@@ -572,8 +569,7 @@ const boots = {
 
         stats: {
             armor: 5,
-            agility: 11,
-            miasmaChance: 6
+            agility: 11
         },
 
         value: 2160,
@@ -593,8 +589,7 @@ const boots = {
 
         stats: {
             armor: 7,
-            agility: 12,
-            miasmaChance: 8
+            agility: 12
         },
 
         value: 0,
@@ -614,8 +609,7 @@ const boots = {
 
         stats: {
             armor: 9,
-            agility: 15,
-            miasmaChance: 10
+            agility: 15
         },
 
         value: 0,

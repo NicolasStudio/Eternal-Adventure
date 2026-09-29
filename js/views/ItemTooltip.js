@@ -67,8 +67,14 @@ export default class ItemTooltip {
         if (!this.item.stats) {
             return "";
         }
+        // Arma sempre mostra Ataque/Armadura/Agilidade (mesmo 0); o
+        // resto (especiais, ou qualquer atributo de peça que não seja
+        // arma) só aparece se tiver valor — armas antigas guardavam
+        // Crítico/Roubo de Vida/etc. zerados e poluíam a lista.
+        const alwaysShown = this.item.slot === "weapon" ? ["attack", "armor", "agility"] : [];
         let html = "";
         Object.entries(this.item.stats).forEach(([key, value]) => {
+            if (value === 0 && !alwaysShown.includes(key)) return;
             html += this.renderStat(key, value);
         });
         return `
