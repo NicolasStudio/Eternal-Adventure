@@ -570,7 +570,167 @@ const weapons = {
         },
         value: 0,
         sellValue: 0
+    },
+
+/* ==========================================
+       PUTRID
+========================================== */
+    stink_common: {
+
+        id: "stink_common",
+        name: "Fedor",
+        type: "weapon",
+        slot: "weapon",
+        class: "putrid",
+        weaponType: "stink",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/weapons/stink-rarity-comum.png",
+
+        stats: {
+            attack: 4,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 2,
+            penetration: 0,
+            absorption: 0
+        },
+
+        value: 120,
+        sellValue: 60
+
+    },
+
+    stink_uncommon: {
+
+        id: "stink_uncommon",
+        name: "Fedor",
+        type: "weapon",
+        slot: "weapon",
+        class: "putrid",
+        weaponType: "stink",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/weapons/stink-rarity-incomum.png",
+
+        stats: {
+            attack: 9,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 5,
+            penetration: 0,
+            absorption: 0
+        },
+
+        value: 360,
+        sellValue: 180
+
+    },
+
+    stink_rare: {
+
+        id: "stink_rare",
+        name: "Fedor",
+        type: "weapon",
+        slot: "weapon",
+        class: "putrid",
+        weaponType: "stink",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/weapons/stink-rarity-rare.png",
+
+        stats: {
+            attack: 15,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 6,
+            penetration: 0,
+            absorption: 0
+        },
+
+        value: 1080,
+        sellValue: 540
+
+    },
+
+    stink_mystic: {
+
+        id: "stink_mystic",
+        name: "Fedor",
+        type: "weapon",
+        slot: "weapon",
+        class: "putrid",
+        weaponType: "stink",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/weapons/stink-rarity-mistico.png",
+
+        stats: {
+            attack: 29,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 10,
+            penetration: 0,
+            absorption: 0
+        },
+
+        value: 3240,
+        sellValue: 1620
+
+    },
+
+    stink_legendary: {
+
+        id: "stink_legendary",
+        name: "Fedor",
+        type: "weapon",
+        slot: "weapon",
+        class: "putrid",
+        weaponType: "stink",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/weapons/stink-rarity-lendario.png",
+
+        stats: {
+            attack: 41,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 11,
+            penetration: 0,
+            absorption: 0
+        },
+
+        value: 0,
+        sellValue: 18860
+
+    },
+
+    stink_ultraje: {
+
+        id: "stink_ultraje",
+        name: "Fedor",
+        type: "weapon",
+        slot: "weapon",
+        class: "putrid",
+        weaponType: "stink",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/weapons/stink-rarity-ultraje.png",
+
+        stats: {
+            attack: 56,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 15,
+            penetration: 0,
+            absorption: 0
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
+
 };
 
 export default weapons;

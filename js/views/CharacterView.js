@@ -131,41 +131,46 @@ export default class CharacterView {
 
                 <div class="character-stats">
 
-                    <div class="character-stat">
+                    <div class="character-stat character-stat-hoverable" data-stat="attack">
                         <span>Ataque</span>
                         <span>${stats.attack}</span>
                     </div>
 
-                    <div class="character-stat">
+                    <div class="character-stat character-stat-hoverable" data-stat="armor">
                         <span>Armadura</span>
                         <span>${stats.armor}</span>
                     </div>
 
-                    <div class="character-stat">
+                    <div class="character-stat character-stat-hoverable" data-stat="agility">
                         <span>Agilidade</span>
                         <span>${stats.agility}</span>
                     </div>
 
                     <div class="character-divider"><hr></div>
 
-                    <div class="character-stat">
+                    <div class="character-stat character-stat-hoverable" data-stat="criticalChance">
                         <span>Chance Crítica</span>
                         <span>${stats.criticalChance}%</span>
                     </div>
 
-                    <div class="character-stat">
+                    <div class="character-stat character-stat-hoverable" data-stat="lifeSteal">
                         <span>Roubo de Vida</span>
                         <span>${stats.lifeSteal}%</span>
                     </div>
 
-                    <div class="character-stat">
+                    <div class="character-stat character-stat-hoverable" data-stat="penetration">
                         <span>Penetração</span>
                         <span>${stats.penetration}%</span>
                     </div>
 
-                    <div class="character-stat">
+                    <div class="character-stat character-stat-hoverable" data-stat="absorption">
                         <span>Absorção</span>
                         <span>${stats.absorption}%</span>
+                    </div>
+
+                    <div class="character-stat character-stat-hoverable" data-stat="miasmaChance">
+                        <span>Miasma</span>
+                        <span>${stats.miasmaChance}%</span>
                     </div>
 
                     <div class="character-divider"><hr></div>
@@ -891,6 +896,7 @@ export default class CharacterView {
         });
         this.registerEquipmentEvents(container);
         this.registerPowerTooltipEvents(container);
+        this.registerStatTooltipEvents(container);
 
         // Aba Pets não tem mais slot próprio em "Equipados" pra clicar
         // e selecionar (removido de propósito — não fazia sentido um
@@ -1211,6 +1217,172 @@ export default class CharacterView {
             <p class="tooltip-description">
                 Ataque, Armadura e Agilidade somados, valorizados pela raridade dos itens. Não altera o dano em combate.
             </p>
+        `;
+
+    }
+
+    /* =====================================================
+       TOOLTIP DOS ATRIBUTOS ESPECIAIS — Crítico, Roubo de Vida,
+       Penetração, Absorção e Miasma (Pútrido). Mesmo container de
+       tooltip dos itens/Poder (#item-tooltip), só que explicando a
+       MECÂNICA de cada um (chance de ativar, o que acontece quando
+       ativa, tetos) — muito jogador pergunta isso no chat, não tá
+       óbvio só pelo número em %.
+    ===================================================== */
+
+    static STAT_TOOLTIP_INFO = {
+
+        attack: {
+            icon: "fa-khanda",
+            title: "Ataque",
+            suffix: "",
+            summary: "A base de todo o seu dano — entra direto na conta de quanto você causa em cada golpe.",
+            details: [
+                ["Fórmula", "Dano = Ataque × (1.5× se crítico) × mitigação da Armadura do alvo."],
+                ["Sem chance", "Diferente de Crítico/Absorção, o Ataque não é sorteado — vale o valor cheio em todo golpe."]
+            ]
+        },
+
+        armor: {
+            icon: "fa-shield-halved",
+            title: "Armadura",
+            suffix: "",
+            summary: "Reduz o dano que você recebe — de forma proporcional, com retorno decrescente.",
+            details: [
+                ["Mitigação", "Quanto mais Armadura, menos dano passa — mas nunca chega a bloquear tudo, não importa o quanto você acumule."],
+                ["Penetração inimiga", "A Penetração de quem te ataca reduz sua Armadura efetiva antes da conta ser feita."]
+            ]
+        },
+
+        agility: {
+            icon: "fa-wind",
+            title: "Agilidade",
+            suffix: "",
+            summary: "Decide quem age primeiro no combate e sua chance de Esquiva.",
+            details: [
+                ["Iniciativa", "Quem tem mais Agilidade ataca primeiro no combate."],
+                ["Esquiva", "Quanto mais ágil que o adversário, maior a chance de esquivar dos golpes dele — com um teto de 40%, nunca chega a ficar impossível de acertar."]
+            ]
+        },
+
+        criticalChance: {
+            icon: "fa-bullseye",
+            title: "Chance Crítica",
+            summary: "Chance, a CADA golpe seu, de causar um Golpe Crítico.",
+            details: [
+                ["Quando ativa", "Multiplica o dano daquele golpe por 1.5×."],
+                ["Chance", "Rolada de novo em todo ataque — não acumula, não garante o próximo."]
+            ]
+        },
+
+        lifeSteal: {
+            icon: "fa-droplet",
+            title: "Roubo de Vida",
+            summary: "Chance, a cada golpe seu, de recuperar Vida com o próprio ataque.",
+            details: [
+                ["Quando ativa", "Recupera 20% do dano causado + 2% da sua Vida Máxima."],
+                ["Chance", "Rolada de novo em todo ataque, independente de crítico."]
+            ]
+        },
+
+        penetration: {
+            icon: "fa-burst",
+            title: "Penetração",
+            summary: "NÃO é uma chance — reduz a Armadura efetiva do alvo em todo golpe seu, sempre.",
+            details: [
+                ["Efeito", "A Armadura do alvo vale (100 − Penetração)% do valor real antes do dano ser calculado."],
+                ["Sempre ativa", "Ao contrário dos outros atributos aqui, não precisa de nenhuma sorte pra funcionar."]
+            ]
+        },
+
+        absorption: {
+            icon: "fa-shield-heart",
+            title: "Absorção",
+            summary: "Chance, a cada golpe RECEBIDO, de bloquear o dano por completo.",
+            details: [
+                ["Quando ativa", "O golpe causa 0 de dano — mitigação total, sem cura adicional."],
+                ["Teto", "Nunca passa de 95% de chance, mesmo somando muito equipamento."]
+            ]
+        },
+
+        miasmaChance: {
+            icon: "fa-skull-crossbones",
+            title: "Miasma",
+            summary: "Exclusivo do Pútrido: chance, a cada golpe seu, de intoxicar o alvo.",
+            details: [
+                ["Quando ativa", "Reduz pela metade a Chance Crítica, Roubo de Vida, Penetração e Absorção do alvo no PRÓXIMO ataque dele."],
+                ["Por quê no próximo", "Garante o efeito mesmo se o alvo for mais rápido e já tiver atacado nesse turno."],
+                ["Não causa dano", "Só enfraquece — a queda de dano do alvo vem do atributo dele mesmo ficando pior."]
+            ]
+        }
+
+    };
+
+    registerStatTooltipEvents(container) {
+
+        container.querySelectorAll(".character-stat-hoverable").forEach(row => {
+
+            const statKey = row.dataset.stat;
+
+            row.addEventListener("mouseenter", (event) => {
+                this.showStatTooltip(statKey, event.clientX, event.clientY);
+            });
+
+            row.addEventListener("mousemove", (event) => {
+                this.updateTooltipPosition(event.clientX, event.clientY);
+            });
+
+            row.addEventListener("mouseleave", () => {
+                this.hideTooltip();
+            });
+
+        });
+
+    }
+
+    showStatTooltip(statKey, x, y) {
+
+        const info = CharacterView.STAT_TOOLTIP_INFO[statKey];
+
+        if (!info) return;
+
+        this.hideTooltip();
+
+        const element = document.createElement("div");
+        element.id = "item-tooltip";
+        element.className = "item-tooltip stat-tooltip";
+        element.innerHTML = this.renderStatTooltip(statKey, info);
+        document.body.appendChild(element);
+
+        this.updateTooltipPosition(x, y);
+
+    }
+
+    renderStatTooltip(statKey, info) {
+
+        const value = this.game.player.stats.getFinalStats()[statKey] ?? 0;
+
+        return `
+            <div class="power-tooltip-header">
+                <i class="fa-solid ${info.icon}"></i>
+                <span class="power-tooltip-title">${info.title}</span>
+                <span class="power-tooltip-total">${value}${info.suffix ?? "%"}</span>
+            </div>
+
+            <div class="tooltip-divider"></div>
+
+            <p class="tooltip-description">${info.summary}</p>
+
+            <div class="tooltip-divider"></div>
+
+            <div class="power-tooltip-parts">
+                ${info.details.map(([label, text]) => `
+                    <div class="power-tooltip-part">
+                        <span class="tooltip-label">${label}</span>
+                        <p class="tooltip-description" style="margin-top:2px;">${text}</p>
+                    </div>
+                `).join("")}
+            </div>
         `;
 
     }

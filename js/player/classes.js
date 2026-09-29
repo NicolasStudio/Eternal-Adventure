@@ -50,19 +50,21 @@ const classes = {
     },
 
     barbarian: {
-
         id: "barbarian",
-
         name: "Bárbaro",
-
         image: "assets/img/assets/character/class/barbarian.png",
-
         hud: "assets/img/assets/character/class/barbarian-hud.png",
-
         description: "Especialista em combate bruto e resistência.",
-
         lore: "Vindos das terras geladas além das fronteiras de Asterion, os bárbaros transformam fúria em força. Onde outros recuam, eles avançam — absorvendo golpes que derrubariam qualquer guerreiro comum e devolvendo cada gota de dano em vida roubada."
+    },
 
+    putrid: {
+        id: "putrid",
+        name: "Putrido",
+        image: "assets/img/assets/character/class/putrid.png",
+        hud: "assets/img/assets/character/class/putrid-hud.png",
+        description: "Especialista em exalar odores e doenças.",
+        lore: "Os Putridos são mestres na arte de espalhar seu cheiro fétido e doenças por onde passam. Suas habilidades de combate são focadas em envenenar e enfraquecer seus inimigos, tornando-os vulneráveis a ataques subsequentes.",
     }
 
 };

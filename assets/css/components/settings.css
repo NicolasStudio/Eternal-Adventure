@@ -79,30 +79,6 @@
     cursor:not-allowed;
 }
 
-.settings-danger-button{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    width:100%;
-    padding:10px;
-    border:2px solid #7a2e2e;
-    border-radius:6px;
-    background:rgba(122,46,46,.15);
-    color:#e39a9a;
-    font-family:"Cinzel",serif;
-    font-size:.9rem;
-    font-weight:700;
-    cursor:pointer;
-    transition:.15s;
-}
-
-.settings-danger-button:hover{
-    border-color:#c04b4b;
-    background:rgba(122,46,46,.28);
-    color:#ffb3b3;
-}
-
 .settings-footer{
     padding:14px 20px 20px;
     display:flex;
@@ -173,73 +149,4 @@
 }
 .report-bug-link:hover{
     color:#f0a878;
-}
-
-/* ==========================================================
-   CONFIRMAÇÃO DE LIMPEZA DE DADOS
-========================================================== */
-.settings-confirm-overlay{
-    position:absolute;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:rgba(0,0,0,.8);
-    backdrop-filter:blur(2px);
-    z-index:5;
-}
-
-.settings-confirm-modal{
-    width:300px;
-    max-width:88%;
-    padding:20px;
-    border:1px solid #7a2e2e;
-    border-radius:8px;
-    background:rgba(24,16,11,.98);
-    text-align:center;
-}
-
-.settings-confirm-modal p{
-    margin:0 0 18px;
-    font-size:.88rem;
-    color:#e8d9b8;
-    line-height:1.5;
-}
-
-.settings-confirm-actions{
-    display:flex;
-    justify-content:center;
-    gap:12px;
-}
-
-.settings-confirm-yes,
-.settings-confirm-no{
-    padding:8px 20px;
-    border-radius:6px;
-    font-family:"Cinzel",serif;
-    font-weight:700;
-    font-size:.85rem;
-    cursor:pointer;
-    transition:.15s;
-}
-
-.settings-confirm-yes{
-    border:2px solid #c04b4b;
-    background:rgba(122,46,46,.25);
-    color:#ffb3b3;
-}
-
-.settings-confirm-yes:hover{
-    border-color:#e36868;
-}
-
-.settings-confirm-no{
-    border:2px solid #5b4633;
-    background:rgba(0,0,0,.25);
-    color:#d8c39b;
-}
-
-.settings-confirm-no:hover{
-    border-color:#8b7355;
-    color:#f3e0b7;
 }

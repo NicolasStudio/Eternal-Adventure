@@ -471,7 +471,10 @@ export default class SaveService {
                 criticalChance: stats.criticalChance,
                 lifeSteal: stats.lifeSteal,
                 penetration: stats.penetration,
-                absorption: stats.absorption
+                absorption: stats.absorption,
+                // Só o Pútrido tem isso > 0 — em qualquer outra classe
+                // fica 0 (ver PlayerStats.getFinalStats).
+                miasmaChance: stats.miasmaChance
             },
             equipment
         };
@@ -529,6 +532,15 @@ export default class SaveService {
                 name: player.name ?? player.class.name,
                 level: player.level,
                 classId: player.class.id,
+                // Título/retrato "reais" pro cabeçalho e pro painel de
+                // status do detalhe do ranking — se o jogador já
+                // transcendeu (upClasse.js), mostra a classe evoluída
+                // (ex: "Mago da Escuridão"); senão, a classe base.
+                // Resolvido aqui pra não precisar duplicar a lógica de
+                // transcendência (que depende do lado luz/trevas
+                // escolhido) no lado de quem só está VENDO o ranking.
+                title: player.transcendence?.name ?? player.class.name,
+                titleImage: player.transcendence?.image ?? player.class.image,
                 power: PowerService.getPower(player),
                 ...this.buildProfileSnapshot(player)
             });
@@ -574,10 +586,6 @@ export default class SaveService {
 
     static hasLocalSave() {
         return !!localStorage.getItem(STORAGE_KEY);
-    }
-
-    static clearLocalSave() {
-        localStorage.removeItem(STORAGE_KEY);
     }
 
     static loadFromLocalStorage() {

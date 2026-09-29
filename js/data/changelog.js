@@ -14,7 +14,17 @@ export default [
             "Adicionado o Ranking: mostra os 10 jogadores com maior Poder entre todas as contas, com Nome, Nível, Classe e Poder",
             "Adicionado efeito visual de dano (flash branco) nos personagens ao apanhar, e de cura (luz verde subindo pelo corpo) ao receber cura, em Dungeons, PVP e Cooperativo",
             "Corrigido o carregamento inicial do jogo mostrando rapidamente a tela de login antes de corrigir pra quem já estava logado",
-            "Wiki: seções Salvar e Carregar reescritas para o novo sistema de conta e nuvem, e adicionada a seção Ranking"
+            "Adicionado o Chat global: mensagens somem sozinhas depois de 1h, com proteção contra repetição e spam, e aviso de mensagem nova no ícone da barra de ferramentas",
+            "Adicionado novo pet: Boitatá, com uma terceira habilidade — queimadura, que incendeia o alvo no primeiro golpe e causa dano direto a cada turno seu até o combate acabar (fraca contra criaturas de Água, forte contra Planta, nos chefes do Cooperativo); drop de 5% em qualquer andar do Cooperativo",
+            "Pets: aumentado o nível máximo para 50 — a cada nível par o pet ganha atributos direto (Vida, Ataque, Armadura ou Agilidade, conforme a família), além dos estágios de evolução já existentes",
+            "Adicionado um quarto estágio de Qualidade, 'Lendário', exclusivo pra itens de raridade Lendária — mesmo bônus do Excepcional, é só um teto de prestígio pra quem quer investir ainda mais ouro",
+            "Ranking: clicando na lupa ao lado de qualquer jogador, um novo modal mostra os equipamentos e o status dele (ou os seus) no momento do último save",
+            "Ranking: corrigida a Classe exibida no modal de detalhe, que sempre mostrava a classe base mesmo em personagens já transcendidos (Portal da Luz/Trevas) — agora mostra o título real",
+            "Reduzido o tempo de espera do Baú de 3h30 para 3h",
+            "Aumentados vida e dano dos monstros a partir do nível 35, que estavam ficando fáceis demais nessa faixa",
+            "Reativado o modo PVP 2x2 (estava indisponível desde a v0.12): corrigidos os bugs que deixavam um jogador preso 'procurando partida' pra sempre ou o colocavam em duas partidas ao mesmo tempo; o limite de Poder entre os 4 jogadores agora se alarga sozinho quanto mais tempo a fila demora, pra fechar a partida mesmo com poucos jogadores online",
+            "Padronizados os botões de fechar (X) de todos os modais e telas do jogo — mesmo visual circular dourado em todo lugar",
+            "Wiki: seções Salvar e Carregar reescritas para o novo sistema de conta e nuvem, e adicionadas as seções Ranking e Chat; atualizadas as seções Pets (nível máximo, queimadura do Boitatá), Qualidade (quarto estágio) e PVP (2x2 reativado)"
         ]
     },
 

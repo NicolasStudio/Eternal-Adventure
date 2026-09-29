@@ -6,6 +6,7 @@ import CombatToast from "../combat/CombatToast.js";
 import HealFlash from "../combat/HealFlash.js";
 import HitFlash from "../combat/HitFlash.js";
 import BoitataBurn from "../services/BoitataBurn.js";
+import MiasmaService from "../services/MiasmaService.js";
 import dungeons from "../data/dungeons.js";
 
 // Só os chefes "normais" (não o final secreto, que fica de fora da
@@ -871,6 +872,10 @@ export default class PvpView {
 
             let message = "";
 
+            if (entry.miasmaWeakened) {
+                message += `<em>(Miasma reduziu os atributos especiais desse golpe.)</em><br>`;
+            }
+
             if (entry.critical) {
                 message += `<span class="combat-critical">Golpe Crítico!</span><br>`;
             }
@@ -881,11 +886,19 @@ export default class PvpView {
                 message += `<br><span class="combat-life-steal">Life Steal!</span> Recuperou <strong>${entry.lifeSteal}</strong> HP.`;
             }
 
+            if (entry.miasmaProc) {
+                message += `<br>${MiasmaService.buildProcMessage(opponentName)}`;
+            }
+
             return message;
 
         }
 
         let hitMessage = "";
+
+        if (entry.miasmaWeakened) {
+            hitMessage += `<em>(Miasma reduziu a Absorção desse golpe.)</em><br>`;
+        }
 
         if (entry.critical) {
             hitMessage += `<span class="combat-critical">Ataque Crítico!</span><br>`;
@@ -895,6 +908,10 @@ export default class PvpView {
 
         if (entry.absorbed > 0) {
             hitMessage += `<br><span class="combat-absorption">Absorção!</span> Mitigou <strong>${entry.absorbed}</strong> de dano por completo.`;
+        }
+
+        if (entry.miasmaProc) {
+            hitMessage += `<br>${MiasmaService.buildProcMessage("você")}`;
         }
 
         return hitMessage;
@@ -963,6 +980,10 @@ export default class PvpView {
 
             let message = "";
 
+            if (entry.miasmaWeakened) {
+                message += `<em>(Miasma reduziu os atributos especiais desse golpe.)</em><br>`;
+            }
+
             if (entry.critical) {
                 message += `<span class="combat-critical">Golpe Crítico!</span><br>`;
             }
@@ -973,6 +994,10 @@ export default class PvpView {
                 message += `<br><span class="combat-life-steal">Life Steal!</span> Recuperou <strong>${entry.lifeSteal}</strong> HP.`;
             }
 
+            if (entry.miasmaProc) {
+                message += `<br>${MiasmaService.buildProcMessage(targetName)}`;
+            }
+
             return message;
 
         }
@@ -980,6 +1005,10 @@ export default class PvpView {
         if (targetIsMe) {
 
             let hitMessage = "";
+
+            if (entry.miasmaWeakened) {
+                hitMessage += `<em>(Miasma reduziu sua Absorção nesse golpe.)</em><br>`;
+            }
 
             if (entry.critical) {
                 hitMessage += `<span class="combat-critical">Ataque Crítico!</span><br>`;
@@ -991,6 +1020,10 @@ export default class PvpView {
                 hitMessage += `<br><span class="combat-absorption">Absorção!</span> Mitigou <strong>${entry.absorbed}</strong> de dano por completo.`;
             }
 
+            if (entry.miasmaProc) {
+                hitMessage += `<br>${MiasmaService.buildProcMessage("você")}`;
+            }
+
             return hitMessage;
 
         }
@@ -998,7 +1031,8 @@ export default class PvpView {
         // Ataque entre outras duas pessoas que não sou eu (ex: meu
         // aliado atacando, ou o inimigo atacando meu aliado).
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
-        return `${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}.`;
+        const miasma = entry.miasmaProc ? ` <span class="combat-pet-bite">(Miasma!)</span>` : "";
+        return `${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${miasma}.`;
 
     }
 

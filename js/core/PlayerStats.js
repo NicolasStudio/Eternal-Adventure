@@ -89,7 +89,11 @@ export default class PlayerStats {
 
             penetration: withBaseBonus("penetration"),
 
-            absorption: withBaseBonus("absorption")
+            absorption: withBaseBonus("absorption"),
+
+            // Só o Pútrido tem fonte real disso (equipamento dele) — em
+            // qualquer outra classe fica 0 pelo mesmo fallback das outras.
+            miasmaChance: withBaseBonus("miasmaChance")
 
         };
     }
@@ -120,6 +124,10 @@ export default class PlayerStats {
 
     get absorption() {
         return this.getFinalStats().absorption;
+    }
+
+    get miasmaChance() {
+        return this.getFinalStats().miasmaChance;
     }
 
 }

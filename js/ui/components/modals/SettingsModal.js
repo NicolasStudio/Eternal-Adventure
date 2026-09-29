@@ -2,7 +2,6 @@ import SaveService from "../../../services/SaveService.js";
 import AuthService from "../../../services/AuthService.js";
 import AudioSettings from "../../../services/AudioSettings.js";
 import MusicService from "../../../services/MusicService.js";
-import Toast from "../Toast.js";
 
 export default class SettingsModal {
 
@@ -10,13 +9,11 @@ export default class SettingsModal {
         this.game = game;
         this.inGame = inGame;
         this.modal = null;
-        this.confirmingClear = false;
         this.settings = AudioSettings.get();
     }
 
     show() {
         this.settings = AudioSettings.get();
-        this.confirmingClear = false;
         this.mount();
     }
 
@@ -89,14 +86,6 @@ export default class SettingsModal {
                 </section>
 
                 <section class="settings-section">
-                    <h3>Dados</h3>
-                    <button class="settings-danger-button" id="settings-clear-data">
-                        <i class="fa-solid fa-trash"></i>
-                        Limpar dados salvos
-                    </button>
-                </section>
-
-                <section class="settings-section">
                     <h3>Agradecimentos</h3>
                     <a href="acknowledgments.html" class="acknowledgments" target="_blank">Ver sobre</a>
                 </section>
@@ -124,26 +113,6 @@ export default class SettingsModal {
                     </button>
                 </footer>
 
-            </div>
-
-            ${this.confirmingClear ? this.renderConfirmClear() : ""}
-        `;
-    }
-
-    renderConfirmClear() {
-        return `
-            <div class="settings-confirm-overlay" id="settings-confirm-overlay">
-                <div class="settings-confirm-modal">
-                    <p>
-                        Isso vai apagar todo o progresso salvo neste
-                        navegador. Essa ação não pode ser desfeita.
-                        Deseja continuar?
-                    </p>
-                    <div class="settings-confirm-actions">
-                        <button class="settings-confirm-yes" id="settings-confirm-yes">Sim, apagar</button>
-                        <button class="settings-confirm-no" id="settings-confirm-no">Cancelar</button>
-                    </div>
-                </div>
             </div>
         `;
     }
@@ -178,22 +147,6 @@ export default class SettingsModal {
             this.settings.sfxVolume = Number(event.target.value);
             AudioSettings.save(this.settings);
             this.checkSilenceAchievement();
-        });
-
-        this.modal.querySelector("#settings-clear-data")?.addEventListener("click", () => {
-            this.confirmingClear = true;
-            this.refresh();
-        });
-
-        this.modal.querySelector("#settings-confirm-yes")?.addEventListener("click", () => {
-            SaveService.clearLocalSave();
-            Toast.show("Dados apagados.");
-            this.hide();
-        });
-
-        this.modal.querySelector("#settings-confirm-no")?.addEventListener("click", () => {
-            this.confirmingClear = false;
-            this.refresh();
         });
 
         this.modal.querySelector("#settings-exit")?.addEventListener("click", () => {

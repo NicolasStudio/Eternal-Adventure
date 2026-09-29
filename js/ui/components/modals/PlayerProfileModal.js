@@ -27,7 +27,8 @@ const STATS = [
     ["criticalChance", "Chance Crítica", "%"],
     ["lifeSteal", "Roubo de Vida", "%"],
     ["penetration", "Penetração", "%"],
-    ["absorption", "Absorção", "%"]
+    ["absorption", "Absorção", "%"],
+    ["miasmaChance", "Miasma", "%"]
 ];
 
 // Só estas chaves de atributo passam do banco pra tela.
@@ -144,7 +145,10 @@ export default class PlayerProfileModal {
 
     render(entry) {
 
-        const className = classes[entry.classId]?.name ?? "???";
+        // Título "real" (ex: "Mago da Escuridão" se já transcendeu) —
+        // quem ainda não salvou depois dessa atualização não tem
+        // "title" publicado, cai pro nome da classe base.
+        const className = entry.title ?? classes[entry.classId]?.name ?? "???";
 
         return `
             <div class="profile-modal">
@@ -167,6 +171,7 @@ export default class PlayerProfileModal {
                     </section>
 
                     <section class="profile-stats">
+                        ${this.renderPortrait(entry)}
                         ${STATS.map(stat => this.renderStat(stat, entry.stats)).join("")}
                         <div class="profile-divider"></div>
                         <div class="profile-stat profile-power">
@@ -183,6 +188,26 @@ export default class PlayerProfileModal {
                     `}
                 </div>
 
+            </div>
+        `;
+
+    }
+
+    // Só o retrato (sem o nome embaixo — o cabeçalho já mostra o
+    // título real em "Nv. X · Título") no topo do painel de status,
+    // empurrando a lista de status pra baixo.
+    renderPortrait(entry) {
+
+        // Compatibilidade: quem ainda não salvou depois dessa
+        // atualização não tem "titleImage" publicado — cai pro retrato
+        // da classe base, sem a transcendência.
+        const image = entry.titleImage ?? classes[entry.classId]?.image ?? null;
+
+        if (!image) return "";
+
+        return `
+            <div class="profile-portrait">
+                <img src="${image}" alt="">
             </div>
         `;
 

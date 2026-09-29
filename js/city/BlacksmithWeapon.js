@@ -329,6 +329,7 @@ export default class BlacksmithWeapon {
             case "lifeSteal": return "Roubo de Vida";
             case "penetration": return "Penetração";
             case "absorption": return "Absorção";
+            case "miasmaChance": return "Miasma";
             default: return stat;
         }
     }
@@ -342,6 +343,7 @@ export default class BlacksmithWeapon {
             case "lifeSteal": return "🩸";
             case "penetration": return "💥";
             case "absorption": return "🪨";
+            case "miasmaChance": return "🦠";
             default: return "•";
         }
     }

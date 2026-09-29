@@ -120,7 +120,10 @@ export default class RankingModal {
 
     renderRow(entry, position) {
 
-        const className = classes[entry.classId]?.name ?? "???";
+        // Título "real" (ex: "Mago da Escuridão" se já transcendeu) —
+        // quem ainda não salvou depois dessa atualização não tem
+        // "title" publicado, cai pro nome da classe base.
+        const className = entry.title ?? classes[entry.classId]?.name ?? "???";
 
         // Quem ainda não salvou depois da atualização não tem
         // equipamento/status publicados: a lupa aparece do mesmo jeito,

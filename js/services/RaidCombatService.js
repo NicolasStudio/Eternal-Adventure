@@ -1,5 +1,6 @@
 import PvpCombatService from "./PvpCombatService.js";
 import BoitataBurn from "./BoitataBurn.js";
+import MiasmaService from "./MiasmaService.js";
 
 // Boss tem HP colossal (milhares) contra só 4 atacantes por rodada —
 // precisa de bem mais rodadas que um duelo de PVP (que usa guard 500/1000)
@@ -135,6 +136,10 @@ export default class RaidCombatService {
         // nem do chefe). Não consome rng().
         const burns = new Map();
 
+        // Miasma do Pútrido (ver MiasmaService.js) — uma marca por
+        // combatente (inclui o chefe: ele também pode ser intoxicado).
+        const miasmaFlagsById = new Map(all.map(c => [c.id, MiasmaService.createFlags()]));
+
         const tickBurn = (owner) => {
 
             const burn = burns.get(owner.id);
@@ -217,13 +222,21 @@ export default class RaidCombatService {
 
                 const attackPower = isBossTurn ? chosenAttack.damage : attacker.attack;
 
-                const isCritical = rng() * 100 < attacker.criticalChance;
+                // Miasma: marca pendente no ATACANTE reduz Crítico/Roubo
+                // de Vida/Penetração DESSE golpe; marca pendente no ALVO
+                // reduz a Absorção dele ao recebê-lo. O chefe nunca tem
+                // miasmaChance > 0 (não é Pútrido), então só ativa vindo
+                // do squad — mas PODE ser alvo do débuff se for atingido.
+                const attackDebuff = MiasmaService.consumeAttackMultiplier(miasmaFlagsById.get(attacker.id));
+                const defendDebuff = MiasmaService.consumeDefendMultiplier(miasmaFlagsById.get(target.id));
+
+                const isCritical = rng() * 100 < attacker.criticalChance * attackDebuff;
                 const criticalMultiplier = isCritical ? 1.5 : 1;
-                const effectiveArmor = target.armor * (1 - attacker.penetration / 100);
+                const effectiveArmor = target.armor * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
                 const preAbsorption = Math.max(1, Math.floor(attackPower * criticalMultiplier * mitigation));
 
-                const absorptionChance = Math.min(95, target.absorption ?? 0);
+                const absorptionChance = Math.min(95, (target.absorption ?? 0) * defendDebuff);
                 let absorbed = 0;
                 let fullyAbsorbed = false;
 
@@ -238,9 +251,17 @@ export default class RaidCombatService {
 
                 let lifeStealAmount = 0;
 
-                if (rng() * 100 < attacker.lifeSteal) {
+                if (rng() * 100 < attacker.lifeSteal * attackDebuff) {
                     lifeStealAmount = Math.floor(damage * 0.20) + Math.floor(attacker.maxHP * 0.02);
                     attacker.currentHP = Math.min(attacker.maxHP, attacker.currentHP + lifeStealAmount);
+                }
+
+                // Miasma: sorteado com o valor ORIGINAL do atacante. Só
+                // Pútrido tem miasmaChance > 0 — o chefe nunca ativa isso.
+                const miasmaProc = MiasmaService.procs(attacker.miasmaChance ?? 0, rng());
+
+                if (miasmaProc) {
+                    MiasmaService.applyDebuff(miasmaFlagsById.get(target.id));
                 }
 
                 log.push({
@@ -252,7 +273,9 @@ export default class RaidCombatService {
                     critical: isCritical,
                     lifeSteal: lifeStealAmount,
                     absorbed,
-                    attackName: chosenAttack?.name ?? null
+                    attackName: chosenAttack?.name ?? null,
+                    miasmaProc,
+                    miasmaWeakened: attackDebuff < 1 || defendDebuff < 1
                 });
 
                 // Mordida do pet: só quem está atacando o chefe (nunca o

@@ -291,3 +291,28 @@
     gap:4px;
     margin-top:6px;
 }
+
+/* ==========================================================
+   TOOLTIP DE ATRIBUTO ESPECIAL (Crítico/Roubo de Vida/
+   Penetração/Absorção/Miasma) — mesma família visual do tooltip
+   de Poder, só que com o header em tom neutro (não é sobre ouro).
+========================================================== */
+.stat-tooltip{
+    width:270px;
+}
+.stat-tooltip .power-tooltip-header i{
+    color:#e6d2b5;
+    filter:drop-shadow(0 0 8px rgba(230,210,181,.35));
+}
+.stat-tooltip .power-tooltip-total{
+    color:#f5e6c8;
+    font-size:22px;
+    text-shadow:none;
+}
+.stat-tooltip .power-tooltip-part{
+    margin-bottom:2px;
+}
+.stat-tooltip .power-tooltip-part .tooltip-label{
+    font-weight:700;
+    color:#d4a373;
+}

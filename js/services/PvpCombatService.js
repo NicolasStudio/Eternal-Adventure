@@ -1,6 +1,7 @@
 import PetService from "./PetService.js";
 import PowerService from "./PowerService.js";
 import BoitataBurn from "./BoitataBurn.js";
+import MiasmaService from "./MiasmaService.js";
 
 const DODGE_CAP = 40;
 
@@ -8,7 +9,9 @@ const DODGE_CAP = 40;
 // no seu navegador, dois jogadores em versões diferentes chegariam a
 // resultados diferentes — o pareamento do 2x2 só junta quem tem o MESMO
 // número (ver PvpLobbyService). Aumente sempre que mudar a simulação.
-export const TEAM_SIM_VERSION = 2;
+// v3: Miasma do Pútrido passou a consumir rng() (o sorteio da ativação) —
+// clientes na v2 não fariam essa chamada e desincronizariam.
+export const TEAM_SIM_VERSION = 3;
 
 /*
     PVP precisa que os DOIS clientes (o do jogador A e o do jogador B)
@@ -89,6 +92,9 @@ export default class PvpCombatService {
             lifeSteal: stats.lifeSteal ?? 0,
             penetration: stats.penetration ?? 0,
             absorption: stats.absorption ?? 0,
+            // Só o Pútrido tem isso > 0 (ver MiasmaService.js) — em
+            // qualquer outra classe fica 0 e o Miasma nunca ativa.
+            miasmaChance: stats.miasmaChance ?? 0,
             petBiteDamage: scaledPet?.biteDamage ?? 0,
             petHealAmount: scaledPet?.healAmount ?? 0,
             petMimicRatio: scaledPet?.mimicRatio ?? 0,
@@ -136,6 +142,10 @@ export default class PvpCombatService {
         // Não consome rng(), então não dessincroniza os dois clientes.
         const burns = { a: null, b: null };
 
+        // Miasma do Pútrido (ver MiasmaService.js) — marca pendente de
+        // débuff por lado.
+        const miasmaFlags = { a: MiasmaService.createFlags(), b: MiasmaService.createFlags() };
+
         while (a.currentHP > 0 && b.currentHP > 0 && guard < 500) {
 
             guard++;
@@ -151,9 +161,17 @@ export default class PvpCombatService {
 
             } else {
 
-                const isCritical = rng() * 100 < attacker.criticalChance;
+                const defenderKey = turn === "a" ? "b" : "a";
+
+                // Miasma: marca pendente no ATACANTE reduz Crítico/Roubo
+                // de Vida/Penetração DESSE golpe; marca pendente no
+                // DEFENSOR reduz a Absorção dele ao recebê-lo.
+                const attackDebuff = MiasmaService.consumeAttackMultiplier(miasmaFlags[turn]);
+                const defendDebuff = MiasmaService.consumeDefendMultiplier(miasmaFlags[defenderKey]);
+
+                const isCritical = rng() * 100 < attacker.criticalChance * attackDebuff;
                 const criticalMultiplier = isCritical ? 1.5 : 1;
-                const effectiveArmor = defender.armor * (1 - attacker.penetration / 100);
+                const effectiveArmor = defender.armor * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
                 const preAbsorption = Math.max(1, Math.floor(attacker.attack * criticalMultiplier * mitigation));
 
@@ -161,7 +179,7 @@ export default class PvpCombatService {
                 // completo (mesma lógica de proc do Roubo de Vida, só que
                 // do lado de quem apanha) — sem cura extra, a mitigação
                 // total do dano já é o benefício.
-                const absorptionChance = Math.min(95, defender.absorption ?? 0);
+                const absorptionChance = Math.min(95, (defender.absorption ?? 0) * defendDebuff);
                 let absorbed = 0;
                 let fullyAbsorbed = false;
 
@@ -176,9 +194,18 @@ export default class PvpCombatService {
 
                 let lifeStealAmount = 0;
 
-                if (rng() * 100 < attacker.lifeSteal) {
+                if (rng() * 100 < attacker.lifeSteal * attackDebuff) {
                     lifeStealAmount = Math.floor(damage * 0.20) + Math.floor(attacker.maxHP * 0.02);
                     attacker.currentHP = Math.min(attacker.maxHP, attacker.currentHP + lifeStealAmount);
+                }
+
+                // Miasma: sorteado com o valor ORIGINAL do atacante (não
+                // afetado pelo próprio débuff que ele talvez esteja
+                // sofrendo). Só Pútrido tem miasmaChance > 0.
+                const miasmaProc = MiasmaService.procs(attacker.miasmaChance ?? 0, rng());
+
+                if (miasmaProc) {
+                    MiasmaService.applyDebuff(miasmaFlags[defenderKey]);
                 }
 
                 log.push({
@@ -188,7 +215,9 @@ export default class PvpCombatService {
                     damage,
                     critical: isCritical,
                     lifeSteal: lifeStealAmount,
-                    absorbed
+                    absorbed,
+                    miasmaProc,
+                    miasmaWeakened: attackDebuff < 1 || defendDebuff < 1
                 });
 
                 // Mordida do pet: garantida, não consome rng(). Dano e
@@ -302,6 +331,11 @@ export default class PvpCombatService {
         // do time — igual nos 4 clientes.
         const burns = new Map();
 
+        // Miasma do Pútrido (ver MiasmaService.js) — uma marca por
+        // COMBATENTE (não por time: cada um dos 4 pode estar debuffado
+        // independente dos aliados).
+        const miasmaFlagsById = new Map(all.map(c => [c.id, MiasmaService.createFlags()]));
+
         const tickBurn = (owner, enemyTeam) => {
 
             const burn = burns.get(owner.id);
@@ -370,13 +404,19 @@ export default class PvpCombatService {
 
                 }
 
-                const isCritical = rng() * 100 < attacker.criticalChance;
+                // Miasma: marca pendente no ATACANTE reduz Crítico/Roubo
+                // de Vida/Penetração DESSE golpe; marca pendente no ALVO
+                // reduz a Absorção dele ao recebê-lo.
+                const attackDebuff = MiasmaService.consumeAttackMultiplier(miasmaFlagsById.get(attacker.id));
+                const defendDebuff = MiasmaService.consumeDefendMultiplier(miasmaFlagsById.get(target.id));
+
+                const isCritical = rng() * 100 < attacker.criticalChance * attackDebuff;
                 const criticalMultiplier = isCritical ? 1.5 : 1;
-                const effectiveArmor = target.armor * (1 - attacker.penetration / 100);
+                const effectiveArmor = target.armor * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
                 const preAbsorption = Math.max(1, Math.floor(attacker.attack * criticalMultiplier * mitigation));
 
-                const absorptionChance = Math.min(95, target.absorption ?? 0);
+                const absorptionChance = Math.min(95, (target.absorption ?? 0) * defendDebuff);
                 let absorbed = 0;
                 let fullyAbsorbed = false;
 
@@ -391,9 +431,17 @@ export default class PvpCombatService {
 
                 let lifeStealAmount = 0;
 
-                if (rng() * 100 < attacker.lifeSteal) {
+                if (rng() * 100 < attacker.lifeSteal * attackDebuff) {
                     lifeStealAmount = Math.floor(damage * 0.20) + Math.floor(attacker.maxHP * 0.02);
                     attacker.currentHP = Math.min(attacker.maxHP, attacker.currentHP + lifeStealAmount);
+                }
+
+                // Miasma: sorteado com o valor ORIGINAL do atacante. Só
+                // Pútrido tem miasmaChance > 0.
+                const miasmaProc = MiasmaService.procs(attacker.miasmaChance ?? 0, rng());
+
+                if (miasmaProc) {
+                    MiasmaService.applyDebuff(miasmaFlagsById.get(target.id));
                 }
 
                 log.push({
@@ -404,7 +452,9 @@ export default class PvpCombatService {
                     damage,
                     critical: isCritical,
                     lifeSteal: lifeStealAmount,
-                    absorbed
+                    absorbed,
+                    miasmaProc,
+                    miasmaWeakened: attackDebuff < 1 || defendDebuff < 1
                 });
 
                 // Mordida do pet: garantida, não consome rng(). Dano e

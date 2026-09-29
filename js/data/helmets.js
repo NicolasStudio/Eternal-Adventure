@@ -490,6 +490,130 @@ const helmets = {
         value: 0,
         sellValue: 0
     },
+
+/* ==========================================
+       PUTRID
+========================================== */
+    helmet_putrid_common: {
+
+        id: "helmet_putrid_common",
+        name: "Máscara",
+        type: "armor",
+        slot: "helmet",
+        class: "putrid",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/helmets/helmets-putrid-rarity-comum.png",
+
+        stats: {
+            armor: 2,
+            criticalChance: 2
+        },
+
+        value: 50,
+        sellValue: 20
+
+    },
+
+    helmet_putrid_uncommon: {
+
+        id: "helmet_putrid_uncommon",
+        name: "Máscara",
+        type: "armor",
+        slot: "helmet",
+        class: "putrid",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/helmets/helmets-putrid-rarity-incomum.png",
+
+        stats: {
+            armor: 4,
+            criticalChance: 3
+        },
+
+        value: 200,
+        sellValue: 120
+
+    },
+
+    helmet_putrid_rare: {
+
+        id: "helmet_putrid_rare",
+        name: "Máscara",
+        type: "armor",
+        slot: "helmet",
+        class: "putrid",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/helmets/helmets-putrid-rarity-rare.png",
+
+        stats: {
+            armor: 6,
+            criticalChance: 4
+        },
+
+        value: 720,
+        sellValue: 360
+
+    },
+
+    helmet_putrid_mystic: {
+
+        id: "helmet_putrid_mystic",
+        name: "Máscara",
+        type: "armor",
+        slot: "helmet",
+        class: "putrid",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/helmets/helmets-putrid-rarity-mistico.png",
+
+        stats: {
+            armor: 8,
+            criticalChance: 6
+        },
+
+        value: 2160,
+        sellValue: 1080
+
+    },
+
+    helmet_putrid_legendary: {
+
+        id: "helmet_putrid_legendary",
+        name: "Máscara",
+        type: "armor",
+        slot: "helmet",
+        class: "putrid",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/helmets/helmets-putrid-rarity-lendario.png",
+
+        stats: {
+            armor: 14,
+            criticalChance: 8
+        },
+
+        value: 0,
+        sellValue: 13240
+
+    },
+
+    helmet_putrid_ultraje: {
+
+        id: "helmet_putrid_ultraje",
+        name: "Máscara",
+        type: "armor",
+        slot: "helmet",
+        class: "putrid",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/helmets/helmets-putrid-rarity-ultraje.png",
+
+        stats: {
+            armor: 18,
+            criticalChance: 10
+        },
+
+        value: 0,
+        sellValue: 0
+
+    }
+
 };
 
 export default helmets;

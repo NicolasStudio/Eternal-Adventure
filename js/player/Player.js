@@ -690,7 +690,12 @@ export default class Player {
             warrior: "absorption",
             mage: "penetration",
             archer: "criticalChance",
-            barbarian: "lifeSteal"
+            barbarian: "lifeSteal",
+            // Pútrido não tem UM especial só (o foco é Crítico + Penetração +
+            // Absorção + Roubo de Vida, espalhado no equipamento) — pra
+            // efeitos do Quartzo Rosa e do tooltip, Roubo de Vida é o "principal"
+            // porque é o que a arma dele (Fedor) reforça, igual as outras classes.
+            putrid: "lifeSteal"
         }[this.class.id] ?? null;
     }
 

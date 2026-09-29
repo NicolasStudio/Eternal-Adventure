@@ -82,8 +82,12 @@
                     <i class="fa-solid fa-users"></i> Cooperativo
                 </a>
 
-                <a href="#ranking" class="wiki-nav-item" data-keywords="ranking rankings top 10 mais fortes poder nível classe">
+                <a href="#ranking" class="wiki-nav-item" data-keywords="ranking rankings top 10 mais fortes poder nível classe lupa equipamentos">
                     <i class="fa-solid fa-ranking-star"></i> Ranking
+                </a>
+
+                <a href="#chat" class="wiki-nav-item" data-keywords="chat global mensagem mensagens conversa jogadores online">
+                    <i class="fa-solid fa-comments"></i> Chat
                 </a>
 
                 <a href="#album" class="wiki-nav-item" data-keywords="album cartas bestiario bestiário criaturas baú chest">
@@ -183,12 +187,13 @@
             <section id="qualidade" class="wiki-section">
 
                 <h2><i class="fa-solid fa-star"></i> Qualidade</h2>
-                <p class="wiki-intro">Diferente da raridade, a Qualidade você controla: é o quanto você já melhorou aquele item específico na Ferraria. Todo item começa em <strong>Nenhuma</strong> (sem melhoria nenhuma) e pode subir três estágios, gastando ouro em cada um.</p>
+                <p class="wiki-intro">Diferente da raridade, a Qualidade você controla: é o quanto você já melhorou aquele item específico na Ferraria. Todo item começa em <strong>Nenhuma</strong> (sem melhoria nenhuma) e pode subir três estágios, gastando ouro em cada um — itens de raridade <strong>Lendária</strong> ganham um quarto estágio exclusivo.</p>
 
                 <div class="wiki-steps">
                     <div class="wiki-step"><span class="wiki-step-num">1</span><div><h4>Ordinário</h4><p>O primeiro upgrade. Um reforço já perceptível nos atributos principais do item.</p></div></div>
                     <div class="wiki-step"><span class="wiki-step-num">2</span><div><h4>Medíocre</h4><p>Segundo estágio — o item começa a ficar bem mais forte que a versão base.</p></div></div>
-                    <div class="wiki-step"><span class="wiki-step-num">3</span><div><h4>Excepcional</h4><p>O teto de qualidade daquele item. É aqui, inclusive, que atributos secundários (como Chance Crítica ou Roubo de Vida) finalmente recebem reforço — nos estágios anteriores, só os atributos principais melhoram.</p></div></div>
+                    <div class="wiki-step"><span class="wiki-step-num">3</span><div><h4>Excepcional</h4><p>O teto de qualidade pra qualquer item que não seja de raridade Lendária. É aqui, inclusive, que atributos secundários (como Chance Crítica ou Roubo de Vida) finalmente recebem reforço — nos estágios anteriores, só os atributos principais melhoram.</p></div></div>
+                    <div class="wiki-step"><span class="wiki-step-num">4</span><div><h4>Lendário</h4><p>Só existe pra itens de raridade Lendária. Não soma nenhum atributo a mais além do Excepcional — é um selo de prestígio pra quem quer investir ainda mais ouro no item que já é o teto do jogo.</p></div></div>
                 </div>
 
                 <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: o custo em ouro de cada estágio é o mesmo pra qualquer item — o que muda com a raridade é o quanto você ganha em cada melhoria, não o preço.</p>
@@ -337,6 +342,7 @@
 
                 <h3>Chocar e Evoluir</h3>
                 <p>O ovo fica no seu inventário, na aba "Pets" da tela de Personagem. Selecione ele e clique em "Chocar" pra virar um pet de verdade. A partir daí ele evolui sozinho, em múltiplos estágios, conforme sobe de nível — nome, imagem e atributos vão mudando automaticamente, sem precisar fazer nada além de alimentá-lo.</p>
+                <p>Além dos estágios, o pet também ganha atributos a cada nível par, até o nível máximo (50) — o quanto ganha em cada ganho depende da raridade dele (3★, 4★ ou 5★) e da família (algumas focam em Vida, outras em Dano, Agilidade etc.). Um pet que já está avançado recebe, na hora, tudo que faltava até o nível atual dele.</p>
                 <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: cada espécie de pet tem seus próprios estágios de evolução — em quais níveis e no que ele se torna, você descobre jogando.</p>
 
                 <h3>Fome e XP</h3>
@@ -361,6 +367,7 @@
 
                 <h3>Ataque do Pet</h3>
                 <p>Um pet equipado ataca o inimigo a cada turno seu, além do seu próprio ataque — um golpe extra, garantido (sem chance de esquiva ou crítico), com linha própria no log de combate. Funciona em Dungeons, PVP e Cooperativo. Algumas espécies, além do dano, também curam você (e seus aliados, em PVP 2x2 e Cooperativo) na mesma quantidade a cada ataque. O efeito escala com a fome, igual aos outros atributos.</p>
+                <p>O Boitatá tem uma terceira variante: ao acertar o primeiro golpe, incendeia o alvo, que passa a levar dano direto (não passa pela armadura) a cada turno seu até o combate acabar. Contra os elementos dos chefes do Cooperativo, a queimadura é <strong>fraca</strong> contra criaturas de Água e <strong>forte</strong> contra criaturas de Planta.</p>
 
                 <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: mantenha seu pet bem alimentado antes de encarar um combate difícil — com a fome baixa, ele praticamente não ajuda em nada.</p>
 
@@ -447,6 +454,16 @@
                 <h2><i class="fa-solid fa-ranking-star"></i> Ranking</h2>
                 <p class="wiki-intro">Acessível pelo ícone correspondente na barra de ferramentas. Mostra os <strong>10 jogadores com maior <a href="#poder">Poder</a></strong> entre todas as contas do jogo, do maior pro menor, com Nome, Nível, Classe e Poder de cada um.</p>
                 <p>A lista é atualizada sempre que você salva (manual ou automaticamente) — não fica em tempo real enquanto está aberta, então feche e abra de novo pra ver uma posição atualizada.</p>
+                <p>Clicando na lupa ao lado da posição de qualquer jogador, um segundo modal mostra os equipamentos e o status dele no momento do último save — a mesma tela vale pro seu próprio personagem. Quem ainda não salvou depois dessa atualização aparece com a lupa apagada, e o modal explica que os dados ainda não foram publicados.</p>
+
+            </section>
+
+            <section id="chat" class="wiki-section">
+
+                <h2><i class="fa-solid fa-comments"></i> Chat</h2>
+                <p class="wiki-intro">Acessível pelo ícone de balões na barra de ferramentas (fora de combate). Um chat global, com todo jogador online no mesmo canal — sem salas nem conversa privada.</p>
+                <p>Mensagens somem sozinhas depois de 1 hora. Pra evitar spam, não dá pra mandar a mesma mensagem duas vezes seguidas em menos de 5 minutos, nem mandar muito rápido uma atrás da outra — o jogo avisa quando isso acontece.</p>
+                <p>Uma bolinha vermelha no ícone do Chat aparece quando chegam mensagens novas enquanto a janela está fechada.</p>
 
             </section>
 
@@ -455,7 +472,7 @@
                 <h2><i class="fa-solid fa-gears"></i> Configurações e Maximizar</h2>
 
                 <h3>Configurações</h3>
-                <p>Controla o volume da música ambiente e dos efeitos sonoros separadamente (liga/desliga e volume de cada um), e tem a opção de limpar todos os dados salvos no navegador — use com cuidado, essa ação não tem volta.</p>
+                <p>Controla o volume da música ambiente e dos efeitos sonoros separadamente (liga/desliga e volume de cada um).</p>
 
                 <h3>Maximizar</h3>
                 <p>Deixa o jogo em tela cheia no seu navegador. Clique de novo (ou aperte Esc) pra sair da tela cheia.</p>

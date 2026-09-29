@@ -120,11 +120,17 @@ export default class ClassSelectionScreen {
                 "🩸 Alto Roubo de Vida",
                 "💪 Ataque e Agilidade Equilibrados",
                 "🪨 Absorção Baixa"
+            ],
+
+            putrid: [
+                "🦠 Dano Médio",
+                "🧪 Debuff em atributos especiais dos inimigos",
+                "🏃 Agilidade considerada"
             ]
 
         };
 
-        const list = specialties[this.selectedClass.id]
+        const list = (specialties[this.selectedClass.id] ?? [])
             .map(item => `<li>${item}</li>`)
             .join("");
 

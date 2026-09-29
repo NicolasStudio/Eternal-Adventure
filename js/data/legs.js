@@ -494,6 +494,136 @@ const legs = {
 
     },
 
+
+/* ==========================================
+       PUTRID
+========================================== */
+    legs_putrid_common: {
+
+        id: "legs_putrid_common",
+        name: "Calças",
+        type: "armor",
+        slot: "leg",
+        class: "putrid",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/legs/legs-putrid-rarity-comum.png",
+
+        stats: {
+            armor: 2,
+            agility: 1,
+            penetration: 2
+        },
+
+        value: 95,
+        sellValue: 45
+
+    },
+
+    legs_putrid_uncommon: {
+
+        id: "legs_putrid_uncommon",
+        name: "Calças",
+        type: "armor",
+        slot: "leg",
+        class: "putrid",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/legs/legs-putrid-rarity-incomum.png",
+
+        stats: {
+            armor: 4,
+            agility: 2,
+            penetration: 3
+        },
+
+        value: 285,
+        sellValue: 135
+
+    },
+
+    legs_putrid_rare: {
+
+        id: "legs_putrid_rare",
+        name: "Calças",
+        type: "armor",
+        slot: "leg",
+        class: "putrid",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/legs/legs-putrid-rarity-rare.png",
+
+        stats: {
+            armor: 6,
+            agility: 4,
+            penetration: 4
+        },
+
+        value: 855,
+        sellValue: 405
+
+    },
+
+    legs_putrid_mystic: {
+
+        id: "legs_putrid_mystic",
+        name: "Calças",
+        type: "armor",
+        slot: "leg",
+        class: "putrid",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/legs/legs-putrid-rarity-mistico.png",
+
+        stats: {
+            armor: 12,
+            agility: 5,
+            penetration: 6
+        },
+
+        value: 2565,
+        sellValue: 1215
+
+    },
+
+    legs_putrid_legendary: {
+
+        id: "legs_putrid_legendary",
+        name: "Calças",
+        type: "armor",
+        slot: "leg",
+        class: "putrid",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/legs/legs-putrid-rarity-lendario.png",
+
+        stats: {
+            armor: 14,
+            agility: 6,
+            penetration: 8
+        },
+
+        value: 0,
+        sellValue: 13645
+
+    },
+
+    legs_putrid_ultraje: {
+
+        id: "legs_putrid_ultraje",
+        name: "Calças",
+        type: "armor",
+        slot: "leg",
+        class: "putrid",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/legs/legs-putrid-rarity-ultraje.png",
+
+        stats: {
+            armor: 17,
+            agility: 7,
+            penetration: 10
+        },
+
+        value: 0,
+        sellValue: 0
+
+    }
+
 };
 
 export default legs;

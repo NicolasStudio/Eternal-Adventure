@@ -493,6 +493,136 @@ const boots = {
 
     },
 
+
+/* ==========================================
+       PUTRID
+========================================== */
+    boots_putrid_common: {
+
+        id: "boots_putrid_common",
+        name: "Botas",
+        type: "armor",
+        slot: "boot",
+        class: "putrid",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/boots/boots-putrid-rarity-comum.png",
+
+        stats: {
+            armor: 1,
+            agility: 4,
+            miasmaChance: 2
+        },
+
+        value: 80,
+        sellValue: 40
+
+    },
+
+    boots_putrid_uncommon: {
+
+        id: "boots_putrid_uncommon",
+        name: "Botas",
+        type: "armor",
+        slot: "boot",
+        class: "putrid",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/boots/boots-putrid-rarity-incomum.png",
+
+        stats: {
+            armor: 2,
+            agility: 7,
+            miasmaChance: 3
+        },
+
+        value: 240,
+        sellValue: 120
+
+    },
+
+    boots_putrid_rare: {
+
+        id: "boots_putrid_rare",
+        name: "Botas",
+        type: "armor",
+        slot: "boot",
+        class: "putrid",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/boots/boots-putrid-rarity-rare.png",
+
+        stats: {
+            armor: 3,
+            agility: 10,
+            miasmaChance: 4
+        },
+
+        value: 720,
+        sellValue: 360
+
+    },
+
+    boots_putrid_mystic: {
+
+        id: "boots_putrid_mystic",
+        name: "Botas",
+        type: "armor",
+        slot: "boot",
+        class: "putrid",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/boots/boots-putrid-rarity-mistico.png",
+
+        stats: {
+            armor: 5,
+            agility: 11,
+            miasmaChance: 6
+        },
+
+        value: 2160,
+        sellValue: 1080
+
+    },
+
+    boots_putrid_legendary: {
+
+        id: "boots_putrid_legendary",
+        name: "Botas",
+        type: "armor",
+        slot: "boot",
+        class: "putrid",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/boots/boots-putrid-rarity-lendario.png",
+
+        stats: {
+            armor: 7,
+            agility: 12,
+            miasmaChance: 8
+        },
+
+        value: 0,
+        sellValue: 13240
+
+    },
+
+    boots_putrid_ultraje: {
+
+        id: "boots_putrid_ultraje",
+        name: "Botas",
+        type: "armor",
+        slot: "boot",
+        class: "putrid",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/boots/boots-putrid-rarity-ultraje.png",
+
+        stats: {
+            armor: 9,
+            agility: 15,
+            miasmaChance: 10
+        },
+
+        value: 0,
+        sellValue: 0
+
+    }
+
 };
 
 export default boots;

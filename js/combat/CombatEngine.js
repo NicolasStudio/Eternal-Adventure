@@ -1,5 +1,6 @@
 import PetService from "../services/PetService.js";
 import BoitataBurn from "../services/BoitataBurn.js";
+import MiasmaService from "../services/MiasmaService.js";
 
 // Teto máximo de chance de esquiva, não importa o quanto a agilidade
 // de um lado supere a do outro — nunca "nunca é atingido".
@@ -15,6 +16,12 @@ export default class CombatEngine {
         // primeiro golpe do jogador que acerta; o engine é recriado a
         // cada andar, então a queimadura sempre acaba junto do combate.
         this.burn = null;
+        // Miasma do Pútrido (ver MiasmaService.js) — marca pendente de
+        // débuff em cada lado; também reiniciado a cada andar.
+        this.miasmaFlags = {
+            player: MiasmaService.createFlags(),
+            monster: MiasmaService.createFlags()
+        };
     }
 
     rollInitiative() {
@@ -32,20 +39,24 @@ export default class CombatEngine {
         const playerTurn = this.currentTurn === "player";
         const attacker = playerTurn ? this.player.stats : this.monster.status;
         const defender = playerTurn ? this.monster.status : this.player.stats;
+        const attackerSide = playerTurn ? "player" : "monster";
+        const defenderSide = playerTurn ? "monster" : "player";
 
         if (this.rollDodge(attacker, defender)) {
             return {
-                attacker: playerTurn ? "player" : "monster",
-                target: playerTurn ? "monster" : "player",
+                attacker: attackerSide,
+                target: defenderSide,
                 dodged: true,
                 damage: 0,
                 critical: false,
                 lifeSteal: 0,
-                absorbed: 0
+                absorbed: 0,
+                miasmaProc: false,
+                miasmaWeakened: false
             };
         }
 
-        const result = this.calculateDamage(attacker, defender);
+        const result = this.calculateDamage(attacker, defender, attackerSide, defenderSide);
         if (playerTurn) {
             this.monster.status.vidaAtual -= result.damage;
             this.monster.status.vidaAtual = Math.max(0, this.monster.status.vidaAtual);
@@ -57,13 +68,15 @@ export default class CombatEngine {
             this.player.currentHP = Math.max(0, this.player.currentHP);
         }
         return {
-            attacker: playerTurn ? "player" : "monster",
-            target: playerTurn ? "monster" : "player",
+            attacker: attackerSide,
+            target: defenderSide,
             dodged: false,
             damage: result.damage,
             critical: result.critical,
             lifeSteal: result.lifeSteal,
-            absorbed: result.absorbed
+            absorbed: result.absorbed,
+            miasmaProc: result.miasmaProc,
+            miasmaWeakened: result.miasmaWeakened
         };
     }
 
@@ -84,15 +97,21 @@ export default class CombatEngine {
 
     }
 
-    calculateDamage(attacker, defender) {
+    calculateDamage(attacker, defender, attackerSide = null, defenderSide = null) {
 
         const attack = attacker.attack ?? attacker.dano;
         const armor = defender.armor ?? defender.armadura;
-        const penetration = attacker.penetration ?? 0;
-        const criticalChance = attacker.criticalChance ?? 0;
+
+        // Miasma do Pútrido: se o ATACANTE tiver uma marca pendente
+        // (foi intoxicado no golpe anterior que sofreu), Crítico/Roubo
+        // de Vida/Penetração desse golpe saem pela metade.
+        const attackDebuff = MiasmaService.consumeAttackMultiplier(this.miasmaFlags[attackerSide]);
+
+        const penetration = (attacker.penetration ?? 0) * attackDebuff;
+        const criticalChance = (attacker.criticalChance ?? 0) * attackDebuff;
 
         // Chance de ativação do Life Steal
-        const lifeStealChance = attacker.lifeSteal ?? 0;
+        const lifeStealChance = (attacker.lifeSteal ?? 0) * attackDebuff;
 
         const isCritical = Math.random() * 100 < criticalChance;
         const criticalMultiplier = isCritical ? 1.5 : 1;
@@ -116,7 +135,10 @@ export default class CombatEngine {
         // ativa, absorve o dano INTEIRO daquele golpe (0 de dano) — só
         // isso, sem cura adicional (a mitigação completa já É o
         // benefício).
-        const absorptionChance = Math.min(95, defender.absorption ?? 0);
+        // Miasma: se o DEFENSOR tiver uma marca pendente, a Absorção
+        // dele sai pela metade nesse golpe que está recebendo agora.
+        const defendDebuff = MiasmaService.consumeDefendMultiplier(this.miasmaFlags[defenderSide]);
+        const absorptionChance = Math.min(95, (defender.absorption ?? 0) * defendDebuff);
 
         let absorbed = 0;
         let fullyAbsorbed = false;
@@ -144,7 +166,22 @@ export default class CombatEngine {
 
         }
 
+        // ==========================
+        // MIASMA (Pútrido)
+        // ==========================
+        // Sorteado com o miasmaChance ORIGINAL do atacante (não afetado
+        // pelo próprio débuff que talvez ele esteja sofrendo — Miasma
+        // não se enfraquece sozinho). Só existe pra classe Pútrido; em
+        // qualquer outro atacante miasmaChance é 0 e isso nunca ativa.
+        const miasmaProc = MiasmaService.procs(attacker.miasmaChance ?? 0, Math.random());
+
+        if (miasmaProc) {
+            MiasmaService.applyDebuff(this.miasmaFlags[defenderSide]);
+        }
+
         return {
+            miasmaProc,
+            miasmaWeakened: attackDebuff < 1 || defendDebuff < 1,
             damage,
             critical: isCritical,
             lifeSteal: recoveredHP,
@@ -163,6 +200,9 @@ export default class CombatEngine {
 
         if (result.attacker === "player") {
             let message = "";
+            if (result.miasmaWeakened) {
+                message += `<em>(Miasma reduziu os atributos especiais desse golpe.)</em><br>`;
+            }
             if (result.critical) {
                 message += `<span class="combat-critical">Golpe Crítico!</span><br>`;
             }
@@ -170,10 +210,16 @@ export default class CombatEngine {
             if (result.lifeSteal > 0) {
                 message += `<br><span class="combat-life-steal">Life Steal!</span> Recuperou <strong>${result.lifeSteal}</strong> HP.`;
             }
+            if (result.miasmaProc) {
+                message += `<br>${MiasmaService.buildProcMessage(this.monster.name)}`;
+            }
             return message;
         }
 
         let message = "";
+        if (result.miasmaWeakened) {
+            message += `<em>(Miasma reduziu sua Absorção nesse golpe.)</em><br>`;
+        }
         if (result.critical) {
             message += `<span class="combat-critical">Ataque Crítico!</span><br>`;
         }

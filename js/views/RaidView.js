@@ -9,6 +9,7 @@ import CombatToast from "../combat/CombatToast.js";
 import HealFlash from "../combat/HealFlash.js";
 import HitFlash from "../combat/HitFlash.js";
 import BoitataBurn from "../services/BoitataBurn.js";
+import MiasmaService from "../services/MiasmaService.js";
 
 export default class RaidView {
 
@@ -640,6 +641,10 @@ export default class RaidView {
 
         let message = "";
 
+        if (entry.miasmaWeakened) {
+            message += `<em>(Miasma reduziu os atributos especiais desse golpe.)</em><br>`;
+        }
+
         if (isBossAttacker && entry.attackName) {
             message += `<strong>${attackerName}</strong> usou <span class="combat-critical">${entry.attackName}</span><br>`;
         }
@@ -662,6 +667,10 @@ export default class RaidView {
 
         if (entry.absorbed > 0) {
             message += `<br><span class="combat-absorption">Absorção!</span> ${targetName} mitigou <strong>${entry.absorbed}</strong> de dano por completo.`;
+        }
+
+        if (entry.miasmaProc) {
+            message += `<br>${MiasmaService.buildProcMessage(targetName === "Você" ? "você" : targetName)}`;
         }
 
         return message;

@@ -319,7 +319,8 @@ export default class MarketView {
             warrior: "Guerreiro",
             archer: "Arqueiro",
             mage: "Mago",
-            barbarian: "Bárbaro"
+            barbarian: "Bárbaro",
+            putrid: "Putrido"
         };
         return classes[playerClass] ?? playerClass;
     }

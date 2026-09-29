@@ -252,9 +252,10 @@ hr{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:8px 12px;
+    padding:6px 12px;
     background:rgba(255,255,255,.03);
     border-radius:4px;
+    font-size:16px;
 }
 .character-stat span:first-child{
     color:#d4a373;
@@ -275,6 +276,17 @@ hr{
 .character-stat.character-power span:last-child{
     color:#f1c75c;
     font-size:1.1em;
+}
+
+/* Atributos especiais (Crítico/Roubo de Vida/Penetração/Absorção/Miasma)
+   têm tooltip explicando a mecânica — cursor de ajuda + destaque sutil
+   no hover deixam claro que dá pra passar o mouse ali. */
+.character-stat-hoverable{
+    cursor:help;
+    transition:background .15s;
+}
+.character-stat-hoverable:hover{
+    background:rgba(255,255,255,.07);
 }
 
 /* ==========================================================
