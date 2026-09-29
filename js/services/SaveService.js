@@ -152,6 +152,16 @@ export default class SaveService {
             player.baseStats[key] = Math.max(0, player.baseStats[key] ?? 0);
         }
 
+        // Quartzo Rosa no Pútrido aprimorava Roubo de Vida (o especial
+        // dele estava errado) — agora aprimora Miasma. Nada mais dá Roubo
+        // de Vida-base pro Pútrido (nem level up nem transcendência), então
+        // tudo que estiver ali veio da pedra e vira Miasma. Idempotente:
+        // depois da primeira vez o Roubo de Vida-base já é 0.
+        if (characterClass.id === "putrid" && player.baseStats.lifeSteal > 0) {
+            player.baseStats.miasmaChance = (player.baseStats.miasmaChance ?? 0) + player.baseStats.lifeSteal;
+            player.baseStats.lifeSteal = 0;
+        }
+
         player.inventory = this.refreshFoodItems(this.repairStones(data.inventory ?? []));
         player.equipment = data.equipment ?? player.equipment;
         // Saves de antes do slot de pet existir não têm essa chave —

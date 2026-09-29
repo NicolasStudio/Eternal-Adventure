@@ -276,11 +276,10 @@ export default class BlacksmithEnchant {
             mage: "penetration",
             archer: "criticalChance",
             barbarian: "lifeSteal",
-            // Pútrido não tem UM especial só (o foco é Crítico + Penetração +
-            // Absorção + Roubo de Vida, espalhado no equipamento) — pra
-            // efeitos do Quartzo Rosa e do tooltip, Roubo de Vida é o "principal"
-            // porque é o que a arma dele (Fedor) reforça, igual as outras classes.
-            putrid: "lifeSteal"
+            // Pútrido: o especial dele é o Miasma (enfraquece os 4
+            // especiais do INIMIGO — ver MiasmaService.js); ele mesmo não
+            // tem Crítico/Roubo de Vida/Penetração/Absorção.
+            putrid: "miasmaChance"
         }[classId] ?? null;
     }
 
@@ -298,6 +297,7 @@ export default class BlacksmithEnchant {
             case "lifeSteal": return "Roubo de Vida";
             case "penetration": return "Penetração";
             case "absorption": return "Absorção";
+            case "miasmaChance": return "Miasma";
             default: return stat;
         }
     }
@@ -316,6 +316,7 @@ export default class BlacksmithEnchant {
             case "lifeSteal": return "🩸";
             case "penetration": return "💥";
             case "absorption": return "🪨";
+            case "miasmaChance": return "🦠";
             default: return "•";
         }
     }

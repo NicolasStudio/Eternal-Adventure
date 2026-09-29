@@ -633,7 +633,7 @@ export default class Player {
             // Quartzo Rosa: o bônus é sempre "special" na pedra/arma, mas
             // vira o atributo secundário real da classe do jogador
             // (Guerreiro = Absorção, Mago = Penetração, Bárbaro = Roubo de
-            // Vida, Arqueiro = Crítico) — mesmo teto de secondaryCap das
+            // Vida, Arqueiro = Crítico, Pútrido = Miasma) — mesmo teto de secondaryCap das
             // demais fontes desse atributo (ver PlayerStats.getFinalStats).
             const specialKey = this.getSpecialStatKey();
             if (specialKey) {
@@ -691,11 +691,10 @@ export default class Player {
             mage: "penetration",
             archer: "criticalChance",
             barbarian: "lifeSteal",
-            // Pútrido não tem UM especial só (o foco é Crítico + Penetração +
-            // Absorção + Roubo de Vida, espalhado no equipamento) — pra
-            // efeitos do Quartzo Rosa e do tooltip, Roubo de Vida é o "principal"
-            // porque é o que a arma dele (Fedor) reforça, igual as outras classes.
-            putrid: "lifeSteal"
+            // Pútrido: o especial dele é o Miasma (enfraquece os 4
+            // especiais do INIMIGO — ver MiasmaService.js); ele mesmo não
+            // tem Crítico/Roubo de Vida/Penetração/Absorção.
+            putrid: "miasmaChance"
         }[this.class.id] ?? null;
     }
 
@@ -705,6 +704,7 @@ export default class Player {
             case "penetration": return "Penetração";
             case "criticalChance": return "Chance Crítica";
             case "lifeSteal": return "Roubo de Vida";
+            case "miasmaChance": return "Miasma";
             default: return "Atributo Especial";
         }
     }

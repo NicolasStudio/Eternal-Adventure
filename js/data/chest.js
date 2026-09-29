@@ -483,7 +483,7 @@ const chests = {
 
         stats: {
             armor: 4,
-            absorption: 2
+            miasmaChance: 2
         },
 
         value: 100,
@@ -503,7 +503,7 @@ const chests = {
 
         stats: {
             armor: 8,
-            absorption: 3
+            miasmaChance: 3
         },
 
         value: 300,
@@ -523,7 +523,7 @@ const chests = {
 
         stats: {
             armor: 14,
-            absorption: 4
+            miasmaChance: 4
         },
 
         value: 900,
@@ -543,7 +543,7 @@ const chests = {
 
         stats: {
             armor: 18,
-            absorption: 6
+            miasmaChance: 6
         },
 
         value: 2700,
@@ -563,7 +563,7 @@ const chests = {
 
         stats: {
             armor: 24,
-            absorption: 8
+            miasmaChance: 8
         },
 
         value: 0,
@@ -583,7 +583,7 @@ const chests = {
 
         stats: {
             armor: 31,
-            absorption: 10
+            miasmaChance: 10
         },
 
         value: 0,

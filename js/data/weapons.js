@@ -591,9 +591,10 @@ const weapons = {
             armor: 0,
             agility: 0,
             criticalChance: 0,
-            lifeSteal: 2,
+            lifeSteal: 0,
             penetration: 0,
-            absorption: 0
+            absorption: 0,
+            miasmaChance: 2
         },
 
         value: 120,
@@ -617,9 +618,10 @@ const weapons = {
             armor: 0,
             agility: 0,
             criticalChance: 0,
-            lifeSteal: 5,
+            lifeSteal: 0,
             penetration: 0,
-            absorption: 0
+            absorption: 0,
+            miasmaChance: 5
         },
 
         value: 360,
@@ -643,9 +645,10 @@ const weapons = {
             armor: 0,
             agility: 0,
             criticalChance: 0,
-            lifeSteal: 6,
+            lifeSteal: 0,
             penetration: 0,
-            absorption: 0
+            absorption: 0,
+            miasmaChance: 6
         },
 
         value: 1080,
@@ -669,9 +672,10 @@ const weapons = {
             armor: 0,
             agility: 0,
             criticalChance: 0,
-            lifeSteal: 10,
+            lifeSteal: 0,
             penetration: 0,
-            absorption: 0
+            absorption: 0,
+            miasmaChance: 10
         },
 
         value: 3240,
@@ -695,9 +699,10 @@ const weapons = {
             armor: 0,
             agility: 0,
             criticalChance: 0,
-            lifeSteal: 11,
+            lifeSteal: 0,
             penetration: 0,
-            absorption: 0
+            absorption: 0,
+            miasmaChance: 11
         },
 
         value: 0,
@@ -721,9 +726,10 @@ const weapons = {
             armor: 0,
             agility: 0,
             criticalChance: 0,
-            lifeSteal: 15,
+            lifeSteal: 0,
             penetration: 0,
-            absorption: 0
+            absorption: 0,
+            miasmaChance: 15
         },
 
         value: 0,

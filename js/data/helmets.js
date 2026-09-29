@@ -506,7 +506,7 @@ const helmets = {
 
         stats: {
             armor: 2,
-            criticalChance: 2
+            miasmaChance: 2
         },
 
         value: 50,
@@ -526,7 +526,7 @@ const helmets = {
 
         stats: {
             armor: 4,
-            criticalChance: 3
+            miasmaChance: 3
         },
 
         value: 200,
@@ -546,7 +546,7 @@ const helmets = {
 
         stats: {
             armor: 6,
-            criticalChance: 4
+            miasmaChance: 4
         },
 
         value: 720,
@@ -566,7 +566,7 @@ const helmets = {
 
         stats: {
             armor: 8,
-            criticalChance: 6
+            miasmaChance: 6
         },
 
         value: 2160,
@@ -586,7 +586,7 @@ const helmets = {
 
         stats: {
             armor: 14,
-            criticalChance: 8
+            miasmaChance: 8
         },
 
         value: 0,
@@ -606,7 +606,7 @@ const helmets = {
 
         stats: {
             armor: 18,
-            criticalChance: 10
+            miasmaChance: 10
         },
 
         value: 0,

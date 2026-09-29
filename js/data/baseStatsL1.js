@@ -7,8 +7,7 @@ export default {
     mage: { attack: 8, armor: 2, agility: 5, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     barbarian: { attack: 7, armor: 4, agility: 4, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     // Dano médio (menos que Mago/Arqueiro), um pouco mais de Vida (ver
-    // levels.js) e Agilidade rápida mas atrás do Arqueiro. O foco da
-    // classe (Crítico/Roubo de Vida/Penetração/Absorção) vem quase todo
-    // do equipamento (ver weapons/helmets/chest/legs.js), não daqui.
+    // levels.js) e Agilidade rápida mas atrás do Arqueiro. O único
+    // especial da classe é o Miasma, que vem 100% do equipamento.
     putrid: { attack: 6, armor: 3, agility: 6, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
 };

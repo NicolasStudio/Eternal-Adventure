@@ -511,7 +511,7 @@ const legs = {
         stats: {
             armor: 2,
             agility: 1,
-            penetration: 2
+            miasmaChance: 2
         },
 
         value: 95,
@@ -532,7 +532,7 @@ const legs = {
         stats: {
             armor: 4,
             agility: 2,
-            penetration: 3
+            miasmaChance: 3
         },
 
         value: 285,
@@ -553,7 +553,7 @@ const legs = {
         stats: {
             armor: 6,
             agility: 4,
-            penetration: 4
+            miasmaChance: 4
         },
 
         value: 855,
@@ -574,7 +574,7 @@ const legs = {
         stats: {
             armor: 12,
             agility: 5,
-            penetration: 6
+            miasmaChance: 6
         },
 
         value: 2565,
@@ -595,7 +595,7 @@ const legs = {
         stats: {
             armor: 14,
             agility: 6,
-            penetration: 8
+            miasmaChance: 8
         },
 
         value: 0,
@@ -616,7 +616,7 @@ const legs = {
         stats: {
             armor: 17,
             agility: 7,
-            penetration: 10
+            miasmaChance: 10
         },
 
         value: 0,
