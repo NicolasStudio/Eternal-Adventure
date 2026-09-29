@@ -156,11 +156,17 @@ export default class SettingsModal {
 
         this.modal.querySelector("#settings-logout")?.addEventListener("click", async () => {
 
+            // Espera a nuvem ANTES de deslogar (depois do signOut o
+            // Firestore recusa a escrita) e só então limpa o save local
+            // — senão a próxima conta a logar neste navegador puxaria
+            // esse personagem.
             if (this.game.player) {
-                SaveService.autoSave(this.game.player);
+                await SaveService.autoSave(this.game.player);
             }
 
             await AuthService.signOut();
+
+            SaveService.clearLocalSave();
 
             this.hide();
             this.game.player = null;

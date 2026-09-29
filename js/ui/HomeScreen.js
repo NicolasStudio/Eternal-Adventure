@@ -130,6 +130,10 @@ export default class HomeScreen {
     }
 
     show() {
+        // O save local depende de QUAL conta está logada — recalcula a
+        // cada vez que a Home aparece, não só quando ela foi montada.
+        const continueButton = this.element.querySelector("#btn-continue");
+        if (continueButton) continueButton.disabled = !SaveService.hasLocalSave();
         this.element.classList.remove("hidden");
         MusicService.play("home");
     }

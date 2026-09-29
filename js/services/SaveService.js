@@ -438,14 +438,18 @@ export default class SaveService {
     // Dispara a sincronização em paralelo, sem esperar — só se tiver
     // alguém logado no momento (fora do fluxo de login, save local
     // continua funcionando normalmente sem conta nenhuma).
+    // Retorna a promise pra quem PRECISA esperar a nuvem (ex: logout,
+    // que limpa o save local logo em seguida).
     static syncCloudIfLoggedIn(player, data) {
 
         const user = AuthService.getCurrentUser();
 
-        if (!user) return;
+        if (!user) return Promise.resolve();
 
-        this.saveToCloud(user.uid, data);
-        this.updateLeaderboardEntry(user.uid, player);
+        return Promise.all([
+            this.saveToCloud(user.uid, data),
+            this.updateLeaderboardEntry(user.uid, player)
+        ]);
 
     }
 
@@ -584,6 +588,13 @@ export default class SaveService {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
 
+    // Chamado no logout — sem isso, a próxima conta a logar neste
+    // navegador puxaria o personagem da conta anterior (e salvar
+    // duplicaria ele na conta nova).
+    static clearLocalSave() {
+        localStorage.removeItem(STORAGE_KEY);
+    }
+
     static hasLocalSave() {
         return !!localStorage.getItem(STORAGE_KEY);
     }
@@ -627,7 +638,7 @@ export default class SaveService {
     // sem o jogador ter clicado em "Salvar" manualmente.
     static autoSave(player) {
 
-        if (!player) return;
+        if (!player) return Promise.resolve();
 
         try {
 
@@ -635,11 +646,13 @@ export default class SaveService {
 
             this.persist(data);
 
-            this.syncCloudIfLoggedIn(player, data);
+            return this.syncCloudIfLoggedIn(player, data);
 
         } catch (err) {
 
             console.warn("Falha ao salvar automaticamente:", err);
+
+            return Promise.resolve();
 
         }
 
