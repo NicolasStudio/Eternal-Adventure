@@ -280,6 +280,11 @@ export default class SaveService {
 
         if (!canonical) return item;
 
+        // Nome e ícone também vêm do cadastro atual — item renomeado
+        // depois de já estar no save (ex: capacete do Pútrido, que era
+        // "Máscara" e virou "Touca") continuava com o nome antigo.
+        item.name = canonical.name;
+        item.icon = canonical.icon;
         item.baseStats = structuredClone(canonical.stats);
 
         UpgradeService.applyStats(item);
