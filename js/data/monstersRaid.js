@@ -18,7 +18,7 @@ const monstersRaid = [
         floor: 1,
 
         status: {
-            vidaMaxima: 15000,
+            vidaMaxima: 16000,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
@@ -82,8 +82,8 @@ const monstersRaid = [
                     dano: 320,
                 },
             ],
-            armadura: 230,
-            agilidade: 240,
+            armadura: 240,
+            agilidade: 250,
             xp: 0,
             ouro: 70000
         },
@@ -131,7 +131,7 @@ const monstersRaid = [
                     dano: 380,
                 },
             ],
-            armadura: 240,
+            armadura: 250,
             agilidade: 200,
             xp: 0,
             ouro: 80000
@@ -165,7 +165,7 @@ const monstersRaid = [
         floor: 4,
 
         status: {
-            vidaMaxima: 18000,
+            vidaMaxima: 20000,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
@@ -180,7 +180,7 @@ const monstersRaid = [
                     dano: 380,
                 },
             ],
-            armadura: 250,
+            armadura: 280,
             agilidade: 250,
             xp: 0,
             ouro: 80000
@@ -214,7 +214,7 @@ const monstersRaid = [
         floor: 5,
 
         status: {
-            vidaMaxima: 22000,
+            vidaMaxima: 25000,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
@@ -229,7 +229,7 @@ const monstersRaid = [
                     dano: 400,
                 },
             ],
-            armadura: 255,
+            armadura: 275,
             agilidade: 280,
             xp: 0,
             ouro: 100000
