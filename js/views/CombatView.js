@@ -180,6 +180,10 @@ export default class CombatView {
 
             type = "absorption enemy";
 
+        } else if (result.critical) {
+
+            type = "critico enemy";
+
         }
 
         if (result.attacker === "player" && !result.dodged && result.damage > 0) {

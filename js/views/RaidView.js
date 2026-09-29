@@ -688,11 +688,14 @@ export default class RaidView {
             type += " dodge";
         } else if (entry.petBite || entry.burn) {
             type += " pet-bite";
-        } else if (isMeAttacking) {
-            if (entry.lifeSteal > 0) type = "lifeSteal player";
-            else if (entry.critical) type = "critico player";
+        } else if (isMeAttacking && entry.lifeSteal > 0) {
+            type = "lifeSteal player";
         } else if (isMeTarget && entry.absorbed > 0) {
             type = "absorption enemy";
+        } else if (entry.critical) {
+            // Crítico de qualquer um (eu, aliado ou inimigo) usa a
+            // caixa de crítico — o lado da tela continua vindo de type.
+            type += " critico";
         }
 
         return type;

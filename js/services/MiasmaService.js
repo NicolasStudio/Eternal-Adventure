@@ -55,7 +55,7 @@ export default class MiasmaService {
     }
 
     static buildProcMessage(targetName) {
-        return `<span class="combat-pet-bite">Miasma!</span> ${targetName} foi intoxicado — os atributos especiais dele saem pela metade no próximo golpe.`;
+        return `<span class="combat-miasma">Miasma!</span> ${targetName} foi intoxicado — os atributos especiais dele saem pela metade no próximo golpe.`;
     }
 
 }

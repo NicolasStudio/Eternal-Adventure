@@ -185,96 +185,74 @@
     min-width:260px;
     max-width:360px;
     padding:14px 22px;
-    border:3px solid #2a1f16;
     border-radius:6px;
     font-family:"Cinzel",serif;
     font-size:22px;
-    font-weight:bold;
-    font-weight: 800;
+    font-weight:800;
     text-align:center;
     opacity:0;
     box-shadow:0 10px 22px rgba(0,0,0,.45);
-}
-
-/* ==========================================================
-   PLAYER - ATAQUE NORMAL
-========================================================== */
-.combat-toast.player {
-    left: 62%;
-    top: 42%;
-    background: #f5f1e8;
-    color: #b31212;
-    border: 2px solid #d7cdbd;
-}
-
-/* ==========================================================
-   PLAYER - CRÍTICO
-========================================================== */
-.combat-toast.critico.player {
-    left: 62%;
-    top: 42%;
-    background: #fad55d;
-    color: #b31212;
-    border: 2px solid #b31212;
-    font-size: 22px;
-    font-weight: 700;
-}
-
-/* ==========================================================
-   PLAYER - LIFE STEAL
-========================================================== */
-.combat-toast.lifeSteal.player {
-    left: 62%;
-    top: 42%;
-    background: #32d35a;
-    color: #ffffff;
-    border: 2px solid #0b8d2b;
-    font-size: 20px;
-}
-
-/* ==========================================================
-   ENEMY
-========================================================== */
-.combat-toast.enemy {
-    left: 18%;
-    top: 42%;
-    background: #fad55d;
-    color: #b31212;
-    border: 2px solid #b31212;
-}
-
-/* ==========================================================
-   ENEMY - VOCÊ ABSORVEU PARTE DO GOLPE (mesmo visual do Life
-   Steal, só que do lado de quem apanha, não de quem ataca)
-========================================================== */
-.combat-toast.absorption.enemy {
-    left: 18%;
-    top: 42%;
-    background: #32d35a;
-    color: #ffffff;
-    border: 2px solid #0b8d2b;
-    font-size: 20px;
-}
-
-/* ==========================================================
-   MORDIDA DO PET (dono ou adversário) — mesma posição de
-   .player/.enemy (não redefine left/top), só troca a cor pra
-   destacar como um golpe extra, separado do ataque principal.
-========================================================== */
-.combat-toast.pet-bite {
-    background: #7c4dff;
-    color: #ffffff;
-    border: 2px solid #4b2e99;
-    font-size: 19px;
-}
-
-/* ==========================================================
-   ESQUIVA
-========================================================== */
-.combat-toast.dodge{
-    background:#e4e4e4;
+    /* Padrão = ATAQUE NORMAL (e esquiva): borda preta, fundo branco,
+       letra preta. Os tipos abaixo só sobrescrevem as cores. */
+    background:#ffffff;
     color:#111111;
     border:3px solid #000000;
+}
+
+/* ==========================================================
+   POSIÇÃO — quem ataca define o lado da tela; a cor vem do tipo
+   (crítico/cura/pet), então qualquer lado pode usar qualquer cor.
+========================================================== */
+.combat-toast.player{
+    left:62%;
+    top:42%;
+}
+.combat-toast.enemy{
+    left:18%;
+    top:42%;
+}
+
+/* ==========================================================
+   CRÍTICO (jogador ou inimigo): borda vermelha, fundo amarelo,
+   letra vermelha.
+========================================================== */
+.combat-toast.critico{
+    background:#fad55d;
+    color:#b31212;
+    border-color:#b31212;
+}
+
+/* ==========================================================
+   CURA (Life Steal, Absorção): borda branca, fundo verde claro,
+   letra branca. A sombra no texto é o que mantém o branco legível
+   em cima do verde claro.
+========================================================== */
+.combat-toast.lifeSteal,
+.combat-toast.absorption{
+    background:#5fd97a;
+    color:#ffffff;
+    border-color:#ffffff;
+    text-shadow:0 1px 3px rgba(0,0,0,.55);
+    font-size:20px;
+}
+
+/* ==========================================================
+   PET (mordida, cura e queimadura — dono ou adversário): borda
+   branca, fundo azul, letra branca. O azul é médio de propósito:
+   mais claro que isso o branco perde contraste.
+========================================================== */
+.combat-toast.pet-bite{
+    background:#2f80d0;
+    color:#ffffff;
+    border-color:#ffffff;
+    text-shadow:0 1px 3px rgba(0,0,0,.45);
+    font-size:19px;
+}
+
+/* ==========================================================
+   ESQUIVA — mesmo visual do ataque normal (padrão acima).
+========================================================== */
+.combat-toast.dodge{
     font-size:20px;
 }
 
@@ -312,14 +290,12 @@
 }
 
 /* ==========================================================
-   DESTAQUES DENTRO DA MENSAGEM (crítico / life steal)
+   DESTAQUES DENTRO DA MENSAGEM (crítico / life steal / absorção)
 
-   O span de crítico só aparece dentro de toasts com fundo dourado
-   (".critico.player" e ".enemy" já usam #fad55d) — por isso NÃO usa
-   essa mesma cor no texto (dourado-em-dourado ficava ilegível, quase
-   invisível). Life Steal e Absorção sempre aparecem dentro do toast
-   verde (".lifeSteal.player" / ".absorption.enemy", ambos #32d35a),
-   por isso os dois usam o mesmo branco.
+   Crítico em vermelho serve tanto no fundo amarelo quanto no branco.
+   Life Steal/Absorção são verde escuro por padrão (legível no fundo
+   branco, ex: absorção de um aliado no 2x2) e herdam o branco quando
+   estão dentro da caixa de cura.
 ========================================================== */
 .combat-critical{
     color:#b31212;
@@ -327,20 +303,33 @@
     letter-spacing:.5px;
     text-transform:uppercase;
 }
-.combat-life-steal{
-    color:#ffffff;
-    font-weight:800;
-    text-shadow:0 0 6px rgba(0,0,0,.45);
-}
+.combat-life-steal,
 .combat-absorption{
-    color:#ffffff;
+    color:#0b8d2b;
     font-weight:800;
-    text-shadow:0 0 6px rgba(0,0,0,.45);
 }
+.combat-toast.lifeSteal .combat-life-steal,
+.combat-toast.absorption .combat-absorption{
+    color:inherit;
+}
+/* Nome do pet: só aparece dentro da caixa do pet, herda o branco. */
 .combat-pet-bite{
-    color:#c9a8ff;
+    color:inherit;
     font-weight:800;
-    text-shadow:0 0 6px rgba(0,0,0,.45);
+}
+/* "Miasma!" (pútrido, tom de esgoto): selo verde musgo com letra
+   verde pálida. É um selo com fundo próprio, e não só cor de texto,
+   porque aparece dentro de qualquer caixa (normal, crítico, cura,
+   pet) — musgo puro sumiria em cima do verde da cura. */
+.combat-miasma{
+    display:inline-block;
+    padding:1px 8px;
+    border-radius:4px;
+    background:#4a5a23;
+    color:#d8e4a8;
+    border:1px solid #2e3a12;
+    font-weight:800;
+    text-shadow:none;
 }
 
 /* ==========================================================

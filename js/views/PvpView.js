@@ -928,11 +928,12 @@ export default class PvpView {
             type += " dodge";
         } else if (entry.petBite || entry.burn) {
             type += " pet-bite";
-        } else if (isMe) {
-            if (entry.lifeSteal > 0) type = "lifeSteal player";
-            else if (entry.critical) type = "critico player";
-        } else if (entry.absorbed > 0) {
+        } else if (isMe && entry.lifeSteal > 0) {
+            type = "lifeSteal player";
+        } else if (!isMe && entry.absorbed > 0) {
             type = "absorption enemy";
+        } else if (entry.critical) {
+            type += " critico";
         }
 
         return type;
@@ -1031,7 +1032,7 @@ export default class PvpView {
         // Ataque entre outras duas pessoas que não sou eu (ex: meu
         // aliado atacando, ou o inimigo atacando meu aliado).
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
-        const miasma = entry.miasmaProc ? ` <span class="combat-pet-bite">(Miasma!)</span>` : "";
+        const miasma = entry.miasmaProc ? ` <span class="combat-miasma">(Miasma!)</span>` : "";
         return `${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${miasma}.`;
 
     }
@@ -1048,11 +1049,14 @@ export default class PvpView {
             type += " dodge";
         } else if (entry.petBite || entry.burn) {
             type += " pet-bite";
-        } else if (isMe) {
-            if (entry.lifeSteal > 0) type = "lifeSteal player";
-            else if (entry.critical) type = "critico player";
+        } else if (isMe && entry.lifeSteal > 0) {
+            type = "lifeSteal player";
         } else if (targetIsMe && entry.absorbed > 0) {
             type = "absorption enemy";
+        } else if (entry.critical) {
+            // Crítico de qualquer um (eu, aliado ou inimigo) usa a
+            // caixa de crítico — o lado da tela continua vindo de type.
+            type += " critico";
         }
 
         return type;

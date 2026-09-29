@@ -17,6 +17,13 @@
        baixo). Um valor MAIOR que 10 (ex: 50, como Dungeon/PVP/Cidade)
        resolveria o header mas cobriria o menu de novo. */
     z-index:10;
+    /* Por ser inset:0 e ficar acima do header, a camada inteira
+       engolia os cliques do HUD (ex: botão do chat). Ela mesma deixa o
+       clique passar; só os filhos interativos abaixo recebem. */
+    pointer-events:none;
+}
+.farm-screen > *{
+    pointer-events:auto;
 }
 
 /* ==========================================================
