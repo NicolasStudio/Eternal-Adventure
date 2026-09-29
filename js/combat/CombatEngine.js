@@ -52,7 +52,8 @@ export default class CombatEngine {
                 lifeSteal: 0,
                 absorbed: 0,
                 miasmaProc: false,
-                miasmaWeakened: false
+                miasmaAttackWeakened: false,
+                miasmaDefendWeakened: false
             };
         }
 
@@ -76,7 +77,8 @@ export default class CombatEngine {
             lifeSteal: result.lifeSteal,
             absorbed: result.absorbed,
             miasmaProc: result.miasmaProc,
-            miasmaWeakened: result.miasmaWeakened
+            miasmaAttackWeakened: result.miasmaAttackWeakened,
+            miasmaDefendWeakened: result.miasmaDefendWeakened
         };
     }
 
@@ -181,7 +183,8 @@ export default class CombatEngine {
 
         return {
             miasmaProc,
-            miasmaWeakened: attackDebuff < 1 || defendDebuff < 1,
+            miasmaAttackWeakened: attackDebuff < 1,
+            miasmaDefendWeakened: defendDebuff < 1,
             damage,
             critical: isCritical,
             lifeSteal: recoveredHP,
@@ -200,9 +203,7 @@ export default class CombatEngine {
 
         if (result.attacker === "player") {
             let message = "";
-            if (result.miasmaWeakened) {
-                message += `<em>(Miasma reduziu os atributos especiais desse golpe.)</em><br>`;
-            }
+            message += MiasmaService.buildWeakenedMessage(result, "você", this.monster.name);
             if (result.critical) {
                 message += `<span class="combat-critical">Golpe Crítico!</span><br>`;
             }
@@ -217,9 +218,7 @@ export default class CombatEngine {
         }
 
         let message = "";
-        if (result.miasmaWeakened) {
-            message += `<em>(Miasma reduziu sua Absorção nesse golpe.)</em><br>`;
-        }
+        message += MiasmaService.buildWeakenedMessage(result, this.monster.name, "você");
         if (result.critical) {
             message += `<span class="combat-critical">Ataque Crítico!</span><br>`;
         }

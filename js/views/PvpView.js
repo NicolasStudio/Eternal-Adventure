@@ -872,9 +872,7 @@ export default class PvpView {
 
             let message = "";
 
-            if (entry.miasmaWeakened) {
-                message += `<em>(Miasma reduziu os atributos especiais desse golpe.)</em><br>`;
-            }
+            message += MiasmaService.buildWeakenedMessage(entry, "você", opponentName);
 
             if (entry.critical) {
                 message += `<span class="combat-critical">Golpe Crítico!</span><br>`;
@@ -896,9 +894,7 @@ export default class PvpView {
 
         let hitMessage = "";
 
-        if (entry.miasmaWeakened) {
-            hitMessage += `<em>(Miasma reduziu a Absorção desse golpe.)</em><br>`;
-        }
+        hitMessage += MiasmaService.buildWeakenedMessage(entry, opponentName, "você");
 
         if (entry.critical) {
             hitMessage += `<span class="combat-critical">Ataque Crítico!</span><br>`;
@@ -981,9 +977,7 @@ export default class PvpView {
 
             let message = "";
 
-            if (entry.miasmaWeakened) {
-                message += `<em>(Miasma reduziu os atributos especiais desse golpe.)</em><br>`;
-            }
+            message += MiasmaService.buildWeakenedMessage(entry, "você", targetName);
 
             if (entry.critical) {
                 message += `<span class="combat-critical">Golpe Crítico!</span><br>`;
@@ -1007,9 +1001,7 @@ export default class PvpView {
 
             let hitMessage = "";
 
-            if (entry.miasmaWeakened) {
-                hitMessage += `<em>(Miasma reduziu sua Absorção nesse golpe.)</em><br>`;
-            }
+            hitMessage += MiasmaService.buildWeakenedMessage(entry, attackerName, "você");
 
             if (entry.critical) {
                 hitMessage += `<span class="combat-critical">Ataque Crítico!</span><br>`;

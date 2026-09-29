@@ -54,6 +54,24 @@ export default class MiasmaService {
         return DEBUFF_MULTIPLIER;
     }
 
+    // Aviso de que uma marca foi CONSUMIDA nesse golpe — sempre dizendo
+    // de QUEM é o atributo cortado (o intoxicado), nunca "seu"/"desse
+    // golpe" genérico: quem lê é tanto o Pútrido quanto a vítima.
+    // attackWeakened: o ATACANTE estava intoxicado (Crítico/Roubo de
+    // Vida/Penetração dele pela metade). defendWeakened: o ALVO estava
+    // intoxicado (Absorção dele pela metade). Nomes já no formato da
+    // frase ("você" minúsculo pro próprio jogador).
+    static buildWeakenedMessage({ miasmaAttackWeakened, miasmaDefendWeakened }, attackerName, targetName) {
+        let message = "";
+        if (miasmaAttackWeakened) {
+            message += `<em>(Miasma: ${attackerName} está intoxicado — Crítico, Roubo de Vida e Penetração pela metade neste golpe.)</em><br>`;
+        }
+        if (miasmaDefendWeakened) {
+            message += `<em>(Miasma: ${targetName} está intoxicado — Absorção pela metade neste golpe.)</em><br>`;
+        }
+        return message;
+    }
+
     static buildProcMessage(targetName) {
         return `<span class="combat-miasma">Miasma!</span> ${targetName} foi intoxicado — os atributos especiais dele saem pela metade no próximo golpe.`;
     }

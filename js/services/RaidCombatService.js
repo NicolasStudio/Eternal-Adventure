@@ -275,7 +275,8 @@ export default class RaidCombatService {
                     absorbed,
                     attackName: chosenAttack?.name ?? null,
                     miasmaProc,
-                    miasmaWeakened: attackDebuff < 1 || defendDebuff < 1
+                    miasmaAttackWeakened: attackDebuff < 1,
+                    miasmaDefendWeakened: defendDebuff < 1
                 });
 
                 // Mordida do pet: só quem está atacando o chefe (nunca o

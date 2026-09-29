@@ -217,7 +217,8 @@ export default class PvpCombatService {
                     lifeSteal: lifeStealAmount,
                     absorbed,
                     miasmaProc,
-                    miasmaWeakened: attackDebuff < 1 || defendDebuff < 1
+                    miasmaAttackWeakened: attackDebuff < 1,
+                    miasmaDefendWeakened: defendDebuff < 1
                 });
 
                 // Mordida do pet: garantida, não consome rng(). Dano e
@@ -454,7 +455,8 @@ export default class PvpCombatService {
                     lifeSteal: lifeStealAmount,
                     absorbed,
                     miasmaProc,
-                    miasmaWeakened: attackDebuff < 1 || defendDebuff < 1
+                    miasmaAttackWeakened: attackDebuff < 1,
+                    miasmaDefendWeakened: defendDebuff < 1
                 });
 
                 // Mordida do pet: garantida, não consome rng(). Dano e

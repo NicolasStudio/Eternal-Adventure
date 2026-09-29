@@ -641,9 +641,8 @@ export default class RaidView {
 
         let message = "";
 
-        if (entry.miasmaWeakened) {
-            message += `<em>(Miasma reduziu os atributos especiais desse golpe.)</em><br>`;
-        }
+        const inSentence = (name) => name === "Você" ? "você" : name;
+        message += MiasmaService.buildWeakenedMessage(entry, inSentence(attackerName), inSentence(targetName));
 
         if (isBossAttacker && entry.attackName) {
             message += `<strong>${attackerName}</strong> usou <span class="combat-critical">${entry.attackName}</span><br>`;
