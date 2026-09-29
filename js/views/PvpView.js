@@ -489,7 +489,7 @@ export default class PvpView {
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
         const absorbed = entry.absorbed > 0
-            ? ` <span class="pvp-log-absorption">(${defenderName} absorveu ${entry.absorbed} por completo)</span>`
+            ? ` <span class="pvp-log-absorption">(${defenderName} absorveu ${entry.absorbed})</span>`
             : "";
         return `<div class="pvp-log-line">${name} causou ${entry.damage} de dano${crit}${steal}${absorbed}</div>`;
     }
@@ -513,7 +513,7 @@ export default class PvpView {
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
         const absorbed = entry.absorbed > 0
-            ? ` <span class="pvp-log-absorption">(${targetName} absorveu ${entry.absorbed} por completo)</span>`
+            ? ` <span class="pvp-log-absorption">(${targetName} absorveu ${entry.absorbed})</span>`
             : "";
         return `<div class="pvp-log-line">${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}</div>`;
     }
@@ -885,7 +885,7 @@ export default class PvpView {
             }
 
             if (entry.miasmaProc) {
-                message += `<br>${MiasmaService.buildProcMessage(opponentName)}`;
+                message += `<br>${MiasmaService.buildProcMessage(opponentName, entry)}`;
             }
 
             return message;
@@ -903,11 +903,11 @@ export default class PvpView {
         hitMessage += ` Você recebeu um golpe de <strong>${opponentName}</strong>, <strong>${entry.damage}</strong> de dano.`;
 
         if (entry.absorbed > 0) {
-            hitMessage += `<br><span class="combat-absorption">Absorção!</span> Mitigou <strong>${entry.absorbed}</strong> de dano por completo.`;
+            hitMessage += `<br><span class="combat-absorption">Absorção!</span> Absorveu <strong>${entry.absorbed}</strong> do golpe.`;
         }
 
         if (entry.miasmaProc) {
-            hitMessage += `<br>${MiasmaService.buildProcMessage("você")}`;
+            hitMessage += `<br>${MiasmaService.buildProcMessage("você", entry)}`;
         }
 
         return hitMessage;
@@ -990,7 +990,7 @@ export default class PvpView {
             }
 
             if (entry.miasmaProc) {
-                message += `<br>${MiasmaService.buildProcMessage(targetName)}`;
+                message += `<br>${MiasmaService.buildProcMessage(targetName, entry)}`;
             }
 
             return message;
@@ -1010,11 +1010,11 @@ export default class PvpView {
             hitMessage += ` Você recebeu um golpe de <strong>${attackerName}</strong>, <strong>${entry.damage}</strong> de dano.`;
 
             if (entry.absorbed > 0) {
-                hitMessage += `<br><span class="combat-absorption">Absorção!</span> Mitigou <strong>${entry.absorbed}</strong> de dano por completo.`;
+                hitMessage += `<br><span class="combat-absorption">Absorção!</span> Absorveu <strong>${entry.absorbed}</strong> do golpe.`;
             }
 
             if (entry.miasmaProc) {
-                hitMessage += `<br>${MiasmaService.buildProcMessage("você")}`;
+                hitMessage += `<br>${MiasmaService.buildProcMessage("você", entry)}`;
             }
 
             return hitMessage;

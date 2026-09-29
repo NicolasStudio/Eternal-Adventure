@@ -1,6 +1,7 @@
 import PvpCombatService from "./PvpCombatService.js";
 import BoitataBurn from "./BoitataBurn.js";
 import MiasmaService from "./MiasmaService.js";
+import { ABSORPTION_CAP, absorbedAmount } from "../combat/Absorption.js";
 
 // Boss tem HP colossal (milhares) contra só 4 atacantes por rodada —
 // precisa de bem mais rodadas que um duelo de PVP (que usa guard 500/1000)
@@ -8,7 +9,7 @@ import MiasmaService from "./MiasmaService.js";
 const MAX_ROUNDS = 3000;
 
 // Peso de "ameaça" por classe pra mira do boss: Guerreiro e Bárbaro têm
-// mitigação própria em combate (Guerreiro anula o golpe inteiro via
+// mitigação própria em combate (Guerreiro absorve metade do golpe via
 // Absorção, Bárbaro rouba vida ao bater), então o boss prioriza bater
 // neles; Mago e Arqueiro não têm nenhuma forma de se manter vivos
 // sozinhos, então levam menos foco. Uma classe ausente do squad (ou
@@ -198,7 +199,13 @@ export default class RaidCombatService {
                     ? attacker.attacks[Math.floor(rng() * attacker.attacks.length)]
                     : null;
 
-                const dodgeChance = PvpCombatService.dodgeChance(target.agility, attacker.agility);
+                // Acúmulos de Intoxicação do Miasma: Ataque e Agilidade de
+                // quem estiver intoxicado (na prática, o chefe) saem
+                // reduzidos a luta inteira.
+                const attackerMult = MiasmaService.statMultiplier(miasmaFlagsById.get(attacker.id));
+                const targetMult = MiasmaService.statMultiplier(miasmaFlagsById.get(target.id));
+
+                const dodgeChance = PvpCombatService.dodgeChance(target.agility * targetMult, attacker.agility * attackerMult);
 
                 if (rng() * 100 < dodgeChance) {
 
@@ -220,7 +227,7 @@ export default class RaidCombatService {
 
                 }
 
-                const attackPower = isBossTurn ? chosenAttack.damage : attacker.attack;
+                const attackPower = (isBossTurn ? chosenAttack.damage : attacker.attack) * attackerMult;
 
                 // Miasma: marca pendente no ATACANTE reduz Crítico/Roubo
                 // de Vida/Penetração DESSE golpe; marca pendente no ALVO
@@ -236,16 +243,9 @@ export default class RaidCombatService {
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
                 const preAbsorption = Math.max(1, Math.floor(attackPower * criticalMultiplier * mitigation));
 
-                const absorptionChance = Math.min(95, (target.absorption ?? 0) * defendDebuff);
-                let absorbed = 0;
-                let fullyAbsorbed = false;
-
-                if (rng() * 100 < absorptionChance) {
-                    fullyAbsorbed = true;
-                    absorbed = preAbsorption;
-                }
-
-                const damage = fullyAbsorbed ? 0 : preAbsorption;
+                const absorptionChance = Math.min(ABSORPTION_CAP, (target.absorption ?? 0) * defendDebuff);
+                const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance);
+                const damage = preAbsorption - absorbed;
 
                 target.currentHP = Math.max(0, target.currentHP - damage);
 
@@ -260,9 +260,7 @@ export default class RaidCombatService {
                 // Pútrido tem miasmaChance > 0 — o chefe nunca ativa isso.
                 const miasmaProc = MiasmaService.procs(attacker.miasmaChance ?? 0, rng());
 
-                if (miasmaProc) {
-                    MiasmaService.applyDebuff(miasmaFlagsById.get(target.id));
-                }
+                const miasmaStacks = miasmaProc ? MiasmaService.applyDebuff(miasmaFlagsById.get(target.id)) : 0;
 
                 log.push({
                     attackerId: attacker.id,
@@ -275,8 +273,10 @@ export default class RaidCombatService {
                     absorbed,
                     attackName: chosenAttack?.name ?? null,
                     miasmaProc,
-                    miasmaAttackWeakened: attackDebuff < 1,
-                    miasmaDefendWeakened: defendDebuff < 1
+                    miasmaStacks,
+                    miasmaTargetHasSpecials: MiasmaService.hasAnySpecials(target),
+                    miasmaAttackWeakened: attackDebuff < 1 && MiasmaService.hasAttackSpecials(attacker),
+                    miasmaDefendWeakened: defendDebuff < 1 && MiasmaService.hasDefendSpecials(target)
                 });
 
                 // Mordida do pet: só quem está atacando o chefe (nunca o

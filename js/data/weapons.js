@@ -219,7 +219,7 @@ const weapons = {
         rarity: rarities.rare,
         icon: "assets/img/assets/items/weapons/scepter-rarity-raro.png",
         stats: {
-            attack: 22,
+            attack: 25,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -241,7 +241,7 @@ const weapons = {
         rarity: rarities.mystic,
         icon: "assets/img/assets/items/weapons/scepter-rarity-mistico.png",
         stats: {
-            attack: 39,
+            attack: 41,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -263,7 +263,7 @@ const weapons = {
         rarity: rarities.legendary,
         icon: "assets/img/assets/items/weapons/scepter-rarity-lendario.png",
         stats: {
-            attack: 48,
+            attack: 58,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -285,7 +285,7 @@ const weapons = {
         rarity: rarities.ultraje,
         icon: "assets/img/assets/items/weapons/scepter-rarity-ultraje.png",
         stats: {
-            attack: 65,
+            attack: 75,
             armor: 0,
             agility: 0,
             criticalChance: 0,

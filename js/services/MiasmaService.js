@@ -5,16 +5,29 @@
    chamam estas funções — nenhum guarda a regra sozinho.)
 
    Regra: em todo golpe SEU que acerta (não dodgado), o Pútrido tem
-   MIASMA_CHANCE% de chance de intoxicar o alvo. Quando ativa, o
-   alvo fica marcado — na PRÓXIMA vez que ele atacar, a Chance
-   Crítica/Roubo de Vida/Penetração saem pela metade; na PRÓXIMA vez
-   que ele apanhar, a Absorção sai pela metade. As duas marcas são
-   independentes (uma pode ser consumida antes da outra, dependendo
-   de quem age primeiro) — assim o efeito sempre se aplica de
-   verdade, não importa a ordem de turno.
+   MIASMA_CHANCE% de chance de intoxicar o alvo. Cada ativação faz
+   duas coisas:
+
+   1. Marca (um golpe só): na PRÓXIMA vez que o alvo atacar, a Chance
+      Crítica/Roubo de Vida/Penetração dele saem pela metade; na
+      PRÓXIMA vez que ele apanhar, a Absorção sai pela metade. As duas
+      marcas são independentes (uma pode ser consumida antes da outra,
+      dependendo de quem age primeiro). Só pesa contra quem TEM esses
+      atributos — na prática, jogadores (PVP).
+
+   2. Acúmulo de Intoxicação (até o fim da luta): cada ativação soma 1
+      acúmulo, até STACK_MAX; cada acúmulo tira STACK_PERCENT% do
+      Ataque e da Agilidade do alvo. É o que dá efeito contra monstro
+      e chefe (que não têm atributos especiais pra cortar).
+      Valores escolhidos por simulação (2% x3): mais que isso deixava
+      o Pútrido dominante no PVP, já que as lutas são longas e o alvo
+      chega no máximo de acúmulos logo no começo.
 ========================================================== */
 
 const DEBUFF_MULTIPLIER = 0.5;
+
+export const STACK_PERCENT = 2;
+export const STACK_MAX = 3;
 
 export default class MiasmaService {
 
@@ -26,16 +39,26 @@ export default class MiasmaService {
         return miasmaChance > 0 && roll * 100 < miasmaChance;
     }
 
-    // Cria o "estado" de marcação de um combatente — cada lado do
+    // Cria o "estado" de Miasma de um combatente — cada lado do
     // combate guarda o seu.
     static createFlags() {
-        return { attack: false, defend: false };
+        return { attack: false, defend: false, stacks: 0 };
     }
 
+    // Aplica a marca e soma um acúmulo (travado em STACK_MAX). Devolve
+    // quantos acúmulos o alvo ficou — é o que a mensagem mostra.
     static applyDebuff(flags) {
-        if (!flags) return;
+        if (!flags) return 0;
         flags.attack = true;
         flags.defend = true;
+        flags.stacks = Math.min(STACK_MAX, (flags.stacks ?? 0) + 1);
+        return flags.stacks;
+    }
+
+    // Multiplicador de Ataque e Agilidade do combatente pelos acúmulos
+    // (1 = sem Intoxicação). Não consome nada — vale a luta inteira.
+    static statMultiplier(flags) {
+        return 1 - (STACK_PERCENT * (flags?.stacks ?? 0)) / 100;
     }
 
     // Consome a marca de ataque (se existir) e devolve o multiplicador
@@ -52,6 +75,23 @@ export default class MiasmaService {
         if (!flags?.defend) return 1;
         flags.defend = false;
         return DEBUFF_MULTIPLIER;
+    }
+
+    // Se a marca consumida cortou alguma coisa de verdade — monstro e
+    // chefe não têm esses atributos, então avisar "pela metade" seria
+    // prometer um efeito que não existe.
+    static hasAttackSpecials(combatant) {
+        return (combatant?.criticalChance ?? 0) > 0
+            || (combatant?.lifeSteal ?? 0) > 0
+            || (combatant?.penetration ?? 0) > 0;
+    }
+
+    static hasDefendSpecials(combatant) {
+        return (combatant?.absorption ?? 0) > 0;
+    }
+
+    static hasAnySpecials(combatant) {
+        return this.hasAttackSpecials(combatant) || this.hasDefendSpecials(combatant);
     }
 
     // Aviso de que uma marca foi CONSUMIDA nesse golpe — sempre dizendo
@@ -79,8 +119,14 @@ export default class MiasmaService {
         return entry?.miasmaProc || entry?.miasmaAttackWeakened || entry?.miasmaDefendWeakened ? 1.5 : 0;
     }
 
-    static buildProcMessage(targetName) {
-        return `<span class="combat-miasma">Miasma!</span> ${targetName} foi intoxicado — os atributos especiais dele saem pela metade no próximo golpe.`;
+    // entry: resultado/log do golpe que ativou o Miasma (usa
+    // miasmaStacks e miasmaTargetHasSpecials, gravados pelos motores).
+    static buildProcMessage(targetName, entry = {}) {
+        const stacks = entry.miasmaStacks ?? 1;
+        const specials = entry.miasmaTargetHasSpecials
+            ? " Atributos especiais pela metade no próximo golpe."
+            : "";
+        return `<span class="combat-miasma">Miasma!</span> ${targetName} foi intoxicado (${stacks}/${STACK_MAX}) — −${STACK_PERCENT * stacks}% de Ataque e Agilidade até o fim da luta.${specials}`;
     }
 
 }

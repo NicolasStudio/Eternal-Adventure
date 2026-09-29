@@ -219,7 +219,7 @@ export default class RaidView {
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
         const absorbed = entry.absorbed > 0
-            ? ` <span class="pvp-log-absorption">(${targetName} absorveu ${entry.absorbed} por completo)</span>`
+            ? ` <span class="pvp-log-absorption">(${targetName} absorveu ${entry.absorbed})</span>`
             : "";
 
         return `<div class="pvp-log-line">${attackerName}${attackTag} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}</div>`;
@@ -665,11 +665,11 @@ export default class RaidView {
         }
 
         if (entry.absorbed > 0) {
-            message += `<br><span class="combat-absorption">Absorção!</span> ${targetName} mitigou <strong>${entry.absorbed}</strong> de dano por completo.`;
+            message += `<br><span class="combat-absorption">Absorção!</span> ${targetName} absorveu <strong>${entry.absorbed}</strong> do golpe.`;
         }
 
         if (entry.miasmaProc) {
-            message += `<br>${MiasmaService.buildProcMessage(targetName === "Você" ? "você" : targetName)}`;
+            message += `<br>${MiasmaService.buildProcMessage(targetName === "Você" ? "você" : targetName, entry)}`;
         }
 
         return message;

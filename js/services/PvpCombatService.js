@@ -2,6 +2,7 @@ import PetService from "./PetService.js";
 import PowerService from "./PowerService.js";
 import BoitataBurn from "./BoitataBurn.js";
 import MiasmaService from "./MiasmaService.js";
+import { ABSORPTION_CAP, absorbedAmount } from "../combat/Absorption.js";
 
 const DODGE_CAP = 40;
 
@@ -11,7 +12,10 @@ const DODGE_CAP = 40;
 // número (ver PvpLobbyService). Aumente sempre que mudar a simulação.
 // v3: Miasma do Pútrido passou a consumir rng() (o sorteio da ativação) —
 // clientes na v2 não fariam essa chamada e desincronizariam.
-export const TEAM_SIM_VERSION = 3;
+// v4: Miasma ganhou acúmulos de Intoxicação (−Ataque/−Agilidade) — muda
+// dano e esquiva, então o resultado da luta muda. Junto: Absorção passou
+// a absorver metade do golpe (antes anulava o golpe inteiro).
+export const TEAM_SIM_VERSION = 4;
 
 /*
     PVP precisa que os DOIS clientes (o do jogador A e o do jogador B)
@@ -153,15 +157,20 @@ export default class PvpCombatService {
             const attacker = turn === "a" ? a : b;
             const defender = turn === "a" ? b : a;
 
-            const dodgeChance = this.dodgeChance(defender.agility, attacker.agility);
+            const defenderKey = turn === "a" ? "b" : "a";
+
+            // Acúmulos de Intoxicação do Miasma: Ataque e Agilidade de
+            // quem estiver intoxicado saem reduzidos a luta inteira.
+            const attackerMult = MiasmaService.statMultiplier(miasmaFlags[turn]);
+            const defenderMult = MiasmaService.statMultiplier(miasmaFlags[defenderKey]);
+
+            const dodgeChance = this.dodgeChance(defender.agility * defenderMult, attacker.agility * attackerMult);
 
             if (rng() * 100 < dodgeChance) {
 
                 log.push({ turn, attacker: attacker.name, dodged: true });
 
             } else {
-
-                const defenderKey = turn === "a" ? "b" : "a";
 
                 // Miasma: marca pendente no ATACANTE reduz Crítico/Roubo
                 // de Vida/Penetração DESSE golpe; marca pendente no
@@ -173,22 +182,14 @@ export default class PvpCombatService {
                 const criticalMultiplier = isCritical ? 1.5 : 1;
                 const effectiveArmor = defender.armor * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
-                const preAbsorption = Math.max(1, Math.floor(attacker.attack * criticalMultiplier * mitigation));
+                const preAbsorption = Math.max(1, Math.floor(attacker.attack * attackerMult * criticalMultiplier * mitigation));
 
-                // Absorção: CHANCE de quem defende absorver o golpe por
-                // completo (mesma lógica de proc do Roubo de Vida, só que
-                // do lado de quem apanha) — sem cura extra, a mitigação
-                // total do dano já é o benefício.
-                const absorptionChance = Math.min(95, (defender.absorption ?? 0) * defendDebuff);
-                let absorbed = 0;
-                let fullyAbsorbed = false;
-
-                if (rng() * 100 < absorptionChance) {
-                    fullyAbsorbed = true;
-                    absorbed = preAbsorption;
-                }
-
-                const damage = fullyAbsorbed ? 0 : preAbsorption;
+                // Absorção: CHANCE de quem defende absorver parte do golpe
+                // (ver Absorption.js). Sempre consome 1 rng(), ativando ou
+                // não — a ordem dos sorteios não pode mudar.
+                const absorptionChance = Math.min(ABSORPTION_CAP, (defender.absorption ?? 0) * defendDebuff);
+                const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance);
+                const damage = preAbsorption - absorbed;
 
                 defender.currentHP = Math.max(0, defender.currentHP - damage);
 
@@ -204,9 +205,7 @@ export default class PvpCombatService {
                 // sofrendo). Só Pútrido tem miasmaChance > 0.
                 const miasmaProc = MiasmaService.procs(attacker.miasmaChance ?? 0, rng());
 
-                if (miasmaProc) {
-                    MiasmaService.applyDebuff(miasmaFlags[defenderKey]);
-                }
+                const miasmaStacks = miasmaProc ? MiasmaService.applyDebuff(miasmaFlags[defenderKey]) : 0;
 
                 log.push({
                     turn,
@@ -217,8 +216,10 @@ export default class PvpCombatService {
                     lifeSteal: lifeStealAmount,
                     absorbed,
                     miasmaProc,
-                    miasmaAttackWeakened: attackDebuff < 1,
-                    miasmaDefendWeakened: defendDebuff < 1
+                    miasmaStacks,
+                    miasmaTargetHasSpecials: MiasmaService.hasAnySpecials(defender),
+                    miasmaAttackWeakened: attackDebuff < 1 && MiasmaService.hasAttackSpecials(attacker),
+                    miasmaDefendWeakened: defendDebuff < 1 && MiasmaService.hasDefendSpecials(defender)
                 });
 
                 // Mordida do pet: garantida, não consome rng(). Dano e
@@ -384,7 +385,12 @@ export default class PvpCombatService {
 
                 const target = targets[Math.floor(rng() * targets.length)];
 
-                const dodgeChance = this.dodgeChance(target.agility, attacker.agility);
+                // Acúmulos de Intoxicação do Miasma: Ataque e Agilidade de
+                // quem estiver intoxicado saem reduzidos a luta inteira.
+                const attackerMult = MiasmaService.statMultiplier(miasmaFlagsById.get(attacker.id));
+                const targetMult = MiasmaService.statMultiplier(miasmaFlagsById.get(target.id));
+
+                const dodgeChance = this.dodgeChance(target.agility * targetMult, attacker.agility * attackerMult);
 
                 if (rng() * 100 < dodgeChance) {
 
@@ -415,18 +421,11 @@ export default class PvpCombatService {
                 const criticalMultiplier = isCritical ? 1.5 : 1;
                 const effectiveArmor = target.armor * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
-                const preAbsorption = Math.max(1, Math.floor(attacker.attack * criticalMultiplier * mitigation));
+                const preAbsorption = Math.max(1, Math.floor(attacker.attack * attackerMult * criticalMultiplier * mitigation));
 
-                const absorptionChance = Math.min(95, (target.absorption ?? 0) * defendDebuff);
-                let absorbed = 0;
-                let fullyAbsorbed = false;
-
-                if (rng() * 100 < absorptionChance) {
-                    fullyAbsorbed = true;
-                    absorbed = preAbsorption;
-                }
-
-                const damage = fullyAbsorbed ? 0 : preAbsorption;
+                const absorptionChance = Math.min(ABSORPTION_CAP, (target.absorption ?? 0) * defendDebuff);
+                const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance);
+                const damage = preAbsorption - absorbed;
 
                 target.currentHP = Math.max(0, target.currentHP - damage);
 
@@ -441,9 +440,7 @@ export default class PvpCombatService {
                 // Pútrido tem miasmaChance > 0.
                 const miasmaProc = MiasmaService.procs(attacker.miasmaChance ?? 0, rng());
 
-                if (miasmaProc) {
-                    MiasmaService.applyDebuff(miasmaFlagsById.get(target.id));
-                }
+                const miasmaStacks = miasmaProc ? MiasmaService.applyDebuff(miasmaFlagsById.get(target.id)) : 0;
 
                 log.push({
                     attackerId: attacker.id,
@@ -455,8 +452,10 @@ export default class PvpCombatService {
                     lifeSteal: lifeStealAmount,
                     absorbed,
                     miasmaProc,
-                    miasmaAttackWeakened: attackDebuff < 1,
-                    miasmaDefendWeakened: defendDebuff < 1
+                    miasmaStacks,
+                    miasmaTargetHasSpecials: MiasmaService.hasAnySpecials(target),
+                    miasmaAttackWeakened: attackDebuff < 1 && MiasmaService.hasAttackSpecials(attacker),
+                    miasmaDefendWeakened: defendDebuff < 1 && MiasmaService.hasDefendSpecials(target)
                 });
 
                 // Mordida do pet: garantida, não consome rng(). Dano e

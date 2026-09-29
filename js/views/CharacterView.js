@@ -6,6 +6,8 @@ import PetService from "../services/PetService.js";
 import PowerService from "../services/PowerService.js";
 import PetFeedModal from "../ui/components/modals/PetFeedModal.js";
 import FarmConfirmModal from "../ui/components/modals/FarmConfirmModal.js";
+import { STACK_PERCENT as MIASMA_STACK_PERCENT, STACK_MAX as MIASMA_STACK_MAX } from "../services/MiasmaService.js";
+import { ABSORPTION_RATIO, ABSORPTION_CAP } from "../combat/Absorption.js";
 
 export default class CharacterView {
     constructor(game) {
@@ -1230,6 +1232,11 @@ export default class CharacterView {
        óbvio só pelo número em %.
     ===================================================== */
 
+    // Linhas repetidas nos 5 atributos especiais (ver PlayerStats.getFinalStats
+    // pro teto e MiasmaService.js pro corte do Miasma).
+    static SPECIAL_CAP_ROW = ["Teto", "A parte que vem do equipamento é limitada pela maior raridade equipada (Comum 8% … Ultraje 45%). O Quartzo Rosa soma por cima, sem limite."];
+    static MIASMA_CUT_ROW = ["Contra o Pútrido", "Se você estiver intoxicado pelo Miasma, esse atributo cai pela metade no seu próximo golpe."];
+
     static STAT_TOOLTIP_INFO = {
 
         attack: {
@@ -1239,7 +1246,8 @@ export default class CharacterView {
             summary: "A base de todo o seu dano — entra direto na conta de quanto você causa em cada golpe.",
             details: [
                 ["Fórmula", "Dano = Ataque × (1.5× se crítico) × mitigação da Armadura do alvo."],
-                ["Sem chance", "Diferente de Crítico/Absorção, o Ataque não é sorteado — vale o valor cheio em todo golpe."]
+                ["Sem chance", "Diferente de Crítico/Absorção, o Ataque não é sorteado — vale o valor cheio em todo golpe."],
+                ["Contra o Pútrido", `Cada acúmulo de Intoxicação do Miasma tira ${MIASMA_STACK_PERCENT}% do seu Ataque até o fim da luta.`]
             ]
         },
 
@@ -1261,7 +1269,9 @@ export default class CharacterView {
             summary: "Decide quem age primeiro no combate e sua chance de Esquiva.",
             details: [
                 ["Iniciativa", "Quem tem mais Agilidade ataca primeiro no combate."],
-                ["Esquiva", "Quanto mais ágil que o adversário, maior a chance de esquivar dos golpes dele — com um teto de 40%, nunca chega a ficar impossível de acertar."]
+                ["Esquiva nas Dungeons", "Só esquiva quem for mais ágil que o adversário: a diferença de Agilidade vira a chance (teto de 40%)."],
+                ["Esquiva no PVP/Cooperativo", "Proporcional à Agilidade dos dois — até o mais lento tem alguma chance, e o mais ágil tem mais (teto de 40%)."],
+                ["Contra o Pútrido", `Cada acúmulo de Intoxicação do Miasma tira ${MIASMA_STACK_PERCENT}% da sua Agilidade até o fim da luta.`]
             ]
         },
 
@@ -1271,17 +1281,21 @@ export default class CharacterView {
             summary: "Chance, a CADA golpe seu, de causar um Golpe Crítico.",
             details: [
                 ["Quando ativa", "Multiplica o dano daquele golpe por 1.5×."],
-                ["Chance", "Rolada de novo em todo ataque — não acumula, não garante o próximo."]
+                ["Chance", "Rolada de novo em todo ataque — não acumula, não garante o próximo."],
+                CharacterView.SPECIAL_CAP_ROW,
+                CharacterView.MIASMA_CUT_ROW
             ]
         },
 
         lifeSteal: {
             icon: "fa-droplet",
             title: "Roubo de Vida",
-            summary: "Chance, a cada golpe seu, de recuperar Vida com o próprio ataque.",
+            summary: "Chance, a cada golpe seu que acerta, de recuperar Vida com o próprio ataque.",
             details: [
                 ["Quando ativa", "Recupera 20% do dano causado + 2% da sua Vida Máxima."],
-                ["Chance", "Rolada de novo em todo ataque, independente de crítico."]
+                ["Chance", "Rolada de novo em todo ataque, independente de crítico."],
+                CharacterView.SPECIAL_CAP_ROW,
+                CharacterView.MIASMA_CUT_ROW
             ]
         },
 
@@ -1291,28 +1305,33 @@ export default class CharacterView {
             summary: "NÃO é uma chance — reduz a Armadura efetiva do alvo em todo golpe seu, sempre.",
             details: [
                 ["Efeito", "A Armadura do alvo vale (100 − Penetração)% do valor real antes do dano ser calculado."],
-                ["Sempre ativa", "Ao contrário dos outros atributos aqui, não precisa de nenhuma sorte pra funcionar."]
+                ["Sempre ativa", "Ao contrário dos outros atributos especiais, não precisa de nenhuma sorte pra funcionar."],
+                CharacterView.SPECIAL_CAP_ROW,
+                CharacterView.MIASMA_CUT_ROW
             ]
         },
 
         absorption: {
             icon: "fa-shield-heart",
             title: "Absorção",
-            summary: "Chance, a cada golpe RECEBIDO, de bloquear o dano por completo.",
+            summary: `Chance, a cada golpe RECEBIDO, de absorver ${Math.round(ABSORPTION_RATIO * 100)}% do dano.`,
             details: [
-                ["Quando ativa", "O golpe causa 0 de dano — mitigação total, sem cura adicional."],
-                ["Teto", "Nunca passa de 95% de chance, mesmo somando muito equipamento."]
+                ["Quando ativa", `O golpe acerta, mas você toma só ${Math.round((1 - ABSORPTION_RATIO) * 100)}% do dano — o resto é absorvido.`],
+                ["Não é esquiva", "A Esquiva evita o golpe inteiro; a Absorção entra DEPOIS do golpe acertar. As duas se somam."],
+                ["Teto", `Nunca passa de ${ABSORPTION_CAP}% de chance. A parte do equipamento também é limitada pela maior raridade equipada (Comum 8% … Ultraje 45%); o Quartzo Rosa soma por cima.`],
+                CharacterView.MIASMA_CUT_ROW
             ]
         },
 
         miasmaChance: {
             icon: "fa-skull-crossbones",
             title: "Miasma",
-            summary: "Exclusivo do Pútrido: chance, a cada golpe seu, de intoxicar o alvo.",
+            summary: "Exclusivo do Pútrido: chance, a cada golpe seu que acerta, de intoxicar o alvo.",
             details: [
-                ["Quando ativa", "Reduz pela metade a Chance Crítica, Roubo de Vida, Penetração e Absorção do alvo no PRÓXIMO ataque dele."],
-                ["Por quê no próximo", "Garante o efeito mesmo se o alvo for mais rápido e já tiver atacado nesse turno."],
-                ["Não causa dano", "Só enfraquece — a queda de dano do alvo vem do atributo dele mesmo ficando pior."]
+                ["Intoxicação", `Cada ativação soma 1 acúmulo no alvo (máximo ${MIASMA_STACK_MAX}): −${MIASMA_STACK_PERCENT}% de Ataque e Agilidade por acúmulo, até o fim da luta. Vale contra monstros, chefes e jogadores.`],
+                ["Especiais pela metade", "Também corta pela metade a Chance Crítica, Roubo de Vida, Penetração e Absorção do alvo no PRÓXIMO golpe — só pesa contra quem tem esses atributos (jogadores, no PVP)."],
+                ["Não causa dano", "Só enfraquece — a queda de dano do alvo vem dos atributos dele mesmo ficando piores."],
+                CharacterView.SPECIAL_CAP_ROW
             ]
         }
 

@@ -1,6 +1,7 @@
 import PetService from "../services/PetService.js";
 import BoitataBurn from "../services/BoitataBurn.js";
 import MiasmaService from "../services/MiasmaService.js";
+import { ABSORPTION_CAP, absorbedAmount } from "./Absorption.js";
 
 // Teto máximo de chance de esquiva, não importa o quanto a agilidade
 // de um lado supere a do outro — nunca "nunca é atingido".
@@ -42,7 +43,7 @@ export default class CombatEngine {
         const attackerSide = playerTurn ? "player" : "monster";
         const defenderSide = playerTurn ? "monster" : "player";
 
-        if (this.rollDodge(attacker, defender)) {
+        if (this.rollDodge(attacker, defender, attackerSide, defenderSide)) {
             return {
                 attacker: attackerSide,
                 target: defenderSide,
@@ -52,6 +53,8 @@ export default class CombatEngine {
                 lifeSteal: 0,
                 absorbed: 0,
                 miasmaProc: false,
+                miasmaStacks: 0,
+                miasmaTargetHasSpecials: false,
                 miasmaAttackWeakened: false,
                 miasmaDefendWeakened: false
             };
@@ -77,6 +80,8 @@ export default class CombatEngine {
             lifeSteal: result.lifeSteal,
             absorbed: result.absorbed,
             miasmaProc: result.miasmaProc,
+            miasmaStacks: result.miasmaStacks,
+            miasmaTargetHasSpecials: result.miasmaTargetHasSpecials,
             miasmaAttackWeakened: result.miasmaAttackWeakened,
             miasmaDefendWeakened: result.miasmaDefendWeakened
         };
@@ -85,10 +90,12 @@ export default class CombatEngine {
     // Esquiva: a diferença de agilidade entre quem defende e quem ataca
     // vira % de chance de esquiva pra quem defende, sempre travada em
     // DODGE_CAP — a chance nunca passa disso, não importa a diferença.
-    rollDodge(attacker, defender) {
+    // Acúmulos de Intoxicação do Miasma reduzem a Agilidade de quem
+    // estiver intoxicado (ver MiasmaService.statMultiplier).
+    rollDodge(attacker, defender, attackerSide = null, defenderSide = null) {
 
-        const attackerAgility = attacker.agility ?? attacker.agilidade ?? 0;
-        const defenderAgility = defender.agility ?? defender.agilidade ?? 0;
+        const attackerAgility = (attacker.agility ?? attacker.agilidade ?? 0) * MiasmaService.statMultiplier(this.miasmaFlags[attackerSide]);
+        const defenderAgility = (defender.agility ?? defender.agilidade ?? 0) * MiasmaService.statMultiplier(this.miasmaFlags[defenderSide]);
 
         const dodgeChance = Math.min(
             DODGE_CAP,
@@ -101,7 +108,9 @@ export default class CombatEngine {
 
     calculateDamage(attacker, defender, attackerSide = null, defenderSide = null) {
 
-        const attack = attacker.attack ?? attacker.dano;
+        // Acúmulos de Intoxicação do Miasma reduzem o Ataque de quem
+        // estiver intoxicado (ver MiasmaService.statMultiplier).
+        const attack = (attacker.attack ?? attacker.dano) * MiasmaService.statMultiplier(this.miasmaFlags[attackerSide]);
         const armor = defender.armor ?? defender.armadura;
 
         // Miasma do Pútrido: se o ATACANTE tiver uma marca pendente
@@ -131,28 +140,16 @@ export default class CombatEngine {
             Math.floor(attack * criticalMultiplier * mitigation)
         );
 
-        // Absorção: CHANCE de o defensor bloquear o golpe por completo —
-        // igual ao Roubo de Vida (que é "chance de proc", não garantido),
-        // só que do lado de quem APANHA em vez de quem ataca. Quando
-        // ativa, absorve o dano INTEIRO daquele golpe (0 de dano) — só
-        // isso, sem cura adicional (a mitigação completa já É o
-        // benefício).
+        // Absorção: CHANCE de o defensor absorver parte do golpe (ver
+        // Absorption.js) — igual ao Roubo de Vida (que é "chance de
+        // proc", não garantido), só que do lado de quem APANHA.
         // Miasma: se o DEFENSOR tiver uma marca pendente, a Absorção
         // dele sai pela metade nesse golpe que está recebendo agora.
         const defendDebuff = MiasmaService.consumeDefendMultiplier(this.miasmaFlags[defenderSide]);
-        const absorptionChance = Math.min(95, (defender.absorption ?? 0) * defendDebuff);
+        const absorptionChance = Math.min(ABSORPTION_CAP, (defender.absorption ?? 0) * defendDebuff);
 
-        let absorbed = 0;
-        let fullyAbsorbed = false;
-
-        if (Math.random() * 100 < absorptionChance) {
-
-            fullyAbsorbed = true;
-            absorbed = preAbsorption;
-
-        }
-
-        const damage = fullyAbsorbed ? 0 : preAbsorption;
+        const absorbed = absorbedAmount(preAbsorption, Math.random() * 100 < absorptionChance);
+        const damage = preAbsorption - absorbed;
 
         // ==========================
         // LIFE STEAL
@@ -177,14 +174,16 @@ export default class CombatEngine {
         // qualquer outro atacante miasmaChance é 0 e isso nunca ativa.
         const miasmaProc = MiasmaService.procs(attacker.miasmaChance ?? 0, Math.random());
 
-        if (miasmaProc) {
-            MiasmaService.applyDebuff(this.miasmaFlags[defenderSide]);
-        }
+        const miasmaStacks = miasmaProc ? MiasmaService.applyDebuff(this.miasmaFlags[defenderSide]) : 0;
 
         return {
             miasmaProc,
-            miasmaAttackWeakened: attackDebuff < 1,
-            miasmaDefendWeakened: defendDebuff < 1,
+            miasmaStacks,
+            miasmaTargetHasSpecials: MiasmaService.hasAnySpecials(defender),
+            // Só avisa "pela metade" quando havia algo pra cortar (monstro
+            // não tem atributo especial nenhum).
+            miasmaAttackWeakened: attackDebuff < 1 && MiasmaService.hasAttackSpecials(attacker),
+            miasmaDefendWeakened: defendDebuff < 1 && MiasmaService.hasDefendSpecials(defender),
             damage,
             critical: isCritical,
             lifeSteal: recoveredHP,
@@ -212,7 +211,7 @@ export default class CombatEngine {
                 message += `<br><span class="combat-life-steal">Life Steal!</span> Recuperou <strong>${result.lifeSteal}</strong> HP.`;
             }
             if (result.miasmaProc) {
-                message += `<br>${MiasmaService.buildProcMessage(this.monster.name)}`;
+                message += `<br>${MiasmaService.buildProcMessage(this.monster.name, result)}`;
             }
             return message;
         }
@@ -224,7 +223,7 @@ export default class CombatEngine {
         }
         message += ` Você recebeu <strong>${this.monster.status.nomeAtaque}</strong>, <strong>${result.damage}</strong> de dano.`;
         if (result.absorbed > 0) {
-            message += `<br><span class="combat-absorption">Absorção!</span> Mitigou <strong>${result.absorbed}</strong> de dano por completo.`;
+            message += `<br><span class="combat-absorption">Absorção!</span> Absorveu <strong>${result.absorbed}</strong> do golpe.`;
         }
         return message;
     }
