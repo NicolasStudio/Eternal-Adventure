@@ -263,7 +263,7 @@ const weapons = {
         rarity: rarities.legendary,
         icon: "assets/img/assets/items/weapons/scepter-rarity-lendario.png",
         stats: {
-            attack: 52,
+            attack: 48,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -285,7 +285,7 @@ const weapons = {
         rarity: rarities.ultraje,
         icon: "assets/img/assets/items/weapons/scepter-rarity-ultraje.png",
         stats: {
-            attack: 72,
+            attack: 68,
             armor: 0,
             agility: 0,
             criticalChance: 0,

@@ -2,6 +2,7 @@ import PetService from "../services/PetService.js";
 import BoitataBurn from "../services/BoitataBurn.js";
 import MiasmaService from "../services/MiasmaService.js";
 import { ABSORPTION_CAP, absorbedAmount } from "./Absorption.js";
+import { CRITICAL_MULTIPLIER } from "./Critical.js";
 
 // Teto máximo de chance de esquiva, não importa o quanto a agilidade
 // de um lado supere a do outro — nunca "nunca é atingido".
@@ -116,7 +117,8 @@ export default class CombatEngine {
         // Miasma do Pútrido: se o ATACANTE tiver uma marca pendente
         // (foi intoxicado no golpe anterior que sofreu), Crítico/Roubo
         // de Vida/Penetração desse golpe saem pela metade.
-        const attackDebuff = MiasmaService.consumeAttackMultiplier(this.miasmaFlags[attackerSide]);
+        const attackMark = MiasmaService.consumeAttackMultiplier(this.miasmaFlags[attackerSide]);
+        const attackDebuff = attackMark * MiasmaService.persistentSpecialMultiplier(this.miasmaFlags[attackerSide]);
 
         const penetration = (attacker.penetration ?? 0) * attackDebuff;
         const criticalChance = (attacker.criticalChance ?? 0) * attackDebuff;
@@ -125,7 +127,7 @@ export default class CombatEngine {
         const lifeStealChance = (attacker.lifeSteal ?? 0) * attackDebuff;
 
         const isCritical = Math.random() * 100 < criticalChance;
-        const criticalMultiplier = isCritical ? 1.5 : 1;
+        const criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER : 1;
 
         const effectiveArmor = armor * (1 - penetration / 100);
 
@@ -145,7 +147,8 @@ export default class CombatEngine {
         // proc", não garantido), só que do lado de quem APANHA.
         // Miasma: se o DEFENSOR tiver uma marca pendente, a Absorção
         // dele sai pela metade nesse golpe que está recebendo agora.
-        const defendDebuff = MiasmaService.consumeDefendMultiplier(this.miasmaFlags[defenderSide]);
+        const defendMark = MiasmaService.consumeDefendMultiplier(this.miasmaFlags[defenderSide]);
+        const defendDebuff = defendMark * MiasmaService.persistentSpecialMultiplier(this.miasmaFlags[defenderSide]);
         const absorptionChance = Math.min(ABSORPTION_CAP, (defender.absorption ?? 0) * defendDebuff);
 
         const absorbed = absorbedAmount(preAbsorption, Math.random() * 100 < absorptionChance);
@@ -182,8 +185,8 @@ export default class CombatEngine {
             miasmaTargetHasSpecials: MiasmaService.hasAnySpecials(defender),
             // Só avisa "pela metade" quando havia algo pra cortar (monstro
             // não tem atributo especial nenhum).
-            miasmaAttackWeakened: attackDebuff < 1 && MiasmaService.hasAttackSpecials(attacker),
-            miasmaDefendWeakened: defendDebuff < 1 && MiasmaService.hasDefendSpecials(defender),
+            miasmaAttackWeakened: attackMark < 1 && MiasmaService.hasAttackSpecials(attacker),
+            miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(defender),
             damage,
             critical: isCritical,
             lifeSteal: recoveredHP,

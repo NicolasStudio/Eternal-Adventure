@@ -6,8 +6,9 @@ import PetService from "../services/PetService.js";
 import PowerService from "../services/PowerService.js";
 import PetFeedModal from "../ui/components/modals/PetFeedModal.js";
 import FarmConfirmModal from "../ui/components/modals/FarmConfirmModal.js";
-import { STACK_PERCENT as MIASMA_STACK_PERCENT, STACK_MAX as MIASMA_STACK_MAX } from "../services/MiasmaService.js";
+import { STACK_PERCENTS as MIASMA_STACK_PERCENTS, STACK_MAX as MIASMA_STACK_MAX, PERSISTENT_SPECIAL_MULTIPLIER as MIASMA_SPECIAL_KEEP } from "../services/MiasmaService.js";
 import { ABSORPTION_RATIO, ABSORPTION_CAP } from "../combat/Absorption.js";
+import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
 export default class CharacterView {
     constructor(game) {
@@ -1235,7 +1236,9 @@ export default class CharacterView {
     // Linhas repetidas nos 5 atributos especiais (ver PlayerStats.getFinalStats
     // pro teto e MiasmaService.js pro corte do Miasma).
     static SPECIAL_CAP_ROW = ["Teto", "A parte que vem do equipamento é limitada pela maior raridade equipada (Comum 8% … Ultraje 45%). O Quartzo Rosa soma por cima, sem limite."];
-    static MIASMA_CUT_ROW = ["Contra o Pútrido", "Se você estiver intoxicado pelo Miasma, esse atributo cai pela metade no seu próximo golpe."];
+    static MIASMA_STACKS_TEXT = MIASMA_STACK_PERCENTS.slice(1).map(p => `${p}%`).join(" / ");
+    static MIASMA_SPECIAL_CUT = Math.round((1 - MIASMA_SPECIAL_KEEP) * 100);
+    static MIASMA_CUT_ROW = ["Contra o Pútrido", `Intoxicado pelo Miasma, esse atributo cai ${CharacterView.MIASMA_SPECIAL_CUT}% até o fim da luta — e pela metade no golpe logo após cada ativação.`];
 
     static STAT_TOOLTIP_INFO = {
 
@@ -1245,9 +1248,9 @@ export default class CharacterView {
             suffix: "",
             summary: "A base de todo o seu dano — entra direto na conta de quanto você causa em cada golpe.",
             details: [
-                ["Fórmula", "Dano = Ataque × (1.5× se crítico) × mitigação da Armadura do alvo."],
+                ["Fórmula", `Dano = Ataque × (${CRITICAL_MULTIPLIER}× se crítico) × mitigação da Armadura do alvo.`],
                 ["Sem chance", "Diferente de Crítico/Absorção, o Ataque não é sorteado — vale o valor cheio em todo golpe."],
-                ["Contra o Pútrido", `Cada acúmulo de Intoxicação do Miasma tira ${MIASMA_STACK_PERCENT}% do seu Ataque até o fim da luta.`]
+                ["Contra o Pútrido", `Os acúmulos de Intoxicação do Miasma tiram ${CharacterView.MIASMA_STACKS_TEXT} do seu Ataque (1, 2 ou 3 acúmulos) até o fim da luta.`]
             ]
         },
 
@@ -1271,7 +1274,7 @@ export default class CharacterView {
                 ["Iniciativa", "Quem tem mais Agilidade ataca primeiro no combate."],
                 ["Esquiva nas Dungeons", "Só esquiva quem for mais ágil que o adversário: a diferença de Agilidade vira a chance (teto de 40%)."],
                 ["Esquiva no PVP/Cooperativo", "Proporcional à Agilidade dos dois — até o mais lento tem alguma chance, e o mais ágil tem mais (teto de 40%)."],
-                ["Contra o Pútrido", `Cada acúmulo de Intoxicação do Miasma tira ${MIASMA_STACK_PERCENT}% da sua Agilidade até o fim da luta.`]
+                ["Contra o Pútrido", `Os acúmulos de Intoxicação do Miasma tiram ${CharacterView.MIASMA_STACKS_TEXT} da sua Agilidade (1, 2 ou 3 acúmulos) até o fim da luta.`]
             ]
         },
 
@@ -1280,7 +1283,7 @@ export default class CharacterView {
             title: "Chance Crítica",
             summary: "Chance, a CADA golpe seu, de causar um Golpe Crítico.",
             details: [
-                ["Quando ativa", "Multiplica o dano daquele golpe por 1.5×."],
+                ["Quando ativa", `Multiplica o dano daquele golpe por ${CRITICAL_MULTIPLIER}×.`],
                 ["Chance", "Rolada de novo em todo ataque — não acumula, não garante o próximo."],
                 CharacterView.SPECIAL_CAP_ROW,
                 CharacterView.MIASMA_CUT_ROW
@@ -1328,8 +1331,8 @@ export default class CharacterView {
             title: "Miasma",
             summary: "Exclusivo do Pútrido: chance, a cada golpe seu que acerta, de intoxicar o alvo.",
             details: [
-                ["Intoxicação", `Cada ativação soma 1 acúmulo no alvo (máximo ${MIASMA_STACK_MAX}): −${MIASMA_STACK_PERCENT}% de Ataque e Agilidade por acúmulo, até o fim da luta. Vale contra monstros, chefes e jogadores.`],
-                ["Especiais pela metade", "Também corta pela metade a Chance Crítica, Roubo de Vida, Penetração e Absorção do alvo no PRÓXIMO golpe — só pesa contra quem tem esses atributos (jogadores, no PVP)."],
+                ["Intoxicação", `Cada ativação soma 1 acúmulo no alvo (máximo ${MIASMA_STACK_MAX}): −${CharacterView.MIASMA_STACKS_TEXT} de Ataque e Agilidade, até o fim da luta. Vale contra monstros, chefes e jogadores.`],
+                ["Especiais enfraquecidos", `Intoxicado, o alvo perde ${CharacterView.MIASMA_SPECIAL_CUT}% da Chance Crítica, Roubo de Vida, Penetração e Absorção até o fim da luta — e esses atributos caem ainda pela metade no golpe logo após cada ativação. Só pesa contra quem tem esses atributos (jogadores, no PVP).`],
                 ["Não causa dano", "Só enfraquece — a queda de dano do alvo vem dos atributos dele mesmo ficando piores."],
                 CharacterView.SPECIAL_CAP_ROW
             ]

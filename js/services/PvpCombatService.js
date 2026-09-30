@@ -3,6 +3,7 @@ import PowerService from "./PowerService.js";
 import BoitataBurn from "./BoitataBurn.js";
 import MiasmaService from "./MiasmaService.js";
 import { ABSORPTION_CAP, absorbedAmount } from "../combat/Absorption.js";
+import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
 const DODGE_CAP = 40;
 
@@ -15,7 +16,9 @@ const DODGE_CAP = 40;
 // v4: Miasma ganhou acúmulos de Intoxicação (−Ataque/−Agilidade) — muda
 // dano e esquiva, então o resultado da luta muda. Junto: Absorção passou
 // a absorver metade do golpe (antes anulava o golpe inteiro).
-export const TEAM_SIM_VERSION = 4;
+// v5: Crítico 1.6x (era 1.5x), Absorção 42% (era 50%) e Miasma com
+// especiais −25% a luta toda + acúmulos 3/6/10%.
+export const TEAM_SIM_VERSION = 5;
 
 /*
     PVP precisa que os DOIS clientes (o do jogador A e o do jogador B)
@@ -175,11 +178,13 @@ export default class PvpCombatService {
                 // Miasma: marca pendente no ATACANTE reduz Crítico/Roubo
                 // de Vida/Penetração DESSE golpe; marca pendente no
                 // DEFENSOR reduz a Absorção dele ao recebê-lo.
-                const attackDebuff = MiasmaService.consumeAttackMultiplier(miasmaFlags[turn]);
-                const defendDebuff = MiasmaService.consumeDefendMultiplier(miasmaFlags[defenderKey]);
+                const attackMark = MiasmaService.consumeAttackMultiplier(miasmaFlags[turn]);
+                const attackDebuff = attackMark * MiasmaService.persistentSpecialMultiplier(miasmaFlags[turn]);
+                const defendMark = MiasmaService.consumeDefendMultiplier(miasmaFlags[defenderKey]);
+                const defendDebuff = defendMark * MiasmaService.persistentSpecialMultiplier(miasmaFlags[defenderKey]);
 
                 const isCritical = rng() * 100 < attacker.criticalChance * attackDebuff;
-                const criticalMultiplier = isCritical ? 1.5 : 1;
+                const criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER : 1;
                 const effectiveArmor = defender.armor * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
                 const preAbsorption = Math.max(1, Math.floor(attacker.attack * attackerMult * criticalMultiplier * mitigation));
@@ -218,8 +223,8 @@ export default class PvpCombatService {
                     miasmaProc,
                     miasmaStacks,
                     miasmaTargetHasSpecials: MiasmaService.hasAnySpecials(defender),
-                    miasmaAttackWeakened: attackDebuff < 1 && MiasmaService.hasAttackSpecials(attacker),
-                    miasmaDefendWeakened: defendDebuff < 1 && MiasmaService.hasDefendSpecials(defender)
+                    miasmaAttackWeakened: attackMark < 1 && MiasmaService.hasAttackSpecials(attacker),
+                    miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(defender)
                 });
 
                 // Mordida do pet: garantida, não consome rng(). Dano e
@@ -414,11 +419,13 @@ export default class PvpCombatService {
                 // Miasma: marca pendente no ATACANTE reduz Crítico/Roubo
                 // de Vida/Penetração DESSE golpe; marca pendente no ALVO
                 // reduz a Absorção dele ao recebê-lo.
-                const attackDebuff = MiasmaService.consumeAttackMultiplier(miasmaFlagsById.get(attacker.id));
-                const defendDebuff = MiasmaService.consumeDefendMultiplier(miasmaFlagsById.get(target.id));
+                const attackMark = MiasmaService.consumeAttackMultiplier(miasmaFlagsById.get(attacker.id));
+                const attackDebuff = attackMark * MiasmaService.persistentSpecialMultiplier(miasmaFlagsById.get(attacker.id));
+                const defendMark = MiasmaService.consumeDefendMultiplier(miasmaFlagsById.get(target.id));
+                const defendDebuff = defendMark * MiasmaService.persistentSpecialMultiplier(miasmaFlagsById.get(target.id));
 
                 const isCritical = rng() * 100 < attacker.criticalChance * attackDebuff;
-                const criticalMultiplier = isCritical ? 1.5 : 1;
+                const criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER : 1;
                 const effectiveArmor = target.armor * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
                 const preAbsorption = Math.max(1, Math.floor(attacker.attack * attackerMult * criticalMultiplier * mitigation));
@@ -454,8 +461,8 @@ export default class PvpCombatService {
                     miasmaProc,
                     miasmaStacks,
                     miasmaTargetHasSpecials: MiasmaService.hasAnySpecials(target),
-                    miasmaAttackWeakened: attackDebuff < 1 && MiasmaService.hasAttackSpecials(attacker),
-                    miasmaDefendWeakened: defendDebuff < 1 && MiasmaService.hasDefendSpecials(target)
+                    miasmaAttackWeakened: attackMark < 1 && MiasmaService.hasAttackSpecials(attacker),
+                    miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(target)
                 });
 
                 // Mordida do pet: garantida, não consome rng(). Dano e

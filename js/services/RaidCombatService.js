@@ -2,6 +2,7 @@ import PvpCombatService from "./PvpCombatService.js";
 import BoitataBurn from "./BoitataBurn.js";
 import MiasmaService from "./MiasmaService.js";
 import { ABSORPTION_CAP, absorbedAmount } from "../combat/Absorption.js";
+import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
 // Boss tem HP colossal (milhares) contra só 4 atacantes por rodada —
 // precisa de bem mais rodadas que um duelo de PVP (que usa guard 500/1000)
@@ -234,11 +235,13 @@ export default class RaidCombatService {
                 // reduz a Absorção dele ao recebê-lo. O chefe nunca tem
                 // miasmaChance > 0 (não é Pútrido), então só ativa vindo
                 // do squad — mas PODE ser alvo do débuff se for atingido.
-                const attackDebuff = MiasmaService.consumeAttackMultiplier(miasmaFlagsById.get(attacker.id));
-                const defendDebuff = MiasmaService.consumeDefendMultiplier(miasmaFlagsById.get(target.id));
+                const attackMark = MiasmaService.consumeAttackMultiplier(miasmaFlagsById.get(attacker.id));
+                const attackDebuff = attackMark * MiasmaService.persistentSpecialMultiplier(miasmaFlagsById.get(attacker.id));
+                const defendMark = MiasmaService.consumeDefendMultiplier(miasmaFlagsById.get(target.id));
+                const defendDebuff = defendMark * MiasmaService.persistentSpecialMultiplier(miasmaFlagsById.get(target.id));
 
                 const isCritical = rng() * 100 < attacker.criticalChance * attackDebuff;
-                const criticalMultiplier = isCritical ? 1.5 : 1;
+                const criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER : 1;
                 const effectiveArmor = target.armor * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
                 const preAbsorption = Math.max(1, Math.floor(attackPower * criticalMultiplier * mitigation));
@@ -275,8 +278,8 @@ export default class RaidCombatService {
                     miasmaProc,
                     miasmaStacks,
                     miasmaTargetHasSpecials: MiasmaService.hasAnySpecials(target),
-                    miasmaAttackWeakened: attackDebuff < 1 && MiasmaService.hasAttackSpecials(attacker),
-                    miasmaDefendWeakened: defendDebuff < 1 && MiasmaService.hasDefendSpecials(target)
+                    miasmaAttackWeakened: attackMark < 1 && MiasmaService.hasAttackSpecials(attacker),
+                    miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(target)
                 });
 
                 // Mordida do pet: só quem está atacando o chefe (nunca o

@@ -44,7 +44,7 @@ const upClasse = {
         description: "Você escolheu transcender para um mago da luz.",
         states:{
             life: 80,
-            attack: 65,
+            attack: 60,
             armor: 15,
             agility: 15,
             criticalChance: 0,
@@ -62,7 +62,7 @@ const upClasse = {
         description: "Você escolheu transcender para um mago da escuridão.",
         states:{
             life: 70,
-            attack: 65,
+            attack: 60,
             armor: 10,
             agility: 12,
             criticalChance: 0,
@@ -80,9 +80,9 @@ const upClasse = {
         description: "Você escolheu transcender para um arqueiro da luz.",
         states:{
             life: 70,
-            attack: 35,
+            attack: 45,
             armor: 10,
-            agility: 20,
+            agility: 25,
             criticalChance: 7,
             lifeSteal: 0,
             penetration: 0,
@@ -98,9 +98,9 @@ const upClasse = {
         description: "Você escolheu transcender para um arqueiro da escuridão.",
         states:{
             life: 60,
-            attack: 32,
+            attack: 42,
             armor: 5,
-            agility: 25,
+            agility: 30,
             criticalChance: 10,
             lifeSteal: 0,
             penetration: 0,
@@ -115,8 +115,8 @@ const upClasse = {
         hud: "assets/img/assets/character/class_up/barbarian/light-barbarian-hud.png",
         description: "Você escolheu transcender para um bárbaro da luz.",
         states:{
-            life: 90,
-            attack: 28,
+            life: 140,
+            attack: 38,
             armor: 22,
             agility: 10,
             criticalChance: 0,
@@ -133,8 +133,8 @@ const upClasse = {
         hud: "assets/img/assets/character/class_up/barbarian/dark-barbarian-hud.png",
         description: "Você escolheu transcender para um bárbaro da escuridão.",
         states:{
-            life: 75,
-            attack: 38,
+            life: 100,
+            attack: 48,
             armor: 14,
             agility: 12,
             criticalChance: 0,

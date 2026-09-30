@@ -7,8 +7,9 @@
    entra reduzido, então não tem como morrer "antes de curar").
 ========================================================== */
 
-// Fração do golpe absorvida quando a Absorção ativa.
-export const ABSORPTION_RATIO = 0.5;
+// Fração do golpe absorvida quando a Absorção ativa (era 0.5 — reduzida
+// porque o Guerreiro full dominava o PVP).
+export const ABSORPTION_RATIO = 0.42;
 
 // Nunca passa disso, mesmo somando muito equipamento.
 export const ABSORPTION_CAP = 95;
