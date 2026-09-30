@@ -1,6 +1,7 @@
 import levels from "../data/levels.js";
 import legacyLevels_v1 from "../data/legacyLevels_v1.js";
 import legacyLevels_v2 from "../data/legacyLevels_v2.js";
+import legacyLevels_v3 from "../data/legacyLevels_v3.js";
 import baseStatsL1 from "../data/baseStatsL1.js";
 
 // Sobe toda vez que a curva de levels.js (ou o formato de baseStats)
@@ -17,13 +18,24 @@ import baseStatsL1 from "../data/baseStatsL1.js";
 // v3: Crítico/Roubo de Vida/Penetração/Absorção deixam de vir de level
 //     up — passam a vir 100% de Arma + Chapéu (Arma + Elmo, no caso do
 //     Bárbaro), pra ficar visível pro jogador de onde cada ponto vem.
-export const CURRENT_BALANCE_VERSION = 3;
+// v4: Pútrido teve a curva de Agilidade reduzida (soma dos 99 níveis:
+//     114 -> 96) — o Poder dele estava empatando com classes de dano
+//     alto (Ataque bem menor) só por causa do excesso de Agilidade/
+//     Armadura na base. Não afeta nenhuma outra classe (ver
+//     legacyLevels_v3.js).
+export const CURRENT_BALANCE_VERSION = 4;
 
-const STAT_KEYS = ["attack", "armor", "agility", "criticalChance", "lifeSteal", "penetration", "absorption"];
+// miasmaChance entra aqui só pra não ser DESCARTADO na migração (a
+// tabela de migração nunca tem esse campo, então ele sempre passa
+// direto como "extra" — preserva o que o Pútrido já tinha ganho de
+// Quartzo Rosa). Nenhuma curva de level up (nem antiga nem atual) dá
+// pontos nele, então isso nunca soma nada por conta própria.
+const STAT_KEYS = ["attack", "armor", "agility", "criticalChance", "lifeSteal", "penetration", "absorption", "miasmaChance"];
 
 const LEGACY_TABLES = {
     1: legacyLevels_v1,
-    2: legacyLevels_v2
+    2: legacyLevels_v2,
+    3: legacyLevels_v3
 };
 
 export default class StatsMigrationService {

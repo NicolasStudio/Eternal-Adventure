@@ -44,7 +44,7 @@ const upClasse = {
         description: "Você escolheu transcender para um mago da luz.",
         states:{
             life: 80,
-            attack: 50,
+            attack: 65,
             armor: 15,
             agility: 15,
             criticalChance: 0,
@@ -62,9 +62,9 @@ const upClasse = {
         description: "Você escolheu transcender para um mago da escuridão.",
         states:{
             life: 70,
-            attack: 50,
+            attack: 65,
             armor: 10,
-            agility: 10,
+            agility: 12,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 10,
@@ -141,6 +141,44 @@ const upClasse = {
             lifeSteal: 10,
             penetration: 0,
             absorption: 0
+        }
+    },
+
+    light_putrid: {
+        id: "light_putrid",
+        name: "Putrido da Luz",
+        image: "assets/img/assets/character/class_up/putrid/light-putrid.png",
+        hud: "assets/img/assets/character/class_up/putrid/light-putrid-hud.png",
+        description: "Você escolheu transcender para um putrido da luz.",
+        states:{
+            life: 65,
+            attack: 35,
+            armor: 20,
+            agility: 12,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            miasmaChance: 13
+        }
+    },
+
+    dark_putrid: {
+        id: "dark_putrid",
+        name: "Putrido da Escuridão",
+        image: "assets/img/assets/character/class_up/putrid/dark-putrid.png",
+        hud: "assets/img/assets/character/class_up/putrid/dark-putrid-hud.png",
+        description: "Você escolheu transcender para um putrido da escuridão.",
+        states:{
+            life: 85,
+            attack: 28,
+            armor: 17,
+            agility: 18,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            miasmaChance: 10
         }
     },
 
