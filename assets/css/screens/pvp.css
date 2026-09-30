@@ -328,12 +328,18 @@
     color:#f0a0a0;
 }
 
+/* SEM z-index de propósito: com z-index a janela vira uma camada
+   própria, e tudo dentro dela (inclusive as mensagens de combate,
+   #combat-toast-container z-index 50) ficava preso ABAIXO do
+   .hud-header (z-index 10) — os cartões de vida do 2x2 moram no header
+   e desciam por cima das mensagens. Sem ela, cada filho disputa camada
+   direto com o header/menu: mensagens por cima de tudo, retratos
+   (z-index 10) empatados com header/menu. */
 .pvp2v2-window{
     position:absolute;
     inset:0;
     overflow:hidden;
     pointer-events:none;
-    z-index:2;
 }
 .pvp2v2-arena{
     position:absolute;

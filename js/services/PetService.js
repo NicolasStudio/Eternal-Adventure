@@ -192,6 +192,12 @@ export default class PetService {
             return { life: 0, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0, biteDamage: 0, healAmount: 0, mimicRatio: 0, burnDamage: 0 };
         }
 
+        // Cura (Duende) e Queimadura (Boitatá) crescem com o pet: nível em
+        // que o estágio atual evolui (1/18/32) + nível atual do pet. O
+        // valor de `heal`/`burnDamage` em pet.js só marca QUAL habilidade
+        // o pet tem. Ex: Duende Adulto nível 50 = 32 + 50 = 82 de cura.
+        const levelPower = (stage.nivel ?? 0) + Math.min(petInstance.level ?? 1, PET_MAX_LEVEL);
+
         return {
             life: scale(stats.life),
             attack: scale(stats.attack),
@@ -202,10 +208,11 @@ export default class PetService {
             penetration: scale(stats.penetration),
             absorption: scale(stats.absorption),
             biteDamage: scale(ability?.damage),
-            healAmount: scale(ability?.heal),
+            healAmount: ability?.heal ? scale(levelPower) : 0,
             mimicRatio: (ability?.mimicRatio ?? 0) * multiplier,
-            // Boitatá: dano de UM tick da queimadura (ver BoitataBurn.js).
-            burnDamage: scale(ability?.burnDamage)
+            // Boitatá: dano de UM tick da queimadura, antes da efetividade
+            // do elemento do alvo (ver BoitataBurn.js).
+            burnDamage: ability?.burnDamage ? scale(levelPower) : 0
         };
 
     }

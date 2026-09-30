@@ -1,6 +1,5 @@
 import RaidLobbyService from "../services/RaidLobbyService.js";
 import RaidCombatService from "../services/RaidCombatService.js";
-import PetService from "../services/PetService.js";
 import monstersRaid from "../data/monstersRaid.js";
 import LootSystem from "../combat/LootSystem.js";
 import LevelUpModal from "../ui/components/modals/LevelUpModal.js";
@@ -290,49 +289,27 @@ export default class RaidView {
         this.bossHP = this.bossCombatant.maxHP;
     }
 
-    // Monta o squad do andar atual a partir do roster original da
-    // partida, excluindo quem já saiu do cooperativo e usando o HP com
-    // que cada um confirmou "Continuar" no andar anterior (ou o HP
-    // cheio do snapshot, no andar 1).
+    // Monta o squad do andar atual a partir dos snapshots da partida,
+    // excluindo quem já saiu do cooperativo e usando o HP com que cada um
+    // confirmou "Continuar" no andar anterior (ou o HP cheio do snapshot,
+    // no andar 1). Cada jogador regrava o próprio snapshot ao confirmar
+    // (ver waitForNextFloor) — pet trocado/alimentado, equipamento e Vida
+    // Máxima chegam atualizados e IGUAIS pros 4 clientes. Nunca ajustar
+    // nada só localmente aqui: a luta é simulada em cada navegador e
+    // precisa dos mesmos dados em todos.
     buildSquadForFloor() {
 
         const left = this.matchData.left ?? {};
         const hp = this.matchData.hp ?? {};
-        const selfId = RaidLobbyService.playerId;
 
         return Object.values(this.matchData.squad)
             .filter(c => !left[c.id])
-            .map(c => ({ ...c, currentHP: hp[c.id] ?? c.currentHP ?? c.maxHP }))
-            // O snapshot original do squad (feito uma única vez ao
-            // entrar na fila) congela a mordida/cura do pet com a fome
-            // de então — recalcula com a fome ATUAL só pra mim antes de
-            // cada andar, senão alimentar o pet no intervalo entre
-            // andares não faz efeito nenhum na luta.
-            .map(c => c.id === selfId ? { ...c, ...this.currentPetContribution() } : c)
+            .map(c => ({ ...c, currentHP: Math.min(c.maxHP, hp[c.id] ?? c.currentHP ?? c.maxHP) }))
             // Visual: menor armadura fica na primeira posição, maior
             // armadura na última — o boss é sempre ancorado do lado
             // direito da arena (ver raid.css .raid-boss-portrait), então
             // quem aguenta mais dano fica visualmente mais perto dele.
             .sort((a, b) => a.armor - b.armor);
-
-    }
-
-    // Mordida/cura do pet recalculadas com a fome ATUAL, não a do
-    // momento em que entrei na fila — ver buildSquadForFloor acima.
-    currentPetContribution() {
-
-        const pet = this.player.equipment.pet;
-
-        if (!pet) return { petBiteDamage: 0, petHealAmount: 0, petMimicRatio: 0, petBurnDamage: 0 };
-
-        const scaled = PetService.getScaledStats(pet);
-
-        return {
-            petBiteDamage: scaled.biteDamage,
-            petHealAmount: scaled.healAmount,
-            petMimicRatio: scaled.mimicRatio,
-            petBurnDamage: scaled.burnDamage
-        };
 
     }
 
@@ -434,7 +411,14 @@ export default class RaidView {
         const squadIds = Object.keys(this.matchData.squad);
         const expectedFloor = this.currentFloor;
 
-        await RaidLobbyService.markFloorReady(this.matchId, RaidLobbyService.playerId, this.game.player.currentHP);
+        // Snapshot novo junto: pet/equipamento podem ter mudado no
+        // inventário entre um andar e outro (ver RaidLobbyService.markFloorReady).
+        await RaidLobbyService.markFloorReady(
+            this.matchId,
+            RaidLobbyService.playerId,
+            this.game.player.currentHP,
+            RaidCombatService.snapshotCombatant(this.player)
+        );
 
         this.floorWaitProgress = { ready: 0, total: squadIds.length };
         this.state = "floor-wait";

@@ -309,12 +309,26 @@ export default class RaidLobbyService {
     // (depois de eu decidir curar ou não no inventário) — é esse valor
     // que os outros clientes vão usar como meu HP inicial no próximo
     // andar, já que cada um só sabe da própria cura.
-    static async markFloorReady(matchId, playerId, currentHP) {
+    //
+    // combatant: meu snapshot ATUAL (RaidCombatService.snapshotCombatant)
+    // — substitui o que foi tirado ao entrar na fila. Sem isso, trocar de
+    // pet (ou equipamento) entre andares deixava cada cliente simulando
+    // com dados diferentes: Vida Máxima e nome do pet antigos, habilidade
+    // do pet novo só no MEU navegador. Vai na mesma escrita do
+    // floorReady, então o andar nunca avança comigo "pronto" mas com o
+    // snapshot velho.
+    static async markFloorReady(matchId, playerId, currentHP, combatant = null) {
 
-        await update(ref(db, `${this.matchesPath()}/${matchId}`), {
+        const updates = {
             [`floorReady/${playerId}`]: true,
             [`hp/${playerId}`]: currentHP
-        });
+        };
+
+        if (combatant) {
+            updates[`squad/${playerId}`] = { ...combatant, id: playerId };
+        }
+
+        await update(ref(db, `${this.matchesPath()}/${matchId}`), updates);
 
     }
 
