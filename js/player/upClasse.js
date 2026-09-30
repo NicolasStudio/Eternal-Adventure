@@ -182,6 +182,7 @@ const upClasse = {
         }
     },
 
+    
 };
 
 export default upClasse;
