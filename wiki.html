@@ -30,8 +30,12 @@
 
             <nav class="wiki-nav" id="wiki-nav">
 
-                <a href="#classes" class="wiki-nav-item" data-keywords="classes guerreiro arqueiro mago">
+                <a href="#classes" class="wiki-nav-item" data-keywords="classes guerreiro arqueiro mago barbaro putrido">
                     <i class="fa-solid fa-shield-halved"></i> Classes
+                </a>
+
+                <a href="#comparativo" class="wiki-nav-item" data-keywords="comparativo grafico gráfico radar atributos vida ataque armadura agilidade nivel">
+                    <i class="fa-solid fa-chart-line"></i> Comparativo
                 </a>
 
                 <a href="#itens" class="wiki-nav-item" data-keywords="itens armas cabeça peitoral calça botas poções equipamento">
@@ -124,7 +128,7 @@
             <section id="classes" class="wiki-section">
 
                 <h2><i class="fa-solid fa-shield-halved"></i> Classes</h2>
-                <p class="wiki-intro">Ao começar uma aventura, você escolhe uma entre quatro classes. Cada uma tem um jeito bem diferente de jogar — não existe "a melhor", existe a que combina com o seu estilo.</p>
+                <p class="wiki-intro">Ao começar uma aventura, você escolhe uma entre cinco classes. Cada uma tem um jeito bem diferente de jogar — não existe "a melhor", existe a que combina com o seu estilo.</p>
 
                 <div class="wiki-cards">
 
@@ -148,7 +152,50 @@
                         <p>Um meio-termo entre Guerreiro e Arqueiro: ataque e agilidade acima da média, com vida e armadura razoáveis. O <strong>Roubo de Vida</strong> alto é o forte dele — cada golpe certeiro tem boa chance de recuperar parte da vida perdida, sustentando lutas longas sem depender de poções.</p>
                     </article>
 
+                    <article class="wiki-card">
+                        <h3><i class="fa-solid fa-skull-crossbones"></i> Pútrido</h3>
+                        <p>Um debuffer, não um "dano puro": ataque mediano, mas com um pouco mais de vida que as outras classes e a segunda maior agilidade do jogo (atrás só do Arqueiro). O forte dele é o <strong>Miasma</strong>, atributo exclusivo — chance, a cada golpe que acerta, de intoxicar o alvo. Na próxima vez que o alvo intoxicado atacar ou apanhar, os atributos especiais dele (Crítico, Roubo de Vida, Penetração ou Absorção) saem pela metade.</p>
+                    </article>
+
                 </div>
+
+            </section>
+
+            <section id="comparativo" class="wiki-section">
+
+                <h2><i class="fa-solid fa-chart-line"></i> Comparativo de Classes</h2>
+                <p class="wiki-intro">Um raio-x visual de <strong>Vida, Ataque, Armadura e Agilidade</strong> — só os atributos base de cada classe (sem nenhum equipamento), nos níveis 20, 50 e 100. Cada eixo é comparado contra o maior valor que QUALQUER classe alcança naquele atributo no nível 100 — então dá pra comparar as 5 formas diretamente, olhando o tamanho de cada "pizza".</p>
+
+                <div class="wiki-radar-grid">
+
+                    <article class="wiki-radar-card">
+                        <h3><i class="fa-solid fa-shield"></i> Guerreiro</h3>
+                        <canvas id="radar-warrior"></canvas>
+                    </article>
+
+                    <article class="wiki-radar-card">
+                        <h3><i class="fa-solid fa-bow-arrow"></i> Arqueiro</h3>
+                        <canvas id="radar-archer"></canvas>
+                    </article>
+
+                    <article class="wiki-radar-card">
+                        <h3><i class="fa-solid fa-hat-wizard"></i> Mago</h3>
+                        <canvas id="radar-mage"></canvas>
+                    </article>
+
+                    <article class="wiki-radar-card">
+                        <h3><i class="fa-solid fa-mitten"></i> Bárbaro</h3>
+                        <canvas id="radar-barbarian"></canvas>
+                    </article>
+
+                    <article class="wiki-radar-card">
+                        <h3><i class="fa-solid fa-skull-crossbones"></i> Pútrido</h3>
+                        <canvas id="radar-putrid"></canvas>
+                    </article>
+
+                </div>
+
+                <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: o eixo cheio (100%) sempre pertence a alguém — não significa "o máximo possível", só "quem é o mais forte nesse atributo específico no nível 100". Ex: a Armadura do Guerreiro sempre fecha o eixo por completo, porque é ele quem detém o maior valor.</p>
 
             </section>
 
@@ -513,6 +560,142 @@
         }, { rootMargin: "-20% 0px -70% 0px" });
 
         sections.forEach(section => observer.observe(section));
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.1/chart.umd.min.js"></script>
+    <script type="module">
+        // Comparativo de Classes — lê os dados de VERDADE do jogo
+        // (baseStatsL1.js + levels.js), direto do navegador, toda vez
+        // que a wiki carrega. Não é um número fixo colado aqui: se o
+        // balanceamento mudar, o gráfico muda sozinho — não precisa
+        // lembrar de atualizar a wiki de novo.
+        import baseStatsL1 from "./js/data/baseStatsL1.js";
+        import levels from "./js/data/levels.js";
+
+        const CLASS_IDS = ["warrior", "archer", "mage", "barbarian", "putrid"];
+        const STAT_KEYS = ["life", "attack", "armor", "agility"];
+        const RADAR_LABELS = ["Vida", "Ataque", "Armadura", "Agilidade"];
+        const LEVELS_TO_SHOW = [20, 50, 100];
+
+        // Mesma soma que Player.applyLevelBonus() faz um nível de cada vez
+        // durante o jogo normal, só que tudo de uma vez até `targetLevel`.
+        function cumulative(classId, targetLevel) {
+
+            const stats = { life: 100, ...(baseStatsL1[classId] ?? {}) };
+
+            for (const key of STAT_KEYS) stats[key] ??= 0;
+
+            for (let lvl = 2; lvl <= targetLevel; lvl++) {
+
+                const bonus = levels[lvl]?.[classId];
+
+                if (!bonus) continue;
+
+                for (const key of STAT_KEYS) stats[key] += bonus[key] ?? 0;
+
+            }
+
+            return stats;
+
+        }
+
+        // raw[classe][nível] = { life, attack, armor, agility } de verdade.
+        const raw = {};
+        CLASS_IDS.forEach(classId => {
+            raw[classId] = {};
+            LEVELS_TO_SHOW.forEach(level => {
+                raw[classId][level] = cumulative(classId, level);
+            });
+        });
+
+        // Teto de cada atributo = o maior valor que QUALQUER classe
+        // atinge nele no nível mais alto mostrado — é o que deixa os 5
+        // gráficos comparáveis entre si (ver dica na página).
+        const topLevel = LEVELS_TO_SHOW[LEVELS_TO_SHOW.length - 1];
+        const ceiling = {};
+        STAT_KEYS.forEach(key => {
+            ceiling[key] = Math.max(...CLASS_IDS.map(classId => raw[classId][topLevel][key] || 0)) || 1;
+        });
+
+        // RADAR_DATA[classe][nível] = [%Vida, %Ataque, %Armadura, %Agilidade]
+        const RADAR_DATA = {};
+        CLASS_IDS.forEach(classId => {
+            RADAR_DATA[classId] = {};
+            LEVELS_TO_SHOW.forEach(level => {
+                RADAR_DATA[classId][level] = STAT_KEYS.map(
+                    key => Math.round((raw[classId][level][key] / ceiling[key]) * 100)
+                );
+            });
+        });
+
+        // Do nível mais fraco (fino, apagado) pro mais forte (grosso, cor
+        // cheia) — mesma leitura em todo gráfico.
+        const RADAR_LEVELS = [
+            { level: 20, border: "rgba(139,115,85,.6)", fill: "rgba(139,115,85,.10)", width: 1.5 },
+            { level: 50, border: "rgba(212,163,115,.8)", fill: "rgba(212,163,115,.12)", width: 2 },
+            { level: 100, border: "#f1c75c", fill: "rgba(241,199,92,.22)", width: 2.5 }
+        ];
+
+        const radarOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: false,
+            // Gráfico só ilustrativo — sem interação nenhuma no hover
+            // (o Chart.js por padrão mostra tooltip por ponto, e com 3
+            // camadas sobrepostas nos mesmos 4 ângulos isso saía confuso/
+            // instável num canvas pequeno). events:[] desliga qualquer
+            // resposta a mouse.
+            events: [],
+            scales: {
+                r: {
+                    min: 0,
+                    max: 100,
+                    ticks: { display: false, stepSize: 25 },
+                    grid: { color: "rgba(212,163,115,.18)" },
+                    angleLines: { color: "rgba(212,163,115,.25)" },
+                    pointLabels: {
+                        color: "#d8c39b",
+                        font: { family: "Cinzel", size: 11 }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: "bottom",
+                    labels: {
+                        color: "#c7b08d",
+                        font: { family: "Cinzel", size: 10 },
+                        boxWidth: 12,
+                        padding: 8
+                    }
+                }
+            }
+        };
+
+        Object.entries(RADAR_DATA).forEach(([classId, byLevel]) => {
+
+            const canvas = document.getElementById(`radar-${classId}`);
+
+            if (!canvas || typeof Chart === "undefined") return;
+
+            new Chart(canvas, {
+                type: "radar",
+                data: {
+                    labels: RADAR_LABELS,
+                    datasets: RADAR_LEVELS.map(({ level, border, fill, width }) => ({
+                        label: `Nv. ${level}`,
+                        data: byLevel[level],
+                        borderColor: border,
+                        backgroundColor: fill,
+                        borderWidth: width,
+                        pointRadius: 2,
+                        pointBackgroundColor: border
+                    }))
+                },
+                options: radarOptions
+            });
+
+        });
     </script>
 
 </body>

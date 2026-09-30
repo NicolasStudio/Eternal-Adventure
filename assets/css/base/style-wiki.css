@@ -253,6 +253,37 @@ body::before {
     margin: 0;
 }
 
+/* Grade de gráficos radar (Comparativo de Classes) */
+.wiki-radar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 16px;
+    margin-top: 8px;
+}
+
+.wiki-radar-card {
+    padding: 14px 14px 6px;
+    background: rgba(18, 13, 9, .6);
+    border: 1px solid #5b4633;
+    border-radius: 8px;
+}
+
+.wiki-radar-card h3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 0 6px;
+    color: #f1c75c;
+    font-size: .95rem;
+    text-align: center;
+}
+
+.wiki-radar-card canvas {
+    width: 100% !important;
+    height: 230px !important;
+}
+
 /* Tabela simples (itens) */
 .wiki-table {
     display: flex;
