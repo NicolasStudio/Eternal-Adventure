@@ -93,7 +93,11 @@ export default class PlayerStats {
 
             // Só o Pútrido tem fonte real disso (equipamento dele) — em
             // qualquer outra classe fica 0 pelo mesmo fallback das outras.
-            miasmaChance: withBaseBonus("miasmaChance")
+            miasmaChance: withBaseBonus("miasmaChance"),
+
+            // Só o Mímico tem fonte real disso (ver MimicService.js) —
+            // mesma regra do Miasma, fica 0 pra qualquer outra classe.
+            reflection: withBaseBonus("reflection")
 
         };
     }
@@ -128,6 +132,10 @@ export default class PlayerStats {
 
     get miasmaChance() {
         return this.getFinalStats().miasmaChance;
+    }
+
+    get reflection() {
+        return this.getFinalStats().reflection;
     }
 
 }

@@ -188,7 +188,8 @@ export default class ItemTooltip {
             mage: "Mago",
             archer: "Arqueiro",
             barbarian: "Bárbaro",
-            putrid: "Putrido"
+            putrid: "Putrido",
+            mimic: "Mímico"
         };
         return classes[classId] || classId;
     }
@@ -206,7 +207,9 @@ export default class ItemTooltip {
             // Pútrido: o especial dele é o Miasma (enfraquece os 4
             // especiais do INIMIGO — ver MiasmaService.js); ele mesmo não
             // tem Crítico/Roubo de Vida/Penetração/Absorção.
-            putrid: "miasmaChance"
+            putrid: "miasmaChance",
+            // Mímico: o especial dele é a Imitação (ver MimicService.js).
+            mimic: "reflection"
         }[this.item.class] ?? null;
     }
 
@@ -224,6 +227,7 @@ export default class ItemTooltip {
             case "penetration": return "Penetração";
             case "absorption": return "Absorção";
             case "miasmaChance": return "Miasma";
+            case "reflection": return "Imitação";
             default: return stat;
         }
     }
@@ -242,6 +246,7 @@ export default class ItemTooltip {
             case "penetration": return "💥";
             case "absorption": return "🪨";
             case "miasmaChance": return "🦠";
+            case "reflection": return "🪞";
             case "life": return "❤️";
             default: return "•";
         }

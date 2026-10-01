@@ -735,6 +735,171 @@ const weapons = {
         value: 0,
         sellValue: 0
 
+    },
+
+/* ==========================================
+       MIMIC
+========================================== */
+    mirror_common: {
+
+        id: "mirror_common",
+        name: "Espelho",
+        type: "weapon",
+        slot: "weapon",
+        class: "mimic",
+        weaponType: "mirror",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/weapons/mirror-rarity-comum.png",
+
+        stats: {
+            attack: 3,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            reflection: 2
+        },
+
+        value: 120,
+        sellValue: 60
+
+    },
+
+    mirror_uncommon: {
+
+        id: "mirror_uncommon",
+        name: "Espelho",
+        type: "weapon",
+        slot: "weapon",
+        class: "mimic",
+        weaponType: "mirror",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/weapons/mirror-rarity-incomum.png",
+
+        stats: {
+            attack: 7,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            reflection: 5
+        },
+
+        value: 360,
+        sellValue: 180
+
+    },
+
+    mirror_rare: {
+
+        id: "mirror_rare",
+        name: "Espelho",
+        type: "weapon",
+        slot: "weapon",
+        class: "mimic",
+        weaponType: "mirror",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/weapons/mirror-rarity-rare.png",
+
+        stats: {
+            attack: 13,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            reflection: 6
+        },
+
+        value: 1080,
+        sellValue: 540
+
+    },
+
+    mirror_mystic: {
+
+        id: "mirror_mystic",
+        name: "Espelho",
+        type: "weapon",
+        slot: "weapon",
+        class: "mimic",
+        weaponType: "mirror",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/weapons/mirror-rarity-mistico.png",
+
+        stats: {
+            attack: 25,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            reflection: 10
+        },
+
+        value: 3240,
+        sellValue: 1620
+
+    },
+
+    mirror_legendary: {
+
+        id: "mirror_legendary",
+        name: "Espelho",
+        type: "weapon",
+        slot: "weapon",
+        class: "mimic",
+        weaponType: "mirror",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/weapons/mirror-rarity-lendario.png",
+
+        stats: {
+            attack: 36,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            reflection: 11
+        },
+
+        value: 0,
+        sellValue: 18860
+
+    },
+
+    mirror_ultraje: {
+
+        id: "mirror_ultraje",
+        name: "Espelho",
+        type: "weapon",
+        slot: "weapon",
+        class: "mimic",
+        weaponType: "mirror",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/weapons/mirror-rarity-ultraje.png",
+
+        stats: {
+            attack: 50,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            reflection: 15
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

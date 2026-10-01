@@ -182,7 +182,42 @@ const upClasse = {
         }
     },
 
-    
+    light_mimic:{
+        id: "light_mimic",
+        name: "Mímico da Luz",
+        image: "assets/img/assets/character/class_up/mimic/light-mimic.png",
+        hud: "assets/img/assets/character/class_up/mimic/light-mimic-hud.png",
+        description: "Você escolheu transcender para um mímico da luz.",
+        states:{
+            life: 70,
+            attack: 30,
+            armor: 15,
+            agility: 25,
+            criticalChance: 5,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+        }
+    },
+
+    dark_mimic:{
+        id: "dark_mimic",
+        name: "Mímico da Escuridão",
+        image: "assets/img/assets/character/class_up/mimic/dark-mimic.png",
+        hud: "assets/img/assets/character/class_up/mimic/dark-mimic-hud.png",
+        description: "Você escolheu transcender para um mímico da escuridão.",
+        states:{
+            life: 80,
+            attack: 25,
+            armor: 20,
+            agility: 20,
+            criticalChance: 10,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+        }
+    }
+
 };
 
 export default upClasse;

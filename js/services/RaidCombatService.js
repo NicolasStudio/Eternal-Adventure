@@ -1,6 +1,7 @@
 import PvpCombatService from "./PvpCombatService.js";
 import BoitataBurn from "./BoitataBurn.js";
 import MiasmaService from "./MiasmaService.js";
+import MimicService from "./MimicService.js";
 import { ABSORPTION_CAP, absorbedAmount } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
@@ -91,6 +92,21 @@ export default class RaidCombatService {
             maxHP: status.vidaMaxima,
             currentHP: status.vidaMaxima,
             attacks: status.ataque.map(a => ({ name: a.nomeAtaque, damage: a.dano })),
+            // Ataque "único" de conveniência pra quem precisa de UM
+            // número (ex: Imitação do Mímico, que copia % disso) — média
+            // dos golpes nomeados. A simulação em si continua sorteando
+            // um dos 3 golpes de verdade pro turno do chefe.
+            attack: Math.round(
+                status.ataque.reduce((sum, a) => sum + a.dano, 0) / status.ataque.length
+            ),
+            // Nome do golpe mais forte do chefe — usado só pra mensagem
+            // da Imitação ("usou [golpe] através da Imitação"), quando o
+            // Mímico está acertando ELE (fora do turno do chefe não há
+            // nenhum golpe "escolhido" de verdade, então usa esse como
+            // o "mais representativo").
+            attackName: status.ataque.reduce(
+                (best, a) => a.dano > best.dano ? a : best, status.ataque[0]
+            )?.nomeAtaque ?? null,
             armor: status.armadura,
             agility: status.agilidade,
             criticalChance: status.criticalChance ?? 0,
@@ -248,7 +264,14 @@ export default class RaidCombatService {
 
                 const absorptionChance = Math.min(ABSORPTION_CAP, (target.absorption ?? 0) * defendDebuff);
                 const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance);
-                const damage = preAbsorption - absorbed;
+
+                // Imitação do Mímico: dano VERDADEIRO extra, por cima do
+                // golpe já mitigado/absorvido (ver MimicService.js). O
+                // chefe nunca tem Imitação (não é Mímico), mas PODE ser
+                // alvo dele (usa o `attack` de conveniência do snapshot).
+                const mimicBonus = MimicService.getBonusDamage(target.attack, attacker.reflection ?? 0);
+
+                const damage = preAbsorption - absorbed + mimicBonus;
 
                 target.currentHP = Math.max(0, target.currentHP - damage);
 
@@ -274,6 +297,10 @@ export default class RaidCombatService {
                     critical: isCritical,
                     lifeSteal: lifeStealAmount,
                     absorbed,
+                    mimicBonus,
+                    // Nome do golpe que a Imitação "copiou" — só existe
+                    // quando o alvo tem um golpe nomeado (o chefe).
+                    mimicAttackName: mimicBonus > 0 ? (target.attackName ?? null) : null,
                     attackName: chosenAttack?.name ?? null,
                     miasmaProc,
                     miasmaStacks,

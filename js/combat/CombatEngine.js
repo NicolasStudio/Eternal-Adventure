@@ -1,6 +1,7 @@
 import PetService from "../services/PetService.js";
 import BoitataBurn from "../services/BoitataBurn.js";
 import MiasmaService from "../services/MiasmaService.js";
+import MimicService from "../services/MimicService.js";
 import { ABSORPTION_CAP, absorbedAmount } from "./Absorption.js";
 import { CRITICAL_MULTIPLIER } from "./Critical.js";
 
@@ -57,7 +58,8 @@ export default class CombatEngine {
                 miasmaStacks: 0,
                 miasmaTargetHasSpecials: false,
                 miasmaAttackWeakened: false,
-                miasmaDefendWeakened: false
+                miasmaDefendWeakened: false,
+                mimicBonus: 0
             };
         }
 
@@ -84,7 +86,8 @@ export default class CombatEngine {
             miasmaStacks: result.miasmaStacks,
             miasmaTargetHasSpecials: result.miasmaTargetHasSpecials,
             miasmaAttackWeakened: result.miasmaAttackWeakened,
-            miasmaDefendWeakened: result.miasmaDefendWeakened
+            miasmaDefendWeakened: result.miasmaDefendWeakened,
+            mimicBonus: result.mimicBonus
         };
     }
 
@@ -152,7 +155,15 @@ export default class CombatEngine {
         const absorptionChance = Math.min(ABSORPTION_CAP, (defender.absorption ?? 0) * defendDebuff);
 
         const absorbed = absorbedAmount(preAbsorption, Math.random() * 100 < absorptionChance);
-        const damage = preAbsorption - absorbed;
+
+        // Imitação do Mímico: dano VERDADEIRO extra, por cima do golpe já
+        // mitigado/absorvido — ignora Armadura e Absorção de propósito
+        // (ver MimicService.js). Usa o Ataque "cru" do alvo (defender),
+        // não afetado pelo débuff de Miasma que o PRÓPRIO atacante
+        // esteja sofrendo.
+        const mimicBonus = MimicService.getBonusDamage(defender.attack ?? defender.dano, attacker.reflection ?? 0);
+
+        const damage = preAbsorption - absorbed + mimicBonus;
 
         // ==========================
         // LIFE STEAL
@@ -190,7 +201,8 @@ export default class CombatEngine {
             damage,
             critical: isCritical,
             lifeSteal: recoveredHP,
-            absorbed
+            absorbed,
+            mimicBonus
         };
 
     }
@@ -215,6 +227,9 @@ export default class CombatEngine {
             }
             if (result.miasmaProc) {
                 message += `<br>${MiasmaService.buildProcMessage(this.monster.name, result)}`;
+            }
+            if (result.mimicBonus > 0) {
+                message += `<br>${MimicService.buildMessage(result.mimicBonus, { attackName: this.monster.status.nomeAtaque })}`;
             }
             return message;
         }

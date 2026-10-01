@@ -583,6 +583,123 @@ const chests = {
         value: 0,
         sellValue: 0
 
+    },
+
+/* ==========================================
+       MIMIC
+========================================== */
+    chest_mimic_common: {
+
+        id: "chest_mimic_common",
+        name: "Camisa Listrada",
+        type: "armor",
+        slot: "chest",
+        class: "mimic",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/chest/chest-mimic-rarity-comum.png",
+
+        stats: {
+            armor: 4
+        },
+
+        value: 100,
+        sellValue: 50
+
+    },
+
+    chest_mimic_uncommon: {
+
+        id: "chest_mimic_uncommon",
+        name: "Camisa Listrada",
+        type: "armor",
+        slot: "chest",
+        class: "mimic",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/chest/chest-mimic-rarity-incomum.png",
+
+        stats: {
+            armor: 9
+        },
+
+        value: 300,
+        sellValue: 150
+
+    },
+
+    chest_mimic_rare: {
+
+        id: "chest_mimic_rare",
+        name: "Camisa Listrada",
+        type: "armor",
+        slot: "chest",
+        class: "mimic",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/chest/chest-mimic-rarity-rare.png",
+
+        stats: {
+            armor: 16
+        },
+
+        value: 900,
+        sellValue: 450
+
+    },
+
+    chest_mimic_mystic: {
+
+        id: "chest_mimic_mystic",
+        name: "Camisa Listrada",
+        type: "armor",
+        slot: "chest",
+        class: "mimic",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/chest/chest-mimic-rarity-mistico.png",
+
+        stats: {
+            armor: 20
+        },
+
+        value: 2700,
+        sellValue: 1350
+
+    },
+
+    chest_mimic_legendary: {
+
+        id: "chest_mimic_legendary",
+        name: "Camisa Listrada",
+        type: "armor",
+        slot: "chest",
+        class: "mimic",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/chest/chest-mimic-rarity-lendario.png",
+
+        stats: {
+            armor: 27
+        },
+
+        value: 0,
+        sellValue: 14050
+
+    },
+
+    chest_mimic_ultraje: {
+
+        id: "chest_mimic_ultraje",
+        name: "Camisa Listrada",
+        type: "armor",
+        slot: "chest",
+        class: "mimic",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/chest/chest-mimic-rarity-ultraje.png",
+
+        stats: {
+            armor: 34
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

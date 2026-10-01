@@ -279,7 +279,9 @@ export default class BlacksmithEnchant {
             // Pútrido: o especial dele é o Miasma (enfraquece os 4
             // especiais do INIMIGO — ver MiasmaService.js); ele mesmo não
             // tem Crítico/Roubo de Vida/Penetração/Absorção.
-            putrid: "miasmaChance"
+            putrid: "miasmaChance",
+            // Mímico: o especial dele é a Imitação (ver MimicService.js).
+            mimic: "reflection"
         }[classId] ?? null;
     }
 
@@ -298,6 +300,7 @@ export default class BlacksmithEnchant {
             case "penetration": return "Penetração";
             case "absorption": return "Absorção";
             case "miasmaChance": return "Miasma";
+            case "reflection": return "Imitação";
             default: return stat;
         }
     }
@@ -317,6 +320,7 @@ export default class BlacksmithEnchant {
             case "penetration": return "💥";
             case "absorption": return "🪨";
             case "miasmaChance": return "🦠";
+            case "reflection": return "🪞";
             default: return "•";
         }
     }

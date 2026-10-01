@@ -227,6 +227,7 @@ export default class BlacksmithArmor {
             case "penetration": return "Penetração";
             case "absorption": return "Absorção";
             case "miasmaChance": return "Miasma";
+            case "reflection": return "Imitação";
             default: return stat;
         }
     }
@@ -241,6 +242,7 @@ export default class BlacksmithArmor {
             case "penetration": return "💥";
             case "absorption": return "🪨";
             case "miasmaChance": return "🦠";
+            case "reflection": return "🪞";
             default: return "•";
         }
     }

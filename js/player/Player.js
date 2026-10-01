@@ -695,7 +695,10 @@ export default class Player {
             // Pútrido: o especial dele é o Miasma (enfraquece os 4
             // especiais do INIMIGO — ver MiasmaService.js); ele mesmo não
             // tem Crítico/Roubo de Vida/Penetração/Absorção.
-            putrid: "miasmaChance"
+            putrid: "miasmaChance",
+            // Mímico: o especial dele é a Imitação (copia % do Ataque do
+            // inimigo como dano verdadeiro — ver MimicService.js).
+            mimic: "reflection"
         }[this.class.id] ?? null;
     }
 
@@ -706,6 +709,7 @@ export default class Player {
             case "criticalChance": return "Chance Crítica";
             case "lifeSteal": return "Roubo de Vida";
             case "miasmaChance": return "Miasma";
+            case "reflection": return "Imitação";
             default: return "Atributo Especial";
         }
     }

@@ -494,7 +494,6 @@ const legs = {
 
     },
 
-
 /* ==========================================
        PUTRID
 ========================================== */
@@ -611,6 +610,129 @@ const legs = {
         stats: {
             armor: 17,
             agility: 7
+        },
+
+        value: 0,
+        sellValue: 0
+
+    },
+
+/* ==========================================
+       MIMIC
+========================================== */
+    legs_mimic_common: {
+
+        id: "legs_mimic_common",
+        name: "Calças",
+        type: "armor",
+        slot: "leg",
+        class: "mimic",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/legs/legs-mimic-rarity-comum.png",
+
+        stats: {
+            armor: 2,
+            agility: 1
+        },
+
+        value: 95,
+        sellValue: 45
+
+    },
+
+    legs_mimic_uncommon: {
+
+        id: "legs_mimic_uncommon",
+        name: "Calças",
+        type: "armor",
+        slot: "leg",
+        class: "mimic",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/legs/legs-mimic-rarity-incomum.png",
+
+        stats: {
+            armor: 4,
+            agility: 3
+        },
+
+        value: 285,
+        sellValue: 135
+
+    },
+
+    legs_mimic_rare: {
+
+        id: "legs_mimic_rare",
+        name: "Calças",
+        type: "armor",
+        slot: "leg",
+        class: "mimic",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/legs/legs-mimic-rarity-rare.png",
+
+        stats: {
+            armor: 6,
+            agility: 4
+        },
+
+        value: 855,
+        sellValue: 405
+
+    },
+
+    legs_mimic_mystic: {
+
+        id: "legs_mimic_mystic",
+        name: "Calças",
+        type: "armor",
+        slot: "leg",
+        class: "mimic",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/legs/legs-mimic-rarity-mistico.png",
+
+        stats: {
+            armor: 11,
+            agility: 7
+        },
+
+        value: 2565,
+        sellValue: 1215
+
+    },
+
+    legs_mimic_legendary: {
+
+        id: "legs_mimic_legendary",
+        name: "Calças",
+        type: "armor",
+        slot: "leg",
+        class: "mimic",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/legs/legs-mimic-rarity-lendario.png",
+
+        stats: {
+            armor: 13,
+            agility: 8
+        },
+
+        value: 0,
+        sellValue: 13645
+
+    },
+
+    legs_mimic_ultraje: {
+
+        id: "legs_mimic_ultraje",
+        name: "Calças",
+        type: "armor",
+        slot: "leg",
+        class: "mimic",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/legs/legs-mimic-rarity-ultraje.png",
+
+        stats: {
+            armor: 15,
+            agility: 10
         },
 
         value: 0,

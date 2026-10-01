@@ -331,6 +331,19 @@
     font-weight:800;
     text-shadow:none;
 }
+/* "Imitação!" (mímico, tom de espelho): selo prateado/azulado — mesma
+   lógica do selo do Miasma (fundo próprio pra não sumir em cima de
+   nenhuma outra cor de caixa). */
+.combat-mimic{
+    display:inline-block;
+    padding:1px 8px;
+    border-radius:4px;
+    background:#3a4a5a;
+    color:#cfe8f5;
+    border:1px solid #1f2e3a;
+    font-weight:800;
+    text-shadow:none;
+}
 
 /* ==========================================================
    NOTEBOOK

@@ -126,6 +126,12 @@ export default class ClassSelectionScreen {
                 "🦠 Dano Médio",
                 "🧪 Debuff em atributos especiais dos inimigos",
                 "🏃 Agilidade considerada"
+            ],
+
+            mimic: [
+                "🪞 Dano Baixo, mas Imita o Ataque do Inimigo",
+                "🛡️ Armadura Alta",
+                "🏃 Agilidade acima da Média"
             ]
 
         };

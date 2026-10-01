@@ -9,6 +9,7 @@ import HealFlash from "../combat/HealFlash.js";
 import HitFlash from "../combat/HitFlash.js";
 import BoitataBurn from "../services/BoitataBurn.js";
 import MiasmaService from "../services/MiasmaService.js";
+import MimicService from "../services/MimicService.js";
 
 export default class RaidView {
 
@@ -555,7 +556,7 @@ export default class RaidView {
 
             const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
-            await CombatToast.show(this.buildAttackMessage(entry, squad), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry), speed);
+            await CombatToast.show(this.buildAttackMessage(entry, squad), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry), speed);
 
             await this.sleep(450 / speed);
 
@@ -650,6 +651,10 @@ export default class RaidView {
 
         if (entry.absorbed > 0) {
             message += `<br><span class="combat-absorption">Absorção!</span> ${targetName} absorveu <strong>${entry.absorbed}</strong> do golpe.`;
+        }
+
+        if (entry.mimicBonus > 0) {
+            message += `<br>${MimicService.buildMessage(entry.mimicBonus, { subject: attackerName, attackName: entry.mimicAttackName })}`;
         }
 
         if (entry.miasmaProc) {

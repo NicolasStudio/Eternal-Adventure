@@ -151,14 +151,24 @@ export default class CharacterView {
 
                     <div class="character-divider"><hr></div>
 
+                    <div class="character-stat character-stat-hoverable" data-stat="absorption">
+                        <span>Absorção</span>
+                        <span>${stats.absorption}%</span>
+                    </div>
+
                     <div class="character-stat character-stat-hoverable" data-stat="criticalChance">
                         <span>Chance Crítica</span>
                         <span>${stats.criticalChance}%</span>
                     </div>
 
-                    <div class="character-stat character-stat-hoverable" data-stat="lifeSteal">
-                        <span>Roubo de Vida</span>
-                        <span>${stats.lifeSteal}%</span>
+                    <div class="character-stat character-stat-hoverable" data-stat="reflection">
+                        <span>Imitação</span>
+                        <span>${stats.reflection}%</span>
+                    </div>
+
+                    <div class="character-stat character-stat-hoverable" data-stat="miasmaChance">
+                        <span>Miasma</span>
+                        <span>${stats.miasmaChance}%</span>
                     </div>
 
                     <div class="character-stat character-stat-hoverable" data-stat="penetration">
@@ -166,14 +176,9 @@ export default class CharacterView {
                         <span>${stats.penetration}%</span>
                     </div>
 
-                    <div class="character-stat character-stat-hoverable" data-stat="absorption">
-                        <span>Absorção</span>
-                        <span>${stats.absorption}%</span>
-                    </div>
-
-                    <div class="character-stat character-stat-hoverable" data-stat="miasmaChance">
-                        <span>Miasma</span>
-                        <span>${stats.miasmaChance}%</span>
+                    <div class="character-stat character-stat-hoverable" data-stat="lifeSteal">
+                        <span>Roubo de Vida</span>
+                        <span>${stats.lifeSteal}%</span>
                     </div>
 
                     <div class="character-divider"><hr></div>
@@ -1250,7 +1255,8 @@ export default class CharacterView {
             details: [
                 ["Fórmula", `Dano = Ataque × (${CRITICAL_MULTIPLIER}× se crítico) × mitigação da Armadura do alvo.`],
                 ["Sem chance", "Diferente de Crítico/Absorção, o Ataque não é sorteado — vale o valor cheio em todo golpe."],
-                ["Contra o Pútrido", `Os acúmulos de Intoxicação do Miasma tiram ${CharacterView.MIASMA_STACKS_TEXT} do seu Ataque (1, 2 ou 3 acúmulos) até o fim da luta.`]
+                ["Contra o Pútrido", `Os acúmulos de Intoxicação do Miasma tiram ${CharacterView.MIASMA_STACKS_TEXT} do seu Ataque (1, 2 ou 3 acúmulos) até o fim da luta.`],
+                ["Contra o Mímico", "A Imitação dele copia uma % do seu Ataque como dano verdadeiro sempre que ele te acerta — quanto mais Ataque você tiver, mais ele copia."]
             ]
         },
 
@@ -1334,6 +1340,18 @@ export default class CharacterView {
                 ["Intoxicação", `Cada ativação soma 1 acúmulo no alvo (máximo ${MIASMA_STACK_MAX}): −${CharacterView.MIASMA_STACKS_TEXT} de Ataque e Agilidade, até o fim da luta. Vale contra monstros, chefes e jogadores.`],
                 ["Especiais enfraquecidos", `Intoxicado, o alvo perde ${CharacterView.MIASMA_SPECIAL_CUT}% da Chance Crítica, Roubo de Vida, Penetração e Absorção até o fim da luta — e esses atributos caem ainda pela metade no golpe logo após cada ativação. Só pesa contra quem tem esses atributos (jogadores, no PVP).`],
                 ["Não causa dano", "Só enfraquece — a queda de dano do alvo vem dos atributos dele mesmo ficando piores."],
+                CharacterView.SPECIAL_CAP_ROW
+            ]
+        },
+
+        reflection: {
+            icon: "fa-shield-cat",
+            title: "Imitação",
+            summary: "Exclusivo do Mímico: soma dano VERDADEIRO extra em todo golpe seu que acerta.",
+            details: [
+                ["Fórmula", "Dano extra = Imitação% × Ataque do ALVO (não o seu) — some em cima do golpe normal, mitigado ou não."],
+                ["Dano verdadeiro", "Ignora Armadura e Absorção por completo. Não precisa de Crítico nem de sorte — ativa sempre que o golpe acerta."],
+                ["Contra monstros e chefes", "Funciona igual — usa o Ataque (ou dano do golpe) deles no lugar."],
                 CharacterView.SPECIAL_CAP_ROW
             ]
         }

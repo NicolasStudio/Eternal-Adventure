@@ -7,6 +7,7 @@ import HealFlash from "../combat/HealFlash.js";
 import HitFlash from "../combat/HitFlash.js";
 import BoitataBurn from "../services/BoitataBurn.js";
 import MiasmaService from "../services/MiasmaService.js";
+import MimicService from "../services/MimicService.js";
 import dungeons from "../data/dungeons.js";
 
 // Só os chefes "normais" (não o final secreto, que fica de fora da
@@ -884,6 +885,10 @@ export default class PvpView {
                 message += `<br><span class="combat-life-steal">Life Steal!</span> Recuperou <strong>${entry.lifeSteal}</strong> HP.`;
             }
 
+            if (entry.mimicBonus > 0) {
+                message += `<br>${MimicService.buildMessage(entry.mimicBonus)}`;
+            }
+
             if (entry.miasmaProc) {
                 message += `<br>${MiasmaService.buildProcMessage(opponentName, entry)}`;
             }
@@ -904,6 +909,10 @@ export default class PvpView {
 
         if (entry.absorbed > 0) {
             hitMessage += `<br><span class="combat-absorption">Absorção!</span> Absorveu <strong>${entry.absorbed}</strong> do golpe.`;
+        }
+
+        if (entry.mimicBonus > 0) {
+            hitMessage += `<br>${MimicService.buildMessage(entry.mimicBonus, { subject: opponentName })}`;
         }
 
         if (entry.miasmaProc) {
@@ -989,6 +998,10 @@ export default class PvpView {
                 message += `<br><span class="combat-life-steal">Life Steal!</span> Recuperou <strong>${entry.lifeSteal}</strong> HP.`;
             }
 
+            if (entry.mimicBonus > 0) {
+                message += `<br>${MimicService.buildMessage(entry.mimicBonus)}`;
+            }
+
             if (entry.miasmaProc) {
                 message += `<br>${MiasmaService.buildProcMessage(targetName, entry)}`;
             }
@@ -1013,6 +1026,10 @@ export default class PvpView {
                 hitMessage += `<br><span class="combat-absorption">Absorção!</span> Absorveu <strong>${entry.absorbed}</strong> do golpe.`;
             }
 
+            if (entry.mimicBonus > 0) {
+                hitMessage += `<br>${MimicService.buildMessage(entry.mimicBonus, { subject: attackerName })}`;
+            }
+
             if (entry.miasmaProc) {
                 hitMessage += `<br>${MiasmaService.buildProcMessage("você", entry)}`;
             }
@@ -1024,8 +1041,9 @@ export default class PvpView {
         // Ataque entre outras duas pessoas que não sou eu (ex: meu
         // aliado atacando, ou o inimigo atacando meu aliado).
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
+        const mimic = entry.mimicBonus > 0 ? ` <span class="combat-mimic">(Imitação!)</span>` : "";
         const miasma = entry.miasmaProc ? ` <span class="combat-miasma">(Miasma!)</span>` : "";
-        return `${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${miasma}.`;
+        return `${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${mimic}${miasma}.`;
 
     }
 
@@ -1112,7 +1130,7 @@ export default class PvpView {
 
             const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
-            await CombatToast.show(this.buildAttackMessage(entry), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry), speed);
+            await CombatToast.show(this.buildAttackMessage(entry), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry), speed);
 
             await this.sleep(500 / speed);
 
@@ -1201,7 +1219,7 @@ export default class PvpView {
 
                 const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
-                await CombatToast.show(this.buildTeamAttackMessage(entry, nameOf, petNameOf), this.buildTeamToastType(entry), 2 + MiasmaService.extraToastSeconds(entry), speed);
+                await CombatToast.show(this.buildTeamAttackMessage(entry, nameOf, petNameOf), this.buildTeamToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry), speed);
 
                 await this.sleep(450 / speed);
 

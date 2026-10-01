@@ -493,7 +493,6 @@ const boots = {
 
     },
 
-
 /* ==========================================
        PUTRID
 ========================================== */
@@ -610,6 +609,129 @@ const boots = {
         stats: {
             armor: 9,
             agility: 15
+        },
+
+        value: 0,
+        sellValue: 0
+
+    },
+
+/* ==========================================
+       MIMIC
+========================================== */
+    boots_mimic_common: {
+
+        id: "boots_mimic_common",
+        name: "Coturnos",
+        type: "armor",
+        slot: "boot",
+        class: "mimic",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/boots/boots-mimic-rarity-comum.png",
+
+        stats: {
+            armor: 1,
+            agility: 4
+        },
+
+        value: 80,
+        sellValue: 40
+
+    },
+
+    boots_mimic_uncommon: {
+
+        id: "boots_mimic_uncommon",
+        name: "Coturnos",
+        type: "armor",
+        slot: "boot",
+        class: "mimic",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/boots/boots-mimic-rarity-incomum.png",
+
+        stats: {
+            armor: 2,
+            agility: 7
+        },
+
+        value: 240,
+        sellValue: 120
+
+    },
+
+    boots_mimic_rare: {
+
+        id: "boots_mimic_rare",
+        name: "Coturnos",
+        type: "armor",
+        slot: "boot",
+        class: "mimic",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/boots/boots-mimic-rarity-rare.png",
+
+        stats: {
+            armor: 4,
+            agility: 12
+        },
+
+        value: 720,
+        sellValue: 360
+
+    },
+
+    boots_mimic_mystic: {
+
+        id: "boots_mimic_mystic",
+        name: "Coturnos",
+        type: "armor",
+        slot: "boot",
+        class: "mimic",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/boots/boots-mimic-rarity-mistico.png",
+
+        stats: {
+            armor: 6,
+            agility: 13
+        },
+
+        value: 2160,
+        sellValue: 1080
+
+    },
+
+    boots_mimic_legendary: {
+
+        id: "boots_mimic_legendary",
+        name: "Coturnos",
+        type: "armor",
+        slot: "boot",
+        class: "mimic",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/boots/boots-mimic-rarity-lendario.png",
+
+        stats: {
+            armor: 8,
+            agility: 14
+        },
+
+        value: 0,
+        sellValue: 13240
+
+    },
+
+    boots_mimic_ultraje: {
+
+        id: "boots_mimic_ultraje",
+        name: "Coturnos",
+        type: "armor",
+        slot: "boot",
+        class: "mimic",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/boots/boots-mimic-rarity-ultraje.png",
+
+        stats: {
+            armor: 10,
+            agility: 16
         },
 
         value: 0,

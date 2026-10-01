@@ -24,11 +24,12 @@ const STATS = [
     ["armor", "Armadura", ""],
     ["agility", "Agilidade", ""],
     null,
-    ["criticalChance", "Chance Crítica", "%"],
-    ["lifeSteal", "Roubo de Vida", "%"],
-    ["penetration", "Penetração", "%"],
     ["absorption", "Absorção", "%"],
-    ["miasmaChance", "Miasma", "%"]
+    ["criticalChance", "Chance Crítica", "%"],
+    ["reflection", "Imitação", "%"],
+    ["miasmaChance", "Miasma", "%"],
+    ["penetration", "Penetração", "%"],
+    ["lifeSteal", "Roubo de Vida", "%"]
 ];
 
 // Só estas chaves de atributo passam do banco pra tela.

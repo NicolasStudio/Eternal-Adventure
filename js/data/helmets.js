@@ -612,6 +612,129 @@ const helmets = {
         value: 0,
         sellValue: 0
 
+    },
+
+/* ==========================================
+       MIMIC
+========================================== */
+    helmet_mimic_common: {
+
+        id: "helmet_mimic_common",
+        name: "Boina Vermelha",
+        type: "armor",
+        slot: "helmet",
+        class: "mimic",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/helmets/helmets-mimic-rarity-comum.png",
+
+        stats: {
+            armor: 2,
+            reflection: 2
+        },
+
+        value: 50,
+        sellValue: 20
+
+    },
+
+    helmet_mimic_uncommon: {
+
+        id: "helmet_mimic_uncommon",
+        name: "Boina Vermelha",
+        type: "armor",
+        slot: "helmet",
+        class: "mimic",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/helmets/helmets-mimic-rarity-incomum.png",
+
+        stats: {
+            armor: 4,
+            reflection: 3
+        },
+
+        value: 200,
+        sellValue: 120
+
+    },
+
+    helmet_mimic_rare: {
+
+        id: "helmet_mimic_rare",
+        name: "Boina Vermelha",
+        type: "armor",
+        slot: "helmet",
+        class: "mimic",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/helmets/helmets-mimic-rarity-rare.png",
+
+        stats: {
+            armor: 6,
+            reflection: 4
+        },
+
+        value: 720,
+        sellValue: 360
+
+    },
+
+    helmet_mimic_mystic: {
+
+        id: "helmet_mimic_mystic",
+        name: "Boina Vermelha",
+        type: "armor",
+        slot: "helmet",
+        class: "mimic",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/helmets/helmets-mimic-rarity-mistico.png",
+
+        stats: {
+            armor: 8,
+            reflection: 6
+        },
+
+        value: 2160,
+        sellValue: 1080
+
+    },
+
+    helmet_mimic_legendary: {
+
+        id: "helmet_mimic_legendary",
+        name: "Boina Vermelha",
+        type: "armor",
+        slot: "helmet",
+        class: "mimic",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/helmets/helmets-mimic-rarity-lendario.png",
+
+        stats: {
+            armor: 14,
+            reflection: 8
+        },
+
+        value: 0,
+        sellValue: 13240
+
+    },
+
+    helmet_mimic_ultraje: {
+
+        id: "helmet_mimic_ultraje",
+        name: "Boina Vermelha",
+        type: "armor",
+        slot: "helmet",
+        class: "mimic",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/helmets/helmets-mimic-rarity-ultraje.png",
+
+        stats: {
+            armor: 18,
+            reflection: 10
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

@@ -493,7 +493,9 @@ export default class SaveService {
                 absorption: stats.absorption,
                 // Só o Pútrido tem isso > 0 — em qualquer outra classe
                 // fica 0 (ver PlayerStats.getFinalStats).
-                miasmaChance: stats.miasmaChance
+                miasmaChance: stats.miasmaChance,
+                // Só o Mímico tem isso > 0 (ver MimicService.js).
+                reflection: stats.reflection
             },
             equipment
         };
