@@ -7,14 +7,18 @@
    entra reduzido, então não tem como morrer "antes de curar").
 ========================================================== */
 
-// Fração do golpe absorvida quando a Absorção ativa (era 0.5 — reduzida
-// porque o Guerreiro full dominava o PVP).
-export const ABSORPTION_RATIO = 0.42;
+// Fração do golpe absorvida quando a Absorção ativa — depende de QUEM
+// bateu: contra a máquina (monstro de dungeon, chefe do Cooperativo) o
+// golpe é absorvido inteiro; contra outro jogador (PVP), só metade. Sem
+// essa separação, o valor que equilibrava o PVP deixava o Guerreiro sem
+// conseguir passar dos chefes a partir do nível 70.
+export const ABSORPTION_RATIO_PVE = 1;
+export const ABSORPTION_RATIO_PVP = 0.5;
 
 // Nunca passa disso, mesmo somando muito equipamento.
 export const ABSORPTION_CAP = 95;
 
 // Quanto do golpe foi absorvido (0 se não ativou).
-export function absorbedAmount(preAbsorption, activated) {
-    return activated ? Math.floor(preAbsorption * ABSORPTION_RATIO) : 0;
+export function absorbedAmount(preAbsorption, activated, ratio) {
+    return activated ? Math.floor(preAbsorption * ratio) : 0;
 }

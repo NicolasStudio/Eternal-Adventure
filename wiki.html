@@ -30,7 +30,7 @@
 
             <nav class="wiki-nav" id="wiki-nav">
 
-                <a href="#classes" class="wiki-nav-item" data-keywords="classes guerreiro arqueiro mago barbaro putrido">
+                <a href="#classes" class="wiki-nav-item" data-keywords="classes guerreiro arqueiro mago barbaro putrido pútrido mimico mímico miasma imitação absorção">
                     <i class="fa-solid fa-shield-halved"></i> Classes
                 </a>
 
@@ -128,18 +128,18 @@
             <section id="classes" class="wiki-section">
 
                 <h2><i class="fa-solid fa-shield-halved"></i> Classes</h2>
-                <p class="wiki-intro">Ao começar uma aventura, você escolhe uma entre cinco classes. Cada uma tem um jeito bem diferente de jogar — não existe "a melhor", existe a que combina com o seu estilo.</p>
+                <p class="wiki-intro">Ao começar uma aventura, você escolhe uma entre seis classes. Cada uma tem um jeito bem diferente de jogar — não existe "a melhor", existe a que combina com o seu estilo.</p>
 
                 <div class="wiki-cards">
 
                     <article class="wiki-card">
                         <h3><i class="fa-solid fa-shield"></i> Guerreiro</h3>
-                        <p>O tanque do grupo. Armadura alta e dano mais baixo — ele não é quem mais causa dano, mas é quem mais aguenta apanhar. Sua agilidade é baixa, então raramente age primeiro num combate. Os itens dele se apoiam em <strong>Absorção</strong>, um atributo exclusivo dele: uma chance de ativar a cada golpe recebido (igual ao Roubo de Vida, só que do lado de quem apanha) que, quando ativa, mitiga parte do dano daquele golpe e ainda recupera um pouco de vida.</p>
+                        <p>O tanque do grupo. Armadura alta e dano mais baixo — ele não é quem mais causa dano, mas é quem mais aguenta apanhar. Sua agilidade é baixa, então raramente age primeiro num combate. Os itens dele se apoiam em <strong>Absorção</strong>, um atributo exclusivo dele: uma chance de ativar a cada golpe recebido (igual ao Roubo de Vida, só que do lado de quem apanha). Quando ativa, contra monstros e chefes ele absorve o golpe inteiro; contra outros jogadores, absorve metade.</p>
                     </article>
 
                     <article class="wiki-card">
                         <h3><i class="fa-solid fa-bow-arrow"></i> Arqueiro</h3>
-                        <p>Focado em agilidade — na prática, isso significa que ele quase sempre age primeiro no combate, e tem mais chance de esquivar de ataques inimigos. O dano dele é mediano, mas a <strong>Chance Crítica</strong> alta faz ele estourar golpes bem mais fortes de vez em quando.</p>
+                        <p>Focado em agilidade — na prática, isso significa que ele quase sempre age primeiro no combate, e tem mais chance de esquivar de ataques inimigos. O dano dele é mediano, mas a <strong>Chance Crítica</strong> alta faz ele estourar golpes 60% mais fortes de vez em quando.</p>
                     </article>
 
                     <article class="wiki-card">
@@ -154,7 +154,12 @@
 
                     <article class="wiki-card">
                         <h3><i class="fa-solid fa-skull-crossbones"></i> Pútrido</h3>
-                        <p>Um debuffer, não um "dano puro": ataque mediano, mas com um pouco mais de vida que as outras classes e a segunda maior agilidade do jogo (atrás só do Arqueiro). O forte dele é o <strong>Miasma</strong>, atributo exclusivo — chance, a cada golpe que acerta, de intoxicar o alvo. Na próxima vez que o alvo intoxicado atacar ou apanhar, os atributos especiais dele (Crítico, Roubo de Vida, Penetração ou Absorção) saem pela metade.</p>
+                        <p>Um debuffer, não um "dano puro": ataque mediano, mas com um pouco mais de vida que as outras classes e a segunda maior agilidade do jogo (atrás só do Arqueiro). O forte dele é o <strong>Miasma</strong>, atributo exclusivo — chance, a cada golpe que acerta, de intoxicar o alvo (até 3 acúmulos). O alvo intoxicado perde Ataque e Agilidade (3%, 6% e 10%) e um quarto dos atributos especiais (Crítico, Roubo de Vida, Penetração ou Absorção) até o fim da luta — e esses especiais ainda caem pela metade no golpe logo após cada ativação.</p>
+                    </article>
+
+                    <article class="wiki-card">
+                        <h3><i class="fa-solid fa-masks-theater"></i> Mímico</h3>
+                        <p>Dano próprio baixo, mas armadura alta e agilidade acima da média. O forte dele é a <strong>Imitação</strong>, atributo exclusivo: todo golpe que acerta causa um dano extra <strong>verdadeiro</strong> (ignora armadura e Absorção) com base na Vida Máxima do alvo. Quanto mais vida o alvo tem, mais ele sofre — por isso o Mímico brilha contra chefes, e é mais contido contra outros jogadores.</p>
                     </article>
 
                 </div>
@@ -164,7 +169,7 @@
             <section id="comparativo" class="wiki-section">
 
                 <h2><i class="fa-solid fa-chart-line"></i> Comparativo de Classes</h2>
-                <p class="wiki-intro">Um raio-x visual de <strong>Vida, Ataque, Armadura e Agilidade</strong> — só os atributos base de cada classe (sem nenhum equipamento), nos níveis 20, 50 e 100. Cada eixo é comparado contra o maior valor que QUALQUER classe alcança naquele atributo no nível 100 — então dá pra comparar as 5 formas diretamente, olhando o tamanho de cada "pizza".</p>
+                <p class="wiki-intro">Um raio-x visual de <strong>Vida, Ataque, Armadura e Agilidade</strong> — só os atributos base de cada classe (sem nenhum equipamento), nos níveis 20, 50 e 100. Cada eixo é comparado contra o maior valor que QUALQUER classe alcança naquele atributo no nível 100 — então dá pra comparar as 6 formas diretamente, olhando o tamanho de cada "pizza".</p>
 
                 <div class="wiki-radar-grid">
 
@@ -193,9 +198,14 @@
                         <canvas id="radar-putrid"></canvas>
                     </article>
 
+                    <article class="wiki-radar-card">
+                        <h3><i class="fa-solid fa-masks-theater"></i> Mímico</h3>
+                        <canvas id="radar-mimic"></canvas>
+                    </article>
+
                 </div>
 
-                <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: o eixo cheio (100%) sempre pertence a alguém — não significa "o máximo possível", só "quem é o mais forte nesse atributo específico no nível 100". Ex: a Armadura do Guerreiro sempre fecha o eixo por completo, porque é ele quem detém o maior valor.</p>
+                <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: o eixo cheio (100%) sempre pertence a alguém — não significa "o máximo possível", só "quem é o mais forte nesse atributo específico no nível 100". Ex: a Vida do Pútrido sempre fecha o eixo por completo, porque é ele quem detém o maior valor.</p>
 
             </section>
 
@@ -413,8 +423,9 @@
                 <p>Só um pet pode ficar equipado por vez, também pela aba "Pets". O pet equipado soma atributos fixos ao seu personagem — Vida, Ataque, Armadura e Agilidade — mas <strong>escalados pela fome atual</strong>: com 50% de fome ele só entrega metade desses atributos, com 20% só 20%, e com a fome zerada não soma nada.</p>
 
                 <h3>Ataque do Pet</h3>
-                <p>Um pet equipado ataca o inimigo a cada turno seu, além do seu próprio ataque — um golpe extra, garantido (sem chance de esquiva ou crítico), com linha própria no log de combate. Funciona em Dungeons, PVP e Cooperativo. Algumas espécies, além do dano, também curam você (e seus aliados, em PVP 2x2 e Cooperativo) na mesma quantidade a cada ataque. O efeito escala com a fome, igual aos outros atributos.</p>
+                <p>Um pet equipado ataca o inimigo a cada turno seu, além do seu próprio ataque — um golpe extra, garantido (sem chance de esquiva ou crítico), com linha própria no log de combate. Funciona em Dungeons, PVP e Cooperativo. Algumas espécies, em vez de dano, curam a cada turno seu — você, ou um aliado sorteado em PVP 2x2 e Cooperativo. O efeito escala com a fome, igual aos outros atributos.</p>
                 <p>O Boitatá tem uma terceira variante: ao acertar o primeiro golpe, incendeia o alvo, que passa a levar dano direto (não passa pela armadura) a cada turno seu até o combate acabar. Contra os elementos dos chefes do Cooperativo, a queimadura é <strong>fraca</strong> contra criaturas de Água e <strong>forte</strong> contra criaturas de Planta.</p>
+                <p>A cura e a queimadura crescem junto com o pet: valem o nível em que o estágio atual evoluiu somado ao nível atual dele — ou seja, sobem a cada nível e dão um salto a cada evolução.</p>
 
                 <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: mantenha seu pet bem alimentado antes de encarar um combate difícil — com a fome baixa, ele praticamente não ajuda em nada.</p>
 
@@ -459,7 +470,8 @@
 
                 <h2><i class="fa-solid fa-users"></i> Cooperativo</h2>
                 <p class="wiki-intro">Liberado a partir do nível 100. Reúne um esquadrão de 4 jogadores pareados automaticamente pra enfrentar juntos um mesmo chefe, avançando andar por andar.</p>
-                <p>No fim de cada andar, todo mundo precisa confirmar "Continuar" antes do grupo avançar — dá tempo de usar itens do inventário e curar entre um andar e outro. Se alguém sair no meio do caminho, os outros seguem em frente sem essa pessoa.</p>
+                <p>No fim de cada andar, todo mundo precisa confirmar "Continuar" antes do grupo avançar — dá tempo de usar itens do inventário, curar e trocar de equipamento ou de pet entre um andar e outro (a troca já vale no andar seguinte). Se alguém sair no meio do caminho, os outros seguem em frente sem essa pessoa.</p>
+                <p>Lutas longas aceleram sozinhas: 2x depois de 1 minuto e 4x depois de 2 minutos. Só a animação fica mais rápida — o resultado da luta não muda.</p>
 
             </section>
 
@@ -510,7 +522,7 @@
                 <h2><i class="fa-solid fa-comments"></i> Chat</h2>
                 <p class="wiki-intro">Acessível pelo ícone de balões, logo abaixo do seu HUD, em qualquer tela, inclusive durante combates de Dungeon, PVP e Cooperativo. Um chat global, com todo jogador online no mesmo canal — sem salas nem conversa privada.</p>
                 <p>Mensagens somem sozinhas depois de 1 hora. Pra evitar spam, não dá pra mandar a mesma mensagem duas vezes seguidas em menos de 5 minutos, nem mandar muito rápido uma atrás da outra — o jogo avisa quando isso acontece.</p>
-                <p>Uma bolinha vermelha no ícone do Chat aparece quando chegam mensagens novas enquanto a janela está fechada.</p>
+                <p>Uma bolinha vermelha no ícone do Chat aparece quando chegam mensagens novas enquanto a janela está fechada. Se o jogo estiver em outra aba, a própria aba do navegador mostra quantas mensagens chegaram — inclusive no ícone, se a aba estiver fixada.</p>
 
             </section>
 
@@ -572,7 +584,7 @@
         import baseStatsL1 from "./js/data/baseStatsL1.js";
         import levels from "./js/data/levels.js";
 
-        const CLASS_IDS = ["warrior", "archer", "mage", "barbarian", "putrid"];
+        const CLASS_IDS = ["warrior", "archer", "mage", "barbarian", "putrid", "mimic"];
         const STAT_KEYS = ["life", "attack", "armor", "agility"];
         const RADAR_LABELS = ["Vida", "Ataque", "Armadura", "Agilidade"];
         const LEVELS_TO_SHOW = [20, 50, 100];

@@ -656,7 +656,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-mimic-rarity-mistico.png",
 
         stats: {
-            armor: 20
+            armor: 25
         },
 
         value: 2700,
@@ -675,7 +675,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-mimic-rarity-lendario.png",
 
         stats: {
-            armor: 27
+            armor: 32
         },
 
         value: 0,
@@ -694,7 +694,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-mimic-rarity-ultraje.png",
 
         stats: {
-            armor: 34
+            armor: 39
         },
 
         value: 0,

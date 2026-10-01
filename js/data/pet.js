@@ -62,7 +62,7 @@ const pets = {
             hability: {
                 name: "Mordida",
                 description: "Uma mordida poderosa que causa dano verdadeiro.",
-                damage: 2,
+                damage: 10,
             }
         }
     },
@@ -96,7 +96,7 @@ const pets = {
             hability: {
                 name: "Mordida",
                 description: "Uma mordida poderosa que causa dano verdadeiro.",
-                damage: 7,
+                damage: 14,
             }
         }
     },
@@ -130,7 +130,7 @@ const pets = {
             hability: {
                 name: "Mordida",
                 description: "Uma mordida poderosa que causa dano verdadeiro.",
-                damage: 14,
+                damage: 21,
             }
         }
     },

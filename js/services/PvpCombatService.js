@@ -2,8 +2,8 @@ import PetService from "./PetService.js";
 import PowerService from "./PowerService.js";
 import BoitataBurn from "./BoitataBurn.js";
 import MiasmaService from "./MiasmaService.js";
-import MimicService from "./MimicService.js";
-import { ABSORPTION_CAP, absorbedAmount } from "../combat/Absorption.js";
+import MimicService, { HP_DIVISOR_PVP as MIMIC_HP_DIVISOR_PVP } from "./MimicService.js";
+import { ABSORPTION_CAP, ABSORPTION_RATIO_PVP, absorbedAmount } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
 const DODGE_CAP = 40;
@@ -17,14 +17,19 @@ const DODGE_CAP = 40;
 // v4: Miasma ganhou acúmulos de Intoxicação (−Ataque/−Agilidade) — muda
 // dano e esquiva, então o resultado da luta muda. Junto: Absorção passou
 // a absorver metade do golpe (antes anulava o golpe inteiro).
-// v5: Crítico 1.6x (era 1.5x), Absorção 42% (era 50%) e Miasma com
+// v5: Crítico 1.6x (era 1.5x), Absorção 50% no PVP e Miasma com
 // especiais −25% a luta toda + acúmulos 3/6/10%.
 // v6: Mímico — soma dano verdadeiro extra (Imitação% do Ataque do alvo)
 // em todo golpe que acerta. Não consome rng() a mais, mas muda o
 // resultado de qualquer luta com um Mímico nos dois lados.
+<<<<<<< HEAD
 // v7: Imitação deixou de ser dano à parte — agora soma Imitação% do
 // Ataque do alvo ao PRÓPRIO Ataque antes da mitigação, passando por
 // Crítico/Armadura/Absorção igual o resto do golpe.
+=======
+// v7: Imitação passou a ser % da Vida Máxima do alvo (era do Ataque), com
+// divisor próprio no PVP (÷30).
+>>>>>>> 9b1704d9788e0a7a5f9dde9da29078214114e9fe
 export const TEAM_SIM_VERSION = 7;
 
 /*
@@ -209,9 +214,15 @@ export default class PvpCombatService {
                 // (ver Absorption.js). Sempre consome 1 rng(), ativando ou
                 // não — a ordem dos sorteios não pode mudar.
                 const absorptionChance = Math.min(ABSORPTION_CAP, (defender.absorption ?? 0) * defendDebuff);
-                const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance);
+                const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance, ABSORPTION_RATIO_PVP);
 
+<<<<<<< HEAD
                 const damage = preAbsorption - absorbed;
+=======
+                // Imitação do Mímico: dano VERDADEIRO extra, por cima do
+                // golpe já mitigado/absorvido (ver MimicService.js).
+                const mimicBonus = MimicService.getBonusDamage(defender.maxHP, attacker.reflection ?? 0, MIMIC_HP_DIVISOR_PVP);
+>>>>>>> 9b1704d9788e0a7a5f9dde9da29078214114e9fe
 
                 // Quanto do dano final veio da Imitação (só pra mensagem) —
                 // proporcional, já que o bônus entrou junto no Ataque.
@@ -460,9 +471,15 @@ export default class PvpCombatService {
                 const preAbsorption = Math.max(1, Math.floor(totalAttack * criticalMultiplier * mitigation));
 
                 const absorptionChance = Math.min(ABSORPTION_CAP, (target.absorption ?? 0) * defendDebuff);
-                const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance);
+                const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance, ABSORPTION_RATIO_PVP);
 
+<<<<<<< HEAD
                 const damage = preAbsorption - absorbed;
+=======
+                // Imitação do Mímico: dano VERDADEIRO extra, por cima do
+                // golpe já mitigado/absorvido (ver MimicService.js).
+                const mimicBonus = MimicService.getBonusDamage(target.maxHP, attacker.reflection ?? 0, MIMIC_HP_DIVISOR_PVP);
+>>>>>>> 9b1704d9788e0a7a5f9dde9da29078214114e9fe
 
                 // Quanto do dano final veio da Imitação (só pra mensagem) —
                 // proporcional, já que o bônus entrou junto no Ataque.

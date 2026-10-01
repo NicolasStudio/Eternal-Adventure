@@ -1,8 +1,8 @@
 import PvpCombatService from "./PvpCombatService.js";
 import BoitataBurn from "./BoitataBurn.js";
 import MiasmaService from "./MiasmaService.js";
-import MimicService from "./MimicService.js";
-import { ABSORPTION_CAP, absorbedAmount } from "../combat/Absorption.js";
+import MimicService, { HP_DIVISOR_PVE as MIMIC_HP_DIVISOR_PVE } from "./MimicService.js";
+import { ABSORPTION_CAP, ABSORPTION_RATIO_PVE, absorbedAmount } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
 // Boss tem HP colossal (milhares) contra só 4 atacantes por rodada —
@@ -272,9 +272,17 @@ export default class RaidCombatService {
                 const preAbsorption = Math.max(1, Math.floor(totalAttackPower * criticalMultiplier * mitigation));
 
                 const absorptionChance = Math.min(ABSORPTION_CAP, (target.absorption ?? 0) * defendDebuff);
-                const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance);
+                const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance, ABSORPTION_RATIO_PVE);
 
+<<<<<<< HEAD
                 const damage = preAbsorption - absorbed;
+=======
+                // Imitação do Mímico: dano VERDADEIRO extra, por cima do
+                // golpe já mitigado/absorvido (ver MimicService.js). O
+                // chefe nunca tem Imitação (não é Mímico), mas PODE ser
+                // alvo dele (usa o `attack` de conveniência do snapshot).
+                const mimicBonus = MimicService.getBonusDamage(target.maxHP, attacker.reflection ?? 0, MIMIC_HP_DIVISOR_PVE);
+>>>>>>> 9b1704d9788e0a7a5f9dde9da29078214114e9fe
 
                 // Quanto do dano final veio da Imitação (só pra mensagem) —
                 // proporcional, já que o bônus entrou junto no Ataque.

@@ -1,6 +1,30 @@
 export default [
 
     {
+        version: "Beta 0.2",
+        date: "Outubro de 2026",
+        changes: [
+            "Nova classe: Pútrido — o especial dele é o Miasma: cada ativação intoxica o alvo (até 3 acúmulos), tirando 3%/6%/10% de Ataque e Agilidade e 25% dos atributos especiais até o fim da luta, além de cortar os especiais pela metade no golpe seguinte",
+            "Nova classe: Mímico — o especial dele é a Imitação: todo golpe que acerta causa dano verdadeiro extra com base na Vida Máxima do alvo (forte contra chefes, mais contido no PVP)",
+            "Pútrido e Mímico ganharam transcendência (Portal da Luz/Trevas)",
+            "Absorção (Guerreiro): agora absorve o golpe inteiro contra monstros e chefes, e metade contra jogadores",
+            "Golpe Crítico agora multiplica o dano por 1,6x (era 1,5x)",
+            "Rebalanceamento de transcendências: Mago −5 de Ataque, Arqueiro +10 de Ataque e +5 de Agilidade, Bárbaro +10 de Ataque e mais Vida",
+            "Guerreiro: mais Agilidade na Calça e nas Botas Místicas, pra encarar os chefes a partir do nível 70",
+            "Pets: a cura do Duende e a queimadura do Boitatá agora crescem com o pet (nível de evolução + nível atual — até 82 no nível 50); mordida do Lobo aumentada",
+            "Pedra Rubi (Vida) aumentada pra 50/150/300 — armas já encantadas são atualizadas sozinhas ao carregar o save",
+            "Anjos Caídos com 500 de Vida a menos; chefes do Cooperativo mais resistentes",
+            "Cooperativo: corrigido trocar de pet entre andares (vida acima do máximo, habilidade do pet errado); lutas longas aceleram pra 2x depois de 1 minuto e 4x depois de 2",
+            "PVP 2x2: mensagens de combate não ficam mais escondidas atrás dos cartões de vida",
+            "Novo padrão de cores das mensagens de combate: normal, crítico, cura e pet cada um com sua cor",
+            "Tooltips: atributos especiais zerados não aparecem mais nos itens, e as explicações dos atributos foram atualizadas",
+            "Chat: a aba do navegador mostra quantas mensagens novas chegaram; corrigido o botão do chat sem clique na Fazenda",
+            "Conta: sair da conta agora salva e limpa os dados do navegador, evitando puxar o personagem de outra conta",
+            "Wiki: adicionado o Mímico e atualizadas as seções de Classes, Pets e Cooperativo"
+        ]
+    },
+
+    {
         version: "Beta 0.1",
         date: "Setembro de 2026",
         changes: [

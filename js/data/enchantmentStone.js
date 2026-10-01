@@ -20,7 +20,7 @@ const enchantmentStone = {
 
         description: "Uma das pedras mais valiosas do mundo. Pode ser usada para aumentar a Vida do jogador.",
         stats: {
-            life: 7
+            life: 50
         },
         enchantPrice: 10000,
         sellValue: 300
@@ -43,7 +43,7 @@ const enchantmentStone = {
 
         description: "Uma das pedras mais valiosas do mundo. Pode ser usada para aumentar a Vida do jogador.",
         stats: {
-            life: 10
+            life: 150
         },
         enchantPrice: 20000,
         sellValue: 700
@@ -66,7 +66,7 @@ const enchantmentStone = {
 
         description: "Uma das pedras mais valiosas do mundo. Pode ser usada para aumentar a Vida do jogador.",
         stats: {
-            life: 15
+            life: 300
         },
         enchantPrice: 30000,
         sellValue: 1000

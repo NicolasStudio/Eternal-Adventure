@@ -7,8 +7,9 @@ import PowerService from "../services/PowerService.js";
 import PetFeedModal from "../ui/components/modals/PetFeedModal.js";
 import FarmConfirmModal from "../ui/components/modals/FarmConfirmModal.js";
 import { STACK_PERCENTS as MIASMA_STACK_PERCENTS, STACK_MAX as MIASMA_STACK_MAX, PERSISTENT_SPECIAL_MULTIPLIER as MIASMA_SPECIAL_KEEP } from "../services/MiasmaService.js";
-import { ABSORPTION_RATIO, ABSORPTION_CAP } from "../combat/Absorption.js";
+import { ABSORPTION_RATIO_PVE, ABSORPTION_RATIO_PVP, ABSORPTION_CAP } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
+import { HP_DIVISOR_PVE as MIMIC_HP_DIVISOR_PVE, HP_DIVISOR_PVP as MIMIC_HP_DIVISOR_PVP } from "../services/MimicService.js";
 
 export default class CharacterView {
     constructor(game) {
@@ -1323,9 +1324,10 @@ export default class CharacterView {
         absorption: {
             icon: "fa-shield-heart",
             title: "Absorção",
-            summary: `Chance, a cada golpe RECEBIDO, de absorver ${Math.round(ABSORPTION_RATIO * 100)}% do dano.`,
+            summary: "Chance, a cada golpe RECEBIDO, de absorver o dano.",
             details: [
-                ["Quando ativa", `O golpe acerta, mas você toma só ${Math.round((1 - ABSORPTION_RATIO) * 100)}% do dano — o resto é absorvido.`],
+                ["Contra monstros e chefes", `Absorve ${Math.round(ABSORPTION_RATIO_PVE * 100)}% do golpe.`],
+                ["Contra jogadores (PVP)", `Absorve ${Math.round(ABSORPTION_RATIO_PVP * 100)}% do golpe — você toma o resto.`],
                 ["Não é esquiva", "A Esquiva evita o golpe inteiro; a Absorção entra DEPOIS do golpe acertar. As duas se somam."],
                 ["Teto", `Nunca passa de ${ABSORPTION_CAP}% de chance. A parte do equipamento também é limitada pela maior raridade equipada (Comum 8% … Ultraje 45%); o Quartzo Rosa soma por cima.`],
                 CharacterView.MIASMA_CUT_ROW
@@ -1349,9 +1351,15 @@ export default class CharacterView {
             title: "Imitação",
             summary: "Exclusivo do Mímico: soma Imitação% do Ataque do alvo ao seu próprio Ataque em todo golpe.",
             details: [
+<<<<<<< HEAD
                 ["Fórmula", "Bônus de Ataque = Imitação% × Ataque do ALVO (não o seu) — soma no seu Ataque ANTES da mitigação."],
                 ["Não é dano à parte", "O bônus passa por Crítico, Armadura e Absorção do alvo igual o resto do golpe. Não precisa de sorte pra ativar — só pra ser ou não crítico/absorvido, como qualquer dano."],
                 ["Contra monstros e chefes", "Funciona igual — usa o Ataque (ou dano do golpe) deles no lugar."],
+=======
+                ["Contra monstros e chefes", `Dano extra = (Imitação ÷ ${MIMIC_HP_DIVISOR_PVE})% da Vida Máxima do ALVO. Ex: 35% de Imitação = ${(35 / MIMIC_HP_DIVISOR_PVE).toFixed(1).replace(".", ",")}% da vida máxima dele por golpe.`],
+                ["Contra jogadores (PVP)", `Dano extra = (Imitação ÷ ${MIMIC_HP_DIVISOR_PVP})% da Vida Máxima do ALVO. Ex: 35% de Imitação = ${(35 / MIMIC_HP_DIVISOR_PVP).toFixed(2).replace(".", ",")}% da vida máxima dele por golpe.`],
+                ["Dano verdadeiro", "Ignora Armadura e Absorção por completo. Não precisa de Crítico nem de sorte — ativa sempre que o golpe acerta."],
+>>>>>>> 9b1704d9788e0a7a5f9dde9da29078214114e9fe
                 CharacterView.SPECIAL_CAP_ROW
             ]
         }

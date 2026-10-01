@@ -99,8 +99,8 @@ export default class ClassSelectionScreen {
         const specialties = {
 
             warrior: [
-                "⚔️ Alto Ataque",
-                "🛡️ Alta Armadura",
+                "🪨 Absorção: anula golpes de monstros",
+                "🛡️ Alta Armadura e Vida",
                 "👢 Baixa Agilidade"
             ],
 
@@ -119,17 +119,17 @@ export default class ClassSelectionScreen {
             barbarian: [
                 "🩸 Alto Roubo de Vida",
                 "💪 Ataque e Agilidade Equilibrados",
-                "🪨 Absorção Baixa"
+                "❤️ Vida Baixa"
             ],
 
             putrid: [
-                "🦠 Dano Médio",
-                "🧪 Debuff em atributos especiais dos inimigos",
+                "🦠 Dano Médio e Vida Alta",
+                "🧪 Intoxica: enfraquece Ataque, Agilidade e especiais",
                 "🏃 Agilidade considerada"
             ],
 
             mimic: [
-                "🪞 Dano Baixo, mas Imita o Ataque do Inimigo",
+                "🪞 Dano verdadeiro pela Vida do Inimigo",
                 "🛡️ Armadura Alta",
                 "🏃 Agilidade acima da Média"
             ]
