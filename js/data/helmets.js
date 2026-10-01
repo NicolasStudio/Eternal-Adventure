@@ -688,7 +688,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-mimic-rarity-mistico.png",
 
         stats: {
-            armor: 8,
+            armor: 15,
             reflection: 6
         },
 
@@ -708,7 +708,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-mimic-rarity-lendario.png",
 
         stats: {
-            armor: 14,
+            armor: 21,
             reflection: 8
         },
 
@@ -728,7 +728,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-mimic-rarity-ultraje.png",
 
         stats: {
-            armor: 18,
+            armor: 25,
             reflection: 10
         },
 

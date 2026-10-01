@@ -3268,7 +3268,7 @@ const monsters = [
         sprite: "assets/img/monsters/creature_up_class/fallen_angel_of_light.png",
 
         status: {
-            vidaMaxima: 1800,
+            vidaMaxima: 1592, // 3821 no jogo (×2,4 do monsterScaling) — era 1800 (4320)
             dano: 300,
             nomeAtaque: "Julgamento Divino",
             armadura: 150,
@@ -3293,7 +3293,7 @@ const monsters = [
         sprite: "assets/img/monsters/creature_up_class/dark_fallen_angel.png",
 
         status: {
-            vidaMaxima: 1800,
+            vidaMaxima: 1592, // 3821 no jogo (×2,4 do monsterScaling) — era 1800 (4320)
             dano: 300,
             nomeAtaque: "Aço Sombrio",
             armadura: 150,

@@ -181,6 +181,8 @@ export default class SaveService {
         // carregado — barato e sempre seguro de repetir.
         this.refreshAllItemStats(player);
 
+        this.upgradeLifeEnchantments(player);
+
         player.progress = data.progress ?? player.progress;
 
         // Saves de antes das conquistas existirem não têm esses dois
@@ -313,6 +315,42 @@ export default class SaveService {
         if ((item.level ?? 0) > PET_MAX_LEVEL) {
             item.level = PET_MAX_LEVEL;
             item.xp = 0;
+        }
+
+    }
+
+    // O Rubi (pedra de Vida) passou de 7/10/15 pra 50/150/300. O bônus de
+    // Vida do encantamento é somado direto na Vida Máxima no momento em
+    // que se encanta (Player.applyEnchantment) e a arma só guarda o valor
+    // aplicado — então quem encantou antes ficava pra sempre com o
+    // antigo. Troca o valor na arma e soma a DIFERENÇA na Vida Máxima.
+    // Idempotente: valores antigos e novos não se repetem, então depois
+    // da primeira vez não encontra mais nada pra converter.
+    // (Arma vendida/descartada depois de encantada não é encontrada —
+    // fica com o bônus antigo, não tem como saber que ela existiu.)
+    static LIFE_ENCHANT_UPGRADES = { 7: 50, 10: 150, 15: 300 };
+
+    static upgradeLifeEnchantments(player) {
+
+        const weapons = [player.equipment.weapon, ...player.inventory]
+            .filter(item => item?.slot === "weapon" && item.enchantments?.life != null);
+
+        let gained = 0;
+
+        weapons.forEach(weapon => {
+
+            const upgraded = this.LIFE_ENCHANT_UPGRADES[weapon.enchantments.life];
+
+            if (upgraded == null) return;
+
+            gained += upgraded - weapon.enchantments.life;
+            weapon.enchantments.life = upgraded;
+
+        });
+
+        if (gained > 0) {
+            player.maxHP += gained;
+            player.currentHP += gained;
         }
 
     }
