@@ -9,6 +9,7 @@ import FarmConfirmModal from "../ui/components/modals/FarmConfirmModal.js";
 import { STACK_PERCENTS as MIASMA_STACK_PERCENTS, STACK_MAX as MIASMA_STACK_MAX, PERSISTENT_SPECIAL_MULTIPLIER as MIASMA_SPECIAL_KEEP } from "../services/MiasmaService.js";
 import { ABSORPTION_RATIO_PVE, ABSORPTION_RATIO_PVP, ABSORPTION_CAP } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
+import { HP_DIVISOR_PVE as MIMIC_HP_DIVISOR_PVE, HP_DIVISOR_PVP as MIMIC_HP_DIVISOR_PVP } from "../services/MimicService.js";
 
 export default class CharacterView {
     constructor(game) {
@@ -1350,9 +1351,9 @@ export default class CharacterView {
             title: "Imitação",
             summary: "Exclusivo do Mímico: soma dano VERDADEIRO extra em todo golpe seu que acerta.",
             details: [
-                ["Fórmula", "Dano extra = Imitação% × Ataque do ALVO (não o seu) — some em cima do golpe normal, mitigado ou não."],
+                ["Contra monstros e chefes", `Dano extra = (Imitação ÷ ${MIMIC_HP_DIVISOR_PVE})% da Vida Máxima do ALVO. Ex: 35% de Imitação = ${(35 / MIMIC_HP_DIVISOR_PVE).toFixed(1).replace(".", ",")}% da vida máxima dele por golpe.`],
+                ["Contra jogadores (PVP)", `Dano extra = (Imitação ÷ ${MIMIC_HP_DIVISOR_PVP})% da Vida Máxima do ALVO. Ex: 35% de Imitação = ${(35 / MIMIC_HP_DIVISOR_PVP).toFixed(2).replace(".", ",")}% da vida máxima dele por golpe.`],
                 ["Dano verdadeiro", "Ignora Armadura e Absorção por completo. Não precisa de Crítico nem de sorte — ativa sempre que o golpe acerta."],
-                ["Contra monstros e chefes", "Funciona igual — usa o Ataque (ou dano do golpe) deles no lugar."],
                 CharacterView.SPECIAL_CAP_ROW
             ]
         }

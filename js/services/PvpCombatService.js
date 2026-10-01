@@ -2,7 +2,7 @@ import PetService from "./PetService.js";
 import PowerService from "./PowerService.js";
 import BoitataBurn from "./BoitataBurn.js";
 import MiasmaService from "./MiasmaService.js";
-import MimicService from "./MimicService.js";
+import MimicService, { HP_DIVISOR_PVP as MIMIC_HP_DIVISOR_PVP } from "./MimicService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVP, absorbedAmount } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
@@ -22,7 +22,9 @@ const DODGE_CAP = 40;
 // v6: Mímico — soma dano verdadeiro extra (Imitação% do Ataque do alvo)
 // em todo golpe que acerta. Não consome rng() a mais, mas muda o
 // resultado de qualquer luta com um Mímico nos dois lados.
-export const TEAM_SIM_VERSION = 6;
+// v7: Imitação passou a ser % da Vida Máxima do alvo (era do Ataque), com
+// divisor próprio no PVP (÷30).
+export const TEAM_SIM_VERSION = 7;
 
 /*
     PVP precisa que os DOIS clientes (o do jogador A e o do jogador B)
@@ -203,7 +205,7 @@ export default class PvpCombatService {
 
                 // Imitação do Mímico: dano VERDADEIRO extra, por cima do
                 // golpe já mitigado/absorvido (ver MimicService.js).
-                const mimicBonus = MimicService.getBonusDamage(defender.attack, attacker.reflection ?? 0);
+                const mimicBonus = MimicService.getBonusDamage(defender.maxHP, attacker.reflection ?? 0, MIMIC_HP_DIVISOR_PVP);
 
                 const damage = preAbsorption - absorbed + mimicBonus;
 
@@ -447,7 +449,7 @@ export default class PvpCombatService {
 
                 // Imitação do Mímico: dano VERDADEIRO extra, por cima do
                 // golpe já mitigado/absorvido (ver MimicService.js).
-                const mimicBonus = MimicService.getBonusDamage(target.attack, attacker.reflection ?? 0);
+                const mimicBonus = MimicService.getBonusDamage(target.maxHP, attacker.reflection ?? 0, MIMIC_HP_DIVISOR_PVP);
 
                 const damage = preAbsorption - absorbed + mimicBonus;
 

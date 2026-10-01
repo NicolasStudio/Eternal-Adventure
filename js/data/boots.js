@@ -690,7 +690,7 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-mimic-rarity-mistico.png",
 
         stats: {
-            armor: 12,
+            armor: 9,
             agility: 19
         },
 
@@ -710,7 +710,7 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-mimic-rarity-lendario.png",
 
         stats: {
-            armor: 14,
+            armor: 11,
             agility: 20
         },
 
@@ -730,7 +730,7 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-mimic-rarity-ultraje.png",
 
         stats: {
-            armor: 16,
+            armor: 13,
             agility: 22
         },
 

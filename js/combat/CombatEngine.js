@@ -1,7 +1,7 @@
 import PetService from "../services/PetService.js";
 import BoitataBurn from "../services/BoitataBurn.js";
 import MiasmaService from "../services/MiasmaService.js";
-import MimicService from "../services/MimicService.js";
+import MimicService, { HP_DIVISOR_PVE as MIMIC_HP_DIVISOR_PVE } from "../services/MimicService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVE, absorbedAmount } from "./Absorption.js";
 import { CRITICAL_MULTIPLIER } from "./Critical.js";
 
@@ -158,10 +158,9 @@ export default class CombatEngine {
 
         // Imitação do Mímico: dano VERDADEIRO extra, por cima do golpe já
         // mitigado/absorvido — ignora Armadura e Absorção de propósito
-        // (ver MimicService.js). Usa o Ataque "cru" do alvo (defender),
-        // não afetado pelo débuff de Miasma que o PRÓPRIO atacante
-        // esteja sofrendo.
-        const mimicBonus = MimicService.getBonusDamage(defender.attack ?? defender.dano, attacker.reflection ?? 0);
+        // (ver MimicService.js). Usa a Vida MÁXIMA do alvo (defender) —
+        // não a atual, senão o bônus encolheria conforme o alvo apanha.
+        const mimicBonus = MimicService.getBonusDamage(defender.maxHP ?? defender.vidaMaxima, attacker.reflection ?? 0, MIMIC_HP_DIVISOR_PVE);
 
         const damage = preAbsorption - absorbed + mimicBonus;
 

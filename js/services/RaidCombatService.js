@@ -1,7 +1,7 @@
 import PvpCombatService from "./PvpCombatService.js";
 import BoitataBurn from "./BoitataBurn.js";
 import MiasmaService from "./MiasmaService.js";
-import MimicService from "./MimicService.js";
+import MimicService, { HP_DIVISOR_PVE as MIMIC_HP_DIVISOR_PVE } from "./MimicService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVE, absorbedAmount } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
@@ -269,7 +269,7 @@ export default class RaidCombatService {
                 // golpe já mitigado/absorvido (ver MimicService.js). O
                 // chefe nunca tem Imitação (não é Mímico), mas PODE ser
                 // alvo dele (usa o `attack` de conveniência do snapshot).
-                const mimicBonus = MimicService.getBonusDamage(target.attack, attacker.reflection ?? 0);
+                const mimicBonus = MimicService.getBonusDamage(target.maxHP, attacker.reflection ?? 0, MIMIC_HP_DIVISOR_PVE);
 
                 const damage = preAbsorption - absorbed + mimicBonus;
 

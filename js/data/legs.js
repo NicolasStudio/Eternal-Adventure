@@ -691,7 +691,7 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-mimic-rarity-mistico.png",
 
         stats: {
-            armor: 18,
+            armor: 15,
             agility: 11
         },
 
@@ -711,7 +711,7 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-mimic-rarity-lendario.png",
 
         stats: {
-            armor: 20,
+            armor: 17,
             agility: 12
         },
 
@@ -731,7 +731,7 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-mimic-rarity-ultraje.png",
 
         stats: {
-            armor: 22,
+            armor: 19,
             agility: 14
         },
 

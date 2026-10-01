@@ -5,28 +5,45 @@
    funções — nenhum guarda a regra sozinho.)
 
    Regra: em todo golpe SEU que acerta (não dodgado), o Mímico soma
-   dano VERDADEIRO extra = Imitação% do ATAQUE do alvo — sem precisar
-   de sorte (ao contrário de Crítico/Absorção/Miasma, que são chance),
-   e ignorando Armadura/Absorção por completo (senão uma % pequena
-   quase não apareceria contra alvo bem defendido). Não é afetado por
-   nada que reduza o PRÓPRIO Ataque do Mímico (ex: Miasma) — é
-   calculado só a partir do Ataque do INIMIGO.
+   dano VERDADEIRO extra = (Imitação ÷ divisor)% da VIDA MÁXIMA do
+   alvo — sem precisar de sorte (ao contrário de Crítico/Absorção/
+   Miasma, que são chance), e ignorando Armadura/Absorção por completo.
+
+   O divisor depende de QUEM é o alvo (mesma ideia da Absorção):
+     contra a máquina (monstro, chefe do Cooperativo): ÷ HP_DIVISOR_PVE
+       — 35% de Imitação = 3,5% da Vida Máxima do alvo por golpe;
+     contra jogador (PVP): ÷ HP_DIVISOR_PVP — 35% = ~1,17%.
+   Dano verdadeiro vale ~4x um golpe normal no fim do jogo (todo mundo
+   tem 230–330 de Armadura), então o valor que dava chance contra os
+   Anjos fazia o Mímico vencer ~95% no PVP. Sem Imitação nenhuma, ele
+   vence <1% — a força da classe está toda aqui. Valores por simulação.
+
+   Era % do ATAQUE do alvo (vencia 100% no PVP). Não é afetado por nada
+   que reduza o PRÓPRIO Ataque do Mímico (ex: Miasma) — é calculado só
+   a partir da vida do ALVO.
 
    (O campo interno continua se chamando "reflection" no código —
    só o nome exibido pro jogador virou "Imitação", porque "Reflexo"
    remetia a esquiva/reação rápida.)
 ========================================================== */
 
+// Imitação% ÷ isso = % da Vida Máxima do alvo. PVE ÷15 já deixava o
+// Mímico sem chance contra os Anjos; PVP ÷30 deixa ele em ~43–58% de
+// vitórias (÷20 ainda ficava em ~68–81%).
+export const HP_DIVISOR_PVE = 10;
+export const HP_DIVISOR_PVP = 30;
+
 export default class MimicService {
 
-    // enemyAttack: Ataque (ou "dano", no caso de monstro de dungeon) do
-    // alvo nesse golpe. reflectionRatio: atributo "Imitação" do atacante
-    // (0-100, não é fração).
-    static getBonusDamage(enemyAttack, reflectionRatio) {
+    // targetMaxHP: Vida Máxima do alvo (vidaMaxima, no caso de monstro de
+    // dungeon). reflectionRatio: atributo "Imitação" do atacante (0-100,
+    // não é fração). divisor: HP_DIVISOR_PVE ou HP_DIVISOR_PVP, conforme
+    // o alvo seja a máquina ou outro jogador.
+    static getBonusDamage(targetMaxHP, reflectionRatio, divisor) {
 
-        if (!(reflectionRatio > 0) || !(enemyAttack > 0)) return 0;
+        if (!(reflectionRatio > 0) || !(targetMaxHP > 0)) return 0;
 
-        return Math.max(0, Math.round(enemyAttack * reflectionRatio / 100));
+        return Math.max(0, Math.round(targetMaxHP * reflectionRatio / divisor / 100));
 
     }
 
@@ -50,7 +67,7 @@ export default class MimicService {
         // precisa repetir o nome dela, só o que aconteceu.
         const source = attackName
             ? `usou <strong>${attackName}</strong>`
-            : `copiou o Ataque do alvo`;
+            : `imitou a vitalidade do alvo`;
 
         return `<span class="combat-mimic">Imitação!</span> ${subject} ${source}, causando <strong>${bonusDamage}</strong> de dano verdadeiro.`;
 
