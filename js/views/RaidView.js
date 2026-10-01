@@ -42,11 +42,17 @@ export default class RaidView {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    // Mesmo motivo do PvpView: depois de 1 minuto a animação acelera pra
-    // 2x sozinha, sem toggle nenhum pro jogador — o boss tem HP colossal,
-    // uma luta longa não pode arrastar pra sempre na velocidade normal.
+    // Mesmo motivo do PvpView, só que progressivo: o boss tem HP colossal e
+    // cada golpe vira uma caixa de ~3,8s — 2x depois de 1 minuto ainda
+    // arrastava demais, então depois de 2 minutos vai pra 4x. Sem toggle
+    // nenhum pro jogador. Só muda a ANIMAÇÃO: a luta já foi simulada
+    // inteira antes (RaidCombatService), então não mexe no resultado nem
+    // na sincronia entre os 4 clientes.
     getBattleSpeedMultiplier(battleStartTime) {
-        return (Date.now() - battleStartTime) > 60000 ? 2 : 1;
+        const elapsed = Date.now() - battleStartTime;
+        if (elapsed > 120000) return 4;
+        if (elapsed > 60000) return 2;
+        return 1;
     }
 
     render() {
