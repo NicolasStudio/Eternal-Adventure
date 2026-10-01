@@ -11,7 +11,7 @@ export default {
     // especial da classe é o Miasma, que vem 100% do equipamento.
     putrid: { attack: 6, armor: 3, agility: 4, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     // Dano baixo (o mais baixo do jogo) — compensado pela Mímica, que
-    // copia % do Ataque do inimigo como dano verdadeiro (ver
+    // soma % do Ataque do inimigo ao próprio Ataque a cada golpe (ver
     // MimicService.js). Armadura é a maior do jogo ("item de ataque é
     // um espelho") e Agilidade fica acima da média. O Ataque próprio
     // é reforçado até o nível 25 (levels.js) pra não punir o início,

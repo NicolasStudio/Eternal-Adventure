@@ -696,8 +696,8 @@ export default class Player {
             // especiais do INIMIGO — ver MiasmaService.js); ele mesmo não
             // tem Crítico/Roubo de Vida/Penetração/Absorção.
             putrid: "miasmaChance",
-            // Mímico: o especial dele é a Imitação (copia % do Ataque do
-            // inimigo como dano verdadeiro — ver MimicService.js).
+            // Mímico: o especial dele é a Imitação (soma % do Ataque do
+            // inimigo ao próprio Ataque — ver MimicService.js).
             mimic: "reflection"
         }[this.class.id] ?? null;
     }

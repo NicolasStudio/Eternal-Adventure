@@ -22,7 +22,10 @@ const DODGE_CAP = 40;
 // v6: Mímico — soma dano verdadeiro extra (Imitação% do Ataque do alvo)
 // em todo golpe que acerta. Não consome rng() a mais, mas muda o
 // resultado de qualquer luta com um Mímico nos dois lados.
-export const TEAM_SIM_VERSION = 6;
+// v7: Imitação deixou de ser dano à parte — agora soma Imitação% do
+// Ataque do alvo ao PRÓPRIO Ataque antes da mitigação, passando por
+// Crítico/Armadura/Absorção igual o resto do golpe.
+export const TEAM_SIM_VERSION = 7;
 
 /*
     PVP precisa que os DOIS clientes (o do jogador A e o do jogador B)
@@ -193,7 +196,14 @@ export default class PvpCombatService {
                 const criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER : 1;
                 const effectiveArmor = defender.armor * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
-                const preAbsorption = Math.max(1, Math.floor(attacker.attack * attackerMult * criticalMultiplier * mitigation));
+
+                // Imitação do Mímico: soma Imitação% do Ataque do alvo ao
+                // PRÓPRIO Ataque ANTES da mitigação — vira parte do golpe
+                // normal (passa por Crítico/Armadura/Absorção igual o
+                // resto, não é mais "dano à parte"). Ver MimicService.js.
+                const mimicBonusAttack = MimicService.getBonusAttack(defender.attack, attacker.reflection ?? 0);
+                const totalAttack = attacker.attack * attackerMult + mimicBonusAttack;
+                const preAbsorption = Math.max(1, Math.floor(totalAttack * criticalMultiplier * mitigation));
 
                 // Absorção: CHANCE de quem defende absorver parte do golpe
                 // (ver Absorption.js). Sempre consome 1 rng(), ativando ou
@@ -201,11 +211,11 @@ export default class PvpCombatService {
                 const absorptionChance = Math.min(ABSORPTION_CAP, (defender.absorption ?? 0) * defendDebuff);
                 const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance);
 
-                // Imitação do Mímico: dano VERDADEIRO extra, por cima do
-                // golpe já mitigado/absorvido (ver MimicService.js).
-                const mimicBonus = MimicService.getBonusDamage(defender.attack, attacker.reflection ?? 0);
+                const damage = preAbsorption - absorbed;
 
-                const damage = preAbsorption - absorbed + mimicBonus;
+                // Quanto do dano final veio da Imitação (só pra mensagem) —
+                // proporcional, já que o bônus entrou junto no Ataque.
+                const mimicBonus = mimicBonusAttack > 0 ? Math.round(damage * mimicBonusAttack / totalAttack) : 0;
 
                 defender.currentHP = Math.max(0, defender.currentHP - damage);
 
@@ -440,16 +450,23 @@ export default class PvpCombatService {
                 const criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER : 1;
                 const effectiveArmor = target.armor * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
-                const preAbsorption = Math.max(1, Math.floor(attacker.attack * attackerMult * criticalMultiplier * mitigation));
+
+                // Imitação do Mímico: soma Imitação% do Ataque do alvo ao
+                // PRÓPRIO Ataque ANTES da mitigação — vira parte do golpe
+                // normal (passa por Crítico/Armadura/Absorção igual o
+                // resto, não é mais "dano à parte"). Ver MimicService.js.
+                const mimicBonusAttack = MimicService.getBonusAttack(target.attack, attacker.reflection ?? 0);
+                const totalAttack = attacker.attack * attackerMult + mimicBonusAttack;
+                const preAbsorption = Math.max(1, Math.floor(totalAttack * criticalMultiplier * mitigation));
 
                 const absorptionChance = Math.min(ABSORPTION_CAP, (target.absorption ?? 0) * defendDebuff);
                 const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance);
 
-                // Imitação do Mímico: dano VERDADEIRO extra, por cima do
-                // golpe já mitigado/absorvido (ver MimicService.js).
-                const mimicBonus = MimicService.getBonusDamage(target.attack, attacker.reflection ?? 0);
+                const damage = preAbsorption - absorbed;
 
-                const damage = preAbsorption - absorbed + mimicBonus;
+                // Quanto do dano final veio da Imitação (só pra mensagem) —
+                // proporcional, já que o bônus entrou junto no Ataque.
+                const mimicBonus = mimicBonusAttack > 0 ? Math.round(damage * mimicBonusAttack / totalAttack) : 0;
 
                 target.currentHP = Math.max(0, target.currentHP - damage);
 

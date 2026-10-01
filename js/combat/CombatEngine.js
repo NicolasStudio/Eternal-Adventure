@@ -114,8 +114,15 @@ export default class CombatEngine {
 
         // Acúmulos de Intoxicação do Miasma reduzem o Ataque de quem
         // estiver intoxicado (ver MiasmaService.statMultiplier).
-        const attack = (attacker.attack ?? attacker.dano) * MiasmaService.statMultiplier(this.miasmaFlags[attackerSide]);
+        const ownAttack = (attacker.attack ?? attacker.dano) * MiasmaService.statMultiplier(this.miasmaFlags[attackerSide]);
         const armor = defender.armor ?? defender.armadura;
+
+        // Imitação do Mímico: soma Imitação% do Ataque "cru" do alvo ao
+        // PRÓPRIO Ataque ANTES da mitigação — vira parte do golpe normal
+        // (passa por Crítico/Armadura/Absorção igual o resto do dano,
+        // não é mais "dano à parte"). Ver MimicService.js.
+        const mimicBonusAttack = MimicService.getBonusAttack(defender.attack ?? defender.dano, attacker.reflection ?? 0);
+        const attack = ownAttack + mimicBonusAttack;
 
         // Miasma do Pútrido: se o ATACANTE tiver uma marca pendente
         // (foi intoxicado no golpe anterior que sofreu), Crítico/Roubo
@@ -156,14 +163,12 @@ export default class CombatEngine {
 
         const absorbed = absorbedAmount(preAbsorption, Math.random() * 100 < absorptionChance);
 
-        // Imitação do Mímico: dano VERDADEIRO extra, por cima do golpe já
-        // mitigado/absorvido — ignora Armadura e Absorção de propósito
-        // (ver MimicService.js). Usa o Ataque "cru" do alvo (defender),
-        // não afetado pelo débuff de Miasma que o PRÓPRIO atacante
-        // esteja sofrendo.
-        const mimicBonus = MimicService.getBonusDamage(defender.attack ?? defender.dano, attacker.reflection ?? 0);
+        const damage = preAbsorption - absorbed;
 
-        const damage = preAbsorption - absorbed + mimicBonus;
+        // Quanto do dano final veio da Imitação (só pra mensagem/toast) —
+        // proporcional, já que o bônus entrou junto no Ataque antes da
+        // mitigação (não dá mais pra separar um "pedaço puro" depois).
+        const mimicBonus = mimicBonusAttack > 0 ? Math.round(damage * mimicBonusAttack / attack) : 0;
 
         // ==========================
         // LIFE STEAL
