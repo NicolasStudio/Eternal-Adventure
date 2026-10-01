@@ -2,7 +2,7 @@ import PvpCombatService from "./PvpCombatService.js";
 import BoitataBurn from "./BoitataBurn.js";
 import MiasmaService from "./MiasmaService.js";
 import MimicService from "./MimicService.js";
-import { ABSORPTION_CAP, absorbedAmount } from "../combat/Absorption.js";
+import { ABSORPTION_CAP, ABSORPTION_RATIO_PVE, absorbedAmount } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
 // Boss tem HP colossal (milhares) contra só 4 atacantes por rodada —
@@ -263,7 +263,7 @@ export default class RaidCombatService {
                 const preAbsorption = Math.max(1, Math.floor(attackPower * criticalMultiplier * mitigation));
 
                 const absorptionChance = Math.min(ABSORPTION_CAP, (target.absorption ?? 0) * defendDebuff);
-                const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance);
+                const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance, ABSORPTION_RATIO_PVE);
 
                 // Imitação do Mímico: dano VERDADEIRO extra, por cima do
                 // golpe já mitigado/absorvido (ver MimicService.js). O

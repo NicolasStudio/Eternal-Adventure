@@ -77,7 +77,7 @@ const legs = {
 
         stats: {
             armor: 11,
-            agility: 4
+            agility: 11
         },
 
         value: 2565,

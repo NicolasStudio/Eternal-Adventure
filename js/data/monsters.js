@@ -2416,7 +2416,7 @@ const monsters = [
 
         status: {
             vidaMaxima: 700,
-            dano: 201,
+            dano: 190,
             nomeAtaque: "Fatiar",
             armadura: 77,
             agilidade: 114,
@@ -2772,8 +2772,8 @@ const monsters = [
         sprite: "assets/img/monsters/creature_boss_8/cuca.png",
 
         status: {
-            vidaMaxima: 950,
-            dano: 216,
+            vidaMaxima: 920,
+            dano: 212,
             nomeAtaque: "Te pega daqui, te pega de lá",
             armadura: 90,
             agilidade: 100,

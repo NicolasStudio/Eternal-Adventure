@@ -2,7 +2,7 @@ import PetService from "../services/PetService.js";
 import BoitataBurn from "../services/BoitataBurn.js";
 import MiasmaService from "../services/MiasmaService.js";
 import MimicService from "../services/MimicService.js";
-import { ABSORPTION_CAP, absorbedAmount } from "./Absorption.js";
+import { ABSORPTION_CAP, ABSORPTION_RATIO_PVE, absorbedAmount } from "./Absorption.js";
 import { CRITICAL_MULTIPLIER } from "./Critical.js";
 
 // Teto máximo de chance de esquiva, não importa o quanto a agilidade
@@ -154,7 +154,7 @@ export default class CombatEngine {
         const defendDebuff = defendMark * MiasmaService.persistentSpecialMultiplier(this.miasmaFlags[defenderSide]);
         const absorptionChance = Math.min(ABSORPTION_CAP, (defender.absorption ?? 0) * defendDebuff);
 
-        const absorbed = absorbedAmount(preAbsorption, Math.random() * 100 < absorptionChance);
+        const absorbed = absorbedAmount(preAbsorption, Math.random() * 100 < absorptionChance, ABSORPTION_RATIO_PVE);
 
         // Imitação do Mímico: dano VERDADEIRO extra, por cima do golpe já
         // mitigado/absorvido — ignora Armadura e Absorção de propósito

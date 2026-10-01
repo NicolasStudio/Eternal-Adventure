@@ -3,7 +3,7 @@ import PowerService from "./PowerService.js";
 import BoitataBurn from "./BoitataBurn.js";
 import MiasmaService from "./MiasmaService.js";
 import MimicService from "./MimicService.js";
-import { ABSORPTION_CAP, absorbedAmount } from "../combat/Absorption.js";
+import { ABSORPTION_CAP, ABSORPTION_RATIO_PVP, absorbedAmount } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
 const DODGE_CAP = 40;
@@ -17,7 +17,7 @@ const DODGE_CAP = 40;
 // v4: Miasma ganhou acúmulos de Intoxicação (−Ataque/−Agilidade) — muda
 // dano e esquiva, então o resultado da luta muda. Junto: Absorção passou
 // a absorver metade do golpe (antes anulava o golpe inteiro).
-// v5: Crítico 1.6x (era 1.5x), Absorção 42% (era 50%) e Miasma com
+// v5: Crítico 1.6x (era 1.5x), Absorção 50% no PVP e Miasma com
 // especiais −25% a luta toda + acúmulos 3/6/10%.
 // v6: Mímico — soma dano verdadeiro extra (Imitação% do Ataque do alvo)
 // em todo golpe que acerta. Não consome rng() a mais, mas muda o
@@ -199,7 +199,7 @@ export default class PvpCombatService {
                 // (ver Absorption.js). Sempre consome 1 rng(), ativando ou
                 // não — a ordem dos sorteios não pode mudar.
                 const absorptionChance = Math.min(ABSORPTION_CAP, (defender.absorption ?? 0) * defendDebuff);
-                const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance);
+                const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance, ABSORPTION_RATIO_PVP);
 
                 // Imitação do Mímico: dano VERDADEIRO extra, por cima do
                 // golpe já mitigado/absorvido (ver MimicService.js).
@@ -443,7 +443,7 @@ export default class PvpCombatService {
                 const preAbsorption = Math.max(1, Math.floor(attacker.attack * attackerMult * criticalMultiplier * mitigation));
 
                 const absorptionChance = Math.min(ABSORPTION_CAP, (target.absorption ?? 0) * defendDebuff);
-                const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance);
+                const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance, ABSORPTION_RATIO_PVP);
 
                 // Imitação do Mímico: dano VERDADEIRO extra, por cima do
                 // golpe já mitigado/absorvido (ver MimicService.js).
