@@ -1257,7 +1257,7 @@ export default class CharacterView {
                 ["Fórmula", `Dano = Ataque × (${CRITICAL_MULTIPLIER}× se crítico) × mitigação da Armadura do alvo.`],
                 ["Sem chance", "Diferente de Crítico/Absorção, o Ataque não é sorteado — vale o valor cheio em todo golpe."],
                 ["Contra o Pútrido", `Os acúmulos de Intoxicação do Miasma tiram ${CharacterView.MIASMA_STACKS_TEXT} do seu Ataque (1, 2 ou 3 acúmulos) até o fim da luta.`],
-                ["Contra o Mímico", "A Imitação dele soma uma % do seu Ataque ao Ataque dele em todo golpe — quanto mais Ataque você tiver, mais forte ele bate, mas esse bônus passa pela SUA Armadura igual o resto do dano dele."]
+                ["Contra o Mímico", "A Imitação dele causa dano verdadeiro extra baseado na SUA Vida Máxima (não no seu Ataque) sempre que ele te acerta — ignora Armadura e Absorção."]
             ]
         },
 
@@ -1349,17 +1349,11 @@ export default class CharacterView {
         reflection: {
             icon: "fa-shield-cat",
             title: "Imitação",
-            summary: "Exclusivo do Mímico: soma Imitação% do Ataque do alvo ao seu próprio Ataque em todo golpe.",
+            summary: "Exclusivo do Mímico: causa dano verdadeiro extra baseado na Vida Máxima do alvo em todo golpe que acerta.",
             details: [
-<<<<<<< HEAD
-                ["Fórmula", "Bônus de Ataque = Imitação% × Ataque do ALVO (não o seu) — soma no seu Ataque ANTES da mitigação."],
-                ["Não é dano à parte", "O bônus passa por Crítico, Armadura e Absorção do alvo igual o resto do golpe. Não precisa de sorte pra ativar — só pra ser ou não crítico/absorvido, como qualquer dano."],
-                ["Contra monstros e chefes", "Funciona igual — usa o Ataque (ou dano do golpe) deles no lugar."],
-=======
                 ["Contra monstros e chefes", `Dano extra = (Imitação ÷ ${MIMIC_HP_DIVISOR_PVE})% da Vida Máxima do ALVO. Ex: 35% de Imitação = ${(35 / MIMIC_HP_DIVISOR_PVE).toFixed(1).replace(".", ",")}% da vida máxima dele por golpe.`],
                 ["Contra jogadores (PVP)", `Dano extra = (Imitação ÷ ${MIMIC_HP_DIVISOR_PVP})% da Vida Máxima do ALVO. Ex: 35% de Imitação = ${(35 / MIMIC_HP_DIVISOR_PVP).toFixed(2).replace(".", ",")}% da vida máxima dele por golpe.`],
                 ["Dano verdadeiro", "Ignora Armadura e Absorção por completo. Não precisa de Crítico nem de sorte — ativa sempre que o golpe acerta."],
->>>>>>> 9b1704d9788e0a7a5f9dde9da29078214114e9fe
                 CharacterView.SPECIAL_CAP_ROW
             ]
         }

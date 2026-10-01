@@ -114,15 +114,8 @@ export default class CombatEngine {
 
         // Acúmulos de Intoxicação do Miasma reduzem o Ataque de quem
         // estiver intoxicado (ver MiasmaService.statMultiplier).
-        const ownAttack = (attacker.attack ?? attacker.dano) * MiasmaService.statMultiplier(this.miasmaFlags[attackerSide]);
+        const attack = (attacker.attack ?? attacker.dano) * MiasmaService.statMultiplier(this.miasmaFlags[attackerSide]);
         const armor = defender.armor ?? defender.armadura;
-
-        // Imitação do Mímico: soma Imitação% do Ataque "cru" do alvo ao
-        // PRÓPRIO Ataque ANTES da mitigação — vira parte do golpe normal
-        // (passa por Crítico/Armadura/Absorção igual o resto do dano,
-        // não é mais "dano à parte"). Ver MimicService.js.
-        const mimicBonusAttack = MimicService.getBonusAttack(defender.attack ?? defender.dano, attacker.reflection ?? 0);
-        const attack = ownAttack + mimicBonusAttack;
 
         // Miasma do Pútrido: se o ATACANTE tiver uma marca pendente
         // (foi intoxicado no golpe anterior que sofreu), Crítico/Roubo
@@ -163,20 +156,13 @@ export default class CombatEngine {
 
         const absorbed = absorbedAmount(preAbsorption, Math.random() * 100 < absorptionChance, ABSORPTION_RATIO_PVE);
 
-<<<<<<< HEAD
-        const damage = preAbsorption - absorbed;
-=======
         // Imitação do Mímico: dano VERDADEIRO extra, por cima do golpe já
         // mitigado/absorvido — ignora Armadura e Absorção de propósito
         // (ver MimicService.js). Usa a Vida MÁXIMA do alvo (defender) —
         // não a atual, senão o bônus encolheria conforme o alvo apanha.
         const mimicBonus = MimicService.getBonusDamage(defender.maxHP ?? defender.vidaMaxima, attacker.reflection ?? 0, MIMIC_HP_DIVISOR_PVE);
->>>>>>> 9b1704d9788e0a7a5f9dde9da29078214114e9fe
 
-        // Quanto do dano final veio da Imitação (só pra mensagem/toast) —
-        // proporcional, já que o bônus entrou junto no Ataque antes da
-        // mitigação (não dá mais pra separar um "pedaço puro" depois).
-        const mimicBonus = mimicBonusAttack > 0 ? Math.round(damage * mimicBonusAttack / attack) : 0;
+        const damage = preAbsorption - absorbed + mimicBonus;
 
         // ==========================
         // LIFE STEAL

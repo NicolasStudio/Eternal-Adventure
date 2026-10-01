@@ -260,33 +260,18 @@ export default class RaidCombatService {
                 const criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER : 1;
                 const effectiveArmor = target.armor * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
-
-                // Imitação do Mímico: soma Imitação% do Ataque do alvo ao
-                // PRÓPRIO Ataque ANTES da mitigação — vira parte do golpe
-                // normal (passa por Crítico/Armadura/Absorção igual o
-                // resto, não é mais "dano à parte"). O chefe nunca tem
-                // Imitação (não é Mímico), mas PODE ser alvo dela (usa o
-                // `attack` de conveniência do snapshot). Ver MimicService.js.
-                const mimicBonusAttack = MimicService.getBonusAttack(target.attack, attacker.reflection ?? 0);
-                const totalAttackPower = attackPower + mimicBonusAttack;
-                const preAbsorption = Math.max(1, Math.floor(totalAttackPower * criticalMultiplier * mitigation));
+                const preAbsorption = Math.max(1, Math.floor(attackPower * criticalMultiplier * mitigation));
 
                 const absorptionChance = Math.min(ABSORPTION_CAP, (target.absorption ?? 0) * defendDebuff);
                 const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance, ABSORPTION_RATIO_PVE);
 
-<<<<<<< HEAD
-                const damage = preAbsorption - absorbed;
-=======
                 // Imitação do Mímico: dano VERDADEIRO extra, por cima do
                 // golpe já mitigado/absorvido (ver MimicService.js). O
                 // chefe nunca tem Imitação (não é Mímico), mas PODE ser
                 // alvo dele (usa o `attack` de conveniência do snapshot).
                 const mimicBonus = MimicService.getBonusDamage(target.maxHP, attacker.reflection ?? 0, MIMIC_HP_DIVISOR_PVE);
->>>>>>> 9b1704d9788e0a7a5f9dde9da29078214114e9fe
 
-                // Quanto do dano final veio da Imitação (só pra mensagem) —
-                // proporcional, já que o bônus entrou junto no Ataque.
-                const mimicBonus = mimicBonusAttack > 0 ? Math.round(damage * mimicBonusAttack / totalAttackPower) : 0;
+                const damage = preAbsorption - absorbed + mimicBonus;
 
                 target.currentHP = Math.max(0, target.currentHP - damage);
 
