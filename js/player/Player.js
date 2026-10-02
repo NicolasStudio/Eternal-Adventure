@@ -155,7 +155,8 @@ export default class Player {
             mage: prefix === "light" ? "light_mage" : "dark_mage",
             archer: prefix === "light" ? "light_archer" : "dark_archer",
             barbarian: prefix === "light" ? "light_barbarian" : "dark_barbarian",
-            putrid: prefix === "light" ? "light_putrid" : "dark_putrid"
+            putrid: prefix === "light" ? "light_putrid" : "dark_putrid",
+            mimic: prefix === "light" ? "light_mimic" : "dark_mimic"
         }[this.class.id];
 
         return upClasse[classKey] ?? null;
@@ -725,13 +726,15 @@ export default class Player {
             clears: previousClears + 1
         };
 
-        // Primeira vitória no Portal da Luz/Trevas — é aqui que a
-        // melhoria de classe (status somados + retrato novo) acontece de
-        // verdade, não no momento da escolha.
-        if (
-            previousClears === 0 &&
-            (dungeonId === "light_dungeon" || dungeonId === "dark_dungeon")
-        ) {
+        // Portal da Luz/Trevas — é aqui que a melhoria de classe (status
+        // somados + retrato novo) acontece de verdade, não no momento da
+        // escolha. Tenta em TODA vitória (não só a primeira): applyClassUpgrade()
+        // já se protege sozinho contra aplicar duas vezes (if (this.transcendence)
+        // return false), então repetir aqui é inofensivo pra quem já recebeu — mas
+        // é o que permite quem ficou travado por um bug (ex: classe sem entrada no
+        // mapa de getTranscendenceFor) finalmente receber a melhoria na próxima vitória,
+        // sem precisar recriar o personagem.
+        if (dungeonId === "light_dungeon" || dungeonId === "dark_dungeon") {
             this.applyClassUpgrade();
         }
 
