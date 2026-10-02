@@ -7,6 +7,8 @@ export default [
             "Nova classe: Pútrido — o especial dele é o Miasma: cada ativação intoxica o alvo (até 3 acúmulos), tirando 3%/6%/10% de Ataque e Agilidade e 25% dos atributos especiais até o fim da luta, além de cortar os especiais pela metade no golpe seguinte",
             "Nova classe: Mímico — o especial dele é a Imitação: todo golpe que acerta causa dano verdadeiro extra com base na Vida Máxima do alvo (forte contra chefes, mais contido no PVP)",
             "Pútrido e Mímico ganharam transcendência (Portal da Luz/Trevas)",
+            "Corrigido o Mímico não recebendo a melhoria de classe mesmo vencendo o Anjo — a vitória no Portal agora sempre tenta aplicar o bônus (não só na primeira vez), resolvendo também quem tinha ficado travado por esse bug antes da correção",
+            "Mímico: Vida por nível reduzida (12 → 9), cerca de 300 a menos no nível 100 — personagens já existentes são atualizados sozinhos ao carregar o save",
             "Absorção (Guerreiro): agora absorve o golpe inteiro contra monstros e chefes, e metade contra jogadores",
             "Golpe Crítico agora multiplica o dano por 1,6x (era 1,5x)",
             "Rebalanceamento de transcendências: Mago −5 de Ataque, Arqueiro +10 de Ataque e +5 de Agilidade, Bárbaro +10 de Ataque e mais Vida",
@@ -14,13 +16,17 @@ export default [
             "Pets: a cura do Duende e a queimadura do Boitatá agora crescem com o pet (nível de evolução + nível atual — até 82 no nível 50); mordida do Lobo aumentada",
             "Pedra Rubi (Vida) aumentada pra 50/150/300 — armas já encantadas são atualizadas sozinhas ao carregar o save",
             "Anjos Caídos com 500 de Vida a menos; chefes do Cooperativo mais resistentes",
-            "Cooperativo: corrigido trocar de pet entre andares (vida acima do máximo, habilidade do pet errado); lutas longas aceleram pra 2x depois de 1 minuto e 4x depois de 2",
+            "Cooperativo: corrigido trocar de pet entre andares (vida acima do máximo, habilidade do pet errado); lutas longas aceleram pra 2x depois de 1 minuto e 4x depois de 2, e depois de uns 4 minutos as mensagens de combate somem (só a vida atualiza), já que no 4x elas ficavam rápidas demais pra ler",
             "PVP 2x2: mensagens de combate não ficam mais escondidas atrás dos cartões de vida",
             "Novo padrão de cores das mensagens de combate: normal, crítico, cura e pet cada um com sua cor",
             "Tooltips: atributos especiais zerados não aparecem mais nos itens, e as explicações dos atributos foram atualizadas",
             "Chat: a aba do navegador mostra quantas mensagens novas chegaram; corrigido o botão do chat sem clique na Fazenda",
             "Conta: sair da conta agora salva e limpa os dados do navegador, evitando puxar o personagem de outra conta",
-            "Wiki: adicionado o Mímico e atualizadas as seções de Classes, Pets e Cooperativo"
+            "Conta: sua sessão agora é única — abrir a mesma conta em outra aba ou dispositivo pergunta se quer desconectar a sessão anterior e continuar ali (igual ao WhatsApp Web), evitando duas abas sobrescrevendo o progresso uma da outra",
+            "Corrigido o aviso de sessão em uso ficando escondido atrás da tela de 'Carregando...' e nunca aparecendo",
+            "Adicionado o Ranking Global (ícone de globo na barra de ferramentas): lista todos os jogadores do servidor por Poder, com uma bolinha verde/vermelha mostrando quem está online agora",
+            "Adicionadas 2 novas conquistas de Ouro: 'Instinto Superior' (Poder acima de 32 mil) e 'Quase um senhor' (nível 50 com o Pet)",
+            "Wiki: adicionado o Mímico e atualizadas as seções de Classes, Pets, Cooperativo, Salvar e Ranking"
         ]
     },
 
