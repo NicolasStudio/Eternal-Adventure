@@ -85,7 +85,7 @@ const dungeons = [
 
         drops: [
             {
-                type: ["chest"],
+                type: ["chest", "ring"],
                 rarity: "common"
             },
             items.smallPotion
@@ -114,6 +114,11 @@ const dungeons = [
             {
                 type: ["weapon"],
                 rarity: "uncommon"
+            },
+            {
+                type: ["amulet"],
+                rarity: "common",
+                chance: 5
             },
             items.smallPotion
         ]
@@ -213,7 +218,7 @@ const dungeons = [
         boss: true,
         page: 4,
         fights: 1,
-        
+
         monsters: [
             "skullKingIII"
         ],
@@ -225,6 +230,11 @@ const dungeons = [
             {
                 type: ["weapon"],
                 rarity: "rare"
+            },
+            {
+                type: ["amulet"],
+                rarity: "uncommon",
+                chance: 5
             },
             items.mediumPotion
         ]
@@ -290,7 +300,7 @@ const dungeons = [
         boss: false,
         page: 5,
         fights: 4,
-        
+
         monsters: [
             "goblin_donatello",
             "goblin_leonardo",
@@ -305,6 +315,11 @@ const dungeons = [
             {
                 type: ["helmet"],
                 rarity: "rare"
+            },
+            {
+                type: ["ring"],
+                rarity: "uncommon",
+                chance: 5
             },
             items.smallPotion
         ]
@@ -390,8 +405,9 @@ const dungeons = [
 
         drops: [
             {
-                // type: ["boot"],
-                // rarity: "rare"
+                type: ["amulet"],
+                rarity: "rare",
+                chance: 5
             },
             items.mediumPotion
         ]
@@ -420,6 +436,9 @@ const dungeons = [
 
         drops: [
             {
+                type: ["ring"],
+                rarity: "rare",
+                chance: 5
             },
             items.mediumPotion
         ]
@@ -529,6 +548,9 @@ const dungeons = [
 
         drops: [
             {
+                type: ["amulet"],
+                rarity: "mystic",
+                chance: 5
             },
             items.mediumPotion
         ]
@@ -1005,7 +1027,7 @@ const dungeons = [
         boss: true,
         page: 18,
         fights: 1,
-        
+
         monsters: [
             "daibo"
         ],
@@ -1015,8 +1037,9 @@ const dungeons = [
 
         drops: [
             {
-                // type: ["weapon"],
-                // rarity: "mystic"
+                type: ["ring"],
+                rarity: "mystic",
+                chance: 5
             },
             items.tripleMediumPotion
         ]

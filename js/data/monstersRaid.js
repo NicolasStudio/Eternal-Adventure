@@ -18,7 +18,7 @@ const monstersRaid = [
         floor: 1,
 
         status: {
-            vidaMaxima: 16000,
+            vidaMaxima: 17000,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
@@ -67,7 +67,7 @@ const monstersRaid = [
         floor: 2,
 
         status: {
-            vidaMaxima: 17000,
+            vidaMaxima: 18000,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
@@ -106,6 +106,58 @@ const monstersRaid = [
     },
 
     {
+        id: "drake_bug",
+        element: "bug",
+        name: "Dragão Varejeiro",
+        level: 150,
+        type: "beast",
+
+        sprite: "assets/img/monstersRaid/drake-bug.png",
+        floor: 3,
+
+        status: {
+            vidaMaxima: 19000,
+            ataque:[
+                {
+                    nomeAtaque: "Mordida",
+                    dano: 300,
+                },
+                {
+                    nomeAtaque: "Ferroada Acida",
+                    dano: 320,
+                },
+                {
+                    nomeAtaque: "Jato Acido",
+                    dano: 320,
+                },
+            ],
+            armadura: 255,
+            agilidade: 260,
+            xp: 0,
+            ouro: 70000
+        },
+
+        drops: [
+            {
+                item: items.largePotion,
+                quantidade: 10
+            },
+            {
+                pool: [
+                    { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
+                    { type: ["amulet"], rarity: "legendary", chance: 5 },
+                    { type: ["ring"], rarity: "legendary", chance: 5 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 5 },
+                    { item: enchantmentStone.quartzoRosaDois, chance: 15 },
+                    { item: enchantmentStone.quartzoRosaUm, chance: 60 }
+                ]
+            }
+        ]
+    },
+
+
+
+    {
         id: "drake_light",
         element: "light",
         name: "Dragão Solaria",
@@ -113,7 +165,7 @@ const monstersRaid = [
         type: "beast",
 
         sprite: "assets/img/monstersRaid/drake-light.png",
-        floor: 3,
+        floor: 4,
 
         status: {
             vidaMaxima: 18000,
@@ -162,7 +214,7 @@ const monstersRaid = [
         type: "beast",
 
         sprite: "assets/img/monstersRaid/drake-dark.png",
-        floor: 4,
+        floor: 5,
 
         status: {
             vidaMaxima: 20000,
@@ -211,7 +263,7 @@ const monstersRaid = [
         type: "beast",
 
         sprite: "assets/img/monstersRaid/drake-plant.png",
-        floor: 5,
+        floor: 6,
 
         status: {
             vidaMaxima: 25000,
