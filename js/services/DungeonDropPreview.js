@@ -3,6 +3,8 @@ import helmets from "../data/helmets.js";
 import chests from "../data/chest.js";
 import legs from "../data/legs.js";
 import boots from "../data/boots.js";
+import rings from "../data/ring.js";
+import amulets from "../data/amulet.js";
 
 export default class DungeonDropPreview {
 
@@ -26,7 +28,9 @@ export default class DungeonDropPreview {
                 return;
             }
 
-            // Equipamentos
+            // Equipamentos (ou com chance própria — drop.chance, 0-100;
+            // sem esse campo, é sempre garantido como antes — ver
+            // LootSystem.js, mesma regra).
             if (Array.isArray(drop.type)) {
 
                 drop.type.forEach(type => {
@@ -38,7 +42,7 @@ export default class DungeonDropPreview {
                     );
 
                     if (item) {
-                        drops.push(item);
+                        drops.push({ ...item, dropChance: drop.chance ?? 100 });
                     }
 
                 });
@@ -77,6 +81,14 @@ export default class DungeonDropPreview {
                 collection = boots;
                 break;
 
+            case "ring":
+                collection = rings;
+                break;
+
+            case "amulet":
+                collection = amulets;
+                break;
+
             default:
                 return null;
 
@@ -84,7 +96,9 @@ export default class DungeonDropPreview {
 
         return Object.values(collection).find(item =>
 
-            item.class === playerClass &&
+            // "all" = anel/amuleto, qualquer classe pode usar (ver
+            // ring.js/amulet.js).
+            (item.class === "all" || item.class === playerClass) &&
             item.rarity.id === rarity
 
         ) || null;

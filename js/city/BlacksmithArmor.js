@@ -7,8 +7,17 @@ const ARMOR_SLOTS = [
     { id: "helmet", label: "Elmo", icon: "fa-solid fa-hat-wizard" },
     { id: "chest", label: "Peitoral", icon: "fa-solid fa-shirt" },
     { id: "leg", label: "Pernas", icon: "fa-solid fa-socks" },
-    { id: "boot", label: "Botas", icon: "fa-solid fa-shoe-prints" }
+    { id: "boot", label: "Botas", icon: "fa-solid fa-shoe-prints" },
+    { id: "accessory", label: "Acessórios", icon: "fa-solid fa-gem" }
 ];
+
+// Acessórios (ver ring.js/amulet.js) são DOIS slots de equipamento
+// (anel + amuleto) que dividem UMA aba só no Ferreiro — igual já
+// dividem uma aba só no inventário (CharacterView.js). Em todo outro
+// lugar deste arquivo, "accessory" nunca é um slot de item de verdade,
+// só o id da aba — por isso os métodos abaixo traduzem pra essa lista
+// sempre que activeSlot === "accessory".
+const ACCESSORY_SLOTS = ["ring", "amulet"];
 
 export default class BlacksmithArmor {
 
@@ -27,20 +36,30 @@ export default class BlacksmithArmor {
     getItems() {
         const items = [];
 
+        const matchesActiveSlot = item => this.activeSlot === "accessory"
+            ? ACCESSORY_SLOTS.includes(item.slot)
+            : item.slot === this.activeSlot;
+
         this.player.inventory.forEach(item => {
-            if (item.slot !== this.activeSlot) return;
+            if (!matchesActiveSlot(item)) return;
             if (!UpgradeService.canUpgrade(item)) return;
             items.push(item);
         });
 
-        const equippedItem = this.player.equipment[this.activeSlot];
+        const equippedSlots = this.activeSlot === "accessory" ? ACCESSORY_SLOTS : [this.activeSlot];
 
-        if (equippedItem && UpgradeService.canUpgrade(equippedItem)) {
-            const alreadyExists = items.some(i => i.uid === equippedItem.uid);
-            if (!alreadyExists) {
-                items.unshift(equippedItem);
+        equippedSlots.forEach(slot => {
+
+            const equippedItem = this.player.equipment[slot];
+
+            if (equippedItem && UpgradeService.canUpgrade(equippedItem)) {
+                const alreadyExists = items.some(i => i.uid === equippedItem.uid);
+                if (!alreadyExists) {
+                    items.unshift(equippedItem);
+                }
             }
-        }
+
+        });
 
         this.items = items;
         return items;
@@ -219,6 +238,7 @@ export default class BlacksmithArmor {
 
     getStatName(stat) {
         switch (stat) {
+            case "life": return "Vida";
             case "attack": return "Ataque";
             case "armor": return "Armadura";
             case "agility": return "Agilidade";
@@ -234,6 +254,7 @@ export default class BlacksmithArmor {
 
     getStatIcon(stat) {
         switch (stat) {
+            case "life": return "❤️";
             case "attack": return "⚔️";
             case "armor": return "🛡️";
             case "agility": return "👢";

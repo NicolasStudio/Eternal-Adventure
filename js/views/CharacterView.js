@@ -37,6 +37,7 @@ export default class CharacterView {
                 case "chest": return item.slot === "chest";
                 case "leg": return item.slot === "leg";
                 case "boot": return item.slot === "boot";
+                case "accessory": return item.type === "ring" || item.type === "amulet";
                 case "item": return item.type === "item" && !CharacterView.isFood(item);
                 case "food": return item.type === "item" && CharacterView.isFood(item);
                 case "pet": return item.type === "pet";
@@ -204,6 +205,8 @@ export default class CharacterView {
                 ${this.renderEquipmentSlot("chest", "Peitoral", equipment.chest)}
                 ${this.renderEquipmentSlot("leg", "Calças", equipment.leg)}
                 ${this.renderEquipmentSlot("boot", "Botas", equipment.boot)}
+                ${this.renderEquipmentSlot("ring", "Anel", equipment.ring)}
+                ${this.renderEquipmentSlot("amulet", "Amuleto", equipment.amulet)}
             </div>
         `;
     }
@@ -357,6 +360,7 @@ export default class CharacterView {
         { id: "chest", label: "Peitoral" },
         { id: "leg", label: "Calças" },
         { id: "boot", label: "Botas" },
+        { id: "accessory", label: "Acessórios" },
         { id: "item", label: "Itens" },
         { id: "food", label: "Comidas" },
         { id: "pet", label: "Pets" }

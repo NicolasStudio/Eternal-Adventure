@@ -78,6 +78,8 @@ export default class Player {
             chest: null,
             leg: null,
             boot: null,
+            ring: null,
+            amulet: null,
             pet: null
         };
 
@@ -85,6 +87,11 @@ export default class Player {
         // PetService.syncMaxHPBonus) — guardado aqui pra sincronizar
         // sem acumular em dobro toda vez que a fome muda.
         this.petLifeBonusApplied = 0;
+
+        // Mesma ideia do petLifeBonusApplied, só que pro Anel/Amuleto
+        // (únicos itens de equipamento — fora o pet — que dão Vida
+        // Máxima; ver syncEquipmentLifeBonus()).
+        this.equipmentLifeBonusApplied = 0;
         this.stats = new PlayerStats(this);
 
         // Baú diário (Pokébox): fica pronto imediatamente numa partida nova.
@@ -313,9 +320,10 @@ export default class Player {
 
         if (!item) return false;
 
-        // Itens sem `class` (ex: pet) valem pra qualquer classe — só
-        // barra quando o item REALMENTE exige uma classe específica.
-        if (item.class && item.class !== this.class.id) {
+        // Itens sem `class` (ex: pet) ou com class "all" (anel/amuleto —
+        // ver ring.js/amulet.js) valem pra qualquer classe — só barra
+        // quando o item REALMENTE exige uma classe específica.
+        if (item.class && item.class !== "all" && item.class !== this.class.id) {
             return false;
         }
 
@@ -328,6 +336,8 @@ export default class Player {
         this.inventory = this.inventory.filter(i => i.uid !== item.uid);
 
         this.equipment[slot] = item;
+
+        this.syncEquipmentLifeBonus();
 
         this.notify();
 
@@ -345,9 +355,33 @@ export default class Player {
 
         this.equipment[slot] = null;
 
+        this.syncEquipmentLifeBonus();
+
         this.notify();
 
         return true;
+
+    }
+
+    // Anel/Amuleto (ver ring.js/amulet.js) são os únicos itens de
+    // equipamento — fora o pet, que já tem seu próprio mecanismo em
+    // PetService.syncEquippedPetContribution — que podem dar Vida
+    // Máxima. Como "life" não é um dos status normais que PlayerStats
+    // soma (ver getFinalStats()), precisa desse ajuste à parte, idêntico
+    // em espírito ao do pet: só aplica a DIFERENÇA entre o que já estava
+    // aplicado e o valor atual, nunca acumula em dobro.
+    syncEquipmentLifeBonus() {
+
+        const newBonus = (this.equipment.ring?.stats?.life ?? 0) + (this.equipment.amulet?.stats?.life ?? 0);
+        const oldBonus = this.equipmentLifeBonusApplied ?? 0;
+
+        if (newBonus === oldBonus) return;
+
+        const diff = newBonus - oldBonus;
+
+        this.maxHP = Math.max(1, this.maxHP + diff);
+        this.currentHP = Math.min(this.maxHP, Math.max(0, this.currentHP + diff));
+        this.equipmentLifeBonusApplied = newBonus;
 
     }
 

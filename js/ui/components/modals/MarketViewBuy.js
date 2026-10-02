@@ -3,6 +3,8 @@ import helmets from "../../../data/helmets.js";
 import chests from "../../../data/chest.js";
 import legs from "../../../data/legs.js";
 import boots from "../../../data/boots.js";
+import rings from "../../../data/ring.js";
+import amulets from "../../../data/amulet.js";
 import dungeons from "../../../data/dungeons.js";
 import monsters from "../../../data/monsters.js";
 import seeds from "../../../data/seeds.js";
@@ -63,7 +65,7 @@ export default class MarketViewBuy {
             dungeon.drops.forEach(drop => {
                 if (!drop.type) return;
                 equipments.forEach(item => {
-                    if (item.class !== this.player.class.id) {
+                    if (item.class !== "all" && item.class !== this.player.class.id) {
                         return;
                     }
                     if (item.rarity.id !== drop.rarity) {

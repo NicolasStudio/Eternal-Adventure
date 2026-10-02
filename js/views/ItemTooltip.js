@@ -34,7 +34,7 @@ export default class ItemTooltip {
         let itemClass;
         if (this.item.type === "item") {
             itemClass = "Consumível";
-        } else if (this.item.class) {
+        } else if (this.item.class && this.item.class !== "all") {
             itemClass = this.getClassName(this.item.class);
         } else {
             itemClass = "Todas as Classes";
@@ -189,7 +189,9 @@ export default class ItemTooltip {
             archer: "Arqueiro",
             barbarian: "Bárbaro",
             putrid: "Putrido",
-            mimic: "Mímico"
+            mimic: "Mímico",
+            // Anel/Amuleto (ver ring.js/amulet.js) — qualquer classe usa.
+            all: "Todas as Classes"
         };
         return classes[classId] || classId;
     }

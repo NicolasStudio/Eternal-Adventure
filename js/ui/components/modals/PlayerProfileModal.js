@@ -3,6 +3,8 @@ import helmets from "../../../data/helmets.js";
 import chests from "../../../data/chest.js";
 import legs from "../../../data/legs.js";
 import boots from "../../../data/boots.js";
+import rings from "../../../data/ring.js";
+import amulets from "../../../data/amulet.js";
 import qualities from "../../../data/quality.js";
 import classes from "../../../player/classes.js";
 import PetService from "../../../services/PetService.js";
@@ -15,6 +17,8 @@ const SLOTS = [
     ["chest", "Peitoral"],
     ["leg", "Calças"],
     ["boot", "Botas"],
+    ["ring", "Anel"],
+    ["amulet", "Amuleto"],
     ["pet", "Pet"]
 ];
 
@@ -36,7 +40,7 @@ const STATS = [
 const STAT_KEYS = ["life", "attack", "armor", "agility", "criticalChance", "lifeSteal", "penetration", "absorption", "special"];
 
 const EQUIPMENT_BY_ID = {};
-[weapons, helmets, chests, legs, boots].forEach(pool => {
+[weapons, helmets, chests, legs, boots, rings, amulets].forEach(pool => {
     Object.values(pool).forEach(item => { EQUIPMENT_BY_ID[item.id] = item; });
 });
 

@@ -321,7 +321,9 @@ export default class MarketView {
             mage: "Mago",
             barbarian: "Bárbaro",
             putrid: "Putrido",
-            mimic: "Mímico"
+            mimic: "Mímico",
+            // Anel/Amuleto (ver ring.js/amulet.js) — qualquer classe usa.
+            all: "Todas as Classes"
         };
         return classes[playerClass] ?? playerClass;
     }

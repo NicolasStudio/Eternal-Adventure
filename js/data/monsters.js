@@ -269,6 +269,10 @@ const monsters = [
 
         drops: [
             {
+                type: ["ring"],
+                rarity: "common",
+                chance: 5
+
             },
             {
                 item: items.smallPotion,
@@ -302,6 +306,11 @@ const monsters = [
             {
                 type: ["weapon"],
                 rarity: "uncommon"
+            },
+            {
+                type: ["amulet"],
+                rarity: "common",
+                chance: 5
             },
             {
                 item: items.smallPotion,
@@ -612,6 +621,11 @@ const monsters = [
                 rarity: "rare"
             },
             {
+                type: ["amulet"],
+                rarity: "uncommon",
+                chance: 5
+            },
+            {
                 item: items.mediumPotion,
                 quantidade: 2
             }
@@ -906,6 +920,9 @@ const monsters = [
 
         drops: [
             {
+                type: ["ring"],
+                rarity: "uncommon",
+                chance: 5
             },
             {
                 item: items.mediumPotion,
@@ -1145,6 +1162,9 @@ const monsters = [
 
         drops: [
             {
+                type: ["amulet"],
+                rarity: "rare",
+                chance: 5
             },
             {
                 item: items.mediumPotion,
@@ -1344,6 +1364,9 @@ const monsters = [
 
         drops: [
             {
+                type: ["ring"],
+                rarity: "rare",
+                chance: 5
             },
             {
                 item: items.mediumPotion,
@@ -1642,6 +1665,9 @@ const monsters = [
 
         drops: [
             {
+                type: ["amulet"],
+                rarity: "mystic",
+                chance: 5
             },
             {
                 item: items.mediumPotion,
@@ -3245,8 +3271,9 @@ const monsters = [
 
         drops: [
             {
-                // type: ["weapon"],
-                // rarity: "mystic"
+                type: ["ring"],
+                rarity: "mystic",
+                chance: 5
             },
             {
                 item: items.tripleMediumPotion,

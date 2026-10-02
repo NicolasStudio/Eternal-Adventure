@@ -8,6 +8,8 @@ import helmets from "../data/helmets.js";
 import chests from "../data/chest.js";
 import legs from "../data/legs.js";
 import boots from "../data/boots.js";
+import rings from "../data/ring.js";
+import amulets from "../data/amulet.js";
 import pets from "../data/pet.js";
 import farmCrops from "../data/farmCrops.js";
 import Toast from "../ui/components/Toast.js";
@@ -25,7 +27,7 @@ const LEADERBOARD_COLLECTION = "leaderboard";
 // Todo item de equipamento conhecido, indexado por id — usado só pra
 // "refrescar" itens salvos (ver refreshItemStats), nunca alterado.
 const EQUIPMENT_BY_ID = {};
-[weapons, helmets, chests, legs, boots].forEach(pool => {
+[weapons, helmets, chests, legs, boots, rings, amulets].forEach(pool => {
     Object.values(pool).forEach(item => { EQUIPMENT_BY_ID[item.id] = item; });
 });
 
@@ -69,6 +71,7 @@ export default class SaveService {
             album: player.album,
             farm: player.farm,
             petLifeBonusApplied: player.petLifeBonusApplied,
+            equipmentLifeBonusApplied: player.equipmentLifeBonusApplied,
 
             health: {
                 burstMode: player.health.burstMode,
@@ -255,6 +258,7 @@ export default class SaveService {
         player.album = data.album ?? [];
         player.farm = data.farm ?? player.farm;
         player.petLifeBonusApplied = data.petLifeBonusApplied ?? 0;
+        player.equipmentLifeBonusApplied = data.equipmentLifeBonusApplied ?? 0;
 
         // Saves de antes da Anti-Praga existir não têm esses campos —
         // sem isso, applyPestSpawn() trataria "nunca nasceu nenhuma
@@ -515,7 +519,7 @@ export default class SaveService {
         const stats = player.stats.getFinalStats();
         const equipment = {};
 
-        ["weapon", "helmet", "chest", "leg", "boot", "pet"].forEach(slot => {
+        ["weapon", "helmet", "chest", "leg", "boot", "ring", "amulet", "pet"].forEach(slot => {
             equipment[slot] = this.compactEquippedItem(player.equipment[slot]);
         });
 

@@ -3,6 +3,8 @@ import helmets from "../data/helmets.js";
 import chests from "../data/chest.js";
 import legs from "../data/legs.js";
 import boots from "../data/boots.js";
+import rings from "../data/ring.js";
+import amulets from "../data/amulet.js";
 import dungeons from "../data/dungeons.js";
 import xpByLevel from "../data/xpByLevel.js";
 
@@ -38,7 +40,9 @@ export default class LootSystem {
             ...Object.values(helmets),
             ...Object.values(chests),
             ...Object.values(legs),
-            ...Object.values(boots)
+            ...Object.values(boots),
+            ...Object.values(rings),
+            ...Object.values(amulets)
         ];
 
         for (const drop of monster.drops) {
@@ -109,14 +113,21 @@ export default class LootSystem {
             }
 
             // ===============================
-            // Equipamento aleatório
+            // Equipamento aleatório (ou com chance própria — drop.chance,
+            // 0-100; sem esse campo, é sempre garantido como antes)
             // ===============================
             if (drop.type) {
 
-                const equipment = this.pickEquipment(drop.type, drop.rarity, player, allItems);
+                const chance = drop.chance ?? 100;
 
-                if (equipment) {
-                    reward.items.push({ ...equipment, quantity: 1 });
+                if (Math.random() * 100 < chance) {
+
+                    const equipment = this.pickEquipment(drop.type, drop.rarity, player, allItems);
+
+                    if (equipment) {
+                        reward.items.push({ ...equipment, quantity: 1 });
+                    }
+
                 }
 
             }
@@ -141,8 +152,9 @@ export default class LootSystem {
             // common, rare...
             && item.rarity.id === rarity
 
-            // warrior, mage, archer...
-            && item.class === player.class.id
+            // warrior, mage, archer... ("all" = anel/amuleto, qualquer
+            // classe pode usar — ver ring.js/amulet.js)
+            && (item.class === "all" || item.class === player.class.id)
 
         );
 

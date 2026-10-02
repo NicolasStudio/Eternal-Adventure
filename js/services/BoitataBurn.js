@@ -12,12 +12,14 @@
    Efetividade contra o elemento do alvo (chefes do Cooperativo):
      Água     -70% de dano
      Planta   +70% de dano
+     Inseto   +70% de dano
      Fogo, Luz, Escuridão e alvos sem elemento: dano padrão.
 ========================================================== */
 
 const EFFECTIVENESS = {
     water: 0.3,
-    plant: 1.7
+    plant: 1.7,
+    bug: 1.7
 };
 
 export default class BoitataBurn {
