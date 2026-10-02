@@ -61,6 +61,8 @@
     position:fixed;
     z-index:900;
     display:flex;
+    width:380px;
+    height:420px;
     flex-direction:column;
     gap:8px;
     padding:12px;
@@ -70,12 +72,19 @@
     box-shadow:0 0 20px rgba(0,0,0,.7), inset 0 0 25px rgba(255,255,255,.03);
     color:#efe2bf;
     font-family:"Cinzel",serif;
+    overflow:hidden;
 }
 
 .chat-header{
     display:flex;
     align-items:center;
     justify-content:space-between;
+    cursor:move;
+    user-select:none;
+    touch-action:none;
+}
+.chat-header.dragging{
+    cursor:grabbing;
 }
 .chat-header h3{
     margin:0;
@@ -89,8 +98,7 @@
 
 .chat-messages{
     flex:1;
-    min-height:120px;
-    height:220px;
+    min-height:0;
     overflow-y:auto;
     padding:8px;
     display:flex;

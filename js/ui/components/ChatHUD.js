@@ -4,6 +4,14 @@ import TabBadge from "../TabBadge.js";
 
 const MAX_RENDERED_MESSAGES = 100;
 
+// Margem mínima da borda da tela — tanto na posição inicial quanto
+// arrastando, o painel nunca fica mais perto do que isso de nenhuma
+// borda (ver positionPanel/bindDrag). O painel agora tem tamanho FIXO
+// (.chat-panel no chat.css) em vez de esticar sozinho, que era o que
+// fazia ele parecer "preso" no rodapé — o rodapé do painel estourava
+// pra fora da viewport quando abria perto da base da tela.
+const SCREEN_MARGIN = 12;
+
 export default class ChatHUD {
 
     constructor(game) {
@@ -164,6 +172,7 @@ export default class ChatHUD {
 
         this.positionPanel();
         this.bindPanelEvents();
+        this.bindDrag();
 
         // Abrir o painel = leu tudo.
         this.unread = 0;
@@ -202,15 +211,67 @@ export default class ChatHUD {
             ? document.getElementById("chat-toggle")
             : document.querySelector(".hud-panel");
         const rect = anchor?.getBoundingClientRect();
-        const width = document.querySelector(".hud-panel")?.getBoundingClientRect().width ?? 0;
 
-        const top = (rect?.bottom ?? 120) + 12;
-        const left = rect?.left ?? 20;
+        const rawTop = (rect?.bottom ?? 120) + 12;
+        const rawLeft = rect?.left ?? 20;
 
-        this.panel.style.top = `${top}px`;
-        this.panel.style.left = `${left}px`;
-        this.panel.style.width = `${Math.max(width, 280)}px`;
-        this.panel.style.maxHeight = `calc(100vh - ${top}px - 20px)`;
+        // Tamanho fixo (ver .chat-panel no chat.css) — só precisa travar
+        // dentro da tela, não calcular mais nada dinâmico.
+        const maxTop = Math.max(SCREEN_MARGIN, window.innerHeight - this.panel.offsetHeight - SCREEN_MARGIN);
+        const maxLeft = Math.max(SCREEN_MARGIN, window.innerWidth - this.panel.offsetWidth - SCREEN_MARGIN);
+
+        this.panel.style.top = `${Math.min(rawTop, maxTop)}px`;
+        this.panel.style.left = `${Math.min(rawLeft, maxLeft)}px`;
+
+    }
+
+    // Arrasta o painel pelo cabeçalho (exceto o botão de fechar) — só
+    // atualiza top/left em px, do mesmo jeito que positionPanel() já
+    // posiciona (position:fixed no CSS). Usa Pointer Events + captura:
+    // funciona com mouse e toque, e continua seguindo o dedo/cursor
+    // mesmo que ele saia de cima do cabeçalho durante o arrasto.
+    bindDrag() {
+
+        const header = this.panel.querySelector(".chat-header");
+
+        header.addEventListener("pointerdown", event => {
+
+            if (event.target.closest("#chat-close")) return;
+
+            event.preventDefault();
+
+            const startX = event.clientX;
+            const startY = event.clientY;
+            const startLeft = this.panel.offsetLeft;
+            const startTop = this.panel.offsetTop;
+
+            header.setPointerCapture(event.pointerId);
+            header.classList.add("dragging");
+
+            const onMove = moveEvent => {
+
+                // Trava dentro da tela — nunca deixa arrastar o painel
+                // (de tamanho fixo) pra fora por completo e "perder" ele.
+                const maxLeft = Math.max(SCREEN_MARGIN, window.innerWidth - this.panel.offsetWidth - SCREEN_MARGIN);
+                const maxTop = Math.max(SCREEN_MARGIN, window.innerHeight - this.panel.offsetHeight - SCREEN_MARGIN);
+
+                const left = Math.min(Math.max(SCREEN_MARGIN, startLeft + (moveEvent.clientX - startX)), maxLeft);
+                const top = Math.min(Math.max(SCREEN_MARGIN, startTop + (moveEvent.clientY - startY)), maxTop);
+
+                this.panel.style.left = `${left}px`;
+                this.panel.style.top = `${top}px`;
+
+            };
+
+            const onUp = () => {
+                header.classList.remove("dragging");
+                header.removeEventListener("pointermove", onMove);
+            };
+
+            header.addEventListener("pointermove", onMove);
+            header.addEventListener("pointerup", onUp, { once: true });
+
+        });
 
     }
 
