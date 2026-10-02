@@ -159,7 +159,7 @@
 
                     <article class="wiki-card">
                         <h3><i class="fa-solid fa-masks-theater"></i> Mímico</h3>
-                        <p>Dano próprio baixo, mas armadura alta e agilidade acima da média. O forte dele é a <strong>Imitação</strong>, atributo exclusivo: soma uma % do Ataque, Armadura e Agilidade de quem ele está enfrentando aos status dele mesmo, recalculada a cada golpe — afeta tanto o quanto ele bate (passa pela Armadura do alvo normalmente) quanto o quanto ele aguenta e esquiva. Quanto mais forte for o oponente, mais forte o Mímico fica contra ele.</p>
+                        <p>Dano próprio baixo, mas armadura alta e agilidade acima da média. O forte dele é a <strong>Imitação</strong>, atributo exclusivo: soma uma % do Ataque, Armadura e Agilidade de quem ele está enfrentando aos status dele mesmo, recalculada a cada golpe — afeta tanto o quanto ele bate (passa pela Armadura do alvo normalmente) quanto o quanto ele aguenta e esquiva. Quanto mais forte for o oponente, mais forte o Mímico fica contra ele, até um teto de 30% definido pela arma e pelo elmo equipados.</p>
                     </article>
 
                 </div>
@@ -212,7 +212,7 @@
             <section id="itens" class="wiki-section">
 
                 <h2><i class="fa-solid fa-shirt"></i> Itens</h2>
-                <p class="wiki-intro">Seu personagem tem 5 espaços de equipamento, além de itens consumíveis que ficam soltos no inventário.</p>
+                <p class="wiki-intro">Seu personagem tem 7 espaços de equipamento, além de itens consumíveis que ficam soltos no inventário.</p>
 
                 <div class="wiki-table">
                     <div class="wiki-table-row"><span><i class="fa-solid fa-khanda"></i> Armas</span><span>Definem seu ataque principal. Cada classe usa um tipo de arma diferente (espada, arco ou cetro) e só pode equipar armas da própria classe.</span></div>
@@ -220,8 +220,12 @@
                     <div class="wiki-table-row"><span><i class="fa-solid fa-shirt"></i> Peitoral</span><span>A peça de armadura mais robusta do conjunto.</span></div>
                     <div class="wiki-table-row"><span><i class="fa-solid fa-socks"></i> Calça</span><span>Mais um pedaço de armadura, com sua própria progressão de raridade.</span></div>
                     <div class="wiki-table-row"><span><i class="fa-solid fa-shoe-prints"></i> Botas</span><span>Fecham o conjunto de armadura, e costumam contribuir também com Agilidade.</span></div>
+                    <div class="wiki-table-row"><span><i class="fa-solid fa-ring"></i> Anel</span><span>"Anel do Primeiro Imperador" — soma Vida e Armadura. Usável por qualquer classe, sem restrição.</span></div>
+                    <div class="wiki-table-row"><span><i class="fa-solid fa-gem"></i> Amuleto</span><span>"Amuleto Primal" — soma Ataque e Agilidade. Também usável por qualquer classe.</span></div>
                     <div class="wiki-table-row"><span><i class="fa-solid fa-flask"></i> Poções</span><span>Consumíveis que recuperam vida na hora. Você pode usar uma de cada vez, ou usar o botão de "Curar Vida Completa" pra gastar automaticamente quantas forem necessárias e ficar com a vida cheia numa tacada só.</span></div>
                 </div>
+
+                <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: Anel e Amuleto não dropam de monstros comuns — só de pontos fixos específicos em algumas dungeons e chefes, com 5% de chance cada, em raridades de Comum a Místico.</p>
 
             </section>
 
@@ -296,6 +300,9 @@
 
                 <h3>Melhoria de Equipamento</h3>
                 <p>Mesma lógica da arma, só que pra Cabeça, Peitoral, Calça e Botas — cada peça de armadura melhora de forma independente.</p>
+
+                <h3>Acessórios</h3>
+                <p>Aba própria pra melhorar Anel e Amuleto — os dois aparecem juntos aqui, já que dividem a mesma aba no inventário. Seguem a mesma regra de Qualidade de qualquer outro item, incluindo o estágio extra Lendário pras peças de raridade Lendária.</p>
 
                 <h3>Encantamento</h3>
                 <p>Liberado a partir do nível 50. Aqui você usa Pedras de Encantamento (que caem de monstros específicos) pra dar um bônus <strong>permanente</strong> no seu personagem através de uma arma.</p>
@@ -424,7 +431,7 @@
 
                 <h3>Ataque do Pet</h3>
                 <p>Um pet equipado ataca o inimigo a cada turno seu, além do seu próprio ataque — um golpe extra, garantido (sem chance de esquiva ou crítico), com linha própria no log de combate. Funciona em Dungeons, PVP e Cooperativo. Algumas espécies, em vez de dano, curam a cada turno seu — você, ou um aliado sorteado em PVP 2x2 e Cooperativo. O efeito escala com a fome, igual aos outros atributos.</p>
-                <p>O Boitatá tem uma terceira variante: ao acertar o primeiro golpe, incendeia o alvo, que passa a levar dano direto (não passa pela armadura) a cada turno seu até o combate acabar. Contra os elementos dos chefes do Cooperativo, a queimadura é <strong>fraca</strong> contra criaturas de Água e <strong>forte</strong> contra criaturas de Planta.</p>
+                <p>O Boitatá tem uma terceira variante: ao acertar o primeiro golpe, incendeia o alvo, que passa a levar dano direto (não passa pela armadura) a cada turno seu até o combate acabar. Contra os elementos dos chefes do Cooperativo, a queimadura é <strong>fraca</strong> contra criaturas de Água e <strong>forte</strong> contra criaturas de Planta ou Inseto.</p>
                 <p>A cura e a queimadura crescem junto com o pet: valem o nível em que o estágio atual evoluiu somado ao nível atual dele — ou seja, sobem a cada nível e dão um salto a cada evolução.</p>
 
                 <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: mantenha seu pet bem alimentado antes de encarar um combate difícil — com a fome baixa, ele praticamente não ajuda em nada.</p>
@@ -528,6 +535,7 @@
                 <p class="wiki-intro">Acessível pelo ícone de balões, logo abaixo do seu HUD, em qualquer tela, inclusive durante combates de Dungeon, PVP e Cooperativo. Um chat global, com todo jogador online no mesmo canal — sem salas nem conversa privada.</p>
                 <p>Mensagens somem sozinhas depois de 1 hora. Pra evitar spam, não dá pra mandar a mesma mensagem duas vezes seguidas em menos de 5 minutos, nem mandar muito rápido uma atrás da outra — o jogo avisa quando isso acontece.</p>
                 <p>Uma bolinha vermelha no ícone do Chat aparece quando chegam mensagens novas enquanto a janela está fechada. Se o jogo estiver em outra aba, a própria aba do navegador mostra quantas mensagens chegaram — inclusive no ícone, se a aba estiver fixada.</p>
+                <p>O jogador no <strong>1º lugar</strong> do <a href="#ranking">Ranking Global</a> exibe uma coroa dourada ao lado do nome, em qualquer mensagem que mandar. A janela do chat também pode ser arrastada pela tela, segurando pelo cabeçalho.</p>
 
             </section>
 
