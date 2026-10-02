@@ -148,6 +148,7 @@ const CHECKS = {
     // sempre, mesmo que o Poder caia (pet com fome, trocar item).
     power_8k: player => PowerService.getPower(player) > 8000,
     power_25k: player => PowerService.getPower(player) > 25000,
+    power_32k: player => PowerService.getPower(player) > 32000,
 
     egg_hatch_1: player => (player.progress.stats?.eggsHatched ?? 0) >= 1,
     egg_hatch_5: player => (player.progress.stats?.eggsHatched ?? 0) >= 5,
@@ -161,6 +162,7 @@ const CHECKS = {
     pet_level_up: player => hasPetAtLevel(player, 2),
     pet_level_18: player => hasPetAtLevel(player, 18),
     pet_level_32: player => hasPetAtLevel(player, 32),
+    pet_level_50: player => hasPetAtLevel(player, 50),
     pet_5_stars: player => hasPetWithStars(player, 5),
 
     farm_till_first: player => player.farm.plots.some(plot => plot.tilled),
