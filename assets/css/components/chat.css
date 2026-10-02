@@ -79,7 +79,7 @@
     display:flex;
     align-items:center;
     justify-content:space-between;
-    cursor:move;
+    cursor:grab;
     user-select:none;
     touch-action:none;
 }
