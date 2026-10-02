@@ -9,7 +9,6 @@ import FarmConfirmModal from "../ui/components/modals/FarmConfirmModal.js";
 import { STACK_PERCENTS as MIASMA_STACK_PERCENTS, STACK_MAX as MIASMA_STACK_MAX, PERSISTENT_SPECIAL_MULTIPLIER as MIASMA_SPECIAL_KEEP } from "../services/MiasmaService.js";
 import { ABSORPTION_RATIO_PVE, ABSORPTION_RATIO_PVP, ABSORPTION_CAP } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
-import { HP_DIVISOR_PVE as MIMIC_HP_DIVISOR_PVE, HP_DIVISOR_PVP as MIMIC_HP_DIVISOR_PVP } from "../services/MimicService.js";
 
 export default class CharacterView {
     constructor(game) {
@@ -1257,7 +1256,7 @@ export default class CharacterView {
                 ["Fórmula", `Dano = Ataque × (${CRITICAL_MULTIPLIER}× se crítico) × mitigação da Armadura do alvo.`],
                 ["Sem chance", "Diferente de Crítico/Absorção, o Ataque não é sorteado — vale o valor cheio em todo golpe."],
                 ["Contra o Pútrido", `Os acúmulos de Intoxicação do Miasma tiram ${CharacterView.MIASMA_STACKS_TEXT} do seu Ataque (1, 2 ou 3 acúmulos) até o fim da luta.`],
-                ["Contra o Mímico", "A Imitação dele causa dano verdadeiro extra baseado na SUA Vida Máxima (não no seu Ataque) sempre que ele te acerta — ignora Armadura e Absorção."]
+                ["Contra o Mímico", "A Imitação dele soma uma % do seu Ataque/Armadura/Agilidade aos dele — quanto mais forte você for, mais forte ele fica contra você, mas esse bônus de Ataque passa pela SUA Armadura igual o resto do dano dele."]
             ]
         },
 
@@ -1349,11 +1348,11 @@ export default class CharacterView {
         reflection: {
             icon: "fa-shield-cat",
             title: "Imitação",
-            summary: "Exclusivo do Mímico: causa dano verdadeiro extra baseado na Vida Máxima do alvo em todo golpe que acerta.",
+            summary: "Exclusivo do Mímico: soma Imitação% do Ataque/Armadura/Agilidade de quem ele enfrenta aos status dele mesmo.",
             details: [
-                ["Contra monstros e chefes", `Dano extra = (Imitação ÷ ${MIMIC_HP_DIVISOR_PVE})% da Vida Máxima do ALVO. Ex: 35% de Imitação = ${(35 / MIMIC_HP_DIVISOR_PVE).toFixed(1).replace(".", ",")}% da vida máxima dele por golpe.`],
-                ["Contra jogadores (PVP)", `Dano extra = (Imitação ÷ ${MIMIC_HP_DIVISOR_PVP})% da Vida Máxima do ALVO. Ex: 35% de Imitação = ${(35 / MIMIC_HP_DIVISOR_PVP).toFixed(2).replace(".", ",")}% da vida máxima dele por golpe.`],
-                ["Dano verdadeiro", "Ignora Armadura e Absorção por completo. Não precisa de Crítico nem de sorte — ativa sempre que o golpe acerta."],
+                ["Fórmula", "Bônus = Imitação% × Ataque/Armadura/Agilidade do OPONENTE (não o dele) — recalculado a cada golpe, a partir de quem ele está enfrentando."],
+                ["Os três lados", "O bônus de Ataque passa pela mitigação normal (Armadura do alvo); o de Armadura/Agilidade valem o tempo todo, tanto quando ele ataca quanto quando apanha."],
+                ["Quanto mais forte o oponente", "Mais o Mímico ganha — mas o bônus de Ataque ainda é reduzido pela Armadura de quem ele está atacando, igual qualquer outro dano."],
                 CharacterView.SPECIAL_CAP_ROW
             ]
         }

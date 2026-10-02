@@ -17,9 +17,10 @@ const SECONDARY_BONUS_QUALITIES = ["exceptional", LEGENDARY_EXTRA_QUALITY];
 // Status secundários só passam a receber bônus de melhoria quando o
 // item chega em "Excepcional". Antes disso, só os principais
 // (attack, armor, agility) ganham pontos a cada melhoria. Inclui
-// miasmaChance (especial do Pútrido, na arma e na touca) — sem isso, o
-// Miasma nunca melhorava com a Qualidade.
-const SECONDARY_STATS = ["criticalChance", "lifeSteal", "penetration", "absorption", "miasmaChance"];
+// miasmaChance (especial do Pútrido, na arma e na touca) e reflection
+// (especial do Mímico, na arma e no elmo) — sem isso, Miasma/Imitação
+// nunca melhoram com a Qualidade.
+const SECONDARY_STATS = ["criticalChance", "lifeSteal", "penetration", "absorption", "miasmaChance", "reflection"];
 
 // Bônus de "Excepcional" pra status SECUNDÁRIOS (% com teto por
 // raridade — ver rarities.js/secondaryCap), por raridade do item.
@@ -33,6 +34,14 @@ const SECONDARY_STATS = ["criticalChance", "lifeSteal", "penetration", "absorpti
 // peças, completas E no Excepcional, cheguem exatamente no teto da
 // raridade (rarities.js/secondaryCap) — nem uma peça sozinha chega perto,
 // nem sobra bônus desperdiçado pelo teto.
+//
+// Exceção: a Imitação do Mímico (reflection) tem teto PRÓPRIO de 30 —
+// bem mais baixo que o secondaryCap normal (45 no Ultraje), porque um
+// único ponto percentual dela vale muito mais que nos outros status
+// secundários (soma de uma vez no Ataque, na Armadura E na Agilidade —
+// ver MimicService.js). A curva da arma/elmo dela (weapons.js/
+// helmets.js) foi recalibrada à parte, fechando em 30 no Ultraje+
+// Lendário em vez do teto cheio.
 const SECONDARY_EXCEPTIONAL_BONUS = {
     common: 2,
     uncommon: 3,

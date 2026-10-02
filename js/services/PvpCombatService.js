@@ -2,7 +2,7 @@ import PetService from "./PetService.js";
 import PowerService from "./PowerService.js";
 import BoitataBurn from "./BoitataBurn.js";
 import MiasmaService from "./MiasmaService.js";
-import MimicService, { HP_DIVISOR_PVP as MIMIC_HP_DIVISOR_PVP } from "./MimicService.js";
+import MimicService from "./MimicService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVP, absorbedAmount } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
@@ -24,7 +24,11 @@ const DODGE_CAP = 40;
 // resultado de qualquer luta com um Mímico nos dois lados.
 // v7: Imitação passou a ser % da Vida Máxima do alvo (era do Ataque), com
 // divisor próprio no PVP (÷30).
-export const TEAM_SIM_VERSION = 7;
+// v8: Imitação deixou de ser dano — agora soma Imitação% do Ataque/
+// Armadura/Agilidade do oponente aos status do Mímico a luta inteira
+// (afeta quanto ele bate, aguenta e esquiva), recalculado a cada golpe
+// a partir de quem ele está enfrentando naquele momento.
+export const TEAM_SIM_VERSION = 8;
 
 /*
     PVP precisa que os DOIS clientes (o do jogador A e o do jogador B)
@@ -175,7 +179,19 @@ export default class PvpCombatService {
             const attackerMult = MiasmaService.statMultiplier(miasmaFlags[turn]);
             const defenderMult = MiasmaService.statMultiplier(miasmaFlags[defenderKey]);
 
-            const dodgeChance = this.dodgeChance(defender.agility * defenderMult, attacker.agility * attackerMult);
+            // Imitação do Mímico: soma Imitação% do Ataque/Armadura/
+            // Agilidade de quem ele enfrenta aos status dele — recalculada
+            // a cada golpe (quem está nos dois lados não muda no 1x1, mas
+            // mantém o mesmo cálculo do 2x2). Não afetado pelo próprio
+            // débuff de Miasma (attackerMult/defenderMult), só a parte
+            // PRÓPRIA do status é reduzida por ele (ver MimicService.js).
+            const attackerCopy = MimicService.applyCopy(defender, attacker.reflection ?? 0);
+            const defenderCopy = MimicService.applyCopy(attacker, defender.reflection ?? 0);
+
+            const dodgeChance = this.dodgeChance(
+                defender.agility * defenderMult + defenderCopy.bonusAgility,
+                attacker.agility * attackerMult + attackerCopy.bonusAgility
+            );
 
             if (rng() * 100 < dodgeChance) {
 
@@ -193,9 +209,9 @@ export default class PvpCombatService {
 
                 const isCritical = rng() * 100 < attacker.criticalChance * attackDebuff;
                 const criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER : 1;
-                const effectiveArmor = defender.armor * (1 - (attacker.penetration * attackDebuff) / 100);
+                const effectiveArmor = (defender.armor + defenderCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
-                const preAbsorption = Math.max(1, Math.floor(attacker.attack * attackerMult * criticalMultiplier * mitigation));
+                const preAbsorption = Math.max(1, Math.floor((attacker.attack * attackerMult + attackerCopy.bonusAttack) * criticalMultiplier * mitigation));
 
                 // Absorção: CHANCE de quem defende absorver parte do golpe
                 // (ver Absorption.js). Sempre consome 1 rng(), ativando ou
@@ -203,11 +219,11 @@ export default class PvpCombatService {
                 const absorptionChance = Math.min(ABSORPTION_CAP, (defender.absorption ?? 0) * defendDebuff);
                 const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance, ABSORPTION_RATIO_PVP);
 
-                // Imitação do Mímico: dano VERDADEIRO extra, por cima do
-                // golpe já mitigado/absorvido (ver MimicService.js).
-                const mimicBonus = MimicService.getBonusDamage(defender.maxHP, attacker.reflection ?? 0, MIMIC_HP_DIVISOR_PVP);
+                const damage = preAbsorption - absorbed;
 
-                const damage = preAbsorption - absorbed + mimicBonus;
+                // Imitação do Mímico: quanto do Ataque usado nesse golpe
+                // veio da cópia — só pra mensagem (ver MimicService.js).
+                const mimicBonus = attackerCopy.bonusAttack;
 
                 defender.currentHP = Math.max(0, defender.currentHP - damage);
 
@@ -409,7 +425,17 @@ export default class PvpCombatService {
                 const attackerMult = MiasmaService.statMultiplier(miasmaFlagsById.get(attacker.id));
                 const targetMult = MiasmaService.statMultiplier(miasmaFlagsById.get(target.id));
 
-                const dodgeChance = this.dodgeChance(target.agility * targetMult, attacker.agility * attackerMult);
+                // Imitação do Mímico: soma Imitação% do Ataque/Armadura/
+                // Agilidade de quem ele enfrenta aos status dele — no 2x2
+                // recalculada a cada golpe porque o alvo sorteado pode
+                // mudar de turno pra turno (ver MimicService.js).
+                const attackerCopy = MimicService.applyCopy(target, attacker.reflection ?? 0);
+                const targetCopy = MimicService.applyCopy(attacker, target.reflection ?? 0);
+
+                const dodgeChance = this.dodgeChance(
+                    target.agility * targetMult + targetCopy.bonusAgility,
+                    attacker.agility * attackerMult + attackerCopy.bonusAgility
+                );
 
                 if (rng() * 100 < dodgeChance) {
 
@@ -440,18 +466,18 @@ export default class PvpCombatService {
 
                 const isCritical = rng() * 100 < attacker.criticalChance * attackDebuff;
                 const criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER : 1;
-                const effectiveArmor = target.armor * (1 - (attacker.penetration * attackDebuff) / 100);
+                const effectiveArmor = (target.armor + targetCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
-                const preAbsorption = Math.max(1, Math.floor(attacker.attack * attackerMult * criticalMultiplier * mitigation));
+                const preAbsorption = Math.max(1, Math.floor((attacker.attack * attackerMult + attackerCopy.bonusAttack) * criticalMultiplier * mitigation));
 
                 const absorptionChance = Math.min(ABSORPTION_CAP, (target.absorption ?? 0) * defendDebuff);
                 const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance, ABSORPTION_RATIO_PVP);
 
-                // Imitação do Mímico: dano VERDADEIRO extra, por cima do
-                // golpe já mitigado/absorvido (ver MimicService.js).
-                const mimicBonus = MimicService.getBonusDamage(target.maxHP, attacker.reflection ?? 0, MIMIC_HP_DIVISOR_PVP);
+                const damage = preAbsorption - absorbed;
 
-                const damage = preAbsorption - absorbed + mimicBonus;
+                // Imitação do Mímico: quanto do Ataque usado nesse golpe
+                // veio da cópia — só pra mensagem (ver MimicService.js).
+                const mimicBonus = attackerCopy.bonusAttack;
 
                 target.currentHP = Math.max(0, target.currentHP - damage);
 

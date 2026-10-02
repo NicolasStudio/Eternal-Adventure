@@ -4,46 +4,59 @@
    do bônus e a mensagem. (Os motores de combate só chamam estas
    funções — nenhum guarda a regra sozinho.)
 
-   Regra: em todo golpe SEU que acerta (não dodgado), o Mímico soma
-   dano VERDADEIRO extra = (Imitação ÷ divisor)% da VIDA MÁXIMA do
-   alvo — sem precisar de sorte (ao contrário de Crítico/Absorção/
-   Miasma, que são chance), e ignorando Armadura/Absorção por completo.
+   Regra: em TODO golpe (seu ou do oponente), o Mímico soma Imitação%
+   do Ataque/Armadura/Agilidade de quem ela está enfrentando aos
+   PRÓPRIOS Ataque/Armadura/Agilidade — vira parte normal dos status
+   dela pra aquele confronto, não é mais dano à parte. Isso afeta os
+   TRÊS lados: quanto ela bate (Ataque, passa pela mitigação normal),
+   quanto ela aguenta (Armadura, sofre menos de quem ela copiou) e
+   quanto ela esquiva/é difícil de acertar (Agilidade).
 
-   O divisor depende de QUEM é o alvo (mesma ideia da Absorção):
-     contra a máquina (monstro, chefe do Cooperativo): ÷ HP_DIVISOR_PVE
-       — 35% de Imitação = 3,5% da Vida Máxima do alvo por golpe;
-     contra jogador (PVP): ÷ HP_DIVISOR_PVP — 35% = ~1,17%.
-   Dano verdadeiro vale ~4x um golpe normal no fim do jogo (todo mundo
-   tem 230–330 de Armadura), então o valor que dava chance contra os
-   Anjos fazia o Mímico vencer ~95% no PVP. Sem Imitação nenhuma, ele
-   vence <1% — a força da classe está toda aqui. Valores por simulação.
+   Recalculado a cada golpe a partir do oponente DAQUELA troca (não
+   trava no início da luta) — importa no 2x2, onde ela pode alternar
+   entre os 2 inimigos do outro time.
 
-   Era % do ATAQUE do alvo (vencia 100% no PVP). Não é afetado por nada
-   que reduza o PRÓPRIO Ataque do Mímico (ex: Miasma) — é calculado só
-   a partir da vida do ALVO.
+   Era dano verdadeiro baseado em % da Vida Máxima do alvo — contra
+   chefes (dezenas de milhares de vida) isso chegava a 600-1000+ de
+   dano por golpe, bem desproporcional. Copiar os status de combate
+   (não a vida) fica naturalmente mais contido, porque Ataque/Armadura
+   já são números pequenos e equilibrados pela própria mitigação.
 
    (O campo interno continua se chamando "reflection" no código —
    só o nome exibido pro jogador virou "Imitação", porque "Reflexo"
    remetia a esquiva/reação rápida.)
 ========================================================== */
 
-// Imitação% ÷ isso = % da Vida Máxima do alvo. PVE ÷15 já deixava o
-// Mímico sem chance contra os Anjos; PVP ÷30 deixa ele em ~43–58% de
-// vitórias (÷20 ainda ficava em ~68–81%).
-export const HP_DIVISOR_PVE = 10;
-export const HP_DIVISOR_PVP = 30;
-
 export default class MimicService {
 
-    // targetMaxHP: Vida Máxima do alvo (vidaMaxima, no caso de monstro de
-    // dungeon). reflectionRatio: atributo "Imitação" do atacante (0-100,
-    // não é fração). divisor: HP_DIVISOR_PVE ou HP_DIVISOR_PVP, conforme
-    // o alvo seja a máquina ou outro jogador.
-    static getBonusDamage(targetMaxHP, reflectionRatio, divisor) {
+    // opponentValue: Ataque/Armadura/Agilidade "cru" de quem ela está
+    // enfrentando nesse golpe. reflectionRatio: atributo "Imitação" do
+    // Mímico (0-100, não é fração).
+    static getCopiedBonus(opponentValue, reflectionRatio) {
 
-        if (!(reflectionRatio > 0) || !(targetMaxHP > 0)) return 0;
+        if (!(reflectionRatio > 0) || !(opponentValue > 0)) return 0;
 
-        return Math.max(0, Math.round(targetMaxHP * reflectionRatio / divisor / 100));
+        return Math.max(0, Math.round(opponentValue * reflectionRatio / 100));
+
+    }
+
+    // Imitação% do Ataque/Armadura/Agilidade "crus" do oponente — só os
+    // BÔNUS (nunca soma sozinho com o status "próprio" de quem chama,
+    // de propósito: cada motor decide como combinar isso com os
+    // multiplicadores que já tem, ex: o débuff de Miasma, que só reduz
+    // o Ataque PRÓPRIO do Mímico, nunca a parte copiada). Sem Imitação
+    // (reflectionRatio 0), os três bônus saem zerados.
+    static applyCopy(opponent, reflectionRatio) {
+
+        const opponentAttack = opponent.attack ?? opponent.dano ?? 0;
+        const opponentArmor = opponent.armor ?? opponent.armadura ?? 0;
+        const opponentAgility = opponent.agility ?? opponent.agilidade ?? 0;
+
+        return {
+            bonusAttack: this.getCopiedBonus(opponentAttack, reflectionRatio),
+            bonusArmor: this.getCopiedBonus(opponentArmor, reflectionRatio),
+            bonusAgility: this.getCopiedBonus(opponentAgility, reflectionRatio)
+        };
 
     }
 
@@ -53,25 +66,15 @@ export default class MimicService {
         return entry?.mimicBonus > 0 ? 1 : 0;
     }
 
-    // bonusDamage: dano VERDADEIRO extra da Imitação nesse golpe (ver
-    // getBonusDamage — já é o valor final, não precisa de mais contas).
-    // subject: quem fez a Imitação nessa frase — "Você" (padrão, quando
-    // é o próprio jogador lendo) ou o NOME de quem fez (quando é outra
-    // pessoa, ex: o oponente no PVP, ou um aliado no 2x2/Cooperativo).
-    // attackName: nome do golpe do ALVO que foi copiado — só existe pra
-    // monstro/chefe (nomeAtaque/attacks nomeados). Jogador não tem
-    // golpe nomeado (PVP), então cai na frase genérica.
-    static buildMessage(bonusDamage, { subject = "Você", attackName = null } = {}) {
+    // bonusAttack: quanto do Ataque usado nesse golpe veio da cópia
+    // (ver applyCopy). subject: quem fez a Imitação nessa frase —
+    // "Você" (padrão) ou o NOME de quem fez (oponente no PVP, aliado
+    // no 2x2/Cooperativo).
+    static buildMessage(bonusAttack, { subject = "Você", opponentName = "o alvo" } = {}) {
 
-        if (!(bonusDamage > 0)) return "";
+        if (!(bonusAttack > 0)) return "";
 
-        // O selo "Imitação!" já diz QUAL habilidade é — a frase não
-        // precisa repetir o nome dela, só o que aconteceu.
-        const source = attackName
-            ? `usou <strong>${attackName}</strong>`
-            : `imitou a vitalidade do alvo`;
-
-        return `<span class="combat-mimic">Imitação!</span> ${subject} ${source}, causando <strong>${bonusDamage}</strong> de dano verdadeiro.`;
+        return `<span class="combat-mimic">Imitação!</span> ${subject} atacou com <strong>+${bonusAttack}</strong> de Ataque copiado de ${opponentName}.`;
 
     }
 

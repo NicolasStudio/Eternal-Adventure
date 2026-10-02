@@ -629,7 +629,7 @@ const helmets = {
 
         stats: {
             armor: 2,
-            reflection: 2
+            reflection: 1
         },
 
         value: 50,
@@ -649,7 +649,7 @@ const helmets = {
 
         stats: {
             armor: 4,
-            reflection: 3
+            reflection: 1
         },
 
         value: 200,
@@ -669,7 +669,7 @@ const helmets = {
 
         stats: {
             armor: 6,
-            reflection: 4
+            reflection: 2
         },
 
         value: 720,
@@ -689,7 +689,7 @@ const helmets = {
 
         stats: {
             armor: 11,
-            reflection: 6
+            reflection: 2
         },
 
         value: 2160,
@@ -709,7 +709,7 @@ const helmets = {
 
         stats: {
             armor: 17,
-            reflection: 8
+            reflection: 3
         },
 
         value: 0,
@@ -729,7 +729,7 @@ const helmets = {
 
         stats: {
             armor: 21,
-            reflection: 10
+            reflection: 4
         },
 
         value: 0,

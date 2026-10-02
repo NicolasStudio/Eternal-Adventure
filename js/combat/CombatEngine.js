@@ -1,7 +1,7 @@
 import PetService from "../services/PetService.js";
 import BoitataBurn from "../services/BoitataBurn.js";
 import MiasmaService from "../services/MiasmaService.js";
-import MimicService, { HP_DIVISOR_PVE as MIMIC_HP_DIVISOR_PVE } from "../services/MimicService.js";
+import MimicService from "../services/MimicService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVE, absorbedAmount } from "./Absorption.js";
 import { CRITICAL_MULTIPLIER } from "./Critical.js";
 
@@ -29,7 +29,9 @@ export default class CombatEngine {
 
     rollInitiative() {
         const stats = this.player.stats.getFinalStats();
-        const playerAgility = stats.agility;
+        // Imitação já copia Agilidade do monstro pra essa luta — conta
+        // também pra decidir quem começa atacando (ver MimicService.js).
+        const playerAgility = stats.agility + MimicService.applyCopy(this.monster.status, stats.reflection).bonusAgility;
         const monsterAgility = this.monster.status.agilidade;
         return playerAgility >= monsterAgility ? "player" : "monster";
     }
@@ -40,8 +42,23 @@ export default class CombatEngine {
 
     attack() {
         const playerTurn = this.currentTurn === "player";
-        const attacker = playerTurn ? this.player.stats : this.monster.status;
-        const defender = playerTurn ? this.monster.status : this.player.stats;
+
+        // Imitação do Mímico: recalculada a cada golpe a partir do
+        // monstro ATUAL (ver MimicService.js) — some em cima do Ataque/
+        // Armadura/Agilidade dela, então vale tanto quando ela ataca
+        // quanto quando apanha. Sem Imitação, os 3 bônus saem zerados.
+        const rawPlayerStats = this.player.stats.getFinalStats();
+        const mimicCopy = MimicService.applyCopy(this.monster.status, rawPlayerStats.reflection);
+        const playerStats = {
+            ...rawPlayerStats,
+            attack: rawPlayerStats.attack + mimicCopy.bonusAttack,
+            armor: rawPlayerStats.armor + mimicCopy.bonusArmor,
+            agility: rawPlayerStats.agility + mimicCopy.bonusAgility,
+            bonusAttack: mimicCopy.bonusAttack
+        };
+
+        const attacker = playerTurn ? playerStats : this.monster.status;
+        const defender = playerTurn ? this.monster.status : playerStats;
         const attackerSide = playerTurn ? "player" : "monster";
         const defenderSide = playerTurn ? "monster" : "player";
 
@@ -156,13 +173,13 @@ export default class CombatEngine {
 
         const absorbed = absorbedAmount(preAbsorption, Math.random() * 100 < absorptionChance, ABSORPTION_RATIO_PVE);
 
-        // Imitação do Mímico: dano VERDADEIRO extra, por cima do golpe já
-        // mitigado/absorvido — ignora Armadura e Absorção de propósito
-        // (ver MimicService.js). Usa a Vida MÁXIMA do alvo (defender) —
-        // não a atual, senão o bônus encolheria conforme o alvo apanha.
-        const mimicBonus = MimicService.getBonusDamage(defender.maxHP ?? defender.vidaMaxima, attacker.reflection ?? 0, MIMIC_HP_DIVISOR_PVE);
+        const damage = preAbsorption - absorbed;
 
-        const damage = preAbsorption - absorbed + mimicBonus;
+        // Imitação do Mímico: quanto do "attack" somado lá em cima
+        // (ver MimicService.applyCopy, chamado em attack()) veio da
+        // cópia — só pra mensagem, já foi aplicado por completo na
+        // mitigação acima, não precisa de mais nenhuma conta aqui.
+        const mimicBonus = attacker.bonusAttack ?? 0;
 
         // ==========================
         // LIFE STEAL
@@ -228,7 +245,7 @@ export default class CombatEngine {
                 message += `<br>${MiasmaService.buildProcMessage(this.monster.name, result)}`;
             }
             if (result.mimicBonus > 0) {
-                message += `<br>${MimicService.buildMessage(result.mimicBonus, { attackName: this.monster.status.nomeAtaque })}`;
+                message += `<br>${MimicService.buildMessage(result.mimicBonus, { opponentName: this.monster.name })}`;
             }
             return message;
         }

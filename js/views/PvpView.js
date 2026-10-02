@@ -886,7 +886,7 @@ export default class PvpView {
             }
 
             if (entry.mimicBonus > 0) {
-                message += `<br>${MimicService.buildMessage(entry.mimicBonus)}`;
+                message += `<br>${MimicService.buildMessage(entry.mimicBonus, { opponentName })}`;
             }
 
             if (entry.miasmaProc) {
@@ -912,7 +912,10 @@ export default class PvpView {
         }
 
         if (entry.mimicBonus > 0) {
-            hitMessage += `<br>${MimicService.buildMessage(entry.mimicBonus, { subject: opponentName })}`;
+            // Aqui é o OPONENTE que fez a Imitação copiando OS SEUS
+            // status — subject é quem agiu, opponentName é de quem foi
+            // copiado (ver MimicService.buildMessage).
+            hitMessage += `<br>${MimicService.buildMessage(entry.mimicBonus, { subject: opponentName, opponentName: "você" })}`;
         }
 
         if (entry.miasmaProc) {
@@ -999,7 +1002,7 @@ export default class PvpView {
             }
 
             if (entry.mimicBonus > 0) {
-                message += `<br>${MimicService.buildMessage(entry.mimicBonus)}`;
+                message += `<br>${MimicService.buildMessage(entry.mimicBonus, { opponentName: targetName })}`;
             }
 
             if (entry.miasmaProc) {
@@ -1027,7 +1030,7 @@ export default class PvpView {
             }
 
             if (entry.mimicBonus > 0) {
-                hitMessage += `<br>${MimicService.buildMessage(entry.mimicBonus, { subject: attackerName })}`;
+                hitMessage += `<br>${MimicService.buildMessage(entry.mimicBonus, { subject: attackerName, opponentName: "você" })}`;
             }
 
             if (entry.miasmaProc) {

@@ -759,7 +759,7 @@ const weapons = {
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            reflection: 2
+            reflection: 1
         },
 
         value: 120,
@@ -786,7 +786,7 @@ const weapons = {
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            reflection: 5
+            reflection: 2
         },
 
         value: 360,
@@ -813,7 +813,7 @@ const weapons = {
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            reflection: 6
+            reflection: 3
         },
 
         value: 1080,
@@ -840,7 +840,7 @@ const weapons = {
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            reflection: 10
+            reflection: 4
         },
 
         value: 3240,
@@ -867,7 +867,7 @@ const weapons = {
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            reflection: 11
+            reflection: 5
         },
 
         value: 0,
@@ -894,7 +894,7 @@ const weapons = {
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            reflection: 15
+            reflection: 6
         },
 
         value: 0,

@@ -5,7 +5,7 @@ export default [
         date: "Outubro de 2026",
         changes: [
             "Nova classe: Pútrido — o especial dele é o Miasma: cada ativação intoxica o alvo (até 3 acúmulos), tirando 3%/6%/10% de Ataque e Agilidade e 25% dos atributos especiais até o fim da luta, além de cortar os especiais pela metade no golpe seguinte",
-            "Nova classe: Mímico — o especial dele é a Imitação: todo golpe que acerta causa dano verdadeiro extra com base na Vida Máxima do alvo (forte contra chefes, mais contido no PVP)",
+            "Nova classe: Mímico — o especial dele é a Imitação: soma uma % do Ataque, Armadura e Agilidade de quem ele está enfrentando aos status dele mesmo, recalculado a cada golpe",
             "Pútrido e Mímico ganharam transcendência (Portal da Luz/Trevas)",
             "Corrigido o Mímico não recebendo a melhoria de classe mesmo vencendo o Anjo — a vitória no Portal agora sempre tenta aplicar o bônus (não só na primeira vez), resolvendo também quem tinha ficado travado por esse bug antes da correção",
             "Mímico: Vida por nível reduzida (12 → 9), cerca de 300 a menos no nível 100 — personagens já existentes são atualizados sozinhos ao carregar o save",

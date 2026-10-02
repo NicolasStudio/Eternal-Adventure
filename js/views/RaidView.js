@@ -673,7 +673,7 @@ export default class RaidView {
         }
 
         if (entry.mimicBonus > 0) {
-            message += `<br>${MimicService.buildMessage(entry.mimicBonus, { subject: attackerName, attackName: entry.mimicAttackName })}`;
+            message += `<br>${MimicService.buildMessage(entry.mimicBonus, { subject: attackerName, opponentName: entry.mimicOpponentName })}`;
         }
 
         if (entry.miasmaProc) {
