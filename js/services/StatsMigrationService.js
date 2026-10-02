@@ -2,6 +2,7 @@ import levels from "../data/levels.js";
 import legacyLevels_v1 from "../data/legacyLevels_v1.js";
 import legacyLevels_v2 from "../data/legacyLevels_v2.js";
 import legacyLevels_v3 from "../data/legacyLevels_v3.js";
+import legacyLevels_v4 from "../data/legacyLevels_v4.js";
 import baseStatsL1 from "../data/baseStatsL1.js";
 
 // Sobe toda vez que a curva de levels.js (ou o formato de baseStats)
@@ -23,19 +24,24 @@ import baseStatsL1 from "../data/baseStatsL1.js";
 //     alto (Ataque bem menor) só por causa do excesso de Agilidade/
 //     Armadura na base. Não afeta nenhuma outra classe (ver
 //     legacyLevels_v3.js).
-export const CURRENT_BALANCE_VERSION = 4;
+// v5: Mímico teve a Vida por nível reduzida (12 -> 9/nível, soma dos 99
+//     níveis: 1188 -> 891) — tirando 297 de Vida Máxima no nível 100.
+//     Não afeta nenhuma outra classe (ver legacyLevels_v4.js).
+export const CURRENT_BALANCE_VERSION = 5;
 
-// miasmaChance entra aqui só pra não ser DESCARTADO na migração (a
-// tabela de migração nunca tem esse campo, então ele sempre passa
-// direto como "extra" — preserva o que o Pútrido já tinha ganho de
-// Quartzo Rosa). Nenhuma curva de level up (nem antiga nem atual) dá
-// pontos nele, então isso nunca soma nada por conta própria.
-const STAT_KEYS = ["attack", "armor", "agility", "criticalChance", "lifeSteal", "penetration", "absorption", "miasmaChance"];
+// miasmaChance/reflection entram aqui só pra não serem DESCARTADOS na
+// migração (a tabela de migração nunca tem esses campos, então sempre
+// passam direto como "extra" — preserva o que o Pútrido/Mímico já
+// tinham ganho de equipamento, ex: Quartzo Rosa ou Imitação do item).
+// Nenhuma curva de level up (nem antiga nem atual) dá pontos neles,
+// então isso nunca soma nada por conta própria.
+const STAT_KEYS = ["attack", "armor", "agility", "criticalChance", "lifeSteal", "penetration", "absorption", "miasmaChance", "reflection"];
 
 const LEGACY_TABLES = {
     1: legacyLevels_v1,
     2: legacyLevels_v2,
-    3: legacyLevels_v3
+    3: legacyLevels_v3,
+    4: legacyLevels_v4
 };
 
 export default class StatsMigrationService {
