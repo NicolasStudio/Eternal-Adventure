@@ -76,7 +76,7 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-warrior-rarity-mistico.png",
 
         stats: {
-            armor: 7,
+            armor: 6,
             agility: 15
         },
 
@@ -96,7 +96,7 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-warrior-rarity-lendario.png",
 
         stats: {
-            armor: 9,
+            armor: 8,
             agility: 9
         },
 
