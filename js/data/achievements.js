@@ -174,6 +174,13 @@ const achievements = [
         iconLocked:'assets/img/icons/achievements/bloqueado.png'
     },
     {
+        id: 'pet_level_50',
+        name: 'Quase um senhor',
+        description: 'Atinja nível 50 com seu PET.',
+        icon: 'assets/img/icons/achievements/ouro.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
         id: 'pet_5_stars',
         name: 'Aclamado pela crítica',
         description: 'Consiga um PET 5 estrelas',
@@ -484,6 +491,13 @@ const achievements = [
         name: 'O miserável é um miserável',
         description: 'Atinja Poder acima de 25 mil',
         icon: 'assets/img/icons/achievements/prata.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'power_32k',
+        name: 'Instinto Superior',
+        description: 'Atinja Poder acima de 32 mil',
+        icon: 'assets/img/icons/achievements/ouro.png',
         iconLocked:'assets/img/icons/achievements/bloqueado.png'
     },
     // Transcendência
