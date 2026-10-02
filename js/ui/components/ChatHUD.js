@@ -1,6 +1,8 @@
 import ChatService, { MAX_LENGTH } from "../../services/ChatService.js";
 import AuthService from "../../services/AuthService.js";
+import SaveService from "../../services/SaveService.js";
 import TabBadge from "../TabBadge.js";
+import ADMIN_UIDS from "../../data/admins.js";
 
 const MAX_RENDERED_MESSAGES = 100;
 
@@ -21,6 +23,10 @@ export default class ChatHUD {
         this.unread = 0;
         this.stopPanel = null;
         this.stopWatching = null;
+        // uid de quem está no #1 do ranking AGORA — carregado toda vez
+        // que o painel abre (ver open()), pra decidir quem ganha a
+        // coroa ao lado do nome nas mensagens (ver addMessage()).
+        this.topPlayerUid = null;
 
         // Voltou pra aba com o painel aberto = leu o que chegou enquanto
         // estava em outra aba.
@@ -135,7 +141,7 @@ export default class ChatHUD {
         else this.open();
     }
 
-    open() {
+    async open() {
 
         if (this.isOpen) return;
 
@@ -178,12 +184,21 @@ export default class ChatHUD {
         this.unread = 0;
         this.updateBadge();
 
+        this.panel.querySelector("#chat-input").focus();
+
+        // Quem está no #1 do ranking AGORA — pra saber quem ganha a
+        // coroa nas mensagens (ver addMessage()). Busca ANTES de
+        // assinar o chat, pra nenhuma mensagem já chegar sem essa
+        // informação pronta. Fechou o painel enquanto isso carregava
+        // (busca rápida, mas é rede) — não assina nada à toa.
+        this.topPlayerUid = await SaveService.getTopPlayerUid();
+
+        if (!this.isOpen) return;
+
         this.stopPanel = ChatService.subscribe(
             message => this.addMessage(message),
             id => this.removeMessage(id)
         );
-
-        this.panel.querySelector("#chat-input").focus();
 
     }
 
@@ -364,9 +379,37 @@ export default class ChatHUD {
             row.classList.add("mine");
         }
 
+        // Admin: identidade FIXA (ver data/admins.js), diferente do #1
+        // do ranking (que muda com o Poder de quem quer que seja). Cor
+        // do nome vem daqui; o selo (ícone) é adicionado mais abaixo,
+        // junto com a coroa.
+        const isAdmin = message.uid && ADMIN_UIDS.includes(message.uid);
+
+        if (isAdmin) {
+            row.classList.add("admin");
+        }
+
         const name = document.createElement("span");
         name.className = "chat-name";
         name.textContent = message.name;
+
+        // #1 do ranking (Poder) no momento em que o painel abriu — ver
+        // open()/SaveService.getTopPlayerUid(). Ícone à parte (nunca
+        // dentro do textContent do nome), pra não ter risco nenhum de
+        // injeção vindo do nome de outro jogador.
+        if (message.uid && message.uid === this.topPlayerUid) {
+            const crown = document.createElement("i");
+            crown.className = "fa-solid fa-crown chat-crown";
+            crown.title = "#1 do servidor";
+            name.append(crown);
+        }
+
+        if (isAdmin) {
+            const shield = document.createElement("i");
+            shield.className = "fa-solid fa-shield-halved chat-admin-badge";
+            shield.title = "Admin";
+            name.append(shield);
+        }
 
         const text = document.createElement("span");
         text.className = "chat-text";

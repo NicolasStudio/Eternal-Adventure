@@ -134,6 +134,28 @@
 .chat-message.mine .chat-name{
     color:#f1c75c;
 }
+
+/* Admin (identidade fixa, ver data/admins.js) — depois de .mine de
+   propósito: se for admin lendo a própria mensagem, essa cor vence a
+   do "é você" genérico. */
+.chat-message.admin .chat-name{
+    color:#e0558a;
+}
+
+/* #1 do ranking (Poder) — ver ChatHUD.addMessage(). */
+.chat-crown{
+    margin-left:4px;
+    font-size:.78em;
+    color:#ffd700;
+    text-shadow:0 0 4px rgba(255,215,0,.6);
+}
+
+.chat-admin-badge{
+    margin-left:4px;
+    font-size:.78em;
+    color:#e0558a;
+    text-shadow:0 0 4px rgba(224,85,138,.6);
+}
 .chat-text{
     color:#efe2bf;
 }

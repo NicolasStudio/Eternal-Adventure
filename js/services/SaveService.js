@@ -635,6 +635,33 @@ export default class SaveService {
 
     }
 
+    // uid de quem está no #1 do servidor AGORA (maior Poder) — usado só
+    // pra decidir quem ganha a coroa ao lado do nome no Chat (ver
+    // ChatHUD.js). Consulta leve (1 documento), não precisa do resto do
+    // perfil que getTopLeaderboard já traria.
+    static async getTopPlayerUid() {
+
+        try {
+
+            const topQuery = query(
+                collection(firestore, LEADERBOARD_COLLECTION),
+                orderBy("power", "desc"),
+                limit(1)
+            );
+
+            const snapshot = await getDocs(topQuery);
+
+            return snapshot.docs[0]?.id ?? null;
+
+        } catch (err) {
+
+            console.warn("Falha ao carregar o topo do ranking:", err);
+            return null;
+
+        }
+
+    }
+
     // Igual getTopLeaderboard, mas sem limite — usado pelo Ranking
     // Global (todos os jogadores do servidor). Mantém o uid (o topo não
     // precisa dele, mas o Global cruza com PresenceService.getOnlineUids()
