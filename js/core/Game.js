@@ -31,14 +31,17 @@ export default class Game {
 
     async start() {
 
-        const loader = new Loader(this);
+        // Guardado na instância pra enterWithAccount() poder esconder a
+        // tela de loading mais cedo, se precisar mostrar o modal de
+        // conflito de sessão (ver comentário lá embaixo).
+        this.loader = new Loader(this);
 
         // Carrega os assets e verifica a sessão do Firebase em
         // paralelo — assim, quando a tela de loading some, o destino
         // certo (login/home/hud) já está decidido e visível por trás,
         // sem piscar a tela de login por um instante antes de corrigir.
         const [, user] = await Promise.all([
-            loader.load(),
+            this.loader.load(),
             this.waitForAuthState()
         ]);
 
@@ -48,7 +51,7 @@ export default class Game {
             this.showScreen("login");
         }
 
-        await loader.hide();
+        await this.loader.hide();
 
         this.startAutoSave();
 
@@ -107,6 +110,13 @@ export default class Game {
         const { claimed } = await PresenceService.claim(user.uid);
 
         if (!claimed) {
+
+            // Esconde a tela de loading ANTES do modal — senão ele fica
+            // esperando um clique atrás da tela de "Carregando...", que
+            // só some depois que enterWithAccount() termina (e ela não
+            // termina até alguém responder o modal). Chamar hide() de
+            // novo no fim de start() não tem problema, é idempotente.
+            await this.loader?.hide();
 
             const confirmed = await this.sessionConflictModal.show();
 
