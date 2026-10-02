@@ -76,7 +76,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-mistico.png",
 
         stats: {
-            armor: 10,
+            armor: 12,
             absorption: 6
         },
 
@@ -96,7 +96,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-lendario.png",
 
         stats: {
-            armor: 14,
+            armor: 17,
             absorption: 8
         },
 

@@ -3,6 +3,7 @@ import legacyLevels_v1 from "../data/legacyLevels_v1.js";
 import legacyLevels_v2 from "../data/legacyLevels_v2.js";
 import legacyLevels_v3 from "../data/legacyLevels_v3.js";
 import legacyLevels_v4 from "../data/legacyLevels_v4.js";
+import legacyLevels_v5 from "../data/legacyLevels_v5.js";
 import baseStatsL1 from "../data/baseStatsL1.js";
 
 // Sobe toda vez que a curva de levels.js (ou o formato de baseStats)
@@ -27,7 +28,12 @@ import baseStatsL1 from "../data/baseStatsL1.js";
 // v5: Mímico teve a Vida por nível reduzida (12 -> 9/nível, soma dos 99
 //     níveis: 1188 -> 891) — tirando 297 de Vida Máxima no nível 100.
 //     Não afeta nenhuma outra classe (ver legacyLevels_v4.js).
-export const CURRENT_BALANCE_VERSION = 5;
+// v6: Guerreiro ganhou +27 de Vida e perdeu 8 de Agilidade (dos 18
+//     tirados no total, os outros 10 saíram do equipamento) nos níveis
+//     70-100 — pra aguentar melhor os chefes dessa faixa, em troca de
+//     um pouco de esquiva. Só esse trecho de níveis muda (ver
+//     legacyLevels_v5.js).
+export const CURRENT_BALANCE_VERSION = 6;
 
 // miasmaChance/reflection entram aqui só pra não serem DESCARTADOS na
 // migração (a tabela de migração nunca tem esses campos, então sempre
@@ -41,7 +47,8 @@ const LEGACY_TABLES = {
     1: legacyLevels_v1,
     2: legacyLevels_v2,
     3: legacyLevels_v3,
-    4: legacyLevels_v4
+    4: legacyLevels_v4,
+    5: legacyLevels_v5
 };
 
 export default class StatsMigrationService {
