@@ -6,6 +6,7 @@ export default [
         changes: [
             "Nova classe: Pútrido — o especial dele é o Miasma: cada ativação intoxica o alvo (até 3 acúmulos), tirando 3%/6%/10% de Ataque e Agilidade e 25% dos atributos especiais até o fim da luta, além de cortar os especiais pela metade no golpe seguinte",
             "Nova classe: Mímico — o especial dele é a Imitação: soma uma % do Ataque, Armadura e Agilidade de quem ele está enfrentando aos status dele mesmo, recalculado a cada golpe",
+            "Mímico: a % copiada pela Imitação tem um teto de 30%, definido pela arma e pelo elmo equipados (quanto maior a raridade e a Qualidade, mais perto do teto)",
             "Pútrido e Mímico ganharam transcendência (Portal da Luz/Trevas)",
             "Corrigido o Mímico não recebendo a melhoria de classe mesmo vencendo o Anjo — a vitória no Portal agora sempre tenta aplicar o bônus (não só na primeira vez), resolvendo também quem tinha ficado travado por esse bug antes da correção",
             "Mímico: Vida por nível reduzida (12 → 9), cerca de 300 a menos no nível 100 — personagens já existentes são atualizados sozinhos ao carregar o save",
@@ -26,7 +27,15 @@ export default [
             "Corrigido o aviso de sessão em uso ficando escondido atrás da tela de 'Carregando...' e nunca aparecendo",
             "Adicionado o Ranking Global (ícone de globo na barra de ferramentas): lista todos os jogadores do servidor por Poder, com uma bolinha verde/vermelha mostrando quem está online agora",
             "Adicionadas 2 novas conquistas de Ouro: 'Instinto Superior' (Poder acima de 32 mil) e 'Quase um senhor' (nível 50 com o Pet)",
-            "Wiki: adicionado o Mímico e atualizadas as seções de Classes, Pets, Cooperativo, Salvar e Ranking"
+            "Guerreiro: mais Armadura nos itens Místicos e Lendários, +27 de Vida e −18 de Agilidade a partir do nível 70 (metade vindo dos níveis, metade dos equipamentos) — ajuste fino depois do reforço de Agilidade desta mesma atualização",
+            "Adicionados dois novos slots de equipamento, Anel ('Anel do Primeiro Imperador') e Amuleto ('Amuleto Primal') — usáveis por qualquer classe: o anel soma Vida e Armadura, o amuleto soma Ataque e Agilidade",
+            "Anel e Amuleto dropam com 5% de chance em 8 pontos fixos: Bosque (andar 3), Caverna (andar 6), Oceano (andares 2 e 3), Deserto (andar 3) e os chefes dos níveis 10, 20 e 90 — raridades de Comum a Místico",
+            "Inventário: nova aba 'Acessórios' (Anel e Amuleto), visível só nas abas Status e Equipados",
+            "Ferraria: nova aba 'Acessórios' na Melhoria de Equipamento, permitindo melhorar Anel e Amuleto até Lendário",
+            "Ranking: a lupa de detalhe do jogador agora mostra também o Anel e o Amuleto equipados",
+            "Adicionado novo chefe do Cooperativo: Dragão Varejeiro (elemento Inseto, 3º andar) — dropa Anel ou Amuleto Lendário",
+            "O pet Boitatá agora também é super efetivo (+70% de dano na queimadura) contra criaturas do tipo Inseto",
+            "Wiki: adicionado o Mímico, a nova seção de Acessórios (Anel e Amuleto) e atualizadas as seções de Classes, Itens, Pets, Ferraria, Cooperativo, Salvar e Ranking"
         ]
     },
 
