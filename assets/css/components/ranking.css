@@ -133,6 +133,41 @@
     opacity:.45;
 }
 
+/* ==========================================================
+   MODAL - RANKING GLOBAL (todos os jogadores + presença online)
+   Mesma linha do ranking normal, só que sem a coluna de Classe e
+   com a bolinha de presença no lugar — por isso as colunas (e o
+   "#N" da posição, que esse ranking não mostra) são redefinidas
+   aqui em cima da mesma .ranking-row.
+========================================================== */
+.global-ranking-row{
+    grid-template-columns:40px 1.5fr 60px 1fr 40px;
+}
+
+.presence-column{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.presence-dot{
+    display:inline-block;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    box-shadow:0 0 6px currentColor;
+}
+
+.presence-dot-online{
+    background:#4caf50;
+    color:#4caf50;
+}
+
+.presence-dot-offline{
+    background:#8b3a3a;
+    color:#8b3a3a;
+}
+
 .profile-empty{
     grid-column:1 / -1;
     margin:0;

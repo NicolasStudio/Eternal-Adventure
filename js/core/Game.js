@@ -6,6 +6,8 @@ import LoginScreen from "../ui/LoginScreen.js";
 import Loader from "./Loader.js";
 import AuthService from "../services/AuthService.js";
 import SaveService from "../services/SaveService.js";
+import PresenceService from "../services/PresenceService.js";
+import SessionConflictModal from "../ui/components/modals/SessionConflictModal.js";
 
 const AUTO_SAVE_INTERVAL_MS = 60 * 60 * 1000; // 1h
 
@@ -14,6 +16,8 @@ export default class Game {
     constructor() {
 
         this.player = null;
+
+        this.sessionConflictModal = new SessionConflictModal();
 
         this.loginScreen = new LoginScreen(this);
 
@@ -88,11 +92,35 @@ export default class Game {
 
     }
 
-    // Chamado tanto no boot (sessão já logada) quanto logo após um
-    // login/cadastro bem-sucedido em LoginScreen: se já existe save na
-    // nuvem, entra direto no jogo; senão manda pra Home criar
-    // personagem (fluxo de "Novo Jogo" continua igual).
+    // Chamado tanto no boot (sessão já logada — inclusive uma 2ª aba da
+    // MESMA conta, já que a sessão do Firebase Auth persiste sozinha)
+    // quanto logo após um login/cadastro bem-sucedido em LoginScreen: se
+    // já existe save na nuvem, entra direto no jogo; senão manda pra
+    // Home criar personagem (fluxo de "Novo Jogo" continua igual).
+    //
+    // Antes de qualquer coisa, reivindica a sessão única da conta — igual
+    // ao WhatsApp Web: se já tem outra aba/dispositivo ativo, pergunta se
+    // quer desconectar a sessão anterior e continuar aqui; a aba antiga
+    // percebe sozinha (watchForTakeover) e se desconecta na hora.
     async enterWithAccount(user) {
+
+        const { claimed } = await PresenceService.claim(user.uid);
+
+        if (!claimed) {
+
+            const confirmed = await this.sessionConflictModal.show();
+
+            if (!confirmed) {
+                await AuthService.signOut();
+                this.showScreen("login");
+                return;
+            }
+
+            await PresenceService.forceClaim(user.uid);
+
+        }
+
+        PresenceService.watchForTakeover(user.uid, () => this.handleRemoteTakeover());
 
         const cloudData = await SaveService.loadFromCloud(user.uid);
 
@@ -101,6 +129,27 @@ export default class Game {
         } else {
             this.showScreen("home");
         }
+
+    }
+
+    // Esta aba foi desconectada porque outra (mais nova) assumiu a
+    // conta — equivalente ao "conectado em outro lugar" do WhatsApp Web.
+    // Nunca mexe no servidor (a vaga já é da sessão nova): só salva o
+    // último estado local, sai do Firebase Auth e volta pro login.
+    async handleRemoteTakeover() {
+
+        PresenceService.forgetLocalSession();
+
+        if (this.player) {
+            await SaveService.autoSave(this.player);
+        }
+
+        await AuthService.signOut();
+
+        this.player = null;
+
+        this.showScreen("login");
+        this.loginScreen.showError("Sua conta foi aberta em outro lugar — esta sessão foi desconectada.");
 
     }
 

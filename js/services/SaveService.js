@@ -635,6 +635,32 @@ export default class SaveService {
 
     }
 
+    // Igual getTopLeaderboard, mas sem limite — usado pelo Ranking
+    // Global (todos os jogadores do servidor). Mantém o uid (o topo não
+    // precisa dele, mas o Global cruza com PresenceService.getOnlineUids()
+    // pra saber quem está online).
+    static async getFullLeaderboard() {
+
+        try {
+
+            const leaderboardQuery = query(
+                collection(firestore, LEADERBOARD_COLLECTION),
+                orderBy("power", "desc")
+            );
+
+            const snapshot = await getDocs(leaderboardQuery);
+
+            return snapshot.docs.map(entry => ({ uid: entry.id, ...entry.data() }));
+
+        } catch (err) {
+
+            console.warn("Falha ao carregar o ranking global:", err);
+            return [];
+
+        }
+
+    }
+
     /* =====================================================
        LOCALSTORAGE
     ===================================================== */

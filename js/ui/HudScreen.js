@@ -24,6 +24,7 @@ import ChestRewardModal from "./components/modals/ChestRewardModal.js";
 import AlbumModal from "./components/modals/AlbumModal.js";
 import LoadGameModal from "./components/modals/LoadGameModal.js";
 import RankingModal from "./components/modals/RankingModal.js";
+import GlobalRankingModal from "./components/modals/GlobalRankingModal.js";
 import SettingsModal from "./components/modals/SettingsModal.js";
 import MusicService from "../services/MusicService.js";
 import SaveService from "../services/SaveService.js";
@@ -58,6 +59,7 @@ export default class HudScreen {
         this.achievementModal = new AchievementModal(game);
         this.loadGameModal = new LoadGameModal(game);
         this.rankingModal = new RankingModal(game);
+        this.globalRankingModal = new GlobalRankingModal(game);
         this.settingsModal = new SettingsModal(game, { inGame: true });
         this.currentView = "";
         this.characterVisible = true;

@@ -1,5 +1,6 @@
 import SaveService from "../../../services/SaveService.js";
 import AuthService from "../../../services/AuthService.js";
+import PresenceService from "../../../services/PresenceService.js";
 import AudioSettings from "../../../services/AudioSettings.js";
 import MusicService from "../../../services/MusicService.js";
 
@@ -163,6 +164,12 @@ export default class SettingsModal {
             if (this.game.player) {
                 await SaveService.autoSave(this.game.player);
             }
+
+            // Libera a vaga da sessão única ANTES do signOut — depois
+            // dele as regras do Realtime Database recusam a escrita
+            // (auth.uid deixa de existir), e a vaga ficaria presa até o
+            // timeout do heartbeat em vez de liberar na hora.
+            await PresenceService.release();
 
             await AuthService.signOut();
 

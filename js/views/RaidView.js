@@ -13,6 +13,9 @@ import MimicService from "../services/MimicService.js";
 
 export default class RaidView {
 
+    // Ver shouldSkipMessages().
+    static SKIP_MESSAGES_AFTER_MS = 4 * 60 * 1000;
+
     constructor(game) {
         this.game = game;
         this.state = "idle"; // idle | searching | found | battle | floor-wait | result
@@ -53,6 +56,14 @@ export default class RaidView {
         if (elapsed > 120000) return 4;
         if (elapsed > 60000) return 2;
         return 1;
+    }
+
+    // A partir de ~4min de luta, as mensagens já estão tão compactadas
+    // (4x) que só piscam na tela sem dar tempo de ler — nesse ponto não
+    // faz mais sentido mostrá-las: só atualiza as barras de vida e segue,
+    // bem mais rápido que esperar a caixa abrir/fechar pra cada golpe.
+    shouldSkipMessages(battleStartTime) {
+        return (Date.now() - battleStartTime) > RaidView.SKIP_MESSAGES_AFTER_MS;
     }
 
     render() {
@@ -562,7 +573,9 @@ export default class RaidView {
 
             const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
-            await CombatToast.show(this.buildAttackMessage(entry, squad), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry), speed);
+            if (!this.shouldSkipMessages(battleStartTime)) {
+                await CombatToast.show(this.buildAttackMessage(entry, squad), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry), speed);
+            }
 
             await this.sleep(450 / speed);
 

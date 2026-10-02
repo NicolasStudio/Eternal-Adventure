@@ -12,6 +12,9 @@ export default class Toolbar {
                 <button class="hud-tool" id="btn-ranking" data-tooltip="Rankings">
                     <i class="fa-solid fa-ranking-star"></i>
                 </button>
+                <button class="hud-tool" id="btn-global" data-tooltip="Global">
+                    <i class="fa-solid fa-globe"></i>
+                </button>
                 <button class="hud-tool" id="btn-album" data-tooltip="Álbum ">
                     <i class="fa-solid fa-book-skull"></i>
                 </button>
@@ -73,6 +76,10 @@ export default class Toolbar {
 
         toolbar.querySelector("#btn-ranking")?.addEventListener("click", () => {
             this.game.hudScreen.rankingModal.show();
+        });
+
+        toolbar.querySelector("#btn-global")?.addEventListener("click", () => {
+            this.game.hudScreen.globalRankingModal.show();
         });
 
         toolbar.querySelector("#btn-settings")?.addEventListener("click", () => {
