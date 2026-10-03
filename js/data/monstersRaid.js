@@ -116,7 +116,7 @@ const monstersRaid = [
         floor: 3,
 
         status: {
-            vidaMaxima: 19000,
+            vidaMaxima: 20000,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
@@ -145,17 +145,63 @@ const monstersRaid = [
             {
                 pool: [
                     { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
-                    { type: ["amulet"], rarity: "legendary", chance: 5 },
                     { type: ["ring"], rarity: "legendary", chance: 5 },
-                    { item: enchantmentStone.quartzoRosaTres, chance: 5 },
-                    { item: enchantmentStone.quartzoRosaDois, chance: 15 },
-                    { item: enchantmentStone.quartzoRosaUm, chance: 60 }
+                    { item: enchantmentStone.quartzoRosaTres, chance: 10 },
+                    { item: enchantmentStone.quartzoRosaDois, chance: 13 },
+                    { item: enchantmentStone.quartzoRosaUm, chance: 67 }
                 ]
             }
         ]
     },
 
+    {
+        id: "drake_energy",
+        element: "energy",
+        name: "Dragão de Indra",
+        level: 150,
+        type: "beast",
 
+        sprite: "assets/img/monstersRaid/drake-energy.png",
+        floor: 4,
+
+        status: {
+            vidaMaxima: 22000,
+            ataque:[
+                {
+                    nomeAtaque: "Mordida",
+                    dano: 300,
+                },
+                {
+                    nomeAtaque: "Choque Elétrico",
+                    dano: 320,
+                },
+                {
+                    nomeAtaque: "Trovão",
+                    dano: 320,
+                },
+            ],
+            armadura: 255,
+            agilidade: 260,
+            xp: 0,
+            ouro: 70000
+        },
+
+        drops: [
+            {
+                item: items.largePotion,
+                quantidade: 10
+            },
+            {
+                pool: [
+                    { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
+                    { type: ["amulet"], rarity: "legendary", chance: 5 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 10 },
+                    { item: enchantmentStone.quartzoRosaDois, chance: 13 },
+                    { item: enchantmentStone.quartzoRosaUm, chance: 67 }
+                ]
+            }
+        ]
+    },
 
     {
         id: "drake_light",
@@ -165,10 +211,10 @@ const monstersRaid = [
         type: "beast",
 
         sprite: "assets/img/monstersRaid/drake-light.png",
-        floor: 4,
+        floor: 5,
 
         status: {
-            vidaMaxima: 18000,
+            vidaMaxima: 25000,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
@@ -214,10 +260,10 @@ const monstersRaid = [
         type: "beast",
 
         sprite: "assets/img/monstersRaid/drake-dark.png",
-        floor: 5,
+        floor: 6,
 
         status: {
-            vidaMaxima: 20000,
+            vidaMaxima: 25000,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
@@ -263,10 +309,10 @@ const monstersRaid = [
         type: "beast",
 
         sprite: "assets/img/monstersRaid/drake-plant.png",
-        floor: 6,
+        floor: 7,
 
         status: {
-            vidaMaxima: 25000,
+            vidaMaxima: 30000,
             ataque:[
                 {
                     nomeAtaque: "Mordida",

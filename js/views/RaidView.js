@@ -8,7 +8,7 @@ import CombatToast from "../combat/CombatToast.js";
 import HealFlash from "../combat/HealFlash.js";
 import HitFlash from "../combat/HitFlash.js";
 import BoitataBurn from "../services/BoitataBurn.js";
-import MiasmaService from "../services/MiasmaService.js";
+import MiasmaService, { PVE_STACK_PERCENTS as MIASMA_PVE_PERCENTS } from "../services/MiasmaService.js";
 import MimicService from "../services/MimicService.js";
 
 export default class RaidView {
@@ -677,7 +677,7 @@ export default class RaidView {
         }
 
         if (entry.miasmaProc) {
-            message += `<br>${MiasmaService.buildProcMessage(targetName === "Você" ? "você" : targetName, entry)}`;
+            message += `<br>${MiasmaService.buildProcMessage(targetName === "Você" ? "você" : targetName, entry, MIASMA_PVE_PERCENTS)}`;
         }
 
         return message;
