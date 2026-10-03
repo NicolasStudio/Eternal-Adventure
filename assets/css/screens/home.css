@@ -245,22 +245,18 @@
 }
 
 @media (max-width:1366px), (max-height:768px){
-
     .home_logo{
         width:450px;
         margin-bottom: 15px;
     }
-
     .menu{
         gap:14px;
     }
-
     .menu button{
         width:280px;
         height:46px;
         font-size:15px;
     }
-
     .home small{
         margin-top:8px;
         font-size:12px;
@@ -272,13 +268,11 @@
     .home_logo {
         width: 220px;
     }
-    
     .menu button {
         width: 250px;
         height: 45px;
         font-size: 14px;
     }
-    
     .menu button::after {
         display: none;
     }

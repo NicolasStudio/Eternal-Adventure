@@ -7,22 +7,16 @@
     top:50%;
     left:50%;
     transform:translate(-50%,-50%);
-
     width:clamp(900px,90vw,1100px);
     height:clamp(620px,88vh,800px);
-
     background:rgba(20,12,8,.72);
     backdrop-filter:blur(10px);
-
     border:2px solid #8b7355;
     border-radius:10px;
-
     display:flex;
     flex-direction:column;
     overflow:hidden;
-
     z-index:50;
-
     box-shadow:
         0 15px 40px rgba(0,0,0,.55),
         inset 0 0 40px rgba(0,0,0,.25);
@@ -33,34 +27,21 @@
 ========================================================== */
 
 .character-header{
-
     height:clamp(48px,6vh,60px);
-
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
     padding:0 clamp(14px,1.6vw,22px);
-
     border-bottom:1px solid rgba(212,163,115,.25);
-
     background:rgba(18,12,8,.15);
-
     flex-shrink:0;
-
 }
 
 .character-header h2{
     font-family:"Cinzel",serif;
-
     color:#f0d5b0;
-
     font-size:clamp(20px,1.8vw,28px);
-
     letter-spacing:2px;
-
 }
 
 /* ==========================================================
@@ -68,13 +49,9 @@
 ========================================================== */
 
 .character-body{
-
     flex:1;
-
     display:flex;
-
     overflow:hidden;
-
 }
 
 /* ==========================================================
@@ -82,15 +59,10 @@
 ========================================================== */
 
 @media (max-width:1366px){
-
     .character-window{
-
         width:94vw;
-
         height:85vh;
-
     }
-
 }
 
 /* ==========================================================
@@ -98,15 +70,10 @@
 ========================================================== */
 
 @media (max-width:1024px){
-
     .character-window{
-
         width:97vw;
-
         height:85vh;
-
     }
-
 }
 
 /* ==========================================================
@@ -114,23 +81,13 @@
 ========================================================== */
 
 @media (max-width:768px){
-
     .character-window{
-
         width:100vw;
-
         height:85vh;
-
         border:none;
-
         border-radius:0;
-
     }
-
     .character-header{
-
         padding:0 12px;
-
     }
-
 }

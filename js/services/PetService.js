@@ -163,23 +163,14 @@ export default class PetService {
        STATS DADOS AO JOGADOR
     ===================================================== */
 
-    // Stats fixos do estágio atual, escalados pela % de fome — sempre
-    // arredondado pra baixo (nunca um valor quebrado passando pro
-    // jogador). biteDamage é a Mordida já escalada junto — SÓ pets com
-    // habilidade de dano FIXO (campo `damage`, ex: Lobo) têm um valor
-    // aqui; pets de cura pura (campo `heal`, ex: Duende) não têm mais
-    // dano nenhum embutido na mordida, só o efeito de cura (ver
-    // healAmount abaixo).
-    //
-    // mimicRatio é diferente: a habilidade de Mímico (ex: Aranha) não
-    // tem dano fixo nenhum, ela copia uma FRAÇÃO do dano que o golpe
-    // PRINCIPAL daquele turno realmente causou (já com armadura/crítico/
-    // absorção aplicados — "os 50 que bateram", não o ataque bruto).
-    // Por isso não dá pra resolver esse número aqui: quem chama
-    // getScaledStats não sabe ainda quanto vai bater. Só devolvemos a
-    // fração (já reduzida pela fome, igual todo o resto) — cada combate
-    // (CombatEngine.petBite, PvpCombatService.simulate*, RaidCombatService.
-    // simulateRaid) multiplica isso pelo dano de verdade daquele golpe.
+    // Stats do estágio atual escalados pela fome (sempre arredondado pra
+    // baixo). biteDamage só existe em pets de dano fixo (`damage`, ex:
+    // Lobo); pets de cura pura (`heal`, ex: Duende) não mordem, só curam
+    // (ver healAmount). mimicRatio (ex: Aranha) é diferente: copia uma
+    // FRAÇÃO do dano real do golpe principal daquele turno (já mitigado),
+    // não um valor fixo — por isso só devolvemos a fração aqui, e cada
+    // combate (CombatEngine.petBite, PvpCombatService, RaidCombatService)
+    // multiplica pelo dano de verdade na hora.
     static getScaledStats(petInstance) {
 
         const stage = this.getCurrentStage(petInstance);
@@ -217,21 +208,13 @@ export default class PetService {
 
     }
 
-    // Chamado sempre que o pet equipado pode ter mudado (equipar/
-    // desequipar, alimentar, ou o tick periódico do HUD) — dois efeitos:
-    //
-    // 1) Reescreve `pet.stats` (o item que está em player.equipment.pet)
-    //    com os valores JÁ escalados pela fome atual. PlayerStats.
-    //    getEquipmentStats() já soma item.stats de QUALQUER equipamento
-    //    de forma genérica — não precisa saber nada sobre pet/fome, só
-    //    precisa que os números que já estão ali estejam em dia. Isso
-    //    evita importar PetService dentro de PlayerStats.js, que criaria
-    //    um ciclo (PlayerStats -> PetService -> SaveService -> Player ->
-    //    PlayerStats, já que Player instancia PlayerStats no construtor).
-    //
-    // 2) Reconcilia player.maxHP/currentHP com a Vida dada pelo pet —
-    //    idempotente (só ajusta a DIFERENÇA entre o que já estava
-    //    aplicado e o valor atual), nunca acumula em dobro.
+    // Chamado quando o pet equipado pode ter mudado (equipar/desequipar,
+    // alimentar, tick do HUD). Dois efeitos: 1) reescreve `pet.stats` já
+    // escalado pela fome — PlayerStats.getEquipmentStats() soma
+    // item.stats de qualquer equipamento genericamente, sem precisar
+    // importar PetService (evitaria ciclo com SaveService/Player). 2)
+    // reconcilia maxHP/currentHP com a Vida do pet, idempotente (só a
+    // diferença, nunca acumula em dobro).
     static syncEquippedPetContribution(player) {
 
         const pet = player.equipment.pet;

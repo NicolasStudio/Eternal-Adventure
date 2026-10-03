@@ -448,7 +448,6 @@ PREVIEW DOS ATRIBUTOS
     background:#a67b3f;
 }
 
-
 .blacksmith-left::-webkit-scrollbar{
     width:8px;
 }
@@ -462,7 +461,6 @@ PREVIEW DOS ATRIBUTOS
 .blacksmith-left::-webkit-scrollbar-thumb:hover{
     background:#a67b3f;
 }
-
 
 .blacksmith-right::-webkit-scrollbar{
     width:8px;

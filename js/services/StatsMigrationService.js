@@ -11,54 +11,18 @@ import legacyLevels_v9 from "../data/legacyLevels_v9.js";
 import legacyLevels_v10 from "../data/legacyLevels_v10.js";
 import baseStatsL1 from "../data/baseStatsL1.js";
 
-// Sobe toda vez que a curva de levels.js (ou o formato de baseStats)
-// muda de um jeito que precisa recalcular personagens já existentes —
-// não é a mesma coisa que SAVE_VERSION (esse é sobre o FORMATO do
-// arquivo de save, não sobre o balanceamento das classes).
+// Sobe quando a curva de levels.js muda de um jeito que exige recalcular
+// saves existentes (ver LEGACY_TABLES abaixo pra cada versão antiga).
+// Não é SAVE_VERSION (esse é sobre o formato do arquivo, não balanceamento).
 //
-// v1: curva original (Guerreiro com Roubo de Vida como especial, sem
-//     Absorção, sem Bárbaro).
-// v2: reequilíbrio — Guerreiro ganha Absorção como especial (Roubo de
-//     Vida vira secundário), Arqueiro/Mago suavizados, Bárbaro criado.
-//     Crítico/Roubo de Vida/Penetração/Absorção ainda vinham (em parte)
-//     de level up.
-// v3: Crítico/Roubo de Vida/Penetração/Absorção deixam de vir de level
-//     up — passam a vir 100% de Arma + Chapéu (Arma + Elmo, no caso do
-//     Bárbaro), pra ficar visível pro jogador de onde cada ponto vem.
-// v4: Pútrido teve a curva de Agilidade reduzida (soma dos 99 níveis:
-//     114 -> 96) — o Poder dele estava empatando com classes de dano
-//     alto (Ataque bem menor) só por causa do excesso de Agilidade/
-//     Armadura na base. Não afeta nenhuma outra classe (ver
-//     legacyLevels_v3.js).
-// v5: Mímico teve a Vida por nível reduzida (12 -> 9/nível, soma dos 99
-//     níveis: 1188 -> 891) — tirando 297 de Vida Máxima no nível 100.
-//     Não afeta nenhuma outra classe (ver legacyLevels_v4.js).
-// v6: Guerreiro ganhou +27 de Vida e perdeu 8 de Agilidade (dos 18
-//     tirados no total, os outros 10 saíram do equipamento) nos níveis
-//     70-100 — pra aguentar melhor os chefes dessa faixa, em troca de
-//     um pouco de esquiva. Só esse trecho de níveis muda (ver
-//     legacyLevels_v5.js).
-// v7: Pútrido ganhou +20 de Vida, +3 de Ataque, +4 de Armadura e +4 de
-//     Agilidade (dos quais +4/+4/+4 saíram do equipamento Místico) nos
-//     níveis 70-100 — a classe estava ficando frágil demais nessa faixa
-//     de chefes. Só esse trecho de níveis muda (ver legacyLevels_v6.js).
-// v8: Pútrido ganhou mais +5 de Armadura, concentrados nos níveis 78-83
-//     — reforço extra num trecho específico onde a dificuldade sobe mais
-//     rápido. Só esse trecho de níveis muda (ver legacyLevels_v7.js).
-// v9: Pútrido ganhou +12 de Vida nos níveis 44/45/50/60/65, +1 de
-//     Armadura (nível 45) e +1 de Ataque (nível 50). Só esses 5 níveis
-//     mudam (ver legacyLevels_v8.js).
-// v10: Pútrido ganhou mais +100 de Vida nos níveis 50-100 — a diferença
-//      de Vida contra os chefes do Cooperativo ainda era grande demais
-//      mesmo com os reforços anteriores. Só esse trecho de níveis muda
-//      (ver legacyLevels_v9.js). O Miasma também passou a reduzir a
-//      Armadura do alvo em PVE (não muda baseStats/maxHP, não precisa
-//      de migração — é regra de combate, não dado salvo).
-// v11: Pútrido ganhou +100 de Vida (todos os níveis 2-100) e +40 de
-//      Agilidade (40 níveis espalhados por todo o range) — mesmo com
-//      Anel+Amuleto, ele estava empatando ou perdendo em Agilidade e
-//      quase perdendo em Vida pro Arqueiro equipado igual. Curva inteira
-//      muda dessa vez, não só um trecho (ver legacyLevels_v10.js).
+// v1 curva original · v2 Guerreiro ganha Absorção, Bárbaro criado · v3
+// Crítico/Roubo de Vida/Penetração/Absorção saem do level up, viram 100%
+// equipamento · v4 Pútrido Agilidade 114→96 · v5 Mímico Vida/nível 12→9 ·
+// v6 Guerreiro +27 Vida/−8 Agilidade (lv 70-100) · v7 Pútrido +20 Vida/
+// +3 Atq/+4 Def/+4 Agi (lv 70-100) + itens Místicos · v8 Pútrido +5 Def
+// (lv 78-83) · v9 Pútrido +12 Vida/+1 Atq/+1 Def (lv 44-65) · v10 Pútrido
+// +100 Vida (lv 50-100), Miasma passa a reduzir Armadura em PVE · v11
+// Pútrido +100 Vida/+40 Agilidade (curva inteira)
 export const CURRENT_BALANCE_VERSION = 11;
 
 // miasmaChance/reflection entram aqui só pra não serem DESCARTADOS na

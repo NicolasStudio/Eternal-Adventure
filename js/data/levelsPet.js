@@ -1,24 +1,13 @@
 /* ==========================================================
    ATRIBUTOS DO PET POR NÍVEL
+   Cada ganho é SOMADO ao nível 1 (pet.js) — só a habilidade especial
+   vem do estágio. Ganhos só em níveis PARES, pontos por raridade
+   (3★=1, 4★=2, 5★=3); valores aqui são PONTOS (vida = LIFE_PER_POINT
+   HP/ponto, resto = 1/ponto). Pet que já passou do nível recebe tudo
+   de uma vez, calculado a partir do nível atual.
 
-   Os atributos do pet NÃO são mais fixos por estágio: cada ganho
-   abaixo é SOMADO aos atributos do nível 1 (o estágio inicial em
-   pet.js). Só a habilidade especial continua vindo do estágio.
-
-   - Ganhos só nos níveis PARES (2, 4, 6 ... 50).
-   - Pontos por ganho, pela raridade: 3★ = 1 | 4★ = 2 | 5★ = 3.
-   - Os valores abaixo estão em PONTOS. Vida vale LIFE_PER_POINT HP por
-     ponto; ataque, armadura e agilidade valem 1 por ponto.
-   - Nível máximo do pet: PET_MAX_LEVEL.
-   - Um pet que já está num nível X recebe, na hora, tudo que a tabela
-     dá até o X (o cálculo é sempre feito a partir do nível atual).
-
-   Perfil de cada família:
-     wolf   = Dano (baixo, é 3★)
-     fairy  = Vida e um pouco de armadura/ataque
-     spider = Dano e Agilidade
-     bear   = Vida e Armadura
-     snake  = Vida, Dano e Agilidade
+   Perfil: wolf=Dano(baixo) · fairy=Vida+pouco Armadura/Ataque ·
+   spider=Dano+Agilidade · bear=Vida+Armadura · snake=Vida+Dano+Agilidade
 ========================================================== */
 
 export const PET_MAX_LEVEL = 50;

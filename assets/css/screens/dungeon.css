@@ -34,11 +34,8 @@
 
 .dungeon-header h2, .character-header h2{
     font-family:"Cinzel",serif;
-
     color:#f0d5b0;
-
     font-size:clamp(20px,1.8vw,28px);
-
     letter-spacing:2px;
 }
 
@@ -225,31 +222,18 @@
 }
 
 .dungeon-badge{
-
     display:inline-flex;
-
     align-items:center;
-
     justify-content:center;
-
     padding:4px 12px;
-
     margin-bottom:8px;
-
     border-radius:20px;
-
     background:#b8960c;
-
     color:#fff;
-
     font-size:11px;
-
     font-weight:bold;
-
     letter-spacing:2px;
-
     text-transform:uppercase;
-
 }
 
 /* ==========================================================
@@ -376,10 +360,8 @@
    IMAGEM
 ========================================================== */
 .dungeon-card-image{
-
     width:100%;
     height:130px;
-
 }
 
 .dungeon-card-image::after{
@@ -404,15 +386,10 @@
 }
 
 .dungeon-card-header{
-
     padding:10px 0 14px;
-
     display:flex;
-
     justify-content:center;
-
     align-items:center;
-
 }
 
 /* ==========================================================
@@ -508,17 +485,11 @@
 }
 
 .dungeon-card-drops{
-
     display:flex;
-
     flex-direction:column;
-
     align-items:center;
-
     gap:12px;
-
     padding:18px 10px;
-
 }
 
 .drops-empty{
@@ -526,56 +497,34 @@
 }
 
 .drops-title{
-
     font-family:"Cinzel",serif;
-
     font-size:13px;
-
     color:#bda57d;
-
     letter-spacing:2px;
-
     text-transform:uppercase;
-
 }
 .drops-list{
-
     display:flex;
-
     justify-content:center;
-
     flex-wrap:wrap;
-
     gap:10px;
-
 }
 
 .dungeon-drop{
-
     display:flex;
-
     justify-content:center;
-
     align-items:center;
-
 }
 
 .dungeon-drop img{
-
     width:34px;
-
     height:34px;
-
     image-rendering:pixelated;
-
 }
 
 .dungeon-drop:hover{
-
     transform:scale(1.15);
-
     border-color:#d4a373;
-
 }
 /* ==========================================================
    ANIMAÇÕES
@@ -614,109 +563,61 @@
    NOTEBOOKS (1366x768 / 1600x900)
 ---------------------------------------------------------- */
 @media (max-width:1366px), (max-height:768px){
-
     .dungeon-window{
-
         width:94vw;
         height:auto;
-
     }
-
     .dungeon-header{
-
         height:52px;
         padding:0 18px;
-
     }
-
     .dungeon-header h2{
     font-family:"Cinzel",serif;
-
     color:#f0d5b0;
-
     font-size:clamp(20px,1.8vw,28px);
-
     letter-spacing:2px;
-
     }
-
     .dungeon-body{
-
         padding:22px 45px;
-
     }
-
     .dungeons-container{
-
         padding:20px;
-
     }
-
     .dungeons-title{
-
         font-size:26px;
         margin-bottom:20px;
         letter-spacing:3px;
-
     }
-
     .dungeons-title::before,
     .dungeons-title::after{
-
         margin:0 14px;
-
     }
-
-
-
     /* Mantém o tamanho original dos cards */
-
     .dungeon-card{
-
         width:220px;
         min-height:330px;
-
     }
-
     .dungeon-card-image{
-
         height:130px;
-
     }
-
     .dungeon-name{
-
         font-size:20px;
-
     }
-
     .dungeon-level{
-
         font-size:12px;
-
     }
-
     .dungeon-requirement{
-
         font-size:11px;
-
     }
-
     .dungeon-enter{
-
         min-height:42px;
         font-size:clamp(11px,4vw,15px);
-
     }
-
     .dungeon-page{
-
         width:48px;
         height:48px;
         font-size:18px;
-
     }
-
 }
 
 /* ----------------------------------------------------------
@@ -724,32 +625,21 @@
 ---------------------------------------------------------- */
 
 @media (max-width:992px){
-
     .dungeon-window{
-
         width:97vw;
         height: auto;
-
     }
-
     .dungeon-body{
-
         padding:20px 30px;
-
     }
-
     .dungeon-grid{
         grid-template-columns:repeat(2,220px);
     }
-
     .dungeon-page{
-
         width:44px;
         height:44px;
         font-size:16px;
-
     }
-
 }
 
 /* ----------------------------------------------------------
@@ -757,81 +647,47 @@
 ---------------------------------------------------------- */
 
 @media (max-width:768px){
-
     .dungeon-window{
-
         width:100vw;
         height: auto;
-
         border:none;
         border-radius:0;
-
     }
-
     .dungeon-header{
-
         height:48px;
         padding:0 12px;
-
     }
-
     .dungeon-header h2{
         font-family:"Cinzel",serif;
-
         color:#f0d5b0;
-
         font-size:clamp(20px,1.8vw,28px);
-
         letter-spacing:2px;
-
     }
-
     .dungeon-body{
-
         padding:16px;
-
     }
-
     .dungeons-title{
-
         font-size:22px;
         margin-bottom:16px;
-
     }
-
     .dungeon-grid{
-
         grid-template-columns:1fr;
         justify-items:center;
-
     }
-
     .dungeon-card{
-
         width:220px;
-
     }
-
     .dungeon-page{
-
         width:40px;
         height:40px;
         font-size:15px;
-
     }
-
     .dungeon-page:first-child{
-
         left:8px;
-
     }
-
     .dungeon-page:last-child{
-
         right:8px;
-
     }
-
 }
 
 /* ----------------------------------------------------------
@@ -839,29 +695,18 @@
 ---------------------------------------------------------- */
 
 @media (min-width:1920px){
-
     .dungeon-window{
-
         width:1150px;
         height: auto;
-
     }
-
     .dungeon-grid{
-
         gap:34px;
-
     }
-
 }
 
 @media (min-width:2560px){
-
     .dungeon-window{
-
         width:1250px;
         height: auto;
-
     }
-
 }

@@ -151,15 +151,11 @@
 .market-buy-footer{
     margin-top:auto;
     flex-shrink:0;
-
     display:flex;
     justify-content:space-between;
     align-items:center;
-
     gap:24px;
-
     padding:22px 28px;
-
     border-top:1px solid rgba(255,255,255,.08);
 }
 
@@ -297,7 +293,6 @@
     font-family:"Cinzel",serif;
     background:linear-gradient(180deg, #5f3b18 0%, #3a2412 100%);
     box-shadow:inset 0 0 20px rgba(255,255,255,.03), inset 0 -10px 20px rgba(0,0,0,.25), 0 5px 18px rgba(0,0,0,.35);
-
     color:#ecd8b3;
     font-size:1rem;
     font-weight:700;
@@ -311,7 +306,6 @@
     border-color:#d4a373;
     background:linear-gradient(180deg, #5f3b18 0%, #3a2412 100%);
     box-shadow:inset 0 0 20px rgba(255,255,255,.03), inset 0 -10px 20px rgba(0,0,0,.25), 0 5px 18px rgba(0,0,0,.35);
-
 }
 
 .market-buy-button:disabled{

@@ -187,29 +187,23 @@ p + p{
    RESPONSIVO
 ========================================================== */
 @media (max-width:600px){
-
     body{
         padding:50px 16px 70px;
         gap:22px;
     }
-
     h1{
         letter-spacing:2px;
     }
-
     h1::after{
         letter-spacing:10px;
     }
-
     h2{
         padding:24px 20px;
         font-size:16px;
         line-height:1.65;
     }
-
     p{
         font-size:17px;
         padding:12px 18px;
     }
-
 }

@@ -1,30 +1,17 @@
 /* ==========================================================
    MÍMICO — IMITAÇÃO
-   Tudo que é específico da habilidade do Mímico fica aqui: o cálculo
-   do bônus e a mensagem. (Os motores de combate só chamam estas
-   funções — nenhum guarda a regra sozinho.)
+   Em todo golpe (seu ou do oponente), soma Imitação% do Ataque/
+   Armadura/Agilidade de quem ela enfrenta aos PRÓPRIOS atributos —
+   vira status normal pra aquele confronto, afetando quanto ela bate,
+   aguenta e esquiva. Recalculado a cada golpe a partir do oponente
+   DAQUELA troca (importa no 2x2, onde ela alterna de alvo).
 
-   Regra: em TODO golpe (seu ou do oponente), o Mímico soma Imitação%
-   do Ataque/Armadura/Agilidade de quem ela está enfrentando aos
-   PRÓPRIOS Ataque/Armadura/Agilidade — vira parte normal dos status
-   dela pra aquele confronto, não é mais dano à parte. Isso afeta os
-   TRÊS lados: quanto ela bate (Ataque, passa pela mitigação normal),
-   quanto ela aguenta (Armadura, sofre menos de quem ela copiou) e
-   quanto ela esquiva/é difícil de acertar (Agilidade).
+   Antes era dano verdadeiro por % da Vida Máxima do alvo, mas contra
+   chefes isso passava de 600-1000 de dano por golpe. Copiar os
+   status de combate fica naturalmente mais contido.
 
-   Recalculado a cada golpe a partir do oponente DAQUELA troca (não
-   trava no início da luta) — importa no 2x2, onde ela pode alternar
-   entre os 2 inimigos do outro time.
-
-   Era dano verdadeiro baseado em % da Vida Máxima do alvo — contra
-   chefes (dezenas de milhares de vida) isso chegava a 600-1000+ de
-   dano por golpe, bem desproporcional. Copiar os status de combate
-   (não a vida) fica naturalmente mais contido, porque Ataque/Armadura
-   já são números pequenos e equilibrados pela própria mitigação.
-
-   (O campo interno continua se chamando "reflection" no código —
-   só o nome exibido pro jogador virou "Imitação", porque "Reflexo"
-   remetia a esquiva/reação rápida.)
+   (Campo interno continua "reflection" — só o nome exibido virou
+   "Imitação", já que "Reflexo" remetia a esquiva.)
 ========================================================== */
 
 export default class MimicService {

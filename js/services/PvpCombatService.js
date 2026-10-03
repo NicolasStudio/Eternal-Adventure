@@ -8,58 +8,32 @@ import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
 const DODGE_CAP = 40;
 
-// Versão da simulação do 2x2. Como os 4 clientes calculam a luta cada um
-// no seu navegador, dois jogadores em versões diferentes chegariam a
-// resultados diferentes — o pareamento do 2x2 só junta quem tem o MESMO
-// número (ver PvpLobbyService). Aumente sempre que mudar a simulação.
-// v3: Miasma do Pútrido passou a consumir rng() (o sorteio da ativação) —
-// clientes na v2 não fariam essa chamada e desincronizariam.
-// v4: Miasma ganhou acúmulos de Intoxicação (−Ataque/−Agilidade) — muda
-// dano e esquiva, então o resultado da luta muda. Junto: Absorção passou
-// a absorver metade do golpe (antes anulava o golpe inteiro).
-// v5: Crítico 1.6x (era 1.5x), Absorção 50% no PVP e Miasma com
-// especiais −25% a luta toda + acúmulos 3/6/10%.
-// v6: Mímico — soma dano verdadeiro extra (Imitação% do Ataque do alvo)
-// em todo golpe que acerta. Não consome rng() a mais, mas muda o
-// resultado de qualquer luta com um Mímico nos dois lados.
-// v7: Imitação passou a ser % da Vida Máxima do alvo (era do Ataque), com
-// divisor próprio no PVP (÷30).
-// v8: Imitação deixou de ser dano — agora soma Imitação% do Ataque/
-// Armadura/Agilidade do oponente aos status do Mímico a luta inteira
-// (afeta quanto ele bate, aguenta e esquiva), recalculado a cada golpe
-// a partir de quem ele está enfrentando naquele momento.
-// v9: Miasma ganhou um 4º acúmulo (3/6/9/15%, era 3/6/10 em 3 acúmulos),
-// passou a reduzir também a Armadura do alvo (antes só Ataque/
-// Agilidade), e o corte dos especiais (Crítico/Roubo de Vida/
-// Penetração/Absorção) foi de −25% pra −50% enquanto intoxicado.
+// Versão da simulação do 2x2 — os 4 clientes calculam a luta cada um no
+// seu navegador, então só pareia quem tem o MESMO número (ver
+// PvpLobbyService). Aumente sempre que mudar a simulação.
+// v3 Miasma passa a consumir rng() · v4 Miasma ganha acúmulos de
+// Ataque/Agilidade, Absorção vira 50% (antes anulava o golpe) · v5
+// Crítico 1.6x, Absorção 50% PVP, Miasma −25% especiais + 3/6/10% ·
+// v6 Mímico soma dano verdadeiro (Imitação% do Ataque do alvo) · v7
+// Imitação vira % da Vida Máxima (÷30 no PVP) · v8 Imitação deixa de
+// ser dano, passa a somar Imitação% de Ataque/Armadura/Agilidade do
+// oponente aos status do Mímico · v9 Miasma ganha 4º acúmulo
+// (3/6/9/15%), reduz também Armadura, especiais −50% (era −25%)
 export const TEAM_SIM_VERSION = 9;
 
 /*
-    PVP precisa que os DOIS clientes (o do jogador A e o do jogador B)
-    cheguem exatamente ao mesmo resultado de combate, sem depender de
-    ficar trocando mensagem por mensagem durante a luta em si — só o
-    "pareamento" (quem lutou com quem) passa pelo Firebase.
+    Os dois clientes (jogador A e B) precisam chegar no MESMO resultado
+    sem trocar mensagem a cada golpe — só o pareamento passa pelo
+    Firebase. Por isso a luta roda com RNG com SEMENTE (mulberry32): os
+    dois lados tiram os mesmos "aleatórios" na mesma ordem.
 
-    Pra isso, a luta usa um gerador de números aleatórios com SEMENTE
-    (mulberry32): os dois lados, combinando a MESMA semente, tiram
-    exatamente os mesmos números "aleatórios" na mesma ordem — o
-    resultado sai idêntico nos dois navegadores, sem precisar de um
-    servidor calculando por eles.
-
-    A mitigação de armadura e a absorção são as mesmas usadas em
-    CombatEngine.js — não reaproveitamos a classe em si porque ela tem uma
-    assimetria (Roubo de Vida só é aplicado de verdade pro lado "player",
-    nunca pro lado "monster") que não faz diferença nas dungeons (monstro
-    não tem esse atributo), mas seria injusta num PVP onde os dois lados
-    são jogadores de verdade.
-
-    A ESQUIVA é diferente de propósito: aqui usa uma razão proporcional
-    (`dodgeChance()`, abaixo) em vez do `min(40, max(0, agiDef-agiAtk))`
-    do CombatEngine.js — esse "tudo ou nada" travava em 0% sempre que o
-    defensor não fosse o mais ágil dos dois, o que deixava classes lentas
-    (Guerreiro) matematicamente injogáveis contra qualquer oponente mais
-    ágil. Dungeons (CombatEngine.js) não usam essa mudança de propósito —
-    lá o monstro não tem "carreira" de PVP pra proteger.
+    Mitigação/absorção reaproveitam a lógica do CombatEngine.js, mas não
+    a classe em si — lá o Roubo de Vida só vale pro lado "player" (monstro
+    não tem esse atributo), o que seria injusto com os dois lados sendo
+    jogadores reais. A ESQUIVA também muda de propósito: usa razão
+    proporcional (`dodgeChance()`) em vez do "tudo ou nada" do
+    CombatEngine, que travava em 0% e deixava classe lenta (Guerreiro)
+    injogável contra qualquer oponente mais ágil.
 */
 
 function mulberry32(seed) {

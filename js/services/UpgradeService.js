@@ -22,26 +22,17 @@ const SECONDARY_BONUS_QUALITIES = ["exceptional", LEGENDARY_EXTRA_QUALITY];
 // nunca melhoram com a Qualidade.
 const SECONDARY_STATS = ["criticalChance", "lifeSteal", "penetration", "absorption", "miasmaChance", "reflection"];
 
-// Bônus de "Excepcional" pra status SECUNDÁRIOS (% com teto por
-// raridade — ver rarities.js/secondaryCap), por raridade do item.
-// NÃO reaproveita a fórmula dos principais (qualityStep × stepMultiplier)
-// de propósito — daria um valor gigante de uma vez só numa única peça.
+// Bônus de "Excepcional" pra status SECUNDÁRIOS (teto por raridade, ver
+// rarities.js/secondaryCap). Não reaproveita a fórmula dos principais
+// (qualityStep × stepMultiplier) de propósito — daria um valor gigante
+// numa peça só. Crítico/Roubo de Vida/Penetração/Absorção só vêm de
+// Arma+Chapéu (Arma+Elmo no Bárbaro) desde a v3; os dois itens foram
+// calibrados pra, completos e no Excepcional, baterem exato no teto.
 //
-// Desde a v3 do balanceamento, Crítico/Roubo de Vida/Penetração/Absorção
-// não vêm mais de level up NENHUM — só de Arma + Chapéu (ou Arma + Elmo,
-// no caso do Bárbaro). Os valores BASE desses dois itens (weapons.js/
-// helmets.js) foram recalibrados junto com esse bônus pra que as DUAS
-// peças, completas E no Excepcional, cheguem exatamente no teto da
-// raridade (rarities.js/secondaryCap) — nem uma peça sozinha chega perto,
-// nem sobra bônus desperdiçado pelo teto.
-//
-// Exceção: a Imitação do Mímico (reflection) tem teto PRÓPRIO de 30 —
-// bem mais baixo que o secondaryCap normal (45 no Ultraje), porque um
-// único ponto percentual dela vale muito mais que nos outros status
-// secundários (soma de uma vez no Ataque, na Armadura E na Agilidade —
-// ver MimicService.js). A curva da arma/elmo dela (weapons.js/
-// helmets.js) foi recalibrada à parte, fechando em 30 no Ultraje+
-// Lendário em vez do teto cheio.
+// Exceção: Imitação do Mímico (reflection) tem teto próprio de 30 (bem
+// abaixo do secondaryCap normal), porque soma de uma vez em Ataque,
+// Armadura E Agilidade (ver MimicService.js) — curva da arma/elmo dela
+// recalibrada à parte pra fechar em 30 no Ultraje+Lendário.
 const SECONDARY_EXCEPTIONAL_BONUS = {
     common: 2,
     uncommon: 3,

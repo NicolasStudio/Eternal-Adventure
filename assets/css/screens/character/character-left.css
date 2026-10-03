@@ -159,11 +159,9 @@
    BARRAS
 ========================================================== */
 .character-bars{
-
     display:flex;
     flex-direction:column;
     gap:10px;
-
 }
 
 .character-bar{

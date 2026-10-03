@@ -1,30 +1,15 @@
 /* ==========================================================
    PÚTRIDO — MIASMA
-   Tudo que é específico da habilidade do Pútrido fica aqui: o
-   sorteio, o débuff em si e a mensagem. (Os motores de combate só
-   chamam estas funções — nenhum guarda a regra sozinho.)
-
-   Regra: em todo golpe SEU que acerta (não dodgado), o Pútrido tem
-   MIASMA_CHANCE% de chance de intoxicar o alvo. Cada ativação faz
-   três coisas:
-
-   1. Acúmulo de Intoxicação (até o fim da luta): soma 1 acúmulo, até
-      STACK_MAX (4); o total tira STACK_PERCENTS[acúmulos]% do Ataque,
-      da Agilidade E da Armadura do alvo — em PVP e em PVE, as duas
-      tabelas têm valor próprio (ver STACK_PERCENTS/PVE_STACK_PERCENTS).
-
-   2. Especiais enfraquecidos (até o fim da luta): com 1+ acúmulo, a
-      Chance Crítica/Roubo de Vida/Penetração/Absorção do alvo valem
-      PERSISTENT_SPECIAL_MULTIPLIER (50%). Não aumenta com mais
-      acúmulos. É o que faz do Pútrido o contrapeso da Absorção do
-      Guerreiro — só pesa no PVP, já que monstro/chefe não têm esses
-      atributos (ver hasAnySpecials).
-
-   3. Marca (um golpe só): na PRÓXIMA vez que o alvo atacar, Crítico/
-      Roubo de Vida/Penetração saem ainda pela metade; na PRÓXIMA vez
-      que ele apanhar, a Absorção sai pela metade. As duas marcas são
-      independentes (uma pode ser consumida antes da outra, dependendo
-      de quem age primeiro).
+   Em todo golpe SEU que acerta, MIASMA_CHANCE% de intoxicar o alvo,
+   com 3 efeitos:
+   1. Acúmulo (até STACK_MAX=4, resto da luta): tira STACK_PERCENTS[n]%
+      de Ataque/Agilidade/Armadura — tabela própria pra PVP e PVE.
+   2. Especiais fracos (resto da luta, 1+ acúmulo): Crítico/Roubo de
+      Vida/Penetração/Absorção valem PERSISTENT_SPECIAL_MULTIPLIER
+      (50%) — só pesa no PVP, monstro/chefe não têm esses atributos.
+   3. Marca (um golpe só): próximo ataque do alvo sai com Crítico/
+      Roubo de Vida/Penetração pela metade; próxima vez que apanha,
+      Absorção pela metade. Marcas independentes.
 ========================================================== */
 
 const DEBUFF_MULTIPLIER = 0.5;

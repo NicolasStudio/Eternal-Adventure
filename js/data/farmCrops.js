@@ -1,19 +1,10 @@
-// Configuração de cada cultura da Fazenda: tempo total até a colheita,
-// as 5 imagens de estágio (ver FarmService.getStageIndex, que decide
-// qual delas mostrar a partir do tempo decorrido desde o plantio), e o
-// item que vai pro inventário (aba "Comidas") ao colher.
-//
-// Balanceamento (tempo/preço da semente definidos à mão, o resto
-// derivado de forma consistente pra não precisar ajustar cultura por
-// cultura no futuro):
-// - petXP = minutos de crescimento (Batata 5min→5xp, Trigo 15min→15xp,
-//   e assim por diante — quanto mais devagar a cultura, mais XP ela
-//   rende, mas sempre na mesma proporção: 1xp por minuto de espera).
-// - harvestedItem.sellValue = preço da semente (seeds.js `value`) + 20%.
-// - harvestedItem.petFeedValue = preço da semente / 50 (era /10; com 24
-//   canteiros e o pet limitado ao nível 32, o valor antigo deixava a
-//   fazenda upar um pet inteiro em poucos dias — reduzido pra virar um
-//   objetivo de mais longo prazo. Batata: 100/50 = 2).
+// Cada cultura: tempo até a colheita, as 5 imagens de estágio (ver
+// FarmService.getStageIndex) e o item que cai no inventário ao colher.
+// Tempo/preço da semente são à mão; o resto é derivado: petXP = minutos
+// de crescimento (1xp/minuto); sellValue = preço da semente (seeds.js)
+// +20%; petFeedValue = preço da semente /50 (era /10 — upava um pet
+// inteiro em poucos dias com 24 canteiros; agora é objetivo de prazo
+// mais longo. Batata: 100/50 = 2).
 const farmCrops = {
 
     potato: {

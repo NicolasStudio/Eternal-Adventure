@@ -1,18 +1,10 @@
 /* ==========================================================
    ESCALA DE DIFICULDADE DOS MONSTROS (dungeons)
-
-   A partir de FROM_LEVEL, vida e dano de todo monstro ganham um
-   multiplicador que cresce de forma linear com o nível do monstro:
-   começa em `start` no FROM_LEVEL e chega em `end` no TO_LEVEL.
-   Abaixo do FROM_LEVEL nada muda.
-
-   A escala é aplicada uma vez só, na saída de monsters.js — combate,
-   pular dungeon e HUD do monstro leem todos os mesmos valores, então
-   não precisa editar monstro por monstro. XP, ouro, armadura e
-   agilidade NÃO são alterados. (Os chefes de Cooperativo ficam de fora,
-   ver monstersRaid.js.)
-
-   Pra ajustar a dificuldade, mexa só nos números abaixo.
+   A partir de FROM_LEVEL, vida e dano crescem linearmente (`start` no
+   FROM_LEVEL até `end` no TO_LEVEL); abaixo disso nada muda. Aplicada
+   uma vez na saída de monsters.js, então vale pra combate/skip/HUD sem
+   editar monstro por monstro. Não afeta XP/ouro/armadura/agilidade,
+   nem os chefes de Cooperativo (ver monstersRaid.js).
 ========================================================== */
 
 export const FROM_LEVEL = 35;

@@ -42,15 +42,11 @@
 }
 
 .market-sell-panel{
-
     margin-top:auto;
-
     padding-top:24px;
-
     display:flex;
     flex-direction:column;
     gap:16px;
-
 }
 
 /* ==========================================================

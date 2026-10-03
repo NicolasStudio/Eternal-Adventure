@@ -2,10 +2,8 @@
     position: fixed;
     z-index: 99999;
     pointer-events: none;
-
     opacity: 0;
     visibility: hidden;
-
     transition: opacity .12s;
 }
 

@@ -43,38 +43,15 @@ function isPowerCompatible(a, b, range = PVP_POWER_RANGE) {
 const MAX_TEAM_CANDIDATES = 30;
 
 /*
-    Como o pareamento evita jogadores "roubarem" o mesmo adversário ao
-    mesmo tempo:
-
-    1x1 — quando o cliente A vê o cliente B esperando na fila, ele
-    tenta uma TRANSAÇÃO no nó do PRÓPRIO B (não no seu) — "só marca B
-    como pareado comigo SE `matchedWith` de B ainda estiver vazio". Se
-    dois jogadores tentarem parear com B ao mesmo tempo, o Firebase
-    garante que só uma dessas transações tem sucesso.
-
-    2x2 — a mesma ideia, só que reivindicando 3 outros jogadores em
-    vez de 1. Pra evitar que várias pessoas tentem montar um grupo de
-    4 ao mesmo tempo (o que multiplicaria o risco de corrida), só o
-    jogador com o ID "menor" entre TODOS os que estão esperando tenta
-    formar o grupo — todo mundo mais espera ser encontrado. Se, no
-    meio do caminho, uma das 3 reivindicações falhar (alguém saiu da
-    fila ou foi pego por outra tentativa), as que já tinham sido
-    feitas são liberadas e a formação é abandonada — tenta de novo no
-    próximo jogador que entrar ou sair da fila.
-
-    Poder: só entram como candidatos os jogadores dentro de
-    PVP_POWER_RANGE do meu Poder. No 1x1 a regra do "ID menor inicia"
-    continua valendo, só que entre os COMPATÍVEIS — sempre há alguém
-    que inicia: o menor ID que tenha qualquer par compatível. No 2x2,
-    cada jogador procura um grupo de 4 (ele + 3) em que todos estejam
-    dentro do limite entre si, e só tenta montar se for o menor ID
-    DAQUELE grupo — assim o menor ID de qualquer grupo válido sempre
-    tenta, e ninguém fica travado esperando alguém que não consegue
-    formar grupo.
-
-    Cada MODO tem sua própria fila, separada por caminho
-    (pvpLobby/1v1, pvpLobby/2v2) — um jogador procurando 1x1 nunca
-    esbarra com alguém procurando 2x2.
+    Evita "roubar" o mesmo adversário: 1x1 reivindica via transação no
+    nó do OUTRO jogador (só vira par se `matchedWith` dele ainda estiver
+    vazio — o Firebase garante que só uma transação concorrente vence).
+    2x2 reivindica 3 jogadores da mesma forma, mas só quem tem o menor
+    ID entre os compatíveis tenta formar o grupo, pra não multiplicar o
+    risco de corrida; se uma das 3 reivindicações falhar, desfaz as
+    outras e tenta de novo depois. Só entram candidatos dentro do
+    PVP_POWER_RANGE do meu Poder. Cada modo tem fila própria
+    (pvpLobby/1v1, pvpLobby/2v2), sem cruzar uma com a outra.
 */
 export default class PvpLobbyService {
 

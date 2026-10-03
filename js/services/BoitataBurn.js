@@ -1,19 +1,9 @@
 /* ==========================================================
    BOITATÁ — QUEIMADURA
-   Tudo que é específico da habilidade do pet Boitatá fica aqui:
-   a efetividade elemental e o cálculo/mensagem de cada tick.
-   (O restante do jogo só chama estas funções.)
-
-   Regra: a queimadura é ativada no PRIMEIRO golpe do dono que
-   acerta, e depois causa dano uma vez a cada turno DO PRÓPRIO DONO
-   (nunca no turno do monstro/chefe nem de outros jogadores) até o
-   combate terminar. É dano direto — não passa pela armadura.
-
-   Efetividade contra o elemento do alvo (chefes do Cooperativo):
-     Água     -70% de dano
-     Planta   +70% de dano
-     Inseto   +70% de dano
-     Fogo, Luz, Escuridão e alvos sem elemento: dano padrão.
+   Ativa no PRIMEIRO golpe do dono que acerta; depois causa dano
+   direto (ignora armadura) a cada turno DO DONO até o combate
+   acabar. Efetividade por elemento do alvo: Água −70%, Planta/Inseto
+   +70%, resto dano padrão.
 ========================================================== */
 
 const EFFECTIVENESS = {
