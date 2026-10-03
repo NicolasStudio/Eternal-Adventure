@@ -28,7 +28,11 @@ const DODGE_CAP = 40;
 // Armadura/Agilidade do oponente aos status do Mímico a luta inteira
 // (afeta quanto ele bate, aguenta e esquiva), recalculado a cada golpe
 // a partir de quem ele está enfrentando naquele momento.
-export const TEAM_SIM_VERSION = 8;
+// v9: Miasma ganhou um 4º acúmulo (3/6/9/15%, era 3/6/10 em 3 acúmulos),
+// passou a reduzir também a Armadura do alvo (antes só Ataque/
+// Agilidade), e o corte dos especiais (Crítico/Roubo de Vida/
+// Penetração/Absorção) foi de −25% pra −50% enquanto intoxicado.
+export const TEAM_SIM_VERSION = 9;
 
 /*
     PVP precisa que os DOIS clientes (o do jogador A e o do jogador B)
@@ -209,7 +213,9 @@ export default class PvpCombatService {
 
                 const isCritical = rng() * 100 < attacker.criticalChance * attackDebuff;
                 const criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER : 1;
-                const effectiveArmor = (defender.armor + defenderCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
+                // Miasma: Armadura de quem está intoxicado também cai,
+                // junto com Ataque/Agilidade (defenderMult, calculado acima).
+                const effectiveArmor = (defender.armor * defenderMult + defenderCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
                 const preAbsorption = Math.max(1, Math.floor((attacker.attack * attackerMult + attackerCopy.bonusAttack) * criticalMultiplier * mitigation));
 
@@ -466,7 +472,9 @@ export default class PvpCombatService {
 
                 const isCritical = rng() * 100 < attacker.criticalChance * attackDebuff;
                 const criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER : 1;
-                const effectiveArmor = (target.armor + targetCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
+                // Miasma: Armadura de quem está intoxicado também cai,
+                // junto com Ataque/Agilidade (targetMult, calculado acima).
+                const effectiveArmor = (target.armor * targetMult + targetCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
                 const preAbsorption = Math.max(1, Math.floor((attacker.attack * attackerMult + attackerCopy.bonusAttack) * criticalMultiplier * mitigation));
 

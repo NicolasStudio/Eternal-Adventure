@@ -1,6 +1,6 @@
 import PvpCombatService from "./PvpCombatService.js";
 import BoitataBurn from "./BoitataBurn.js";
-import MiasmaService from "./MiasmaService.js";
+import MiasmaService, { PVE_STACK_PERCENTS as MIASMA_PVE_PERCENTS } from "./MiasmaService.js";
 import MimicService from "./MimicService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVE, absorbedAmount } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
@@ -217,8 +217,8 @@ export default class RaidCombatService {
                 // Acúmulos de Intoxicação do Miasma: Ataque e Agilidade de
                 // quem estiver intoxicado (na prática, o chefe) saem
                 // reduzidos a luta inteira.
-                const attackerMult = MiasmaService.statMultiplier(miasmaFlagsById.get(attacker.id));
-                const targetMult = MiasmaService.statMultiplier(miasmaFlagsById.get(target.id));
+                const attackerMult = MiasmaService.statMultiplier(miasmaFlagsById.get(attacker.id), MIASMA_PVE_PERCENTS);
+                const targetMult = MiasmaService.statMultiplier(miasmaFlagsById.get(target.id), MIASMA_PVE_PERCENTS);
 
                 // Imitação do Mímico: soma Imitação% do Ataque/Armadura/
                 // Agilidade de quem ele enfrenta aos status dele — o chefe
@@ -267,7 +267,9 @@ export default class RaidCombatService {
 
                 const isCritical = rng() * 100 < attacker.criticalChance * attackDebuff;
                 const criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER : 1;
-                const effectiveArmor = (target.armor + targetCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
+                // Miasma (PVE): Armadura de quem está intoxicado também cai,
+                // junto com Ataque/Agilidade (targetMult, calculado acima).
+                const effectiveArmor = (target.armor * targetMult + targetCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
                 const preAbsorption = Math.max(1, Math.floor((attackPower + attackerCopy.bonusAttack) * criticalMultiplier * mitigation));
 

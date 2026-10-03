@@ -1,6 +1,6 @@
 import PetService from "../services/PetService.js";
 import BoitataBurn from "../services/BoitataBurn.js";
-import MiasmaService from "../services/MiasmaService.js";
+import MiasmaService, { PVE_STACK_PERCENTS as MIASMA_PVE_PERCENTS } from "../services/MiasmaService.js";
 import MimicService from "../services/MimicService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVE, absorbedAmount } from "./Absorption.js";
 import { CRITICAL_MULTIPLIER } from "./Critical.js";
@@ -115,8 +115,8 @@ export default class CombatEngine {
     // estiver intoxicado (ver MiasmaService.statMultiplier).
     rollDodge(attacker, defender, attackerSide = null, defenderSide = null) {
 
-        const attackerAgility = (attacker.agility ?? attacker.agilidade ?? 0) * MiasmaService.statMultiplier(this.miasmaFlags[attackerSide]);
-        const defenderAgility = (defender.agility ?? defender.agilidade ?? 0) * MiasmaService.statMultiplier(this.miasmaFlags[defenderSide]);
+        const attackerAgility = (attacker.agility ?? attacker.agilidade ?? 0) * MiasmaService.statMultiplier(this.miasmaFlags[attackerSide], MIASMA_PVE_PERCENTS);
+        const defenderAgility = (defender.agility ?? defender.agilidade ?? 0) * MiasmaService.statMultiplier(this.miasmaFlags[defenderSide], MIASMA_PVE_PERCENTS);
 
         const dodgeChance = Math.min(
             DODGE_CAP,
@@ -130,9 +130,11 @@ export default class CombatEngine {
     calculateDamage(attacker, defender, attackerSide = null, defenderSide = null) {
 
         // Acúmulos de Intoxicação do Miasma reduzem o Ataque de quem
-        // estiver intoxicado (ver MiasmaService.statMultiplier).
-        const attack = (attacker.attack ?? attacker.dano) * MiasmaService.statMultiplier(this.miasmaFlags[attackerSide]);
-        const armor = defender.armor ?? defender.armadura;
+        // estiver intoxicado (ver MiasmaService.statMultiplier). Em PVE
+        // também reduz a Armadura de quem está defendendo, se ele
+        // estiver intoxicado — só aqui (Dungeons), nunca no PVP.
+        const attack = (attacker.attack ?? attacker.dano) * MiasmaService.statMultiplier(this.miasmaFlags[attackerSide], MIASMA_PVE_PERCENTS);
+        const armor = (defender.armor ?? defender.armadura) * MiasmaService.statMultiplier(this.miasmaFlags[defenderSide], MIASMA_PVE_PERCENTS);
 
         // Miasma do Pútrido: se o ATACANTE tiver uma marca pendente
         // (foi intoxicado no golpe anterior que sofreu), Crítico/Roubo
@@ -242,7 +244,7 @@ export default class CombatEngine {
                 message += `<br><span class="combat-life-steal">Life Steal!</span> Recuperou <strong>${result.lifeSteal}</strong> HP.`;
             }
             if (result.miasmaProc) {
-                message += `<br>${MiasmaService.buildProcMessage(this.monster.name, result)}`;
+                message += `<br>${MiasmaService.buildProcMessage(this.monster.name, result, MIASMA_PVE_PERCENTS)}`;
             }
             if (result.mimicBonus > 0) {
                 message += `<br>${MimicService.buildMessage(result.mimicBonus, { opponentName: this.monster.name })}`;

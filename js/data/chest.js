@@ -539,7 +539,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-putrid-rarity-mistico.png",
 
         stats: {
-            armor: 18
+            armor: 22
         },
 
         value: 2700,
@@ -558,7 +558,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-putrid-rarity-lendario.png",
 
         stats: {
-            armor: 24
+            armor: 29
         },
 
         value: 0,

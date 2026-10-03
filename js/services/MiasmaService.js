@@ -9,35 +9,40 @@
    três coisas:
 
    1. Acúmulo de Intoxicação (até o fim da luta): soma 1 acúmulo, até
-      STACK_MAX; o total tira STACK_PERCENTS[acúmulos]% do Ataque e da
-      Agilidade do alvo (3% / 6% / 10%). É o que dá efeito contra
-      monstro e chefe (que não têm atributos especiais pra cortar).
+      STACK_MAX (4); o total tira STACK_PERCENTS[acúmulos]% do Ataque,
+      da Agilidade E da Armadura do alvo — em PVP e em PVE, as duas
+      tabelas têm valor próprio (ver STACK_PERCENTS/PVE_STACK_PERCENTS).
 
    2. Especiais enfraquecidos (até o fim da luta): com 1+ acúmulo, a
       Chance Crítica/Roubo de Vida/Penetração/Absorção do alvo valem
-      PERSISTENT_SPECIAL_MULTIPLIER (75%). Não aumenta com mais
+      PERSISTENT_SPECIAL_MULTIPLIER (50%). Não aumenta com mais
       acúmulos. É o que faz do Pútrido o contrapeso da Absorção do
-      Guerreiro.
+      Guerreiro — só pesa no PVP, já que monstro/chefe não têm esses
+      atributos (ver hasAnySpecials).
 
    3. Marca (um golpe só): na PRÓXIMA vez que o alvo atacar, Crítico/
       Roubo de Vida/Penetração saem ainda pela metade; na PRÓXIMA vez
       que ele apanhar, a Absorção sai pela metade. As duas marcas são
       independentes (uma pode ser consumida antes da outra, dependendo
       de quem age primeiro).
-
-   Valores escolhidos por simulação ("variante E"): cortar os especiais
-   pela metade a luta toda deixava o Pútrido dominante no PVP (57–72%
-   de vitórias); só o corte de um golpe deixava ele o mais fraco.
 ========================================================== */
 
 const DEBUFF_MULTIPLIER = 0.5;
 
-// % de Ataque e Agilidade a menos por quantidade de acúmulos (índice).
-export const STACK_PERCENTS = [0, 3, 6, 10];
+// % de Ataque, Agilidade e Armadura a menos por quantidade de acúmulos
+// (índice) — vale pro PVP (1x1/2x2).
+export const STACK_PERCENTS = [0, 3, 6, 9, 15];
+
+// Mesma coisa, mas pro PVE (Dungeons e Cooperativo) — valores maiores,
+// já que lá a Camada 2/3 (especiais) nunca pesa (ninguém tem Crítico/
+// Roubo de Vida/Penetração/Absorção fora de jogador), então essa é a
+// única camada que o Pútrido tem contra monstro/chefe.
+export const PVE_STACK_PERCENTS = [0, 5, 10, 15, 20];
+
 export const STACK_MAX = STACK_PERCENTS.length - 1;
 
 // Quanto sobra dos atributos especiais de quem tem 1+ acúmulo.
-export const PERSISTENT_SPECIAL_MULTIPLIER = 0.75;
+export const PERSISTENT_SPECIAL_MULTIPLIER = 0.5;
 
 export default class MiasmaService {
 
@@ -67,8 +72,11 @@ export default class MiasmaService {
 
     // Multiplicador de Ataque e Agilidade do combatente pelos acúmulos
     // (1 = sem Intoxicação). Não consome nada — vale a luta inteira.
-    static statMultiplier(flags) {
-        return 1 - (STACK_PERCENTS[flags?.stacks ?? 0] ?? 0) / 100;
+    // percents: qual tabela usar — STACK_PERCENTS (padrão, PVP) ou
+    // PVE_STACK_PERCENTS (passada explicitamente por quem chama em
+    // Dungeons/Cooperativo).
+    static statMultiplier(flags, percents = STACK_PERCENTS) {
+        return 1 - (percents[flags?.stacks ?? 0] ?? 0) / 100;
     }
 
     // Multiplicador permanente dos atributos especiais (1 = sem
@@ -138,13 +146,16 @@ export default class MiasmaService {
 
     // entry: resultado/log do golpe que ativou o Miasma (usa
     // miasmaStacks e miasmaTargetHasSpecials, gravados pelos motores).
-    static buildProcMessage(targetName, entry = {}) {
+    // percents: mesma tabela usada no statMultiplier do combate que
+    // chamou isso — precisa bater, senão a mensagem mostra um número
+    // diferente do que foi de fato aplicado.
+    static buildProcMessage(targetName, entry = {}, percents = STACK_PERCENTS) {
         const stacks = entry.miasmaStacks ?? 1;
         const specialsLeft = Math.round((1 - PERSISTENT_SPECIAL_MULTIPLIER) * 100);
         const specials = entry.miasmaTargetHasSpecials
             ? ` Atributos especiais −${specialsLeft}% até o fim da luta, e pela metade no próximo golpe.`
             : "";
-        return `<span class="combat-miasma">Miasma!</span> ${targetName} foi intoxicado (${stacks}/${STACK_MAX}) — −${STACK_PERCENTS[stacks]}% de Ataque e Agilidade até o fim da luta.${specials}`;
+        return `<span class="combat-miasma">Miasma!</span> ${targetName} foi intoxicado (${stacks}/${STACK_MAX}) — −${percents[stacks]}% de Ataque, Agilidade e Armadura até o fim da luta.${specials}`;
     }
 
 }

@@ -568,8 +568,8 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-putrid-rarity-mistico.png",
 
         stats: {
-            armor: 12,
-            agility: 5
+            armor: 14,
+            agility: 10
         },
 
         value: 2565,
@@ -588,8 +588,8 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-putrid-rarity-lendario.png",
 
         stats: {
-            armor: 14,
-            agility: 6
+            armor: 15,
+            agility: 10
         },
 
         value: 0,
@@ -608,8 +608,8 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-putrid-rarity-ultraje.png",
 
         stats: {
-            armor: 17,
-            agility: 7
+            armor: 20,
+            agility: 8
         },
 
         value: 0,

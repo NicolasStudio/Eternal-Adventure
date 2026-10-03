@@ -565,7 +565,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-putrid-rarity-mistico.png",
 
         stats: {
-            armor: 8,
+            armor: 9,
             miasmaChance: 6
         },
 

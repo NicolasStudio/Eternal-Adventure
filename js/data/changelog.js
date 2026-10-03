@@ -4,7 +4,8 @@ export default [
         version: "Beta 0.2",
         date: "Outubro de 2026",
         changes: [
-            "Nova classe: Pútrido — o especial dele é o Miasma: cada ativação intoxica o alvo (até 3 acúmulos), tirando 3%/6%/10% de Ataque e Agilidade e 25% dos atributos especiais até o fim da luta, além de cortar os especiais pela metade no golpe seguinte",
+            "Nova classe: Pútrido — o especial dele é o Miasma: cada ativação intoxica o alvo (até 4 acúmulos), tirando Ataque, Agilidade e Armadura, além de enfraquecer os atributos especiais até o fim da luta e cortá-los pela metade no golpe seguinte",
+            "Miasma: agora vai até 4 acúmulos (era 3) e também reduz a Armadura do alvo, não só Ataque e Agilidade — em Dungeons/Cooperativo os valores são 5/10/15/20%, no PVP 3/6/9/15%; o corte dos atributos especiais (Crítico, Roubo de Vida, Penetração, Absorção) do alvo intoxicado também dobrou, de −25% pra −50% enquanto durar a Intoxicação",
             "Nova classe: Mímico — o especial dele é a Imitação: soma uma % do Ataque, Armadura e Agilidade de quem ele está enfrentando aos status dele mesmo, recalculado a cada golpe",
             "Mímico: a % copiada pela Imitação tem um teto de 30%, definido pela arma e pelo elmo equipados (quanto maior a raridade e a Qualidade, mais perto do teto)",
             "Pútrido e Mímico ganharam transcendência (Portal da Luz/Trevas)",
@@ -35,6 +36,13 @@ export default [
             "Ranking: a lupa de detalhe do jogador agora mostra também o Anel e o Amuleto equipados",
             "Adicionado novo chefe do Cooperativo: Dragão Varejeiro (elemento Inseto, 3º andar) — dropa Anel ou Amuleto Lendário",
             "O pet Boitatá agora também é super efetivo (+70% de dano na queimadura) contra criaturas do tipo Inseto",
+            "Pútrido: +20 de Vida, +3 de Ataque, +4 de Armadura e +4 de Agilidade pelos níveis 70-100, mais +4 de Ataque (arma), +4 de Armadura (elmo/peitoral/calça/botas) e +4 de Agilidade (calça/botas) nos itens Místicos — a classe estava ficando frágil demais contra os chefes dessa faixa",
+            "Pútrido: mais +5 de Armadura, concentrados nos níveis 78-83 — reforço extra bem localizado, nesse trecho em que a dificuldade sobe mais rápido",
+            "Pútrido: mais +12 de Vida nos níveis 44, 45, 50, 60 e 65, além de +1 de Ataque (nível 50) e +1 de Armadura (nível 45)",
+            "Pútrido: mais +100 de Vida nos níveis 50-100 — ainda estava muito atrás da Vida dos chefes do Cooperativo nessa faixa",
+            "Pútrido: +10 de Agilidade (5 na Calça, 5 na Bota) nos itens Místicos e Lendários",
+            "Miasma: além de Ataque e Agilidade, agora também reduz a Armadura do alvo em Dungeons e Cooperativo — assim o próprio Pútrido passa a bater mais forte em quem já está intoxicado, não só apanhar menos (sem mudança no PVP)",
+            "Novo chefe do Cooperativo: Dragão de Indra (elemento Energia, 4º andar); os 7 dragões agora dropam cada um um item Lendário diferente (Botas, Calça, Anel, Amuleto, Peitoral, Elmo e por último, no 7º andar, a Arma)",
             "Wiki: adicionado o Mímico, a nova seção de Acessórios (Anel e Amuleto) e atualizadas as seções de Classes, Itens, Pets, Ferraria, Cooperativo, Salvar e Ranking"
         ]
     },

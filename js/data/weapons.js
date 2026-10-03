@@ -668,7 +668,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/stink-rarity-mistico.png",
 
         stats: {
-            attack: 29,
+            attack: 40,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -695,7 +695,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/stink-rarity-lendario.png",
 
         stats: {
-            attack: 41,
+            attack: 48,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -722,7 +722,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/stink-rarity-ultraje.png",
 
         stats: {
-            attack: 56,
+            attack: 58,
             armor: 0,
             agility: 0,
             criticalChance: 0,

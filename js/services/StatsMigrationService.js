@@ -4,6 +4,10 @@ import legacyLevels_v2 from "../data/legacyLevels_v2.js";
 import legacyLevels_v3 from "../data/legacyLevels_v3.js";
 import legacyLevels_v4 from "../data/legacyLevels_v4.js";
 import legacyLevels_v5 from "../data/legacyLevels_v5.js";
+import legacyLevels_v6 from "../data/legacyLevels_v6.js";
+import legacyLevels_v7 from "../data/legacyLevels_v7.js";
+import legacyLevels_v8 from "../data/legacyLevels_v8.js";
+import legacyLevels_v9 from "../data/legacyLevels_v9.js";
 import baseStatsL1 from "../data/baseStatsL1.js";
 
 // Sobe toda vez que a curva de levels.js (ou o formato de baseStats)
@@ -33,7 +37,23 @@ import baseStatsL1 from "../data/baseStatsL1.js";
 //     70-100 — pra aguentar melhor os chefes dessa faixa, em troca de
 //     um pouco de esquiva. Só esse trecho de níveis muda (ver
 //     legacyLevels_v5.js).
-export const CURRENT_BALANCE_VERSION = 6;
+// v7: Pútrido ganhou +20 de Vida, +3 de Ataque, +4 de Armadura e +4 de
+//     Agilidade (dos quais +4/+4/+4 saíram do equipamento Místico) nos
+//     níveis 70-100 — a classe estava ficando frágil demais nessa faixa
+//     de chefes. Só esse trecho de níveis muda (ver legacyLevels_v6.js).
+// v8: Pútrido ganhou mais +5 de Armadura, concentrados nos níveis 78-83
+//     — reforço extra num trecho específico onde a dificuldade sobe mais
+//     rápido. Só esse trecho de níveis muda (ver legacyLevels_v7.js).
+// v9: Pútrido ganhou +12 de Vida nos níveis 44/45/50/60/65, +1 de
+//     Armadura (nível 45) e +1 de Ataque (nível 50). Só esses 5 níveis
+//     mudam (ver legacyLevels_v8.js).
+// v10: Pútrido ganhou mais +100 de Vida nos níveis 50-100 — a diferença
+//      de Vida contra os chefes do Cooperativo ainda era grande demais
+//      mesmo com os reforços anteriores. Só esse trecho de níveis muda
+//      (ver legacyLevels_v9.js). O Miasma também passou a reduzir a
+//      Armadura do alvo em PVE (não muda baseStats/maxHP, não precisa
+//      de migração — é regra de combate, não dado salvo).
+export const CURRENT_BALANCE_VERSION = 10;
 
 // miasmaChance/reflection entram aqui só pra não serem DESCARTADOS na
 // migração (a tabela de migração nunca tem esses campos, então sempre
@@ -48,7 +68,11 @@ const LEGACY_TABLES = {
     2: legacyLevels_v2,
     3: legacyLevels_v3,
     4: legacyLevels_v4,
-    5: legacyLevels_v5
+    5: legacyLevels_v5,
+    6: legacyLevels_v6,
+    7: legacyLevels_v7,
+    8: legacyLevels_v8,
+    9: legacyLevels_v9
 };
 
 export default class StatsMigrationService {

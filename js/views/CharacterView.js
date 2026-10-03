@@ -6,7 +6,7 @@ import PetService from "../services/PetService.js";
 import PowerService from "../services/PowerService.js";
 import PetFeedModal from "../ui/components/modals/PetFeedModal.js";
 import FarmConfirmModal from "../ui/components/modals/FarmConfirmModal.js";
-import { STACK_PERCENTS as MIASMA_STACK_PERCENTS, STACK_MAX as MIASMA_STACK_MAX, PERSISTENT_SPECIAL_MULTIPLIER as MIASMA_SPECIAL_KEEP } from "../services/MiasmaService.js";
+import { STACK_PERCENTS as MIASMA_STACK_PERCENTS, PVE_STACK_PERCENTS as MIASMA_PVE_PERCENTS, PERSISTENT_SPECIAL_MULTIPLIER as MIASMA_SPECIAL_KEEP } from "../services/MiasmaService.js";
 import { ABSORPTION_RATIO_PVE, ABSORPTION_RATIO_PVP, ABSORPTION_CAP } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
@@ -1245,7 +1245,8 @@ export default class CharacterView {
     // Linhas repetidas nos 5 atributos especiais (ver PlayerStats.getFinalStats
     // pro teto e MiasmaService.js pro corte do Miasma).
     static SPECIAL_CAP_ROW = ["Teto", "A parte que vem do equipamento é limitada pela maior raridade equipada (Comum 8% … Ultraje 45%). O Quartzo Rosa soma por cima, sem limite."];
-    static MIASMA_STACKS_TEXT = MIASMA_STACK_PERCENTS.slice(1).map(p => `${p}%`).join(" / ");
+    static MIASMA_PVE_TEXT = MIASMA_PVE_PERCENTS.slice(1).map(p => `${p}%`).join("/");
+    static MIASMA_PVP_TEXT = MIASMA_STACK_PERCENTS.slice(1).map(p => `${p}%`).join("/");
     static MIASMA_SPECIAL_CUT = Math.round((1 - MIASMA_SPECIAL_KEEP) * 100);
     static MIASMA_CUT_ROW = ["Contra o Pútrido", `Intoxicado pelo Miasma, esse atributo cai ${CharacterView.MIASMA_SPECIAL_CUT}% até o fim da luta — e pela metade no golpe logo após cada ativação.`];
 
@@ -1340,11 +1341,10 @@ export default class CharacterView {
         miasmaChance: {
             icon: "fa-skull-crossbones",
             title: "Miasma",
-            summary: "Exclusivo do Pútrido: chance, a cada golpe seu que acerta, de intoxicar o alvo.",
+            summary: "Exclusivo do Pútrido: chance de intoxicar o alvo a cada golpe seu que acerta.",
             details: [
-                ["Intoxicação", `Cada ativação soma 1 acúmulo no alvo (máximo ${MIASMA_STACK_MAX}): −${CharacterView.MIASMA_STACKS_TEXT} de Ataque e Agilidade, até o fim da luta. Vale contra monstros, chefes e jogadores.`],
-                ["Especiais enfraquecidos", `Intoxicado, o alvo perde ${CharacterView.MIASMA_SPECIAL_CUT}% da Chance Crítica, Roubo de Vida, Penetração e Absorção até o fim da luta — e esses atributos caem ainda pela metade no golpe logo após cada ativação. Só pesa contra quem tem esses atributos (jogadores, no PVP).`],
-                ["Não causa dano", "Só enfraquece — a queda de dano do alvo vem dos atributos dele mesmo ficando piores."],
+                ["Intoxicação", `Até 4 acúmulos, reduzindo mais o Ataque, a Agilidade e a Armadura do alvo a cada um: −${CharacterView.MIASMA_PVE_TEXT}% contra monstro/chefe, −${CharacterView.MIASMA_PVP_TEXT}% no PVP.`],
+                ["Contra jogadores", `Também corta o Crítico/Roubo de Vida/Penetração/Absorção do alvo — ${CharacterView.MIASMA_SPECIAL_CUT}% até o fim da luta, e pela metade no golpe seguinte. Monstro e chefe não têm esses atributos, então essa parte só pesa no PVP.`],
                 CharacterView.SPECIAL_CAP_ROW
             ]
         },
