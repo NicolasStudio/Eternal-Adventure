@@ -8,6 +8,7 @@ import legacyLevels_v6 from "../data/legacyLevels_v6.js";
 import legacyLevels_v7 from "../data/legacyLevels_v7.js";
 import legacyLevels_v8 from "../data/legacyLevels_v8.js";
 import legacyLevels_v9 from "../data/legacyLevels_v9.js";
+import legacyLevels_v10 from "../data/legacyLevels_v10.js";
 import baseStatsL1 from "../data/baseStatsL1.js";
 
 // Sobe toda vez que a curva de levels.js (ou o formato de baseStats)
@@ -53,7 +54,12 @@ import baseStatsL1 from "../data/baseStatsL1.js";
 //      (ver legacyLevels_v9.js). O Miasma também passou a reduzir a
 //      Armadura do alvo em PVE (não muda baseStats/maxHP, não precisa
 //      de migração — é regra de combate, não dado salvo).
-export const CURRENT_BALANCE_VERSION = 10;
+// v11: Pútrido ganhou +100 de Vida (todos os níveis 2-100) e +40 de
+//      Agilidade (40 níveis espalhados por todo o range) — mesmo com
+//      Anel+Amuleto, ele estava empatando ou perdendo em Agilidade e
+//      quase perdendo em Vida pro Arqueiro equipado igual. Curva inteira
+//      muda dessa vez, não só um trecho (ver legacyLevels_v10.js).
+export const CURRENT_BALANCE_VERSION = 11;
 
 // miasmaChance/reflection entram aqui só pra não serem DESCARTADOS na
 // migração (a tabela de migração nunca tem esses campos, então sempre
@@ -72,7 +78,8 @@ const LEGACY_TABLES = {
     6: legacyLevels_v6,
     7: legacyLevels_v7,
     8: legacyLevels_v8,
-    9: legacyLevels_v9
+    9: legacyLevels_v9,
+    10: legacyLevels_v10
 };
 
 export default class StatsMigrationService {
