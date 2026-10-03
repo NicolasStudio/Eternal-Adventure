@@ -263,7 +263,7 @@ const weapons = {
         rarity: rarities.legendary,
         icon: "assets/img/assets/items/weapons/scepter-rarity-lendario.png",
         stats: {
-            attack: 48,
+            attack: 50,
             armor: 0,
             agility: 0,
             criticalChance: 0,
