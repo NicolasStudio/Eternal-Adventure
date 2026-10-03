@@ -136,7 +136,7 @@
 .character-name{
     text-align:center;
     font-family:"Cinzel",serif;
-    font-size:24px;
+    font-size:22px;
     margin-top:5px;
     margin-bottom:5px;
     color:#f0d5b0;
@@ -252,10 +252,10 @@ hr{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:6px 12px;
+    padding:6px 10px;
     background:rgba(255,255,255,.03);
     border-radius:4px;
-    font-size:16px;
+    font-size:14px;
 }
 .character-stat span:first-child{
     color:#d4a373;
@@ -327,7 +327,7 @@ hr{
     gap:12px;
 }
 .equipment-slot{
-    padding:12px;
+    padding:10px;
     border:2px solid rgba(212,163,115,.18);
     background:rgba(255,255,255,.03);
     border-radius:6px;
