@@ -42,6 +42,11 @@ export default [
             "Pútrido: mais +100 de Vida nos níveis 50-100 — ainda estava muito atrás da Vida dos chefes do Cooperativo nessa faixa",
             "Pútrido: +10 de Agilidade (5 na Calça, 5 na Bota) nos itens Místicos e Lendários",
             "Pútrido: mais +100 de Vida (em todos os níveis) e +40 de Agilidade (espalhados pela curva inteira) — mesmo com Anel e Amuleto, ele ainda ficava atrás do Arqueiro em Agilidade e quase empatava em Vida",
+            "Cidade: a Enfermaria agora fica no card Saúde, e o novo Veterinário (🐾) converte um pet em Ração de Pet — a Ração guarda toda a XP do pet e dá essa XP ao pet equipado. O preço sobe com o nível e as estrelas do pet",
+            "Veterinário: converter um pet agora pede confirmação antes, avisando que o pet vai desaparecer",
+            "Mercado: novo menu Vender Pet — vende só pets chocados, por 25 mil por estrela a partir da 3ª + 800 por nível. A tela mostra todas as informações do pet (descrição, atributos, habilidade) antes da venda",
+            "Veterinário: o preço da conversão passou a 50 mil por estrela a partir da 3ª + 1 mil por nível",
+            "Ração de Pet: fica na aba Comidas e mostra a XP armazenada na tooltip",
             "Miasma: além de Ataque e Agilidade, agora também reduz a Armadura do alvo em Dungeons e Cooperativo — assim o próprio Pútrido passa a bater mais forte em quem já está intoxicado, não só apanhar menos (sem mudança no PVP)",
             "Novo chefe do Cooperativo: Dragão de Indra (elemento Energia, 4º andar); os 7 dragões agora dropam cada um um item Lendário diferente (Botas, Calça, Anel, Amuleto, Peitoral, Elmo e por último, no 7º andar, a Arma)",
             "Wiki: adicionado o Mímico, a nova seção de Acessórios (Anel e Amuleto) e atualizadas as seções de Classes, Itens, Pets, Ferraria, Cooperativo, Salvar e Ranking"
