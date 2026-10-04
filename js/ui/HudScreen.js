@@ -15,6 +15,7 @@ import ToolbarHUD from "../services/ToolbarHUD.js";
 import Toast from "../ui/components/Toast.js";
 import MarketView from "../views/MarketView.js";
 import MarketViewBuy from "./components/modals/MarketViewBuy.js";
+import MarketPetView from "../views/MarketPetView.js";
 import BlacksmithWeapon from "./../city/BlacksmithWeapon.js";
 import BlacksmithArmor from "./../city/BlacksmithArmor.js";
 import BlacksmithEnchant from "./../city/BlacksmithEnchant.js";
@@ -45,6 +46,7 @@ export default class HudScreen {
         this.cityView = new CityView(game);
         this.farmView = new FarmView(game);
         this.marketView = new MarketView(game);
+        this.marketPetView = new MarketPetView(game);
         this.blacksmithWeapon = new BlacksmithWeapon(this.game);
         this.blacksmithArmor = new BlacksmithArmor(this.game);
         this.blacksmithEnchant = new BlacksmithEnchant(this.game);
@@ -193,6 +195,9 @@ export default class HudScreen {
 
             case "market-buy":
                 return this.marketViewBuy.render();
+
+            case "market-pet":
+                return this.marketPetView.render();
 
             case "blacksmith-weapon":
                 return this.blacksmithWeapon.render();
@@ -436,6 +441,7 @@ export default class HudScreen {
             case "coop":
             case "market":
             case "market-buy":
+            case "market-pet":
             case "blacksmith-weapon":
             case "blacksmith-armor":
             case "blacksmith-enchant":
@@ -485,6 +491,9 @@ export default class HudScreen {
                 break;
             case "market-buy":
                 this.marketViewBuy.registerEvents(document);
+                break;
+            case "market-pet":
+                this.marketPetView.registerEvents(document);
                 break;
             case "blacksmith-weapon":
                 this.blacksmithWeapon.registerEvents(document);
@@ -573,6 +582,9 @@ export default class HudScreen {
                 break;
             case "market-buy":
                 this.marketViewBuy.registerEvents(document);
+                break;
+            case "market-pet":
+                this.marketPetView.registerEvents(document);
                 break;
             case "blacksmith-weapon":
                 this.blacksmithWeapon.registerEvents(document);

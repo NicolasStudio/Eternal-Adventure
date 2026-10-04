@@ -22,11 +22,10 @@ export default class CharacterView {
         this.releasePetModal = new FarmConfirmModal();
     }
 
-    // Semente (category:"seed") ou colheita da Fazenda (petFeedValue,
-    // ver farmCrops.js) — os dois tipos de "comida" que saem da aba
-    // "Itens" genérica e vão pra aba própria "Comidas".
+    // Semente, colheita da Fazenda (petFeedValue) ou Ração de Pet —
+    // saem da aba "Itens" genérica e vão pra aba própria "Comidas".
     static isFood(item) {
-        return item.category === "seed" || item.petFeedValue > 0;
+        return item.category === "seed" || item.category === "ration" || item.petFeedValue > 0;
     }
 
     getFilteredInventory() {
@@ -594,6 +593,20 @@ export default class CharacterView {
             return;
         }
 
+        if (this.selectedItem.petXpValue > 0) {
+
+            const result = PetService.useRation(this.game.player, this.selectedItem);
+
+            Toast.show(result.message);
+
+            if (result.ok) this.selectedItem = null;
+
+            this.refresh();
+
+            return;
+
+        }
+
         // Equipamento (inclui pet já chocado, que tem slot:"pet")
         if (this.selectedItem.slot) {
 
@@ -1039,6 +1052,12 @@ export default class CharacterView {
 
                         // Ovo — ainda não vira "Equipar" até chocar.
                         equipButton.textContent = "Chocar";
+
+                    } else if (this.selectedItem.petXpValue > 0) {
+
+                        const canUse = !!equippedPet && !PetService.isMaxLevel(equippedPet);
+                        equipButton.textContent = "Dar XP ao pet";
+                        equipButton.disabled = !canUse;
 
                     } else if (this.selectedItem.petFeedValue > 0) {
 

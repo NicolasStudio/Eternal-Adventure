@@ -45,10 +45,11 @@ export default class ItemTooltip {
                     <span class="tooltip-label">Classe</span>
                     <span>${itemClass}</span>
                 </div>
+                ${this.item.category === "ration" ? "" : `
                 <div class="tooltip-row">
                     <span class="tooltip-label">Raridade</span>
                     <span class="tooltip-rarity" style="color:${rarity.color};">${rarity.name}</span>
-                </div>
+                </div>`}
                 ${
                     this.item.quality
                         ? `
@@ -145,6 +146,19 @@ export default class ItemTooltip {
                     <div class="tooltip-row">
                         <span class="tooltip-label">Vira XP se exceder</span>
                         <span class="tooltip-value">até ${this.item.petFeedValue}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Ração de Pet — mostra a XP guardada (ver PetService.convertToRation).
+        if (this.item.petXpValue > 0) {
+            return `
+                <div class="tooltip-section">
+                    <h3 class="tooltip-title">Ração de Pet</h3>
+                    <div class="tooltip-row">
+                        <span class="tooltip-label">XP armazenada</span>
+                        <span class="tooltip-value">${this.item.petXpValue}</span>
                     </div>
                 </div>
             `;

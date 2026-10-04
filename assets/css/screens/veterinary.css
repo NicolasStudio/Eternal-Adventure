@@ -1,0 +1,52 @@
+.vet-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    background: rgba(0, 0, 0, .7);
+}
+
+.vet-slot-note {
+    margin: 0;
+    color: #bca46d;
+    font-size: .85rem;
+    text-align: center;
+}
+
+.market-pet-info {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 6px;
+    font-size: 16px;
+}
+
+.market-pet-info .tooltip-name {
+    font-size: 22px;
+}
+
+.market-pet-info .tooltip-class {
+    font-size: 16px;
+}
+
+.market-pet-info .tooltip-title {
+    font-size: 15px;
+}
+
+.market-pet-info .tooltip-label,
+.market-pet-info .tooltip-value,
+.market-pet-info .tooltip-stat,
+.market-pet-info p {
+    font-size: 16px;
+}
+
+.market-item .market-pet-level {
+    color: #d9c79a;
+}
+
+.market-item .market-pet-stars {
+    color: #f1c75c;
+}
+
+.vet-slot:disabled {
+    cursor: default;
+}

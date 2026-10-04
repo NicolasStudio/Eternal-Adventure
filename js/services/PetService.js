@@ -365,6 +365,106 @@ export default class PetService {
 
     }
 
+    // XP total já acumulada desde o nível 1: soma das barras de cada nível
+    // subido + o que está na barra atual (exatamente o inverso de applyPetXP).
+    static getTotalXp(petInstance) {
+
+        const level = Math.min(petInstance.level ?? 1, PET_MAX_LEVEL);
+
+        let total = petInstance.xp ?? 0;
+
+        for (let lvl = 1; lvl < level; lvl++) {
+            total += this.getXpForNextLevel(lvl);
+        }
+
+        return total;
+
+    }
+
+    // 50 mil por estrela a partir da 3ª (3★ = 50k, 4★ = 100k, 5★ = 150k)
+    // + 1 mil por nível do pet.
+    static getConversionPrice(petInstance) {
+
+        const stars = (petInstance.stars?.match(/★/g) ?? []).length;
+
+        return Math.max(0, stars - 2) * 50000 + (petInstance.level ?? 1) * 1000;
+
+    }
+
+    // 25 mil por estrela a partir da 3ª (3★ = 25k, 4★ = 50k, 5★ = 75k)
+    // + 800 por nível do pet.
+    static getSellPrice(petInstance) {
+
+        const stars = (petInstance.stars?.match(/★/g) ?? []).length;
+
+        return Math.max(0, stars - 2) * 25000 + (petInstance.level ?? 1) * 800;
+
+    }
+
+    // Converte o pet numa Ração com toda a XP dele. Não-empilhável (cada
+    // ração guarda uma quantidade de XP diferente, então tem id próprio).
+    static convertToRation(player, petInstance) {
+
+        if (!petInstance?.shocked) {
+            return { ok: false, message: "Escolha um pet chocado." };
+        }
+
+        const price = this.getConversionPrice(petInstance);
+
+        if (player.gold < price) {
+            return { ok: false, message: `Ouro insuficiente (precisa de ${price}).` };
+        }
+
+        const totalXp = this.getTotalXp(petInstance);
+
+        player.gold -= price;
+        player.removeItem(petInstance);
+
+        player.addItem({
+            id: `pet_ration_${crypto.randomUUID()}`,
+            name: "Ração de Pet",
+            type: "item",
+            category: "ration",
+            description: "Ração criada no Veterinário. Guarda a XP de um pet convertido e pode ser usada pra evoluir outro pet.",
+            icon: "assets/img/icons/bag-of-pet-food.png",
+            petXpValue: totalXp,
+            quantity: 1,
+            sellValue: 0
+        });
+
+        player.notify();
+        SaveService.autoSave(player);
+
+        return { ok: true, message: `${petInstance.name} virou ${totalXp} XP em ração!` };
+
+    }
+
+    // Usa a ração dando toda a XP guardada pro pet equipado.
+    static useRation(player, ration) {
+
+        const pet = player.equipment.pet;
+
+        if (!pet) {
+            return { ok: false, message: "Equipe um pet pra usar a ração." };
+        }
+
+        if (this.isMaxLevel(pet)) {
+            return { ok: false, message: "Seu pet já está no nível máximo." };
+        }
+
+        const xp = ration.petXpValue ?? 0;
+
+        this.applyPetXP(pet, xp);
+        player.removeItem(ration);
+        this.syncEquippedPetContribution(player);
+
+        player.notify();
+        SaveService.autoSave(player);
+
+        return { ok: true, message: `+${xp} XP pra ${pet.name}!` };
+
+    }
+
     // Quantas unidades faltam pra fome bater no teto do pet (arredondado
     // pra cima, nunca mais que o que o jogador tem) — teto do range do
     // botão "Alimentar", pra nunca sugerir desperdiçar alimento à toa.

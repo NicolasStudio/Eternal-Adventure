@@ -1,5 +1,6 @@
 import Toast from "../ui/components/Toast.js";
 import HospitalModal from "../ui/components/modals/HospitalModal.js";
+import VeterinaryModal from "../ui/components/modals/VeterinaryModal.js";
 import SaveService from "../services/SaveService.js";
 
 export default class CityView {
@@ -8,6 +9,7 @@ export default class CityView {
 
         this.game = game;
         this.hospitalModal = new HospitalModal(game);
+        this.veterinaryModal = new VeterinaryModal(game);
 
     }
 
@@ -142,6 +144,11 @@ export default class CityView {
                         💰 Vender
                     </div>
 
+                    <div class="city-option city-action"
+                         data-view="market-pet">
+                        🐾 Vender Pet
+                    </div>
+
                 </div>
 
             </article>
@@ -159,7 +166,7 @@ export default class CityView {
                 </div>
 
                 <div class="city-card-header">
-                    <h3 class="city-name">Enfermaria</h3>
+                    <h3 class="city-name">Saúde</h3>
                 </div>
 
                 <div class="city-card-actions">
@@ -167,6 +174,11 @@ export default class CityView {
                     <div class="city-option city-action"
                          data-view="hospital">
                         🏥 Ir para Enfermaria
+                    </div>
+
+                    <div class="city-option city-action"
+                         data-view="veterinary">
+                        🐾 Ir para Veterinário
                     </div>
 
                 </div>
@@ -214,6 +226,14 @@ registerEvents(container = document) {
                     }
 
                 } while (option);
+
+                return;
+
+            }
+
+            if (view === "veterinary") {
+
+                await this.veterinaryModal.show();
 
                 return;
 
