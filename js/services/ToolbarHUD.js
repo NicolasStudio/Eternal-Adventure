@@ -9,32 +9,38 @@ export default class Toolbar {
     render() {
         return `
             <div class="hud-toolbar">
-                <button class="hud-tool" id="btn-ranking" data-tooltip="Rankings">
-                    <i class="fa-solid fa-ranking-star"></i>
-                </button>
-                <button class="hud-tool" id="btn-global" data-tooltip="Global">
-                    <i class="fa-solid fa-globe"></i>
-                </button>
-                <button class="hud-tool" id="btn-album" data-tooltip="Álbum ">
+                <button class="hud-tool" id="btn-album" data-tooltip="Álbum">
                     <i class="fa-solid fa-book-skull"></i>
                 </button>
-                <button class="hud-tool" id="btn-wiki" data-tooltip="Wiki">
-                    <i class="fa-brands fa-wikipedia-w"></i>
+                <button class="hud-tool" id="btn-talents" data-tooltip="Árvore de Talentos">
+                    <i class="fa-solid fa-diagram-project"></i>
                 </button>
                 <button class="hud-tool" id="btn-conquistas" data-tooltip="Conquistas">
                     <i class="fa-solid fa-medal"></i>
                 </button>
-                <button id="btn-save" class="hud-tool" data-tooltip="Salvar jogo">
-                    <i class="fa-solid fa-floppy-disk"></i>
+                <button class="hud-tool" id="btn-global" data-tooltip="Global">
+                    <i class="fa-solid fa-globe"></i>
+                </button>
+                <button class="hud-tool" id="btn-ranking" data-tooltip="Rankings">
+                    <i class="fa-solid fa-ranking-star"></i>
+                </button>
+                <button class="hud-tool" id="btn-news" data-tooltip="Atualizações">
+                    <i class="fa-solid fa-scroll"></i>
                 </button>
                 <button id="btn-load" class="hud-tool" data-tooltip="Carregar jogo">
                     <i class="fa-solid fa-folder-open"></i>
                 </button>
-                <button id="btn-maximize" class="hud-tool" data-tooltip="Maximizar">
-                    <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+                <button id="btn-save" class="hud-tool" data-tooltip="Salvar jogo">
+                    <i class="fa-solid fa-floppy-disk"></i>
                 </button>
                 <button id="btn-settings" class="hud-tool" data-tooltip="Configurações">
                     <i class="fa-solid fa-gears"></i>
+                </button>
+                <button id="btn-maximize" class="hud-tool" data-tooltip="Maximizar">
+                    <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+                </button>
+                <button class="hud-tool" id="btn-wiki" data-tooltip="Wiki">
+                    <i class="fa-brands fa-wikipedia-w"></i>
                 </button>
             </div>
         `;
@@ -80,6 +86,14 @@ export default class Toolbar {
 
         toolbar.querySelector("#btn-global")?.addEventListener("click", () => {
             this.game.hudScreen.globalRankingModal.show();
+        });
+
+        toolbar.querySelector("#btn-talents")?.addEventListener("click", () => {
+            this.game.hudScreen.talentTreeModal.show();
+        });
+
+        toolbar.querySelector("#btn-news")?.addEventListener("click", () => {
+            this.game.hudScreen.newsModal.show();
         });
 
         toolbar.querySelector("#btn-settings")?.addEventListener("click", () => {

@@ -15,6 +15,7 @@ import ItemValueService from "../services/ItemValueService.js";
 import baseStatsL1 from "../data/baseStatsL1.js";
 import { CURRENT_BALANCE_VERSION } from "../services/StatsMigrationService.js";
 import pets from "../data/pet.js";
+import TalentService from "../services/TalentService.js";
 
 export default class Player {
     constructor(characterClass, name) {
@@ -92,6 +93,7 @@ export default class Player {
         // (únicos itens de equipamento — fora o pet — que dão Vida
         // Máxima; ver syncEquipmentLifeBonus()).
         this.equipmentLifeBonusApplied = 0;
+        this.talentApplied = { lifeLost: 0, attack: 0, armor: 0, agility: 0 };
         this.stats = new PlayerStats(this);
 
         // Baú diário (Pokébox): fica pronto imediatamente numa partida nova.
@@ -499,6 +501,10 @@ export default class Player {
                 bonus
             });
 
+        }
+
+        if (levelUps.length > 0) {
+            TalentService.sync(this);
         }
 
         // Ovo do primeiro pet, uma única vez, ao alcançar o nível 30 —

@@ -72,6 +72,7 @@ export default class SaveService {
             farm: player.farm,
             petLifeBonusApplied: player.petLifeBonusApplied,
             equipmentLifeBonusApplied: player.equipmentLifeBonusApplied,
+            talentApplied: player.talentApplied,
 
             health: {
                 burstMode: player.health.burstMode,
@@ -259,6 +260,7 @@ export default class SaveService {
         player.farm = data.farm ?? player.farm;
         player.petLifeBonusApplied = data.petLifeBonusApplied ?? 0;
         player.equipmentLifeBonusApplied = data.equipmentLifeBonusApplied ?? 0;
+        player.talentApplied = data.talentApplied ?? { lifeLost: 0, attack: 0, armor: 0, agility: 0 };
 
         // Saves de antes da Anti-Praga existir não têm esses campos —
         // sem isso, applyPestSpawn() trataria "nunca nasceu nenhuma

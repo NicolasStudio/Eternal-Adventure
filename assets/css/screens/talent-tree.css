@@ -1,0 +1,232 @@
+.talent-modal-overlay{
+    position:fixed;
+    inset:0;
+    z-index:9000;
+    background:rgba(0,0,0,.7);
+}
+
+.talent-window{
+    position:absolute;
+    inset:50% auto auto 50%;
+    transform:translate(-50%,-50%);
+    width:min(820px,94vw);
+    height:min(520px,90vh);
+    display:flex;
+    flex-direction:column;
+    background:linear-gradient(rgba(0,0,0,.18),rgba(0,0,0,.18)),radial-gradient(circle at top,#24160d 0%,#120b07 70%,#0a0604 100%);
+    border:2px solid #8b7355;
+    border-radius:10px;
+    box-shadow:0 0 60px rgba(0,0,0,.6), inset 0 0 60px rgba(0,0,0,.35);
+    color:#e8dcc8;
+    font-family:"Cinzel",serif;
+}
+
+.talent-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 26px;
+    border-bottom:1px solid #8b7355;
+}
+.talent-header h2{
+    margin:0;
+    font-size:1.5rem;
+    letter-spacing:2px;
+    color:#f1c75c;
+    text-shadow:0 0 18px rgba(212,163,115,.3);
+}
+
+/* Linha única; flex-wrap deixa espaço pra mais talentos no futuro. */
+.talent-body{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:30px 24px;
+}
+.talent-row{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    background:transparent;
+    gap:28px;
+}
+
+.talent-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    background:transparent;
+    gap:8px;
+}
+
+.talent-card{
+    position:relative;
+    width:auto;
+    height:auto;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background:none;
+    border:none;
+    color:inherit;
+    font:inherit;
+    cursor:default;
+    transition:.2s;
+}
+.talent-card.can-invest{
+    cursor:pointer;
+    border-color:#8b7355;
+}
+.talent-card.can-invest:hover{
+    transform:translateY(-3px);
+    border-color:#f1c75c;
+}
+.talent-card.maxed{
+    border-color:#c79b37;
+}
+
+.talent-icon{
+    padding:0;
+    border:2px solid #8b7355;
+    
+    border-radius:8px;
+    width:80px;
+    height:80px;
+    object-fit:contain;
+    image-rendering:pixelated;
+    transition:.2s;
+}
+.talent-card:not(.can-invest):not(.maxed) .talent-icon{
+    filter:grayscale(.8) brightness(.7);
+}
+
+.talent-progress{
+    font-size:0.9rem;
+    font-weight:700;
+    color:#f1c75c;
+    letter-spacing:1px;
+}
+
+/* Tooltip ao passar o mouse: texto explicando o talento e o efeito atual. */
+.talent-tooltip{
+    position:absolute;
+    bottom:calc(100% + 12px);
+    left:50%;
+    transform:translateX(-50%) translateY(6px);
+    width:260px;
+    padding:14px 16px;
+    background:rgba(12,8,5,.97);
+    border:1px solid #8b7355;
+    border-radius:8px;
+    box-shadow:0 8px 28px rgba(0,0,0,.6);
+    font-family:"Cinzel",serif;
+    font-size:.9rem;
+    line-height:1.45;
+    color:#e8dcc8;
+    text-align:left;
+    opacity:0;
+    pointer-events:none;
+    transition:.18s;
+    z-index:10;
+}
+.talent-card:hover .talent-tooltip{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+.talent-tooltip strong{
+    display:block;
+    margin-bottom:8px;
+    color:#f1c75c;
+    font-size:.95rem;
+}
+.talent-tooltip p{
+    margin:6px 0 0;
+}
+.talent-tooltip-effect{
+    color:#b8e6a0;
+}
+.talent-tooltip-hint{
+    color:#8f7a5a;
+    font-style:italic;
+}
+
+.talent-reset{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 18px;
+    border:1px solid #8a3a3a;
+    border-radius:6px;
+    background:rgba(60,16,16,.5);
+    color:#f0a0a0;
+    font-family:"Cinzel",serif;
+    font-size:.9rem;
+    cursor:pointer;
+    transition:.2s;
+}
+.talent-reset:hover:not(:disabled){
+    background:rgba(92,24,24,.8);
+    border-color:#c55;
+}
+.talent-reset:disabled{
+    opacity:.4;
+    cursor:not-allowed;
+}
+
+.talent-header > div{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+.talent-subtitle{
+    font-size:.82rem;
+    color:#bca46d;
+    line-height:1.4;
+}
+
+.talent-card.selected{
+    box-shadow:0 0 0 2px #f1c75c, 0 0 18px rgba(214,168,55,.35);
+    border-radius:6px;
+}
+
+.talent-footer-actions{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.talent-window .blacksmith-footer{
+    gap:16px;
+    padding:16px 22px;
+    overflow:hidden;
+}
+.talent-window .blacksmith-footer-info{
+    flex:1;
+    min-width:0;
+}
+.talent-window .blacksmith-footer-divider{
+    margin:0 16px;
+}
+.talent-footer-actions{
+    flex-shrink:0;
+}
+.talent-window .blacksmith-upgrade-button{
+    width:135px;
+    height:46px;
+}
+
+.talent-window .talent-reset,
+.talent-window .blacksmith-upgrade-button{
+    width:135px;
+    height:46px;
+    box-sizing:border-box;
+    justify-content:center;
+}
+
+.blacksmith-footer-text{
+    justify-content:center;
+    align-items:center;
+}
