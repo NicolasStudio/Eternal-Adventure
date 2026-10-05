@@ -48,6 +48,8 @@ export default [
             "Veterinário: o preço da conversão passou a 50 mil por estrela a partir da 3ª + 1 mil por nível",
             "Ração de Pet: fica na aba Comidas e mostra a XP armazenada na tooltip",
             "Cooperativo: a busca mostra quem está na fila esperando, e entre os andares aparece quem já confirmou o Continuar e quem ainda não confirmou",
+            "Nova Árvore de Talentos (barra de ferramentas, entre o Global e o Álbum): cada região concluída (3 fases + boss, 3 vitórias em cada) dá 1 ponto. Cada ponto gasto num talento dá 1% da vida máxima em Dano de ataque, Armadura ou Velocidade e tira 3% da vida máxima (até 3 pontos por talento). Cada nível custa ouro: 50 mil, 70 mil e 100 mil",
+            "Árvore de Talentos: clicar num talento seleciona e mostra o preço dele; o botão Melhorar confirma. Resetar custa 100 mil de ouro e pede confirmação",
             "Miasma: além de Ataque e Agilidade, agora também reduz a Armadura do alvo em Dungeons e Cooperativo — assim o próprio Pútrido passa a bater mais forte em quem já está intoxicado, não só apanhar menos (sem mudança no PVP)",
             "Novo chefe do Cooperativo: Dragão de Indra (elemento Energia, 4º andar); os 7 dragões agora dropam cada um um item Lendário diferente (Botas, Calça, Anel, Amuleto, Peitoral, Elmo e por último, no 7º andar, a Arma)",
             "Wiki: adicionado o Mímico, a nova seção de Acessórios (Anel e Amuleto) e atualizadas as seções de Classes, Itens, Pets, Ferraria, Cooperativo, Salvar e Ranking"
