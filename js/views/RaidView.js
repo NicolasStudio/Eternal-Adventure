@@ -26,7 +26,8 @@ export default class RaidView {
         this.currentFloor = 1;
         this.leftSelf = false; // eu escolhi "Sair do Cooperativo" no meio dos andares
         this.abandoned = false; // outro jogador saiu/caiu e o squad não pode prosseguir
-        this.floorWaitProgress = { ready: 0, total: 0 };
+        this.floorWaitProgress = { ready: 0, total: 0, readyIds: [] };
+        this.queue = []; // quem está na fila (inclui eu), vindo do lobby
         this.bossData = null; // entrada crua de monstersRaid.js
         this.bossCombatant = null; // snapshot da simulação
         this.bossHP = null;
@@ -96,11 +97,40 @@ export default class RaidView {
     }
 
     renderFloorWait() {
-        const { ready, total } = this.floorWaitProgress;
+        const { ready, total, readyIds } = this.floorWaitProgress;
+        const members = Object.values(this.matchData.squad);
         return `
             <div class="raid-searching">
                 <div class="raid-spinner"></div>
                 <p class="raid-status-text">Aguardando os outros guerreiros... (${ready}/${total} prontos)</p>
+                <div class="raid-roster">
+                    <h4 class="raid-roster-title">Confirmações — Andar ${this.currentFloor}</h4>
+                    ${members.map(member => {
+                        const confirmed = readyIds.includes(member.id);
+                        return `
+                            <div class="raid-roster-item ${confirmed ? "is-confirmed" : "is-pending"}">
+                                <i class="fa-solid ${confirmed ? "fa-circle-check" : "fa-hourglass-half"}"></i>
+                                <span>${member.name} ${confirmed ? "já confirmou" : "não confirmou"}</span>
+                            </div>
+                        `;
+                    }).join("")}
+                </div>
+            </div>
+        `;
+    }
+
+    renderQueue() {
+        if (!this.queue.length) return "";
+        return `
+            <div class="raid-roster raid-queue">
+                <h4 class="raid-roster-title">Na fila (${this.queue.length})</h4>
+                ${this.queue.map(entry => `
+                    <div class="raid-roster-item is-waiting">
+                        <i class="fa-solid fa-user-clock"></i>
+                        <span>${entry.name}${entry.isSelf ? " (você)" : ""}</span>
+                        <small>Nv. ${entry.level ?? "?"}</small>
+                    </div>
+                `).join("")}
             </div>
         `;
     }
@@ -123,6 +153,7 @@ export default class RaidView {
                     ${this.opponentWaiting ? "Jogadores encontrados, preparando a partida..." : "Procurando outros jogadores..."}
                 </p>
                 <button class="raid-cancel-button">Cancelar</button>
+                ${this.renderQueue()}
             </div>
         `;
     }
@@ -247,6 +278,7 @@ export default class RaidView {
 
         this.state = "searching";
         this.opponentWaiting = false;
+        this.queue = [];
         this.refresh();
 
         const combatant = RaidCombatService.snapshotCombatant(this.player);
@@ -257,6 +289,10 @@ export default class RaidView {
             (waiting) => {
                 this.opponentWaiting = waiting;
                 if (this.state === "searching") this.refresh();
+            },
+            (queue) => {
+                this.queue = queue;
+                if (this.state === "searching") this.refresh();
             }
         );
 
@@ -264,6 +300,7 @@ export default class RaidView {
 
     async cancelQueue() {
         await RaidLobbyService.leaveQueue();
+        this.queue = [];
         this.state = "idle";
         this.refresh();
     }
@@ -438,7 +475,7 @@ export default class RaidView {
             RaidCombatService.snapshotCombatant(this.player)
         );
 
-        this.floorWaitProgress = { ready: 0, total: squadIds.length };
+        this.floorWaitProgress = { ready: 0, total: squadIds.length, readyIds: [] };
         this.state = "floor-wait";
         this.refresh();
 
@@ -446,8 +483,8 @@ export default class RaidView {
             this.matchId,
             squadIds,
             expectedFloor,
-            (ready, total) => {
-                this.floorWaitProgress = { ready, total };
+            (ready, total, readyIds) => {
+                this.floorWaitProgress = { ready, total, readyIds };
                 if (this.state === "floor-wait") this.refresh();
             }
         );

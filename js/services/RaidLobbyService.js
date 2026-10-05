@@ -71,7 +71,7 @@ export default class RaidLobbyService {
     // Entra na fila da raid. onMatchFound(match, matchId) é chamado
     // quando um squad de 4 (incluindo este jogador) se forma — seja
     // porque ele formou, seja porque outra pessoa formou e o incluiu.
-    static async joinQueue(combatant, onMatchFound, onOpponentJoined) {
+    static async joinQueue(combatant, onMatchFound, onOpponentJoined, onQueueChanged) {
 
         if (this.playerId) {
             await this.leaveQueue();
@@ -126,6 +126,14 @@ export default class RaidLobbyService {
         this.lobbyListener = onValue(lobbyRef, async (snapshot) => {
 
             const all = snapshot.val() ?? {};
+
+            const waiting = Object.entries(all)
+                .filter(([, entry]) => !entry.matchedWith)
+                .sort(([, a], [, b]) => (a.joinedAt ?? 0) - (b.joinedAt ?? 0))
+                .map(([id, entry]) => ({ id, name: entry.name, level: entry.level, isSelf: id === this.playerId }));
+
+            onQueueChanged?.(waiting);
+
             const others = Object.entries(all)
                 .filter(([id, entry]) => id !== this.playerId && !entry.matchedWith && !entry.claimedBy)
                 .sort(([idA], [idB]) => idA < idB ? -1 : 1);
@@ -366,8 +374,8 @@ export default class RaidLobbyService {
     // já atualizado direto do servidor em vez de confiar que o onValue
     // vai disparar de novo sozinho.
     //
-    // onProgress(readyCount, total) é chamado a cada atualização, pra
-    // alimentar o "aguardando X/4 jogadores" na tela. Resolve com
+    // onProgress(readyCount, total, readyIds) é chamado a cada atualização,
+    // pra alimentar a lista de quem já confirmou na tela. Resolve com
     // { aborted: true } se alguém abandonou, ou { data } com a partida
     // já no andar seguinte.
     static waitForFloorAdvance(matchId, squadIds, expectedFloor, onProgress) {
@@ -409,9 +417,11 @@ export default class RaidLobbyService {
                 }
 
                 const ready = data.floorReady ?? {};
-                const readyCount = squadIds.filter(id => ready[id]).length;
+                const readyIds = squadIds.filter(id => ready[id]);
 
-                onProgress?.(readyCount, squadIds.length);
+                onProgress?.(readyIds.length, squadIds.length, readyIds);
+
+                const readyCount = readyIds.length;
 
                 if (readyCount < squadIds.length) {
                     return;

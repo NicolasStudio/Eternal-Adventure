@@ -47,6 +47,7 @@ export default [
             "Mercado: novo menu Vender Pet — vende só pets chocados, por 25 mil por estrela a partir da 3ª + 800 por nível. A tela mostra todas as informações do pet (descrição, atributos, habilidade) antes da venda",
             "Veterinário: o preço da conversão passou a 50 mil por estrela a partir da 3ª + 1 mil por nível",
             "Ração de Pet: fica na aba Comidas e mostra a XP armazenada na tooltip",
+            "Cooperativo: a busca mostra quem está na fila esperando, e entre os andares aparece quem já confirmou o Continuar e quem ainda não confirmou",
             "Miasma: além de Ataque e Agilidade, agora também reduz a Armadura do alvo em Dungeons e Cooperativo — assim o próprio Pútrido passa a bater mais forte em quem já está intoxicado, não só apanhar menos (sem mudança no PVP)",
             "Novo chefe do Cooperativo: Dragão de Indra (elemento Energia, 4º andar); os 7 dragões agora dropam cada um um item Lendário diferente (Botas, Calça, Anel, Amuleto, Peitoral, Elmo e por último, no 7º andar, a Arma)",
             "Wiki: adicionado o Mímico, a nova seção de Acessórios (Anel e Amuleto) e atualizadas as seções de Classes, Itens, Pets, Ferraria, Cooperativo, Salvar e Ranking"
