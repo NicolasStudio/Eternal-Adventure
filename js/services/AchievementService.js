@@ -74,7 +74,7 @@ function hasPetHungerZero(player) {
 }
 
 // "Quitandinha" — posse ATUAL (não histórico) de pelo menos 1 unidade
-// de cada uma das 8 colheitas da Fazenda ao mesmo tempo.
+// de cada uma das 12 colheitas da Fazenda ao mesmo tempo.
 function hasOneOfEachFood(player) {
     return Object.values(farmCrops).every(crop =>
         player.inventory.some(item => item.id === crop.harvestedItem.id && (item.quantity ?? 1) > 0)

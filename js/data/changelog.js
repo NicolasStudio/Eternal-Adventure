@@ -49,6 +49,8 @@ export default [
             "Ração de Pet: fica na aba Comidas e mostra a XP armazenada na tooltip",
             "Cooperativo: a busca mostra quem está na fila esperando, e entre os andares aparece quem já confirmou o Continuar e quem ainda não confirmou",
             "Nova Árvore de Talentos (barra de ferramentas, entre o Global e o Álbum): cada região concluída (3 fases + boss, 3 vitórias em cada) dá 1 ponto. Cada ponto gasto num talento dá 1% da vida máxima em Dano de ataque, Armadura ou Velocidade e tira 3% da vida máxima (até 3 pontos por talento). Cada nível custa ouro: 50 mil, 70 mil e 100 mil",
+            "Fazenda: rebalanceado o rendimento das colheitas — culturas longas agora rendem mais itens, e a Batata rende menos. O lucro por hora de cada fruta ficou bem mais parecido (antes ia de 292 a 7.440 por hora)",
+            "Fazenda: 4 novas culturas — Berinjela (20 min), Cenoura (1h30), Laranja (6 horas) e Melancia (24 horas), com sementes no Mercado. A conquista Quitandinha agora pede os 12 alimentos",
             "Árvore de Talentos: clicar num talento seleciona e mostra o preço dele; o botão Melhorar confirma. Resetar custa 100 mil de ouro e pede confirmação",
             "Miasma: além de Ataque e Agilidade, agora também reduz a Armadura do alvo em Dungeons e Cooperativo — assim o próprio Pútrido passa a bater mais forte em quem já está intoxicado, não só apanhar menos (sem mudança no PVP)",
             "Novo chefe do Cooperativo: Dragão de Indra (elemento Energia, 4º andar); os 7 dragões agora dropam cada um um item Lendário diferente (Botas, Calça, Anel, Amuleto, Peitoral, Elmo e por último, no 7º andar, a Arma)",

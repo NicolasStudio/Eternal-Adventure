@@ -19,7 +19,7 @@ const farmCrops = {
             "assets/img/assets/farm/stageSeed/potato-stage-4.png",
             "assets/img/assets/farm/stageSeed/potato-stage-5.png"
         ],
-        harvestYield: 6,
+        harvestYield: 4,
         petXP: 5,
         harvestedItem: {
             id: "potato",
@@ -44,7 +44,7 @@ const farmCrops = {
             "assets/img/assets/farm/stageSeed/wheat-stage-4.png",
             "assets/img/assets/farm/stageSeed/wheat-stage-5.png"
         ],
-        harvestYield: 6,
+        harvestYield: 5,
         petXP: 15,
         harvestedItem: {
             id: "wheat",
@@ -119,7 +119,7 @@ const farmCrops = {
             "assets/img/assets/farm/stageSeed/corn-stage-4.png",
             "assets/img/assets/farm/stageSeed/corn-stage-5.png"
         ],
-        harvestYield: 4,
+        harvestYield: 5,
         petXP: 150,
         harvestedItem: {
             id: "corn",
@@ -144,7 +144,7 @@ const farmCrops = {
             "assets/img/assets/farm/stageSeed/grape-stage-4.png",
             "assets/img/assets/farm/stageSeed/grape-stage-5.png"
         ],
-        harvestYield: 4,
+        harvestYield: 6,
         petXP: 240,
         harvestedItem: {
             id: "grape",
@@ -169,7 +169,7 @@ const farmCrops = {
             "assets/img/assets/farm/stageSeed/strawberry-stage-4.png",
             "assets/img/assets/farm/stageSeed/strawberry-stage-5.png"
         ],
-        harvestYield: 3,
+        harvestYield: 7,
         petXP: 480,
         harvestedItem: {
             id: "strawberry",
@@ -194,7 +194,7 @@ const farmCrops = {
             "assets/img/assets/farm/stageSeed/pumpkin-stage-4.png",
             "assets/img/assets/farm/stageSeed/pumpkin-stage-5.png"
         ],
-        harvestYield: 2,
+        harvestYield: 6,
         petXP: 720,
         harvestedItem: {
             id: "pumpkin",
@@ -204,6 +204,106 @@ const farmCrops = {
             effect: "Um alimento colhido na Fazenda. Pode ser consumido por um pet.",
             sellValue: 3600, // preço da semente (3000) + 20%
             petFeedValue: 60 // preço da semente (3000) / 50
+        }
+    },
+
+    eggplant: {
+        id: "eggplant",
+        seedId: "seed_eggplant",
+        name: "Berinjela",
+        growTimeMs: 20 * 60 * 1000, // 20min
+        stageImages: [
+            "assets/img/assets/farm/stageSeed/eggplant-stage-1.png",
+            "assets/img/assets/farm/stageSeed/eggplant-stage-2.png",
+            "assets/img/assets/farm/stageSeed/eggplant-stage-3.png",
+            "assets/img/assets/farm/stageSeed/eggplant-stage-4.png",
+            "assets/img/assets/farm/stageSeed/eggplant-stage-5.png"
+        ],
+        harvestYield: 5,
+        petXP: 20,
+        harvestedItem: {
+            id: "eggplant",
+            name: "Berinjela",
+            type: "item",
+            icon: "assets/img/assets/farm/seed/eggplant.png",
+            effect: "Um alimento colhido na Fazenda. Pode ser consumido por um pet.",
+            sellValue: 240, // preço da semente (200) + 20%
+            petFeedValue: 4 // preço da semente (200) / 50
+        }
+    },
+
+    carrot: {
+        id: "carrot",
+        seedId: "seed_carrot",
+        name: "Cenoura",
+        growTimeMs: 90 * 60 * 1000, // 1h30min
+        stageImages: [
+            "assets/img/assets/farm/stageSeed/carrot-stage-1.png",
+            "assets/img/assets/farm/stageSeed/carrot-stage-2.png",
+            "assets/img/assets/farm/stageSeed/carrot-stage-3.png",
+            "assets/img/assets/farm/stageSeed/carrot-stage-4.png",
+            "assets/img/assets/farm/stageSeed/carrot-stage-5.png"
+        ],
+        harvestYield: 5,
+        petXP: 90,
+        harvestedItem: {
+            id: "carrot",
+            name: "Cenoura",
+            type: "item",
+            icon: "assets/img/assets/farm/seed/carrot.png",
+            effect: "Um alimento colhido na Fazenda. Pode ser consumido por um pet.",
+            sellValue: 864, // preço da semente (720) + 20%
+            petFeedValue: 14 // preço da semente (720) / 50, arredondado
+        }
+    },
+
+    orange: {
+        id: "orange",
+        seedId: "seed_orange",
+        name: "Laranja",
+        growTimeMs: 6 * 60 * 60 * 1000, // 6h
+        stageImages: [
+            "assets/img/assets/farm/stageSeed/orange-stage-1.png",
+            "assets/img/assets/farm/stageSeed/orange-stage-2.png",
+            "assets/img/assets/farm/stageSeed/orange-stage-3.png",
+            "assets/img/assets/farm/stageSeed/orange-stage-4.png",
+            "assets/img/assets/farm/stageSeed/orange-stage-5.png"
+        ],
+        harvestYield: 6,
+        petXP: 360,
+        harvestedItem: {
+            id: "orange",
+            name: "Laranja",
+            type: "item",
+            icon: "assets/img/assets/farm/seed/orange.png",
+            effect: "Um alimento colhido na Fazenda. Pode ser consumido por um pet.",
+            sellValue: 1860, // preço da semente (1550) + 20%
+            petFeedValue: 31 // preço da semente (1550) / 50, arredondado
+        }
+    },
+
+    watermelon: {
+        id: "watermelon",
+        seedId: "seed_watermelon",
+        name: "Melancia",
+        growTimeMs: 24 * 60 * 60 * 1000, // 24h
+        stageImages: [
+            "assets/img/assets/farm/stageSeed/watermelon-stage-1.png",
+            "assets/img/assets/farm/stageSeed/watermelon-stage-2.png",
+            "assets/img/assets/farm/stageSeed/watermelon-stage-3.png",
+            "assets/img/assets/farm/stageSeed/watermelon-stage-4.png",
+            "assets/img/assets/farm/stageSeed/watermelon-stage-5.png"
+        ],
+        harvestYield: 7,
+        petXP: 1440,
+        harvestedItem: {
+            id: "watermelon",
+            name: "Melancia",
+            type: "item",
+            icon: "assets/img/assets/farm/seed/watermelon.png",
+            effect: "Um alimento colhido na Fazenda. Pode ser consumido por um pet.",
+            sellValue: 6000, // preço da semente (5000) + 20%
+            petFeedValue: 100 // preço da semente (5000) / 50
         }
     }
 

@@ -100,6 +100,54 @@ const seeds = {
         effect: "Plante num canteiro da Fazenda para cultivar Abóboras.",
         value: 3000,
         sellValue: 1500
+    },
+
+    seed_eggplant: {
+        id: "seed_eggplant",
+        name: "Semente de Berinjela",
+        type: "item",
+        category: "seed",
+        cropId: "eggplant",
+        icon: "assets/img/assets/farm/seed/seed-eggplant.png",
+        effect: "Plante num canteiro da Fazenda para cultivar Berinjelas.",
+        value: 200,
+        sellValue: 100
+    },
+
+    seed_carrot: {
+        id: "seed_carrot",
+        name: "Semente de Cenoura",
+        type: "item",
+        category: "seed",
+        cropId: "carrot",
+        icon: "assets/img/assets/farm/seed/seed-carrot.png",
+        effect: "Plante num canteiro da Fazenda para cultivar Cenouras.",
+        value: 720,
+        sellValue: 360
+    },
+
+    seed_orange: {
+        id: "seed_orange",
+        name: "Semente de Laranja",
+        type: "item",
+        category: "seed",
+        cropId: "orange",
+        icon: "assets/img/assets/farm/seed/seed-orange.png",
+        effect: "Plante num canteiro da Fazenda para cultivar Laranjas.",
+        value: 1550,
+        sellValue: 775
+    },
+
+    seed_watermelon: {
+        id: "seed_watermelon",
+        name: "Semente de Melancia",
+        type: "item",
+        category: "seed",
+        cropId: "watermelon",
+        icon: "assets/img/assets/farm/seed/seed-watermelon.png",
+        effect: "Plante num canteiro da Fazenda para cultivar Melancias.",
+        value: 5000,
+        sellValue: 2500
     }
 
 };
