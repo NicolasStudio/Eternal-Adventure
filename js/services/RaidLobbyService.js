@@ -3,6 +3,7 @@ import {
     get, runTransaction, serverTimestamp
 } from "./FirebaseService.js";
 import monstersRaid from "../data/monstersRaid.js";
+import { sanitizeRemote } from "./MatchSanitizer.js";
 
 // Tempo que um candidato reivindicado (claimedBy preenchido) espera
 // virar uma partida de verdade antes de se liberar sozinho — mesmo
@@ -115,7 +116,9 @@ export default class RaidLobbyService {
                 this.clearStaleClaimTimer();
 
                 const matchSnapshot = await get(ref(db, `${this.matchesPath()}/${data.matchId}`));
-                const match = matchSnapshot.val();
+                // O squad foi gravado por outros navegadores — nunca chega
+                // cru na tela (ver MatchSanitizer.js).
+                const match = sanitizeRemote(matchSnapshot.val());
 
                 if (match) {
                     this.stopListening();
@@ -142,7 +145,7 @@ export default class RaidLobbyService {
 
             const all = snapshot.val() ?? {};
 
-            const waiting = Object.entries(all)
+            const waiting = Object.entries(sanitizeRemote(all))
                 .filter(([, entry]) => !entry.matchedWith)
                 .sort(([, a], [, b]) => (a.joinedAt ?? 0) - (b.joinedAt ?? 0))
                 // O primeiro da fila (quem entrou antes) é o host: só ele
@@ -501,7 +504,7 @@ export default class RaidLobbyService {
 
         this.playerId = playerId;
 
-        return { ok: true, data: result.snapshot.val() };
+        return { ok: true, data: sanitizeRemote(result.snapshot.val()) };
 
     }
 
@@ -556,7 +559,7 @@ export default class RaidLobbyService {
 
                 if (settled || checking) return;
 
-                const data = snapshot.val();
+                const data = sanitizeRemote(snapshot.val());
 
                 if (!data || data.left?.[this.playerId]) {
                     finish({ aborted: true, kicked: !!data?.kicked?.[this.playerId] });
@@ -596,9 +599,9 @@ export default class RaidLobbyService {
                 // avançou o andar antes de mim — busco o valor real
                 // direto do servidor em vez de esperar passivamente o
                 // onValue disparar de novo por conta própria.
-                const finalValue = result.committed
+                const finalValue = sanitizeRemote(result.committed
                     ? result.snapshot.val()
-                    : (await get(matchRef)).val();
+                    : (await get(matchRef)).val());
 
                 if (finalValue && finalValue.floor > expectedFloor) {
                     finish({ data: finalValue });

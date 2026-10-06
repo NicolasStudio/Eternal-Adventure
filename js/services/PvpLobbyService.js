@@ -3,6 +3,7 @@ import {
     get, runTransaction, serverTimestamp
 } from "./FirebaseService.js";
 import { TEAM_SIM_VERSION } from "./PvpCombatService.js";
+import { sanitizeRemote } from "./MatchSanitizer.js";
 
 // Tempo que um candidato reivindicado (claimedBy preenchido) espera
 // virar uma partida de verdade antes de se liberar sozinho. Cobre o
@@ -206,7 +207,9 @@ export default class PvpLobbyService {
                 if (this.mode === "2v2") matchHandled = true;
 
                 const matchSnapshot = await get(ref(db, `${this.matchesPath()}/${data.matchId}`));
-                const match = matchSnapshot.val();
+                // Os combatentes foram gravados por outros navegadores —
+                // nunca chegam crus na tela (ver MatchSanitizer.js).
+                const match = sanitizeRemote(matchSnapshot.val());
 
                 if (match) {
 

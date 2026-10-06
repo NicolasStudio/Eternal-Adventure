@@ -1,6 +1,7 @@
 import { db, ref, set, update, remove, get, onValue, off, onDisconnect } from "./FirebaseService.js";
 import SaveService from "./SaveService.js";
 import PresenceService from "./PresenceService.js";
+import { sanitizeRemote } from "./MatchSanitizer.js";
 
 // Um convite por CONTA (uid) de quem recebe — o host grava, o convidado
 // responde no mesmo nó (status) e o host apaga. Fica debaixo de
@@ -133,7 +134,8 @@ export default class RaidInviteService {
 
         onValue(ref(db, this.invitePath(uid)), (snapshot) => {
 
-            const data = snapshot.val();
+            // Gravado pelo navegador de quem convidou (ver MatchSanitizer.js).
+            const data = sanitizeRemote(snapshot.val());
 
             if (!data || data.status !== "pending" || data.sentAt === lastSentAt) return;
 
