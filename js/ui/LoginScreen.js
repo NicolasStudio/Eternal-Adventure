@@ -6,7 +6,6 @@ import NewsModal from "./NewsModal.js";
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NAME_REGEX = /^[A-Za-zÀ-ÿ]+(?:\s[A-Za-zÀ-ÿ]+)+$/;
 const MIN_PASSWORD_LENGTH = 6;
-const MIN_RECOVERY_WORD_LENGTH = 4;
 
 const AUTH_ERROR_MESSAGES = {
     "auth/email-already-in-use": "Esse e-mail já está cadastrado.",
@@ -104,7 +103,6 @@ export default class LoginScreen {
             <input type="text" class="name-entry-input signup-fullname" placeholder="Nome completo" autocomplete="name">
             <input type="tel" class="name-entry-input signup-phone" placeholder="Telefone" autocomplete="tel">
             <input type="date" class="name-entry-input signup-birthdate" autocomplete="bday">
-            <input type="text" class="name-entry-input signup-recovery" placeholder="Palavra de Recuperação" autocomplete="off">
             <input type="password" class="name-entry-input signup-password" placeholder="Senha" autocomplete="new-password">
             <input type="password" class="name-entry-input signup-password-confirm" placeholder="Repetir Senha" autocomplete="new-password">
             ${showMigration ? `
@@ -124,13 +122,10 @@ export default class LoginScreen {
     renderRecover() {
         return `
             <h2 class="login-subtitle">Recuperar senha</h2>
-            <p class="name-entry-hint">Confirme os dados do seu cadastro pra receber o e-mail de redefinição.</p>
+            <p class="name-entry-hint">Informe o e-mail da sua conta pra receber o link de redefinição.</p>
             <input type="email" class="name-entry-input recover-email" placeholder="E-mail" autocomplete="username">
-            <input type="date" class="name-entry-input recover-birthdate" autocomplete="bday">
-            <input type="tel" class="name-entry-input recover-phone" placeholder="Telefone" autocomplete="tel">
-            <input type="text" class="name-entry-input recover-recovery" placeholder="Palavra de Recuperação" autocomplete="off">
             <div class="continue-actions">
-                <button class="name-entry-confirm" id="recover-submit">Verificar</button>
+                <button class="name-entry-confirm" id="recover-submit">Enviar</button>
             </div>
             <p class="login-switch"><button class="login-link" id="login-goto-login">Voltar pro login</button></p>
         `;
@@ -200,7 +195,7 @@ export default class LoginScreen {
 
     }
 
-    validateSignup({ email, fullName, phone, birthDate, recoveryWord, password, passwordConfirm }) {
+    validateSignup({ email, fullName, phone, birthDate, password, passwordConfirm }) {
 
         if (!EMAIL_REGEX.test(email)) return "E-mail inválido.";
         if (!NAME_REGEX.test(fullName)) return "Você precisa informar Nome e Sobrenome, somente letras.";
@@ -208,8 +203,6 @@ export default class LoginScreen {
 
         if (!birthDate) return "Informe sua data de nascimento.";
         if (new Date(birthDate) > new Date()) return "Data de nascimento inválida.";
-
-        if (recoveryWord.length < MIN_RECOVERY_WORD_LENGTH) return "Palavra de Recuperação muito curta.";
 
         if (password.length < MIN_PASSWORD_LENGTH) return "Senha tem que ter mais de 5 caracteres.";
         if (password !== passwordConfirm) return "As senhas não são iguais.";
@@ -227,7 +220,6 @@ export default class LoginScreen {
             fullName: this.element.querySelector(".signup-fullname").value.trim(),
             phone: this.element.querySelector(".signup-phone").value.trim(),
             birthDate: this.element.querySelector(".signup-birthdate").value,
-            recoveryWord: this.element.querySelector(".signup-recovery").value.trim(),
             password: this.element.querySelector(".signup-password").value,
             passwordConfirm: this.element.querySelector(".signup-password-confirm").value
         };
@@ -279,12 +271,9 @@ export default class LoginScreen {
         if (this.busy) return;
 
         const email = this.element.querySelector(".recover-email").value.trim();
-        const birthDate = this.element.querySelector(".recover-birthdate").value;
-        const phone = this.element.querySelector(".recover-phone").value.trim();
-        const recoveryWord = this.element.querySelector(".recover-recovery").value.trim();
 
-        if (!email || !birthDate || !phone || !recoveryWord) {
-            this.showError("Preencha todos os campos.");
+        if (!EMAIL_REGEX.test(email)) {
+            this.showError("E-mail inválido.");
             return;
         }
 
@@ -293,14 +282,14 @@ export default class LoginScreen {
 
         try {
 
-            await AuthService.verifyRecovery({ email, birthDate, phone, recoveryWord });
+            await AuthService.sendPasswordReset(email);
             this.switchMode("login");
-            Toast.show("Enviamos um e-mail pra você redefinir sua senha.");
+            Toast.show("Se existir uma conta com esse e-mail, enviamos o link pra redefinir a senha.", 6000);
 
-        } catch {
+        } catch (err) {
 
             this.setBusy(false);
-            this.showError("Dados não conferem.");
+            this.showError(AUTH_ERROR_MESSAGES[err.code] ?? "Não foi possível enviar o e-mail. Tente de novo.");
 
         }
 

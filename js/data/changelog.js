@@ -60,7 +60,8 @@ export default [
             "Cooperativo: o primeiro da fila agora é o host da sala (coroa ao lado do nome) — só ele pode tirar um jogador da fila pelo X e convidar pelo botão Convidar das vagas livres",
             "Cooperativo: convite por nome — o convidado recebe um aviso com o andar e quantas pessoas estão na sala e escolhe Sim ou Não (30 segundos pra responder). O convite avisa quando o nome não existe, o jogador está offline ou ainda não chegou ao nível 100",
             "Cooperativo: um jogador sair entre os andares não encerra mais a run — abre uma vaga, e o host pode convidar um substituto (que entra direto no andar seguinte) ou seguir com o squad que ficou. Se o host sair, o próximo da ordem assume",
-            "Cooperativo: a tela de confirmação entre andares ganhou o botão Sair do Cooperativo, e o host pode remover um jogador da sala pelo X ao lado do nome"
+            "Cooperativo: a tela de confirmação entre andares ganhou o botão Sair do Cooperativo, e o host pode remover um jogador da sala pelo X ao lado do nome",
+            "Conta: recuperar a senha agora pede só o e-mail — o link de redefinição chega na sua caixa de entrada. A Palavra de Recuperação deixou de existir e não é mais pedida no cadastro"
         ]
     }
 

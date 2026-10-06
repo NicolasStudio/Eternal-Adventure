@@ -7,15 +7,9 @@ import {
     sendPasswordResetEmail,
     firestore,
     doc,
-    getDoc,
     setDoc
 } from "./FirebaseService.js";
 
-// Guarda os campos de verificação ("esqueci a senha") numa coleção
-// própria, indexada pelo e-mail (não pelo uid) — é o único jeito de
-// achar o documento certo ANTES de estar autenticado, já que quem
-// esqueceu a senha ainda não tem uid disponível no cliente.
-const RECOVERY_COLLECTION = "recovery";
 const USERS_COLLECTION = "users";
 
 function normalizeEmail(email) {
@@ -24,18 +18,6 @@ function normalizeEmail(email) {
 
 function normalizePhone(phone) {
     return phone.replace(/\D/g, "");
-}
-
-function normalizeRecoveryWord(word) {
-    return word.trim().toLowerCase();
-}
-
-async function sha256(text) {
-    const bytes = new TextEncoder().encode(text);
-    const digest = await crypto.subtle.digest("SHA-256", bytes);
-    return Array.from(new Uint8Array(digest))
-        .map(byte => byte.toString(16).padStart(2, "0"))
-        .join("");
 }
 
 export default class AuthService {
@@ -57,7 +39,7 @@ export default class AuthService {
         await firebaseSignOut(auth);
     }
 
-    static async signUp({ email, password, fullName, phone, birthDate, recoveryWord }) {
+    static async signUp({ email, password, fullName, phone, birthDate }) {
 
         const normalizedEmail = normalizeEmail(email);
 
@@ -72,55 +54,30 @@ export default class AuthService {
             createdAt: new Date().toISOString()
         });
 
-        const [birthDateHash, phoneHash, recoveryWordHash] = await Promise.all([
-            sha256(birthDate),
-            sha256(normalizePhone(phone)),
-            sha256(normalizeRecoveryWord(recoveryWord))
-        ]);
-
-        await setDoc(doc(firestore, RECOVERY_COLLECTION, normalizedEmail), {
-            uid,
-            birthDateHash,
-            phoneHash,
-            recoveryWordHash
-        });
-
         return credential.user;
 
     }
 
-    // Confere os 3 dados de identidade contra o hash salvo no cadastro
-    // e, só se todos baterem, dispara o e-mail de redefinição padrão
-    // do Firebase Auth (trocar a senha na hora exigiria um backend,
-    // que o projeto não tem — ver plano). Nunca aponta qual campo
-    // errou, pra não ajudar tentativa por eliminação.
-    static async verifyRecovery({ email, birthDate, phone, recoveryWord }) {
+    // "Esqueci a senha": só o e-mail. Quem protege a troca é o próprio
+    // link de redefinição do Firebase Auth, que só chega na caixa de
+    // entrada do dono da conta. As perguntas de antes (nascimento,
+    // telefone, Palavra de Recuperação) eram conferidas aqui no
+    // navegador contra uma coleção legível sem login — não barravam
+    // ninguém e ainda expunham esses dados.
+    //
+    // Conta inexistente não é erro: quem chama mostra sempre a mesma
+    // mensagem, pra tela não servir de teste de "esse e-mail joga?".
+    static async sendPasswordReset(email) {
 
-        const normalizedEmail = normalizeEmail(email);
+        try {
 
-        const snapshot = await getDoc(doc(firestore, RECOVERY_COLLECTION, normalizedEmail));
+            await sendPasswordResetEmail(auth, normalizeEmail(email));
 
-        if (!snapshot.exists()) {
-            throw new Error("Dados não conferem.");
+        } catch (err) {
+
+            if (err.code !== "auth/user-not-found") throw err;
+
         }
-
-        const stored = snapshot.data();
-
-        const [birthDateHash, phoneHash, recoveryWordHash] = await Promise.all([
-            sha256(birthDate),
-            sha256(normalizePhone(phone)),
-            sha256(normalizeRecoveryWord(recoveryWord))
-        ]);
-
-        const matches = stored.birthDateHash === birthDateHash
-            && stored.phoneHash === phoneHash
-            && stored.recoveryWordHash === recoveryWordHash;
-
-        if (!matches) {
-            throw new Error("Dados não conferem.");
-        }
-
-        await sendPasswordResetEmail(auth, normalizedEmail);
 
     }
 
