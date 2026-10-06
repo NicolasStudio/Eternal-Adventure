@@ -154,23 +154,6 @@
 }
 
 /* ==========================================================
-    SCROLL
-========================================================== */
-.news-body::-webkit-scrollbar{
-    width:8px;
-}
-.news-body::-webkit-scrollbar-track{
-    background:#1d1512;
-}
-.news-body::-webkit-scrollbar-thumb{
-    background:#7b5a2d;
-    border-radius:8px;
-}
-.news-body::-webkit-scrollbar-thumb:hover{
-    background:#a67b3f;
-}
-
-/* ==========================================================
     ANIMAÇÃO
 ========================================================== */
 @keyframes fadeIn{

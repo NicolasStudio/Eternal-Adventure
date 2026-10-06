@@ -89,20 +89,6 @@
     padding:18px 22px 22px;
 }
 
-.achievements-body::-webkit-scrollbar {
-    width: 10px;
-}
-.achievements-body::-webkit-scrollbar-track {
-    background: transparent;
-}
-.achievements-body::-webkit-scrollbar-thumb {
-    background: #5b4633;
-    border-radius: 6px;
-}
-.achievements-body::-webkit-scrollbar-thumb:hover {
-    background: #8b7355;
-}
-
 .achievements-grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);

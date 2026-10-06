@@ -427,18 +427,4 @@
     overflow-y: auto;
     padding-right: 12px; /* Espaço entre o conteúdo e a scrollbar */
 }
-.reward-modal-box::-webkit-scrollbar {
-    width: 8px;
-}
-.reward-modal-box::-webkit-scrollbar-track {
-    background: #1d1512;
-    margin: 4px 0; /* Opcional: espaçamento vertical da track */
-}
-.reward-modal-box::-webkit-scrollbar-thumb {
-    background: #7b5a2d;
-    border-radius: 8px;
-}
-.reward-modal-box::-webkit-scrollbar-thumb:hover {
-    background: #a67b3f;
-}
 }

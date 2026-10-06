@@ -218,15 +218,15 @@ const monstersRaid = [
             ataque:[
                 {
                     nomeAtaque: "Mordida",
-                    dano: 330,
+                    dano: 436,
                 },
                 {
                     nomeAtaque: "Iluminar",
-                    dano: 350,
+                    dano: 462,
                 },
                 {
                     nomeAtaque: "Raio Aurora",
-                    dano: 380,
+                    dano: 502,
                 },
             ],
             armadura: 250,
@@ -267,15 +267,15 @@ const monstersRaid = [
             ataque:[
                 {
                     nomeAtaque: "Mordida",
-                    dano: 350,
+                    dano: 462,
                 },
                 {
                     nomeAtaque: "Ofuscar",
-                    dano: 360,
+                    dano: 475,
                 },
                 {
                     nomeAtaque: "Raio Negro",
-                    dano: 380,
+                    dano: 502,
                 },
             ],
             armadura: 280,
@@ -316,15 +316,15 @@ const monstersRaid = [
             ataque:[
                 {
                     nomeAtaque: "Mordida",
-                    dano: 432,
+                    dano: 475,
                 },
                 {
                     nomeAtaque: "Chicote de Vinha",
-                    dano: 456,
+                    dano: 502,
                 },
                 {
                     nomeAtaque: "Raio Solar",
-                    dano: 504,
+                    dano: 554,
                 },
             ],
             armadura: 400,

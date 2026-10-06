@@ -54,16 +54,6 @@
     padding:4px;
     overflow-y:auto;
 }
-.market-buy-grid::-webkit-scrollbar{
-    width:8px;
-}
-.market-buy-grid::-webkit-scrollbar-track{
-    background:rgba(255,255,255,.04);
-}
-.market-buy-grid::-webkit-scrollbar-thumb{
-    background:rgba(212,175,55,.35);
-    border-radius:20px;
-}
 
 /* ==========================================================
    SLOT

@@ -51,19 +51,6 @@
     overflow-y:auto;
     padding:6px;
 }
-.inventory-grid::-webkit-scrollbar{
-    width:8px;
-}
-.inventory-grid::-webkit-scrollbar-track{
-    background:rgba(255,255,255,.05);
-}
-.inventory-grid::-webkit-scrollbar-thumb{
-    background:#8a6a3d;
-    border-radius:8px;
-}
-.inventory-grid::-webkit-scrollbar-thumb:hover{
-    background:#b38b4d;
-}
 
 /* ==========================================================
    SLOT

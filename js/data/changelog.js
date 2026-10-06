@@ -56,7 +56,7 @@ export default [
             "Novo chefe do Cooperativo: Dragão de Indra (elemento Energia, 4º andar); os 7 dragões agora dropam cada um um item Lendário diferente (Botas, Calça, Anel, Amuleto, Peitoral, Elmo e por último, no 7º andar, a Arma)",
             "Wiki: adicionado o Mímico, a nova seção de Acessórios (Anel e Amuleto) e atualizadas as seções de Classes, Itens, Pets, Ferraria, Cooperativo, Salvar e Ranking",
             "Pets: do nível 18 ao 50 cada nível agora custa o dobro de XP; em troca, a Vida que o pet ganha depois do nível 18 vale o triplo",
-            "Cooperativo: o Dragão Yggdrasil (7º andar) ficou mais forte — +100 de Armadura e +20% de dano em todos os golpes",
+            "Cooperativo: os três últimos dragões ficaram mais fortes — Solaria (5º andar), Tenebris (6º) e Yggdrasil (7º) causam +32% de dano em todos os golpes, e o Yggdrasil ganhou +100 de Armadura",
             "Cooperativo: o primeiro da fila agora é o host da sala (coroa ao lado do nome) — só ele pode tirar um jogador da fila pelo X e convidar pelo botão Convidar das vagas livres",
             "Cooperativo: convite por nome — o convidado recebe um aviso com o andar e quantas pessoas estão na sala e escolhe Sim ou Não (30 segundos pra responder). O convite avisa quando o nome não existe, o jogador está offline ou ainda não chegou ao nível 100",
             "Cooperativo: um jogador sair entre os andares não encerra mais a run — abre uma vaga, e o host pode convidar um substituto (que entra direto no andar seguinte) ou seguir com o squad que ficou. Se o host sair, o próximo da ordem assume",

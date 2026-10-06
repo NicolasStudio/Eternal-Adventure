@@ -42,19 +42,6 @@
     padding:30px;
     overflow-y:auto;
 }
-.city-body::-webkit-scrollbar{
-    width:8px;
-}
-.city-body::-webkit-scrollbar-track{
-    background:rgba(255,255,255,.05);
-}
-.city-body::-webkit-scrollbar-thumb{
-    background:#8a6a3d;
-    border-radius:8px;
-}
-.city-body::-webkit-scrollbar-thumb:hover{
-    background:#b38b4d;
-}
 
 /* ==========================================================
    CONTAINER

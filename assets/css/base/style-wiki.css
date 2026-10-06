@@ -25,18 +25,35 @@ body::before {
     z-index: 0;
 }
 
-::-webkit-scrollbar {
-    width: 10px;
+/* ==========================================================
+   BARRA DE ROLAGEM — estilo único do jogo inteiro. Não repetir
+   ::-webkit-scrollbar por componente: uma regra mais específica
+   ganharia desta e a barra voltaria a ficar diferente das outras.
+========================================================== */
+::-webkit-scrollbar{
+    width:10px;
+    height:10px;
 }
-::-webkit-scrollbar-track {
-    background: transparent;
+::-webkit-scrollbar-track{
+    background:transparent;
 }
-::-webkit-scrollbar-thumb {
-    background: #5b4633;
-    border-radius: 6px;
+::-webkit-scrollbar-thumb{
+    background:#5b4633;
+    border-radius:6px;
 }
-::-webkit-scrollbar-thumb:hover {
-    background: #8b7355;
+::-webkit-scrollbar-thumb:hover{
+    background:#8b7355;
+}
+::-webkit-scrollbar-corner{
+    background:transparent;
+}
+/* Firefox não tem ::-webkit-scrollbar — só lá entram as propriedades
+   padrão (no Chrome elas desligariam o estilo acima). */
+@supports not selector(::-webkit-scrollbar){
+    *{
+        scrollbar-width:thin;
+        scrollbar-color:#5b4633 transparent;
+    }
 }
 
 .wiki-layout {

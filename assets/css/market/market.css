@@ -130,23 +130,6 @@
 }
 
 /* ==========================================================
-   SCROLLBAR
-========================================================== */
-.market-left::-webkit-scrollbar,
-.market-right::-webkit-scrollbar{
-    width:8px;
-}
-.market-left::-webkit-scrollbar-thumb,
-.market-right::-webkit-scrollbar-thumb{
-    background:#8b7355;
-    border-radius:20px;
-}
-.market-left::-webkit-scrollbar-track,
-.market-right::-webkit-scrollbar-track{
-    background:rgba(255,255,255,.04);
-}
-
-/* ==========================================================
    RESPONSIVO
 ========================================================== */
 @media (max-width:1366px), (max-height:768px){

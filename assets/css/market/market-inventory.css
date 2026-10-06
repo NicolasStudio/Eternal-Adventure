@@ -139,24 +139,6 @@
 }
 
 /* ==========================================================
-   SCROLL
-========================================================== */
-.market-item-list::-webkit-scrollbar{
-    width:8px;
-}
-.market-item-list::-webkit-scrollbar-track{
-    background:#120c08;
-    border-radius:8px;
-}
-.market-item-list::-webkit-scrollbar-thumb{
-    background:#6b543c;
-    border-radius:8px;
-}
-.market-item-list::-webkit-scrollbar-thumb:hover{
-    background:#8b7355;
-}
-
-/* ==========================================================
    ITEM
 ========================================================== */
 .market-item{

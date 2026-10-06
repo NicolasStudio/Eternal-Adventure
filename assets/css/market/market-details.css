@@ -264,24 +264,3 @@
     }
 }
 
-.market-details::-webkit-scrollbar{
-    width:8px;
-}
-
-.market-details::-webkit-scrollbar-track{
-    background:rgba(255,255,255,.05);
-}
-
-.market-details::-webkit-scrollbar-thumb{
-    background:#8a6a3d;
-    border-radius:8px;
-}
-
-.market-details::-webkit-scrollbar-thumb:hover{
-    background:#b38b4d;
-}
-
-.market-details{
-    scrollbar-width:thin;
-    scrollbar-color:#8a6a3d rgba(255,255,255,.05);
-}

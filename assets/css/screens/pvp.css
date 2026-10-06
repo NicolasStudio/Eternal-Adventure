@@ -154,23 +154,6 @@
     box-shadow:0 0 20px rgba(199,155,55,.35);
 }
 
-/* ==========================================================
-    SCROLL
-========================================================== */
-.pvp-log::-webkit-scrollbar{
-    width:8px;
-}
-.pvp-log::-webkit-scrollbar-track{
-    background:#1d1512;
-}
-.pvp-log::-webkit-scrollbar-thumb{
-    background:#7b5a2d;
-    border-radius:8px;
-}
-.pvp-log::-webkit-scrollbar-thumb:hover{
-    background:#a67b3f;
-}
-
 /* ===== SEARCHING ===== */
 .pvp-searching{
     display:flex;
