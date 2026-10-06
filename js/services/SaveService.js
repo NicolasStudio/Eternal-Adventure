@@ -484,11 +484,26 @@ export default class SaveService {
 
     }
 
-    // Acha um personagem pelo nome (sem diferenciar maiúsculas): devolve
-    // { uid, name, level } ou null se o nome não existe. Nome e nível vêm
-    // da entrada do ranking (pública) — level fica null se a conta ainda
-    // não tem entrada lá. Usado pelo convite do Cooperativo.
+    // Acha um personagem pelo nome: devolve { uid, name, level } ou null
+    // se o nome não existe. Usado pelo convite do Cooperativo.
+    //
+    // Procura primeiro no ranking (é de lá que vêm os nomes que o
+    // jogador VÊ no jogo), comparando sem diferenciar maiúsculas, espaços
+    // nas pontas nem a forma como o acento foi digitado. A coleção de
+    // nomes reservados fica só de reserva: nem todo personagem tem
+    // entrada nela (a reserva falha em silêncio — ver reserveCharacterName).
     static async findCharacterByName(name) {
+
+        const normalize = (text) => String(text ?? "").normalize("NFKC").trim().toLowerCase();
+        const wanted = normalize(name);
+
+        if (!wanted) return null;
+
+        const ranked = (await this.getFullLeaderboard()).find(entry => normalize(entry.name) === wanted);
+
+        if (ranked) {
+            return { uid: ranked.uid, name: ranked.name, level: ranked.level ?? null };
+        }
 
         const nameSnapshot = await getDoc(doc(firestore, CHARACTER_NAMES_COLLECTION, name.trim().toLowerCase()));
 
