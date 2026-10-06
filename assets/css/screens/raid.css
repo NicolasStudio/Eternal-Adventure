@@ -434,6 +434,93 @@
     color:#c79b37;
 }
 
+.raid-roster-item.is-empty{
+    color:#8f7a5a;
+    border:1px dashed rgba(139,115,85,.35);
+    background:none;
+}
+.raid-roster-item.is-empty i{
+    color:#6f5c42;
+}
+.raid-host-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    color:#c79b37 !important;
+}
+.raid-host-tag i{
+    width:auto;
+    color:#c79b37 !important;
+    animation:none !important;
+}
+
+/* X do host (tira da fila) e Convidar (vaga livre). */
+.raid-kick-button{
+    width:26px;
+    height:26px;
+    flex:none;
+    border:1px solid #7a1f1f;
+    border-radius:50%;
+    background:rgba(58,16,16,.7);
+    color:#f0a0a0;
+    cursor:pointer;
+    transition:.2s;
+}
+.raid-kick-button i{
+    width:auto;
+    color:inherit !important;
+}
+.raid-kick-button:hover{
+    background:#5c1818;
+    color:#fff;
+}
+.raid-invite-button{
+    flex:none;
+    padding:5px 14px;
+    border:1px solid #c79b37;
+    border-radius:6px;
+    background:linear-gradient(180deg,rgba(216,159,27,.3),rgba(155,102,4,.18));
+    color:#f1c75c;
+    font-family:"Cinzel",serif;
+    font-size:.8rem;
+    cursor:pointer;
+    transition:.2s;
+}
+.raid-invite-button:hover{
+    box-shadow:0 0 14px rgba(199,155,55,.35);
+}
+
+/* Modal de convite (estrutura do .continue-modal, reward-modal.css). */
+.raid-invite-input{
+    width:100%;
+    box-sizing:border-box;
+    padding:12px 14px;
+    border:1px solid #7d6846;
+    border-radius:6px;
+    background:rgba(0,0,0,.45);
+    color:#efe2bf;
+    font-family:"Cinzel",serif;
+    font-size:18px;
+    text-align:center;
+    outline:none;
+}
+.raid-invite-input:focus{
+    border-color:#c79b37;
+}
+.raid-invite-error{
+    margin:12px 0 0;
+    text-align:center;
+    font-size:15px;
+    color:#e06a6a;
+}
+.raid-invite-modal .continue-actions{
+    margin-top:20px;
+}
+.raid-invite-modal .continue-actions button:disabled{
+    opacity:.6;
+    cursor:wait;
+}
+
 @keyframes raidRosterIn{
     from{ opacity:0; transform:translateY(6px); }
     to{ opacity:1; transform:none; }

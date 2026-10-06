@@ -1,4 +1,8 @@
-import RaidLobbyService from "../services/RaidLobbyService.js";
+import RaidLobbyService, { SQUAD_SIZE } from "../services/RaidLobbyService.js";
+import RaidInviteService, { RAID_MIN_LEVEL } from "../services/RaidInviteService.js";
+import AuthService from "../services/AuthService.js";
+import RaidInviteModal, { escapeHtml } from "../ui/components/modals/RaidInviteModal.js";
+import Toast from "../ui/components/Toast.js";
 import RaidCombatService from "../services/RaidCombatService.js";
 import monstersRaid from "../data/monstersRaid.js";
 import LootSystem from "../combat/LootSystem.js";
@@ -26,7 +30,7 @@ export default class RaidView {
         this.currentFloor = 1;
         this.leftSelf = false; // eu escolhi "Sair do Cooperativo" no meio dos andares
         this.abandoned = false; // outro jogador saiu/caiu e o squad não pode prosseguir
-        this.floorWaitProgress = { ready: 0, total: 0, readyIds: [] };
+        this.floorWaitData = null; // partida ao vivo enquanto espero as confirmações
         this.queue = []; // quem está na fila (inclui eu), vindo do lobby
         this.bossData = null; // entrada crua de monstersRaid.js
         this.bossCombatant = null; // snapshot da simulação
@@ -36,6 +40,9 @@ export default class RaidView {
         this.squadHP = {}; // { [combatantId]: currentHP } pros 4
         this.rewardModal = new RewardModal(game);
         this.levelUpModal = new LevelUpModal(game);
+        this.inviteModal = new RaidInviteModal(); // host digitando o nome
+        this.incomingModal = new RaidInviteModal(); // convite que chegou pra mim
+        this.answeringInvite = false;
     }
 
     get player() {
@@ -71,13 +78,20 @@ export default class RaidView {
 
         if (this.state === "battle") return this.renderBattleArena();
 
+        // Com a partida em andamento o X some: fechar a janela por ele
+        // largava a run rodando por baixo — entre os andares, quem quer
+        // sair usa o botão "Sair do Cooperativo".
+        const inMatch = this.state === "found" || this.state === "floor-wait";
+
         return `
             <section class="raid-window">
                 <header class="dungeon-header">
                     <h2>Modo Cooperativo</h2>
-                    <button class="close-btn dungeon-close raid-close">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    ${inMatch ? "" : `
+                        <button class="close-btn dungeon-close raid-close">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    `}
                 </header>
                 <div class="raid-body">
                     ${this.renderState()}
@@ -96,43 +110,93 @@ export default class RaidView {
         }
     }
 
+    // Vagas livres até completar o squad — só o host vê o botão Convidar.
+    renderEmptySlots(count, canInvite) {
+        return Array.from({ length: Math.max(0, count) }, () => `
+            <div class="raid-roster-item is-empty">
+                <i class="fa-solid fa-user-plus"></i>
+                <span>Vaga livre</span>
+                ${canInvite ? `<button class="raid-invite-button">Convidar</button>` : ""}
+            </div>
+        `).join("");
+    }
+
     renderFloorWait() {
-        const { ready, total, readyIds } = this.floorWaitProgress;
-        const members = Object.values(this.matchData.squad);
+
+        const data = this.floorWaitData ?? this.matchData;
+        const members = RaidLobbyService.getActiveMembers(data);
+        const ready = data.floorReady ?? {};
+        const readyCount = members.filter(member => ready[member.id]).length;
+        const hostId = RaidLobbyService.getHostId(data);
+        const isHost = hostId === RaidLobbyService.playerId;
+        const openSlots = SQUAD_SIZE - members.length;
+        // Vaga aberta trava o avanço até o host preencher ou dispensar.
+        const waitingHost = openSlots > 0 && data.proceedShort !== this.currentFloor;
+
+        let status = `Aguardando os outros guerreiros... (${readyCount}/${members.length} prontos)`;
+
+        if (waitingHost) {
+            status = isHost
+                ? "Há vaga aberta — convide alguém ou siga com o squad atual."
+                : "Há vaga aberta — aguardando o host convidar alguém ou seguir assim.";
+        }
+
         return `
             <div class="raid-searching">
                 <div class="raid-spinner"></div>
-                <p class="raid-status-text">Aguardando os outros guerreiros... (${ready}/${total} prontos)</p>
+                <p class="raid-status-text">${status}</p>
                 <div class="raid-roster">
                     <h4 class="raid-roster-title">Confirmações — Andar ${this.currentFloor}</h4>
                     ${members.map(member => {
-                        const confirmed = readyIds.includes(member.id);
+                        const confirmed = !!ready[member.id];
                         return `
                             <div class="raid-roster-item ${confirmed ? "is-confirmed" : "is-pending"}">
                                 <i class="fa-solid ${confirmed ? "fa-circle-check" : "fa-hourglass-half"}"></i>
-                                <span>${member.name} ${confirmed ? "já confirmou" : "não confirmou"}</span>
+                                <span>${escapeHtml(member.name)} ${confirmed ? "já confirmou" : "não confirmou"}</span>
+                                ${member.id === hostId ? `<small class="raid-host-tag"><i class="fa-solid fa-crown"></i> Host</small>` : ""}
                             </div>
                         `;
                     }).join("")}
+                    ${this.renderEmptySlots(openSlots, isHost && waitingHost)}
                 </div>
+                ${isHost && waitingHost ? `
+                    <button class="raid-join-button raid-proceed-button">
+                        Continuar com ${members.length} ${members.length === 1 ? "jogador" : "jogadores"}
+                    </button>
+                ` : ""}
+                <button class="raid-cancel-button raid-leave-button">Sair do Cooperativo</button>
             </div>
         `;
+
     }
 
+    // O primeiro da fila é o host: só ele vê o X (tirar da fila) ao lado
+    // dos outros e o botão Convidar nas vagas livres.
     renderQueue() {
+
         if (!this.queue.length) return "";
+
+        const iAmHost = this.queue.some(entry => entry.isSelf && entry.isHost);
+
         return `
             <div class="raid-roster raid-queue">
                 <h4 class="raid-roster-title">Na fila (${this.queue.length})</h4>
                 ${this.queue.map(entry => `
                     <div class="raid-roster-item is-waiting">
-                        <i class="fa-solid fa-user-clock"></i>
-                        <span>${entry.name}${entry.isSelf ? " (você)" : ""}</span>
+                        <i class="fa-solid ${entry.isHost ? "fa-crown" : "fa-user-clock"}"></i>
+                        <span>${escapeHtml(entry.name)}${entry.isSelf ? " (você)" : ""}</span>
                         <small>Nv. ${entry.level ?? "?"}</small>
+                        ${iAmHost && !entry.isSelf ? `
+                            <button class="raid-kick-button" data-id="${entry.id}" title="Remover da fila">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        ` : ""}
                     </div>
                 `).join("")}
+                ${this.renderEmptySlots(SQUAD_SIZE - this.queue.length, iAmHost)}
             </div>
         `;
+
     }
 
     renderIdle() {
@@ -203,8 +267,8 @@ export default class RaidView {
                                 </div>
                                 <img src="${c.image ?? ""}" alt="${c.name}">
                                 <div class="raid-sprite-hp">
-                                    <div class="raid-sprite-hp-fill" id="raid-hp-${c.id}" style="width:${Math.max(0, (c.currentHP / c.maxHP) * 100)}%;"></div>
-                                    <span class="raid-sprite-hp-text" id="raid-hp-text-${c.id}">${Math.max(0, c.currentHP)} / ${c.maxHP}</span>
+                                    <div class="raid-sprite-hp-fill" id="raid-hp-${c.id}" style="width:${Math.max(0, ((this.squadHP[c.id] ?? c.currentHP) / c.maxHP) * 100)}%;"></div>
+                                    <span class="raid-sprite-hp-text" id="raid-hp-text-${c.id}">${Math.max(0, this.squadHP[c.id] ?? c.currentHP)} / ${c.maxHP}</span>
                                 </div>
                             </div>
                         `).join("")}
@@ -293,12 +357,20 @@ export default class RaidView {
             (queue) => {
                 this.queue = queue;
                 if (this.state === "searching") this.refresh();
+            },
+            () => {
+                this.inviteModal.hide();
+                this.queue = [];
+                this.state = "idle";
+                this.refresh();
+                Toast.show("O host removeu você da fila.");
             }
         );
 
     }
 
     async cancelQueue() {
+        this.inviteModal.hide();
         await RaidLobbyService.leaveQueue();
         this.queue = [];
         this.state = "idle";
@@ -307,10 +379,13 @@ export default class RaidView {
 
     async onMatchFound(matchData, matchId) {
 
+        this.inviteModal.hide();
+
         this.matchData = matchData;
         this.matchId = matchId;
         this.leftSelf = false;
         this.abandoned = false;
+        this.combatResult = null;
 
         RaidLobbyService.armLeaveOnDisconnect(matchId, RaidLobbyService.playerId);
 
@@ -321,18 +396,81 @@ export default class RaidView {
 
         await this.sleep(1500);
 
+        await this.runMatch(matchId, false);
+
+    }
+
+    // Roda a partida até eu sair dela (derrota, vitória no último andar,
+    // "Sair do Cooperativo" ou partida encerrada). startWaiting: entrei
+    // como convidado entre os andares — começo na espera, sem lutar.
+    async runMatch(matchId, startWaiting) {
+
         this.game.hudScreen.inRaidCombat = true;
         this.game.hudScreen.setBackground("assets/img/backgrounds/arena_pvp.png");
         this.game.hudScreen.updateMusic();
 
-        await this.runFloors();
+        await this.runFloors(startWaiting);
+
+        this.inviteModal.hide();
+        this.floorWaitData = null;
 
         this.game.hudScreen.inRaidCombat = false;
         this.game.hudScreen.updateMusic();
-        this.state = (this.leftSelf || this.abandoned) ? "idle" : "result";
+        this.state = (this.leftSelf || this.abandoned || !this.combatResult) ? "idle" : "result";
         this.refresh();
 
+        // Só apaga a partida quando ela acabou PRA TODO MUNDO (derrota ou
+        // último andar). Se fui só eu que saí, os outros continuam nela:
+        // leaveMatchFloor já me tirou; no abandono, solto só o que é meu.
+        if (this.leftSelf) return;
+
+        if (this.abandoned) {
+            RaidLobbyService.releaseSelf(matchId);
+            return;
+        }
+
         RaidLobbyService.cleanupMatch(matchId);
+
+    }
+
+    // Convidado aceitando entrar numa partida em andamento (vaga de quem
+    // saiu entre os andares) — ver RaidLobbyService.joinMatchAsReplacement.
+    async joinAsReplacement(invite) {
+
+        this.leftSelf = false;
+        this.abandoned = false;
+        this.combatResult = null;
+        this.queue = [];
+
+        const result = await RaidLobbyService.joinMatchAsReplacement(
+            invite.matchId,
+            invite.waitFloor,
+            RaidCombatService.snapshotCombatant(this.player),
+            this.player.currentHP
+        );
+
+        if (!result.ok) {
+
+            const reasons = {
+                advanced: "O squad já seguiu para o próximo andar.",
+                full: "A vaga já foi preenchida."
+            };
+
+            this.state = "idle";
+            this.refresh();
+            Toast.show(reasons[result.reason] ?? "Essa sala do cooperativo não existe mais.");
+            return;
+
+        }
+
+        this.matchData = result.data;
+        this.matchId = invite.matchId;
+
+        RaidLobbyService.armLeaveOnDisconnect(invite.matchId, RaidLobbyService.playerId);
+
+        this.setupFloor(invite.waitFloor);
+
+        await this.runMatch(invite.matchId, true);
 
     }
 
@@ -372,122 +510,298 @@ export default class RaidView {
     // não for o último andar, espera todo mundo confirmar "Continuar"
     // antes de avançar pro próximo drake. Termina em derrota, em vitória
     // no último andar, ou se eu mesmo escolher sair no meio do caminho.
-    async runFloors() {
+    // startWaiting: pula a primeira luta (convidado que entrou entre os
+    // andares, já confirmado — ver joinAsReplacement).
+    async runFloors(startWaiting = false) {
+
+        let waitingOnly = startWaiting;
 
         while (true) {
 
-            const squad = this.buildSquadForFloor();
+            if (!waitingOnly) {
 
-            const result = await this.fightFloor(squad);
+                const finished = await this.playFloor();
 
-            if (result.winner !== "squad") {
-                return;
-            }
-
-            this.player.progress.stats.raidWins = (this.player.progress.stats.raidWins ?? 0) + 1;
-
-            // Só pra alimentar as conquistas de dragão (ver AchievementService) —
-            // guarda o id do drake sem duplicar, distinto de raidWins (que conta
-            // toda vitória de andar, mesmo repetindo o mesmo drake em runs diferentes).
-            this.player.progress.stats.raidBossesDefeated ??= [];
-            if (!this.player.progress.stats.raidBossesDefeated.includes(this.bossData.id)) {
-                this.player.progress.stats.raidBossesDefeated.push(this.bossData.id);
-            }
-
-            const reward = LootSystem.generate(this.bossData, this.player);
-            const levelUps = this.player.collectReward(reward);
-            this.game.hudScreen.refreshCurrentView();
-
-            const isLastFloor = this.currentFloor >= monstersRaid.length;
-
-            if (isLastFloor) {
-
-                await this.rewardModal.show(reward);
-
-                for (const levelUp of levelUps) {
-                    await this.levelUpModal.show(levelUp.level, levelUp.bonus, levelUp.petReward);
-                }
-
-                return;
+                if (finished) return;
 
             }
 
-            for (const levelUp of levelUps) {
-                await this.levelUpModal.show(levelUp.level, levelUp.bonus, levelUp.petReward);
-            }
-
-            const continueRaid = await this.rewardModal.show(reward, {
-                showActions: true,
-                exitLabel: "Sair do Cooperativo",
-                onOpenInventory: async () => {
-                    this.game.hudScreen.enterPreparationMode();
-                    await new Promise(resolve => {
-                        this.game.hudScreen.onPreparationFinished = resolve;
-                    });
-                    this.game.hudScreen.exitPreparationMode();
-                    this.game.hudScreen.currentView = "coop";
-                    this.game.hudScreen.refreshCurrentView();
-                }
-            });
-
-            if (!continueRaid) {
-
-                await RaidLobbyService.leaveMatchFloor(
-                    this.matchId,
-                    RaidLobbyService.playerId,
-                    Object.keys(this.matchData.squad)
-                );
-
-                this.leftSelf = true;
-                return;
-
-            }
+            waitingOnly = false;
 
             const outcome = await this.waitForNextFloor();
 
+            if (outcome.left) {
+                await RaidLobbyService.leaveMatchFloor(this.matchId, RaidLobbyService.playerId);
+                this.leftSelf = true;
+                return;
+            }
+
             if (outcome.aborted) {
-                await CombatToast.show("Um jogador abandonou o cooperativo — não é possível continuar.", "system", 3);
+                Toast.show("O cooperativo foi encerrado.");
                 this.abandoned = true;
                 return;
             }
 
-            this.matchData = { ...this.matchData, ...outcome.data };
+            this.matchData = outcome.data;
             this.setupFloor(this.matchData.floor);
 
         }
 
     }
 
-    // Grava minha confirmação (com meu HP atual) e espera o squad
-    // inteiro confirmar o andar atual antes de seguir — ver
-    // RaidLobbyService.waitForFloorAdvance para o mecanismo de sincronia.
-    async waitForNextFloor() {
+    // Um andar: luta, recompensa e a escolha de continuar. Devolve true
+    // quando a run acabou pra mim (derrota, último andar ou saí), false
+    // quando confirmei "Continuar" e falta esperar o resto do squad.
+    async playFloor() {
 
-        const squadIds = Object.keys(this.matchData.squad);
-        const expectedFloor = this.currentFloor;
+        const squad = this.buildSquadForFloor();
 
-        // Snapshot novo junto: pet/equipamento podem ter mudado no
-        // inventário entre um andar e outro (ver RaidLobbyService.markFloorReady).
+        const result = await this.fightFloor(squad);
+
+        if (result.winner !== "squad") {
+            return true;
+        }
+
+        this.player.progress.stats.raidWins = (this.player.progress.stats.raidWins ?? 0) + 1;
+
+        // Só pra alimentar as conquistas de dragão (ver AchievementService) —
+        // guarda o id do drake sem duplicar, distinto de raidWins (que conta
+        // toda vitória de andar, mesmo repetindo o mesmo drake em runs diferentes).
+        this.player.progress.stats.raidBossesDefeated ??= [];
+        if (!this.player.progress.stats.raidBossesDefeated.includes(this.bossData.id)) {
+            this.player.progress.stats.raidBossesDefeated.push(this.bossData.id);
+        }
+
+        const reward = LootSystem.generate(this.bossData, this.player);
+        const levelUps = this.player.collectReward(reward);
+        this.game.hudScreen.refreshCurrentView();
+
+        const isLastFloor = this.currentFloor >= monstersRaid.length;
+
+        if (isLastFloor) {
+
+            await this.rewardModal.show(reward);
+
+            for (const levelUp of levelUps) {
+                await this.levelUpModal.show(levelUp.level, levelUp.bonus, levelUp.petReward);
+            }
+
+            return true;
+
+        }
+
+        for (const levelUp of levelUps) {
+            await this.levelUpModal.show(levelUp.level, levelUp.bonus, levelUp.petReward);
+        }
+
+        const continueRaid = await this.rewardModal.show(reward, {
+            showActions: true,
+            exitLabel: "Sair do Cooperativo",
+            onOpenInventory: async () => {
+                this.game.hudScreen.enterPreparationMode();
+                await new Promise(resolve => {
+                    this.game.hudScreen.onPreparationFinished = resolve;
+                });
+                this.game.hudScreen.exitPreparationMode();
+                this.game.hudScreen.currentView = "coop";
+                this.game.hudScreen.refreshCurrentView();
+            }
+        });
+
+        if (!continueRaid) {
+
+            await RaidLobbyService.leaveMatchFloor(this.matchId, RaidLobbyService.playerId);
+
+            this.leftSelf = true;
+            return true;
+
+        }
+
+        // Grava minha confirmação com meu HP atual e um snapshot novo:
+        // pet/equipamento podem ter mudado no inventário entre um
+        // andar e outro (ver RaidLobbyService.markFloorReady).
         await RaidLobbyService.markFloorReady(
             this.matchId,
             RaidLobbyService.playerId,
             this.game.player.currentHP,
-            RaidCombatService.snapshotCombatant(this.player)
+            {
+                ...RaidCombatService.snapshotCombatant(this.player),
+                seat: this.matchData.squad[RaidLobbyService.playerId]?.seat ?? 0
+            }
         );
 
-        this.floorWaitProgress = { ready: 0, total: squadIds.length, readyIds: [] };
+        return false;
+
+    }
+
+    // Espera o squad confirmar o andar atual antes de seguir — ver
+    // RaidLobbyService.waitForFloorAdvance para o mecanismo de sincronia.
+    // É nessa tela que o host convida alguém pra vaga de quem saiu.
+    async waitForNextFloor() {
+
+        this.floorWaitData = this.matchData;
         this.state = "floor-wait";
         this.refresh();
 
         return await RaidLobbyService.waitForFloorAdvance(
             this.matchId,
-            squadIds,
-            expectedFloor,
-            (ready, total, readyIds) => {
-                this.floorWaitProgress = { ready, total, readyIds };
+            this.currentFloor,
+            (data) => {
+                this.floorWaitData = data;
                 if (this.state === "floor-wait") this.refresh();
             }
         );
+
+    }
+
+    /* =====================================================
+       CONVITE (host)
+    ===================================================== */
+
+    // Quem já está na sala agora: o squad ativo entre os andares, ou a fila.
+    getRoomMembers() {
+        return this.state === "floor-wait"
+            ? RaidLobbyService.getActiveMembers(this.floorWaitData ?? this.matchData)
+            : this.queue;
+    }
+
+    openInvite() {
+
+        // Entre os andares o convidado entra pro PRÓXIMO andar.
+        const floor = this.state === "floor-wait" ? this.currentFloor + 1 : 1;
+
+        this.inviteModal.prompt({
+            floor,
+            onSubmit: (name) => this.sendInvite(name, floor)
+        });
+
+    }
+
+    // Devolve a mensagem de erro pro modal, ou null se o convite saiu.
+    async sendInvite(name, floor) {
+
+        const typed = (name ?? "").trim().toLowerCase();
+
+        if (this.getRoomMembers().some(member => member.name?.toLowerCase() === typed)) {
+            return "Esse jogador já está na sala.";
+        }
+
+        const target = await RaidInviteService.resolveTarget(name, AuthService.getCurrentUser()?.uid);
+
+        if (target.error) return target.error;
+
+        const inMatch = this.state === "floor-wait";
+
+        const replies = {
+            accepted: `${target.name} aceitou o convite!`,
+            declined: `${target.name} recusou o convite.`,
+            busy: `${target.name} está ocupado e não pode entrar agora.`,
+            timeout: `${target.name} não respondeu ao convite.`
+        };
+
+        const result = await RaidInviteService.send(
+            target.uid,
+            {
+                fromName: this.player.name,
+                matchId: inMatch ? this.matchId : null,
+                waitFloor: inMatch ? this.currentFloor : 0,
+                floor,
+                count: this.getRoomMembers().length
+            },
+            (status) => Toast.show(replies[status] ?? replies.timeout)
+        );
+
+        if (result.error) return result.error;
+
+        Toast.show(`Convite enviado para ${target.name}.`);
+
+        return null;
+
+    }
+
+    /* =====================================================
+       CONVITE (convidado)
+    ===================================================== */
+
+    startInviteListener() {
+        RaidInviteService.listen(
+            AuthService.getCurrentUser()?.uid,
+            (invite, remainingMs) => this.handleIncomingInvite(invite, remainingMs)
+        );
+    }
+
+    stopInviteListener() {
+        RaidInviteService.stopListening();
+        this.incomingModal.hide();
+        this.inviteModal.hide();
+        this.answeringInvite = false;
+    }
+
+    // Não dá pra aceitar agora: em combate, vida crítica, nível baixo, ou
+    // já dentro de uma partida/fila. Na fila do coop ainda dá pra aceitar
+    // convite de uma sala em andamento (sai da fila e entra nela).
+    cannotAcceptInvite(invite) {
+
+        const hud = this.game.hudScreen;
+        const player = this.player;
+
+        if (!player || player.level < RAID_MIN_LEVEL) return true;
+        if (player.health.getHpPercent() <= 5) return true;
+        if (hud.inCombat || hud.inPvpCombat || hud.inRaidCombat || hud.preparationMode) return true;
+        if (hud.pvpView.state === "searching") return true;
+
+        if (this.state === "searching") return !invite.matchId;
+
+        return this.state !== "idle" && this.state !== "result";
+
+    }
+
+    async handleIncomingInvite(invite, remainingMs) {
+
+        const uid = AuthService.getCurrentUser()?.uid;
+
+        if (this.answeringInvite || this.cannotAcceptInvite(invite)) {
+            await RaidInviteService.respond(uid, invite, "busy");
+            return;
+        }
+
+        this.answeringInvite = true;
+
+        const answer = await this.incomingModal.confirm({
+            fromName: invite.fromName,
+            floor: invite.floor,
+            count: invite.count,
+            timeoutMs: remainingMs
+        });
+
+        this.answeringInvite = false;
+
+        // Prazo acabou sem resposta — o host já recebe o "não respondeu".
+        if (answer === null) return;
+
+        if (!answer) {
+            await RaidInviteService.respond(uid, invite, "declined");
+            return;
+        }
+
+        // A situação pode ter mudado enquanto o modal estava aberto.
+        if (this.cannotAcceptInvite(invite)) {
+            await RaidInviteService.respond(uid, invite, "busy");
+            Toast.show("Você não pode entrar no cooperativo agora.");
+            return;
+        }
+
+        await RaidInviteService.respond(uid, invite, "accepted");
+
+        const hud = this.game.hudScreen;
+
+        if (hud.currentView !== "coop") hud.changeView("coop");
+
+        if (invite.matchId) {
+            await this.joinAsReplacement(invite);
+        } else if (this.state !== "searching") {
+            await this.joinQueue();
+        }
 
     }
 
@@ -776,6 +1090,24 @@ export default class RaidView {
 
         container.querySelector(".raid-back-button")?.addEventListener("click", () => {
             this.game.hudScreen.changeView("");
+        });
+
+        container.querySelectorAll(".raid-kick-button").forEach(button => {
+            button.addEventListener("click", () => {
+                RaidLobbyService.kickFromQueue(button.dataset.id);
+            });
+        });
+
+        container.querySelectorAll(".raid-invite-button").forEach(button => {
+            button.addEventListener("click", () => this.openInvite());
+        });
+
+        container.querySelector(".raid-proceed-button")?.addEventListener("click", () => {
+            RaidLobbyService.allowShortSquad(this.matchId, this.currentFloor);
+        });
+
+        container.querySelector(".raid-leave-button")?.addEventListener("click", () => {
+            RaidLobbyService.cancelFloorWait?.();
         });
 
     }

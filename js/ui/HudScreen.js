@@ -380,6 +380,7 @@ export default class HudScreen {
             if (this.raidView.state === "searching") {
                 RaidLobbyService.leaveQueue();
             }
+            this.raidView.inviteModal.hide();
             this.raidView.state = "idle";
             this.raidView.matchData = null;
             this.raidView.matchId = null;
@@ -554,6 +555,8 @@ export default class HudScreen {
     }
 
     show() {
+        // Convites do Cooperativo chegam em qualquer tela do jogo.
+        this.raidView.startInviteListener();
         this.setBackground("assets/img/backgrounds/tela_inicial.png");
         this.render();
         this.toolbarHUD.registerEvents(this.element);

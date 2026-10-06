@@ -10,6 +10,10 @@ import monstersRaid from "../data/monstersRaid.js";
 // caindo da conexão bem entre "reivindicar" e "terminar de montar").
 const STALE_CLAIM_TIMEOUT_MS = 8000;
 
+// Tamanho do squad — também é o número de vagas mostrado na fila e na
+// tela de confirmação entre andares.
+export const SQUAD_SIZE = 4;
+
 /*
     Mesmo esquema de pareamento do 2x2 (ver PvpLobbyService.js), só que
     formando um SQUAD de 4 jogadores contra 1 boss em vez de dois times
@@ -27,6 +31,7 @@ export default class RaidLobbyService {
     static lobbyListener = null;
     static selfMatchListener = null;
     static staleClaimTimer = null;
+    static cancelFloorWait = null;
 
     static generateId() {
         return "p_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -71,7 +76,8 @@ export default class RaidLobbyService {
     // Entra na fila da raid. onMatchFound(match, matchId) é chamado
     // quando um squad de 4 (incluindo este jogador) se forma — seja
     // porque ele formou, seja porque outra pessoa formou e o incluiu.
-    static async joinQueue(combatant, onMatchFound, onOpponentJoined, onQueueChanged) {
+    // onKicked() é chamado quando o host me tira da fila (ver kickFromQueue).
+    static async joinQueue(combatant, onMatchFound, onOpponentJoined, onQueueChanged, onKicked) {
 
         if (this.playerId) {
             await this.leaveQueue();
@@ -94,6 +100,15 @@ export default class RaidLobbyService {
         this.selfMatchListener = onValue(selfRef, async (snapshot) => {
 
             const data = snapshot.val();
+
+            // Meu nó sumiu sem eu ter saído (leaveQueue para de escutar
+            // ANTES de apagar) — foi o host que me removeu da fila.
+            if (!data) {
+                this.stopListening();
+                this.playerId = null;
+                onKicked?.();
+                return;
+            }
 
             if (data?.matchedWith) {
 
@@ -130,7 +145,9 @@ export default class RaidLobbyService {
             const waiting = Object.entries(all)
                 .filter(([, entry]) => !entry.matchedWith)
                 .sort(([, a], [, b]) => (a.joinedAt ?? 0) - (b.joinedAt ?? 0))
-                .map(([id, entry]) => ({ id, name: entry.name, level: entry.level, isSelf: id === this.playerId }));
+                // O primeiro da fila (quem entrou antes) é o host: só ele
+                // pode tirar alguém da fila e convidar (ver RaidView).
+                .map(([id, entry], index) => ({ id, name: entry.name, level: entry.level, isSelf: id === this.playerId, isHost: index === 0 }));
 
             onQueueChanged?.(waiting);
 
@@ -138,7 +155,7 @@ export default class RaidLobbyService {
                 .filter(([id, entry]) => id !== this.playerId && !entry.matchedWith && !entry.claimedBy)
                 .sort(([idA], [idB]) => idA < idB ? -1 : 1);
 
-            const requiredOthers = 3;
+            const requiredOthers = SQUAD_SIZE - 1;
 
             if (others.length < requiredOthers) {
                 onOpponentJoined?.(others.length > 0);
@@ -162,7 +179,8 @@ export default class RaidLobbyService {
             const candidateIds = candidateEntries.map(([id]) => id);
             const candidateData = Object.fromEntries(candidateEntries);
 
-            await this.tryMatchSquad(candidateIds, candidateData, combatant);
+            // joinedAt junto: é ele que ordena os `seat` (quem é o host).
+            await this.tryMatchSquad(candidateIds, candidateData, { ...combatant, joinedAt: all[this.playerId]?.joinedAt ?? 0 });
 
         });
 
@@ -226,10 +244,15 @@ export default class RaidLobbyService {
         // no andar 1, não é mais sorteado pela seed.
         const bossId = (monstersRaid.find(m => m.floor === 1) ?? monstersRaid[0]).id;
 
+        // `seat` = ordem de entrada na fila: o host da fila continua host
+        // na partida, e o menor seat ainda ativo assume se ele sair (ver
+        // getHostId).
         const allCombatants = [
             { ...selfCombatant, id: this.playerId },
             ...claimedIds.map(id => ({ ...candidateData[id], id }))
-        ];
+        ]
+            .sort((a, b) => (a.joinedAt ?? 0) - (b.joinedAt ?? 0) || (a.id < b.id ? -1 : 1))
+            .map((c, seat) => ({ ...c, seat }));
 
         // squad é um objeto indexado por ID (não array) — mesmo motivo
         // do teamA/teamB em PvpLobbyService.js: o Firebase não guarda
@@ -257,6 +280,22 @@ export default class RaidLobbyService {
         await update(ref(db), updates);
 
         claimDisconnectRefs.forEach(disconnectRef => onDisconnect(disconnectRef).cancel());
+
+    }
+
+    // Host tirando alguém da fila. Transaction (não um remove direto) pra
+    // nunca apagar quem já foi pareado numa partida no meio do caminho.
+    static async kickFromQueue(targetId) {
+
+        if (!targetId || targetId === this.playerId) return;
+
+        await runTransaction(ref(db, `${this.lobbyPath()}/${targetId}`), (current) => {
+
+            if (!current || current.matchedWith) return;
+
+            return null;
+
+        });
 
     }
 
@@ -298,6 +337,17 @@ export default class RaidLobbyService {
         }
     }
 
+    // Solta só o que é MEU (gatilho de desconexão e nó da fila), sem
+    // apagar a partida — pra quando eu saio dela mas os outros continuam.
+    static async releaseSelf(matchId) {
+
+        if (!this.playerId) return;
+
+        this.disarmLeaveOnDisconnect(matchId, this.playerId);
+        await remove(ref(db, `${this.lobbyPath()}/${this.playerId}`));
+
+    }
+
     // Arma uma marcação automática de "saí" pro caso da minha conexão
     // cair no meio dos andares (aba fechada, sem internet, crash) sem eu
     // ter clicado em "Sair do Cooperativo" — sem isso, os outros 3
@@ -324,7 +374,8 @@ export default class RaidLobbyService {
     // com dados diferentes: Vida Máxima e nome do pet antigos, habilidade
     // do pet novo só no MEU navegador. Vai na mesma escrita do
     // floorReady, então o andar nunca avança comigo "pronto" mas com o
-    // snapshot velho.
+    // snapshot velho. O snapshot novo precisa trazer o `seat` de antes
+    // (quem chama repassa), senão a ordem do host se perde.
     static async markFloorReady(matchId, playerId, currentHP, combatant = null) {
 
         const updates = {
@@ -340,10 +391,29 @@ export default class RaidLobbyService {
 
     }
 
+    // Quem ainda está no squad (não saiu), na ordem de entrada (`seat`).
+    static getActiveMembers(matchData) {
+
+        const left = matchData?.left ?? {};
+
+        return Object.values(matchData?.squad ?? {})
+            .filter(member => !left[member.id])
+            .sort((a, b) => (a.seat ?? 0) - (b.seat ?? 0) || (a.id < b.id ? -1 : 1));
+
+    }
+
+    // Host entre os andares: quem está há mais tempo no squad. Se ele
+    // sair, o próximo da ordem assume sozinho.
+    static getHostId(matchData) {
+        return this.getActiveMembers(matchData)[0]?.id ?? null;
+    }
+
     // Marca que eu saí do cooperativo no meio dos andares — os outros
     // continuam sem mim (não conto mais pro "todo mundo pronto"). Se eu
     // for o último do squad a sair, apaga a partida inteira.
-    static async leaveMatchFloor(matchId, playerId, squadIds) {
+    static async leaveMatchFloor(matchId, playerId) {
+
+        const matchRef = ref(db, `${this.matchesPath()}/${matchId}`);
 
         await set(ref(db, `${this.matchesPath()}/${matchId}/left/${playerId}`), true);
 
@@ -352,21 +422,80 @@ export default class RaidLobbyService {
             await remove(ref(db, `${this.lobbyPath()}/${playerId}`));
         }
 
-        const snapshot = await get(ref(db, `${this.matchesPath()}/${matchId}/left`));
-        const left = snapshot.val() ?? {};
-        const allLeft = squadIds.every(id => left[id]);
+        const data = (await get(matchRef)).val();
 
-        if (allLeft) {
-            await remove(ref(db, `${this.matchesPath()}/${matchId}`));
+        if (data && this.getActiveMembers(data).length === 0) {
+            await remove(matchRef);
         }
 
     }
 
-    // Espera até que TODOS os 4 do squad original confirmem "Continuar"
-    // no andar `expectedFloor` pra então avançar de fase — não basta
-    // maioria: se qualquer um dos 4 sair (botão ou queda de conexão)
-    // antes de todos confirmarem, resolve como abandono e quem ainda
-    // está esperando não segue em frente.
+    // Host liberando o squad pra seguir com menos de 4 (ninguém aceitou
+    // o convite, ou ele não quis convidar). Vale só pro andar em espera.
+    static async allowShortSquad(matchId, expectedFloor) {
+        await set(ref(db, `${this.matchesPath()}/${matchId}/proceedShort`), expectedFloor);
+    }
+
+    // Convidado entrando numa partida já em andamento, na vaga de quem
+    // saiu entre os andares. Já entra confirmado ("pronto") com o HP
+    // atual dele. Falha se a partida acabou, já avançou de andar ou a
+    // vaga foi preenchida.
+    static async joinMatchAsReplacement(matchId, waitFloor, combatant, currentHP) {
+
+        if (this.playerId) {
+            await this.leaveQueue();
+        }
+
+        const playerId = this.generateId();
+        const matchRef = ref(db, `${this.matchesPath()}/${matchId}`);
+
+        let failure = null;
+
+        const result = await runTransaction(matchRef, (current) => {
+
+            // Cache local vazio na primeira rodada: devolver o próprio
+            // null força o servidor a responder com o valor real.
+            if (current === null) {
+                failure = "missing";
+                return current;
+            }
+
+            if (current.floor !== waitFloor) {
+                failure = "advanced";
+                return;
+            }
+
+            if (this.getActiveMembers(current).length >= SQUAD_SIZE) {
+                failure = "full";
+                return;
+            }
+
+            failure = null;
+
+            current.squad = current.squad ?? {};
+            current.squad[playerId] = { ...combatant, id: playerId, seat: Date.now() };
+            current.hp = { ...(current.hp ?? {}), [playerId]: currentHP };
+            current.floorReady = { ...(current.floorReady ?? {}), [playerId]: true };
+
+            return current;
+
+        });
+
+        if (failure || !result.committed) {
+            return { ok: false, reason: failure ?? "missing" };
+        }
+
+        this.playerId = playerId;
+
+        return { ok: true, data: result.snapshot.val() };
+
+    }
+
+    // Espera todo mundo que AINDA está no squad confirmar "Continuar" no
+    // andar `expectedFloor`. Quem sai (botão ou queda de conexão) não
+    // encerra mais a run: abre uma vaga, que o host pode preencher com
+    // um convite (joinMatchAsReplacement) ou dispensar (allowShortSquad)
+    // — com vaga aberta, o andar só avança depois de uma das duas coisas.
     //
     // Só o primeiro cliente que perceber a condição cumprida tenta
     // comitar a transaction (mesma ideia do tryMatchSquad acima); se a
@@ -374,11 +503,12 @@ export default class RaidLobbyService {
     // já atualizado direto do servidor em vez de confiar que o onValue
     // vai disparar de novo sozinho.
     //
-    // onProgress(readyCount, total, readyIds) é chamado a cada atualização,
-    // pra alimentar a lista de quem já confirmou na tela. Resolve com
-    // { aborted: true } se alguém abandonou, ou { data } com a partida
-    // já no andar seguinte.
-    static waitForFloorAdvance(matchId, squadIds, expectedFloor, onProgress) {
+    // onProgress(matchData) é chamado a cada atualização, pra alimentar a
+    // lista de confirmações/vagas na tela. Resolve com { aborted: true }
+    // se a partida sumiu ou eu fui marcado como fora, { left: true } se
+    // eu mesmo saí (ver cancelFloorWait), ou { data } com a partida já no
+    // andar seguinte.
+    static waitForFloorAdvance(matchId, expectedFloor, onProgress) {
 
         return new Promise(resolve => {
 
@@ -389,8 +519,22 @@ export default class RaidLobbyService {
             const finish = (value) => {
                 if (settled) return;
                 settled = true;
+                this.cancelFloorWait = null;
                 off(matchRef);
                 resolve(value);
+            };
+
+            this.cancelFloorWait = () => finish({ left: true });
+
+            const canAdvance = (data) => {
+
+                const active = this.getActiveMembers(data);
+                const ready = data.floorReady ?? {};
+
+                return active.length > 0
+                    && active.every(member => ready[member.id])
+                    && (active.length >= SQUAD_SIZE || data.proceedShort === expectedFloor);
+
             };
 
             onValue(matchRef, async (snapshot) => {
@@ -399,7 +543,7 @@ export default class RaidLobbyService {
 
                 const data = snapshot.val();
 
-                if (!data) {
+                if (!data || data.left?.[this.playerId]) {
                     finish({ aborted: true });
                     return;
                 }
@@ -409,21 +553,9 @@ export default class RaidLobbyService {
                     return;
                 }
 
-                const left = data.left ?? {};
+                onProgress?.(data);
 
-                if (squadIds.some(id => left[id])) {
-                    finish({ aborted: true });
-                    return;
-                }
-
-                const ready = data.floorReady ?? {};
-                const readyIds = squadIds.filter(id => ready[id]);
-
-                onProgress?.(readyIds.length, squadIds.length, readyIds);
-
-                const readyCount = readyIds.length;
-
-                if (readyCount < squadIds.length) {
+                if (!canAdvance(data)) {
                     return;
                 }
 
@@ -431,12 +563,13 @@ export default class RaidLobbyService {
 
                 const result = await runTransaction(matchRef, (current) => {
 
-                    if (!current || current.floor !== expectedFloor) {
+                    if (!current || current.floor !== expectedFloor || !canAdvance(current)) {
                         return;
                     }
 
                     current.floor = expectedFloor + 1;
                     current.floorReady = {};
+                    current.proceedShort = null;
 
                     return current;
 

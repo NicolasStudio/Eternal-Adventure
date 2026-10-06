@@ -484,6 +484,27 @@ export default class SaveService {
 
     }
 
+    // Acha um personagem pelo nome (sem diferenciar maiúsculas): devolve
+    // { uid, name, level } ou null se o nome não existe. Nome e nível vêm
+    // da entrada do ranking (pública) — level fica null se a conta ainda
+    // não tem entrada lá. Usado pelo convite do Cooperativo.
+    static async findCharacterByName(name) {
+
+        const nameSnapshot = await getDoc(doc(firestore, CHARACTER_NAMES_COLLECTION, name.trim().toLowerCase()));
+
+        if (!nameSnapshot.exists()) return null;
+
+        const uid = nameSnapshot.data().uid;
+        const entry = await getDoc(doc(firestore, LEADERBOARD_COLLECTION, uid));
+
+        return {
+            uid,
+            name: entry.data()?.name ?? name.trim(),
+            level: entry.data()?.level ?? null
+        };
+
+    }
+
     static async reserveCharacterName(name, uid) {
 
         try {

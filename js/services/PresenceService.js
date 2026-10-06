@@ -186,6 +186,22 @@ export default class PresenceService {
 
     }
 
+    // Uma conta só: está com heartbeat dentro do prazo AGORA? Usado pelo
+    // convite do Cooperativo, que não precisa baixar a lista inteira.
+    static async isOnline(uid) {
+
+        try {
+
+            const session = (await get(ref(rtdb, `${SESSIONS_PATH}/${uid}`))).val();
+
+            return !!session && (Date.now() - (session.lastSeen ?? 0)) < STALE_AFTER_MS;
+
+        } catch {
+            return false;
+        }
+
+    }
+
     // uids com heartbeat dentro do prazo AGORA — usado pelo Ranking
     // Global pra pintar a bolinha verde/vermelha.
     static async getOnlineUids() {
