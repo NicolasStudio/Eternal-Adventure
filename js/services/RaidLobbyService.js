@@ -430,6 +430,20 @@ export default class RaidLobbyService {
 
     }
 
+    // Host tirando alguém da sala entre os andares: conta como saída
+    // (abre a vaga) e deixa marcado que foi expulsão, pra tela de quem
+    // saiu avisar o motivo certo.
+    static async kickFromMatch(matchId, targetId) {
+
+        if (!targetId || targetId === this.playerId) return;
+
+        await update(ref(db, `${this.matchesPath()}/${matchId}`), {
+            [`left/${targetId}`]: true,
+            [`kicked/${targetId}`]: true
+        });
+
+    }
+
     // Host liberando o squad pra seguir com menos de 4 (ninguém aceitou
     // o convite, ou ele não quis convidar). Vale só pro andar em espera.
     static async allowShortSquad(matchId, expectedFloor) {
@@ -505,7 +519,8 @@ export default class RaidLobbyService {
     //
     // onProgress(matchData) é chamado a cada atualização, pra alimentar a
     // lista de confirmações/vagas na tela. Resolve com { aborted: true }
-    // se a partida sumiu ou eu fui marcado como fora, { left: true } se
+    // se a partida sumiu ou eu fui marcado como fora (kicked: true quando
+    // foi o host que me tirou — ver kickFromMatch), { left: true } se
     // eu mesmo saí (ver cancelFloorWait), ou { data } com a partida já no
     // andar seguinte.
     static waitForFloorAdvance(matchId, expectedFloor, onProgress) {
@@ -544,7 +559,7 @@ export default class RaidLobbyService {
                 const data = snapshot.val();
 
                 if (!data || data.left?.[this.playerId]) {
-                    finish({ aborted: true });
+                    finish({ aborted: true, kicked: !!data?.kicked?.[this.playerId] });
                     return;
                 }
 
