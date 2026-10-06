@@ -6,12 +6,18 @@
    HP/ponto, resto = 1/ponto). Pet que já passou do nível recebe tudo
    de uma vez, calculado a partir do nível atual.
 
+   Depois do nível LIFE_BOOST_AFTER_LEVEL (18) cada ponto de Vida vale
+   LIFE_BOOST_MULTIPLIER vezes mais — compensa a XP mais cara dessa
+   faixa (ver HARD_XP_* em PetService.js).
+
    Perfil: wolf=Dano(baixo) · fairy=Vida+pouco Armadura/Ataque ·
    spider=Dano+Agilidade · bear=Vida+Armadura · snake=Vida+Dano+Agilidade
 ========================================================== */
 
 export const PET_MAX_LEVEL = 50;
 export const LIFE_PER_POINT = 5;
+export const LIFE_BOOST_AFTER_LEVEL = 18;
+export const LIFE_BOOST_MULTIPLIER = 3;
 
 export default {
 

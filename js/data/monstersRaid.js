@@ -316,18 +316,18 @@ const monstersRaid = [
             ataque:[
                 {
                     nomeAtaque: "Mordida",
-                    dano: 360,
+                    dano: 432,
                 },
                 {
                     nomeAtaque: "Chicote de Vinha",
-                    dano: 380,
+                    dano: 456,
                 },
                 {
                     nomeAtaque: "Raio Solar",
-                    dano: 420,
+                    dano: 504,
                 },
             ],
-            armadura: 300,
+            armadura: 400,
             agilidade: 300,
             xp: 0,
             ouro: 100000

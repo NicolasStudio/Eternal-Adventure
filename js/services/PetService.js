@@ -1,5 +1,5 @@
 import pets from "../data/pet.js";
-import levelsPet, { PET_MAX_LEVEL, LIFE_PER_POINT } from "../data/levelsPet.js";
+import levelsPet, { PET_MAX_LEVEL, LIFE_PER_POINT, LIFE_BOOST_AFTER_LEVEL, LIFE_BOOST_MULTIPLIER } from "../data/levelsPet.js";
 import SoundEffectService from "./SoundEffectService.js";
 import SaveService from "./SaveService.js";
 
@@ -18,6 +18,12 @@ const DEFAULT_MAX_HUNGER = 100;
 // de uma tabela de XP própria por espécie.
 const XP_BASE = 30;
 const XP_EXPONENT = 1.6;
+
+// Do nível 18 ao 50 cada nível custa HARD_XP_MULTIPLIER vezes a curva
+// normal — em troca, a Vida ganha depois do 18 vale o triplo (ver
+// LIFE_BOOST_* em levelsPet.js).
+const HARD_XP_FROM_LEVEL = 18;
+const HARD_XP_MULTIPLIER = 2;
 
 // Controla o pet-instância que mora no inventário/equipamento do
 // jogador (seu próprio uid, level, xp, fome, lastHungerTickAt). Os
@@ -63,7 +69,9 @@ export default class PetService {
 
         if (level >= PET_MAX_LEVEL) return 0;
 
-        return Math.round(XP_BASE * Math.pow(Math.max(1, level), XP_EXPONENT));
+        const multiplier = level >= HARD_XP_FROM_LEVEL ? HARD_XP_MULTIPLIER : 1;
+
+        return Math.round(XP_BASE * Math.pow(Math.max(1, level), XP_EXPONENT) * multiplier);
 
     }
 
@@ -104,7 +112,11 @@ export default class PetService {
 
             if (!gain) continue;
 
-            Object.keys(points).forEach(key => { points[key] += gain[key] ?? 0; });
+            const lifeMultiplier = Number(gainLevel) > LIFE_BOOST_AFTER_LEVEL ? LIFE_BOOST_MULTIPLIER : 1;
+
+            Object.keys(points).forEach(key => {
+                points[key] += (gain[key] ?? 0) * (key === "life" ? lifeMultiplier : 1);
+            });
 
         }
 
