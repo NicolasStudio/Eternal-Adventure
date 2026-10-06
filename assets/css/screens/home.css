@@ -109,6 +109,145 @@
     color:#f3e0b7;
 }
 
+/* ===== Continuar: personagens da conta + slot bloqueado ===== */
+.character-select-modal{
+    position:relative;
+    width:440px;
+    max-width:92%;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    padding:26px 22px 22px;
+    border:1px solid #8b7355;
+    border-radius:8px;
+    background:rgba(24,16,11,.98);
+    font-family:"Cinzel",serif;
+    box-shadow:0 0 20px rgba(0,0,0,.7);
+}
+.character-select-close{
+    position:absolute;
+    top:10px;
+    right:10px;
+}
+.character-select-title{
+    margin:0 0 4px;
+    text-align:center;
+    font-size:1.3rem;
+    color:#f1c75c;
+}
+.character-slot{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    width:100%;
+    padding:14px 16px;
+    border-radius:8px;
+    font-family:"Cinzel",serif;
+    text-align:left;
+    cursor:pointer;
+    transition:.2s;
+}
+.character-slot-filled{
+    border:2px solid #8b7355;
+    background:linear-gradient(180deg,#2c1810,#1a0f0a);
+    color:#e8d9b8;
+}
+.character-slot-filled:hover{
+    border-color:#c79b37;
+    box-shadow:0 0 18px rgba(199,155,55,.3);
+}
+.character-slot-filled img{
+    width:72px;
+    height:72px;
+    object-fit:contain;
+    image-rendering:pixelated;
+}
+.character-slot-info{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+    min-width:0;
+}
+.character-slot-info strong{
+    font-size:1.1rem;
+    color:#f1c75c;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.character-slot-info span{
+    font-size:.9rem;
+    color:#d8c39b;
+}
+.character-slot-info small{
+    font-size:.8rem;
+    color:#8f7a5a;
+}
+.character-slot-action{
+    padding:7px 16px;
+    border:1px solid #c79b37;
+    border-radius:6px;
+    color:#f1c75c;
+    font-size:.85rem;
+}
+.character-slot-locked{
+    border:2px dashed #5b4633;
+    background:rgba(0,0,0,.3);
+    color:#8f7a5a;
+}
+.character-slot-locked > i{
+    width:72px;
+    font-size:30px;
+    text-align:center;
+    color:#6f5c42;
+}
+.character-slot-locked .character-slot-info strong{
+    color:#a89878;
+}
+.character-slot-locked .character-slot-info span{
+    color:#8f7a5a;
+}
+.character-slot-locked:hover{
+    border-color:#c79b37;
+}
+.character-slot-locked:hover > i{
+    color:#c79b37;
+}
+.character-slot-purchase{
+    border-color:#8b7355;
+    text-align:center;
+}
+.character-slot-purchase h3{
+    margin:0 0 14px;
+    font-size:1.15rem;
+    color:#f1c75c;
+}
+.character-slot-purchase p{
+    margin-bottom:14px;
+}
+.character-slot-price{
+    display:block;
+    margin-bottom:18px;
+    font-size:1.5rem;
+    color:#f1c75c;
+}
+.character-slot-buy{
+    padding:9px 26px;
+    border:2px solid #c79b37;
+    border-radius:6px;
+    background:linear-gradient(180deg,rgba(216,159,27,.3),rgba(155,102,4,.18));
+    color:#f1c75c;
+    font-family:"Cinzel",serif;
+    font-weight:700;
+    font-size:.9rem;
+    cursor:pointer;
+    transition:.15s;
+}
+.character-slot-buy:hover{
+    box-shadow:0 0 16px rgba(199,155,55,.35);
+}
+
 .menu {
     display: flex;
     flex-direction: column;

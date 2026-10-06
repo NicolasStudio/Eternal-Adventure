@@ -3,6 +3,7 @@ import SaveService from "../services/SaveService.js";
 import SettingsModal from "./components/modals/SettingsModal.js";
 import MusicService from "../services/MusicService.js";
 import NameEntryModal from "./components/modals/NameEntryModal.js";
+import CharacterSelectModal from "./components/modals/CharacterSelectModal.js";
 
 export default class HomeScreen {
 
@@ -13,6 +14,7 @@ export default class HomeScreen {
         this.newsModal = new NewsModal();
         this.settingsModal = new SettingsModal(game);
         this.nameEntryModal = new NameEntryModal();
+        this.characterSelectModal = new CharacterSelectModal();
 
         this.render();
         this.bindEvents();
@@ -76,11 +78,17 @@ export default class HomeScreen {
 
         this.element
             .querySelector("#btn-continue")
-            ?.addEventListener("click", () => {
+            ?.addEventListener("click", async () => {
 
                 const data = SaveService.loadFromLocalStorage();
 
                 if (!data || !SaveService.isValidSave(data)) return;
+
+                // Mostra o personagem da conta (e o slot bloqueado) antes
+                // de entrar — só carrega se o jogador escolher jogar.
+                const play = await this.characterSelectModal.show(data);
+
+                if (!play) return;
 
                 SaveService.applyLoadedData(this.game, data);
 
@@ -139,6 +147,7 @@ export default class HomeScreen {
     }
 
     hide() {
+        this.characterSelectModal.hide();
         this.element.classList.add("hidden");
     }
 
