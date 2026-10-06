@@ -154,6 +154,11 @@ export default class RaidView {
                                 <i class="fa-solid ${confirmed ? "fa-circle-check" : "fa-hourglass-half"}"></i>
                                 <span>${escapeHtml(member.name)} ${confirmed ? "já confirmou" : "não confirmou"}</span>
                                 ${member.id === hostId ? `<small class="raid-host-tag"><i class="fa-solid fa-crown"></i> Host</small>` : ""}
+                                ${isHost && member.id !== hostId ? `
+                                    <button class="raid-kick-button" data-id="${member.id}" title="Remover da sala">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                ` : ""}
                             </div>
                         `;
                     }).join("")}
@@ -537,7 +542,7 @@ export default class RaidView {
             }
 
             if (outcome.aborted) {
-                Toast.show("O cooperativo foi encerrado.");
+                Toast.show(outcome.kicked ? "O host removeu você da sala." : "O cooperativo foi encerrado.");
                 this.abandoned = true;
                 return;
             }
@@ -1094,7 +1099,11 @@ export default class RaidView {
 
         container.querySelectorAll(".raid-kick-button").forEach(button => {
             button.addEventListener("click", () => {
-                RaidLobbyService.kickFromQueue(button.dataset.id);
+                if (this.state === "floor-wait") {
+                    RaidLobbyService.kickFromMatch(this.matchId, button.dataset.id);
+                } else {
+                    RaidLobbyService.kickFromQueue(button.dataset.id);
+                }
             });
         });
 
