@@ -359,6 +359,26 @@ export default class ChatHUD {
 
     }
 
+    // O nome da mensagem é digitado por quem envia; o que não dá pra
+    // forjar é o uid. Se o nome está reservado pra OUTRA conta, alguém
+    // está se passando por esse jogador — a mensagem fica marcada.
+    async flagBorrowedName(message, nameElement) {
+
+        if (!message.uid || message.uid === AuthService.getCurrentUser()?.uid) return;
+
+        const owner = await SaveService.getCharacterNameOwner(message.name);
+
+        if (!owner || owner === message.uid) return;
+
+        nameElement.classList.add("chat-name-borrowed");
+
+        const warning = document.createElement("i");
+        warning.className = "fa-solid fa-triangle-exclamation chat-borrowed-badge";
+        warning.title = "Este nome pertence a outro jogador";
+        nameElement.append(warning);
+
+    }
+
     // Texto de outros jogadores NUNCA entra por innerHTML — só por
     // textContent, senão qualquer um poderia injetar HTML/script na
     // tela dos demais.
@@ -410,6 +430,8 @@ export default class ChatHUD {
             shield.title = "Admin";
             name.append(shield);
         }
+
+        this.flagBorrowedName(message, name);
 
         const text = document.createElement("span");
         text.className = "chat-text";

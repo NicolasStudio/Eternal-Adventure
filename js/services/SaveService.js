@@ -16,6 +16,8 @@ import Toast from "../ui/components/Toast.js";
 import AuthService from "./AuthService.js";
 import PowerService from "./PowerService.js";
 import { PET_MAX_LEVEL } from "../data/levelsPet.js";
+import cards from "../data/cards.js";
+import { sanitizeRemote, sanitizeText } from "./MatchSanitizer.js";
 import { firestore, doc, getDoc, setDoc, collection, query, orderBy, limit, getDocs } from "./FirebaseService.js";
 
 const STORAGE_KEY = "eternal-adventure-save";
@@ -37,7 +39,15 @@ const EQUIPMENT_BY_ID = {};
 const FOOD_ITEM_BY_ID = {};
 Object.values(farmCrops).forEach(crop => { FOOD_ITEM_BY_ID[crop.harvestedItem.id] = crop.harvestedItem; });
 
+// Tetos usados só pra recusar valor absurdo num save adulterado (ver
+// normalizeLoadedData) — bem acima do que o jogo consegue produzir.
+const MAX_PLAYER_LEVEL = 100;
+const MAX_GOLD = 1e12;
+const MAX_HP = 1e6;
+
 export default class SaveService {
+
+    static nameOwnerCache = new Map();
 
     /* =====================================================
        SERIALIZAÇÃO (Player -> objeto puro, pronto pra JSON)
@@ -98,7 +108,42 @@ export default class SaveService {
     }
 
     // Recria um Player do zero e aplica por cima os dados salvos.
+    // Corrige NO LUGAR os valores que nenhum jogo legítimo produz, antes
+    // de montar o personagem: o save é um JSON que o jogador consegue
+    // editar (localStorage, ou o documento dele na nuvem). Não impede
+    // trapaça "plausível" (isso só um servidor valida), mas barra valor
+    // quebrado ou absurdo que travaria o jogo ou sujaria o ranking.
+    static normalizeLoadedData(data) {
+
+        const number = (value, min, max, fallback) => {
+            const parsed = Number(value);
+            if (!Number.isFinite(parsed)) return fallback;
+            return Math.min(max, Math.max(min, parsed));
+        };
+
+        data.level = Math.floor(number(data.level, 1, MAX_PLAYER_LEVEL, 1));
+        data.gold = Math.floor(number(data.gold, 0, MAX_GOLD, 0));
+        data.currentXP = Math.floor(number(data.currentXP, 0, Number.MAX_SAFE_INTEGER, 0));
+
+        if (data.maxHP !== undefined) data.maxHP = Math.floor(number(data.maxHP, 1, MAX_HP, 100));
+        if (data.currentHP !== undefined) data.currentHP = Math.floor(number(data.currentHP, 0, MAX_HP, 1));
+
+        if (data.name !== undefined) data.name = sanitizeText(data.name).trim().slice(0, 30);
+
+        // Álbum: só carta que existe, uma vez cada.
+        const validCards = new Set(cards.map(card => card.id));
+        data.album = [...new Set(Array.isArray(data.album) ? data.album : [])].filter(id => validCards.has(id));
+
+        if (!Array.isArray(data.inventory)) data.inventory = [];
+        data.inventory = data.inventory.filter(item => item && typeof item === "object");
+
+        return data;
+
+    }
+
     static deserialize(game, data) {
+
+        this.normalizeLoadedData(data);
 
         const characterClass = classes[data.classId] ?? Object.values(classes)[0];
 
@@ -520,6 +565,33 @@ export default class SaveService {
 
     }
 
+    // Dono (uid) de um nome reservado, ou null se ninguém reservou.
+    // Guarda a resposta enquanto a página está aberta — o chat consulta
+    // isso a cada mensagem pra conferir se o nome é mesmo de quem enviou.
+    static getCharacterNameOwner(name) {
+
+        const key = String(name ?? "").trim().toLowerCase();
+
+        if (!key || key.includes("/")) return Promise.resolve(null);
+
+        if (!this.nameOwnerCache.has(key)) {
+
+            const lookup = getDoc(doc(firestore, CHARACTER_NAMES_COLLECTION, key))
+                .then(snapshot => snapshot.exists() ? (snapshot.data().uid ?? null) : null)
+                .catch(() => {
+                    // Falha de rede não pode ficar guardada como "sem dono".
+                    this.nameOwnerCache.delete(key);
+                    return null;
+                });
+
+            this.nameOwnerCache.set(key, lookup);
+
+        }
+
+        return this.nameOwnerCache.get(key);
+
+    }
+
     static async reserveCharacterName(name, uid) {
 
         try {
@@ -666,7 +738,9 @@ export default class SaveService {
 
             const snapshot = await getDocs(leaderboardQuery);
 
-            return snapshot.docs.map(entry => entry.data());
+            // Cada entrada é gravada pelo navegador do próprio jogador —
+            // nunca chega crua nas telas (ver MatchSanitizer.js).
+            return snapshot.docs.map(entry => sanitizeRemote(entry.data()));
 
         } catch (err) {
 
@@ -719,7 +793,7 @@ export default class SaveService {
 
             const snapshot = await getDocs(leaderboardQuery);
 
-            return snapshot.docs.map(entry => ({ uid: entry.id, ...entry.data() }));
+            return snapshot.docs.map(entry => ({ ...sanitizeRemote(entry.data()), uid: entry.id }));
 
         } catch (err) {
 
@@ -820,6 +894,13 @@ export default class SaveService {
         const player = this.deserialize(game, data);
 
         game.player = player;
+
+        // Garante a reserva do nome pra esta conta (personagens antigos
+        // podem não ter) — é ela que o chat usa pra reconhecer quem está
+        // usando o nome de outro jogador. Se o nome já for de outra conta,
+        // as regras do banco recusam e nada muda.
+        const user = AuthService.getCurrentUser();
+        if (user && player.name) this.reserveCharacterName(player.name, user.uid);
 
         player.addListener(() => {
             game.hudScreen.updateHUD();

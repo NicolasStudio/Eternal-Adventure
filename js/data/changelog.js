@@ -1,6 +1,27 @@
 export default [
 
     {
+        version: "Beta 0.2.1 — Segurança",
+        date: "Outubro de 2026",
+        changes: [
+            "Conta: recuperar a senha agora pede só o e-mail — o link de redefinição chega na sua caixa de entrada. A Palavra de Recuperação deixou de existir e não é mais pedida no cadastro",
+            "Conta: os dados antigos de recuperação (data de nascimento, telefone e Palavra de Recuperação) foram apagados do servidor — ficavam acessíveis a quem soubesse o e-mail da conta",
+            "Conta: a tela de recuperar senha não revela mais se um e-mail tem cadastro no jogo",
+            "PVP e Cooperativo: corrigida uma falha que permitia a um jogador mal-intencionado executar código na tela de quem fosse pareado com ele, usando o nome do personagem — nome, imagem, nível e atributos de outros jogadores agora são filtrados antes de aparecer",
+            "Ranking: o mesmo filtro passou a valer para o ranking e para o perfil dos jogadores (lupa)",
+            "Chat: mensagens enviadas com o nome de outro jogador aparecem riscadas e com um aviso ao lado do nome",
+            "Chat: fechada uma brecha que permitia burlar o intervalo de 3 segundos entre mensagens e o bloqueio de mensagem repetida",
+            "Saves com valores impossíveis (nível acima de 100, ouro negativo, cartas que não existem) são corrigidos ao carregar",
+            "Fila, partidas e convites do PVP e do Cooperativo agora exigem login — antes ficavam acessíveis a qualquer pessoa na internet, mesmo sem conta",
+            "Convites do Cooperativo: ninguém mais consegue listar os convites pendentes dos outros jogadores",
+            "Nomes de personagem: não é mais possível reservar um nome em nome de outra conta, nem transferir a reserva pra outra pessoa",
+            "Ranking: o servidor passou a recusar entradas com formato inválido (nome longo demais, nível fora de 1 a 100, Poder negativo)",
+            "Sessão: o registro de 'quem está online' só aceita os dados que o jogo realmente usa",
+            "O jogo passou a executar apenas scripts dele mesmo e do Firebase (política de conteúdo), e os arquivos externos de ícones e gráficos são conferidos antes de carregar"
+        ]
+    },
+
+    {
         version: "Beta 0.2",
         date: "Outubro de 2026",
         changes: [
@@ -60,8 +81,7 @@ export default [
             "Cooperativo: o primeiro da fila agora é o host da sala (coroa ao lado do nome) — só ele pode tirar um jogador da fila pelo X e convidar pelo botão Convidar das vagas livres",
             "Cooperativo: convite por nome — o convidado recebe um aviso com o andar e quantas pessoas estão na sala e escolhe Sim ou Não (30 segundos pra responder). O convite avisa quando o nome não existe, o jogador está offline ou ainda não chegou ao nível 100",
             "Cooperativo: um jogador sair entre os andares não encerra mais a run — abre uma vaga, e o host pode convidar um substituto (que entra direto no andar seguinte) ou seguir com o squad que ficou. Se o host sair, o próximo da ordem assume",
-            "Cooperativo: a tela de confirmação entre andares ganhou o botão Sair do Cooperativo, e o host pode remover um jogador da sala pelo X ao lado do nome",
-            "Conta: recuperar a senha agora pede só o e-mail — o link de redefinição chega na sua caixa de entrada. A Palavra de Recuperação deixou de existir e não é mais pedida no cadastro"
+            "Cooperativo: a tela de confirmação entre andares ganhou o botão Sair do Cooperativo, e o host pode remover um jogador da sala pelo X ao lado do nome"
         ]
     }
 

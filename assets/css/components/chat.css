@@ -129,6 +129,16 @@
 .chat-name::after{
     content:":";
 }
+/* Nome reservado pra outra conta (ver ChatHUD.flagBorrowedName). */
+.chat-name.chat-name-borrowed{
+    color:#8f7a5a;
+    text-decoration:line-through;
+}
+.chat-borrowed-badge{
+    margin-left:4px;
+    color:#e06a6a;
+    text-decoration:none;
+}
 .chat-message.mine .chat-name{
     color:#f1c75c;
 }

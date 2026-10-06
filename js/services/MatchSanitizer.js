@@ -1,7 +1,7 @@
 /* ==========================================================
    LIMPEZA DO QUE VEM DE OUTROS JOGADORES
-   Fila, partida e convite (PVP e Cooperativo) são gravados no banco
-   pelo navegador de OUTRO jogador — nome, imagem, nível etc. podem vir
+   Fila, partida, convite (PVP e Cooperativo) e a entrada do ranking
+   são gravados no banco pelo navegador de OUTRO jogador — nome, imagem, nível etc. podem vir
    adulterados. As telas montam HTML com esses valores, então tudo que
    sai do banco passa por aqui ANTES de chegar nelas: texto perde os
    caracteres de HTML, imagem só vale se for um arquivo do próprio
@@ -21,7 +21,7 @@ const SAFE_KEY = /^[A-Za-z0-9_-]{1,80}$/;
 // Só imagem servida pelo próprio jogo.
 const SAFE_IMAGE = /^assets\/img\/[A-Za-z0-9_\-./]+\.(png|jpe?g|webp|gif)$/;
 
-const IMAGE_KEYS = new Set(["image", "hud", "icon"]);
+const IMAGE_KEYS = new Set(["image", "hud", "icon", "titleImage"]);
 
 // Campos que as telas e a simulação tratam como número.
 const NUMBER_KEYS = new Set([
@@ -67,6 +67,12 @@ export function sanitizeRemote(value, key = "", parentKey = "") {
 
     if (typeof value === "string") {
         return IMAGE_KEYS.has(key) ? sanitizeImage(value) : sanitizeText(value);
+    }
+
+    if (Array.isArray(value)) {
+        return value
+            .map(item => sanitizeRemote(item, key, parentKey))
+            .filter(item => item !== null);
     }
 
     if (typeof value === "object") {

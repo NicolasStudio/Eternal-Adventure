@@ -103,7 +103,7 @@ export default class ChatService {
         this.unsubscribers = [
             onChildAdded(messagesQuery, snapshot => {
 
-                const message = { id: snapshot.key, ...snapshot.val() };
+                const message = this.normalizeMessage(snapshot.key, snapshot.val());
 
                 this.messages.set(message.id, message);
 
@@ -124,6 +124,23 @@ export default class ChatService {
         ];
 
         this.cleanupExpired();
+
+    }
+
+    // Mensagem como veio do banco -> só os campos que o chat usa, cada
+    // um no tipo certo. O texto NÃO perde caractere nenhum: ele só entra
+    // na tela por textContent (ver ChatHUD.addMessage), nunca como HTML.
+    static normalizeMessage(id, raw) {
+
+        const data = raw && typeof raw === "object" ? raw : {};
+
+        return {
+            id,
+            uid: typeof data.uid === "string" ? data.uid : "",
+            name: String(data.name ?? "").slice(0, 30),
+            text: String(data.text ?? "").slice(0, MAX_LENGTH),
+            ts: typeof data.ts === "number" ? data.ts : null
+        };
 
     }
 
