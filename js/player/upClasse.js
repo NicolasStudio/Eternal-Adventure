@@ -46,7 +46,7 @@ const upClasse = {
             life: 80,
             attack: 85,
             armor: 0,
-            agility: 15,
+            agility: 23,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 15,

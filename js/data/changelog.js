@@ -14,7 +14,11 @@ export default [
             "Conta: se a nuvem tiver uma versão mais nova que a desta sessão, o save é recusado com um aviso em vez de substituir o progresso",
             "Transcendência: quem já venceu o Portal da Luz ou das Trevas recebe a diferença quando os valores do bônus mudam, em vez de ficar com os números antigos",
             "Slot extra: ao clicar no slot bloqueado, aparece o pagamento via Pix (R$ 5,00) com QR code e botão pra copiar o código. A liberação é manual: envie o comprovante com seu nick no WhatsApp",
-            "Slot extra: o pagamento ainda é manual e em fase de testes, então o valor é simbólico"
+            "Slot extra: o pagamento ainda é manual e em fase de testes, então o valor é simbólico",
+            "Pet Boitatá (5★): vida dos níveis 30 a 50 dobrada, +12 de dano entre os níveis 38 e 50, +7 de agilidade entre os níveis 18 e 50 e +6 de armadura entre os níveis 30 e 50",
+            "Pet Urso (4★): +16 de armadura, +2 de dano e +2 de agilidade ao longo da evolução",
+            "Pet Duende: perde toda a vida que ganhava na evolução, +4 de dano, −1 de armadura e +2 de agilidade ao longo da evolução",
+            "Pet Aranha: perde toda a vida que ganhava na evolução, +5 de dano e +5 de agilidade ao longo da evolução"
         ]
     },
 

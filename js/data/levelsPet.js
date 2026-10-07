@@ -23,7 +23,7 @@ export default {
 
     2: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
-        fairy: {life: 1, attack: 0, armor: 0, agility: 0},
+        fairy: {life: 0, attack: 0, armor: 0, agility: 0},
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 1, agility: 0},
         snake: {life: 1, attack: 1, armor: 0, agility: 1},
@@ -31,39 +31,39 @@ export default {
 
     4: {
         wolf: {life: 0, attack: 0, armor: 0, agility: 1},
-        fairy: {life: 1, attack: 0, armor: 0, agility: 0},
+        fairy: {life: 0, attack: 0, armor: 0, agility: 0},
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
-        bear: {life: 1, attack: 0, armor: 1, agility: 0},
+        bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 1, attack: 1, armor: 1, agility: 0},
     },
 
     6: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
         fairy: {life: 0, attack: 1, armor: 0, agility: 0},
-        spider: {life: 1, attack: 1, armor: 0, agility: 0},
+        spider: {life: 0, attack: 1, armor: 0, agility: 0},
         bear: {life: 1, attack: 0, armor: 1, agility: 0},
         snake: {life: 1, attack: 1, armor: 0, agility: 1},
     },
 
     8: {
         wolf: {life: 1, attack: 0, armor: 0, agility: 0},
-        fairy: {life: 1, attack: 0, armor: 0, agility: 0},
+        fairy: {life: 0, attack: 0, armor: 0, agility: 0},
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
-        bear: {life: 1, attack: 0, armor: 1, agility: 0},
+        bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 1, attack: 1, armor: 0, agility: 1},
     },
 
     10: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
         fairy: {life: 0, attack: 0, armor: 1, agility: 0},
-        spider: {life: 0, attack: 1, armor: 0, agility: 1},
-        bear: {life: 1, attack: 1, armor: 0, agility: 0},
+        spider: {life: 0, attack: 2, armor: 0, agility: 2},
+        bear: {life: 1, attack: 1, armor: 1, agility: 0},
         snake: {life: 1, attack: 0, armor: 1, agility: 1},
     },
 
     12: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
-        fairy: {life: 1, attack: 0, armor: 0, agility: 0},
+        fairy: {life: 0, attack: 0, armor: 0, agility: 0},
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 1, agility: 0},
         snake: {life: 1, attack: 1, armor: 0, agility: 1},
@@ -71,17 +71,17 @@ export default {
 
     14: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
-        fairy: {life: 1, attack: 0, armor: 0, agility: 0},
-        spider: {life: 1, attack: 0, armor: 0, agility: 1},
-        bear: {life: 1, attack: 0, armor: 1, agility: 0},
+        fairy: {life: 0, attack: 1, armor: 0, agility: 0},
+        spider: {life: 0, attack: 0, armor: 0, agility: 1},
+        bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 1, attack: 1, armor: 0, agility: 1},
     },
 
     16: {
         wolf: {life: 0, attack: 0, armor: 0, agility: 1},
-        fairy: {life: 1, attack: 0, armor: 0, agility: 0},
+        fairy: {life: 0, attack: 0, armor: 0, agility: 0},
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
-        bear: {life: 1, attack: 0, armor: 1, agility: 0},
+        bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 0, attack: 1, armor: 1, agility: 1},
     },
 
@@ -90,23 +90,23 @@ export default {
         fairy: {life: 0, attack: 1, armor: 0, agility: 0},
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 1, agility: 0},
-        snake: {life: 1, attack: 1, armor: 0, agility: 1},
+        snake: {life: 1, attack: 1, armor: 0, agility: 2},
     },
 
     20: {
         wolf: {life: 1, attack: 0, armor: 0, agility: 0},
-        fairy: {life: 1, attack: 0, armor: 0, agility: 0},
-        spider: {life: 0, attack: 1, armor: 0, agility: 1},
-        bear: {life: 1, attack: 0, armor: 1, agility: 0},
+        fairy: {life: 0, attack: 0, armor: 0, agility: 0},
+        spider: {life: 0, attack: 2, armor: 0, agility: 2},
+        bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 1, attack: 1, armor: 0, agility: 1},
     },
 
     22: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
-        fairy: {life: 1, attack: 0, armor: 0, agility: 0},
+        fairy: {life: 0, attack: 0, armor: 0, agility: 0},
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
-        bear: {life: 1, attack: 0, armor: 1, agility: 0},
-        snake: {life: 1, attack: 1, armor: 0, agility: 1},
+        bear: {life: 1, attack: 0, armor: 2, agility: 0},
+        snake: {life: 1, attack: 1, armor: 0, agility: 2},
     },
 
     24: {
@@ -119,15 +119,15 @@ export default {
 
     26: {
         wolf: {life: 0, attack: 0, armor: 0, agility: 1},
-        fairy: {life: 1, attack: 0, armor: 0, agility: 0},
-        spider: {life: 1, attack: 1, armor: 0, agility: 0},
-        bear: {life: 1, attack: 0, armor: 1, agility: 0},
-        snake: {life: 1, attack: 1, armor: 0, agility: 1},
+        fairy: {life: 0, attack: 1, armor: 0, agility: 1},
+        spider: {life: 0, attack: 1, armor: 0, agility: 0},
+        bear: {life: 1, attack: 1, armor: 2, agility: 1},
+        snake: {life: 1, attack: 1, armor: 0, agility: 2},
     },
 
     28: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
-        fairy: {life: 1, attack: 0, armor: 0, agility: 0},
+        fairy: {life: 0, attack: 0, armor: 0, agility: 0},
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 1, agility: 0},
         snake: {life: 1, attack: 1, armor: 0, agility: 1},
@@ -135,90 +135,90 @@ export default {
 
     30: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
-        fairy: {life: 1, attack: 0, armor: 0, agility: 0},
-        spider: {life: 0, attack: 1, armor: 0, agility: 1},
-        bear: {life: 1, attack: 1, armor: 0, agility: 0},
-        snake: {life: 1, attack: 0, armor: 1, agility: 1},
+        fairy: {life: 0, attack: 0, armor: 0, agility: 0},
+        spider: {life: 0, attack: 2, armor: 0, agility: 2},
+        bear: {life: 1, attack: 1, armor: 1, agility: 0},
+        snake: {life: 2, attack: 0, armor: 2, agility: 2},
     },
 
     32: {
         wolf: {life: 1, attack: 0, armor: 0, agility: 0},
         fairy: {life: 0, attack: 1, armor: 0, agility: 0},
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
-        bear: {life: 1, attack: 0, armor: 1, agility: 0},
-        snake: {life: 1, attack: 1, armor: 0, agility: 1},
+        bear: {life: 1, attack: 0, armor: 2, agility: 0},
+        snake: {life: 2, attack: 1, armor: 0, agility: 1},
     },
 
     34: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
-        fairy: {life: 1, attack: 0, armor: 0, agility: 0},
-        spider: {life: 1, attack: 0, armor: 0, agility: 1},
+        fairy: {life: 0, attack: 0, armor: 0, agility: 0},
+        spider: {life: 0, attack: 0, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 1, agility: 0},
-        snake: {life: 1, attack: 1, armor: 0, agility: 1},
+        snake: {life: 2, attack: 1, armor: 1, agility: 2},
     },
 
     36: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
-        fairy: {life: 0, attack: 0, armor: 1, agility: 0},
+        fairy: {life: 0, attack: 0, armor: 0, agility: 0},
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
-        bear: {life: 1, attack: 0, armor: 1, agility: 0},
+        bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 0, attack: 1, armor: 1, agility: 1},
     },
 
     38: {
         wolf: {life: 0, attack: 0, armor: 0, agility: 1},
-        fairy: {life: 1, attack: 0, armor: 0, agility: 0},
+        fairy: {life: 0, attack: 1, armor: 0, agility: 0},
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
-        bear: {life: 1, attack: 0, armor: 1, agility: 0},
-        snake: {life: 1, attack: 1, armor: 0, agility: 1},
+        bear: {life: 1, attack: 0, armor: 2, agility: 0},
+        snake: {life: 2, attack: 3, armor: 1, agility: 2},
     },
 
     40: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
-        fairy: {life: 1, attack: 0, armor: 0, agility: 0},
-        spider: {life: 0, attack: 1, armor: 0, agility: 1},
+        fairy: {life: 0, attack: 0, armor: 0, agility: 0},
+        spider: {life: 0, attack: 2, armor: 0, agility: 2},
         bear: {life: 1, attack: 0, armor: 1, agility: 0},
-        snake: {life: 1, attack: 1, armor: 0, agility: 1},
+        snake: {life: 2, attack: 3, armor: 0, agility: 1},
     },
 
     42: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
-        fairy: {life: 1, attack: 0, armor: 0, agility: 0},
+        fairy: {life: 0, attack: 0, armor: 0, agility: 0},
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
-        bear: {life: 1, attack: 0, armor: 1, agility: 0},
-        snake: {life: 1, attack: 1, armor: 0, agility: 1},
+        bear: {life: 1, attack: 0, armor: 2, agility: 0},
+        snake: {life: 2, attack: 3, armor: 1, agility: 2},
     },
 
     44: {
         wolf: {life: 0, attack: 0, armor: 0, agility: 1},
-        fairy: {life: 1, attack: 0, armor: 0, agility: 0},
+        fairy: {life: 0, attack: 0, armor: 0, agility: 0},
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
-        bear: {life: 1, attack: 0, armor: 1, agility: 0},
-        snake: {life: 1, attack: 1, armor: 1, agility: 0},
+        bear: {life: 1, attack: 0, armor: 2, agility: 0},
+        snake: {life: 2, attack: 3, armor: 1, agility: 0},
     },
 
     46: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
         fairy: {life: 0, attack: 1, armor: 0, agility: 0},
-        spider: {life: 1, attack: 1, armor: 0, agility: 0},
+        spider: {life: 0, attack: 1, armor: 0, agility: 0},
         bear: {life: 1, attack: 0, armor: 1, agility: 0},
-        snake: {life: 1, attack: 1, armor: 0, agility: 1},
+        snake: {life: 2, attack: 3, armor: 1, agility: 1},
     },
 
     48: {
         wolf: {life: 1, attack: 0, armor: 0, agility: 0},
-        fairy: {life: 1, attack: 0, armor: 0, agility: 0},
+        fairy: {life: 0, attack: 0, armor: 0, agility: 0},
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
-        bear: {life: 1, attack: 0, armor: 1, agility: 0},
-        snake: {life: 1, attack: 1, armor: 0, agility: 1},
+        bear: {life: 1, attack: 0, armor: 2, agility: 0},
+        snake: {life: 2, attack: 2, armor: 0, agility: 1},
     },
 
     50: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
-        fairy: {life: 0, attack: 0, armor: 1, agility: 0},
-        spider: {life: 0, attack: 1, armor: 0, agility: 1},
-        bear: {life: 1, attack: 1, armor: 0, agility: 0},
-        snake: {life: 1, attack: 0, armor: 1, agility: 1},
+        fairy: {life: 0, attack: 1, armor: 1, agility: 1},
+        spider: {life: 0, attack: 2, armor: 0, agility: 2},
+        bear: {life: 1, attack: 2, armor: 1, agility: 1},
+        snake: {life: 2, attack: 1, armor: 2, agility: 1},
     },
 
 };
