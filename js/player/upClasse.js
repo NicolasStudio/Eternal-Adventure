@@ -45,8 +45,8 @@ const upClasse = {
         states:{
             life: 80,
             attack: 85,
-            armor: 0,
-            agility: 23,
+            armor: 10,
+            agility: 25,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 15,
