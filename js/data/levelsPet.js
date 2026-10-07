@@ -11,7 +11,7 @@
    faixa (ver HARD_XP_* em PetService.js).
 
    Perfil: wolf=Dano(baixo) · fairy=Vida+pouco Armadura/Ataque ·
-   spider=Dano+Agilidade · bear=Vida+Armadura · snake=Vida+Dano+Agilidade
+   spider=Dano+Agilidade+pouca Vida · bear=Vida+Armadura · snake=Vida+Dano+Agilidade
 ========================================================== */
 
 export const PET_MAX_LEVEL = 50;
@@ -56,7 +56,7 @@ export default {
     10: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
         fairy: {life: 0, attack: 0, armor: 1, agility: 0},
-        spider: {life: 0, attack: 2, armor: 0, agility: 2},
+        spider: {life: 1, attack: 2, armor: 0, agility: 2},
         bear: {life: 1, attack: 1, armor: 1, agility: 0},
         snake: {life: 1, attack: 0, armor: 1, agility: 1},
     },
@@ -72,7 +72,7 @@ export default {
     14: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
         fairy: {life: 0, attack: 1, armor: 0, agility: 0},
-        spider: {life: 0, attack: 0, armor: 0, agility: 1},
+        spider: {life: 1, attack: 0, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 1, attack: 1, armor: 0, agility: 1},
     },
@@ -88,7 +88,7 @@ export default {
     18: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
         fairy: {life: 0, attack: 1, armor: 0, agility: 0},
-        spider: {life: 0, attack: 1, armor: 0, agility: 1},
+        spider: {life: 1, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 1, agility: 0},
         snake: {life: 1, attack: 1, armor: 0, agility: 2},
     },
@@ -104,7 +104,7 @@ export default {
     22: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
         fairy: {life: 0, attack: 0, armor: 0, agility: 0},
-        spider: {life: 0, attack: 1, armor: 0, agility: 1},
+        spider: {life: 1, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 1, attack: 1, armor: 0, agility: 2},
     },
@@ -120,7 +120,7 @@ export default {
     26: {
         wolf: {life: 0, attack: 0, armor: 0, agility: 1},
         fairy: {life: 0, attack: 1, armor: 0, agility: 1},
-        spider: {life: 0, attack: 1, armor: 0, agility: 0},
+        spider: {life: 1, attack: 1, armor: 0, agility: 0},
         bear: {life: 1, attack: 1, armor: 2, agility: 1},
         snake: {life: 1, attack: 1, armor: 0, agility: 2},
     },
@@ -136,7 +136,7 @@ export default {
     30: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
         fairy: {life: 0, attack: 0, armor: 0, agility: 0},
-        spider: {life: 0, attack: 2, armor: 0, agility: 2},
+        spider: {life: 1, attack: 2, armor: 0, agility: 2},
         bear: {life: 1, attack: 1, armor: 1, agility: 0},
         snake: {life: 2, attack: 0, armor: 2, agility: 2},
     },
@@ -152,7 +152,7 @@ export default {
     34: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
         fairy: {life: 0, attack: 0, armor: 0, agility: 0},
-        spider: {life: 0, attack: 0, armor: 0, agility: 1},
+        spider: {life: 1, attack: 0, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 1, agility: 0},
         snake: {life: 2, attack: 1, armor: 1, agility: 2},
     },
@@ -168,7 +168,7 @@ export default {
     38: {
         wolf: {life: 0, attack: 0, armor: 0, agility: 1},
         fairy: {life: 0, attack: 1, armor: 0, agility: 0},
-        spider: {life: 0, attack: 1, armor: 0, agility: 1},
+        spider: {life: 1, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 2, attack: 3, armor: 1, agility: 2},
     },
@@ -192,7 +192,7 @@ export default {
     44: {
         wolf: {life: 0, attack: 0, armor: 0, agility: 1},
         fairy: {life: 0, attack: 0, armor: 0, agility: 0},
-        spider: {life: 0, attack: 1, armor: 0, agility: 1},
+        spider: {life: 1, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 2, attack: 3, armor: 1, agility: 0},
     },
@@ -216,7 +216,7 @@ export default {
     50: {
         wolf: {life: 0, attack: 1, armor: 0, agility: 0},
         fairy: {life: 0, attack: 1, armor: 1, agility: 1},
-        spider: {life: 0, attack: 2, armor: 0, agility: 2},
+        spider: {life: 1, attack: 2, armor: 0, agility: 2},
         bear: {life: 1, attack: 2, armor: 1, agility: 1},
         snake: {life: 2, attack: 1, armor: 2, agility: 1},
     },

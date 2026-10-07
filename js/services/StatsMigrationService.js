@@ -9,6 +9,7 @@ import legacyLevels_v7 from "../data/legacyLevels_v7.js";
 import legacyLevels_v8 from "../data/legacyLevels_v8.js";
 import legacyLevels_v9 from "../data/legacyLevels_v9.js";
 import legacyLevels_v10 from "../data/legacyLevels_v10.js";
+import legacyLevels_v11 from "../data/legacyLevels_v11.js";
 import baseStatsL1 from "../data/baseStatsL1.js";
 
 // Sobe quando a curva de levels.js muda de um jeito que exige recalcular
@@ -22,8 +23,9 @@ import baseStatsL1 from "../data/baseStatsL1.js";
 // +3 Atq/+4 Def/+4 Agi (lv 70-100) + itens Místicos · v8 Pútrido +5 Def
 // (lv 78-83) · v9 Pútrido +12 Vida/+1 Atq/+1 Def (lv 44-65) · v10 Pútrido
 // +100 Vida (lv 50-100), Miasma passa a reduzir Armadura em PVE · v11
-// Pútrido +100 Vida/+40 Agilidade (curva inteira)
-export const CURRENT_BALANCE_VERSION = 11;
+// Pútrido +100 Vida/+40 Agilidade (curva inteira) · v12 Mago +300 Vida
+// (curva inteira)
+export const CURRENT_BALANCE_VERSION = 12;
 
 // miasmaChance/reflection entram aqui só pra não serem DESCARTADOS na
 // migração (a tabela de migração nunca tem esses campos, então sempre
@@ -43,7 +45,8 @@ const LEGACY_TABLES = {
     7: legacyLevels_v7,
     8: legacyLevels_v8,
     9: legacyLevels_v9,
-    10: legacyLevels_v10
+    10: legacyLevels_v10,
+    11: legacyLevels_v11
 };
 
 export default class StatsMigrationService {
@@ -86,11 +89,25 @@ export default class StatsMigrationService {
     // qualquer encantamento que ele já tivesse aplicado.
     static migrate(classId, level, savedBaseStats, savedMaxHP, fromVersion) {
 
-        const legacyTable = LEGACY_TABLES[fromVersion];
+        // Cada tabela só guarda a classe que mudou naquela versão, então
+        // a de fromVersion pode não ter esta classe. Nesse caso a curva
+        // dela ficou igual até a próxima tabela que a inclui — é essa a
+        // referência certa (ex: Mago salvo na v5 usa o snapshot da v11).
+        let legacyTable = null;
 
-        // Classe nova (ex: Bárbaro) ou versão sem tabela de referência
-        // guardada — não existiam saves antes dela, nada pra migrar.
-        if (!legacyTable || !legacyTable[2]?.[classId]) {
+        for (let version = fromVersion; version < CURRENT_BALANCE_VERSION; version++) {
+
+            if (LEGACY_TABLES[version]?.[2]?.[classId]) {
+
+                legacyTable = LEGACY_TABLES[version];
+                break;
+
+            }
+
+        }
+
+        // Classe que não mudou desde fromVersion — nada pra migrar.
+        if (!legacyTable) {
 
             return {
                 baseStats: savedBaseStats,

@@ -18,7 +18,9 @@ export default [
             "Pet Boitatá (5★): vida dos níveis 30 a 50 dobrada, +12 de dano entre os níveis 38 e 50, +7 de agilidade entre os níveis 18 e 50 e +6 de armadura entre os níveis 30 e 50",
             "Pet Urso (4★): +16 de armadura, +2 de dano e +2 de agilidade ao longo da evolução",
             "Pet Duende: perde toda a vida que ganhava na evolução, +4 de dano, −1 de armadura e +2 de agilidade ao longo da evolução",
-            "Pet Aranha: perde toda a vida que ganhava na evolução, +5 de dano e +5 de agilidade ao longo da evolução"
+            "Pet Aranha: perde toda a vida que ganhava na evolução, +5 de dano e +5 de agilidade ao longo da evolução",
+            "Pet Aranha: volta a ganhar vida na evolução — +120 de vida entre os níveis 10 e 50",
+            "Mago: +300 de vida ao longo dos níveis 1 a 100 — personagens já criados recebem a diferença ao carregar"
         ]
     },
 
