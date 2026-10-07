@@ -86,7 +86,6 @@
     display:flex;
     gap:8px;
     align-items:center;
-    overflow:hidden;
     max-width:800px;        /* folga grande o bastante pros 11 botões */
     opacity:1;
     transition:max-width .28s ease, opacity .2s ease;
@@ -95,6 +94,9 @@
 .hud-toolbar.collapsed .hud-toolbar-items{
     max-width:0;
     opacity:0;
+    overflow:hidden;        /* só corta quando está recolhida — aberta,
+                                overflow visível deixa o tooltip (::after
+                                dos botões) aparecer abaixo deles */
     pointer-events:none;    /* não dá pra clicar num botão escondido */
 }
 
