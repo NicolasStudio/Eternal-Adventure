@@ -246,18 +246,41 @@ export default class PvpView {
     }
 
     renderFoundTeam() {
-        const teamA = sortedTeam(this.matchData.teamA);
-        const teamB = sortedTeam(this.matchData.teamB);
+
+        // Usa os times JÁ resolvidos do ponto de vista do jogador
+        // (getMy/EnemyTeamCombatants dependem de myTeamKey, definido
+        // antes de entrar no estado "found") em vez de teamA/teamB crus
+        // — assim "Sua dupla" é sempre a sua, não a dupla "A" do banco.
+        const myTeam = this.getMyTeamCombatants();
+        const enemyTeam = this.getEnemyTeamCombatants();
+        const myId = PvpLobbyService.playerId;
+
+        const fighter = (c) => {
+            const isYou = c.id === myId;
+            const level = Math.floor(Number(c.level)) || 0;
+            return `
+                <div class="pvp-found-fighter${isYou ? " is-you" : ""}">
+                    <img class="pvp-found-avatar" src="${escapeHtml(c.hud ?? c.image ?? "")}" alt="">
+                    <div class="pvp-found-fighter-info">
+                        <span class="pvp-fighter-name">${escapeHtml(c.name)}${isYou ? ` <span class="pvp-found-you">(você)</span>` : ""}</span>
+                        ${level ? `<span class="pvp-found-level">LV ${level}</span>` : ""}
+                    </div>
+                </div>
+            `;
+        };
+
         return `
             <div class="pvp-found">
                 <h3 class="pvp-found-title">Partida Encontrada!</h3>
                 <div class="pvp-versus pvp-versus-team">
-                    <div class="pvp-team-column">
-                        ${teamA.map(c => `<span class="pvp-fighter-name">${escapeHtml(c.name)}</span>`).join("")}
+                    <div class="pvp-team-column pvp-team-mine">
+                        <span class="pvp-team-label">Sua dupla</span>
+                        ${myTeam.map(fighter).join("")}
                     </div>
                     <span class="pvp-vs">VS</span>
-                    <div class="pvp-team-column">
-                        ${teamB.map(c => `<span class="pvp-fighter-name">${escapeHtml(c.name)}</span>`).join("")}
+                    <div class="pvp-team-column pvp-team-enemy">
+                        <span class="pvp-team-label">Oponentes</span>
+                        ${enemyTeam.map(fighter).join("")}
                     </div>
                 </div>
             </div>
@@ -351,12 +374,16 @@ export default class PvpView {
     renderArenaHeader() {
 
         if (this.mode === "2v2") {
+            const myTeam = this.getMyTeamCombatants();
             const enemyTeam = this.getEnemyTeamCombatants();
-            const names = enemyTeam.map(c => escapeHtml(c.name)).join(" & ");
+            const myId = PvpLobbyService.playerId;
+            const label = (c) => escapeHtml(c.name) + (c.id === myId ? " (você)" : "");
+            const myNames = myTeam.map(label).join(" & ");
+            const enemyNames = enemyTeam.map(c => escapeHtml(c.name)).join(" & ");
             return `
                 <section class="pvp2v2-header-inline">
                     <h2 class="pvp2v2-title">Arena PVP · 2x2</h2>
-                    <span class="pvp2v2-subtitle">vs ${names}</span>
+                    <span class="pvp2v2-subtitle"><strong>${myNames}</strong> vs ${enemyNames}</span>
                 </section>
             `;
         }

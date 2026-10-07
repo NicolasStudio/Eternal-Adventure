@@ -279,6 +279,61 @@
     box-shadow:0 0 16px rgba(199,155,55,.3);
 }
 
+/* ===== Partida Encontrada 2x2: "Sua dupla" x "Oponentes" ===== */
+.pvp-team-label{
+    font-family:"Cinzel",serif;
+    font-size:.8rem;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:#8b7355;
+    text-align:center;
+    margin-bottom:2px;
+}
+.pvp-team-mine .pvp-team-label{ color:#7fd98d; }   /* verde = seu lado */
+.pvp-team-enemy .pvp-team-label{ color:#e0795a; }  /* laranja = inimigo */
+
+.pvp-found-fighter{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:6px 12px;
+    border:1px solid #5b4633;
+    border-radius:6px;
+    background:rgba(0,0,0,.2);
+}
+.pvp-found-fighter.is-you{
+    border-color:#7fd98d;
+    box-shadow:0 0 14px rgba(127,217,141,.25);
+}
+.pvp-found-avatar{
+    width:38px;
+    height:38px;
+    border-radius:6px;
+    object-fit:cover;
+    border:1px solid #5b4633;
+    flex-shrink:0;
+}
+.pvp-found-fighter-info{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:2px;
+}
+.pvp-found-fighter .pvp-fighter-name{
+    padding:0;
+    border:none;
+    border-radius:0;
+}
+.pvp-found-level{
+    font-family:"Cinzel",serif;
+    font-size:.72rem;
+    color:#8b7355;
+}
+.pvp-found-you{
+    color:#7fd98d;
+    font-size:.78rem;
+}
+
 /* ==========================================================
    2x2 — ARENA E CABEÇALHO ISOLADOS (não reaproveitam nada do
    combate PVE nem do PVP 1x1 — layout próprio, posicionado de
