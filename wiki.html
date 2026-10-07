@@ -538,7 +538,9 @@
                 <h2><i class="fa-solid fa-floppy-disk"></i> Salvar</h2>
                 <p class="wiki-intro">Eternal Adventure agora exige login — você cria uma conta (e-mail e senha) antes de jogar, e seu progresso fica salvo na nuvem, vinculado a essa conta, não mais preso a um navegador específico.</p>
                 <p>O botão de Salvar (na barra de ferramentas, durante o jogo) grava seu progresso no navegador <em>e</em> sincroniza com a sua conta na nuvem, na hora. O jogo também salva automaticamente em alguns momentos-chave (ao sair de uma dungeon, curar na enfermaria, melhorar um item), e esses momentos também sincronizam com a nuvem — não é mais preciso baixar nem guardar nenhum arquivo de backup.</p>
-                <p>Sua conta só pode estar aberta em um lugar por vez. Se você entrar numa aba ou dispositivo novo enquanto já está logado em outro, o jogo pergunta se quer desconectar a sessão anterior e continuar na nova — confirmando, a aba antiga se desconecta sozinha e avisa o motivo, sem risco de duas abas sobrescrevendo o progresso uma da outra.</p>
+                <p>Sua conta só pode estar aberta em um lugar por vez. Se você entrar numa aba ou dispositivo novo enquanto já está logado em outro, o jogo pergunta se quer desconectar a sessão anterior e continuar na nova — confirmando, a aba antiga se desconecta sozinha e avisa o motivo. Essa aba antiga não grava mais nada, e um save antigo nunca substitui um mais novo na nuvem: se isso acontecer, o jogo mostra um aviso e recusa a gravação.</p>
+                <p>Cada conta pode ter até dois personagens. O primeiro é grátis; o segundo fica bloqueado até ser liberado nesta conta. Em Continuar você escolhe com qual personagem jogar, ou cria o segundo quando ele estiver liberado. Novo Jogo usa o primeiro slot livre e só pede confirmação quando os dois estão ocupados.</p>
+                <p>Cartas e conquistas são da conta, então o que você descobre ou desbloqueia num personagem vale para o outro. Ouro, nível, equipamentos, inventário, pet, fazenda e talentos são de cada personagem.</p>
                 <p>Esqueceu a senha? Na tela de login, use "Esqueci a senha" e informe só o e-mail da conta: o link para criar uma nova senha chega na sua caixa de entrada. Por segurança, o jogo não informa se um e-mail tem cadastro ou não. Para sair da conta, use o botão nas Configurações; ao sair, o progresso local é salvo e os dados do navegador são limpos.</p>
 
             </section>
@@ -546,7 +548,7 @@
             <section id="carregar" class="wiki-section">
 
                 <h2><i class="fa-solid fa-folder-open"></i> Carregar</h2>
-                <p class="wiki-intro">O botão de Carregar busca o save mais recente salvo na sua conta e aplica na hora, sem precisar de arquivo nenhum.</p>
+                <p class="wiki-intro">O botão de Carregar busca o personagem que você estava jogando por último na sua conta e aplica na hora, sem precisar de arquivo nenhum. Carregar substitui o progresso atual desta sessão; a nuvem é atualizada no próximo salvamento.</p>
                 <p>Útil principalmente se você abriu o jogo em outro navegador ou computador com a mesma conta: em vez de continuar do zero, o Carregar traz de volta o progresso que está guardado na nuvem.</p>
 
             </section>
@@ -554,7 +556,7 @@
             <section id="ranking" class="wiki-section">
 
                 <h2><i class="fa-solid fa-ranking-star"></i> Ranking</h2>
-                <p class="wiki-intro">Acessível pelo ícone correspondente na barra de ferramentas. Mostra os <strong>10 jogadores com maior <a href="#poder">Poder</a></strong> entre todas as contas do jogo, do maior pro menor, com Nome, Nível, Classe e Poder de cada um.</p>
+                <p class="wiki-intro">Acessível pelo ícone correspondente na barra de ferramentas. Mostra os <strong>10 personagens com maior <a href="#poder">Poder</a></strong> entre todos os jogadores, do maior pro menor, com Nome, Nível, Classe e Poder de cada um. Cada personagem aparece separado: uma conta com dois personagens no topo ocupa duas posições.</p>
                 <p>A lista é atualizada sempre que você salva (manual ou automaticamente) — não fica em tempo real enquanto está aberta, então feche e abra de novo pra ver uma posição atualizada.</p>
                 <p>Clicando na lupa ao lado da posição de qualquer jogador, um segundo modal mostra os equipamentos e o status dele no momento do último save — a mesma tela vale pro seu próprio personagem. Quem ainda não salvou depois dessa atualização aparece com a lupa apagada, e o modal explica que os dados ainda não foram publicados.</p>
 

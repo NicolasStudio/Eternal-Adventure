@@ -8,6 +8,57 @@ import Toast from "../Toast.js";
 // liberar o slot sozinho), então o botão Comprar só avisa por enquanto.
 const EXTRA_SLOT_PRICE = "R$ 5,00";
 
+// Pagamento manual (por enquanto): o jogador copia o Pix, transfere e manda o
+// comprovante com o nick no WhatsApp. Quem libera o slot é você, em
+// entitlements/{uid} no Firestore.
+const PIX_COPIA_E_COLA = "00020101021126580014br.gov.bcb.pix013697db79d0-23c1-485f-b1f9-52286f3c28a652040000530398654045.005802BR5918NICOLAS DE A SOUSA6013FRANCISCO MOR62070503***630437C3";
+
+// Biblioteca de QR code guardada no projeto (a CSP só deixa script do próprio
+// site, então não dá pra carregar de um CDN).
+const QR_LIBRARY_SRC = "assets/js/vendor/qrcode.js";
+
+// Copia um texto. Tenta a API moderna; se o navegador negar, usa um campo
+// temporário escondido (funciona em contexto sem HTTPS, por exemplo).
+async function copyText(text) {
+
+    try {
+        await navigator.clipboard.writeText(text);
+        return true;
+    } catch {
+        // cai no método antigo abaixo
+    }
+
+    const helper = document.createElement("textarea");
+    helper.value = text;
+    helper.setAttribute("readonly", "");
+    helper.style.position = "fixed";
+    helper.style.opacity = "0";
+    document.body.appendChild(helper);
+    helper.select();
+
+    const copied = document.execCommand("copy");
+
+    helper.remove();
+
+    return copied;
+
+}
+
+function loadQrLibrary() {
+
+    if (typeof window.qrcode === "function") return Promise.resolve();
+
+    return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = QR_LIBRARY_SRC;
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error("Falha ao carregar a biblioteca de QR code."));
+        document.head.appendChild(script);
+    });
+
+}
+const PIX_MENSAGEM = "O serviço de pagamento ainda funciona de forma manual e está sendo liberado para testes, para identificar o comportamento dos usuários e do sistema. Por isso, o valor cobrado é simbólico, apenas como um incentivo. Após realizar a transferência, encaminhe o comprovante junto com seu nick para o nosso WhatsApp: 11941377733, e aguarde alguns instantes.";
+
 // O nome vem do save — nunca pode entrar como HTML.
 function escapeHtml(text) {
     return String(text ?? "").replace(/[&<>"']/g, char => (
@@ -139,6 +190,28 @@ export default class CharacterSelectModal {
 
     }
 
+    // Desenha o QR do código Pix na imagem do painel. Se a biblioteca não
+    // carregar, o painel continua funcionando com o copia e cola.
+    async renderPixQr(purchase) {
+
+        try {
+
+            await loadQrLibrary();
+
+            const qr = window.qrcode(0, "M");
+            qr.addData(PIX_COPIA_E_COLA);
+            qr.make();
+
+            const image = purchase.querySelector(".character-slot-pix-qr");
+            image.src = qr.createDataURL(6, 4);
+            image.hidden = false;
+
+        } catch (err) {
+            console.warn("Não foi possível gerar o QR code do Pix:", err);
+        }
+
+    }
+
     showPurchase() {
 
         const purchase = document.createElement("div");
@@ -151,18 +224,27 @@ export default class CharacterSelectModal {
                     Os personagens atuais continuam salvos.
                 </p>
                 <strong class="character-slot-price">${EXTRA_SLOT_PRICE}</strong>
+                <img class="character-slot-pix-qr" alt="QR Code Pix" hidden>
+                <p class="character-slot-pix-message">${escapeHtml(PIX_MENSAGEM)}</p>
                 <div class="home-confirm-actions">
                     <button class="home-confirm-no">Voltar</button>
-                    <button class="character-slot-buy">Comprar</button>
+                    <button class="character-slot-copy">Copiar código Pix</button>
                 </div>
             </div>
         `;
 
         document.body.appendChild(purchase);
 
+        this.renderPixQr(purchase);
+
         purchase.querySelector(".home-confirm-no").addEventListener("click", () => purchase.remove());
-        purchase.querySelector(".character-slot-buy").addEventListener("click", () => {
-            Toast.show("A compra de slots ainda não está disponível.");
+
+        purchase.querySelector(".character-slot-copy").addEventListener("click", async () => {
+
+            const copied = await copyText(PIX_COPIA_E_COLA);
+
+            Toast.show(copied ? "Código Pix copiado." : "Não foi possível copiar o código Pix.");
+
         });
 
         this.purchase = purchase;

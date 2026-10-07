@@ -11,7 +11,10 @@ export default [
             "Tela Continuar: mostra os personagens da conta e permite criar o segundo quando ele estiver liberado",
             "Novo Jogo: usa o primeiro slot livre; só pede confirmação quando todos estão ocupados",
             "Conta: uma sessão antiga (aba ou aparelho que perdeu a conta) não sobrescreve mais o progresso da sessão nova na nuvem",
-            "Conta: se a nuvem tiver uma versão mais nova que a desta sessão, o save é recusado com um aviso em vez de substituir o progresso"
+            "Conta: se a nuvem tiver uma versão mais nova que a desta sessão, o save é recusado com um aviso em vez de substituir o progresso",
+            "Transcendência: quem já venceu o Portal da Luz ou das Trevas recebe a diferença quando os valores do bônus mudam, em vez de ficar com os números antigos",
+            "Slot extra: ao clicar no slot bloqueado, aparece o pagamento via Pix (R$ 5,00) com QR code e botão pra copiar o código. A liberação é manual: envie o comprovante com seu nick no WhatsApp",
+            "Slot extra: o pagamento ainda é manual e em fase de testes, então o valor é simbólico"
         ]
     },
 
