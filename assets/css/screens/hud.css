@@ -21,6 +21,11 @@
     position:relative;
     flex-shrink:0;
     z-index:10;
+    overflow-x:clip;      /* a toolbar à direita nunca gera scroll
+                             horizontal — nem no estado recolhido, onde
+                             a animação de largura chegava a estourar
+                             1-2px além da viewport */
+    min-width:0;
 }
 /* ===========================
    Exploração
@@ -65,6 +70,40 @@
     z-index:100000;
     pointer-events:auto;
     margin-right: 10px;
+    align-items:center;
+    transition:padding .28s ease, gap .28s ease;
+}
+
+/* ----------------------------------------------------------
+   Toolbar retrátil
+
+   O grupo .hud-toolbar-items guarda todos os atalhos; só o botão
+   de menu (.hud-tool-toggle) fica sempre visível. Quando a toolbar
+   tem a classe .collapsed o grupo encolhe pra largura 0 e some, com
+   uma transição suave — nada é removido do DOM, só escondido.
+---------------------------------------------------------- */
+.hud-toolbar-items{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    overflow:hidden;
+    max-width:800px;        /* folga grande o bastante pros 11 botões */
+    opacity:1;
+    transition:max-width .28s ease, opacity .2s ease;
+}
+
+.hud-toolbar.collapsed .hud-toolbar-items{
+    max-width:0;
+    opacity:0;
+    pointer-events:none;    /* não dá pra clicar num botão escondido */
+}
+
+/* Recolhida: a caixa encosta no botão da seta (sem o padding/gap
+   lateral que deixava um retângulo largo com a seta perdida no meio),
+   ficando compacta e quadrada em volta do único botão visível. */
+.hud-toolbar.collapsed{
+    padding:0;
+    gap:0;
 }
 
 /* ==========================================================
