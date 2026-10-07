@@ -54,17 +54,19 @@ export default class HomeScreen {
             .querySelector("#btn-new-game")
             .addEventListener("click", async () => {
 
-                const confirmed = await this.confirmNewGame();
+                // Usa um slot livre sem perguntar nada. Só pergunta se todos
+                // estiverem ocupados, porque aí o personagem ativo é sobrescrito.
+                const freeSlot = SaveService.pickNewSlot();
 
-                if (!confirmed) return;
+                if (!freeSlot) {
 
-                const name = await this.nameEntryModal.show();
+                    const confirmed = await this.confirmNewGame();
 
-                if (!name) return;
+                    if (!confirmed) return;
 
-                this.game.pendingPlayerName = name;
+                }
 
-                this.game.showScreen("class");
+                await this.startNewCharacter(freeSlot ?? SaveService.activeSlot);
 
             });
 
@@ -80,17 +82,24 @@ export default class HomeScreen {
             .querySelector("#btn-continue")
             ?.addEventListener("click", async () => {
 
-                const data = SaveService.loadFromLocalStorage();
+                const container = SaveService.loadFromLocalStorage();
 
-                if (!data || !SaveService.isValidSave(data)) return;
+                if (!container) return;
 
-                // Mostra o personagem da conta (e o slot bloqueado) antes
-                // de entrar — só carrega se o jogador escolher jogar.
-                const play = await this.characterSelectModal.show(data);
+                SaveService.useContainer(container);
 
-                if (!play) return;
+                // Mostra os personagens da conta (e os slots bloqueados) antes
+                // de entrar — só carrega se o jogador escolher um deles.
+                const choice = await this.characterSelectModal.show(container, SaveService.maxSlots);
 
-                SaveService.applyLoadedData(this.game, data);
+                if (!choice) return;
+
+                if (choice.create) {
+                    await this.startNewCharacter(choice.create);
+                    return;
+                }
+
+                SaveService.applyLoadedData(this.game, choice.slot);
 
             });
 
@@ -104,9 +113,22 @@ export default class HomeScreen {
 
     }
 
-    // "Novo Jogo" sobrepõe o save da conta (só existe um por conta) —
-    // confirma antes de deixar seguir pro nome/classe, pra não perder
-    // progresso por engano.
+    // Pede o nome e segue pra escolha de classe, já no slot de destino.
+    async startNewCharacter(slot) {
+
+        const name = await this.nameEntryModal.show();
+
+        if (!name) return;
+
+        this.game.pendingPlayerName = name;
+        this.game.pendingSlot = slot;
+
+        this.game.showScreen("class");
+
+    }
+
+    // Todos os slots estão ocupados: criar um personagem sobrescreve o ativo,
+    // então confirma antes de deixar seguir, pra não perder progresso por engano.
     confirmNewGame() {
 
         return new Promise(resolve => {
@@ -115,7 +137,7 @@ export default class HomeScreen {
             overlay.className = "home-confirm-overlay";
             overlay.innerHTML = `
                 <div class="home-confirm-modal">
-                    <p>Ao criar um novo jogo, os dados salvos serão sobrepostos/perdidos. Tem certeza?</p>
+                    <p>Todos os seus personagens estão em uso. Criar um novo sobrescreve o personagem atual. Tem certeza?</p>
                     <div class="home-confirm-actions">
                         <button class="home-confirm-yes" id="home-confirm-yes">Sim</button>
                         <button class="home-confirm-no" id="home-confirm-no">Não</button>
@@ -142,6 +164,9 @@ export default class HomeScreen {
         // cada vez que a Home aparece, não só quando ela foi montada.
         const continueButton = this.element.querySelector("#btn-continue");
         if (continueButton) continueButton.disabled = !SaveService.hasLocalSave();
+
+        // Garante a conta em memória (Home aberta sem passar pelo login).
+        SaveService.useContainer(SaveService.container ?? SaveService.loadFromLocalStorage());
         this.element.classList.remove("hidden");
         MusicService.play("home");
     }

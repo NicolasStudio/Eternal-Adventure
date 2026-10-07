@@ -55,10 +55,10 @@ export default class LoadGameModal {
             return;
         }
 
-        const data = await SaveService.loadFromCloud(user.uid);
+        const container = await SaveService.loadFromCloud(user.uid);
 
-        if (data && SaveService.isValidSave(data)) {
-            this.cloudData = data;
+        if (container && SaveService.hasCharacter(container, container.activeSlot)) {
+            this.cloudData = container;
             this.status = "found";
         } else {
             this.status = "empty";
@@ -144,7 +144,8 @@ export default class LoadGameModal {
 
         if (!this.cloudData) return;
 
-        SaveService.applyLoadedData(this.game, this.cloudData);
+        SaveService.useContainer(this.cloudData);
+        SaveService.applyLoadedData(this.game, this.cloudData.activeSlot);
 
         this.hide();
 

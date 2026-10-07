@@ -1,12 +1,28 @@
 export default [
 
     {
+        version: "Beta 0.2.2 — Personagens",
+        date: "Outubro de 2026",
+        changes: [
+            "Conta com até dois personagens: o primeiro é grátis e o segundo fica bloqueado até ser liberado nesta conta",
+            "Cartas e conquistas são da conta: o que você descobre ou desbloqueia num personagem vale pros outros também",
+            "Ouro, nível, equipamento, inventário, pet, fazenda e talentos são de cada personagem",
+            "Ranking: cada personagem aparece separado, com o próprio Poder",
+            "Tela Continuar: mostra os personagens da conta e permite criar o segundo quando ele estiver liberado",
+            "Novo Jogo: usa o primeiro slot livre; só pede confirmação quando todos estão ocupados",
+            "Conta: uma sessão antiga (aba ou aparelho que perdeu a conta) não sobrescreve mais o progresso da sessão nova na nuvem",
+            "Conta: se a nuvem tiver uma versão mais nova que a desta sessão, o save é recusado com um aviso em vez de substituir o progresso"
+        ]
+    },
+
+    {
         version: "Beta 0.2.1 — Segurança",
         date: "Outubro de 2026",
         changes: [
             "Conta: recuperar a senha agora pede só o e-mail — o link de redefinição chega na sua caixa de entrada. A Palavra de Recuperação deixou de existir e não é mais pedida no cadastro",
             "Conta: os dados antigos de recuperação (data de nascimento, telefone e Palavra de Recuperação) foram apagados do servidor — ficavam acessíveis a quem soubesse o e-mail da conta",
             "Conta: a tela de recuperar senha não revela mais se um e-mail tem cadastro no jogo",
+            "Conta: o cadastro não pede mais telefone nem data de nascimento — o jogo só guarda e-mail e nome. Os dados antigos dessas contas são apagados no próximo login",
             "PVP e Cooperativo: corrigida uma falha que permitia a um jogador mal-intencionado executar código na tela de quem fosse pareado com ele, usando o nome do personagem — nome, imagem, nível e atributos de outros jogadores agora são filtrados antes de aparecer",
             "Ranking: o mesmo filtro passou a valer para o ranking e para o perfil dos jogadores (lupa)",
             "Chat: mensagens enviadas com o nome de outro jogador aparecem riscadas e com um aviso ao lado do nome",

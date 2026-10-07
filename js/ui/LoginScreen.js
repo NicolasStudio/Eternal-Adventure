@@ -17,10 +17,6 @@ const AUTH_ERROR_MESSAGES = {
     "auth/too-many-requests": "Muitas tentativas. Tente novamente em instantes."
 };
 
-function digitsOnly(value) {
-    return value.replace(/\D/g, "");
-}
-
 export default class LoginScreen {
 
     constructor(game) {
@@ -101,8 +97,6 @@ export default class LoginScreen {
             <h2 class="login-subtitle">Criar conta</h2>
             <input type="email" class="name-entry-input signup-email" placeholder="E-mail" autocomplete="username">
             <input type="text" class="name-entry-input signup-fullname" placeholder="Nome completo" autocomplete="name">
-            <input type="tel" class="name-entry-input signup-phone" placeholder="Telefone" autocomplete="tel">
-            <input type="date" class="name-entry-input signup-birthdate" autocomplete="bday">
             <input type="password" class="name-entry-input signup-password" placeholder="Senha" autocomplete="new-password">
             <input type="password" class="name-entry-input signup-password-confirm" placeholder="Repetir Senha" autocomplete="new-password">
             ${showMigration ? `
@@ -195,14 +189,10 @@ export default class LoginScreen {
 
     }
 
-    validateSignup({ email, fullName, phone, birthDate, password, passwordConfirm }) {
+    validateSignup({ email, fullName, password, passwordConfirm }) {
 
         if (!EMAIL_REGEX.test(email)) return "E-mail inválido.";
         if (!NAME_REGEX.test(fullName)) return "Você precisa informar Nome e Sobrenome, somente letras.";
-        if (digitsOnly(phone).length < 10 || digitsOnly(phone).length > 11) return "Telefone inválido.";
-
-        if (!birthDate) return "Informe sua data de nascimento.";
-        if (new Date(birthDate) > new Date()) return "Data de nascimento inválida.";
 
         if (password.length < MIN_PASSWORD_LENGTH) return "Senha tem que ter mais de 5 caracteres.";
         if (password !== passwordConfirm) return "As senhas não são iguais.";
@@ -218,8 +208,6 @@ export default class LoginScreen {
         const fields = {
             email: this.element.querySelector(".signup-email").value.trim(),
             fullName: this.element.querySelector(".signup-fullname").value.trim(),
-            phone: this.element.querySelector(".signup-phone").value.trim(),
-            birthDate: this.element.querySelector(".signup-birthdate").value,
             password: this.element.querySelector(".signup-password").value,
             passwordConfirm: this.element.querySelector(".signup-password-confirm").value
         };
@@ -245,8 +233,11 @@ export default class LoginScreen {
 
                 await SaveService.saveToCloud(user.uid, localSave);
 
-                if (localSave.name) {
-                    await SaveService.reserveCharacterName(localSave.name, user.uid);
+                // Cada personagem local reserva o próprio nome na conta nova.
+                for (const character of Object.values(localSave.slots ?? {})) {
+                    if (character?.name) {
+                        await SaveService.reserveCharacterName(character.name, user.uid);
+                    }
                 }
 
                 await this.game.enterWithAccount(user);

@@ -2,6 +2,7 @@ import {
     db, ref, set, update, remove, onValue, off, onDisconnect,
     get, runTransaction, serverTimestamp
 } from "./FirebaseService.js";
+import AuthService from "./AuthService.js";
 import monstersRaid from "../data/monstersRaid.js";
 import { sanitizeRemote } from "./MatchSanitizer.js";
 
@@ -34,9 +35,6 @@ export default class RaidLobbyService {
     static staleClaimTimer = null;
     static cancelFloorWait = null;
 
-    static generateId() {
-        return "p_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
-    }
 
     static lobbyPath() {
         return "pvpLobby/raid";
@@ -84,7 +82,9 @@ export default class RaidLobbyService {
             await this.leaveQueue();
         }
 
-        this.playerId = this.generateId();
+        const uid = AuthService.getCurrentUser()?.uid;
+        if (!uid) throw new Error("Entre na sua conta pra jogar.");
+        this.playerId = uid;
 
         const selfRef = ref(db, `${this.lobbyPath()}/${this.playerId}`);
 
@@ -104,9 +104,10 @@ export default class RaidLobbyService {
 
             // Meu nó sumiu sem eu ter saído (leaveQueue para de escutar
             // ANTES de apagar) — foi o host que me removeu da fila.
-            if (!data) {
+            if (!data || data.kicked) {
                 this.stopListening();
                 this.playerId = null;
+                await remove(selfRef);
                 onKicked?.();
                 return;
             }
@@ -200,19 +201,11 @@ export default class RaidLobbyService {
 
         for (const candidateId of candidateIds) {
 
-            const candidateRef = ref(db, `${this.lobbyPath()}/${candidateId}`);
-
-            const claimResult = await runTransaction(candidateRef, (current) => {
-
-                if (!current || current.matchedWith || current.claimedBy) {
-                    return;
-                }
-
-                current.claimedBy = this.playerId;
-
-                return current;
-
-            });
+            // Só o campo claimedBy: se já houver reivindicação, a transação aborta.
+            const claimResult = await runTransaction(
+                ref(db, `${this.lobbyPath()}/${candidateId}/claimedBy`),
+                (current) => current ? undefined : this.playerId
+            );
 
             if (!claimResult.committed) {
 
@@ -268,6 +261,7 @@ export default class RaidLobbyService {
         const updates = {
             [`${this.matchesPath()}/${matchId}`]: {
                 squad,
+                players: Object.fromEntries(allIds.map(id => [id, true])),
                 bossId,
                 seed,
                 floor: 1,
@@ -292,13 +286,12 @@ export default class RaidLobbyService {
 
         if (!targetId || targetId === this.playerId) return;
 
-        await runTransaction(ref(db, `${this.lobbyPath()}/${targetId}`), (current) => {
+        const snapshot = await get(ref(db, `${this.lobbyPath()}/${targetId}`));
+        const current = snapshot.val();
 
-            if (!current || current.matchedWith) return;
+        if (!current || current.matchedWith) return;
 
-            return null;
-
-        });
+        await set(ref(db, `${this.lobbyPath()}/${targetId}/kicked`), true);
 
     }
 
@@ -463,8 +456,19 @@ export default class RaidLobbyService {
             await this.leaveQueue();
         }
 
-        const playerId = this.generateId();
+        const playerId = AuthService.getCurrentUser()?.uid;
+        if (!playerId) return { ok: false, reason: "missing" };
+
         const matchRef = ref(db, `${this.matchesPath()}/${matchId}`);
+        const playerPath = ref(db, `${this.matchesPath()}/${matchId}/players/${playerId}`);
+
+        // As regras só deixam escrever na partida quem já é participante,
+        // então entro em players antes da transação.
+        try {
+            await set(playerPath, true);
+        } catch {
+            return { ok: false, reason: "missing" };
+        }
 
         let failure = null;
 
@@ -499,6 +503,7 @@ export default class RaidLobbyService {
         });
 
         if (failure || !result.committed) {
+            await remove(playerPath);
             return { ok: false, reason: failure ?? "missing" };
         }
 

@@ -18,13 +18,19 @@ import PowerService from "./PowerService.js";
 import { PET_MAX_LEVEL } from "../data/levelsPet.js";
 import cards from "../data/cards.js";
 import { sanitizeRemote, sanitizeText } from "./MatchSanitizer.js";
-import { firestore, doc, getDoc, setDoc, collection, query, orderBy, limit, getDocs } from "./FirebaseService.js";
+import { firestore, doc, getDoc, getDocs, setDoc, deleteDoc, runFirestoreTransaction, collection, query, orderBy, limit } from "./FirebaseService.js";
 
 const STORAGE_KEY = "eternal-adventure-save";
+// Formato de UM personagem (ver serialize). A conta inteira usa CONTAINER_VERSION.
 const SAVE_VERSION = 1;
+const CONTAINER_VERSION = 2;
 const SAVES_COLLECTION = "saves";
 const CHARACTER_NAMES_COLLECTION = "characterNames";
 const LEADERBOARD_COLLECTION = "leaderboard";
+const ENTITLEMENTS_COLLECTION = "entitlements";
+
+// Quantos personagens uma conta pode ter: 1 grátis + 1 pago (ver entitlements).
+export const MAX_SLOTS = 2;
 
 // Todo item de equipamento conhecido, indexado por id — usado só pra
 // "refrescar" itens salvos (ver refreshItemStats), nunca alterado.
@@ -48,6 +54,20 @@ const MAX_HP = 1e6;
 export default class SaveService {
 
     static nameOwnerCache = new Map();
+
+    // Conta inteira nesta aba (ver normalizeContainer).
+    static container = null;
+    // Personagem em jogo nesta aba (1 ou 2).
+    static activeSlot = 1;
+    // Quantos personagens a conta pode ter agora (ver loadMaxSlots).
+    static maxSlots = 1;
+    // "savedAt" da versão da nuvem que ESTA sessão leu ou gravou por último.
+    // Se a nuvem tiver algo mais novo, quem está gravando é uma sessão
+    // antiga e não pode sobrescrever (ver saveToCloud).
+    static cloudStamp = null;
+    // Gravações na nuvem andam uma por vez, pra uma não ser comparada
+    // com a outra antes de terminar.
+    static cloudQueue = Promise.resolve();
 
     /* =====================================================
        SERIALIZAÇÃO (Player -> objeto puro, pronto pra JSON)
@@ -300,6 +320,9 @@ export default class SaveService {
 
         }
 
+        // Ajusta a transcendência ao upClasse.js atual (só a diferença).
+        player.syncTranscendenceStats();
+
         player.chest = data.chest ?? player.chest;
         player.album = data.album ?? [];
         player.farm = data.farm ?? player.farm;
@@ -476,28 +499,261 @@ export default class SaveService {
     }
 
     /* =====================================================
+       CONTA (vários personagens)
+       Formato da nuvem e do localStorage:
+         { version: 2, savedAt, activeSlot,
+           account: { album, achievements, stats },   // da conta
+           slots: { "1": personagem, "2": personagem } }
+       Cartas, conquistas e contadores são da CONTA. Ouro, nível,
+       inventário, equipamento, pet, fazenda etc. são de cada personagem.
+       Dentro do jogo o Player continua no formato plano de sempre
+       (serialize/deserialize) — quem separa e junta é este bloco.
+    ===================================================== */
+
+    static emptyAccount() {
+        return { album: [], achievements: [], stats: {} };
+    }
+
+    static emptyContainer() {
+        return {
+            version: CONTAINER_VERSION,
+            savedAt: Date.now(),
+            activeSlot: 1,
+            account: this.emptyAccount(),
+            slots: {}
+        };
+    }
+
+    // Aceita o formato novo e o antigo (um personagem só, na raiz).
+    static normalizeContainer(raw) {
+
+        if (!raw || typeof raw !== "object") return null;
+
+        if (raw.version === CONTAINER_VERSION && raw.slots && typeof raw.slots === "object") {
+            return {
+                version: CONTAINER_VERSION,
+                savedAt: raw.savedAt ?? Date.now(),
+                activeSlot: Number(raw.activeSlot) || 1,
+                account: { ...this.emptyAccount(), ...raw.account },
+                slots: { ...raw.slots }
+            };
+        }
+
+        if (!raw.classId) return null;
+
+        // Save antigo: o personagem é o próprio arquivo, cartas e conquistas
+        // dentro dele. Vira a conta com o personagem no slot 1.
+        const { account, character } = this.splitCharacter(raw);
+        const container = this.emptyContainer();
+
+        container.savedAt = raw.savedAt ?? Date.now();
+        container.account = account;
+        container.slots["1"] = character;
+
+        return container;
+
+    }
+
+    // Separa um personagem (formato plano do serialize) entre o que é da
+    // conta e o que é dele.
+    static splitCharacter(flat) {
+
+        const { album, progress = {}, ...rest } = flat;
+        const { achievements, stats = {}, ...progressRest } = progress;
+        const { wolfEggGranted, ...accountStats } = stats;
+
+        return {
+            account: {
+                album: Array.isArray(album) ? [...album] : [],
+                achievements: Array.isArray(achievements) ? [...achievements] : [],
+                stats: accountStats
+            },
+            character: {
+                ...rest,
+                // O Ovo de Lobo é do personagem: cada um ganha o seu no nível 30.
+                wolfEggGranted: wolfEggGranted === true,
+                progress: progressRest
+            }
+        };
+
+    }
+
+    // Monta o formato plano que o deserialize() já entende, a partir de
+    // um personagem da conta, com cartas e conquistas vindas da conta.
+    static flatCharacter(container, slot) {
+
+        const character = container?.slots?.[slot];
+
+        if (!character) return null;
+
+        const { wolfEggGranted, progress = {}, ...rest } = character;
+
+        return {
+            ...rest,
+            album: [...(container.account?.album ?? [])],
+            progress: {
+                ...progress,
+                achievements: [...(container.account?.achievements ?? [])],
+                stats: {
+                    ...(container.account?.stats ?? {}),
+                    wolfEggGranted: wolfEggGranted === true
+                }
+            }
+        };
+
+    }
+
+    static hasCharacter(container, slot) {
+        return this.isValidSave(this.flatCharacter(container, slot));
+    }
+
+    // Primeiro slot livre dentro do limite da conta, ou null se está cheio.
+    static pickNewSlot(container = this.container) {
+
+        for (let slot = 1; slot <= this.maxSlots; slot++) {
+            if (!this.hasCharacter(container, slot)) return slot;
+        }
+
+        return null;
+
+    }
+
+    static useContainer(container) {
+        this.container = container ?? null;
+    }
+
+    // Personagem recém-criado recebe as cartas e conquistas da conta, senão
+    // o próximo save zeraria o que a conta já tinha.
+    static attachAccount(player) {
+
+        const account = this.container?.account ?? this.emptyAccount();
+
+        player.album = [...account.album];
+        player.progress.achievements = [...account.achievements];
+        player.progress.stats = { ...player.progress.stats, ...account.stats };
+
+        return player;
+
+    }
+
+    // Grava o personagem atual no slot ativo e devolve a conta inteira.
+    static commit(player) {
+
+        const { account, character } = this.splitCharacter(this.serialize(player));
+        const container = this.container ?? this.emptyContainer();
+
+        container.account = account;
+        container.slots[this.activeSlot] = character;
+        container.activeSlot = this.activeSlot;
+        container.savedAt = Date.now();
+
+        this.container = container;
+
+        return container;
+
+    }
+
+    // Quantos personagens a conta pode ter: 1 + slots extras liberados em
+    // entitlements/{uid}. Só o servidor (ou você, no console) escreve esse
+    // documento — ver firestore.rules.
+    static async loadMaxSlots(uid) {
+
+        try {
+
+            const snapshot = await getDoc(doc(firestore, ENTITLEMENTS_COLLECTION, uid));
+            const extra = snapshot.exists() ? Number(snapshot.data().extraSlots) : 0;
+
+            this.maxSlots = Math.min(MAX_SLOTS, 1 + Math.max(0, Number.isFinite(extra) ? extra : 0));
+
+        } catch (err) {
+
+            console.warn("Falha ao checar os slots da conta:", err);
+            this.maxSlots = 1;
+
+        }
+
+        return this.maxSlots;
+
+    }
+
+    /* =====================================================
        NUVEM (Firestore) — espelha o localStorage quando logado
     ===================================================== */
 
     // Best-effort: nunca trava o jogo se a rede/o Firestore falhar,
     // o localStorage continua sendo a fonte confiável imediata.
-    static async saveToCloud(uid, data) {
+    //
+    // Só grava se a nuvem ainda estiver na versão que esta sessão conhece
+    // (cloudStamp). Se outra aba/aparelho gravou depois, a gravação daqui
+    // é recusada — é o que impede um save antigo de apagar um mais novo.
+    static saveToCloud(uid, container) {
+
+        const write = () => this.writeCloud(uid, container);
+
+        this.cloudQueue = this.cloudQueue.then(write, write);
+
+        return this.cloudQueue;
+
+    }
+
+    static async writeCloud(uid, container) {
+
+        const ref = doc(firestore, SAVES_COLLECTION, uid);
 
         try {
-            await setDoc(doc(firestore, SAVES_COLLECTION, uid), data);
+
+            const written = await runFirestoreTransaction(firestore, async (transaction) => {
+
+                const snapshot = await transaction.get(ref);
+                const cloudStamp = snapshot.exists() ? (snapshot.data().savedAt ?? 0) : 0;
+
+                if (cloudStamp > (this.cloudStamp ?? 0)) return false;
+
+                transaction.set(ref, container);
+
+                return true;
+
+            });
+
+            if (!written) {
+                console.warn("Save recusado: a nuvem tem uma versão mais nova desta conta.");
+                Toast.show("Seu progresso NÃO foi salvo na nuvem: a conta foi aberta em outro lugar. Recarregue a página.");
+                return false;
+            }
+
+            this.cloudStamp = container.savedAt;
+
+            return true;
+
         } catch (err) {
             console.warn("Falha ao sincronizar save com a nuvem:", err);
+            return false;
         }
 
     }
 
+    // Devolve a conta no formato novo (ver normalizeContainer) ou null.
     static async loadFromCloud(uid) {
 
         try {
 
             const snapshot = await getDoc(doc(firestore, SAVES_COLLECTION, uid));
 
-            return snapshot.exists() ? snapshot.data() : null;
+            if (!snapshot.exists()) return null;
+
+            const raw = snapshot.data();
+
+            // Esta sessão passa a conhecer ESTA versão da nuvem.
+            this.cloudStamp = raw.savedAt ?? 0;
+
+            // Conta no formato antigo tinha uma entrada de ranking por conta
+            // (id = uid). Agora o ranking é por personagem (id = uid_slot),
+            // então a antiga sai aqui.
+            if (raw.version !== CONTAINER_VERSION) {
+                deleteDoc(doc(firestore, LEADERBOARD_COLLECTION, uid)).catch(() => {});
+            }
+
+            return this.normalizeContainer(raw);
 
         } catch (err) {
 
@@ -532,11 +788,11 @@ export default class SaveService {
     // Acha um personagem pelo nome: devolve { uid, name, level } ou null
     // se o nome não existe. Usado pelo convite do Cooperativo.
     //
-    // Procura primeiro no ranking (é de lá que vêm os nomes que o
-    // jogador VÊ no jogo), comparando sem diferenciar maiúsculas, espaços
-    // nas pontas nem a forma como o acento foi digitado. A coleção de
-    // nomes reservados fica só de reserva: nem todo personagem tem
-    // entrada nela (a reserva falha em silêncio — ver reserveCharacterName).
+    // Procura no ranking (é de lá que vêm os nomes que o jogador VÊ no
+    // jogo), comparando sem diferenciar maiúsculas, espaços nas pontas nem
+    // a forma como o acento foi digitado. Um personagem que nunca entrou no
+    // ranking não aparece aqui — a coleção de nomes reservados não guarda o
+    // nível, então não serve pra checar o nível mínimo do convite.
     static async findCharacterByName(name) {
 
         const normalize = (text) => String(text ?? "").normalize("NFKC").trim().toLowerCase();
@@ -546,22 +802,9 @@ export default class SaveService {
 
         const ranked = (await this.getFullLeaderboard()).find(entry => normalize(entry.name) === wanted);
 
-        if (ranked) {
-            return { uid: ranked.uid, name: ranked.name, level: ranked.level ?? null };
-        }
+        if (!ranked) return null;
 
-        const nameSnapshot = await getDoc(doc(firestore, CHARACTER_NAMES_COLLECTION, name.trim().toLowerCase()));
-
-        if (!nameSnapshot.exists()) return null;
-
-        const uid = nameSnapshot.data().uid;
-        const entry = await getDoc(doc(firestore, LEADERBOARD_COLLECTION, uid));
-
-        return {
-            uid,
-            name: entry.data()?.name ?? name.trim(),
-            level: entry.data()?.level ?? null
-        };
+        return { uid: ranked.uid, name: ranked.name, level: ranked.level ?? null };
 
     }
 
@@ -607,15 +850,15 @@ export default class SaveService {
     // continua funcionando normalmente sem conta nenhuma).
     // Retorna a promise pra quem PRECISA esperar a nuvem (ex: logout,
     // que limpa o save local logo em seguida).
-    static syncCloudIfLoggedIn(player, data) {
+    static syncCloudIfLoggedIn(player, container) {
 
         const user = AuthService.getCurrentUser();
 
         if (!user) return Promise.resolve();
 
         return Promise.all([
-            this.saveToCloud(user.uid, data),
-            this.updateLeaderboardEntry(user.uid, player)
+            this.saveToCloud(user.uid, container),
+            this.updateLeaderboardEntry(user.uid, player, this.activeSlot)
         ]);
 
     }
@@ -697,11 +940,18 @@ export default class SaveService {
     // Entrada "leve" (sem inventário/progresso) só com o que o ranking
     // precisa mostrar — pública pra qualquer jogador logado poder ler,
     // ao contrário do save completo que é privado do dono.
-    static async updateLeaderboardEntry(uid, player) {
+    // Uma entrada por PERSONAGEM (id = uid_slot): o ranking mostra cada um
+    // separado. O uid é a primeira parte do id — as regras só deixam o dono
+    // escrever as próprias entradas.
+    static leaderboardId(uid, slot) {
+        return `${uid}_${slot}`;
+    }
+
+    static async updateLeaderboardEntry(uid, player, slot = this.activeSlot) {
 
         try {
 
-            await setDoc(doc(firestore, LEADERBOARD_COLLECTION, uid), {
+            await setDoc(doc(firestore, LEADERBOARD_COLLECTION, this.leaderboardId(uid, slot)), {
                 name: player.name ?? player.class.name,
                 level: player.level,
                 classId: player.class.id,
@@ -767,7 +1017,7 @@ export default class SaveService {
 
             const snapshot = await getDocs(topQuery);
 
-            return snapshot.docs[0]?.id ?? null;
+            return snapshot.docs[0]?.id.split("_")[0] ?? null;
 
         } catch (err) {
 
@@ -793,7 +1043,7 @@ export default class SaveService {
 
             const snapshot = await getDocs(leaderboardQuery);
 
-            return snapshot.docs.map(entry => ({ ...sanitizeRemote(entry.data()), uid: entry.id }));
+            return snapshot.docs.map(entry => ({ ...sanitizeRemote(entry.data()), uid: entry.id.split("_")[0] }));
 
         } catch (err) {
 
@@ -808,8 +1058,8 @@ export default class SaveService {
        LOCALSTORAGE
     ===================================================== */
 
-    static persist(data) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    static persist(container) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(container));
     }
 
     // Chamado no logout — sem isso, a próxima conta a logar neste
@@ -817,12 +1067,17 @@ export default class SaveService {
     // duplicaria ele na conta nova).
     static clearLocalSave() {
         localStorage.removeItem(STORAGE_KEY);
+        this.container = null;
+        this.activeSlot = 1;
+        this.maxSlots = 1;
+        this.cloudStamp = null;
     }
 
     static hasLocalSave() {
         return !!localStorage.getItem(STORAGE_KEY);
     }
 
+    // Devolve a conta (formato novo) ou null. Save antigo é convertido.
     static loadFromLocalStorage() {
 
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -830,7 +1085,7 @@ export default class SaveService {
         if (!raw) return null;
 
         try {
-            return JSON.parse(raw);
+            return this.normalizeContainer(JSON.parse(raw));
         } catch {
             return null;
         }
@@ -845,13 +1100,13 @@ export default class SaveService {
     // na nuvem (Firestore) — não gera mais arquivo .txt.
     static save(player) {
 
-        const data = this.serialize(player);
+        const container = this.commit(player);
 
-        this.persist(data);
+        this.persist(container);
 
-        this.syncCloudIfLoggedIn(player, data);
+        this.syncCloudIfLoggedIn(player, container);
 
-        return data;
+        return container;
 
     }
 
@@ -866,11 +1121,11 @@ export default class SaveService {
 
         try {
 
-            const data = this.serialize(player);
+            const container = this.commit(player);
 
-            this.persist(data);
+            this.persist(container);
 
-            return this.syncCloudIfLoggedIn(player, data);
+            return this.syncCloudIfLoggedIn(player, container);
 
         } catch (err) {
 
@@ -882,16 +1137,22 @@ export default class SaveService {
 
     }
 
-    // Aplica um save (do localStorage ou de um arquivo carregado)
-    // como o jogador atual da partida.
-    static applyLoadedData(game, data) {
+    // Aplica um personagem da conta (por padrão, o ativo) como o jogador
+    // atual da partida. Usa a conta já carregada em this.container.
+    static applyLoadedData(game, slot = this.activeSlot) {
+
+        const flat = this.flatCharacter(this.container, slot);
+
+        if (!this.isValidSave(flat)) return;
+
+        this.activeSlot = Number(slot);
 
         // Antes do deserialize() mexer em nada — pra saber se a
         // concessão retroativa do ovo (ver deserialize) é coisa NOVA
         // desse carregamento ou já vinha do save.
-        const hadWolfEggAlready = data?.progress?.stats?.wolfEggGranted === true;
+        const hadWolfEggAlready = flat.progress.stats.wolfEggGranted === true;
 
-        const player = this.deserialize(game, data);
+        const player = this.deserialize(game, flat);
 
         game.player = player;
 
@@ -910,7 +1171,7 @@ export default class SaveService {
         // que veio do arquivo/localStorage) — se o deserialize acabou de
         // migrar os status pra uma curva de balanceamento mais nova, é
         // essa versão migrada que precisa ficar salva, não a original.
-        this.persist(this.serialize(player));
+        this.persist(this.commit(player));
 
         game.showScreen("hud");
 

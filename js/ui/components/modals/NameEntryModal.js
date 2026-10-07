@@ -3,6 +3,7 @@ import SaveService from "../../../services/SaveService.js";
 const MAX_LENGTH = 8;
 const MIN_LENGTH = 5;
 const VALID_NAME = /^[A-Za-zÀ-ÿ0-9]+$/;
+const CHECK_SPECIAL_CHARS = true;
 const CHECK_DEBOUNCE_MS = 450;
 
 export default class NameEntryModal {
@@ -17,7 +18,7 @@ export default class NameEntryModal {
             return "Seu nome tem que ter mais de 4 caracteres.";
         }
 
-        if (!VALID_NAME.test(value)) {
+        if (CHECK_SPECIAL_CHARS && !VALID_NAME.test(value)) {
             return "Não pode caractere especial.";
         }
 

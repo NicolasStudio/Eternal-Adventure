@@ -44,12 +44,12 @@ const upClasse = {
         description: "Você escolheu transcender para um mago da luz.",
         states:{
             life: 80,
-            attack: 60,
-            armor: 15,
+            attack: 85,
+            armor: 0,
             agility: 15,
             criticalChance: 0,
             lifeSteal: 0,
-            penetration: 7,
+            penetration: 15,
             absorption: 0
         }
     },

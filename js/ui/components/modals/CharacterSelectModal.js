@@ -1,5 +1,6 @@
 import classes from "../../../player/classes.js";
 import upClasse from "../../../player/upClasse.js";
+import SaveService, { MAX_SLOTS } from "../../../services/SaveService.js";
 import Toast from "../Toast.js";
 
 // Preço exibido do slot extra. A compra em si ainda não existe (precisa
@@ -14,15 +15,17 @@ function escapeHtml(text) {
     ));
 }
 
-// Tela do "Continuar" da Home: o personagem da conta (nome, classe e
-// nível) e, embaixo, o slot bloqueado pra um personagem de outra classe.
+// Tela do "Continuar" da Home: um cartão por slot da conta. Personagem
+// existente vira "Jogar"; slot livre dentro do limite vira "Novo
+// personagem"; slot acima do limite fica bloqueado (compra).
 export default class CharacterSelectModal {
 
     constructor() {
         this.overlay = null;
+        this.purchase = null;
     }
 
-    // Classe "real" do save: a transcendida (Portal da Luz/Trevas) se a
+    // Classe "real" do personagem: a transcendida (Portal da Luz/Trevas) se a
     // dungeon correspondente já foi vencida — mesma regra do
     // SaveService.deserialize —, senão a classe base.
     static resolveClass(data) {
@@ -42,15 +45,62 @@ export default class CharacterSelectModal {
 
     }
 
-    // Resolve true se o jogador escolheu entrar com o personagem, false
-    // se fechou a tela.
-    show(data) {
+    renderSlot(container, slot, maxSlots) {
+
+        if (SaveService.hasCharacter(container, slot)) {
+
+            const character = container.slots[slot];
+            const characterClass = CharacterSelectModal.resolveClass(character);
+
+            return `
+                <button class="character-slot character-slot-filled" data-action="play" data-slot="${slot}">
+                    <img src="${characterClass.image}" alt="${escapeHtml(characterClass.name)}">
+                    <div class="character-slot-info">
+                        <strong>${escapeHtml(character.name ?? characterClass.name)}</strong>
+                        <span>${escapeHtml(characterClass.name)}</span>
+                        <small>Nível ${character.level ?? 1}</small>
+                    </div>
+                    <span class="character-slot-action">Jogar</span>
+                </button>
+            `;
+
+        }
+
+        if (slot <= maxSlots) {
+
+            return `
+                <button class="character-slot character-slot-new" data-action="create" data-slot="${slot}">
+                    <i class="fa-solid fa-plus"></i>
+                    <div class="character-slot-info">
+                        <strong>Novo personagem</strong>
+                        <span>Escolha um nome e uma classe</span>
+                    </div>
+                </button>
+            `;
+
+        }
+
+        return `
+            <button class="character-slot character-slot-locked" data-action="purchase" data-slot="${slot}">
+                <i class="fa-solid fa-lock"></i>
+                <div class="character-slot-info">
+                    <strong>Slot bloqueado</strong>
+                    <span>Libere um personagem extra nesta conta</span>
+                </div>
+            </button>
+        `;
+
+    }
+
+    // Resolve { slot } pra jogar com um personagem existente, { create: slot }
+    // pra criar um novo nesse slot, ou null se fechou a tela.
+    show(container, maxSlots = 1) {
 
         return new Promise(resolve => {
 
             this.hide();
 
-            const characterClass = CharacterSelectModal.resolveClass(data);
+            const slots = Array.from({ length: MAX_SLOTS }, (_, index) => this.renderSlot(container, index + 1, maxSlots));
 
             this.overlay = document.createElement("div");
             this.overlay.className = "home-confirm-overlay";
@@ -60,22 +110,7 @@ export default class CharacterSelectModal {
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                     <h2 class="character-select-title">Seus Personagens</h2>
-                    <button class="character-slot character-slot-filled">
-                        <img src="${characterClass.image}" alt="${escapeHtml(characterClass.name)}">
-                        <div class="character-slot-info">
-                            <strong>${escapeHtml(data.name ?? characterClass.name)}</strong>
-                            <span>${escapeHtml(characterClass.name)}</span>
-                            <small>Nível ${data.level ?? 1}</small>
-                        </div>
-                        <span class="character-slot-action">Jogar</span>
-                    </button>
-                    <button class="character-slot character-slot-locked">
-                        <i class="fa-solid fa-lock"></i>
-                        <div class="character-slot-info">
-                            <strong>Slot bloqueado</strong>
-                            <span>Libere um personagem de outra classe</span>
-                        </div>
-                    </button>
+                    ${slots.join("")}
                 </div>
             `;
 
@@ -86,9 +121,19 @@ export default class CharacterSelectModal {
                 resolve(result);
             };
 
-            this.overlay.querySelector(".character-select-close").addEventListener("click", () => finish(false));
-            this.overlay.querySelector(".character-slot-filled").addEventListener("click", () => finish(true));
-            this.overlay.querySelector(".character-slot-locked").addEventListener("click", () => this.showPurchase());
+            this.overlay.querySelector(".character-select-close").addEventListener("click", () => finish(null));
+
+            this.overlay.querySelectorAll("[data-action]").forEach(button => {
+                button.addEventListener("click", () => {
+
+                    const slot = Number(button.dataset.slot);
+
+                    if (button.dataset.action === "play") finish({ slot });
+                    else if (button.dataset.action === "create") finish({ create: slot });
+                    else this.showPurchase();
+
+                });
+            });
 
         });
 
@@ -102,8 +147,8 @@ export default class CharacterSelectModal {
             <div class="home-confirm-modal character-slot-purchase">
                 <h3><i class="fa-solid fa-lock-open"></i> Slot extra</h3>
                 <p>
-                    Libera mais um personagem nesta conta, de outra classe.
-                    O personagem atual continua salvo.
+                    Libera mais um personagem nesta conta.
+                    Os personagens atuais continuam salvos.
                 </p>
                 <strong class="character-slot-price">${EXTRA_SLOT_PRICE}</strong>
                 <div class="home-confirm-actions">

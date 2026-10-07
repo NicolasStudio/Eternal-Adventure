@@ -4,9 +4,9 @@ import PresenceService from "./PresenceService.js";
 import { sanitizeRemote } from "./MatchSanitizer.js";
 
 // Um convite por CONTA (uid) de quem recebe — o host grava, o convidado
-// responde no mesmo nó (status) e o host apaga. Fica debaixo de
-// pvpLobby/ (mesma árvore da fila) mas num nome que nenhum modo usa.
-const INVITES_PATH = "pvpLobby/raidInvites";
+// responde no mesmo nó (status) e o host apaga. Fica fora de pvpLobby/,
+// pra nenhuma regra de fila alcançar esse caminho.
+const INVITES_PATH = "raidInvites";
 
 // Tempo que o convidado tem pra responder — depois disso o convite some
 // dos dois lados.
@@ -72,15 +72,15 @@ export default class RaidInviteService {
         }
 
         const inviteRef = ref(db, this.invitePath(targetUid));
-        const existing = (await get(inviteRef)).val();
-
-        if (existing && (Date.now() - (existing.sentAt ?? 0)) < INVITE_TIMEOUT_MS) {
-            return { error: "Esse jogador já tem um convite pendente." };
-        }
-
         const sentAt = Date.now();
 
-        await set(inviteRef, { ...invite, sentAt, status: "pending" });
+        // Só o destinatário lê o próprio convite, então não dá pra checar
+        // antes. A regra recusa criar em cima de um convite já existente.
+        try {
+            await set(inviteRef, { ...invite, sentAt, status: "pending" });
+        } catch {
+            return { error: "Esse jogador já tem um convite pendente." };
+        }
 
         onDisconnect(inviteRef).remove();
 

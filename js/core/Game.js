@@ -132,10 +132,15 @@ export default class Game {
 
         PresenceService.watchForTakeover(user.uid, () => this.handleRemoteTakeover());
 
-        const cloudData = await SaveService.loadFromCloud(user.uid);
+        const container = await SaveService.loadFromCloud(user.uid);
 
-        if (cloudData && SaveService.isValidSave(cloudData)) {
-            SaveService.applyLoadedData(this, cloudData);
+        await SaveService.loadMaxSlots(user.uid);
+        SaveService.useContainer(container);
+
+        // Entra direto no último personagem usado; sem personagem, Home.
+        if (container && SaveService.hasCharacter(container, container.activeSlot)) {
+            SaveService.persist(container);
+            SaveService.applyLoadedData(this, container.activeSlot);
         } else {
             this.showScreen("home");
         }
@@ -144,15 +149,11 @@ export default class Game {
 
     // Esta aba foi desconectada porque outra (mais nova) assumiu a
     // conta — equivalente ao "conectado em outro lugar" do WhatsApp Web.
-    // Nunca mexe no servidor (a vaga já é da sessão nova): só salva o
-    // último estado local, sai do Firebase Auth e volta pro login.
+    // NÃO grava nada: o progresso da sessão nova é o que vale, e um save
+    // daqui (com o estado antigo desta aba) sobrescreveria esse progresso.
     async handleRemoteTakeover() {
 
         PresenceService.forgetLocalSession();
-
-        if (this.player) {
-            await SaveService.autoSave(this.player);
-        }
 
         await AuthService.signOut();
 

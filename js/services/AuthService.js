@@ -7,17 +7,15 @@ import {
     sendPasswordResetEmail,
     firestore,
     doc,
-    setDoc
+    setDoc,
+    updateDoc,
+    deleteField
 } from "./FirebaseService.js";
 
 const USERS_COLLECTION = "users";
 
 function normalizeEmail(email) {
     return email.trim().toLowerCase();
-}
-
-function normalizePhone(phone) {
-    return phone.replace(/\D/g, "");
 }
 
 export default class AuthService {
@@ -32,14 +30,30 @@ export default class AuthService {
 
     static async signIn(email, password) {
         const credential = await signInWithEmailAndPassword(auth, email.trim(), password);
+        await this.removeLegacyPersonalData(credential.user.uid);
         return credential.user;
+    }
+
+    // Contas criadas antes desta versão têm telefone e data de nascimento
+    // gravados. O jogo não usa mais esses campos, então apaga aqui, na
+    // primeira vez que a conta entra. Falha em silêncio: se o documento
+    // não existir ou a rede cair, o login segue normal.
+    static async removeLegacyPersonalData(uid) {
+        try {
+            await updateDoc(doc(firestore, USERS_COLLECTION, uid), {
+                phone: deleteField(),
+                birthDate: deleteField()
+            });
+        } catch {
+            // ignorado de propósito — ver comentário acima
+        }
     }
 
     static async signOut() {
         await firebaseSignOut(auth);
     }
 
-    static async signUp({ email, password, fullName, phone, birthDate }) {
+    static async signUp({ email, password, fullName }) {
 
         const normalizedEmail = normalizeEmail(email);
 
@@ -49,8 +63,6 @@ export default class AuthService {
         await setDoc(doc(firestore, USERS_COLLECTION, uid), {
             email: normalizedEmail,
             fullName: fullName.trim(),
-            phone: normalizePhone(phone),
-            birthDate,
             createdAt: new Date().toISOString()
         });
 

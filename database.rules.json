@@ -1,0 +1,75 @@
+{
+  "rules": {
+    "pvpLobby": {
+      "$mode": {
+        ".read": "auth != null",
+        "$playerId": {
+          ".read": "auth != null",
+          ".write": "auth != null && auth.uid === $playerId",
+          ".validate": "!newData.hasChild('name') || (newData.child('name').isString() && newData.child('name').val().length <= 30)",
+          "claimedBy": {
+            ".write": "auth != null",
+            ".validate": "newData.parent().hasChild('joinedAt') && newData.isString() && newData.val().length <= 40"
+          },
+          "matchedWith": {
+            ".write": "auth != null",
+            ".validate": "newData.parent().hasChild('joinedAt') && (newData.isBoolean() || (newData.isString() && newData.val().length <= 40))"
+          },
+          "matchId": {
+            ".write": "auth != null",
+            ".validate": "newData.parent().hasChild('joinedAt') && newData.isString() && newData.val().length <= 60"
+          },
+          "kicked": {
+            ".write": "auth != null",
+            ".validate": "newData.parent().hasChild('joinedAt') && newData.isBoolean()"
+          }
+        }
+      }
+    },
+    "raidInvites": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && (auth.uid === $uid || !data.exists() || data.child('sentAt').val() < now - 35000)",
+        ".validate": "newData.hasChildren(['fromName','sentAt','status']) && newData.child('fromName').isString() && newData.child('fromName').val().length <= 30 && newData.child('sentAt').isNumber() && newData.child('status').isString() && newData.child('status').val().length <= 12"
+      }
+    },
+    "pvpMatches": {
+      "$mode": {
+        ".read": "auth != null",
+        "$matchId": {
+          ".write": "auth != null && ((!data.exists() && newData.child('players').child(auth.uid).exists()) || (data.exists() && data.child('players').child(auth.uid).exists()))",
+          "players": {
+            "$uid": {
+              ".write": "auth != null && auth.uid === $uid && root.child('pvpMatches').child($mode).child($matchId).exists()"
+            }
+          }
+        }
+      }
+    },
+    "chat": {
+      "global": {
+        ".read": "auth != null",
+        ".indexOn": ["ts"],
+        "$id": {
+          ".write": "auth != null && ((!data.exists() && newData.child('uid').val() === auth.uid) || (data.exists() && !newData.exists() && data.child('ts').val() < now - 3600000))",
+          ".validate": "newData.hasChildren(['uid','name','text','ts']) && newData.child('uid').val() === auth.uid && newData.child('name').isString() && newData.child('name').val().length <= 20 && newData.child('text').isString() && newData.child('text').val().length >= 1 && newData.child('text').val().length <= 150 && newData.child('ts').val() === now && newData.parent().parent().parent().child('chatLast').child(auth.uid).child('ts').val() === now && (!root.child('chatLast').child(auth.uid).exists() || root.child('chatLast').child(auth.uid).child('ts').val() < now - 3000) && !(root.child('chatLast').child(auth.uid).child('text').val() === newData.child('text').val().toLowerCase() && root.child('chatLast').child(auth.uid).child('ts').val() > now - 300000)"
+        }
+      }
+    },
+    "chatLast": {
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "newData.hasChildren(['text','ts']) && newData.child('text').isString() && newData.child('text').val().length <= 150 && newData.child('ts').val() === now"
+      }
+    },
+    "sessions": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid",
+        "sessionId": { ".validate": "newData.isString() && newData.val().length <= 80" },
+        "lastSeen": { ".validate": "newData.isNumber()" },
+        "$other": { ".validate": false }
+      }
+    }
+  }
+}

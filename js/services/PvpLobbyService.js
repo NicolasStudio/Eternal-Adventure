@@ -2,6 +2,7 @@ import {
     db, ref, set, update, remove, onValue, off, onDisconnect,
     get, runTransaction, serverTimestamp
 } from "./FirebaseService.js";
+import AuthService from "./AuthService.js";
 import { TEAM_SIM_VERSION } from "./PvpCombatService.js";
 import { sanitizeRemote } from "./MatchSanitizer.js";
 
@@ -71,9 +72,6 @@ export default class PvpLobbyService {
     static recheckTimer = null;
     static lastLobby = null;
 
-    static generateId() {
-        return "p_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
-    }
 
     static lobbyPath() {
         return `pvpLobby/${this.mode}`;
@@ -166,7 +164,9 @@ export default class PvpLobbyService {
         }
 
         this.mode = mode;
-        this.playerId = this.generateId();
+        const uid = AuthService.getCurrentUser()?.uid;
+        if (!uid) throw new Error("Entre na sua conta pra jogar.");
+        this.playerId = uid;
 
         const selfRef = ref(db, `${this.lobbyPath()}/${this.playerId}`);
 
@@ -424,25 +424,17 @@ export default class PvpLobbyService {
 
     static async tryMatch(opponentId, opponentCombatant, selfCombatant) {
 
-        const opponentRef = ref(db, `${this.lobbyPath()}/${opponentId}`);
-
         const matchId = "m_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
         const seed = Math.floor(Math.random() * 2 ** 31);
 
         // Passo 1: reivindica o oponente com uma transação — usa um
         // campo separado ("claimedBy"), de propósito, pra NÃO avisar
         // o oponente ainda (a partida nem existe de verdade ainda).
-        const claimResult = await runTransaction(opponentRef, (current) => {
-
-            if (!current || current.matchedWith || current.claimedBy) {
-                return; // aborta — alguém já pegou, ou ele saiu da fila
-            }
-
-            current.claimedBy = this.playerId;
-
-            return current;
-
-        });
+        // Só o campo claimedBy: se já houver reivindicação, a transação aborta.
+        const claimResult = await runTransaction(
+            ref(db, `${this.lobbyPath()}/${opponentId}/claimedBy`),
+            (current) => current ? undefined : this.playerId
+        );
 
         if (!claimResult.committed) {
             return; // perdeu a corrida, tenta de novo no próximo tick
@@ -469,6 +461,7 @@ export default class PvpLobbyService {
             [`${this.matchesPath()}/${matchId}`]: {
                 combatantA: { ...selfCombatant, id: this.playerId },
                 combatantB: { ...opponentCombatant, id: opponentId },
+                players: { [this.playerId]: true, [opponentId]: true },
                 seed,
                 createdAt: serverTimestamp()
             },
@@ -486,17 +479,10 @@ export default class PvpLobbyService {
     // existir e estiver livre.
     static async claimEntry(entryId, claimerId) {
 
-        const result = await runTransaction(ref(db, `${this.lobbyPath()}/${entryId}`), (current) => {
-
-            if (!current || current.matchedWith || current.claimedBy) {
-                return; // aborta — alguém já pegou, ou ele saiu da fila
-            }
-
-            current.claimedBy = claimerId;
-
-            return current;
-
-        });
+        const result = await runTransaction(
+            ref(db, `${this.lobbyPath()}/${entryId}/claimedBy`),
+            (current) => current ? undefined : claimerId
+        );
 
         return result.committed;
 
@@ -590,6 +576,7 @@ export default class PvpLobbyService {
                 [`${matchesPath}/${matchId}`]: {
                     teamA: toTeamObject(split.teamA),
                     teamB: toTeamObject(split.teamB),
+                    players: Object.fromEntries(claimedIds.map(id => [id, true])),
                     seed,
                     createdAt: serverTimestamp()
                 }

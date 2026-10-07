@@ -216,9 +216,56 @@ export default class Player {
 
         this.transcendence = transcendence;
 
+        // Guarda os valores que foram somados, pra syncTranscendenceStats()
+        // saber, numa próxima carga, o que mudou no upClasse.js desde então.
+        this.progress.transcendenceApplied = { ...transcendence.states };
+
         this.notify();
 
         return true;
+
+    }
+
+    // Corrige o bônus de transcendência de um personagem que já transcendeu:
+    // soma só a DIFERENÇA entre o que está no upClasse.js agora e o que foi
+    // somado na época. Personagem antigo, sem registro, ganha a linha de base
+    // com os valores atuais (sem somar nada agora).
+    syncTranscendenceStats() {
+
+        const transcendence = this.transcendence;
+
+        if (!transcendence) return false;
+
+        const applied = this.progress.transcendenceApplied;
+
+        if (!applied) {
+            this.progress.transcendenceApplied = { ...transcendence.states };
+            return false;
+        }
+
+        let changed = false;
+
+        Object.entries(transcendence.states).forEach(([key, value]) => {
+
+            const delta = value - (applied[key] ?? 0);
+
+            if (!delta) return;
+
+            changed = true;
+
+            if (key === "life") {
+                this.maxHP += delta;
+                this.currentHP += delta;
+                return;
+            }
+
+            this.baseStats[key] = (this.baseStats[key] ?? 0) + delta;
+
+        });
+
+        this.progress.transcendenceApplied = { ...transcendence.states };
+
+        return changed;
 
     }
 

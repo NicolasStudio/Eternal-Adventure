@@ -162,6 +162,21 @@
     object-fit:contain;
     image-rendering:pixelated;
 }
+.character-slot-new{
+    border:2px dashed #8b7355;
+    background:transparent;
+    color:#e8d9b8;
+}
+.character-slot-new:hover{
+    border-color:#c79b37;
+    box-shadow:0 0 18px rgba(199,155,55,.3);
+}
+.character-slot-new > i{
+    font-size:28px;
+    width:72px;
+    text-align:center;
+    color:#c79b37;
+}
 .character-slot-info{
     flex:1;
     display:flex;

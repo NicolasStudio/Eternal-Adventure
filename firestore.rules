@@ -1,0 +1,74 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+
+    match /users/{uid} {
+      allow read, write: if isOwner(uid);
+    }
+
+    // Conta com até 2 personagens: slot "1" sempre; slot "2" só se a conta
+    // tiver um slot extra liberado em entitlements (ver abaixo).
+    match /saves/{uid} {
+      allow read: if isOwner(uid);
+      allow create, update: if isOwner(uid)
+        && request.resource.data.version == 2
+        && request.resource.data.slots is map
+        && request.resource.data.slots.keys().hasOnly(['1', '2'])
+        && request.resource.data.slots['1'].level is number
+        && request.resource.data.slots['1'].level >= 1
+        && request.resource.data.slots['1'].level <= 100
+        && request.resource.data.slots['1'].get('gold', 0) >= 0
+        && (
+          !('2' in request.resource.data.slots)
+          || (
+            request.resource.data.slots['2'].level is number
+            && request.resource.data.slots['2'].level >= 1
+            && request.resource.data.slots['2'].level <= 100
+            && request.resource.data.slots['2'].get('gold', 0) >= 0
+            && exists(/databases/$(database)/documents/entitlements/$(uid))
+            && get(/databases/$(database)/documents/entitlements/$(uid)).data.extraSlots >= 1
+          )
+        );
+      allow delete: if isOwner(uid);
+    }
+
+    // Só o servidor (ou você, no console) libera slots extras. O jogador lê
+    // o próprio direito, mas nunca escreve nele.
+    match /entitlements/{uid} {
+      allow read: if isOwner(uid);
+      allow write: if false;
+    }
+
+    match /characterNames/{name} {
+      allow get: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.keys().hasOnly(['uid'])
+        && name.size() <= 30;
+      allow update: if signedIn()
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.uid == request.auth.uid;
+      allow delete: if signedIn() && resource.data.uid == request.auth.uid;
+    }
+
+    // Id da entrada = "uid_slot" (uma por personagem). O dono é a parte antes do "_".
+    match /leaderboard/{entryId} {
+      allow read: if signedIn();
+      allow delete: if signedIn() && entryId.split('_')[0] == request.auth.uid;
+      allow create, update: if signedIn()
+        && entryId.split('_')[0] == request.auth.uid
+        && request.resource.data.name is string
+        && request.resource.data.name.size() <= 30
+        && request.resource.data.level is int
+        && request.resource.data.level >= 1
+        && request.resource.data.level <= 100
+        && request.resource.data.power is number
+        && request.resource.data.power >= 0
+        && request.resource.data.power <= 500000;
+    }
+
+  }
+}

@@ -176,7 +176,12 @@ export default class ClassSelectionScreen {
 
         const name = this.game.pendingPlayerName;
 
-        this.game.player = new Player(this.selectedClass, name);
+        // Slot e personagem trocam juntos: o save ativo nunca fica apontando
+        // pro slot de um personagem e gravando os dados de outro.
+        SaveService.activeSlot = this.game.pendingSlot ?? SaveService.activeSlot;
+        this.game.pendingSlot = null;
+
+        this.game.player = SaveService.attachAccount(new Player(this.selectedClass, name));
 
         this.game.pendingPlayerName = null;
 
