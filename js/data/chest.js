@@ -209,7 +209,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-mage-rarity-lendario.png",
 
         stats: {
-            armor: 24
+            armor: 30
         },
 
         value: 0,
@@ -228,7 +228,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-mage-rarity-ultraje.png",
 
         stats: {
-            armor: 32
+            armor: 44
         },
 
         value: 0,
