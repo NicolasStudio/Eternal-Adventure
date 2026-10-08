@@ -214,25 +214,25 @@ const monstersRaid = [
         floor: 5,
 
         status: {
-            vidaMaxima: 25000,
+            vidaMaxima: 30000,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
-                    dano: 436,
+                    dano: 520,
                 },
                 {
                     nomeAtaque: "Iluminar",
-                    dano: 462,
+                    dano: 550,
                 },
                 {
                     nomeAtaque: "Raio Aurora",
-                    dano: 502,
+                    dano: 600,
                 },
             ],
-            armadura: 250,
-            agilidade: 200,
+            armadura: 310,
+            agilidade: 270,
             xp: 0,
-            ouro: 80000
+            ouro: 95000
         },
 
         drops: [
@@ -263,25 +263,25 @@ const monstersRaid = [
         floor: 6,
 
         status: {
-            vidaMaxima: 25000,
+            vidaMaxima: 34000,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
-                    dano: 462,
+                    dano: 560,
                 },
                 {
                     nomeAtaque: "Ofuscar",
-                    dano: 475,
+                    dano: 580,
                 },
                 {
                     nomeAtaque: "Raio Negro",
-                    dano: 502,
+                    dano: 630,
                 },
             ],
-            armadura: 280,
-            agilidade: 250,
+            armadura: 340,
+            agilidade: 290,
             xp: 0,
-            ouro: 80000
+            ouro: 100000
         },
 
         drops: [
@@ -312,25 +312,25 @@ const monstersRaid = [
         floor: 7,
 
         status: {
-            vidaMaxima: 30000,
+            vidaMaxima: 40000,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
-                    dano: 475,
+                    dano: 600,
                 },
                 {
                     nomeAtaque: "Chicote de Vinha",
-                    dano: 502,
+                    dano: 650,
                 },
                 {
                     nomeAtaque: "Raio Solar",
-                    dano: 554,
+                    dano: 700,
                 },
             ],
-            armadura: 400,
-            agilidade: 300,
+            armadura: 450,
+            agilidade: 320,
             xp: 0,
-            ouro: 100000
+            ouro: 120000
         },
 
         drops: [
