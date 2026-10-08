@@ -301,36 +301,38 @@ export default {
     },
 
     // Níveis 101-110: só alcançáveis com o talento único "Rompendo
-    // Limites" (ver TalentService.js) — continuam o mesmo ritmo de +500
-    // por nível que já vinha desde a faixa 90-100.
+    // Limites" (ver TalentService.js) — 10x mais caro que o ritmo normal
+    // de +500 por nível que vinha desde a faixa 90-100, de propósito: é
+    // conteúdo de fim de jogo, pago com ouro de verdade (1.000.000) pra
+    // desbloquear, então o grind até o 110 precisa ser bem mais longo.
     101: {
-        required: 53000,
+        required: 530000,
     },
     102: {
-        required: 53500,
+        required: 535000,
     },
     103: {
-        required: 54000,
+        required: 540000,
     },
     104: {
-        required: 54500,
+        required: 545000,
     },
     105: {
-        required: 55000,
+        required: 550000,
     },
     106: {
-        required: 55500,
+        required: 555000,
     },
     107: {
-        required: 56000,
+        required: 560000,
     },
     108: {
-        required: 56500,
+        required: 565000,
     },
     109: {
-        required: 57000,
+        required: 570000,
     },
     110: {
-        required: 57500,
+        required: 575000,
     },
 };
