@@ -29,7 +29,7 @@ const LEVEL_MULTIPLIER = 80;
 // Pet: (atributos + dano da habilidade) x multiplicador das estrelas,
 // mais um bônus fixo pelo estágio (índice em PetService.getStages:
 // 0 = Filhote, 1 = Jovem, 2 = Adulto). Ovo não dá poder.
-const PET_STAR_MULTIPLIER = { 3: 12, 4: 15, 5: 18 };
+const PET_STAR_MULTIPLIER = { 3: 12, 4: 15, 5: 18, 6: 21 };
 const DEFAULT_PET_STAR_MULTIPLIER = 12;
 const PET_STAGE_BONUS = [25, 75, 150];
 

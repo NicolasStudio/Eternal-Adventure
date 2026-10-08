@@ -199,6 +199,10 @@ export default class CombatView {
             HitFlash.play(".hud-avatar");
         }
 
+        if (result.revive) {
+            HealFlash.play(".hud-avatar");
+        }
+
         await CombatToast.show(message, type, MiasmaService.extraToastSeconds(result));
 
         // Pet equipado morde JUNTO do turno do jogador — golpe extra,

@@ -318,6 +318,28 @@ export default class RaidCombatService {
                     miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(target)
                 });
 
+                // Reviver do Yggdrasil: quem o chefe acabou de derrubar
+                // volta uma vez por andar. Entra no log como uma "mordida"
+                // só de cura em quem reviveu, que a tela já sabe aplicar.
+                if (isBossTurn) {
+
+                    const reviveHeal = PvpCombatService.reviveIfDead(target);
+
+                    if (reviveHeal > 0) {
+                        log.push({
+                            attackerId: target.id,
+                            attackerSide: "squad",
+                            targetId: bossCombatant.id,
+                            petBite: true,
+                            revive: true,
+                            damage: 0,
+                            heal: reviveHeal,
+                            healedIds: [target.id]
+                        });
+                    }
+
+                }
+
                 // Mordida do pet: só quem está atacando o chefe (nunca o
                 // chefe mordendo alguém) — garantida, sem rng(). Dano e
                 // cura são efeitos independentes: um pet de cura pura

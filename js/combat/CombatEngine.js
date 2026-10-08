@@ -19,6 +19,9 @@ export default class CombatEngine {
         // primeiro golpe do jogador que acerta; o engine é recriado a
         // cada andar, então a queimadura sempre acaba junto do combate.
         this.burn = null;
+        // Reviver do Yggdrasil — uma vez por combate; o engine é recriado
+        // a cada andar, então volta a valer no monstro seguinte.
+        this.reviveUsed = false;
         // Miasma do Pútrido (ver MiasmaService.js) — marca pendente de
         // débuff em cada lado; também reiniciado a cada andar.
         this.miasmaFlags = {
@@ -91,7 +94,9 @@ export default class CombatEngine {
             this.player.currentHP -= result.damage;
             this.player.currentHP = Math.max(0, this.player.currentHP);
         }
+        const revive = playerTurn ? null : this.tryRevive();
         return {
+            revive,
             attacker: attackerSide,
             target: defenderSide,
             dodged: false,
@@ -225,6 +230,31 @@ export default class CombatEngine {
 
     }
 
+    // Reviver do pet (Yggdrasil): se o golpe do monstro zerou a vida do
+    // jogador, ele volta com revivePercent% da Vida Máxima — uma única
+    // vez por combate. Devolve null se não havia o que reviver.
+    tryRevive() {
+
+        if (this.reviveUsed || this.player.currentHP > 0) return null;
+
+        const pet = this.player.equipment.pet;
+
+        if (!pet) return null;
+
+        const percent = PetService.getScaledStats(pet).revivePercent;
+
+        if (!(percent > 0)) return null;
+
+        this.reviveUsed = true;
+
+        const heal = Math.max(1, Math.floor(this.player.maxHP * percent / 100));
+
+        this.player.currentHP = heal;
+
+        return { petName: pet.name, heal };
+
+    }
+
     createAttackMessage(result) {
 
         if (result.dodged) {
@@ -260,6 +290,9 @@ export default class CombatEngine {
         message += ` Você recebeu <strong>${this.monster.status.nomeAtaque}</strong>, <strong>${result.damage}</strong> de dano.`;
         if (result.absorbed > 0) {
             message += `<br><span class="combat-absorption">Absorção!</span> Absorveu <strong>${result.absorbed}</strong> do golpe.`;
+        }
+        if (result.revive) {
+            message += `<br><span class="combat-pet-bite">${result.revive.petName}</span> reviveu você com <strong>${result.revive.heal}</strong> HP!`;
         }
         return message;
     }

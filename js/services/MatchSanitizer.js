@@ -30,7 +30,8 @@ const NUMBER_KEYS = new Set([
     "maxHP", "currentHP", "attack", "armor", "agility",
     "criticalChance", "lifeSteal", "penetration", "absorption",
     "miasmaChance", "reflection",
-    "petBiteDamage", "petHealAmount", "petMimicRatio", "petBurnDamage"
+    "petBiteDamage", "petHealAmount", "petMimicRatio", "petBurnDamage",
+    "petRevivePercent"
 ]);
 
 // Mapas { [idDoJogador]: número } — o valor é número mesmo com a chave

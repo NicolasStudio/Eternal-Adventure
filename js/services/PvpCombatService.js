@@ -19,7 +19,7 @@ const DODGE_CAP = 40;
 // ser dano, passa a somar Imitação% de Ataque/Armadura/Agilidade do
 // oponente aos status do Mímico · v9 Miasma ganha 4º acúmulo
 // (3/6/9/15%), reduz também Armadura, especiais −50% (era −25%)
-export const TEAM_SIM_VERSION = 9;
+export const TEAM_SIM_VERSION = 10;
 
 /*
     Os dois clientes (jogador A e B) precisam chegar no MESMO resultado
@@ -96,11 +96,30 @@ export default class PvpCombatService {
             petHealAmount: scaledPet?.healAmount ?? 0,
             petMimicRatio: scaledPet?.mimicRatio ?? 0,
             petBurnDamage: scaledPet?.burnDamage ?? 0,
+            // Yggdrasil: % da Vida Máxima com que o dono volta ao morrer,
+            // uma vez por luta (ver reviveIfDead).
+            petRevivePercent: scaledPet?.revivePercent ?? 0,
             petName: player.equipment.pet?.name ?? null,
             simVersion: TEAM_SIM_VERSION,
             // Só pro matchmaking (PvpLobbyService) — não entra no combate.
             power: PowerService.getPower(player)
         };
+
+    }
+
+    // Reviver do pet (Yggdrasil): se o combatente acabou de morrer e ainda
+    // não reviveu nesta luta, volta com petRevivePercent% da Vida Máxima.
+    // Devolve quanto de vida ele recuperou (0 se não reviveu). Não consome
+    // rng() — não desalinha a simulação entre os clientes. Usado também
+    // pelo Cooperativo (RaidCombatService).
+    static reviveIfDead(combatant) {
+
+        if (combatant.currentHP > 0 || combatant.revived || !(combatant.petRevivePercent > 0)) return 0;
+
+        combatant.revived = true;
+        combatant.currentHP = Math.max(1, Math.floor(combatant.maxHP * combatant.petRevivePercent / 100));
+
+        return combatant.currentHP;
 
     }
 
@@ -142,6 +161,18 @@ export default class PvpCombatService {
         // Miasma do Pútrido (ver MiasmaService.js) — marca pendente de
         // débuff por lado.
         const miasmaFlags = { a: MiasmaService.createFlags(), b: MiasmaService.createFlags() };
+
+        // Reviver do Yggdrasil: entra no log como uma "mordida" só de cura
+        // do lado de quem reviveu, que a tela já sabe aplicar.
+        const revive = (combatant, side) => {
+
+            const heal = PvpCombatService.reviveIfDead(combatant);
+
+            if (heal > 0) {
+                log.push({ turn: side, attacker: combatant.name, petBite: true, revive: true, damage: 0, heal });
+            }
+
+        };
 
         while (a.currentHP > 0 && b.currentHP > 0 && guard < 500) {
 
@@ -237,6 +268,8 @@ export default class PvpCombatService {
                     miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(defender)
                 });
 
+                revive(defender, turn === "a" ? "b" : "a");
+
                 // Mordida do pet: garantida, não consome rng(). Dano e
                 // cura são efeitos independentes — um pet de cura pura
                 // (ex: Duende, sem dano nenhum) ainda precisa disparar
@@ -268,6 +301,8 @@ export default class PvpCombatService {
 
                     log.push({ turn, attacker: attacker.name, petBite: true, damage: biteDamage, heal: petHeal });
 
+                    revive(defender, turn === "a" ? "b" : "a");
+
                 }
 
                 // Boitatá: a queimadura liga no primeiro golpe que acerta.
@@ -298,6 +333,8 @@ export default class PvpCombatService {
                 });
 
                 burn.first = false;
+
+                revive(defender, turn === "a" ? "b" : "a");
 
             }
 
@@ -353,6 +390,27 @@ export default class PvpCombatService {
         // independente dos aliados).
         const miasmaFlagsById = new Map(all.map(c => [c.id, MiasmaService.createFlags()]));
 
+        // Reviver do Yggdrasil: entra no log como uma "mordida" só de cura
+        // em quem reviveu (healedIds), que a tela já sabe aplicar.
+        const revive = (combatant, killerId) => {
+
+            const heal = PvpCombatService.reviveIfDead(combatant);
+
+            if (heal > 0) {
+                log.push({
+                    attackerId: combatant.id,
+                    attackerTeam: combatant.team,
+                    targetId: killerId,
+                    petBite: true,
+                    revive: true,
+                    damage: 0,
+                    heal,
+                    healedIds: [combatant.id]
+                });
+            }
+
+        };
+
         const tickBurn = (owner, enemyTeam) => {
 
             const burn = burns.get(owner.id);
@@ -382,6 +440,8 @@ export default class PvpCombatService {
             });
 
             burn.first = false;
+
+            revive(target, owner.id);
 
         };
 
@@ -493,6 +553,8 @@ export default class PvpCombatService {
                     miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(target)
                 });
 
+                revive(target, attacker.id);
+
                 // Mordida do pet: garantida, não consome rng(). Dano e
                 // cura são efeitos independentes — um pet de cura pura
                 // (ex: Duende, sem dano nenhum) ainda precisa disparar
@@ -541,6 +603,8 @@ export default class PvpCombatService {
                         heal: petHeal,
                         healedIds
                     });
+
+                    revive(target, attacker.id);
 
                 }
 

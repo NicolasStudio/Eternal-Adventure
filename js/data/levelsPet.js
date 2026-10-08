@@ -11,7 +11,8 @@
    faixa (ver HARD_XP_* em PetService.js).
 
    Perfil: wolf=Dano(baixo) · fairy=Vida+pouco Armadura/Ataque ·
-   spider=Dano+Agilidade+pouca Vida · bear=Vida+Armadura · snake=Vida+Dano+Agilidade
+   spider=Dano+Agilidade+pouca Vida · bear=Vida+Armadura · snake=Vida+Dano+Agilidade ·
+   drake=tudo alto (6★, não ataca — ver Yggdrasil em pet.js)
 ========================================================== */
 
 export const PET_MAX_LEVEL = 50;
@@ -27,6 +28,7 @@ export default {
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 1, agility: 0},
         snake: {life: 1, attack: 1, armor: 0, agility: 1},
+        drake: {life: 1, attack: 1, armor: 1, agility: 1},
     },
 
     4: {
@@ -35,6 +37,7 @@ export default {
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 1, attack: 1, armor: 1, agility: 0},
+        drake: {life: 1, attack: 1, armor: 2, agility: 1},
     },
 
     6: {
@@ -43,6 +46,7 @@ export default {
         spider: {life: 0, attack: 1, armor: 0, agility: 0},
         bear: {life: 1, attack: 0, armor: 1, agility: 0},
         snake: {life: 1, attack: 1, armor: 0, agility: 1},
+        drake: {life: 2, attack: 1, armor: 2, agility: 1},
     },
 
     8: {
@@ -51,6 +55,7 @@ export default {
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 1, attack: 1, armor: 0, agility: 1},
+        drake: {life: 2, attack: 1, armor: 1, agility: 1},
     },
 
     10: {
@@ -59,6 +64,7 @@ export default {
         spider: {life: 1, attack: 2, armor: 0, agility: 2},
         bear: {life: 1, attack: 1, armor: 1, agility: 0},
         snake: {life: 1, attack: 0, armor: 1, agility: 1},
+        drake: {life: 1, attack: 2, armor: 2, agility: 1},
     },
 
     12: {
@@ -67,6 +73,7 @@ export default {
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 1, agility: 0},
         snake: {life: 1, attack: 1, armor: 0, agility: 1},
+        drake: {life: 3, attack: 1, armor: 2, agility: 1},
     },
 
     14: {
@@ -75,6 +82,7 @@ export default {
         spider: {life: 1, attack: 0, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 1, attack: 1, armor: 0, agility: 1},
+        drake: {life: 1, attack: 1, armor: 1, agility: 1},
     },
 
     16: {
@@ -83,6 +91,7 @@ export default {
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 0, attack: 1, armor: 1, agility: 1},
+        drake: {life: 2, attack: 1, armor: 2, agility: 1},
     },
 
     18: {
@@ -91,6 +100,7 @@ export default {
         spider: {life: 1, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 1, agility: 0},
         snake: {life: 1, attack: 1, armor: 0, agility: 2},
+        drake: {life: 2, attack: 2, armor: 2, agility: 2},
     },
 
     20: {
@@ -99,6 +109,7 @@ export default {
         spider: {life: 0, attack: 2, armor: 0, agility: 2},
         bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 1, attack: 1, armor: 0, agility: 1},
+        drake: {life: 2, attack: 0, armor: 0, agility: 0},
     },
 
     22: {
@@ -107,6 +118,7 @@ export default {
         spider: {life: 1, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 1, attack: 1, armor: 0, agility: 2},
+        drake: {life: 2, attack: 1, armor: 1, agility: 1},
     },
 
     24: {
@@ -115,6 +127,7 @@ export default {
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 1, agility: 0},
         snake: {life: 1, attack: 1, armor: 1, agility: 0},
+        drake: {life: 2, attack: 1, armor: 1, agility: 0},
     },
 
     26: {
@@ -123,6 +136,7 @@ export default {
         spider: {life: 1, attack: 1, armor: 0, agility: 0},
         bear: {life: 1, attack: 1, armor: 2, agility: 1},
         snake: {life: 1, attack: 1, armor: 0, agility: 2},
+        drake: {life: 2, attack: 1, armor: 2, agility: 1},
     },
 
     28: {
@@ -131,6 +145,7 @@ export default {
         spider: {life: 1, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 1, agility: 0},
         snake: {life: 1, attack: 1, armor: 0, agility: 1},
+        drake: {life: 2, attack: 1, armor: 1, agility: 1},
     },
 
     30: {
@@ -139,6 +154,7 @@ export default {
         spider: {life: 1, attack: 2, armor: 0, agility: 2},
         bear: {life: 1, attack: 1, armor: 1, agility: 0},
         snake: {life: 2, attack: 0, armor: 2, agility: 2},
+        drake: {life: 2, attack: 2, armor: 1, agility: 2},
     },
 
     32: {
@@ -147,6 +163,7 @@ export default {
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 2, attack: 1, armor: 0, agility: 1},
+        drake: {life: 2, attack: 2, armor: 1, agility: 2},
     },
 
     34: {
@@ -155,6 +172,7 @@ export default {
         spider: {life: 1, attack: 0, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 1, agility: 0},
         snake: {life: 2, attack: 1, armor: 1, agility: 2},
+        drake: {life: 2, attack: 2, armor: 2, agility: 3},
     },
 
     36: {
@@ -163,6 +181,7 @@ export default {
         spider: {life: 1, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 0, attack: 1, armor: 1, agility: 1},
+        drake: {life: 2, attack: 2, armor: 1, agility: 2},
     },
 
     38: {
@@ -171,6 +190,7 @@ export default {
         spider: {life: 1, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 2, attack: 3, armor: 1, agility: 2},
+        drake: {life: 2, attack: 2, armor: 2, agility: 2},
     },
 
     40: {
@@ -179,6 +199,7 @@ export default {
         spider: {life: 0, attack: 2, armor: 0, agility: 2},
         bear: {life: 1, attack: 0, armor: 1, agility: 0},
         snake: {life: 2, attack: 3, armor: 0, agility: 1},
+        drake: {life: 2, attack: 2, armor: 1, agility: 2},
     },
 
     42: {
@@ -187,6 +208,7 @@ export default {
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 2, attack: 3, armor: 1, agility: 2},
+        drake: {life: 2, attack: 2, armor: 1, agility: 3},
     },
 
     44: {
@@ -195,6 +217,7 @@ export default {
         spider: {life: 1, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 2, attack: 3, armor: 1, agility: 0},
+        drake: {life: 2, attack: 2, armor: 2, agility: 2},
     },
 
     46: {
@@ -203,6 +226,7 @@ export default {
         spider: {life: 0, attack: 1, armor: 0, agility: 0},
         bear: {life: 1, attack: 0, armor: 1, agility: 0},
         snake: {life: 2, attack: 3, armor: 1, agility: 1},
+        drake: {life: 2, attack: 2, armor: 1, agility: 2},
     },
 
     48: {
@@ -211,6 +235,7 @@ export default {
         spider: {life: 0, attack: 1, armor: 0, agility: 1},
         bear: {life: 1, attack: 0, armor: 2, agility: 0},
         snake: {life: 2, attack: 2, armor: 0, agility: 1},
+        drake: {life: 2, attack: 2, armor: 2, agility: 2},
     },
 
     50: {
@@ -219,6 +244,7 @@ export default {
         spider: {life: 1, attack: 2, armor: 0, agility: 2},
         bear: {life: 1, attack: 2, armor: 1, agility: 1},
         snake: {life: 2, attack: 1, armor: 2, agility: 1},
+        drake: {life: 3, attack: 2, armor: 2, agility: 3},
     },
 
 };

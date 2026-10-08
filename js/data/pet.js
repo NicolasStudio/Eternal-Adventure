@@ -680,6 +680,142 @@ const pets = {
         }
     },
 
+    /* ==========================================================
+        Yggdrasil - Não ataca: soma atributos e revive o jogador 1x por combate
+        (revivePercent = % da Vida Máxima com que ele volta)
+    ========================================================== */
+    yggdrasilPet1: {
+        id: "ygg-pet1",
+        name: "Yggdrasil",
+        image: "assets/img/assets/pet/egg-yggdrasil.png",
+        type: "pet",
+        family: "drake",
+        shocked: false,
+        color: "#ff711f",
+        stars: "★★★★★★",
+        nivel: 0,
+        description: "Um ovo do Yggdrasil extremamente raro.",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 0,
+            attack: 0,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+
+        },
+
+    },
+
+    yggdrasilPet2: {
+        id: "ygg-pet2",
+        name: "Yggdrasil",
+        image: "assets/img/assets/pet/yggdrasil-stage-1.png",
+        type: "pet",
+        family: "drake",
+        shocked: true,
+        color: "#ff711f",
+        stars: "★★★★★★",
+        nivel: 1,
+        description: "Um filhote de dragão. Ele ainda é pequeno, mas tem potencial para crescer forte.",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 80,
+            attack: 19,
+            armor: 20,
+            agility: 22,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+
+        },
+        habilities: {
+            hability: {
+                name: "Reviver",
+                description: "Revive o player equipado, uma unica vez por combate, com 10% da vida máxima.",
+                revivePercent: 10,
+            }
+        }
+    },
+
+    yggdrasilPet3: {
+        id: "ygg-pet3",
+        name: "Yggdrasil",
+        image: "assets/img/assets/pet/yggdrasil-stage-2.png",
+        type: "pet",
+        family: "drake",
+        shocked: true,
+        color: "#ff711f",
+        stars: "★★★★★★",
+        nivel: 18,
+        description: "Um yggdrasil jovem. Ele já é mais forte e pode causar dano significativo em combate.",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 140,
+            attack: 30,
+            armor: 35,
+            agility: 32,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+        },
+        habilities: {
+            hability: {
+                name: "Reviver",
+                description: "Revive o player equipado, uma unica vez por combate, com 20% da vida máxima.",
+                revivePercent: 20,
+            }
+        }
+    },
+
+    yggdrasilPet4: {
+        id: "ygg-pet4",
+        name: "Yggdrasil",
+        image: "assets/img/assets/pet/yggdrasil-stage-3.png",
+        type: "pet",
+        family: "drake",
+        shocked: true,
+        color: "#ff711f",
+        stars: "★★★★★★",
+        nivel: 32,
+        description: "Um yggdrasil adulto. Ele é muito forte e pode causar dano significativo em combate.",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 500,
+            attack: 44,
+            armor: 48,
+            agility: 42,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+        },
+        habilities: {
+            hability: {
+                name: "Reviver",
+                description: "Revive o player equipado, uma unica vez por combate, com 30% da vida máxima.",
+                revivePercent: 30,
+            }
+        }
+    },
+
 };
 
 export default pets;

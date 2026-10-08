@@ -11,7 +11,7 @@ const HUNGER_DECAY_AMOUNT = 10;
 // estrelas lida direto do campo `stars` ("★★★" = 3, etc.), então basta
 // dar o número certo de estrelas ao pet em pet.js pra ele cair na faixa
 // certa, sem precisar mexer aqui a cada pet novo.
-const MAX_HUNGER_BY_STARS = { 3: 100, 4: 250, 5: 500 };
+const MAX_HUNGER_BY_STARS = { 3: 100, 4: 250, 5: 500, 6: 750 };
 const DEFAULT_MAX_HUNGER = 100;
 
 // Curva de XP genérica — funciona pra QUALQUER pet/família sem precisar
@@ -192,7 +192,7 @@ export default class PetService {
         const stats = this.getStatsForLevel(petInstance.family, petInstance.level);
 
         if (!stage) {
-            return { life: 0, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0, biteDamage: 0, healAmount: 0, mimicRatio: 0, burnDamage: 0 };
+            return { life: 0, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0, biteDamage: 0, healAmount: 0, mimicRatio: 0, burnDamage: 0, revivePercent: 0 };
         }
 
         // Cura (Duende) e Queimadura (Boitatá) crescem com o pet: nível em
@@ -215,7 +215,11 @@ export default class PetService {
             mimicRatio: (ability?.mimicRatio ?? 0) * multiplier,
             // Boitatá: dano de UM tick da queimadura, antes da efetividade
             // do elemento do alvo (ver BoitataBurn.js).
-            burnDamage: ability?.burnDamage ? scale(levelPower) : 0
+            burnDamage: ability?.burnDamage ? scale(levelPower) : 0,
+            // Yggdrasil: % da Vida Máxima com que o dono volta ao morrer,
+            // uma vez por combate. A % é a do estágio, sem escalar pela
+            // fome — mas com a fome zerada o pet não revive ninguém.
+            revivePercent: multiplier > 0 ? (ability?.revivePercent ?? 0) : 0
         };
 
     }

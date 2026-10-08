@@ -507,6 +507,10 @@ export default class PvpView {
             const petName = (entry.turn === "a" ? combatantA : combatantB).petName ?? "O pet";
             return `<div class="pvp-log-line pvp-log-pet-bite">${petName} queimou ${defenderName}: ${entry.damage} de dano.</div>`;
         }
+        if (entry.revive) {
+            const petName = (entry.turn === "a" ? combatantA : combatantB).petName ?? "O pet";
+            return `<div class="pvp-log-line pvp-log-pet-bite">${petName} reviveu ${name} com ${entry.heal} HP.</div>`;
+        }
         if (entry.petBite) {
             const petName = (entry.turn === "a" ? combatantA : combatantB).petName ?? "O pet";
             const parts = [];
@@ -530,6 +534,9 @@ export default class PvpView {
         }
         if (entry.burn) {
             return `<div class="pvp-log-line pvp-log-pet-bite">${petNameOf(entry.attackerId)} de ${attackerName} queimou ${targetName}: ${entry.damage} de dano.</div>`;
+        }
+        if (entry.revive) {
+            return `<div class="pvp-log-line pvp-log-pet-bite">${petNameOf(entry.attackerId)} reviveu ${attackerName} com ${entry.heal} HP.</div>`;
         }
         if (entry.petBite) {
             const healTargetName = entry.healedIds?.[0] ? nameOf(entry.healedIds[0]) : null;
@@ -883,6 +890,13 @@ export default class PvpView {
             });
         }
 
+        if (entry.revive) {
+            const petName = (isMe ? this.player.equipment.pet?.name : this.currentOpponentSnapshot()?.petName) ?? "O pet";
+            return isMe
+                ? `<span class="combat-pet-bite">${petName}</span> reviveu você com <strong>${entry.heal}</strong> HP!`
+                : `<span class="combat-pet-bite">${petName}</span> reviveu ${opponentName} com <strong>${entry.heal}</strong> HP!`;
+        }
+
         if (entry.petBite) {
             const petName = (isMe ? this.player.equipment.pet?.name : this.currentOpponentSnapshot()?.petName) ?? "O pet";
             const damage = entry.damage > 0
@@ -998,6 +1012,12 @@ export default class PvpView {
         if (entry.dodged) {
             if (targetIsMe) return `<span class="combat-dodge">Você esquivou do ataque de ${attackerName}!</span>`;
             return `<span class="combat-dodge">${targetName} esquivou do ataque de ${attackerName}!</span>`;
+        }
+
+        if (entry.revive) {
+            return isMe
+                ? `<span class="combat-pet-bite">${petNameOf(entry.attackerId)}</span> reviveu você com <strong>${entry.heal}</strong> HP!`
+                : `<span class="combat-pet-bite">${petNameOf(entry.attackerId)}</span> reviveu ${attackerName} com <strong>${entry.heal}</strong> HP!`;
         }
 
         if (entry.petBite) {

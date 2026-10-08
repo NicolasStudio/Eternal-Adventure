@@ -346,6 +346,12 @@ const monstersRaid = [
                     { item: enchantmentStone.quartzoRosaDois, chance: 13 },
                     { item: enchantmentStone.quartzoRosaUm, chance: 67 }
                 ]
+            },
+            // Ovo do Yggdrasil: sorteio à parte (2%), além do pool acima —
+            // não tira a chance de nenhum outro drop.
+            {
+                item: { ...pets.yggdrasilPet1, icon: "assets/img/assets/eggs_drop/egg-yggdrasil.png" },
+                chance: 2
             }
         ]
     },

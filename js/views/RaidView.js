@@ -326,6 +326,10 @@ export default class RaidView {
             return `<div class="pvp-log-line pvp-log-pet-bite">Pet de ${attackerName} queimou ${targetName}: ${entry.damage} de dano.</div>`;
         }
 
+        if (entry.revive) {
+            return `<div class="pvp-log-line pvp-log-pet-bite">Pet de ${attackerName} reviveu ${attackerName} com ${entry.heal} HP.</div>`;
+        }
+
         if (entry.petBite) {
             const healTargetName = entry.healedIds?.[0] ? nameOf(entry.healedIds[0]) : null;
             const damage = entry.damage > 0 ? `Causou ${entry.damage} de dano em ${targetName}.` : "";
@@ -987,6 +991,12 @@ export default class RaidView {
                 element: entry.element,
                 first: entry.burnStart
             });
+        }
+
+        if (entry.revive) {
+            const petName = squad.find(c => c.id === entry.attackerId)?.petName ?? "O pet";
+            const revived = attackerName === "Você" ? "você" : attackerName;
+            return `<span class="combat-pet-bite">${petName}</span> reviveu ${revived} com <strong>${entry.heal}</strong> HP!`;
         }
 
         if (entry.petBite) {
