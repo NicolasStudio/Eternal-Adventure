@@ -322,7 +322,7 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-archer-rarity-mistico.png",
 
         stats: {
-            armor: 12,
+            armor: 10,
             agility: 5
         },
 
@@ -342,7 +342,7 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-archer-rarity-lendario.png",
 
         stats: {
-            armor: 14,
+            armor: 12,
             agility: 6
         },
 
