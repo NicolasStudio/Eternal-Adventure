@@ -299,4 +299,38 @@ export default {
     100: {
         required: 52500,
     },
+
+    // Níveis 101-110: só alcançáveis com o talento único "Rompendo
+    // Limites" (ver TalentService.js) — continuam o mesmo ritmo de +500
+    // por nível que já vinha desde a faixa 90-100.
+    101: {
+        required: 53000,
+    },
+    102: {
+        required: 53500,
+    },
+    103: {
+        required: 54000,
+    },
+    104: {
+        required: 54500,
+    },
+    105: {
+        required: 55000,
+    },
+    106: {
+        required: 55500,
+    },
+    107: {
+        required: 56000,
+    },
+    108: {
+        required: 56500,
+    },
+    109: {
+        required: 57000,
+    },
+    110: {
+        required: 57500,
+    },
 };

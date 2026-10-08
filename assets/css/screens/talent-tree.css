@@ -10,7 +10,7 @@
     inset:50% auto auto 50%;
     transform:translate(-50%,-50%);
     width:min(820px,94vw);
-    height:min(520px,90vh);
+    height:min(660px,92vh);
     display:flex;
     flex-direction:column;
     background:linear-gradient(rgba(0,0,0,.18),rgba(0,0,0,.18)),radial-gradient(circle at top,#24160d 0%,#120b07 70%,#0a0604 100%);
@@ -36,13 +36,16 @@
     text-shadow:0 0 18px rgba(212,163,115,.3);
 }
 
-/* Linha única; flex-wrap deixa espaço pra mais talentos no futuro. */
+/* Duas linhas empilhadas: talentos simples em cima, únicos embaixo —
+   flex-wrap deixa espaço pra mais talentos em qualquer uma das duas. */
 .talent-body{
     flex:1;
     display:flex;
+    flex-direction:column;
     align-items:center;
     justify-content:center;
-    padding:30px 24px;
+    gap:22px;
+    padding:26px 24px;
 }
 .talent-row{
     display:flex;
@@ -50,6 +53,27 @@
     justify-content:center;
     background:transparent;
     gap:28px;
+}
+
+/* Separa as duas linhas com um título discreto, no mesmo estilo dourado
+   apagado do resto da árvore. */
+.talent-divider{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    width:100%;
+    max-width:600px;
+    color:#8f7a5a;
+    font-size:.78rem;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+}
+.talent-divider::before,
+.talent-divider::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:#4a3a28;
 }
 
 .talent-item{

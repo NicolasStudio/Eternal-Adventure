@@ -304,6 +304,10 @@ export default class Player {
 
     getRequiredXP() {
 
+        // Sem o talento único "Rompendo Limites", o nível trava em 100
+        // mesmo que a tabela de experience.js tenha entradas até 110.
+        if (this.level >= TalentService.getMaxLevel(this)) return 0;
+
         const nextLevel = experience[this.level + 1];
 
         return nextLevel ? nextLevel.required : 0;
@@ -550,6 +554,14 @@ export default class Player {
 
         }
 
+        // O loop só para antes de gastar tudo em dois casos: faltou XP pro
+        // próximo nível (normal), ou bateu o teto de nível. No segundo caso
+        // o que sobrou em currentXP não tem mais pra onde ir — descarta,
+        // senão fica acumulado pra sempre (ver comentário da guarda acima).
+        if (this.getRequiredXP() <= 0) {
+            this.currentXP = 0;
+        }
+
         if (levelUps.length > 0) {
             TalentService.sync(this);
         }
@@ -598,6 +610,79 @@ export default class Player {
         });
 
         return structuredClone(bonus);
+
+    }
+
+    // Desfaz, nível por nível, o applyLevelBonus() de tudo que está acima
+    // de `cap` — usado quando o talento único "Rompendo Limites" é
+    // resetado (ver TalentService.clearUniqueTalent): sem ele, o nível
+    // trava em 100 de novo, então os níveis 101+ (e os status que vieram
+    // deles) não fazem mais sentido pro personagem.
+    revertLevelsAbove(cap) {
+
+        while (this.level > cap) {
+
+            const bonus = levels[this.level]?.[this.class.id];
+
+            if (bonus) {
+
+                this.maxHP = Math.max(1, this.maxHP - bonus.life);
+
+                Object.keys(bonus).forEach(stat => {
+                    if (stat === "life") return;
+                    this.baseStats[stat] = Math.max(0, (this.baseStats[stat] ?? 0) - bonus[stat]);
+                });
+
+            }
+
+            this.level--;
+
+        }
+
+        this.currentHP = Math.min(this.currentHP, this.maxHP);
+
+    }
+
+    // Desfaz os encantamentos de Anel e Amuleto (equipados ou no
+    // inventário) — usado quando "Rei dos Encantamentos" é resetado (ver
+    // TalentService.clearUniqueTalent): sem o talento, esses dois não
+    // podem mais ser encantados, então o bônus que já tinham some junto.
+    // A pedra gasta pra chegar lá não volta, igual nenhum outro reset
+    // devolve o ouro investido.
+    revertAccessoryEnchantments() {
+
+        const items = new Map();
+
+        [this.equipment.ring, this.equipment.amulet, ...this.inventory].forEach(item => {
+            if (item?.enchantments && (item.type === "ring" || item.type === "amulet")) {
+                items.set(item.uid, item);
+            }
+        });
+
+        items.forEach(item => {
+
+            Object.entries(item.enchantments).forEach(([statKey, value]) => {
+
+                if (statKey === "life") {
+                    this.maxHP = Math.max(1, this.maxHP - value);
+                    return;
+                }
+
+                if (statKey === "special") {
+                    const specialKey = this.getSpecialStatKey();
+                    if (specialKey) this.baseStats[specialKey] = Math.max(0, (this.baseStats[specialKey] ?? 0) - value);
+                    return;
+                }
+
+                this.baseStats[statKey] = Math.max(0, (this.baseStats[statKey] ?? 0) - value);
+
+            });
+
+            item.enchantments = {};
+
+        });
+
+        this.currentHP = Math.min(this.currentHP, this.maxHP);
 
     }
 
@@ -682,18 +767,20 @@ export default class Player {
 
         if (!stone?.stats) return { success: false, reason: "Pedra inválida." };
 
-        if (!weapon) return { success: false, reason: "Selecione uma arma." };
+        if (!weapon) return { success: false, reason: "Selecione um equipamento." };
 
         const inventoryStone = this.inventory.find(i => i.uid === stone.uid);
 
         if (!inventoryStone) return { success: false, reason: "Pedra inválida." };
 
-        const weaponInstance =
-            this.equipment.weapon?.uid === weapon.uid
-                ? this.equipment.weapon
-                : this.inventory.find(i => i.uid === weapon.uid);
+        // Normalmente só a arma estava equipável aqui, mas "Rei dos
+        // Encantamentos" (ver TalentService.js) também deixa encantar Anel
+        // e Amuleto equipados — por isso procura em QUALQUER slot, não só
+        // em equipment.weapon.
+        const equippedMatch = Object.values(this.equipment).find(item => item?.uid === weapon.uid);
+        const weaponInstance = equippedMatch ?? this.inventory.find(i => i.uid === weapon.uid);
 
-        if (!weaponInstance) return { success: false, reason: "Arma inválida." };
+        if (!weaponInstance) return { success: false, reason: "Equipamento inválido." };
 
         if (!weaponInstance.enchantments) {
             weaponInstance.enchantments = {};

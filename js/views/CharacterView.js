@@ -125,7 +125,7 @@ export default class CharacterView {
                         </div>
 
                         <span class="character-text">
-                            ${player.currentXP} / ${requiredXP}
+                            ${requiredXP > 0 ? `${player.currentXP} / ${requiredXP}` : "NÍVEL MÁXIMO"}
                         </span>
 
                     </div>

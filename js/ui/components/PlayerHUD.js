@@ -12,7 +12,10 @@ export default class PlayerHUD {
         const maxXP = player.getRequiredXP();
 
         const hpPercent = (player.currentHP / player.maxHP) * 100;
-        const xpPercent = Math.min((currentXP / maxXP) * 100, 100);
+        // maxXP = 0 é o nível máximo (sem a XP não ter mais pra onde ir) —
+        // barra cheia e texto próprio, nunca "X / 0".
+        const xpPercent = maxXP > 0 ? Math.min((currentXP / maxXP) * 100, 100) : 100;
+        const xpText = maxXP > 0 ? `${currentXP} / ${maxXP}` : "NÍVEL MÁXIMO";
 
         return `
             <aside class="hud-panel">
@@ -61,7 +64,7 @@ export default class PlayerHUD {
                     </div>
 
                     <span id="xp-text" class="hud-text">
-                        ${currentXP} / ${maxXP}
+                        ${xpText}
                     </span>
 
                 </div>
@@ -96,10 +99,10 @@ export default class PlayerHUD {
         const currentXP = player.currentXP;
         const maxXP = player.getRequiredXP();
 
-        const xpPercent = Math.min((currentXP / maxXP) * 100, 100);
+        const xpPercent = maxXP > 0 ? Math.min((currentXP / maxXP) * 100, 100) : 100;
 
         xpFill.style.width = `${xpPercent}%`;
-        xpText.textContent = `${currentXP} / ${maxXP}`;
+        xpText.textContent = maxXP > 0 ? `${currentXP} / ${maxXP}` : "NÍVEL MÁXIMO";
     }
 
     updateLevel() {

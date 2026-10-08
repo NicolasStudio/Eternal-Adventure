@@ -15,6 +15,7 @@ import farmCrops from "../data/farmCrops.js";
 import Toast from "../ui/components/Toast.js";
 import AuthService from "./AuthService.js";
 import PowerService from "./PowerService.js";
+import TalentService from "./TalentService.js";
 import { PET_MAX_LEVEL } from "../data/levelsPet.js";
 import cards from "../data/cards.js";
 import { sanitizeRemote, sanitizeText } from "./MatchSanitizer.js";
@@ -47,7 +48,11 @@ Object.values(farmCrops).forEach(crop => { FOOD_ITEM_BY_ID[crop.harvestedItem.id
 
 // Tetos usados só pra recusar valor absurdo num save adulterado (ver
 // normalizeLoadedData) — bem acima do que o jogo consegue produzir.
-const MAX_PLAYER_LEVEL = 100;
+// Teto de nível que um save, mesmo adulterado, pode ter. O jogo normal só
+// deixa passar de 100 com o talento único "Rompendo Limites" (ver
+// Player.getRequiredXP/TalentService.getMaxLevel) — este aqui é só a rede
+// de segurança contra valor absurdo, por isso já nasce no teto expandido.
+const MAX_PLAYER_LEVEL = 110;
 const MAX_GOLD = 1e12;
 const MAX_HP = 1e6;
 
@@ -254,6 +259,14 @@ export default class SaveService {
 
         player.progress = data.progress ?? player.progress;
 
+        // Corrige save de antes do addXP() descartar o que sobra ao bater o
+        // teto de nível (ver Player.addXP): se o personagem já está no teto
+        // e sobrou XP acumulada, ela nunca mais seria gasta mesmo — descarta
+        // aqui, uma vez, pra limpar quem ficou com esse valor preso.
+        if (player.level >= TalentService.getMaxLevel(player)) {
+            player.currentXP = 0;
+        }
+
         // Saves de antes das conquistas existirem não têm esses dois
         // campos — sem isso, achievements/stats ficariam undefined pro
         // resto da sessão (AchievementService.evaluate() já protege com
@@ -322,6 +335,10 @@ export default class SaveService {
 
         // Ajusta a transcendência ao upClasse.js atual (só a diferença).
         player.syncTranscendenceStats();
+
+        // Mesma ideia pro bônus do talento único "Cara ou Coroa?" (ver
+        // TalentService.js).
+        TalentService.syncCoinFlipBonus(player);
 
         player.chest = data.chest ?? player.chest;
         player.album = data.album ?? [];

@@ -1,4 +1,7 @@
-import TalentService, { TALENTS, MAX_LEVEL, GAIN_PERCENT_PER_LEVEL, LIFE_LOSS_PERCENT_PER_LEVEL } from "../../../services/TalentService.js";
+import TalentService, {
+    TALENTS, MAX_LEVEL, GAIN_PERCENT_PER_LEVEL, LIFE_LOSS_PERCENT_PER_LEVEL,
+    UNIQUE_TALENTS, UNIQUE_TALENT_COST, getSpecialStatLabel
+} from "../../../services/TalentService.js";
 import SaveService from "../../../services/SaveService.js";
 import Toast from "../Toast.js";
 import FarmConfirmModal from "./FarmConfirmModal.js";
@@ -46,6 +49,7 @@ export default class TalentTreeModal {
                         <h2>Árvore de Talentos</h2>
                         <span class="talent-subtitle">
                             Ganhe 1 ponto a cada região concluída: 3 fases + o boss dela, com 3 vitórias em cada.
+                            +1 ponto ao vencer o Anjo (Portal da Luz ou das Trevas) e melhorar de classe pela primeira vez.
                             (${earned} ganho${earned === 1 ? "" : "s"} até agora)
                         </span>
                     </div>
@@ -89,6 +93,12 @@ export default class TalentTreeModal {
                         }).join("")}
                     </div>
 
+                    <div class="talent-divider">Talentos Únicos</div>
+
+                    <div class="talent-row">
+                        ${UNIQUE_TALENTS.map(talent => this.renderUniqueCard(talent)).join("")}
+                    </div>
+
                 </div>
 
                 <footer class="blacksmith-footer">
@@ -126,7 +136,7 @@ export default class TalentTreeModal {
                     </div>
 
                     <div class="talent-footer-actions">
-                        <button class="talent-reset" ${TalentService.getSpentPoints(this.player) > 0 ? "" : "disabled"}>
+                        <button class="talent-reset" ${(TalentService.getSpentPoints(this.player) > 0 || TalentService.getUniqueTalent(this.player)) ? "" : "disabled"}>
                             <i class="fa-solid fa-rotate-left"></i>
                             Resetar
                         </button>
@@ -143,14 +153,67 @@ export default class TalentTreeModal {
 
     }
 
+    // Talento único: 1/1, sem acúmulo — só UM dos três pode estar ativo.
+    // Escolher um bloqueia os outros dois (ficam acinzentados, igual a um
+    // talento simples sem ouro) até resetar.
+    renderUniqueCard(talent) {
+
+        const active = TalentService.hasUniqueTalent(this.player, talent.id);
+        const lockedByOther = !!TalentService.getUniqueTalent(this.player) && !active;
+        const canInvest = TalentService.canInvestUnique(this.player, talent.id);
+        const bonus = active ? this.player.progress.uniqueTalentBonus : null;
+
+        const effect = talent.id === "cara_ou_coroa" && bonus
+            ? `Ativo: +${bonus.amount}% de ${getSpecialStatLabel(bonus.attribute)}.`
+            : active ? "Ativo." : "Ainda não escolhido.";
+
+        const hint = active
+            ? "Talento ativo."
+            : lockedByOther
+                ? "Só um talento único por vez — resete pra trocar."
+                : canInvest
+                    ? "Clique pra selecionar e depois em Melhorar."
+                    : "Ouro insuficiente.";
+
+        return `
+            <div class="talent-item">
+            <button class="talent-card ${this.selectedId === talent.id ? "selected" : ""} ${active ? "maxed" : ""}"
+                    data-talent="${talent.id}">
+                <img class="talent-icon" src="${talent.icon}" alt="${talent.label}">
+                <div class="talent-tooltip">
+                    <strong>${talent.label}</strong>
+                    <p>${talent.description}</p>
+                    <p class="talent-tooltip-effect">${effect}</p>
+                    <p class="talent-tooltip-hint">${hint}</p>
+                </div>
+            </button>
+            <span class="talent-progress">${active ? "1" : "0"}/1</span>
+            </div>
+        `;
+
+    }
+
+    isUniqueSelected() {
+        return UNIQUE_TALENTS.some(talent => talent.id === this.selectedId);
+    }
+
     registerEvents() {
 
         this.overlay.querySelector(".talent-close").addEventListener("click", () => this.hide());
 
         this.overlay.querySelector(".talent-reset")?.addEventListener("click", async () => {
+            const cost = TalentService.getResetCost(this.player);
+            const uniqueId = TalentService.getUniqueTalent(this.player);
+            const willRevertLevel = uniqueId === "rompendo_limites" && this.player.level > 100;
+            const willRevertEnchants = uniqueId === "rei_dos_encantamentos";
+            const message = uniqueId
+                ? `Resetar custa ${cost.toLocaleString("pt-BR")} de ouro (100.000 dos talentos simples + 500.000 por ter um talento único ativo). Os pontos voltam pro saldo, a vida e os atributos convertidos são devolvidos, e o talento único é desfeito.`
+                    + (willRevertLevel ? ` Seu nível também volta pra 100, desfazendo os status ganhos nos níveis acima disso.` : "")
+                    + (willRevertEnchants ? ` Os encantamentos do Anel e do Amuleto também somem — as pedras usadas não voltam.` : "")
+                : `Resetar os talentos custa ${cost.toLocaleString("pt-BR")} de ouro. Os pontos voltam pro saldo e a vida e os atributos convertidos são devolvidos.`;
             const confirmed = await this.confirmModal.show({
                 title: "Tem certeza?",
-                message: "Resetar os talentos custa 100.000 de ouro. Os pontos voltam pro saldo e a vida e os atributos convertidos são devolvidos.",
+                message,
                 confirmLabel: "SIM",
                 cancelLabel: "NÃO",
                 yesClass: "continue-yes-success",
@@ -171,9 +234,13 @@ export default class TalentTreeModal {
         });
 
         this.overlay.querySelector(".talent-upgrade")?.addEventListener("click", () => {
-            const result = TalentService.invest(this.player, this.selectedId);
+            const result = this.isUniqueSelected()
+                ? TalentService.investUnique(this.player, this.selectedId)
+                : TalentService.invest(this.player, this.selectedId);
             if (result.ok) {
                 SaveService.autoSave(this.player);
+            } else if (result.message) {
+                Toast.show(result.message);
             }
             this.refresh();
         });
@@ -181,11 +248,19 @@ export default class TalentTreeModal {
     }
 
     canUpgradeSelected() {
-        return !!this.selectedId && TalentService.canInvest(this.player, this.selectedId);
+        if (!this.selectedId) return false;
+        return this.isUniqueSelected()
+            ? TalentService.canInvestUnique(this.player, this.selectedId)
+            : TalentService.canInvest(this.player, this.selectedId);
     }
 
     renderSelectedPrice() {
         if (!this.selectedId) return "—";
+        if (this.isUniqueSelected()) {
+            return TalentService.hasUniqueTalent(this.player, this.selectedId)
+                ? "Ativo"
+                : UNIQUE_TALENT_COST.toLocaleString("pt-BR");
+        }
         const cost = TalentService.getUpgradeCost(this.player, this.selectedId);
         return cost === null ? "Máximo" : cost.toLocaleString("pt-BR");
     }
