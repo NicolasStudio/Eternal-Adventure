@@ -23,3 +23,18 @@
     color:#f0d5b0;
     text-transform:uppercase;
 }
+
+/* ==========================================================
+   RESPONSIVO — celular (mesma faixa de player-hud.css, já que os
+   dois painéis dividem a mesma linha do cabeçalho de combate)
+========================================================== */
+@media (max-width:700px){
+    .monster-panel{
+        width:170px;
+        padding:8px;
+        gap:6px;
+    }
+    .monster-name{
+        font-size:13px;
+    }
+}

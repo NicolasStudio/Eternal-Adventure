@@ -435,8 +435,14 @@ PREVIEW DOS ATRIBUTOS
 RESPONSIVO
 ==========================================================*/
 @media (max-width:900px){
-    .blacksmith-body{
+    .blacksmith-body,
+    .blacksmith-body.enchant-layout{
         grid-template-columns:1fr;
+    }
+    /* Arma + Pedra: o layout lado a lado cabe até telas bem estreitas,
+       mas quebra em duas linhas se não couber, em vez de estourar. */
+    .enchant-slots-row{
+        flex-wrap:wrap;
     }
     .blacksmith-footer{
         flex-direction:column;

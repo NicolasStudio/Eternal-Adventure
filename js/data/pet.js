@@ -744,7 +744,7 @@ const pets = {
             hability: {
                 name: "Chicote de Vinha",
                 description: "Um chicote de vinha que causa dano verdadeiro. Também revive você, uma única vez por combate, com 10% da vida máxima.",
-                damage: 25,
+                damage: 20,
                 revivePercent: 10,
             }
         }
@@ -779,7 +779,7 @@ const pets = {
             hability: {
                 name: "Chicote de Vinha",
                 description: "Um chicote de vinha que causa dano verdadeiro. Também revive você, uma única vez por combate, com 20% da vida máxima.",
-                damage: 50,
+                damage: 40,
                 revivePercent: 20,
             }
         }
@@ -801,8 +801,8 @@ const pets = {
         fome: 0,
 
         stats: {
-            life: 500,
-            attack: 44,
+            life: 550,
+            attack: 60,
             armor: 48,
             agility: 42,
             criticalChance: 0,
@@ -814,7 +814,7 @@ const pets = {
             hability: {
                 name: "Chicote de Vinha",
                 description: "Um chicote de vinha que causa dano verdadeiro. Também revive você, uma única vez por combate, com 30% da vida máxima.",
-                damage: 75,
+                damage: 60,
                 revivePercent: 30,
             }
         }

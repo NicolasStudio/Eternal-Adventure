@@ -17,7 +17,11 @@ export default [
             "Cooperativo: Dragão Solaria, Dragão de Tenebris e Dragão Yggdrasil (andares 5, 6 e 7) mais difíceis — mais vida, armadura, agilidade e dano dos ataques, crescendo a cada andar",
             "Pets: a fome agora cai 10 pontos a cada 20 minutos (antes a cada 50)",
             "Rei dos Encantamentos: agora libera encantar só o Anel — o Amuleto não pode mais ser encantado. Os encantamentos já feitos em Amuletos foram removidos, e as pedras usadas não voltam",
-            "Conquistas novas: Qual é o seu talento?, Chocolate, Rompendo limites, Uma lenda (Poder acima de 45 mil) e Pai e filho (duas classes no nível 100 na mesma conta)"
+            "Conquistas novas: Qual é o seu talento?, Chocolate, Rompendo limites, Uma lenda (Poder acima de 45 mil) e Pai e filho (duas classes no nível 100 na mesma conta)",
+            "Cooperativo: Dragão Solaria, Dragão de Tenebris e Dragão Yggdrasil (andares 5, 6 e 7) mais difíceis — mais vida, armadura, agilidade e dano dos ataques, crescendo a cada andar",
+            "Celular: corrigida a página inteira aparecendo 'zoom out' (tudo minúsculo) — a navegação de baixo e a barra de ferramentas eram largas demais pra caber na tela, o que forçava o navegador a encolher o jogo todo pra caber",
+            "Celular: corrigida a tela de Encantar não se ajustando à tela, com o conteúdo esmagado",
+            "Celular: corrigidos os retratos do PVP 2x2 e os personagens do Cooperativo ficando parcialmente fora da tela em luta"
         ]
     },
 

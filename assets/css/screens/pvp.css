@@ -412,6 +412,25 @@
     color:#d8c39b;
     text-shadow:0 2px 6px rgba(0,0,0,.8);
 }
+
+/* ==========================================================
+   RESPONSIVO — celular
+   4 retratos de 200px + 70px de vão entre eles passam de 1000px —
+   a arena (.pvp2v2-arena) corta isso com overflow:hidden, então não
+   quebra a página, mas os jogadores das pontas ficam invisíveis,
+   fora da tela, numa tela de celular.
+========================================================== */
+@media (max-width:700px){
+    .pvp2v2-portraits{
+        gap:14px;
+    }
+    .pvp2v2-portrait-slot img{
+        width:72px;
+    }
+    .pvp2v2-portrait-name{
+        font-size:.65rem;
+    }
+}
 /* Cartões de vida do 2x2: mesmo visual do HUD do jogador. O aliado
    entra na coluna da esquerda (embaixo do meu HUD) e os dois inimigos
    ficam empilhados no canto direito. */
