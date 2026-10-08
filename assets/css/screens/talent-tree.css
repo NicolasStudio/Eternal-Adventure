@@ -76,6 +76,14 @@
     background:#4a3a28;
 }
 
+.talent-unique-requirement{
+    margin:-10px 0 0;
+    font-size:.78rem;
+    font-style:italic;
+    color:#8f7a5a;
+    text-align:center;
+}
+
 .talent-item{
     display:flex;
     flex-direction:column;

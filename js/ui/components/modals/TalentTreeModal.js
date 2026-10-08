@@ -49,7 +49,6 @@ export default class TalentTreeModal {
                         <h2>Árvore de Talentos</h2>
                         <span class="talent-subtitle">
                             Ganhe 1 ponto a cada região concluída: 3 fases + o boss dela, com 3 vitórias em cada.
-                            +1 ponto ao vencer o Anjo (Portal da Luz ou das Trevas) e melhorar de classe pela primeira vez.
                             (${earned} ganho${earned === 1 ? "" : "s"} até agora)
                         </span>
                     </div>
@@ -94,6 +93,10 @@ export default class TalentTreeModal {
                     </div>
 
                     <div class="talent-divider">Talentos Únicos</div>
+
+                    ${!TalentService.hasMaxedTalent(this.player) ? `
+                        <p class="talent-unique-requirement">Deixe um talento simples acima em 3/3 pra desbloquear estes.</p>
+                    ` : ""}
 
                     <div class="talent-row">
                         ${UNIQUE_TALENTS.map(talent => this.renderUniqueCard(talent)).join("")}
@@ -171,9 +174,11 @@ export default class TalentTreeModal {
             ? "Talento ativo."
             : lockedByOther
                 ? "Só um talento único por vez — resete pra trocar."
-                : canInvest
-                    ? "Clique pra selecionar e depois em Melhorar."
-                    : "Ouro insuficiente.";
+                : !TalentService.hasMaxedTalent(this.player)
+                    ? "Deixe um talento simples em 3/3 antes de escolher este."
+                    : canInvest
+                        ? "Clique pra selecionar e depois em Melhorar."
+                        : "Ouro insuficiente.";
 
         return `
             <div class="talent-item">

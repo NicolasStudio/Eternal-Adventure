@@ -95,18 +95,7 @@ export default class TalentService {
     }
 
     static getEarnedPoints(player) {
-
-        const regionPoints = POINT_GROUPS.filter(group => this.isGroupComplete(player, group)).length;
-
-        // +1 ao vencer o Anjo (Portal da Luz ou das Trevas) e melhorar de
-        // classe pela primeira vez — player.transcendence só existe depois
-        // disso (ver Player.applyClassUpgrade), então serve de sinal direto,
-        // sem precisar guardar mais nada: quem já transcendeu antes dessa
-        // atualização ganha o ponto sozinho, na próxima vez que abrir a tela.
-        const angelPoint = player.transcendence ? 1 : 0;
-
-        return regionPoints + angelPoint;
-
+        return POINT_GROUPS.filter(group => this.isGroupComplete(player, group)).length;
     }
 
     static isGroupComplete(player, group) {
@@ -248,16 +237,29 @@ export default class TalentService {
         return this.hasUniqueTalent(player, "rompendo_limites") ? EXPANDED_MAX_LEVEL : DEFAULT_MAX_LEVEL;
     }
 
+    // Pré-requisito pros talentos únicos: precisa ter pelo menos um talento
+    // SIMPLES (Dano/Armadura/Velocidade) em 3/3 antes de poder escolher um.
+    static hasMaxedTalent(player) {
+        const levels = this.getLevels(player);
+        return TALENTS.some(talent => (levels[talent.id] ?? 0) >= MAX_LEVEL);
+    }
+
     static canInvestUnique(player, talentId) {
         return !this.getUniqueTalent(player)
             && UNIQUE_TALENTS.some(talent => talent.id === talentId)
+            && this.hasMaxedTalent(player)
             && player.gold >= UNIQUE_TALENT_COST;
     }
 
     static investUnique(player, talentId) {
 
         if (!this.canInvestUnique(player, talentId)) {
-            return { ok: false, message: "Você já escolheu um talento único, ou o ouro é insuficiente." };
+            return {
+                ok: false,
+                message: !this.hasMaxedTalent(player)
+                    ? "Deixe um talento simples em 3/3 antes de escolher um talento único."
+                    : "Você já escolheu um talento único, ou o ouro é insuficiente."
+            };
         }
 
         player.gold -= UNIQUE_TALENT_COST;
