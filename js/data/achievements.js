@@ -500,6 +500,43 @@ const achievements = [
         icon: 'assets/img/icons/achievements/ouro.png',
         iconLocked:'assets/img/icons/achievements/bloqueado.png'
     },
+    {
+        id: 'power_45k',
+        name: 'Uma lenda',
+        description: 'Atinja Poder acima de 45 mil',
+        icon: 'assets/img/icons/achievements/ouro.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    // Talentos
+    {
+        id: 'talent_first',
+        name: 'Qual é o seu talento?',
+        description: 'Aprimore seu primeiro talento',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'talent_maxed',
+        name: 'Chocolate',
+        description: 'Aprimore um talento em 3/3',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'talent_unique',
+        name: 'Rompendo limites',
+        description: 'Aprimore um talento único',
+        icon: 'assets/img/icons/achievements/prata.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    // Conta
+    {
+        id: 'account_two_classes_100',
+        name: 'Pai e filho',
+        description: 'Tenha uma conta com duas classes no lv 100',
+        icon: 'assets/img/icons/achievements/ouro.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
     // Transcendência
     {
         id: 'class_transcendence',

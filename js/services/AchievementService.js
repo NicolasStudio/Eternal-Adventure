@@ -5,6 +5,8 @@ import monstersRaid from "../data/monstersRaid.js";
 import farmCrops from "../data/farmCrops.js";
 import AudioSettings from "./AudioSettings.js";
 import PowerService from "./PowerService.js";
+import TalentService from "./TalentService.js";
+import SaveService from "./SaveService.js";
 
 const EQUIPMENT_SLOTS = ["weapon", "helmet", "chest", "leg", "boot"];
 
@@ -81,6 +83,25 @@ function hasOneOfEachFood(player) {
     );
 }
 
+// "Pai e filho" — olha a CONTA, não só o personagem em jogo: duas classes
+// DIFERENTES no nível 100 ou mais. O personagem ativo entra com o nível
+// de agora (o do save pode estar atrasado até a próxima gravação); o
+// outro slot vem do save da conta (ver SaveService.container).
+function hasTwoClassesAtLevel(player, level) {
+
+    const classIds = new Set();
+
+    if (player.level >= level) classIds.add(player.class.id);
+
+    Object.entries(SaveService.container?.slots ?? {}).forEach(([slot, character]) => {
+        if (Number(slot) === SaveService.activeSlot) return;
+        if ((character?.level ?? 0) >= level && character.classId) classIds.add(character.classId);
+    });
+
+    return classIds.size >= 2;
+
+}
+
 // Um checador por conquista, indexado pelo MESMO id semântico usado em
 // achievements.js (kill_1, level_5, silence, the_end, etc.) — nunca
 // pela posição/ordem no array. Isso é o que evita o bug de reordenar
@@ -149,6 +170,14 @@ const CHECKS = {
     power_8k: player => PowerService.getPower(player) > 8000,
     power_25k: player => PowerService.getPower(player) > 25000,
     power_32k: player => PowerService.getPower(player) > 32000,
+    power_45k: player => PowerService.getPower(player) > 45000,
+
+    // Ficam pra sempre mesmo depois de resetar os talentos.
+    talent_first: player => TalentService.getSpentPoints(player) >= 1,
+    talent_maxed: player => TalentService.hasMaxedTalent(player),
+    talent_unique: player => TalentService.getUniqueTalent(player) != null,
+
+    account_two_classes_100: player => hasTwoClassesAtLevel(player, 100),
 
     egg_hatch_1: player => (player.progress.stats?.eggsHatched ?? 0) >= 1,
     egg_hatch_5: player => (player.progress.stats?.eggsHatched ?? 0) >= 5,
