@@ -347,6 +347,15 @@ export default class SaveService {
         player.equipmentLifeBonusApplied = data.equipmentLifeBonusApplied ?? 0;
         player.talentApplied = data.talentApplied ?? { lifeLost: 0, attack: 0, armor: 0, agility: 0 };
 
+        // "Rei dos Encantamentos" deixou de liberar o Amuleto (só o Anel
+        // continua) — tira o bônus de todo Amuleto que foi encantado
+        // enquanto era permitido. Idempotente: depois da primeira vez não
+        // sobra Amuleto encantado. Se saiu Vida, a conversão dos talentos
+        // (% da Vida Máxima) é recalculada em cima do novo total.
+        if (player.revertAccessoryEnchantments(["amulet"])) {
+            TalentService.sync(player);
+        }
+
         // Saves de antes da Anti-Praga existir não têm esses campos —
         // sem isso, applyPestSpawn() trataria "nunca nasceu nenhuma
         // praga ainda" como se lastPestSpawnAt fosse `undefined`, o que

@@ -214,7 +214,7 @@ export default class TalentTreeModal {
             const message = uniqueId
                 ? `Resetar custa ${cost.toLocaleString("pt-BR")} de ouro (100.000 dos talentos simples + 500.000 por ter um talento único ativo). Os pontos voltam pro saldo, a vida e os atributos convertidos são devolvidos, e o talento único é desfeito.`
                     + (willRevertLevel ? ` Seu nível também volta pra 100, desfazendo os status ganhos nos níveis acima disso.` : "")
-                    + (willRevertEnchants ? ` Os encantamentos do Anel e do Amuleto também somem — as pedras usadas não voltam.` : "")
+                    + (willRevertEnchants ? ` Os encantamentos do Anel também somem — as pedras usadas não voltam.` : "")
                 : `Resetar os talentos custa ${cost.toLocaleString("pt-BR")} de ouro. Os pontos voltam pro saldo e a vida e os atributos convertidos são devolvidos.`;
             const confirmed = await this.confirmModal.show({
                 title: "Tem certeza?",

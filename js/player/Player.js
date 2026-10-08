@@ -649,12 +649,17 @@ export default class Player {
     // podem mais ser encantados, então o bônus que já tinham some junto.
     // A pedra gasta pra chegar lá não volta, igual nenhum outro reset
     // devolve o ouro investido.
-    revertAccessoryEnchantments() {
+    //
+    // `types` limita quais acessórios são desfeitos — o talento hoje só
+    // libera o Anel, e o carregamento usa ["amulet"] pra tirar o que foi
+    // encantado quando o Amuleto ainda era permitido (ver
+    // SaveService.deserialize). Devolve true se desfez alguma coisa.
+    revertAccessoryEnchantments(types = ["ring", "amulet"]) {
 
         const items = new Map();
 
         [this.equipment.ring, this.equipment.amulet, ...this.inventory].forEach(item => {
-            if (item?.enchantments && (item.type === "ring" || item.type === "amulet")) {
+            if (item?.enchantments && types.includes(item.type) && Object.keys(item.enchantments).length) {
                 items.set(item.uid, item);
             }
         });
@@ -683,6 +688,8 @@ export default class Player {
         });
 
         this.currentHP = Math.min(this.currentHP, this.maxHP);
+
+        return items.size > 0;
 
     }
 
@@ -774,13 +781,17 @@ export default class Player {
         if (!inventoryStone) return { success: false, reason: "Pedra inválida." };
 
         // Normalmente só a arma estava equipável aqui, mas "Rei dos
-        // Encantamentos" (ver TalentService.js) também deixa encantar Anel
-        // e Amuleto equipados — por isso procura em QUALQUER slot, não só
-        // em equipment.weapon.
+        // Encantamentos" (ver TalentService.js) também deixa encantar o
+        // Anel equipado — por isso procura em QUALQUER slot, não só em
+        // equipment.weapon.
         const equippedMatch = Object.values(this.equipment).find(item => item?.uid === weapon.uid);
         const weaponInstance = equippedMatch ?? this.inventory.find(i => i.uid === weapon.uid);
 
         if (!weaponInstance) return { success: false, reason: "Equipamento inválido." };
+
+        if (!TalentService.getEnchantableTypes(this).includes(weaponInstance.type)) {
+            return { success: false, reason: "Esse equipamento não pode ser encantado." };
+        }
 
         if (!weaponInstance.enchantments) {
             weaponInstance.enchantments = {};

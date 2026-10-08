@@ -17,17 +17,13 @@ export default class BlacksmithEnchant {
     }
 
     // Normalmente só a arma. Com o talento único "Rei dos Encantamentos"
-    // (ver TalentService.js), Anel e Amuleto entram também.
+    // (ver TalentService.js), o Anel entra também.
     getEnchantableTypes() {
-        const types = ["weapon"];
-        if (TalentService.hasUniqueTalent(this.player, "rei_dos_encantamentos")) {
-            types.push("ring", "amulet");
-        }
-        return types;
+        return TalentService.getEnchantableTypes(this.player);
     }
 
     // O nome interno (anvilWeapon/weapons) continua o mesmo pra não mexer
-    // no resto do arquivo — pode ser arma, anel ou amuleto, dependendo de
+    // no resto do arquivo — pode ser arma ou anel, dependendo de
     // getEnchantableTypes().
     getWeapons() {
         const types = this.getEnchantableTypes();

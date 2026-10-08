@@ -70,7 +70,7 @@ export const UNIQUE_TALENTS = [
         id: "rei_dos_encantamentos",
         label: "Rei dos Encantamentos",
         icon: "assets/img/assets/talent-tree/enchantment-up.png",
-        description: "Permite encantar o Anel e o Amuleto, assim como já é feito com a arma."
+        description: "Permite encantar o Anel, assim como já é feito com a arma."
     }
 ];
 
@@ -230,6 +230,13 @@ export default class TalentService {
 
     static hasUniqueTalent(player, id) {
         return this.getUniqueTalent(player) === id;
+    }
+
+    // Tipos de item que o personagem pode encantar na Ferraria: só a arma,
+    // e também o Anel com "Rei dos Encantamentos" ativo. O Amuleto já foi
+    // liberado por esse talento e saiu (ficava forte demais).
+    static getEnchantableTypes(player) {
+        return this.hasUniqueTalent(player, "rei_dos_encantamentos") ? ["weapon", "ring"] : ["weapon"];
     }
 
     // Nível máximo de verdade pro personagem AGORA — ver Player.getRequiredXP.
