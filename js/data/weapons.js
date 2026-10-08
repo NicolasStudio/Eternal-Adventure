@@ -420,7 +420,7 @@ const weapons = {
         rarity: rarities.ultraje,
         icon: "assets/img/assets/items/weapons/arch-rarity-ultraje.png",
         stats: {
-            attack: 55,
+            attack: 52,
             armor: 0,
             agility: 11,
             criticalChance: 15,
