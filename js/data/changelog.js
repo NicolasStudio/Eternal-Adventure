@@ -6,7 +6,7 @@ export default [
         changes: [
             "Árvore de Talentos: nova linha de Talentos Únicos, abaixo da conversão de vida. Cada um custa 1.000.000 de ouro, é tudo ou nada (1/1) e só um dos três pode estar ativo por vez",
             "Rompendo Limites: libera o nível máximo até 110 (o normal é 100)",
-            "Cara ou Coroa?: sorteia um atributo especial que não é o principal da sua classe e soma +15% nele",
+            "Cara ou Coroa?: sorteia um atributo especial que não é o principal da sua classe e soma +10% nele",
             "Rei dos Encantamentos: libera encantar o Anel e o Amuleto na Ferraria, do mesmo jeito que já era feito com a arma",
             "Resetar os talentos com um talento único ativo custa 500.000 de ouro a mais que o reset normal, e desfaz os dois de uma vez",
             "Resetar o talento Rompendo Limites também devolve o personagem pro nível 100, desfazendo os status ganhos acima disso",
@@ -14,8 +14,7 @@ export default [
             "Corrigido o XP ficando acumulado pra sempre (e a barra mostrando 'X / 0') quando um ganho grande de XP cruzava o nível máximo de uma vez",
             "Corrigido o tooltip de Anel e Amuleto não mostrando os encantamentos aplicados com o Rei dos Encantamentos ativo",
             "Corrigido resetar o Rei dos Encantamentos não desfazendo os encantamentos já aplicados no Anel e no Amuleto",
-            "Árvore de Talentos: +1 ponto ao vencer o Anjo (Portal da Luz ou das Trevas) e melhorar de classe pela primeira vez — quem já tinha transcendido antes ganha o ponto sozinho",
-            "Cara ou Coroa?: bônus reduzido de +15% para +10% — quem já tinha escolhido esse talento é ajustado sozinho ao carregar"
+            "Árvore de Talentos: +1 ponto ao vencer o Anjo (Portal da Luz ou das Trevas) e melhorar de classe pela primeira vez — quem já tinha transcendido antes ganha o ponto sozinho"
         ]
     },
 
