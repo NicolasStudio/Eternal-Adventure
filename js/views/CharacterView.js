@@ -245,8 +245,7 @@ export default class CharacterView {
             // Mímico não tem dano fixo pra mostrar (é uma fração do
             // golpe de cada turno, só sabida em combate) — mostra a
             // fração em vez de um número inventado.
-            ability.mimicRatio > 0 ? `1/${Math.round(1 / ability.mimicRatio)} do dano causado` : null,
-            scaled.revivePercent > 0 ? `revive com ${scaled.revivePercent}% da vida` : null
+            ability.mimicRatio > 0 ? `1/${Math.round(1 / ability.mimicRatio)} do dano causado` : null
         ].filter(Boolean).join(" + ") || "Passiva" : "";
 
         return `
@@ -307,6 +306,12 @@ export default class CharacterView {
                             <span>${ability.name}</span>
                             <span>${abilityValue}</span>
                         </div>
+                        ${scaled.revivePercent > 0 ? `
+                            <div class="character-stat pet-ability">
+                                <span>Reviver</span>
+                                <span>${scaled.revivePercent}% da vida</span>
+                            </div>
+                        ` : ""}
                     ` : ""}
 
                 </div>
