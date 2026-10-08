@@ -14,7 +14,8 @@ export default [
             "Corrigido o XP ficando acumulado pra sempre (e a barra mostrando 'X / 0') quando um ganho grande de XP cruzava o nível máximo de uma vez",
             "Corrigido o tooltip de Anel e Amuleto não mostrando os encantamentos aplicados com o Rei dos Encantamentos ativo",
             "Corrigido resetar o Rei dos Encantamentos não desfazendo os encantamentos já aplicados no Anel e no Amuleto",
-            "Cooperativo: Dragão Solaria, Dragão de Tenebris e Dragão Yggdrasil (andares 5, 6 e 7) mais difíceis — mais vida, armadura, agilidade e dano dos ataques, crescendo a cada andar"
+            "Cooperativo: Dragão Solaria, Dragão de Tenebris e Dragão Yggdrasil (andares 5, 6 e 7) mais difíceis — mais vida, armadura, agilidade e dano dos ataques, crescendo a cada andar",
+            "Pets: a fome agora cai 10 pontos a cada 20 minutos (antes a cada 50)"
         ]
     },
 

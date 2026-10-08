@@ -3,7 +3,7 @@ import levelsPet, { PET_MAX_LEVEL, LIFE_PER_POINT, LIFE_BOOST_AFTER_LEVEL, LIFE_
 import SoundEffectService from "./SoundEffectService.js";
 import SaveService from "./SaveService.js";
 
-const HUNGER_DECAY_STEP_MS = 50 * 60 * 1000; // 50min
+const HUNGER_DECAY_STEP_MS = 20 * 60 * 1000; // 20min
 const HUNGER_DECAY_AMOUNT = 10;
 
 // Teto de fome por raridade — pet de mais estrelas aguenta mais fome
@@ -134,7 +134,7 @@ export default class PetService {
        FOME
     ===================================================== */
 
-    // Decaimento preguiçoso: avança em blocos INTEIROS de 50min (-10
+    // Decaimento preguiçoso: avança em blocos INTEIROS de 20min (-10
     // cada), preservando o resto do tempo que ainda não completou um
     // bloco — não "perde" progresso parcial toda vez que é checado.
     static applyHungerDecay(petInstance) {
