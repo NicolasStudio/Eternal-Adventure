@@ -12,7 +12,7 @@
 
    Perfil: wolf=Dano(baixo) · fairy=Vida+pouco Armadura/Ataque ·
    spider=Dano+Agilidade+pouca Vida · bear=Vida+Armadura · snake=Vida+Dano+Agilidade ·
-   drake=tudo alto (6★, não ataca — ver Yggdrasil em pet.js)
+   drake=tudo alto (6★ — ver Yggdrasil em pet.js)
 ========================================================== */
 
 export const PET_MAX_LEVEL = 50;

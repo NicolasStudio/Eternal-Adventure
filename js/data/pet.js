@@ -681,8 +681,9 @@ const pets = {
     },
 
     /* ==========================================================
-        Yggdrasil - Não ataca: soma atributos e revive o jogador 1x por combate
-        (revivePercent = % da Vida Máxima com que ele volta)
+        Yggdrasil - Chicote de Vinha (dano fixo, igual à mordida do Lobo) e
+        revive o jogador 1x por combate (revivePercent = % da Vida Máxima
+        com que ele volta)
     ========================================================== */
     yggdrasilPet1: {
         id: "ygg-pet1",
@@ -741,8 +742,9 @@ const pets = {
         },
         habilities: {
             hability: {
-                name: "Reviver",
-                description: "Revive o player equipado, uma unica vez por combate, com 10% da vida máxima.",
+                name: "Chicote de Vinha",
+                description: "Um chicote de vinha que causa dano verdadeiro. Também revive você, uma única vez por combate, com 10% da vida máxima.",
+                damage: 25,
                 revivePercent: 10,
             }
         }
@@ -775,8 +777,9 @@ const pets = {
         },
         habilities: {
             hability: {
-                name: "Reviver",
-                description: "Revive o player equipado, uma unica vez por combate, com 20% da vida máxima.",
+                name: "Chicote de Vinha",
+                description: "Um chicote de vinha que causa dano verdadeiro. Também revive você, uma única vez por combate, com 20% da vida máxima.",
+                damage: 50,
                 revivePercent: 20,
             }
         }
@@ -809,8 +812,9 @@ const pets = {
         },
         habilities: {
             hability: {
-                name: "Reviver",
-                description: "Revive o player equipado, uma unica vez por combate, com 30% da vida máxima.",
+                name: "Chicote de Vinha",
+                description: "Um chicote de vinha que causa dano verdadeiro. Também revive você, uma única vez por combate, com 30% da vida máxima.",
+                damage: 75,
                 revivePercent: 30,
             }
         }
