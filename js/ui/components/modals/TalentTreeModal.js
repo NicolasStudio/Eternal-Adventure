@@ -3,6 +3,7 @@ import TalentService, {
     UNIQUE_TALENTS, UNIQUE_TALENT_COST, getSpecialStatLabel
 } from "../../../services/TalentService.js";
 import SaveService from "../../../services/SaveService.js";
+import AuthService from "../../../services/AuthService.js";
 import Toast from "../Toast.js";
 import FarmConfirmModal from "./FarmConfirmModal.js";
 
@@ -238,17 +239,57 @@ export default class TalentTreeModal {
             });
         });
 
-        this.overlay.querySelector(".talent-upgrade")?.addEventListener("click", () => {
-            const result = this.isUniqueSelected()
+        this.overlay.querySelector(".talent-upgrade")?.addEventListener("click", async () => {
+
+            const wasUnique = this.isUniqueSelected();
+
+            const result = wasUnique
                 ? TalentService.investUnique(this.player, this.selectedId)
                 : TalentService.invest(this.player, this.selectedId);
-            if (result.ok) {
-                SaveService.autoSave(this.player);
-            } else if (result.message) {
-                Toast.show(result.message);
+
+            if (!result.ok) {
+                if (result.message) Toast.show(result.message);
+                this.refresh();
+                return;
             }
+
             this.refresh();
+
+            if (!wasUnique) {
+                SaveService.autoSave(this.player);
+                return;
+            }
+
+            // Talento único muda regra importante (ex: nível máximo com
+            // Rompendo Limites) — autoSave normal é "dispara e esquece",
+            // então sem confirmar aqui o jogador podia continuar jogando
+            // (inclusive subindo de nível) achando que salvou, e perder
+            // tudo se trocasse de aparelho ou limpasse os dados antes de
+            // qualquer save realmente chegar na nuvem (foi exatamente
+            // isso que já aconteceu com jogadores reais).
+            const synced = await this.confirmCloudSync();
+
+            if (!synced) {
+                Toast.show(
+                    "Talento salvo só neste navegador — a nuvem não confirmou. Não troque de aparelho nem limpe os dados até conseguir salvar de novo (ícone de disquete no topo).",
+                    8000
+                );
+            }
+
         });
+
+    }
+
+    // Espera o autoSave terminar e devolve se a nuvem confirmou (true).
+    // Sem conta logada não existe nuvem pra confirmar — só o
+    // localStorage importa nesse caso, então conta como "seguro".
+    async confirmCloudSync() {
+
+        if (!AuthService.getCurrentUser()) return true;
+
+        const result = await SaveService.autoSave(this.player);
+
+        return Array.isArray(result) && result[0] === true;
 
     }
 
