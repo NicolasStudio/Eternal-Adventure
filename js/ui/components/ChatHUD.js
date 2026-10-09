@@ -6,6 +6,22 @@ import ADMIN_UIDS from "../../data/admins.js";
 
 const MAX_RENDERED_MESSAGES = 100;
 
+// Lista curada (não é o seletor nativo do SO, que não dá pra abrir via
+// JS de forma confiável em todo navegador) — emojis comuns + um punhado
+// temáticos do jogo.
+const EMOJIS = [
+    "😀", "😂", "🤣", "😍", "😘", "😎", "🤩", "🥳",
+    "🤔", "🙄", "😏", "😅", "😭", "😢", "😡", "🤬",
+    "😱", "😴", "🤒", "🤡", "🥶", "🥵", "😇", "🤤",
+    "👍", "👎", "👏", "🙏", "💪", "🤝", "🤙", "👋",
+    "🫡", "🤦", "🤷", "👑", "💀", "☠️", "👻", "🤖",
+    "❤️", "🧡", "💛", "💚", "💙", "💔", "🔥", "⭐",
+    "✨", "🎉", "🎊", "💰", "💎", "⚡", "💤", "💯",
+    "⚔️", "🛡️", "🏆", "🎮", "🎲", "🗡️", "🏹", "🪄",
+    "🐉", "🐺", "🦁", "🐍", "🦅", "🐸", "🐲", "🦇",
+    "✅", "❌", "❓", "❗", "💬", "👀", "🚀", "🎯"
+];
+
 // Margem mínima da borda da tela — tanto na posição inicial quanto
 // arrastando, o painel nunca fica mais perto do que isso de nenhuma
 // borda (ver positionPanel/bindDrag). O painel agora tem tamanho FIXO
@@ -23,6 +39,9 @@ export default class ChatHUD {
         this.unread = 0;
         this.stopPanel = null;
         this.stopWatching = null;
+        this.emojiPicker = null;
+        this.emojiOutsideClickHandler = null;
+        this.emojiEscapeHandler = null;
         // uid de quem está no #1 do ranking AGORA — carregado toda vez
         // que o painel abre (ver open()), pra decidir quem ganha a
         // coroa ao lado do nome nas mensagens (ver addMessage()).
@@ -162,6 +181,9 @@ export default class ChatHUD {
             <p class="chat-error" id="chat-error" hidden></p>
 
             <div class="chat-form">
+                <button class="chat-emoji-toggle" id="chat-emoji-toggle" type="button" title="Emojis">
+                    <i class="fa-regular fa-face-smile"></i>
+                </button>
                 <textarea
                     id="chat-input"
                     class="chat-input"
@@ -205,6 +227,8 @@ export default class ChatHUD {
     close() {
 
         if (!this.panel) return;
+
+        this.closeEmojiPicker();
 
         this.stopPanel?.();
         this.stopPanel = null;
@@ -306,7 +330,14 @@ export default class ChatHUD {
         input.addEventListener("keydown", event => {
 
             if (event.key === "Escape") {
-                this.close();
+                // Esc com o seletor aberto só fecha ELE — fechar o painel
+                // inteiro de uma vez seria perder o texto já digitado por
+                // um Esc que a pessoa só queria dar no seletor.
+                if (this.emojiPicker) {
+                    this.closeEmojiPicker();
+                } else {
+                    this.close();
+                }
                 return;
             }
 
@@ -317,6 +348,99 @@ export default class ChatHUD {
             }
 
         });
+
+        this.bindEmojiPicker();
+
+    }
+
+    // Botão de emoji: abre um pequeno grid acima do formulário — clicar
+    // fora ou Esc fecha (mesmo padrão do CharacterView.showPetLightbox).
+    // Clicar num emoji insere ele na posição do cursor do textarea.
+    bindEmojiPicker() {
+
+        const toggle = this.panel.querySelector("#chat-emoji-toggle");
+
+        toggle.addEventListener("click", event => {
+            event.stopPropagation();
+            if (this.emojiPicker) this.closeEmojiPicker();
+            else this.openEmojiPicker();
+        });
+
+    }
+
+    openEmojiPicker() {
+
+        this.closeEmojiPicker();
+
+        const toggle = this.panel.querySelector("#chat-emoji-toggle");
+
+        this.emojiPicker = document.createElement("div");
+        this.emojiPicker.className = "chat-emoji-picker";
+        this.emojiPicker.innerHTML = EMOJIS
+            .map(emoji => `<button type="button" class="chat-emoji-item">${emoji}</button>`)
+            .join("");
+
+        toggle.insertAdjacentElement("afterend", this.emojiPicker);
+
+        this.emojiPicker.querySelectorAll(".chat-emoji-item").forEach(button => {
+            button.addEventListener("click", event => {
+                event.stopPropagation();
+                this.insertEmoji(button.textContent);
+            });
+        });
+
+        // Clicar fora fecha — o próprio botão de abrir já tem
+        // stopPropagation(), então um clique nele não conta como "fora".
+        this.emojiOutsideClickHandler = event => {
+            if (!this.emojiPicker?.contains(event.target)) this.closeEmojiPicker();
+        };
+        document.addEventListener("click", this.emojiOutsideClickHandler);
+
+        this.emojiEscapeHandler = event => {
+            if (event.key === "Escape") this.closeEmojiPicker();
+        };
+        document.addEventListener("keydown", this.emojiEscapeHandler);
+
+    }
+
+    closeEmojiPicker() {
+
+        if (this.emojiPicker) {
+            this.emojiPicker.remove();
+            this.emojiPicker = null;
+        }
+
+        if (this.emojiOutsideClickHandler) {
+            document.removeEventListener("click", this.emojiOutsideClickHandler);
+            this.emojiOutsideClickHandler = null;
+        }
+
+        if (this.emojiEscapeHandler) {
+            document.removeEventListener("keydown", this.emojiEscapeHandler);
+            this.emojiEscapeHandler = null;
+        }
+
+    }
+
+    // Insere na posição do cursor (não só no final), igual qualquer
+    // campo de texto nativo, e respeita o limite de caracteres do chat.
+    insertEmoji(emoji) {
+
+        const input = this.panel?.querySelector("#chat-input");
+
+        if (!input) return;
+
+        const start = input.selectionStart ?? input.value.length;
+        const end = input.selectionEnd ?? input.value.length;
+        const next = input.value.slice(0, start) + emoji + input.value.slice(end);
+
+        if (next.length > MAX_LENGTH) return;
+
+        input.value = next;
+        input.focus();
+        input.selectionStart = input.selectionEnd = start + emoji.length;
+
+        this.panel.querySelector("#chat-count").textContent = `${input.value.length}/${MAX_LENGTH}`;
 
     }
 

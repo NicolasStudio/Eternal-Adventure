@@ -61,7 +61,7 @@
     position:fixed;
     z-index:900;
     display:flex;
-    width:380px;
+    width:420px;
     height:420px;
     flex-direction:column;
     gap:8px;
@@ -179,6 +179,74 @@
     display:flex;
     gap:8px;
     align-items:stretch;
+    position:relative;
+}
+.chat-emoji-toggle{
+    flex-shrink:0;
+    width:38px;
+    cursor:pointer;
+    font-size:1rem;
+    color:#d4a373;
+    background:rgba(0,0,0,.25);
+    border:2px solid #7d6846;
+    border-radius:6px;
+    transition:border-color .15s,color .15s;
+}
+.chat-emoji-toggle:hover{
+    border-color:#c79b37;
+    color:#f1c75c;
+}
+
+/* Grid flutuante acima do botão — mesma ideia de popup com clique-fora/
+   Esc fechando usada no lightbox do pet/álbum, só que sem overlay de
+   tela cheia (é um popup pequeno ancorado no botão, não uma imagem). */
+.chat-emoji-picker{
+    position:absolute;
+    bottom:calc(100% + 8px);
+    left:0;
+    z-index:10;
+    display:grid;
+    /* minmax(0,1fr) em vez de só 1fr — sem isso, cada coluna trava num
+       mínimo igual à largura do emoji (.chat-emoji-item), e quando a
+       barra de rolagem vertical (abaixo) rouba espaço da largura
+       disponível, a grade não consegue encolher pra caber e empurra uma
+       barra de rolagem horizontal cortando a última coluna. */
+    grid-template-columns:repeat(8,minmax(0,1fr));
+    gap:4px;
+    width:260px;
+    /* Teto de altura + rolagem vertical própria — a lista cresceu (80
+       emojis, 10 linhas) e o painel do chat tem overflow:hidden, então
+       sem isso o grid de baixo ficaria cortado em vez de rolar.
+       overflow-x:hidden evita o problema acima descrito mesmo se algo
+       ainda sobrar por 1-2px de arredondamento. */
+    max-height:200px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    padding:8px;
+    background:rgba(18,13,9,.98);
+    border:1px solid #7d6846;
+    border-radius:8px;
+    box-shadow:0 4px 18px rgba(0,0,0,.6);
+}
+.chat-emoji-item{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    /* width:100% (não um valor fixo em px) — segue o tamanho real da
+       coluna do grid, que pode encolher um pouco quando a barra de
+       rolagem vertical ao lado rouba espaço (ver .chat-emoji-picker). */
+    width:100%;
+    aspect-ratio:1;
+    font-size:1.05rem;
+    line-height:1;
+    background:transparent;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    transition:background .15s;
+}
+.chat-emoji-item:hover{
+    background:rgba(212,163,115,.18);
 }
 .chat-input{
     flex:1;
