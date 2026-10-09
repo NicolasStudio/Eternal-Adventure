@@ -77,7 +77,7 @@ const boots = {
 
         stats: {
             armor: 6,
-            agility: 15
+            agility: 11
         },
 
         value: 2160,
@@ -96,8 +96,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-warrior-rarity-lendario.png",
 
         stats: {
-            armor: 8,
-            agility: 9
+            armor: 12,
+            agility: 15
         },
 
         value: 0,
@@ -116,8 +116,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-warrior-rarity-ultraje.png",
 
         stats: {
-            armor: 10,
-            agility: 11
+            armor: 15,
+            agility: 18
         },
 
         value: 0,
