@@ -11,6 +11,7 @@ import legacyLevels_v9 from "../data/legacyLevels_v9.js";
 import legacyLevels_v10 from "../data/legacyLevels_v10.js";
 import legacyLevels_v11 from "../data/legacyLevels_v11.js";
 import legacyLevels_v12 from "../data/legacyLevels_v12.js";
+import legacyLevels_v13 from "../data/legacyLevels_v13.js";
 import baseStatsL1 from "../data/baseStatsL1.js";
 
 // Sobe quando a curva de levels.js muda de um jeito que exige recalcular
@@ -26,8 +27,11 @@ import baseStatsL1 from "../data/baseStatsL1.js";
 // +100 Vida (lv 50-100), Miasma passa a reduzir Armadura em PVE · v11
 // Pútrido +100 Vida/+40 Agilidade (curva inteira) · v12 Mago +300 Vida
 // (curva inteira) · v13 Mago +1 Agilidade em 11 níveis (66,67,70,77,78,
-// 84,88,92,94,98,100), Bárbaro enfraquecido nos níveis 94-98
-export const CURRENT_BALANCE_VERSION = 13;
+// 84,88,92,94,98,100), Bárbaro enfraquecido nos níveis 94-98 · v14 Arqueiro
+// perde 6 de Armadura na curva de nível (parte de um corte maior que também
+// tirou de itens lendários e da transcendência — ver helmets/chest/legs/
+// boots.js e upClasse.js, sincronizados à parte)
+export const CURRENT_BALANCE_VERSION = 14;
 
 // miasmaChance/reflection entram aqui só pra não serem DESCARTADOS na
 // migração (a tabela de migração nunca tem esses campos, então sempre
@@ -49,7 +53,8 @@ const LEGACY_TABLES = {
     9: legacyLevels_v9,
     10: legacyLevels_v10,
     11: legacyLevels_v11,
-    12: legacyLevels_v12
+    12: legacyLevels_v12,
+    13: legacyLevels_v13
 };
 
 export default class StatsMigrationService {

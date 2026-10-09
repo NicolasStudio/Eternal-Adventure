@@ -341,7 +341,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-archer-rarity-lendario.png",
 
         stats: {
-            armor: 14,
+            armor: 9,
             criticalChance: 8
         },
 

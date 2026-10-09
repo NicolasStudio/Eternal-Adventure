@@ -14,7 +14,8 @@ export default [
             "Pets: a fome agora cai 10 pontos a cada 20 minutos (antes a cada 50)",
             "Conquistas novas: Qual é o seu talento?, Chocolate, Rompendo limites, Uma lenda (Poder acima de 45 mil) e Pai e filho (duas classes no nível 100 na mesma conta)",
             "Aviso único ao entrar no jogo, com uma recompensa pra coletar (ouro, ração de pet e um Pet Exclusivo)",
-            "Mago: +13 de Agilidade ao longo dos níveis 66 a 100. Bárbaro: enfraquecido nos níveis 94 a 98 — personagens já existentes são atualizados sozinhos ao carregar"
+            "Mago: +13 de Agilidade ao longo dos níveis 66 a 100. Bárbaro: enfraquecido nos níveis 94 a 98 — personagens já existentes são atualizados sozinhos ao carregar",
+            "Arqueiro: armadura reduzida — itens lendários, bônus de transcendência e a curva de nível, todos um pouco mais fracos. Personagens já existentes são atualizados sozinhos ao carregar"
         ]
     },
 

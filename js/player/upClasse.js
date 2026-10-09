@@ -75,13 +75,13 @@ const upClasse = {
     light_archer: {
         id: "light_archer",
         name: "Arqueiro da Luz",
-        image: "assets/img/assets/character/class_up/archer/light-archer.png",              
+        image: "assets/img/assets/character/class_up/archer/light-archer.png",
         hud: "assets/img/assets/character/class_up/archer/light-archer-hud.png",
         description: "Você escolheu transcender para um arqueiro da luz.",
         states:{
             life: 70,
             attack: 45,
-            armor: 10,
+            armor: 6,
             agility: 25,
             criticalChance: 7,
             lifeSteal: 0,
@@ -99,7 +99,7 @@ const upClasse = {
         states:{
             life: 60,
             attack: 42,
-            armor: 5,
+            armor: 1,
             agility: 30,
             criticalChance: 10,
             lifeSteal: 0,

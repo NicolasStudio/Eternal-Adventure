@@ -341,7 +341,7 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-archer-rarity-lendario.png",
 
         stats: {
-            armor: 6,
+            armor: 4,
             agility: 14
         },
 

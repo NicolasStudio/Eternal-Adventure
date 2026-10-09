@@ -70,7 +70,7 @@ const ring = {
         icon: "assets/img/assets/items/ring/ring-rarity-mistico.png",
 
         stats: {
-            life: 9,
+            life: 13,
             armor: 6
         },
 
@@ -89,7 +89,7 @@ const ring = {
         icon: "assets/img/assets/items/ring/ring-rarity-lendario.png",
 
         stats: {
-            life: 15,
+            life:20,
             armor: 8
         },
 
@@ -108,7 +108,7 @@ const ring = {
         icon: "assets/img/assets/items/ring/ring-rarity-ultraje.png",
 
         stats: {
-            life: 20,
+            life: 35,
             armor: 10
         },
 
