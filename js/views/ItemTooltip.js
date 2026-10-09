@@ -104,13 +104,11 @@ export default class ItemTooltip {
             return "";
         }
 
-        // Elmo, peitoral, calça e bota nunca têm efeito nem podem ser
-        // encantados — a seção some por completo, em vez de mostrar "Este
-        // item não possui efeitos especiais." sem necessidade. Arma, Anel
-        // e Amuleto continuam (o Rei dos Encantamentos libera o Anel —
-        // ver TalentService.js/BlacksmithEnchant.js).
-        const NEVER_ENCHANTABLE_SLOTS = ["helmet", "chest", "leg", "boot"];
-        if (this.item.slot && NEVER_ENCHANTABLE_SLOTS.includes(this.item.slot)) {
+        // Equipamento que não seja arma (cabeça, peitoral, calça, bota,
+        // anel, amuleto) não pode ser encantado nem tem "efeito" — a seção
+        // some por completo, em vez de mostrar "Este item não possui
+        // efeitos especiais." sem necessidade.
+        if (this.item.slot && this.item.slot !== "weapon") {
             return "";
         }
 

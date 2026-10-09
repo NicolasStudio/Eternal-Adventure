@@ -410,6 +410,151 @@ const pets = {
     },
 
     /* ==========================================================
+       Aranha Halloween - Dano conforme o dano do jogador
+    ========================================================== */
+    spiderHalloweenPet1: {
+        id: "spider-halloween-pet1",
+        name: "Ovo de Aranha",
+        image: "assets/img/assets/pet/egg-spider-halloween.png",
+        type: "pet",
+        // Família própria, não "spider" — senão colide com a Aranha normal
+        // (os dois conjuntos de fases disputariam o mesmo getStages/
+        // getEggTemplate). Ver levelsPet.js, que copia o ganho por nível
+        // da Aranha pra essa família, pra manter os mesmos status.
+        family: "spiderHalloween",
+        exclusive: true,
+        shocked: false,
+        color: "#8B4513",
+        stars: "★★★★",
+        nivel: 0,
+        description: "Um ovo sombrio de aranha. ",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 0,
+            attack: 0,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+
+        },
+
+    },
+
+    spiderHalloweenPet2: {
+        id: "spider-halloween-pet2",
+        name: "Aranha Filhote",
+        image: "assets/img/assets/pet/spider-halloween-stage-1.png",
+        type: "pet",
+        family: "spiderHalloween",
+        exclusive: true,
+        shocked: true,
+        color: "#8B4513",
+        stars: "★★★★",
+        nivel: 1,
+        description: "Uma aranha filhote, uma mutação feita por magia negra. Ela ainda é pequena, mas tem potencial para crescer forte.",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 2,
+            attack: 2,
+            armor: 0,
+            agility: 3,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+
+        },
+        habilities: {
+            hability: {
+                name: "Mímico",
+                description: "Copia 1/8 do dano do jogador e aplica no inimigo, causando dano verdadeiro.",
+                mimicRatio: 0.125,
+            }
+        }
+    },
+
+    spiderHalloweenPet3: {
+        id: "spider-halloween-pet3",
+        name: "Aranha jovem",
+        image: "assets/img/assets/pet/spider-halloween-stage-2.png",
+        type: "pet",
+        family: "spiderHalloween",
+        exclusive: true,
+        shocked: true,
+        color: "#8B4513",
+        stars: "★★★★",
+        nivel: 18,
+        description: "Uma aranha jovem, uma mutação feita por magia negra. Ela está em sua fase de crescimento e tem muito potencial.",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 4,
+            attack: 5,
+            armor: 0,
+            agility: 8,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+
+        },
+        habilities: {
+            hability: {
+                name: "Mímico",
+                description: "Copia 1/4 do dano do jogador e aplica no inimigo, causando dano verdadeiro.",
+                mimicRatio: 0.25,
+            }
+        }
+    },
+
+    spiderHalloweenPet4: {
+        id: "spider-halloween-pet4",
+        name: "Aranha Adulta",
+        image: "assets/img/assets/pet/spider-halloween-stage-3.png",
+        type: "pet",
+        family: "spiderHalloween",
+        exclusive: true,
+        shocked: true,
+        color: "#8B4513",
+        stars: "★★★★",
+        nivel: 32,
+        description: "Uma aranha adulta, uma mutação feita por magia negra. Sua experiência e habilidades são notáveis, tornando-o um aliado valioso.",
+
+        xp: 0,
+        fome: 0,
+
+        stats: {
+            life: 8,
+            attack: 12,
+            armor: 0,
+            agility: 15,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0
+
+        },
+        habilities: {
+            hability: {
+                name: "Mímico",
+                description: "Copia 1/2 do dano do jogador e aplica no inimigo, causando dano verdadeiro.",
+                mimicRatio: 0.5,
+            }
+        }
+    },
+
+    /* ==========================================================
        Urso - Mitigador, só aumenta sua vida e armadura, passivamente.
     ========================================================== */
     bearPet1: {
@@ -803,7 +948,7 @@ const pets = {
         stats: {
             life: 550,
             attack: 60,
-            armor: 48,
+            armor: 52,
             agility: 42,
             criticalChance: 0,
             lifeSteal: 0,

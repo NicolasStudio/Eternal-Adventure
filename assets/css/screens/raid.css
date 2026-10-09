@@ -325,27 +325,6 @@
     text-overflow:ellipsis;
     max-width:140px;
 }
-
-/* ==========================================================
-   RESPONSIVO — celular
-   Até 4 personagens de 140px + 40px de vão passam de 600px — o
-   contêiner por cima (.hud-content) corta com overflow:hidden, então
-   não quebra a página, mas os personagens das pontas ficam fora da
-   tela num celular.
-========================================================== */
-@media (max-width:700px){
-    .raid-sprite-row{
-        gap:10px;
-        bottom:76px;
-    }
-    .raid-sprite-slot{
-        width:72px;
-    }
-    .raid-sprite-name{
-        font-size:.75rem;
-        max-width:72px;
-    }
-}
 .raid-sprite-level{
     font-family:"MedievalSharp",cursive;
     font-size:.75rem;

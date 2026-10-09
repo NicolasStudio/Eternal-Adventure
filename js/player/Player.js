@@ -780,18 +780,10 @@ export default class Player {
 
         if (!inventoryStone) return { success: false, reason: "Pedra inválida." };
 
-        // Normalmente só a arma estava equipável aqui, mas "Rei dos
-        // Encantamentos" (ver TalentService.js) também deixa encantar o
-        // Anel equipado — por isso procura em QUALQUER slot, não só em
-        // equipment.weapon.
         const equippedMatch = Object.values(this.equipment).find(item => item?.uid === weapon.uid);
         const weaponInstance = equippedMatch ?? this.inventory.find(i => i.uid === weapon.uid);
 
         if (!weaponInstance) return { success: false, reason: "Equipamento inválido." };
-
-        if (!TalentService.getEnchantableTypes(this).includes(weaponInstance.type)) {
-            return { success: false, reason: "Esse equipamento não pode ser encantado." };
-        }
 
         if (!weaponInstance.enchantments) {
             weaponInstance.enchantments = {};

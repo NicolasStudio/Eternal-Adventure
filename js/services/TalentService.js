@@ -35,7 +35,7 @@ export const SPECIAL_STAT_KEYS = [
     "criticalChance", "lifeSteal", "penetration",
     "absorption", "miasmaChance", "reflection"
 ];
-export const COIN_FLIP_BONUS_PERCENT = 10;
+export const COIN_FLIP_BONUS_PERCENT = 8;
 
 // Nome em português de um dos SPECIAL_STAT_KEYS — "Cara ou Coroa?" pode
 // sortear qualquer um deles, não só o principal da classe do jogador (por
@@ -66,13 +66,12 @@ export const UNIQUE_TALENTS = [
         icon: "assets/img/assets/talent-tree/percent-up.png",
         description: `Desconsiderando o atributo principal da sua classe, escolhe aleatoriamente outro atributo especial e soma +${COIN_FLIP_BONUS_PERCENT}%.`
     },
-    {
-        id: "rei_dos_encantamentos",
-        label: "Rei dos Encantamentos",
-        icon: "assets/img/assets/talent-tree/enchantment-up.png",
-        description: "Permite encantar o Anel, assim como já é feito com a arma."
-    }
 ];
+
+// Removido do jogo: desbalanceava as classes e deixava estranho encantar
+// um acessório sim, outro não. Quem já tinha isso ativo é limpo sozinho
+// ao carregar — ver sanitizeRemovedUniqueTalent().
+export const REMOVED_UNIQUE_TALENT_IDS = ["rei_dos_encantamentos"];
 
 // Cada grupo = 3 fases + o boss da própria região. Completo (3 vitórias em
 // cada) vale 1 ponto. Caverna tem 6 fases e 2 bosses, então dá 2 pontos.
@@ -235,10 +234,6 @@ export default class TalentService {
     // Tipos de item que o personagem pode encantar na Ferraria: só a arma,
     // e também o Anel com "Rei dos Encantamentos" ativo. O Amuleto já foi
     // liberado por esse talento e saiu (ficava forte demais).
-    static getEnchantableTypes(player) {
-        return this.hasUniqueTalent(player, "rei_dos_encantamentos") ? ["weapon", "ring"] : ["weapon"];
-    }
-
     // Nível máximo de verdade pro personagem AGORA — ver Player.getRequiredXP.
     static getMaxLevel(player) {
         return this.hasUniqueTalent(player, "rompendo_limites") ? EXPANDED_MAX_LEVEL : DEFAULT_MAX_LEVEL;
@@ -335,6 +330,23 @@ export default class TalentService {
 
         player.progress.uniqueTalent = null;
         player.progress.uniqueTalentBonus = null;
+
+    }
+
+    // Chamado uma vez por carregamento (ver SaveService.deserialize): se o
+    // personagem está com um talento único que saiu do jogo (ver
+    // REMOVED_UNIQUE_TALENT_IDS), desfaz como um reset normal, mas sem
+    // cobrar nada — o jogador não escolheu perder o talento, o talento é
+    // que deixou de existir. Devolve true se mexeu em algo.
+    static sanitizeRemovedUniqueTalent(player) {
+
+        const id = this.getUniqueTalent(player);
+
+        if (!id || !REMOVED_UNIQUE_TALENT_IDS.includes(id)) return false;
+
+        this.clearUniqueTalent(player);
+
+        return true;
 
     }
 

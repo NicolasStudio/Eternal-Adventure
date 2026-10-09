@@ -219,8 +219,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-mage-rarity-lendario.png",
 
         stats: {
-            armor: 7,
-            agility: 18
+            armor: 10,
+            agility: 20
         },
 
         value: 0,
@@ -238,7 +238,7 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-mage-rarity-ultraje.png",
 
         stats: {
-            armor: 9,
+            armor: 14,
             agility: 25
         },
 

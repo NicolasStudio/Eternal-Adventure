@@ -340,6 +340,11 @@ export default class SaveService {
         // TalentService.js).
         TalentService.syncCoinFlipBonus(player);
 
+        // Quem ainda estava com um talento único que saiu do jogo (ex:
+        // Rei dos Encantamentos) é limpo sozinho aqui — ver
+        // TalentService.sanitizeRemovedUniqueTalent.
+        TalentService.sanitizeRemovedUniqueTalent(player);
+
         player.chest = data.chest ?? player.chest;
         player.album = data.album ?? [];
         player.farm = data.farm ?? player.farm;

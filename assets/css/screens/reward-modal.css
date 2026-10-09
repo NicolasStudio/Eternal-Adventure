@@ -172,6 +172,80 @@
     font-size:20px;
 }
 
+/* ==========================================================
+   COMPENSAÇÃO (CompensationModal) — mensagem mais longa que uma
+   confirmação comum, então fica à esquerda e menor, em parágrafos.
+========================================================== */
+.compensation-modal{
+    width:480px;
+}
+.compensation-message{
+    text-align:left;
+    font-size:16px;
+    line-height:1.6;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+.compensation-paragraph{
+    display:block;
+}
+
+/* Ovo + Ração, lado a lado, com o mesmo visual de slot da Ferraria
+   (borda tracejada, ícone grande) — hover mostra o tooltip do item. */
+.compensation-items{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    margin:4px 0 18px;
+}
+.compensation-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    width:96px;
+    padding:12px 8px;
+    border:2px dashed #5b4633;
+    border-radius:8px;
+    background:rgba(0,0,0,.25);
+    cursor:default;
+    transition:.18s;
+}
+.compensation-item:hover{
+    border-style:solid;
+    border-color:#c79b37;
+    box-shadow:0 0 14px rgba(212,163,115,.35);
+}
+.compensation-item img{
+    width:56px;
+    height:56px;
+    object-fit:contain;
+    image-rendering:pixelated;
+    pointer-events:none;
+}
+.compensation-item-name{
+    font-size:.72rem;
+    color:#bca46d;
+    text-align:center;
+    line-height:1.2;
+}
+
+.compensation-gold{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+    color:#f1c75c;
+    font-family:"Cinzel",serif;
+    font-size:1.2rem;
+    font-weight:700;
+}
+.compensation-gold i{
+    color:#d9b35c;
+}
+
 .continue-actions{
     display:flex;
     gap:16px;

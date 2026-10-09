@@ -514,7 +514,7 @@ export default {
     66: {
         warrior: { life: 14, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         archer: { life: 11, attack: 0, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        mage: { life: 12, attack: 1, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        mage: { life: 12, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         barbarian: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 18, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 0, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -522,7 +522,7 @@ export default {
     67: {
         warrior: { life: 15, attack: 1, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         archer: { life: 11, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        mage: { life: 13, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        mage: { life: 13, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 18, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -546,7 +546,7 @@ export default {
     70: {
         warrior: { life: 16, attack: 1, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         archer: { life: 11, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        mage: { life: 12, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        mage: { life: 12, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         barbarian: { life: 9, attack: 2, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -602,7 +602,7 @@ export default {
     77: {
         warrior: { life: 15, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         archer: { life: 11, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        mage: { life: 12, attack: 1, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        mage: { life: 12, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         barbarian: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 18, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 0, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -610,7 +610,7 @@ export default {
     78: {
         warrior: { life: 16, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         archer: { life: 11, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        mage: { life: 12, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        mage: { life: 12, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -658,7 +658,7 @@ export default {
     84: {
         warrior: { life: 15, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         archer: { life: 11, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        mage: { life: 12, attack: 1, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        mage: { life: 12, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 0, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 0, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -690,7 +690,7 @@ export default {
     88: {
         warrior: { life: 16, attack: 0, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         archer: { life: 11, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        mage: { life: 12, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        mage: { life: 12, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         barbarian: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 18, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 0, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -722,7 +722,7 @@ export default {
     92: {
         warrior: { life: 15, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         archer: { life: 11, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        mage: { life: 12, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        mage: { life: 12, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         barbarian: { life: 9, attack: 2, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -738,8 +738,8 @@ export default {
     94: {
         warrior: { life: 16, attack: 0, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         archer: { life: 11, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        mage: { life: 12, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        barbarian: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        mage: { life: 12, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        barbarian: { life: 8, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 0, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
@@ -747,7 +747,7 @@ export default {
         warrior: { life: 15, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         archer: { life: 11, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mage: { life: 12, attack: 1, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        barbarian: { life: 9, attack: 0, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 2, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 0, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
@@ -755,7 +755,7 @@ export default {
         warrior: { life: 16, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         archer: { life: 11, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mage: { life: 12, attack: 2, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        barbarian: { life: 9, attack: 0, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        barbarian: { life: 7, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 18, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
@@ -770,8 +770,8 @@ export default {
     98: {
         warrior: { life: 14, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         archer: { life: 11, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        mage: { life: 12, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        barbarian: { life: 9, attack: 2, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        mage: { life: 12, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        barbarian: { life: 9, attack: 0, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
@@ -786,7 +786,7 @@ export default {
     100: {
         warrior: { life: 14, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         archer: { life: 11, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        mage: { life: 13, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        mage: { life: 13, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         barbarian: { life: 9, attack: 2, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },

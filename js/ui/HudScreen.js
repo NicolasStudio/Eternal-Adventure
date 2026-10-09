@@ -28,6 +28,7 @@ import LoadGameModal from "./components/modals/LoadGameModal.js";
 import RankingModal from "./components/modals/RankingModal.js";
 import GlobalRankingModal from "./components/modals/GlobalRankingModal.js";
 import TalentTreeModal from "./components/modals/TalentTreeModal.js";
+import CompensationModal from "./components/modals/CompensationModal.js";
 import SettingsModal from "./components/modals/SettingsModal.js";
 import MusicService from "../services/MusicService.js";
 import SaveService from "../services/SaveService.js";
@@ -66,6 +67,7 @@ export default class HudScreen {
         this.rankingModal = new RankingModal(game);
         this.globalRankingModal = new GlobalRankingModal(game);
         this.talentTreeModal = new TalentTreeModal(game);
+        this.compensationModal = new CompensationModal(game);
         this.settingsModal = new SettingsModal(game, { inGame: true });
         this.currentView = "";
         this.characterVisible = true;
@@ -554,10 +556,22 @@ export default class HudScreen {
         this.refreshCurrentView();
     }
 
+    // Pedido de desculpas pela remoção do Rei dos Encantamentos e pelo
+    // ajuste do Cara ou Coroa? (ver CompensationModal.js) — uma vez só
+    // por personagem, igual DungeonView.maybeShowSoulChoice().
+    maybeShowCompensation() {
+
+        if (this.game.player.progress.compensationClaimed) return;
+
+        this.compensationModal.show();
+
+    }
+
     show() {
         // Convites do Cooperativo chegam em qualquer tela do jogo.
         this.raidView.startInviteListener();
         this.setBackground("assets/img/backgrounds/tela_inicial.png");
+        this.maybeShowCompensation();
         this.render();
         this.toolbarHUD.registerEvents(this.element);
         if (!this.inCombat) this.chestHUD.registerEvents(this.element);

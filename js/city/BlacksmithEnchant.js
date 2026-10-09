@@ -1,7 +1,6 @@
 import Toast from "../ui/components/Toast.js";
 import ItemTooltip from "../../js/views/ItemTooltip.js";
 import SaveService from "../services/SaveService.js";
-import TalentService from "../services/TalentService.js";
 
 export default class BlacksmithEnchant {
     constructor(game) {
@@ -16,30 +15,19 @@ export default class BlacksmithEnchant {
         return this.game.player;
     }
 
-    // Normalmente só a arma. Com o talento único "Rei dos Encantamentos"
-    // (ver TalentService.js), o Anel entra também.
-    getEnchantableTypes() {
-        return TalentService.getEnchantableTypes(this.player);
-    }
-
-    // O nome interno (anvilWeapon/weapons) continua o mesmo pra não mexer
-    // no resto do arquivo — pode ser arma ou anel, dependendo de
-    // getEnchantableTypes().
     getWeapons() {
-        const types = this.getEnchantableTypes();
         const weapons = [];
         this.player.inventory.forEach(item => {
-            if (!types.includes(item.type)) return;
+            if (item.type !== "weapon") return;
             weapons.push(item);
         });
-        types.forEach(slot => {
-            const equipped = this.player.equipment[slot];
-            if (!equipped) return;
-            const alreadyExists = weapons.some(item => item.uid === equipped.uid);
+        const equippedWeapon = this.player.equipment.weapon;
+        if (equippedWeapon) {
+            const alreadyExists = weapons.some(weapon => weapon.uid === equippedWeapon.uid);
             if (!alreadyExists) {
-                weapons.unshift(equipped);
+                weapons.unshift(equippedWeapon);
             }
-        });
+        }
         this.weapons = weapons;
         return weapons;
     }
@@ -84,7 +72,7 @@ export default class BlacksmithEnchant {
             return `
                 <div class="blacksmith-empty">
                     <i class="fa-solid fa-sword"></i>
-                    <span>Nenhum equipamento disponível.</span>
+                    <span>Nenhuma arma disponível.</span>
                 </div>
             `;
         }
@@ -123,15 +111,15 @@ export default class BlacksmithEnchant {
 
     renderMiddle() {
         return `
-            <h3 class="blacksmith-title">Encantar Equipamento</h3>
+            <h3 class="blacksmith-title">Encantar Arma</h3>
             <p class="blacksmith-subtitle">
-                Selecione um equipamento e uma pedra para canalizar o encantamento.
+                Selecione uma arma e uma pedra para canalizar o encantamento.
             </p>
 
             <div class="enchant-slots-row">
 
                 <div class="enchant-slot-row">
-                    <span class="enchant-slot-label">Equipamento</span>
+                    <span class="enchant-slot-label">Arma</span>
                     <div class="enchant-slot-box ${this.anvilWeapon ? "filled" : ""}" data-slot="weapon">
                         ${
                             this.anvilWeapon
@@ -173,7 +161,7 @@ export default class BlacksmithEnchant {
             return `
                 <div class="blacksmith-upgrade-info">
                     <p class="enchant-warning">
-                        Esse equipamento já tem um encantamento de ${this.getStatName(statKey)} igual ou melhor (+${currentValue}).
+                        Essa arma já tem um encantamento de ${this.getStatName(statKey)} igual ou melhor (+${currentValue}).
                     </p>
                 </div>
             `;
@@ -243,7 +231,7 @@ export default class BlacksmithEnchant {
     refine() {
 
         if (!this.anvilWeapon || !this.anvilStone) {
-            Toast.show("Selecione um equipamento e uma pedra.");
+            Toast.show("Selecione uma arma e uma pedra.");
             return;
         }
 

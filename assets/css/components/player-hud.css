@@ -70,33 +70,3 @@
     flex-direction:column;
     gap:10px;
 }
-
-/* ==========================================================
-   RESPONSIVO — celular
-   A coluna desta caixa (.hud-header) é 280px fixo; numa tela de
-   ~360-400px isso sozinho já não deixa espaço pra barra de
-   ferramentas ao lado. Encolhe tudo proporcionalmente.
-========================================================== */
-@media (max-width:700px){
-    .hud-panel{
-        width:170px;
-        padding:8px;
-    }
-    .hud-avatar{
-        width:52px;
-        height:52px;
-    }
-    .hud-name{
-        font-size:13px;
-        margin-left:10px;
-    }
-    .hud-level{
-        font-size:11px;
-        margin-top:18px;
-        margin-left:10px;
-    }
-    .hud-bars{
-        margin-top:8px;
-        gap:6px;
-    }
-}
