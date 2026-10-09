@@ -37,6 +37,24 @@
     animation:textBlink 1.5s infinite;
 }
 
+/* ==========================================================
+   RESPONSIVO
+========================================================== */
+@media (max-width:992px){
+    /* #loading-screen (não só .loading-logo) pra especificidade vencer a
+       regra de mesma especificidade em home.css (.home_logo), que carrega
+       DEPOIS deste arquivo e, sem isso, venceria em telas onde as duas
+       media queries se sobrepõem (ex: largura <=992px E altura <=768px). */
+    #loading-screen .loading-logo{
+        width:320px;
+    }
+    .loading-text{
+        margin-top:14px;
+        font-size:13px;
+        letter-spacing:3px;
+    }
+}
+
 @keyframes logoPulse{
     0%{
         transform:scale(.98);

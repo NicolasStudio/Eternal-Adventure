@@ -70,3 +70,30 @@
     flex-direction:column;
     gap:10px;
 }
+
+/* ==========================================================
+   RESPONSIVO
+========================================================== */
+@media (max-width:992px){
+    .hud-panel{
+        width:220px;
+        padding:10px;
+    }
+    .hud-avatar{
+        width:70px;
+        height:70px;
+    }
+    .hud-name{
+        font-size:16px;
+        margin-left:14px;
+    }
+    .hud-level{
+        font-size:13px;
+        margin-top:26px;
+        margin-left:14px;
+    }
+    .hud-bars{
+        margin-top:10px;
+        gap:7px;
+    }
+}

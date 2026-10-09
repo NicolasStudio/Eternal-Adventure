@@ -113,8 +113,10 @@
    GRID
 ========================================================== */
 .dungeon-grid{
-    margin-left: 15px;
-    width:100%;
+    /* Sem width:100% a grade encolhe pro tamanho real do conteúdo, e quem
+       centraliza de verdade é o .dungeon-content (flex + justify-content:
+       center) ao redor dela — mais confiável que centralizar de dentro de
+       uma grade que já ocupa 100% da largura disponível. */
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(220px,250px));
     justify-content:center;
@@ -634,9 +636,12 @@
     }
     /* Card menor nesse breakpoint pra caber os 3 numa linha só — com
        220px fixo (tamanho de desktop) só 2 cabiam e o terceiro sobrava
-       sozinho numa segunda linha, ficando estranho. */
+       sozinho numa segunda linha, ficando estranho. auto-fit (em vez de
+       um repeat(3,...) fixo) é o que deixa 1 ou 2 cards centralizados
+       quando tem menos — repeat(3,...) sempre cria 3 colunas mesmo com
+       1 card só, prendendo ele na primeira em vez de centralizar. */
     .dungeon-grid{
-        grid-template-columns:repeat(3,minmax(0,190px));
+        grid-template-columns:repeat(auto-fit,minmax(190px,190px));
         gap:14px;
     }
     .dungeon-card{

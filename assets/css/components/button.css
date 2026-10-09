@@ -64,3 +64,21 @@
     opacity: .65;
     color:#d4a373;
 }
+
+/* ==========================================================
+   RESPONSIVO
+========================================================== */
+@media (max-width:992px){
+    .hud-tool{
+        width:34px;
+        height:34px;
+        font-size:16px;
+    }
+    .nav-item{
+        font-size:13px;
+        gap:7px;
+    }
+    .nav-item .material-symbols-outlined{
+        font-size:15px;
+    }
+}

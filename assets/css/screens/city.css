@@ -227,9 +227,13 @@
     }
     /* 3 colunas nesse breakpoint em vez de 2 — com 2 o terceiro card
        (Saúde) sobrava sozinho numa segunda linha, ficando estranho.
-       Os cards encolhem um pouco pra caber os 3 numa linha só. */
+       Os cards encolhem um pouco pra caber os 3 numa linha só. auto-fit
+       (em vez de um repeat(3,...) fixo) também deixa centralizado se um
+       dia tiver menos de 3 cards — repeat(3,...) sempre cria 3 colunas
+       mesmo com menos itens, prendendo eles na primeira em vez de
+       centralizar. */
     .city-grid{
-        grid-template-columns:repeat(3,minmax(0,1fr));
+        grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
         gap:16px;
     }
     .city-card-image{

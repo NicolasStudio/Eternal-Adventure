@@ -155,3 +155,33 @@
     background:linear-gradient(180deg,#2c1810,#1a0f0a);
     border-top:2px solid #8b7355;
 }
+
+/* ==========================================================
+   RESPONSIVO
+========================================================== */
+@media (max-width:992px){
+    .hud-header{
+        padding:14px 18px;
+    }
+    /* Acompanha o .hud-panel encolhido pra 220px (ver player-hud.css) —
+       sem isso a coluna reservada no grid continuava 280px e sobrava um
+       vão vazio do lado do painel. */
+    .hud-header.exploration,
+    .hud-header.pvp2v2{
+        grid-template-columns:220px 1fr;
+    }
+    .hud-header.combat{
+        grid-template-columns:220px 1fr 220px;
+    }
+    .hud-toolbar{
+        gap:6px;
+        padding:0 8px;
+    }
+    .hud-toolbar-items{
+        gap:6px;
+    }
+    .hud-navigation{
+        height:56px;
+        gap:26px;
+    }
+}

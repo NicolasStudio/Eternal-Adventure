@@ -24,7 +24,9 @@ export default [
             "Guerreiro: -10 de Armadura dos itens lendários, e -10 de Ataque do upgrade de classe, depois de testes de PVP mostrarem ele forte demais. Personagens já existentes são atualizados sozinhos ao carregar",
             "Pútrido: +33 de Ataque na curva de nível entre os níveis 80 e 100 (ganho crescente, maior quanto mais perto do 100). Personagens já existentes são atualizados sozinhos ao carregar",
             "Poção Grande passa a aparecer na loja pra comprar assim que o primeiro dragão do Cooperativo (Dragão Abissal) for vencido uma vez",
-            "Corrigido o card da Dungeon e o da Cidade (Saúde) ficando sozinhos numa segunda linha em telas entre 768px e 992px de largura — os cards encolhem um pouco nessa faixa pra caber os 3 numa linha só"
+            "Corrigido o card da Dungeon e o da Cidade (Saúde) ficando sozinhos numa segunda linha em telas entre 768px e 992px de largura — os cards encolhem um pouco nessa faixa pra caber os 3 numa linha só, e quando sobra só 1 card (ex: Portal da Luz/Trevas) ele fica centralizado em vez de preso na esquerda",
+            "Em telas entre 768px e 992px de largura, o menu de cima (ícones), o menu de baixo (Personagem/Dungeons/Cidade/...), o painel de status do personagem e a logo da tela de carregamento ficam um pouco menores",
+            "Chat: novo botão de emojis ao lado do campo de mensagem — abre uma gradinha pra inserir na posição do cursor, sem fechar depois de cada clique. O painel do chat ficou um pouco mais largo pra caber o botão"
         ]
     },
 
