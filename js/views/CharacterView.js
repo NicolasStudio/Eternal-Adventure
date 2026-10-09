@@ -20,6 +20,8 @@ export default class CharacterView {
         this.selectedEquipment = null;
         this.petFeedModal = new PetFeedModal();
         this.releasePetModal = new FarmConfirmModal();
+        this.petLightbox = null;
+        this.petLightboxKeyHandler = null;
     }
 
     // Semente, colheita da Fazenda (petFeedValue) ou Ração de Pet —
@@ -949,6 +951,11 @@ export default class CharacterView {
                 if (petUnequipButton) petUnequipButton.disabled = false;
                 if (petReleaseButton) petReleaseButton.style.display = "";
 
+                const petAvatar = container.querySelector(".character-avatar-wrapper-pet");
+                if (petAvatar) {
+                    petAvatar.addEventListener("click", () => this.showPetLightbox(pet));
+                }
+
             }
 
         }
@@ -1559,6 +1566,47 @@ export default class CharacterView {
         }
     }
 
+    // Expande o avatar do pet equipado no centro da tela, igual a carta
+    // do álbum (ver AlbumModal.showLightbox) — clicar fora ou Esc fecha.
+    showPetLightbox(pet) {
+
+        this.hidePetLightbox();
+
+        this.petLightbox = document.createElement("div");
+        this.petLightbox.className = "pet-lightbox-overlay";
+        this.petLightbox.innerHTML = `
+            <figure class="pet-lightbox-figure">
+                <img src="${pet.image ?? pet.icon}" alt="${pet.name}">
+                <figcaption>${pet.name}</figcaption>
+            </figure>
+        `;
+        document.body.appendChild(this.petLightbox);
+
+        this.petLightbox.addEventListener("click", (event) => {
+            if (event.target === this.petLightbox) this.hidePetLightbox();
+        });
+
+        this.petLightboxKeyHandler = (event) => {
+            if (event.key === "Escape") this.hidePetLightbox();
+        };
+        document.addEventListener("keydown", this.petLightboxKeyHandler);
+
+    }
+
+    hidePetLightbox() {
+
+        if (this.petLightbox) {
+            this.petLightbox.remove();
+            this.petLightbox = null;
+        }
+
+        if (this.petLightboxKeyHandler) {
+            document.removeEventListener("keydown", this.petLightboxKeyHandler);
+            this.petLightboxKeyHandler = null;
+        }
+
+    }
+
     refresh() {
         // Sem isso, um refresh disparado enquanto o mouse ainda está em
         // cima de um slot (ex: equipar/consumir o próprio item hovered)
@@ -1573,6 +1621,8 @@ export default class CharacterView {
     }
 
     async close() {
+
+        this.hidePetLightbox();
 
         if (this.game.hudScreen.preparationMode) {
 
