@@ -15,6 +15,7 @@ import legacyLevels_v13 from "../data/legacyLevels_v13.js";
 import legacyLevels_v14 from "../data/legacyLevels_v14.js";
 import legacyLevels_v15 from "../data/legacyLevels_v15.js";
 import legacyLevels_v16 from "../data/legacyLevels_v16.js";
+import legacyLevels_v17 from "../data/legacyLevels_v17.js";
 import baseStatsL1 from "../data/baseStatsL1.js";
 
 // Sobe quando a curva de levels.js muda de um jeito que exige recalcular
@@ -42,8 +43,10 @@ import baseStatsL1 from "../data/baseStatsL1.js";
 // Arqueiro: os 11 níveis de corte de Armadura do v16 saem da curva de
 // nível e viram corte extra nos itens lendários (Capacete/Peitoral/
 // Calças/Botas) — total de Armadura dele não muda, só a fonte. Guerreiro
-// fica como estava no v16, sem mudança nenhuma aqui
-export const CURRENT_BALANCE_VERSION = 17;
+// fica como estava no v16, sem mudança nenhuma aqui · v18 Pútrido +18 de
+// Ataque entre os níveis 80-100, e mais +15 por cima disso entre os
+// níveis 85-100 (as duas camadas somam nesse trecho)
+export const CURRENT_BALANCE_VERSION = 18;
 
 // miasmaChance/reflection entram aqui só pra não serem DESCARTADOS na
 // migração (a tabela de migração nunca tem esses campos, então sempre
@@ -69,7 +72,8 @@ const LEGACY_TABLES = {
     13: legacyLevels_v13,
     14: legacyLevels_v14,
     15: legacyLevels_v15,
-    16: legacyLevels_v16
+    16: legacyLevels_v16,
+    17: legacyLevels_v17
 };
 
 export default class StatsMigrationService {

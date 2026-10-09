@@ -8,7 +8,7 @@ const upClasse = {
         description: "Você escolheu transcender para um guerreiro da luz.",
         states:{
             life: 100,
-            attack: 20,
+            attack: 10,
             armor: 46,
             agility: 0,
             criticalChance: 0,
@@ -26,7 +26,7 @@ const upClasse = {
         description: "Você escolheu transcender para um guerreiro da escuridão.",
         states:{
             life: 100,
-            attack: 30,
+            attack: 20,
             armor: 36,
             agility: 2,
             criticalChance: 0,

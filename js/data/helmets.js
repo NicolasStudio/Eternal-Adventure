@@ -96,7 +96,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-lendario.png",
 
         stats: {
-            armor: 24,
+            armor: 21,
             absorption: 8
         },
 

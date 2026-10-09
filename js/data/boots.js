@@ -95,7 +95,7 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-warrior-rarity-lendario.png",
 
         stats: {
-            armor: 20
+            armor: 18
         },
 
         value: 0,
