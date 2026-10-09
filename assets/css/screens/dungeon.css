@@ -632,8 +632,22 @@
     .dungeon-body{
         padding:20px 30px;
     }
+    /* Card menor nesse breakpoint pra caber os 3 numa linha só — com
+       220px fixo (tamanho de desktop) só 2 cabiam e o terceiro sobrava
+       sozinho numa segunda linha, ficando estranho. */
     .dungeon-grid{
-        grid-template-columns:repeat(2,220px);
+        grid-template-columns:repeat(3,minmax(0,190px));
+        gap:14px;
+    }
+    .dungeon-card{
+        width:190px;
+        min-height:300px;
+    }
+    .dungeon-card-image{
+        height:110px;
+    }
+    .dungeon-name{
+        font-size:17px;
     }
     .dungeon-page{
         width:44px;

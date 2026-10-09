@@ -225,12 +225,28 @@
     .city-body{
         padding:20px;
     }
+    /* 3 colunas nesse breakpoint em vez de 2 — com 2 o terceiro card
+       (Saúde) sobrava sozinho numa segunda linha, ficando estranho.
+       Os cards encolhem um pouco pra caber os 3 numa linha só. */
     .city-grid{
-        grid-template-columns:repeat(2,minmax(240px,1fr));
-        gap:20px;
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:16px;
     }
     .city-card-image{
-        height:220px;
+        height:160px;
+    }
+    .city-card-header{
+        padding:14px;
+    }
+    .city-name{
+        font-size:18px;
+    }
+    .city-card-actions{
+        padding:0 14px 14px;
+    }
+    .city-option{
+        padding:9px 0;
+        font-size:13px;
     }
 }
 
