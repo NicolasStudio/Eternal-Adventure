@@ -361,11 +361,11 @@ export default class RaidCombatService {
                         target.currentHP = Math.max(0, target.currentHP - petBiteAmount);
                     }
 
-                    // Cura da habilidade (ex: Duende) — sorteia UM alvo
-                    // vivo do squad (o próprio atacante pode ser
-                    // sorteado) em vez de curar todo mundo, senão
-                    // ninguém perde vida com o squad cheio de pets
-                    // curativos.
+                    // Cura da habilidade (ex: Duende) — foca em QUEM
+                    // está com a vida ATUAL mais baixa do squad (o
+                    // próprio atacante pode ser o alvo) em vez de
+                    // sortear, senão a cura desperdiçava em quem já
+                    // estava com a vida cheia enquanto outro agonizava.
                     let petHeal = 0;
                     let healedIds = [];
 
@@ -374,7 +374,9 @@ export default class RaidCombatService {
                         petHeal = attacker.petHealAmount;
 
                         const healTargets = aliveSquad();
-                        const healTarget = healTargets[Math.floor(rng() * healTargets.length)];
+                        const healTarget = healTargets.reduce(
+                            (lowest, c) => c.currentHP < lowest.currentHP ? c : lowest
+                        );
                         healTarget.currentHP = Math.min(healTarget.maxHP, healTarget.currentHP + petHeal);
                         healedIds.push(healTarget.id);
 

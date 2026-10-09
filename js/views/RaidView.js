@@ -1,4 +1,4 @@
-import RaidLobbyService, { SQUAD_SIZE } from "../services/RaidLobbyService.js";
+import RaidLobbyService, { SQUAD_SIZE, MIN_SQUAD_SIZE } from "../services/RaidLobbyService.js";
 import RaidInviteService, { RAID_MIN_LEVEL } from "../services/RaidInviteService.js";
 import AuthService from "../services/AuthService.js";
 import RaidInviteModal, { escapeHtml } from "../ui/components/modals/RaidInviteModal.js";
@@ -183,6 +183,12 @@ export default class RaidView {
 
         const iAmHost = this.queue.some(entry => entry.isSelf && entry.isHost);
 
+        // Host pode começar com 3 em vez de esperar o 4º — mínimo do
+        // Cooperativo (ver RaidLobbyService.SQUAD_SIZE/MIN_SQUAD_SIZE).
+        const canStartNow = iAmHost
+            && this.queue.length >= MIN_SQUAD_SIZE
+            && this.queue.length < SQUAD_SIZE;
+
         return `
             <div class="raid-roster raid-queue">
                 <h4 class="raid-roster-title">Na fila (${this.queue.length})</h4>
@@ -199,6 +205,9 @@ export default class RaidView {
                     </div>
                 `).join("")}
                 ${this.renderEmptySlots(SQUAD_SIZE - this.queue.length, iAmHost)}
+                ${canStartNow ? `
+                    <button class="raid-start-now-button">Iniciar com ${this.queue.length} jogadores</button>
+                ` : ""}
             </div>
         `;
 
@@ -1119,6 +1128,10 @@ export default class RaidView {
 
         container.querySelectorAll(".raid-invite-button").forEach(button => {
             button.addEventListener("click", () => this.openInvite());
+        });
+
+        container.querySelector(".raid-start-now-button")?.addEventListener("click", () => {
+            RaidLobbyService.forceStartSquad();
         });
 
         container.querySelector(".raid-proceed-button")?.addEventListener("click", () => {

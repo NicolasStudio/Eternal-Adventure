@@ -16,6 +16,12 @@ const STALE_CLAIM_TIMEOUT_MS = 8000;
 // tela de confirmação entre andares.
 export const SQUAD_SIZE = 4;
 
+// Mínimo pro host começar sem esperar o squad completo (ver
+// forceStartSquad) — mesmo mínimo já aceito entre andares pelo botão
+// "Continuar com X jogadores" (allowShortSquad), só que aqui pra
+// formar a partida logo de cara.
+export const MIN_SQUAD_SIZE = 3;
+
 /*
     Mesmo esquema de pareamento do 2x2 (ver PvpLobbyService.js), só que
     formando um SQUAD de 4 jogadores contra 1 boss em vez de dois times
@@ -277,6 +283,43 @@ export default class RaidLobbyService {
         await update(ref(db), updates);
 
         claimDisconnectRefs.forEach(disconnectRef => onDisconnect(disconnectRef).cancel());
+
+    }
+
+    // Host decide começar com quem já está na fila, sem esperar o 4º —
+    // precisa de pelo menos MIN_SQUAD_SIZE no total (eu + outros). Lê o
+    // estado atual uma vez (em vez de depender do listener do
+    // joinQueue) porque é uma ação pontual de clique, não contínua.
+    // tryMatchSquad já lida com qualquer quantidade de candidatos (não
+    // é hardcoded pra 4), então só precisa reaproveitar ele aqui.
+    static async forceStartSquad() {
+
+        if (!this.playerId) return { ok: false };
+
+        const selfPath = `${this.lobbyPath()}/${this.playerId}`;
+        const selfSnapshot = await get(ref(db, selfPath));
+        const selfData = selfSnapshot.val();
+
+        if (!selfData || selfData.matchedWith) return { ok: false };
+
+        const lobbySnapshot = await get(ref(db, this.lobbyPath()));
+        const all = lobbySnapshot.val() ?? {};
+
+        const others = Object.entries(all)
+            .filter(([id, entry]) => id !== this.playerId && !entry.matchedWith && !entry.claimedBy)
+            .sort(([idA], [idB]) => idA < idB ? -1 : 1);
+
+        const minOthers = MIN_SQUAD_SIZE - 1;
+
+        if (others.length < minOthers) return { ok: false };
+
+        const candidateEntries = others.slice(0, SQUAD_SIZE - 1);
+        const candidateIds = candidateEntries.map(([id]) => id);
+        const candidateData = Object.fromEntries(candidateEntries);
+
+        await this.tryMatchSquad(candidateIds, candidateData, { ...selfData, joinedAt: selfData.joinedAt ?? 0 });
+
+        return { ok: true };
 
     }
 

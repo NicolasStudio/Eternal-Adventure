@@ -27,7 +27,9 @@ export default [
             "Corrigido o card da Dungeon e o da Cidade (Saúde) ficando sozinhos numa segunda linha em telas entre 768px e 992px de largura — os cards encolhem um pouco nessa faixa pra caber os 3 numa linha só, e quando sobra só 1 card (ex: Portal da Luz/Trevas) ele fica centralizado em vez de preso na esquerda",
             "Em telas entre 768px e 992px de largura, o menu de cima (ícones), o menu de baixo (Personagem/Dungeons/Cidade/...), o painel de status do personagem e a logo da tela de carregamento ficam um pouco menores",
             "Chat: novo botão de emojis ao lado do campo de mensagem — abre uma gradinha pra inserir na posição do cursor, sem fechar depois de cada clique. O painel do chat ficou um pouco mais largo pra caber o botão",
-            "Escolher um Talento Único agora espera a nuvem confirmar o salvamento antes de liberar normalmente — antes disso o salvamento rodava em segundo plano sem aviso nenhum se falhasse, o que já fez algum jogador perder o Rompendo Limites ao trocar de aparelho logo depois de escolher"
+            "Escolher um Talento Único agora espera a nuvem confirmar o salvamento antes de liberar normalmente — antes disso o salvamento rodava em segundo plano sem aviso nenhum se falhasse, o que já fez algum jogador perder o Rompendo Limites ao trocar de aparelho logo depois de escolher",
+            "Cooperativo: o pet de cura agora foca em quem está com a vida atual mais baixa do squad, em vez de sortear um alvo qualquer",
+            "Cooperativo: o host agora pode começar a raid com 3 jogadores na fila, sem precisar esperar o 4º — basta clicar em 'Iniciar com 3 jogadores'"
         ]
     },
 

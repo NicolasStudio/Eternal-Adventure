@@ -51,7 +51,8 @@
     font-size:.95rem;
     line-height:1.6;
 }
-.raid-join-button{
+.raid-join-button,
+.raid-start-now-button{
     padding:13px 34px;
     border:2px solid #c79b37;
     border-radius:6px;
@@ -63,8 +64,16 @@
     cursor:pointer;
     transition:.2s;
 }
-.raid-join-button:hover{
+.raid-join-button:hover,
+.raid-start-now-button:hover{
     box-shadow:0 0 20px rgba(199,155,55,.35);
+}
+/* Botão de "Iniciar com X" fica dentro da lista da fila (.raid-queue),
+   não solto como o .raid-join-button — margem em cima pra separar dos
+   itens da lista. */
+.raid-start-now-button{
+    margin-top:10px;
+    width:100%;
 }
 
 /* ===== SEARCHING ===== */
