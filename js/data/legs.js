@@ -340,7 +340,7 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-archer-rarity-lendario.png",
 
         stats: {
-            armor: 6,
+            armor: 3,
             agility: 6
         },
 

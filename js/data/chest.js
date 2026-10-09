@@ -326,7 +326,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-archer-rarity-lendario.png",
 
         stats: {
-            armor: 8
+            armor: 5
         },
 
         value: 0,

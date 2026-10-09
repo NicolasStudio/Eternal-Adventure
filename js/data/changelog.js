@@ -20,7 +20,7 @@ export default [
             "Corrigido o mesmo problema na tela da Cidade: em telas mais baixas os cards de Ferraria/Mercado/Saúde ficavam cortados em cima e embaixo",
             "Corrigido um personagem podendo voltar pro nível salvo mais antigo ao entrar de novo (ex: perder o nível 101+ do Rompendo Limites) quando o jogo era fechado ou recarregado logo depois de salvar — o envio pra nuvem roda em segundo plano e podia não ter terminado ainda",
             "Guerreiro: +200 de Vida ao longo dos níveis 5 a 100, e 50 de Agilidade a menos (itens místicos e lendários de Calças/Botas, e o upgrade de classe). Personagens já existentes são atualizados sozinhos ao carregar",
-            "Guerreiro: +64 de Armadura (itens lendários de Capacete/Peitoral/Calças/Botas, upgrade de classe e a curva de nível). Arqueiro: -19 de Armadura nas mesmas fontes, pra não ficar tão perto do Guerreiro nesse atributo. Personagens já existentes são atualizados sozinhos ao carregar"
+            "Guerreiro: +64 de Armadura (itens lendários de Capacete/Peitoral/Calças/Botas, upgrade de classe e a curva de nível). Arqueiro: -19 de Armadura (itens lendários e upgrade de classe), pra não ficar tão perto do Guerreiro nesse atributo. Personagens já existentes são atualizados sozinhos ao carregar"
         ]
     },
 
