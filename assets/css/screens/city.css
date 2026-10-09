@@ -6,6 +6,11 @@
     inset:50% auto auto 50%;
     transform:translate(-50%,-50%);
     width:min(950px,90vw);
+    /* Sem isso a janela crescia pra caber TODOS os cards (Ferraria,
+       Mercado, Saúde...) e estourava a tela pros dois lados em telas
+       baixas — .city-body só rola se a janela em volta tiver um teto
+       de altura que a force a parar de crescer. */
+    max-height:90vh;
     display:flex;
     flex-direction:column;
     background:rgba(20,12,8,.75);
@@ -22,6 +27,7 @@
 ========================================================== */
 .city-header{
     height:60px;
+    flex-shrink:0;
     display:flex;
     justify-content:space-between;
     align-items:center;

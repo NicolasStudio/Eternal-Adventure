@@ -501,4 +501,21 @@
     overflow-y: auto;
     padding-right: 12px; /* Espaço entre o conteúdo e a scrollbar */
 }
+
+/* Mesmo problema do .reward-modal-box acima, mas nunca corrigido nos
+   outros modais deste arquivo: em telas baixas (janela de navegador
+   curta, tablet em paisagem, duas janelas lado a lado) eles podiam
+   crescer mais que a altura disponível e estourar pra fora dos dois
+   lados da tela, sem como rolar — o botão de baixo (ex: "Continuar" do
+   RewardModal, que aparece depois de toda luta) ficava inacessível.
+   Cobre a recompensa de combate, as confirmações (inclusive o Portal da
+   Luz/Trevas e a Compensação, que usam .continue-modal) e o fim de
+   dungeon. */
+.reward-modal,
+.continue-modal,
+.dungeon-complete-modal {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding-right: 12px;
+}
 }

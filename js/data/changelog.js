@@ -15,7 +15,9 @@ export default [
             "Conquistas novas: Qual é o seu talento?, Chocolate, Rompendo limites, Uma lenda (Poder acima de 45 mil) e Pai e filho (duas classes no nível 100 na mesma conta)",
             "Aviso único ao entrar no jogo, com uma recompensa pra coletar (ouro, ração de pet e um Pet Exclusivo)",
             "Mago: +13 de Agilidade ao longo dos níveis 66 a 100. Bárbaro: enfraquecido nos níveis 94 a 98 — personagens já existentes são atualizados sozinhos ao carregar",
-            "Arqueiro: armadura reduzida — itens lendários, bônus de transcendência e a curva de nível, todos um pouco mais fracos. Personagens já existentes são atualizados sozinhos ao carregar"
+            "Arqueiro: armadura reduzida — itens lendários, bônus de transcendência e a curva de nível, todos um pouco mais fracos. Personagens já existentes são atualizados sozinhos ao carregar",
+            "Corrigido o modal de recompensa (o que aparece depois de toda luta), a confirmação de talento único/Portal da Luz e das Trevas, e o de dungeon concluída ficando cortados em telas com pouca altura — como uma janela de navegador mais curta ou um tablet — sem conseguir rolar pra ver o botão de baixo",
+            "Corrigido o mesmo problema na tela da Cidade: em telas mais baixas os cards de Ferraria/Mercado/Saúde ficavam cortados em cima e embaixo"
         ]
     },
 
