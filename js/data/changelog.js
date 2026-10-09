@@ -4,24 +4,17 @@ export default [
         version: "Beta 0.2.3 — Talentos Únicos",
         date: "Outubro de 2026",
         changes: [
-            "Árvore de Talentos: nova linha de Talentos Únicos, abaixo da conversão de vida. Só libera depois de deixar algum talento simples em 3/3. Cada um custa 1.000.000 de ouro, é tudo ou nada (1/1) e só um dos três pode estar ativo por vez",
+            "Árvore de Talentos: nova linha de Talentos Únicos, abaixo da conversão de vida. Só libera depois de deixar algum talento simples em 3/3. Cada um custa 1.000.000 de ouro, é tudo ou nada (1/1) e só um dos dois pode estar ativo por vez",
             "Rompendo Limites: libera o nível máximo até 110 (o normal é 100)",
-            "Cara ou Coroa?: sorteia um atributo especial que não é o principal da sua classe e soma +10% nele",
-            "Rei dos Encantamentos: libera encantar o Anel e o Amuleto na Ferraria, do mesmo jeito que já era feito com a arma",
+            "Cara ou Coroa?: sorteia um atributo especial que não é o principal da sua classe e soma +8% nele",
             "Resetar os talentos com um talento único ativo custa 500.000 de ouro a mais que o reset normal, e desfaz os dois de uma vez",
             "Resetar o talento Rompendo Limites também devolve o personagem pro nível 100, desfazendo os status ganhos acima disso",
-            "Corrigido o encantamento recusando Anel e Amuleto já equipados como 'Equipamento inválido', com o Rei dos Encantamentos ativo",
             "Corrigido o XP ficando acumulado pra sempre (e a barra mostrando 'X / 0') quando um ganho grande de XP cruzava o nível máximo de uma vez",
-            "Corrigido o tooltip de Anel e Amuleto não mostrando os encantamentos aplicados com o Rei dos Encantamentos ativo",
-            "Corrigido resetar o Rei dos Encantamentos não desfazendo os encantamentos já aplicados no Anel e no Amuleto",
             "Cooperativo: Dragão Solaria, Dragão de Tenebris e Dragão Yggdrasil (andares 5, 6 e 7) mais difíceis — mais vida, armadura, agilidade e dano dos ataques, crescendo a cada andar",
             "Pets: a fome agora cai 10 pontos a cada 20 minutos (antes a cada 50)",
-            "Rei dos Encantamentos: agora libera encantar só o Anel — o Amuleto não pode mais ser encantado. Os encantamentos já feitos em Amuletos foram removidos, e as pedras usadas não voltam",
             "Conquistas novas: Qual é o seu talento?, Chocolate, Rompendo limites, Uma lenda (Poder acima de 45 mil) e Pai e filho (duas classes no nível 100 na mesma conta)",
-            "Cooperativo: Dragão Solaria, Dragão de Tenebris e Dragão Yggdrasil (andares 5, 6 e 7) mais difíceis — mais vida, armadura, agilidade e dano dos ataques, crescendo a cada andar",
-            "Celular: corrigida a página inteira aparecendo 'zoom out' (tudo minúsculo) — a navegação de baixo e a barra de ferramentas eram largas demais pra caber na tela, o que forçava o navegador a encolher o jogo todo pra caber",
-            "Celular: corrigida a tela de Encantar não se ajustando à tela, com o conteúdo esmagado",
-            "Celular: corrigidos os retratos do PVP 2x2 e os personagens do Cooperativo ficando parcialmente fora da tela em luta"
+            "Aviso único ao entrar no jogo, com uma recompensa pra coletar (ouro, ração de pet e um Pet Exclusivo)",
+            "Mago: +13 de Agilidade ao longo dos níveis 66 a 100. Bárbaro: enfraquecido nos níveis 94 a 98 — personagens já existentes são atualizados sozinhos ao carregar"
         ]
     },
 
