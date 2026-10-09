@@ -12,6 +12,8 @@ import legacyLevels_v10 from "../data/legacyLevels_v10.js";
 import legacyLevels_v11 from "../data/legacyLevels_v11.js";
 import legacyLevels_v12 from "../data/legacyLevels_v12.js";
 import legacyLevels_v13 from "../data/legacyLevels_v13.js";
+import legacyLevels_v14 from "../data/legacyLevels_v14.js";
+import legacyLevels_v15 from "../data/legacyLevels_v15.js";
 import baseStatsL1 from "../data/baseStatsL1.js";
 
 // Sobe quando a curva de levels.js muda de um jeito que exige recalcular
@@ -30,8 +32,13 @@ import baseStatsL1 from "../data/baseStatsL1.js";
 // 84,88,92,94,98,100), Bárbaro enfraquecido nos níveis 94-98 · v14 Arqueiro
 // perde 6 de Armadura na curva de nível (parte de um corte maior que também
 // tirou de itens lendários e da transcendência — ver helmets/chest/legs/
-// boots.js e upClasse.js, sincronizados à parte)
-export const CURRENT_BALANCE_VERSION = 14;
+// boots.js e upClasse.js, sincronizados à parte) · v15 Guerreiro +200 Vida
+// (lv 5-100) e perde 50 de Agilidade (itens místicos/lendários de Calças/
+// Botas e upgrade de classe — ver legs/boots.js e upClasse.js) · v16
+// Guerreiro +64 de Armadura e Arqueiro -19 (itens lendários de Capacete/
+// Peitoral/Calças/Botas, transcendência e a curva de nível — ver
+// helmets/chest/legs/boots.js e upClasse.js, sincronizados à parte)
+export const CURRENT_BALANCE_VERSION = 16;
 
 // miasmaChance/reflection entram aqui só pra não serem DESCARTADOS na
 // migração (a tabela de migração nunca tem esses campos, então sempre
@@ -54,7 +61,9 @@ const LEGACY_TABLES = {
     10: legacyLevels_v10,
     11: legacyLevels_v11,
     12: legacyLevels_v12,
-    13: legacyLevels_v13
+    13: legacyLevels_v13,
+    14: legacyLevels_v14,
+    15: legacyLevels_v15
 };
 
 export default class StatsMigrationService {

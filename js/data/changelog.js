@@ -17,7 +17,10 @@ export default [
             "Mago: +13 de Agilidade ao longo dos níveis 66 a 100. Bárbaro: enfraquecido nos níveis 94 a 98 — personagens já existentes são atualizados sozinhos ao carregar",
             "Arqueiro: armadura reduzida — itens lendários, bônus de transcendência e a curva de nível, todos um pouco mais fracos. Personagens já existentes são atualizados sozinhos ao carregar",
             "Corrigido o modal de recompensa (o que aparece depois de toda luta), a confirmação de talento único/Portal da Luz e das Trevas, e o de dungeon concluída ficando cortados em telas com pouca altura — como uma janela de navegador mais curta ou um tablet — sem conseguir rolar pra ver o botão de baixo",
-            "Corrigido o mesmo problema na tela da Cidade: em telas mais baixas os cards de Ferraria/Mercado/Saúde ficavam cortados em cima e embaixo"
+            "Corrigido o mesmo problema na tela da Cidade: em telas mais baixas os cards de Ferraria/Mercado/Saúde ficavam cortados em cima e embaixo",
+            "Corrigido um personagem podendo voltar pro nível salvo mais antigo ao entrar de novo (ex: perder o nível 101+ do Rompendo Limites) quando o jogo era fechado ou recarregado logo depois de salvar — o envio pra nuvem roda em segundo plano e podia não ter terminado ainda",
+            "Guerreiro: +200 de Vida ao longo dos níveis 5 a 100, e 50 de Agilidade a menos (itens místicos e lendários de Calças/Botas, e o upgrade de classe). Personagens já existentes são atualizados sozinhos ao carregar",
+            "Guerreiro: +64 de Armadura (itens lendários de Capacete/Peitoral/Calças/Botas, upgrade de classe e a curva de nível). Arqueiro: -19 de Armadura nas mesmas fontes, pra não ficar tão perto do Guerreiro nesse atributo. Personagens já existentes são atualizados sozinhos ao carregar"
         ]
     },
 

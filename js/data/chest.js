@@ -92,7 +92,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-warrior-rarity-lendario.png",
 
         stats: {
-            armor: 33
+            armor: 41
         },
 
         value: 0,
@@ -326,7 +326,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-archer-rarity-lendario.png",
 
         stats: {
-            armor: 10
+            armor: 8
         },
 
         value: 0,

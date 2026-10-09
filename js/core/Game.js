@@ -132,10 +132,30 @@ export default class Game {
 
         PresenceService.watchForTakeover(user.uid, () => this.handleRemoteTakeover());
 
-        const container = await SaveService.loadFromCloud(user.uid);
+        const cloudContainer = await SaveService.loadFromCloud(user.uid);
+        const localContainer = SaveService.loadFromLocalStorage();
+
+        // save()/autoSave() gravam na nuvem em segundo plano, sem esperar
+        // terminar — se a aba fechar ou recarregar logo depois de uma ação
+        // (ex: investir num talento), essa gravação pode não ter chegado
+        // na nuvem ainda. Sem essa comparação, entrar de novo confiaria
+        // cegamente na nuvem (mais velha) e apagaria do localStorage o
+        // progresso mais recente que já estava correto nesta máquina.
+        const localIsNewer = localContainer
+            && (!cloudContainer || (localContainer.savedAt ?? 0) > (cloudContainer.savedAt ?? 0));
+
+        const container = localIsNewer ? localContainer : cloudContainer;
 
         await SaveService.loadMaxSlots(user.uid);
         SaveService.useContainer(container);
+
+        if (localIsNewer) {
+            // Reenvia pra nuvem o que só existia localmente — cloudStamp já
+            // está certo (acabou de vir do loadFromCloud acima), então essa
+            // gravação não é recusada pela checagem de "versão mais nova
+            // gravada em outro lugar".
+            SaveService.saveToCloud(user.uid, container);
+        }
 
         // Entra direto no último personagem usado; sem personagem, Home.
         if (container && SaveService.hasCharacter(container, container.activeSlot)) {

@@ -76,8 +76,7 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-warrior-rarity-mistico.png",
 
         stats: {
-            armor: 12,
-            agility: 10
+            armor: 12
         },
 
         value: 2565,
@@ -96,8 +95,7 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-warrior-rarity-lendario.png",
 
         stats: {
-            armor: 19,
-            agility: 4
+            armor: 27
         },
 
         value: 0,
@@ -342,7 +340,7 @@ const legs = {
         icon: "assets/img/assets/items/legs/legs-archer-rarity-lendario.png",
 
         stats: {
-            armor: 7,
+            armor: 6,
             agility: 6
         },
 

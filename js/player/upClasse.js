@@ -9,8 +9,8 @@ const upClasse = {
         states:{
             life: 100,
             attack: 20,
-            armor: 30,
-            agility: 10,
+            armor: 46,
+            agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
@@ -27,8 +27,8 @@ const upClasse = {
         states:{
             life: 100,
             attack: 30,
-            armor: 20,
-            agility: 12,
+            armor: 36,
+            agility: 2,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
@@ -81,7 +81,7 @@ const upClasse = {
         states:{
             life: 70,
             attack: 45,
-            armor: 6,
+            armor: 4,
             agility: 25,
             criticalChance: 7,
             lifeSteal: 0,
@@ -99,7 +99,7 @@ const upClasse = {
         states:{
             life: 60,
             attack: 42,
-            armor: 1,
+            armor: 0,
             agility: 30,
             criticalChance: 10,
             lifeSteal: 0,
