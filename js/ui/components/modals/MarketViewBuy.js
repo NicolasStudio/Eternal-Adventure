@@ -8,6 +8,7 @@ import amulets from "../../../data/amulet.js";
 import dungeons from "../../../data/dungeons.js";
 import monsters from "../../../data/monsters.js";
 import seeds from "../../../data/seeds.js";
+import itemsData from "../../../data/items.js";
 import Toast from "../Toast.js";
 import ItemTooltip from "../../../views/ItemTooltip.js";
 import SeedTooltip from "../../../views/SeedTooltip.js";
@@ -93,6 +94,18 @@ export default class MarketViewBuy {
                 items.push(drop.item);
             });
         });
+
+        // Poção Grande: só dropa dos dragões do Cooperativo (ver
+        // monstersRaid.js), que não passam pelo loop de `dungeons` acima
+        // — libera na loja assim que o primeiro drake (Dragão Abissal,
+        // "drake_water") for vencido pela primeira vez.
+        if (
+            !unlocked.has(itemsData.largePotion.id) &&
+            this.player.progress.stats?.raidBossesDefeated?.includes("drake_water")
+        ) {
+            unlocked.add(itemsData.largePotion.id);
+            items.push(itemsData.largePotion);
+        }
 
         // Sementes: liberadas por nível, não por dungeon — todas as 4
         // aparecem de uma vez a partir do nível 30 (ver Fazenda).

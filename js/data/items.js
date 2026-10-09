@@ -4,7 +4,6 @@ const items = {
         id: "smallPotion",
         name: "Poção Pequena",
         icon: "assets/img/assets/items/consumables/small_potion.png",
-
         type: "item",
         stackable: true,
 
@@ -15,11 +14,8 @@ const items = {
         },
 
         quality: null,
-
         heal: 25,
-
         effect: "Recupera 25 pontos de Vida.",
-
         buyValue: 50,
         sellValue: 17
     },
@@ -28,7 +24,6 @@ const items = {
         id: "mediumPotion",
         name: "Poção Média",
         icon: "assets/img/assets/items/consumables/medium_potion.png",
-
         type: "item",
         stackable: true,
 
@@ -39,20 +34,16 @@ const items = {
         },
 
         quality: null,
-
         heal: 100,
-
         effect: "Recupera 100 pontos de Vida.",
-
-        buyValue: 150,
-        sellValue: 50
+        buyValue: 100,
+        sellValue: 500
     },
 
     tripleMediumPotion: {
         id: "tripleMediumPotion",
         name: "Tripla Poção Média",
         icon: "assets/img/assets/items/consumables/triple_medium_potion.png",
-
         type: "item",
         stackable: true,
 
@@ -63,13 +54,10 @@ const items = {
         },
 
         quality: null,
-
         heal: 300,
-
         effect: "Recupera 300 pontos de Vida.",
-
-        buyValue: 450,
-        sellValue: 150
+        buyValue: 800,
+        sellValue: 350
     },
 
 
@@ -77,7 +65,6 @@ const items = {
         id: "largePotion",
         name: "Poção Grande",
         icon: "assets/img/assets/items/consumables/large_potion.png",
-
         type: "item",
         stackable: true,
 
@@ -88,13 +75,10 @@ const items = {
         },
 
         quality: null,
-
         heal: 500,
-
         effect: "Recupera 500 pontos de Vida.",
-
-        buyValue: 800,
-        sellValue: 267
+        buyValue: 2500,
+        sellValue: 500
     }
 
 };

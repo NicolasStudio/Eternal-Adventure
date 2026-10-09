@@ -22,7 +22,9 @@ export default [
             "Guerreiro: +200 de Vida ao longo dos níveis 5 a 100, e 50 de Agilidade a menos (itens místicos e lendários de Calças/Botas, e o upgrade de classe). Personagens já existentes são atualizados sozinhos ao carregar",
             "Guerreiro: +64 de Armadura (itens lendários de Capacete/Peitoral/Calças/Botas, upgrade de classe e a curva de nível). Arqueiro: -19 de Armadura (itens lendários e upgrade de classe), pra não ficar tão perto do Guerreiro nesse atributo. Personagens já existentes são atualizados sozinhos ao carregar",
             "Guerreiro: -10 de Armadura dos itens lendários, e -10 de Ataque do upgrade de classe, depois de testes de PVP mostrarem ele forte demais. Personagens já existentes são atualizados sozinhos ao carregar",
-            "Pútrido: +33 de Ataque na curva de nível entre os níveis 80 e 100 (ganho crescente, maior quanto mais perto do 100). Personagens já existentes são atualizados sozinhos ao carregar"
+            "Pútrido: +33 de Ataque na curva de nível entre os níveis 80 e 100 (ganho crescente, maior quanto mais perto do 100). Personagens já existentes são atualizados sozinhos ao carregar",
+            "Poção Grande passa a aparecer na loja pra comprar assim que o primeiro dragão do Cooperativo (Dragão Abissal) for vencido uma vez",
+            "Corrigido o card da Dungeon e o da Cidade (Saúde) ficando sozinhos numa segunda linha em telas entre 768px e 992px de largura — os cards encolhem um pouco nessa faixa pra caber os 3 numa linha só"
         ]
     },
 
