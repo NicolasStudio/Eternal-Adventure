@@ -13,12 +13,11 @@ export default class RewardModal {
     // "Abrir Inventário" — o modal só se esconde enquanto isso roda e
     // reaparece depois, sem resolver a Promise (ela só resolve quando o
     // jogador escolhe Continuar ou Sair da Dungeon).
-    // options.combatInfo = resumo do andar pra ESTE jogador (ver
-    // RaidCombatService.buildCombatInfo) — só o Cooperativo passa isso
-    // por enquanto, então o botão "Informações do Combate" só aparece
-    // lá. options.combatTimeline = série por rodada (ver
-    // RaidCombatService.buildCombatTimeline), pra aba "Gráfico" desse
-    // mesmo modal. Nenhum dos dois fica guardado aqui: cada show() novo
+    // options.combatInfo = resumo do combate pra ESTE jogador (ver
+    // js/combat/CombatInfo.js) — o botão "Informações do Combate" só
+    // aparece quando quem chamou show() passa isso. options.combatTimeline
+    // = série por rodada (mesmo arquivo), pra aba "Gráfico" desse mesmo
+    // modal. Nenhum dos dois fica guardado aqui: cada show() novo
     // substitui o anterior, e sair da tela não deixa nada pra trás.
     show(reward, options = {}) {
         const { showActions = false, onOpenInventory, exitLabel = "Sair da Dungeon", combatInfo = null, combatTimeline = [] } = options;

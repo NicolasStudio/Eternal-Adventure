@@ -480,3 +480,16 @@
     border-color:#c79b37;
     color:#f1c75c;
 }
+.pvp-combat-info-button{
+    padding:10px 28px;
+    border:1px solid #efe2bf;
+    border-radius:6px;
+    background:#080808;
+    color:#efe2bf;
+    font-family:"Cinzel",serif;
+    cursor:pointer;
+    transition:.2s;
+}
+.pvp-combat-info-button:hover{
+    background:rgba(239,226,191,.1);
+}

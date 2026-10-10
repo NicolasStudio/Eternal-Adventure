@@ -36,8 +36,8 @@ export default [
             "Novas fontes garantidas do Anel/Amuleto Moderno: Caverna I e IV (anel comum/incomum), Caverna II e V (amuleto comum/incomum), Oceano I (anel e amuleto raros), Boss do Vulcão (amuleto místico) e Boss do Inferno (anel místico) — além dos drops que já existiam. Dragão Varejeiro e Dragão de Indra, no Cooperativo, agora podem soltar tanto anel quanto amuleto lendário",
             "Corrigido o Anel/Amuleto que já estava equipado antes da atualização acima ficando com ícone quebrado e preso nos atributos antigos — a criação das duas variantes mudou o identificador interno desses itens, e quem já tinha um não era mais reconhecido. Personagens afetados são corrigidos sozinhos ao carregar",
             "Tooltip de drop das dungeons: o atributo Vida estava sem ícone (❤️) — mesma correção aplicada na tooltip de item",
-            "Cooperativo: novo botão 'Informações do Combate' na tela entre andares, com 14 números daquele andar — dano causado, recebido, mitigado pela armadura, real (sem a armadura do alvo), absorvido e vida roubada; quantidade de esquivas, Absorções, Críticos, Imitações, Miasmas e Roubos de Vida; e cura/dano do pet — some ao continuar ou sair",
-            "Informações do Combate ganhou uma aba 'Gráfico': linha por rodada do andar pra cada um dos 14 números, com checkbox colorido pra cada métrica, pra acompanhar isoladamente"
+            "Novo botão 'Informações do Combate' depois de cada luta (Dungeons, PVP 1x1, PVP 2x2 e Cooperativo), com 14 números — dano causado, recebido, mitigado pela armadura, real (sem a armadura do alvo), absorvido e vida roubada; quantidade de esquivas, Absorções, Críticos, Imitações, Miasmas e Roubos de Vida; e cura/dano do pet — some ao continuar ou sair da tela",
+            "Informações do Combate ganhou uma aba 'Gráfico': linha por rodada pra cada um dos 14 números, escolhendo uma métrica por vez numa lista colorida"
         ]
     },
 

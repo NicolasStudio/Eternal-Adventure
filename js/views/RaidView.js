@@ -4,6 +4,7 @@ import AuthService from "../services/AuthService.js";
 import RaidInviteModal, { escapeHtml } from "../ui/components/modals/RaidInviteModal.js";
 import Toast from "../ui/components/Toast.js";
 import RaidCombatService from "../services/RaidCombatService.js";
+import { buildCombatInfo, buildCombatTimeline } from "../combat/CombatInfo.js";
 import monstersRaid from "../data/monstersRaid.js";
 import LootSystem from "../combat/LootSystem.js";
 import LevelUpModal from "../ui/components/modals/LevelUpModal.js";
@@ -584,9 +585,9 @@ export default class RaidView {
         // RewardModal/CombatInfoModal) — só informativo, nunca salvo em
         // lugar nenhum: o andar seguinte sobrescreve isso de novo.
         // combatTimeline alimenta a aba "Gráfico" do mesmo modal (série
-        // por rodada, ver RaidCombatService.buildCombatTimeline).
-        const combatInfo = RaidCombatService.buildCombatInfo(result.log, RaidLobbyService.playerId);
-        const combatTimeline = RaidCombatService.buildCombatTimeline(result.log, RaidLobbyService.playerId);
+        // por rodada, ver js/combat/CombatInfo.js).
+        const combatInfo = buildCombatInfo(result.log, RaidLobbyService.playerId);
+        const combatTimeline = buildCombatTimeline(result.log, RaidLobbyService.playerId);
 
         this.player.progress.stats.raidWins = (this.player.progress.stats.raidWins ?? 0) + 1;
 

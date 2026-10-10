@@ -1,8 +1,9 @@
-// Resumo do andar pra UM jogador (Cooperativo, por enquanto) — ver
-// RaidCombatService.buildCombatInfo/buildCombatTimeline. Só mostra o que
-// já veio pronto, não guarda nada: cada show() é um retrato daquele andar
-// específico, e RewardModal.hide() (Continuar/Sair) fecha isso junto,
-// então nada sobrevive pro andar seguinte.
+// Resumo do combate pra UM jogador — ver js/combat/CombatInfo.js
+// (buildCombatInfo/buildCombatTimeline), usado pelo Cooperativo, PvE
+// (dungeons) e PvP (1x1 e 2x2). Só mostra o que já veio pronto, não
+// guarda nada: cada show() é um retrato daquele combate específico, e
+// quem chama fecha isso junto ao sair da tela (ex: RewardModal.hide()),
+// então nada sobrevive pro próximo.
 
 // Mesma ordem/agrupamento da aba "Resumo", reaproveitado pelos radios e
 // pela linha da aba "Gráfico" — cada métrica tem uma cor própria (ver

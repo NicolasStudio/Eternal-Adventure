@@ -28,6 +28,14 @@ export default class CombatEngine {
             player: MiasmaService.createFlags(),
             monster: MiasmaService.createFlags()
         };
+        // Log acumulado desse combate, pro mesmo formato/agregador das
+        // "Informações do Combate" do Cooperativo (ver js/combat/
+        // CombatInfo.js) — "player"/"monster" servem de id aqui (não há
+        // múltiplos jogadores numa dungeon pra precisar de algo melhor).
+        // Puramente aditivo: nada aqui entra em vidaAtual/currentHP, só
+        // registra o que attack()/petBite()/burnTick() já calcularam.
+        this.log = [];
+        this.turnCounter = 0;
     }
 
     rollInitiative() {
@@ -45,6 +53,7 @@ export default class CombatEngine {
 
     attack() {
         const playerTurn = this.currentTurn === "player";
+        this.turnCounter++;
 
         // Imitação do Mímico: recalculada a cada golpe a partir do
         // monstro ATUAL (ver MimicService.js) — some em cima do Ataque/
@@ -66,6 +75,12 @@ export default class CombatEngine {
         const defenderSide = playerTurn ? "monster" : "player";
 
         if (this.rollDodge(attacker, defender, attackerSide, defenderSide)) {
+            this.log.push({
+                round: this.turnCounter,
+                attackerId: attackerSide,
+                targetId: defenderSide,
+                dodged: true
+            });
             return {
                 attacker: attackerSide,
                 target: defenderSide,
@@ -95,6 +110,35 @@ export default class CombatEngine {
             this.player.currentHP = Math.max(0, this.player.currentHP);
         }
         const revive = playerTurn ? null : this.tryRevive();
+
+        this.log.push({
+            round: this.turnCounter,
+            attackerId: attackerSide,
+            targetId: defenderSide,
+            dodged: false,
+            damage: result.damage,
+            rawDamage: result.rawDamage,
+            armorMitigated: result.armorMitigated,
+            critical: result.critical,
+            lifeSteal: result.lifeSteal,
+            absorbed: result.absorbed,
+            mimicBonus: result.mimicBonus,
+            miasmaProc: result.miasmaProc
+        });
+
+        if (revive) {
+            this.log.push({
+                round: this.turnCounter,
+                attackerId: "player",
+                targetId: "monster",
+                petBite: true,
+                revive: true,
+                damage: 0,
+                heal: revive.heal,
+                healedIds: ["player"]
+            });
+        }
+
         return {
             revive,
             attacker: attackerSide,
@@ -169,6 +213,14 @@ export default class CombatEngine {
             Math.floor(attack * criticalMultiplier * mitigation)
         );
 
+        // Dano ANTES da armadura, com a MESMA fórmula de preAbsorption só
+        // sem o fator de mitigação — existe só pra "Informações do
+        // Combate" (ver js/combat/CombatInfo.js) saber quanto a armadura
+        // segurou. Puramente informativo: nunca entra em vidaAtual/
+        // currentHP nem em nenhuma conta que mude o resultado do combate.
+        const rawDamage = Math.max(1, Math.floor(attack * criticalMultiplier));
+        const armorMitigated = Math.max(0, rawDamage - preAbsorption);
+
         // Absorção: CHANCE de o defensor absorver parte do golpe (ver
         // Absorption.js) — igual ao Roubo de Vida (que é "chance de
         // proc", não garantido), só que do lado de quem APANHA.
@@ -222,6 +274,8 @@ export default class CombatEngine {
             miasmaAttackWeakened: attackMark < 1 && MiasmaService.hasAttackSpecials(attacker),
             miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(defender),
             damage,
+            rawDamage,
+            armorMitigated,
             critical: isCritical,
             lifeSteal: recoveredHP,
             absorbed,
@@ -331,6 +385,16 @@ export default class CombatEngine {
             this.player.currentHP = Math.min(this.player.maxHP, this.player.currentHP + heal);
         }
 
+        this.log.push({
+            round: this.turnCounter,
+            attackerId: "player",
+            targetId: "monster",
+            petBite: true,
+            damage,
+            heal,
+            healedIds: heal > 0 ? ["player"] : []
+        });
+
         return { petName: pet.name, damage, heal };
 
     }
@@ -377,6 +441,16 @@ export default class CombatEngine {
         const applied = Math.min(this.monster.status.vidaAtual, damage);
 
         this.monster.status.vidaAtual = Math.max(0, this.monster.status.vidaAtual - damage);
+
+        this.log.push({
+            round: this.turnCounter,
+            attackerId: "player",
+            targetId: "monster",
+            burn: true,
+            burnStart: this.burn.first,
+            damage: applied,
+            element
+        });
 
         const result = { petName: this.burn.petName, damage: applied, element, first: this.burn.first };
 
