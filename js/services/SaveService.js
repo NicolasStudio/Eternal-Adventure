@@ -876,6 +876,54 @@ export default class SaveService {
 
     }
 
+    // Libera o que é SÓ desse personagem (nome reservado + entrada no
+    // ranking) — chamado tanto ao excluir um personagem quanto, pra
+    // cada slot, ao excluir a conta inteira. As Regras de Segurança só
+    // deixam apagar characterNames/leaderboard que sejam SEUS, então
+    // chamar isso com um personagem de outra conta simplesmente falha
+    // (ignorado — ver catch).
+    static async releaseCharacterIdentity(uid, slot, name) {
+
+        const tasks = [
+            deleteDoc(doc(firestore, LEADERBOARD_COLLECTION, this.leaderboardId(uid, slot))).catch(() => {})
+        ];
+
+        if (name) {
+            tasks.push(
+                deleteDoc(doc(firestore, CHARACTER_NAMES_COLLECTION, name.trim().toLowerCase())).catch(() => {})
+            );
+        }
+
+        await Promise.all(tasks);
+
+    }
+
+    // Exclusão TOTAL da conta: todo personagem (todos os slots), o save
+    // inteiro e o que é da conta (cartas/conquistas, junto do save).
+    // Chamado ANTES de AuthService.deleteCurrentUser() apagar o login em
+    // si — nessa ordem porque, depois de apagado o login, as Regras de
+    // Segurança (que conferem request.auth.uid) recusam qualquer
+    // escrita dessa conta, inclusive um delete. entitlements/{uid} fica
+    // órfão de propósito: só o servidor escreve lá (ver firestore.rules),
+    // o cliente nunca teve permissão de apagar.
+    static async deleteAccountData(uid) {
+
+        const container = this.container ?? await this.loadFromCloud(uid);
+
+        const slots = container?.slots ?? {};
+
+        await Promise.all(
+            Object.entries(slots).map(([slot, character]) =>
+                this.releaseCharacterIdentity(uid, slot, character?.name)
+            )
+        );
+
+        await deleteDoc(doc(firestore, SAVES_COLLECTION, uid));
+
+        this.clearLocalSave();
+
+    }
+
     // Dispara a sincronização em paralelo, sem esperar — só se tiver
     // alguém logado no momento (fora do fluxo de login, save local
     // continua funcionando normalmente sem conta nenhuma).

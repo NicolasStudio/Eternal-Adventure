@@ -33,7 +33,10 @@ import {
     signOut,
     onAuthStateChanged,
     sendPasswordResetEmail,
-    fetchSignInMethodsForEmail
+    fetchSignInMethodsForEmail,
+    deleteUser,
+    reauthenticateWithCredential,
+    EmailAuthProvider
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
     getFirestore,
@@ -104,6 +107,9 @@ export {
     onAuthStateChanged,
     sendPasswordResetEmail,
     fetchSignInMethodsForEmail,
+    deleteUser,
+    reauthenticateWithCredential,
+    EmailAuthProvider,
     firestore,
     doc,
     getDoc,

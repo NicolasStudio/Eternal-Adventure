@@ -3,6 +3,8 @@ import AuthService from "../../../services/AuthService.js";
 import PresenceService from "../../../services/PresenceService.js";
 import AudioSettings from "../../../services/AudioSettings.js";
 import MusicService from "../../../services/MusicService.js";
+import AccountDangerModal from "./AccountDangerModal.js";
+import Toast from "../Toast.js";
 
 export default class SettingsModal {
 
@@ -11,6 +13,7 @@ export default class SettingsModal {
         this.inGame = inGame;
         this.modal = null;
         this.settings = AudioSettings.get();
+        this.dangerModal = new AccountDangerModal();
     }
 
     show() {
@@ -101,6 +104,19 @@ export default class SettingsModal {
                     </a>
                 </section>
 
+                ${!this.inGame ? `
+                    <section class="settings-section settings-danger-zone">
+                        <h3>Zona de Perigo</h3>
+                        <p class="settings-danger-warning">Ação permanente e não pode ser desfeita.</p>
+                        <div class="settings-danger-actions">
+                            <button class="settings-danger-button" id="settings-delete-account">
+                                <i class="fa-solid fa-trash"></i>
+                                Excluir Conta e Personagens
+                            </button>
+                        </div>
+                    </section>
+                ` : ""}
+
                 <footer class="settings-footer">
                     ${this.inGame ? `
                         <button class="settings-exit-button" id="settings-exit">
@@ -178,6 +194,55 @@ export default class SettingsModal {
             this.hide();
             this.game.player = null;
             this.game.showScreen("login");
+
+        });
+
+        this.modal.querySelector("#settings-delete-account")?.addEventListener("click", async () => {
+
+            const password = await this.dangerModal.confirmDeleteAccount();
+
+            if (!password) return;
+
+            const user = AuthService.getCurrentUser();
+
+            if (!user) {
+                Toast.show("Entre na sua conta pra excluir ela.");
+                return;
+            }
+
+            try {
+
+                // Reautentica ANTES de apagar qualquer dado — confirma a
+                // senha logo de cara, em vez de apagar o progresso todo
+                // pra só depois descobrir que a senha estava errada.
+                await AuthService.reauthenticate(password);
+
+                await SaveService.deleteAccountData(user.uid);
+
+                // Libera a vaga da sessão única ANTES de apagar o login —
+                // depois dele as regras do Realtime Database recusam a
+                // escrita (auth.uid deixa de existir).
+                await PresenceService.release();
+
+                await AuthService.deleteCurrentUser();
+
+                this.hide();
+                this.game.player = null;
+                this.game.showScreen("login");
+
+                Toast.show("Conta excluída.");
+
+            } catch (err) {
+
+                console.warn("Falha ao excluir a conta:", err);
+
+                const message = err.code === "auth/wrong-password" || err.code === "auth/invalid-credential"
+                    ? "Senha incorreta — tente de novo."
+                    : "Não foi possível excluir a conta. Tente de novo.";
+
+                Toast.show(message);
+
+            }
 
         });
 

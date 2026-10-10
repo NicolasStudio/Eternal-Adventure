@@ -5,10 +5,14 @@ import {
     signOut as firebaseSignOut,
     onAuthStateChanged,
     sendPasswordResetEmail,
+    deleteUser,
+    reauthenticateWithCredential,
+    EmailAuthProvider,
     firestore,
     doc,
     setDoc,
     updateDoc,
+    deleteDoc,
     deleteField
 } from "./FirebaseService.js";
 
@@ -90,6 +94,41 @@ export default class AuthService {
             if (err.code !== "auth/user-not-found") throw err;
 
         }
+
+    }
+
+    // Exclusão de conta: o Firebase recusa deleteUser() se o login foi
+    // há muito tempo (auth/requires-recent-login) — tem que reautenticar
+    // com a senha de novo antes. Quem chama decide quando pedir a senha
+    // (ver AccountDangerModal), tentando deleteCurrentUser() primeiro e
+    // só caindo aqui se ele recusar por esse motivo específico.
+    static async reauthenticate(password) {
+
+        const user = auth.currentUser;
+
+        if (!user?.email) throw new Error("Nenhuma conta logada.");
+
+        const credential = EmailAuthProvider.credential(user.email, password);
+
+        await reauthenticateWithCredential(user, credential);
+
+    }
+
+    // Apaga a conta de autenticação em si — o resto dos dados (save,
+    // nome reservado, entrada no ranking) já precisa ter sido apagado
+    // ANTES de chamar isso (ver SaveService.deleteAccountData), porque
+    // depois daqui `auth.currentUser` vira null e as Regras de
+    // Segurança (que conferem request.auth.uid) passam a recusar
+    // qualquer escrita dessa conta.
+    static async deleteCurrentUser() {
+
+        const user = auth.currentUser;
+
+        if (!user) throw new Error("Nenhuma conta logada.");
+
+        await deleteDoc(doc(firestore, USERS_COLLECTION, user.uid));
+
+        await deleteUser(user);
 
     }
 

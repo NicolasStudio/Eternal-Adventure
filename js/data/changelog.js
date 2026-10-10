@@ -30,7 +30,8 @@ export default [
             "Escolher um Talento Único agora espera a nuvem confirmar o salvamento antes de liberar normalmente — antes disso o salvamento rodava em segundo plano sem aviso nenhum se falhasse, o que já fez algum jogador perder o Rompendo Limites ao trocar de aparelho logo depois de escolher",
             "Cooperativo: o pet de cura agora foca em quem está com a vida atual mais baixa do squad, em vez de sortear um alvo qualquer",
             "Cooperativo: o host agora pode começar a raid com 3 jogadores na fila, sem precisar esperar o 4º — basta clicar em 'Iniciar com 3 jogadores'",
-            "Corrigido o convite de um substituto (vaga de quem saiu entre andares) às vezes falhando quando o resto do squad já estava todo pronto — entrar na sala e avançar o andar viraram uma escrita só, em vez de duas que podiam correr uma contra a outra"
+            "Corrigido o convite de um substituto (vaga de quem saiu entre andares) às vezes falhando quando o resto do squad já estava todo pronto — entrar na sala e avançar o andar viraram uma escrita só, em vez de duas que podiam correr uma contra a outra",
+            "Nova Zona de Perigo nas Configurações (tela inicial): botão pra excluir a conta inteira — login, todos os personagens, álbum, conquistas, tudo, pra sempre. Exige digitar 'EXCLUIR' e confirmar a senha antes do botão liberar"
         ]
     },
 
