@@ -447,6 +447,20 @@ export default class RaidLobbyService {
         return this.getActiveMembers(matchData)[0]?.id ?? null;
     }
 
+    // Compartilhado por waitForFloorAdvance (loop de espera normal) e
+    // joinMatchAsReplacement (avança o andar na MESMA transação, se o
+    // convidado completar o squad pronto — ver comentário lá).
+    static canAdvanceFloor(data, expectedFloor) {
+
+        const active = this.getActiveMembers(data);
+        const ready = data.floorReady ?? {};
+
+        return active.length > 0
+            && active.every(member => ready[member.id])
+            && (active.length >= SQUAD_SIZE || data.proceedShort === expectedFloor);
+
+    }
+
     // Marca que eu saí do cooperativo no meio dos andares — os outros
     // continuam sem mim (não conto mais pro "todo mundo pronto"). Se eu
     // for o último do squad a sair, apaga a partida inteira.
@@ -541,6 +555,21 @@ export default class RaidLobbyService {
             current.hp = { ...(current.hp ?? {}), [playerId]: currentHP };
             current.floorReady = { ...(current.floorReady ?? {}), [playerId]: true };
 
+            // Se o convidado completar o squad com todo mundo pronto,
+            // avança o andar JUNTO nessa mesma escrita, em vez de confiar
+            // só no waitForFloorAdvance de outro cliente perceber e
+            // avançar numa transação separada depois — sem isso havia uma
+            // corrida: o convidado nascia "esperando o andar X" bem na
+            // hora em que o resto do squad já tinha virado 4/4 prontos, e
+            // dependendo de qual transação concorrente comitava primeiro
+            // (a dele ou a de avanço de outro cliente), o listener dele
+            // recém-criado podia cair numa janela ruim dessa corrida.
+            if (this.canAdvanceFloor(current, waitFloor)) {
+                current.floor = waitFloor + 1;
+                current.floorReady = {};
+                current.proceedShort = null;
+            }
+
             return current;
 
         });
@@ -592,16 +621,7 @@ export default class RaidLobbyService {
 
             this.cancelFloorWait = () => finish({ left: true });
 
-            const canAdvance = (data) => {
-
-                const active = this.getActiveMembers(data);
-                const ready = data.floorReady ?? {};
-
-                return active.length > 0
-                    && active.every(member => ready[member.id])
-                    && (active.length >= SQUAD_SIZE || data.proceedShort === expectedFloor);
-
-            };
+            const canAdvance = (data) => this.canAdvanceFloor(data, expectedFloor);
 
             onValue(matchRef, async (snapshot) => {
 
