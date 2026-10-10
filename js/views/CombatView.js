@@ -112,15 +112,14 @@ export default class CombatView {
                 // "Informações do Combate" desse andar (ver js/combat/
                 // CombatInfo.js) — engine.log só existe até closeCombat()/
                 // finishDungeon() zerar this.engine, então precisa ser lido
-                // agora, antes de qualquer um dos dois rodar. Só passado
-                // pra tela "meio de dungeon" (showActions) — o último
-                // andar usa o botão único "Coletar", sem espaço pra ele,
-                // mesmo esquema do Cooperativo (ver RaidView.js).
+                // agora, antes de qualquer um dos dois rodar. Passado em
+                // TODOS os andares, inclusive o último (o chefe) — o botão
+                // some sozinho quando não há combatInfo (RewardModal.show).
                 const combatInfo = buildCombatInfo(this.engine.log, "player");
                 const combatTimeline = buildCombatTimeline(this.engine.log, "player");
 
                 if (this.currentFloor >= this.currentDungeon.fights) {
-                    await this.rewardModal.show(reward);
+                    await this.rewardModal.show(reward, { combatInfo, combatTimeline });
                     for (const levelUp of levelUps) {
                         await this.levelUpModal.show(levelUp.level, levelUp.bonus, levelUp.petReward);
                     }

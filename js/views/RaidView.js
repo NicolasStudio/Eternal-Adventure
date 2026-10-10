@@ -607,7 +607,7 @@ export default class RaidView {
 
         if (isLastFloor) {
 
-            await this.rewardModal.show(reward);
+            await this.rewardModal.show(reward, { combatInfo, combatTimeline });
 
             for (const levelUp of levelUps) {
                 await this.levelUpModal.show(levelUp.level, levelUp.bonus, levelUp.petReward);

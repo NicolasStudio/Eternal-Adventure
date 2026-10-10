@@ -61,23 +61,31 @@ export default class RewardModal {
                                     <button class="reward-action reward-action-exit">${exitLabel}</button>
                                 </div>
                             `
-                            : `<button class="reward-collect">Coletar</button>`
+                            : combatInfo
+                                ? `
+                                    <div class="reward-actions">
+                                        <button class="reward-action reward-action-combat-info">Informações do Combate</button>
+                                        <button class="reward-action reward-collect-action">Coletar</button>
+                                    </div>
+                                `
+                                : `<button class="reward-collect">Coletar</button>`
                     }
                 </div>
             `;
             document.body.appendChild(this.overlay);
 
+            this.overlay.querySelector(".reward-action-combat-info")?.addEventListener("click", () => {
+                this.combatInfoModal.show(combatInfo, combatTimeline);
+            });
+
             if (!showActions) {
-                this.overlay.querySelector(".reward-collect").addEventListener("click", () => {
+                this.overlay.querySelector(".reward-collect, .reward-collect-action").addEventListener("click", () => {
+                    this.combatInfoModal.hide();
                     this.hide();
                     resolve(true);
                 });
                 return;
             }
-
-            this.overlay.querySelector(".reward-action-combat-info")?.addEventListener("click", () => {
-                this.combatInfoModal.show(combatInfo, combatTimeline);
-            });
 
             this.overlay.querySelector(".reward-action-inventory").addEventListener("click", async () => {
 

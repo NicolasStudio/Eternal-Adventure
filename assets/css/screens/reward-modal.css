@@ -146,6 +146,12 @@
 .reward-action-combat-info:hover{
     background:rgba(239,226,191,.1);
 }
+/* "Coletar" quando vem acompanhado do botão de Informações do Combate
+   (ver RewardModal.show) — mesmo tom marrom do .reward-collect sozinho,
+   só no tamanho menor de .reward-action pra combinar com o botão ao lado. */
+.reward-collect-action{
+    background:#50331a;
+}
 
 /* ==========================================================
    INFORMAÇÕES DO COMBATE (Cooperativo)
