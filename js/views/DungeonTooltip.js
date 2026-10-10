@@ -129,6 +129,7 @@ export default class DungeonTooltip {
 
     getStatName(stat) {
         const stats = {
+            life: "Vida",
             attack: "Ataque",
             armor: "Armadura",
             agility: "Agilidade",
@@ -142,6 +143,7 @@ export default class DungeonTooltip {
 
     getStatIcon(stat) {
         const icons = {
+            life: "❤️",
             attack: "⚔️",
             armor: "🛡️",
             agility: "👢",

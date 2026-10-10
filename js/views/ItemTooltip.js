@@ -235,6 +235,7 @@ export default class ItemTooltip {
             return resolved ? this.getStatName(resolved) : "Atributo Especial";
         }
         switch (stat) {
+            case "life": return "Vida";
             case "attack": return "Ataque";
             case "armor": return "Armadura";
             case "agility": return "Agilidade";

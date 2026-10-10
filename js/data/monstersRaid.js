@@ -145,7 +145,7 @@ const monstersRaid = [
             {
                 pool: [
                     { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
-                    { type: ["ring"], rarity: "legendary", chance: 5 },
+                    { type: ["ring", "amulet"], rarity: "legendary", chance: 5 },
                     { item: enchantmentStone.quartzoRosaTres, chance: 10 },
                     { item: enchantmentStone.quartzoRosaDois, chance: 13 },
                     { item: enchantmentStone.quartzoRosaUm, chance: 67 }
@@ -194,7 +194,7 @@ const monstersRaid = [
             {
                 pool: [
                     { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
-                    { type: ["amulet"], rarity: "legendary", chance: 5 },
+                    { type: ["ring", "amulet"], rarity: "legendary", chance: 5 },
                     { item: enchantmentStone.quartzoRosaTres, chance: 10 },
                     { item: enchantmentStone.quartzoRosaDois, chance: 13 },
                     { item: enchantmentStone.quartzoRosaUm, chance: 67 }

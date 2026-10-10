@@ -31,7 +31,11 @@ export default [
             "Cooperativo: o pet de cura agora foca em quem está com a vida atual mais baixa do squad, em vez de sortear um alvo qualquer",
             "Cooperativo: o host agora pode começar a raid com 3 jogadores na fila, sem precisar esperar o 4º — basta clicar em 'Iniciar com 3 jogadores'",
             "Corrigido o convite de um substituto (vaga de quem saiu entre andares) às vezes falhando quando o resto do squad já estava todo pronto — entrar na sala e avançar o andar viraram uma escrita só, em vez de duas que podiam correr uma contra a outra",
-            "Nova Zona de Perigo nas Configurações (tela inicial): botão pra excluir a conta inteira — login, todos os personagens, álbum, conquistas, tudo, pra sempre. Exige digitar 'EXCLUIR' e confirmar a senha antes do botão liberar"
+            "Nova Zona de Perigo nas Configurações (tela inicial): botão pra excluir a conta inteira — login, todos os personagens, álbum, conquistas, tudo, pra sempre. Exige digitar 'EXCLUIR' e confirmar a senha antes do botão liberar",
+            "Anel e Amuleto agora têm duas variantes, dropadas pelas mesmas dungeons de antes: Primal (foco em Ataque e Agilidade) e Moderno (foco em Vida e Armadura)",
+            "Novas fontes garantidas do Anel/Amuleto Moderno: Caverna I e IV (anel comum/incomum), Caverna II e V (amuleto comum/incomum), Oceano I (anel e amuleto raros), Boss do Vulcão (amuleto místico) e Boss do Inferno (anel místico) — além dos drops que já existiam. Dragão Varejeiro e Dragão de Indra, no Cooperativo, agora podem soltar tanto anel quanto amuleto lendário",
+            "Corrigido o Anel/Amuleto que já estava equipado antes da atualização acima ficando com ícone quebrado e preso nos atributos antigos — a criação das duas variantes mudou o identificador interno desses itens, e quem já tinha um não era mais reconhecido. Personagens afetados são corrigidos sozinhos ao carregar",
+            "Tooltip de drop das dungeons: o atributo Vida estava sem ícone (❤️) — mesma correção aplicada na tooltip de item"
         ]
     },
 
