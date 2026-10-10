@@ -21,6 +21,20 @@
     color:#efe2bf;
     font-family:"Cinzel", serif;
     animation:rewardPopup .25s ease;
+    /* Incondicional (não só dentro da media query de telas baixas lá
+       embaixo) — com o 4º botão do Cooperativo (Informações do
+       Combate) o conteúdo ficou alto o bastante pra precisar do teto
+       em qualquer altura de janela, não só nas mais curtas. */
+    max-height:70vh;
+    overflow-y:auto;
+    padding-right:12px;
+}
+
+.reward-title{
+    margin:0 0 16px;
+    text-align:center;
+    font-size:28px;
+    color:#f6d19c;
 }
 
 .reward-section{
@@ -35,7 +49,7 @@
     letter-spacing:1px;
 }
 .reward-value{
-    font-size:24px;
+    font-size:20px;
     color:#f3e5b7;
 }
 .reward-items{
@@ -44,6 +58,11 @@
     gap:10px;
     margin-top:10px;
 }
+
+.reward-item span{
+    font-size:14px;
+}
+
 .reward-item{
     display:flex;
     align-items:center;
@@ -89,19 +108,22 @@
     margin-top:24px;
 }
 .reward-action{
-    padding:13px;
+    padding:10px;
     cursor:pointer;
     border:1px solid #8f7144;
     border-radius:4px;
-    background:#50331a;
+    background:#080808;
     color:#f3e5b7;
     font-family:"Cinzel", serif;
-    font-size:16px;
+    font-size:14px;
     transition:.2s;
 }
 .reward-action:hover{
     background:#6b4522;
     transform:translateY(-1px);
+}
+.reward-action-inventory{
+    background:#50331a;
 }
 .reward-action-continue{
     border-color:#2f6b2f;
@@ -116,6 +138,197 @@
 }
 .reward-action-exit:hover{
     background:#5c1818 !important;
+}
+.reward-action-combat-info{
+    border-color:#efe2bf;
+    background:#080808;
+}
+.reward-action-combat-info:hover{
+    background:rgba(239,226,191,.1);
+}
+
+/* ==========================================================
+   INFORMAÇÕES DO COMBATE (Cooperativo)
+========================================================== */
+.combat-info-overlay{
+    position:fixed;
+    inset:0;
+    z-index:10000;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:rgba(0,0,0,.65);
+    backdrop-filter:blur(2px);
+    animation:rewardFade .2s ease;
+}
+.combat-info-modal{
+    width:400px;
+    max-width:92%;
+    padding:20px;
+    border:1px solid #7d6846;
+    border-radius:8px;
+    background:rgba(18,13,9,.98);
+    box-shadow:0 0 25px rgba(0,0,0,.75);
+    color:#efe2bf;
+    font-family:"Cinzel", serif;
+    animation:rewardPopup .22s ease;
+    /* 14 linhas agora (antes eram só 6) — sem teto de altura o modal
+       crescia mais que a tela em janelas mais baixas, igual já
+       aconteceu com o .reward-modal (ver regra dele acima). */
+    max-height:80vh;
+    overflow-y:auto;
+    padding-right:14px;
+}
+/* A aba Gráfico precisa de mais espaço horizontal (linhas do SVG +
+   legenda em 2 colunas) do que as 400px bastam pra tela normal — em
+   telas largas o modal cresce, não fica preso no tamanho pensado pra
+   tablet/notebook pequeno. */
+@media (min-width:900px){
+    .combat-info-modal{
+        width:620px;
+    }
+}
+.combat-info-header{
+    position:sticky;
+    top:0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:16px;
+    padding-bottom:12px;
+    background:rgba(18,13,9,.98);
+    border-bottom:1px solid rgba(212,163,115,.25);
+}
+.combat-info-header h2{
+    margin:0;
+    font-size:1.05rem;
+    color:#f6d19c;
+}
+.combat-info-subtitle{
+    margin:0 0 8px;
+    font-size:.8rem;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:#bca46d;
+}
+.combat-info-tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:14px;
+}
+.combat-info-tab{
+    flex:1;
+    padding:8px;
+    cursor:pointer;
+    border:1px solid #8f7144;
+    border-radius:4px;
+    background:transparent;
+    color:#bca46d;
+    font-family:"Cinzel", serif;
+    font-size:.85rem;
+    transition:.2s;
+}
+.combat-info-tab:hover{
+    background:rgba(239,226,191,.08);
+}
+.combat-info-tab.active{
+    background:#50331a;
+    color:#f3e5b7;
+    border-color:#c79b37;
+}
+.combat-info-group{
+    margin-bottom:16px;
+}
+.combat-info-group:last-child{
+    margin-bottom:0;
+}
+
+/* ----- Aba Gráfico ----- */
+.combat-info-chart-wrap{
+    width:100%;
+    background:rgba(0,0,0,.25);
+    border:1px solid rgba(212,163,115,.2);
+    border-radius:6px;
+    margin-bottom:10px;
+}
+.combat-info-chart{
+    display:block;
+    width:100%;
+    height:auto;
+    aspect-ratio:600/220;
+}
+.combat-info-axis{
+    stroke:rgba(239,226,191,.35);
+    stroke-width:1;
+    vector-effect:non-scaling-stroke;
+}
+.combat-info-axis-label{
+    fill:#9e8d70;
+    font-size:11px;
+    font-family:"Cinzel", serif;
+}
+.combat-info-chart-empty{
+    fill:#9e8d70;
+    font-size:13px;
+    font-family:"Cinzel", serif;
+}
+.combat-info-line{
+    fill:none;
+    stroke-width:2;
+}
+.combat-info-chart-hint{
+    margin:0 0 12px;
+    font-size:.72rem;
+    color:#9e8d70;
+    text-align:center;
+}
+.combat-info-legend{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px 12px;
+}
+.combat-info-check{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    cursor:pointer;
+    font-size:.82rem;
+    color:#efe2bf;
+}
+.combat-info-check input{
+    accent-color:var(--chart-color);
+    cursor:pointer;
+}
+.combat-info-swatch{
+    width:10px;
+    height:10px;
+    border-radius:2px;
+    background:var(--chart-color);
+    flex-shrink:0;
+}
+.combat-info-row{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    padding:7px 0;
+    border-bottom:1px solid rgba(255,255,255,.06);
+    font-size:.92rem;
+}
+.combat-info-row:last-child{
+    border-bottom:none;
+}
+.combat-info-row small{
+    color:#9e8d70;
+    font-size:.75em;
+}
+.combat-info-positive{
+    color:#69d823;
+}
+.combat-info-negative{
+    color:#e0558a;
+}
+.combat-info-neutral{
+    color:#f1c75c;
 }
 .reward-collect:active{
     transform:translateY(1px);
@@ -508,10 +721,10 @@
    crescer mais que a altura disponível e estourar pra fora dos dois
    lados da tela, sem como rolar — o botão de baixo (ex: "Continuar" do
    RewardModal, que aparece depois de toda luta) ficava inacessível.
-   Cobre a recompensa de combate, as confirmações (inclusive o Portal da
-   Luz/Trevas e a Compensação, que usam .continue-modal) e o fim de
-   dungeon. */
-.reward-modal,
+   Cobre as confirmações (inclusive o Portal da Luz/Trevas e a
+   Compensação, que usam .continue-modal) e o fim de dungeon.
+   .reward-modal saiu daqui — o teto dele agora é incondicional (ver
+   regra base acima), não só nessa faixa de altura. */
 .continue-modal,
 .dungeon-complete-modal {
     max-height: 70vh;
