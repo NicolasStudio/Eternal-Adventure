@@ -1,6 +1,8 @@
 import items from "./items.js";
 import enchantmentStone from "./enchantmentStone.js";
 import pets from "./pet.js";
+import ring from "./ring.js";
+import amulet from "./amulet.js";
 
 const dungeons = [
 
@@ -148,6 +150,10 @@ const dungeons = [
                 type: ["leg"],
                 rarity: "uncommon"
             },
+            {
+                item: ring.ringModernCommon,
+                chance: 5
+            },
             items.smallPotion
         ]
     },
@@ -175,6 +181,10 @@ const dungeons = [
             {
                 type: ["chest"],
                 rarity: "uncommon"
+            },
+            {
+                item: amulet.amuletModernCommon,
+                chance: 5
             },
             items.smallPotion
         ]
@@ -263,6 +273,10 @@ const dungeons = [
                 type: ["boot"],
                 rarity: "rare"
             },
+            {
+                item: ring.ringModernIncommon,
+                chance: 5
+            },
             items.smallPotion
         ]
     },
@@ -288,6 +302,10 @@ const dungeons = [
             {
                 type: ["leg"],
                 rarity: "rare"
+            },
+            {
+                item: amulet.amuletModernIncommon,
+                chance: 5
             },
             items.smallPotion
         ]
@@ -379,6 +397,14 @@ const dungeons = [
             {
                 // type: ["boot"],
                 // rarity: "rare"
+            },
+            {
+                item: ring.ringModernRare,
+                chance: 5
+            },
+            {
+                item: amulet.amuletModernRare,
+                chance: 5
             },
             items.mediumPotion
         ]
@@ -696,6 +722,10 @@ const dungeons = [
             {
                 type: ["chest"],
                 rarity: "mystic"
+            },
+            {
+                item: amulet.amuletModernMystic,
+                chance: 5
             },
             items.tripleMediumPotion
         ]
@@ -1039,6 +1069,10 @@ const dungeons = [
             {
                 type: ["ring"],
                 rarity: "mystic",
+                chance: 5
+            },
+            {
+                item: ring.ringModernMystic,
                 chance: 5
             },
             items.tripleMediumPotion

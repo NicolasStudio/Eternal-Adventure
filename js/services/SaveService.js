@@ -40,6 +40,29 @@ const EQUIPMENT_BY_ID = {};
     Object.values(pool).forEach(item => { EQUIPMENT_BY_ID[item.id] = item; });
 });
 
+// Até o Anel/Amuleto virarem duas variantes cada (Primal/Moderno), só
+// existia UM anel ("Anel do Primeiro Imperador", Vida/Armadura — hoje
+// ringModernX) e UM amuleto ("Amuleto Primal", Ataque/Agilidade — hoje
+// amuletPrimalX), com ids mais curtos (ringCommon, amuletLegendary...).
+// Sem este mapa, quem já tinha um desses equipado/no inventário ficava
+// com o item "travado" (refreshItemStats não acha mais o id salvo pra
+// comparar) — ícone quebrado (o arquivo antigo foi renomeado/apagado)
+// e nome congelado no que estava salvo.
+const LEGACY_EQUIPMENT_IDS = {
+    ringCommon: "ringModernCommon",
+    ringIncommon: "ringModernIncommon",
+    ringRare: "ringModernRare",
+    ringMystic: "ringModernMystic",
+    ringLegendary: "ringModernLegendary",
+    ringUltraje: "ringModernUltraje",
+    amuletCommon: "amuletPrimalCommon",
+    amuletIncommon: "amuletPrimalIncommon",
+    amuletRare: "amuletPrimalRare",
+    amuletMystic: "amuletPrimalMystic",
+    amuletLegendary: "amuletPrimalLegendary",
+    amuletUltraje: "amuletPrimalUltraje"
+};
+
 // Todo alimento de pet (colheita da Fazenda) conhecido, indexado por
 // id — usado só pra "refrescar" os já colhidos (ver refreshFoodItems),
 // nunca alterado.
@@ -392,6 +415,11 @@ export default class SaveService {
     static refreshItemStats(item) {
 
         if (!item?.id || !item?.baseStats) return item;
+
+        // Corrige o id ANTES de procurar — ver LEGACY_EQUIPMENT_IDS.
+        // Só mexe de verdade uma vez: da segunda chamada em diante o id
+        // já salvo é o novo, e o mapa não acha nada pra trocar.
+        item.id = LEGACY_EQUIPMENT_IDS[item.id] ?? item.id;
 
         const canonical = EQUIPMENT_BY_ID[item.id];
 
