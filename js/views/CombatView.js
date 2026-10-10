@@ -1,5 +1,6 @@
 import monsters from "../data/monsters.js";
 import CombatEngine from "../combat/CombatEngine.js";
+import { buildCombatInfo, buildCombatTimeline } from "../combat/CombatInfo.js";
 import LootSystem from "../combat/LootSystem.js";
 import LevelUpModal from "../ui/components/modals/LevelUpModal.js";
 import RewardModal from "../ui/components/modals/RewardModal.js";
@@ -108,6 +109,16 @@ export default class CombatView {
                 const levelUps = this.game.player.collectReward(reward);
                 this.game.hudScreen.refreshCurrentView();
 
+                // "Informações do Combate" desse andar (ver js/combat/
+                // CombatInfo.js) — engine.log só existe até closeCombat()/
+                // finishDungeon() zerar this.engine, então precisa ser lido
+                // agora, antes de qualquer um dos dois rodar. Só passado
+                // pra tela "meio de dungeon" (showActions) — o último
+                // andar usa o botão único "Coletar", sem espaço pra ele,
+                // mesmo esquema do Cooperativo (ver RaidView.js).
+                const combatInfo = buildCombatInfo(this.engine.log, "player");
+                const combatTimeline = buildCombatTimeline(this.engine.log, "player");
+
                 if (this.currentFloor >= this.currentDungeon.fights) {
                     await this.rewardModal.show(reward);
                     for (const levelUp of levelUps) {
@@ -123,6 +134,8 @@ export default class CombatView {
 
                 const continueDungeon = await this.rewardModal.show(reward, {
                     showActions: true,
+                    combatInfo,
+                    combatTimeline,
                     onOpenInventory: async () => {
                         this.game.hudScreen.enterPreparationMode();
                         await new Promise(resolve => {

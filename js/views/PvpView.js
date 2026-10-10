@@ -1,6 +1,8 @@
 import PvpLobbyService, { PVP_POWER_RANGE } from "../services/PvpLobbyService.js";
 import PowerService from "../services/PowerService.js";
 import PvpCombatService from "../services/PvpCombatService.js";
+import { buildCombatInfo, buildCombatTimeline } from "../combat/CombatInfo.js";
+import CombatInfoModal from "../ui/components/modals/CombatInfoModal.js";
 import Toast from "../ui/components/Toast.js";
 import CombatToast from "../combat/CombatToast.js";
 import HealFlash from "../combat/HealFlash.js";
@@ -52,6 +54,11 @@ export default class PvpView {
         this.candidateCount = 0; // 2v2: jogadores compatíveis na fila
         this.searchTimer = null;
         this.searchStartedAt = 0;
+        // "Informações do Combate" (ver js/combat/CombatInfo.js) — mesmo
+        // modal do Cooperativo/PvE, aberto a partir da tela de resultado
+        // (renderResult/renderResultTeam). Nunca guarda nada: cada
+        // combatResult novo substitui o anterior.
+        this.combatInfoModal = new CombatInfoModal();
     }
 
     get player() {
@@ -458,6 +465,7 @@ export default class PvpView {
                 <div class="pvp-log">
                     ${this.combatResult.log.slice(-12).map(entry => this.renderLogLine(entry, combatantA, combatantB)).join("")}
                 </div>
+                <button class="pvp-combat-info-button">Informações do Combate</button>
                 <button class="pvp-back-button">Voltar</button>
             </div>
         `;
@@ -491,6 +499,7 @@ export default class PvpView {
                 <div class="pvp-log">
                     ${this.combatResult.log.slice(-12).map(entry => this.renderLogLineTeam(entry, nameOf, petNameOf)).join("")}
                 </div>
+                <button class="pvp-combat-info-button">Informações do Combate</button>
                 <button class="pvp-back-button">Voltar</button>
             </div>
         `;
@@ -1336,6 +1345,7 @@ export default class PvpView {
 
                 if (!event.target.closest(".pvp-close")) return;
 
+                this.combatInfoModal.hide();
                 this.game.hudScreen.changeView("");
 
             });
@@ -1362,7 +1372,25 @@ export default class PvpView {
         });
 
         container.querySelector(".pvp-back-button")?.addEventListener("click", () => {
+            this.combatInfoModal.hide();
             this.game.hudScreen.changeView("");
+        });
+
+        container.querySelector(".pvp-combat-info-button")?.addEventListener("click", () => {
+
+            // 1x1 não tem id real de combatente no log (ver
+            // PvpCombatService.simulate) — "a"/"b" já servem de id ali,
+            // e isPlayerA diz qual dos dois sou eu. O 2x2 usa o id de
+            // verdade (PvpLobbyService.playerId), igual o Cooperativo.
+            const playerId = this.mode === "2v2"
+                ? PvpLobbyService.playerId
+                : (this.isPlayerA ? "a" : "b");
+
+            const info = buildCombatInfo(this.combatResult.log, playerId);
+            const timeline = buildCombatTimeline(this.combatResult.log, playerId);
+
+            this.combatInfoModal.show(info, timeline);
+
         });
 
     }

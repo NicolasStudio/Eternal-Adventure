@@ -164,12 +164,26 @@ export default class PvpCombatService {
 
         // Reviver do Yggdrasil: entra no log como uma "mordida" só de cura
         // do lado de quem reviveu, que a tela já sabe aplicar.
+        // attackerId/targetId (além do "turn"/"attacker" já existentes)
+        // só existem pra alimentar "Informações do Combate" (ver
+        // js/combat/CombatInfo.js) — "a"/"b" servem de id aqui, igual o
+        // próprio "turn" já fazia, não mudam nada do resultado da luta.
         const revive = (combatant, side) => {
 
             const heal = PvpCombatService.reviveIfDead(combatant);
 
             if (heal > 0) {
-                log.push({ turn: side, attacker: combatant.name, petBite: true, revive: true, damage: 0, heal });
+                log.push({
+                    round: guard,
+                    turn: side,
+                    attacker: combatant.name,
+                    attackerId: side,
+                    targetId: side === "a" ? "b" : "a",
+                    petBite: true,
+                    revive: true,
+                    damage: 0,
+                    heal
+                });
             }
 
         };
@@ -204,7 +218,7 @@ export default class PvpCombatService {
 
             if (rng() * 100 < dodgeChance) {
 
-                log.push({ turn, attacker: attacker.name, dodged: true });
+                log.push({ round: guard, turn, attacker: attacker.name, attackerId: turn, targetId: defenderKey, dodged: true });
 
             } else {
 
@@ -223,6 +237,15 @@ export default class PvpCombatService {
                 const effectiveArmor = (defender.armor * defenderMult + defenderCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
                 const preAbsorption = Math.max(1, Math.floor((attacker.attack * attackerMult + attackerCopy.bonusAttack) * criticalMultiplier * mitigation));
+
+                // Dano ANTES da armadura, com a MESMA fórmula de
+                // preAbsorption só sem o fator de mitigação — existe só
+                // pra "Informações do Combate" (ver js/combat/
+                // CombatInfo.js) saber quanto a armadura segurou.
+                // Puramente informativo: nunca entra em currentHP nem em
+                // nenhuma conta que mude o resultado da luta.
+                const rawDamage = Math.max(1, Math.floor((attacker.attack * attackerMult + attackerCopy.bonusAttack) * criticalMultiplier));
+                const armorMitigated = Math.max(0, rawDamage - preAbsorption);
 
                 // Absorção: CHANCE de quem defende absorver parte do golpe
                 // (ver Absorption.js). Sempre consome 1 rng(), ativando ou
@@ -253,10 +276,15 @@ export default class PvpCombatService {
                 const miasmaStacks = miasmaProc ? MiasmaService.applyDebuff(miasmaFlags[defenderKey]) : 0;
 
                 log.push({
+                    round: guard,
                     turn,
                     attacker: attacker.name,
+                    attackerId: turn,
+                    targetId: defenderKey,
                     dodged: false,
                     damage,
+                    rawDamage,
+                    armorMitigated,
                     critical: isCritical,
                     lifeSteal: lifeStealAmount,
                     absorbed,
@@ -299,7 +327,16 @@ export default class PvpCombatService {
                         attacker.currentHP = Math.min(attacker.maxHP, attacker.currentHP + petHeal);
                     }
 
-                    log.push({ turn, attacker: attacker.name, petBite: true, damage: biteDamage, heal: petHeal });
+                    log.push({
+                        round: guard,
+                        turn,
+                        attacker: attacker.name,
+                        attackerId: turn,
+                        targetId: defenderKey,
+                        petBite: true,
+                        damage: biteDamage,
+                        heal: petHeal
+                    });
 
                     revive(defender, turn === "a" ? "b" : "a");
 
@@ -324,8 +361,11 @@ export default class PvpCombatService {
                 defender.currentHP = Math.max(0, defender.currentHP - tickDamage);
 
                 log.push({
+                    round: guard,
                     turn,
                     attacker: attacker.name,
+                    attackerId: turn,
+                    targetId: turn === "a" ? "b" : "a",
                     burn: true,
                     burnStart: burn.first,
                     burnTarget: turn === "a" ? "b" : "a",
@@ -398,6 +438,7 @@ export default class PvpCombatService {
 
             if (heal > 0) {
                 log.push({
+                    round: guard,
                     attackerId: combatant.id,
                     attackerTeam: combatant.team,
                     targetId: killerId,
@@ -431,6 +472,7 @@ export default class PvpCombatService {
             target.currentHP = Math.max(0, target.currentHP - tickDamage);
 
             log.push({
+                round: guard,
                 attackerId: owner.id,
                 attackerTeam: owner.team,
                 targetId: target.id,
@@ -480,6 +522,7 @@ export default class PvpCombatService {
                 if (rng() * 100 < dodgeChance) {
 
                     log.push({
+                        round: guard,
                         attackerId: attacker.id,
                         attackerTeam: attacker.team,
                         targetId: target.id,
@@ -512,6 +555,15 @@ export default class PvpCombatService {
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
                 const preAbsorption = Math.max(1, Math.floor((attacker.attack * attackerMult + attackerCopy.bonusAttack) * criticalMultiplier * mitigation));
 
+                // Dano ANTES da armadura, com a MESMA fórmula de
+                // preAbsorption só sem o fator de mitigação — existe só
+                // pra "Informações do Combate" (ver js/combat/
+                // CombatInfo.js) saber quanto a armadura segurou.
+                // Puramente informativo: nunca entra em currentHP nem em
+                // nenhuma conta que mude o resultado da luta.
+                const rawDamage = Math.max(1, Math.floor((attacker.attack * attackerMult + attackerCopy.bonusAttack) * criticalMultiplier));
+                const armorMitigated = Math.max(0, rawDamage - preAbsorption);
+
                 const absorptionChance = Math.min(ABSORPTION_CAP, (target.absorption ?? 0) * defendDebuff);
                 const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance, ABSORPTION_RATIO_PVP);
 
@@ -537,11 +589,14 @@ export default class PvpCombatService {
                 const miasmaStacks = miasmaProc ? MiasmaService.applyDebuff(miasmaFlagsById.get(target.id)) : 0;
 
                 log.push({
+                    round: guard,
                     attackerId: attacker.id,
                     attackerTeam: attacker.team,
                     targetId: target.id,
                     dodged: false,
                     damage,
+                    rawDamage,
+                    armorMitigated,
                     critical: isCritical,
                     lifeSteal: lifeStealAmount,
                     absorbed,
@@ -595,6 +650,7 @@ export default class PvpCombatService {
                     }
 
                     log.push({
+                        round: guard,
                         attackerId: attacker.id,
                         attackerTeam: attacker.team,
                         targetId: target.id,
