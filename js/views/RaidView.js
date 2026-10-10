@@ -580,6 +580,14 @@ export default class RaidView {
             return true;
         }
 
+        // Resumo do andar pra "Informações do Combate" (ver
+        // RewardModal/CombatInfoModal) — só informativo, nunca salvo em
+        // lugar nenhum: o andar seguinte sobrescreve isso de novo.
+        // combatTimeline alimenta a aba "Gráfico" do mesmo modal (série
+        // por rodada, ver RaidCombatService.buildCombatTimeline).
+        const combatInfo = RaidCombatService.buildCombatInfo(result.log, RaidLobbyService.playerId);
+        const combatTimeline = RaidCombatService.buildCombatTimeline(result.log, RaidLobbyService.playerId);
+
         this.player.progress.stats.raidWins = (this.player.progress.stats.raidWins ?? 0) + 1;
 
         // Só pra alimentar as conquistas de dragão (ver AchievementService) —
@@ -615,6 +623,8 @@ export default class RaidView {
         const continueRaid = await this.rewardModal.show(reward, {
             showActions: true,
             exitLabel: "Sair do Cooperativo",
+            combatInfo,
+            combatTimeline,
             onOpenInventory: async () => {
                 this.game.hudScreen.enterPreparationMode();
                 await new Promise(resolve => {

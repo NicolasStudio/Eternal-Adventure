@@ -1,8 +1,11 @@
+import CombatInfoModal from "./CombatInfoModal.js";
+
 export default class RewardModal {
     constructor(game) {
         this.game = game;
         this.overlay = null;
         this.reward = null;
+        this.combatInfoModal = new CombatInfoModal();
     }
 
     // options.showActions = true -> modo "meio de dungeon" (3 botões)
@@ -10,8 +13,15 @@ export default class RewardModal {
     // "Abrir Inventário" — o modal só se esconde enquanto isso roda e
     // reaparece depois, sem resolver a Promise (ela só resolve quando o
     // jogador escolhe Continuar ou Sair da Dungeon).
+    // options.combatInfo = resumo do andar pra ESTE jogador (ver
+    // RaidCombatService.buildCombatInfo) — só o Cooperativo passa isso
+    // por enquanto, então o botão "Informações do Combate" só aparece
+    // lá. options.combatTimeline = série por rodada (ver
+    // RaidCombatService.buildCombatTimeline), pra aba "Gráfico" desse
+    // mesmo modal. Nenhum dos dois fica guardado aqui: cada show() novo
+    // substitui o anterior, e sair da tela não deixa nada pra trás.
     show(reward, options = {}) {
-        const { showActions = false, onOpenInventory, exitLabel = "Sair da Dungeon" } = options;
+        const { showActions = false, onOpenInventory, exitLabel = "Sair da Dungeon", combatInfo = null, combatTimeline = [] } = options;
         this.reward = reward;
         return new Promise(resolve => {
             this.overlay = document.createElement("div");
@@ -46,6 +56,7 @@ export default class RewardModal {
                         showActions
                             ? `
                                 <div class="reward-actions">
+                                    ${combatInfo ? `<button class="reward-action reward-action-combat-info">Informações do Combate</button>` : ""}
                                     <button class="reward-action reward-action-inventory">Abrir Inventário</button>
                                     <button class="reward-action reward-action-continue">Continuar</button>
                                     <button class="reward-action reward-action-exit">${exitLabel}</button>
@@ -65,6 +76,10 @@ export default class RewardModal {
                 return;
             }
 
+            this.overlay.querySelector(".reward-action-combat-info")?.addEventListener("click", () => {
+                this.combatInfoModal.show(combatInfo, combatTimeline);
+            });
+
             this.overlay.querySelector(".reward-action-inventory").addEventListener("click", async () => {
 
                 this.overlay.style.display = "none";
@@ -76,11 +91,13 @@ export default class RewardModal {
             });
 
             this.overlay.querySelector(".reward-action-continue").addEventListener("click", () => {
+                this.combatInfoModal.hide();
                 this.hide();
                 resolve(true);
             });
 
             this.overlay.querySelector(".reward-action-exit").addEventListener("click", () => {
+                this.combatInfoModal.hide();
                 this.hide();
                 resolve(false);
             });
