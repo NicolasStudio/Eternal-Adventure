@@ -47,7 +47,8 @@ export default [
             "Corrigido o item Tripla Poção Pequena, que estava com identificador, nome e ícone errados (copiados da Poção Pequena), e a raridade da Tripla Poção Média, que aparecia como 'Raro' em vez de 'Místico'",
             "Vender Pet (Mercado), Veterinário (Saúde) e a aba Pets da tela de Personagem agora só ficam disponíveis a partir do nível 30, mesmo nível que libera a Fazenda",
             "Novo Jogo: quando todos os personagens da conta já estão em uso, a confirmação de sobrescrever agora mostra nome, classe e nível de quem seria sobrescrito, em vez de perguntar às cegas",
-            "Removido o aviso único 'Aviso de Balanceamento' (pedido de desculpas pela remoção do Rei dos Encantamentos e ajuste do Cara ou Coroa?, com recompensa em ouro, ração e um pet exclusivo) — quem ainda não tinha coletado não recebe mais essa recompensa"
+            "Removido o aviso único 'Aviso de Balanceamento' (pedido de desculpas pela remoção do Rei dos Encantamentos e ajuste do Cara ou Coroa?, com recompensa em ouro, ração e um pet exclusivo) — quem ainda não tinha coletado não recebe mais essa recompensa",
+            "XP necessária pra subir de nível ficou mais cara entre os níveis 20 e 100 — 10% do 20 ao 50, 20% do 51 ao 70, 25% do 71 ao 79, 30% do 80 ao 89 e 35% do 90 ao 100. A XP ganha em combate não mudou, só o quanto precisa pra passar de nível"
         ]
     },
 
