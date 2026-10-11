@@ -76,6 +76,22 @@
     line-height:1.5;
     color:#e8d9b8;
 }
+/* Mini-cartão do personagem que seria sobrescrito — mesma cara do
+   cartão de slot preenchido da tela "Continuar" (ver
+   CharacterSelectModal.js), só que sem ação nenhuma (não é botão). O
+   seletor combinado (.character-slot-filled.home-confirm-preview) é
+   só pra ganhar de ".character-slot-filled:hover" (mesma
+   especificidade, mas definido depois no arquivo). */
+.home-confirm-preview{
+    margin-bottom:18px;
+}
+.character-slot-filled.home-confirm-preview{
+    cursor:default;
+}
+.character-slot-filled.home-confirm-preview:hover{
+    border-color:#8b7355;
+    box-shadow:none;
+}
 .home-confirm-actions{
     display:flex;
     justify-content:center;

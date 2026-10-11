@@ -216,6 +216,44 @@ const upClasse = {
             penetration: 0,
             absorption: 0
         }
+    },
+
+    light_crazy:{
+        id: "light_crazy",
+        name: "Louca da Luz",
+        image: "assets/img/assets/character/class_up/crazy/light-crazy.png",
+        hud: "assets/img/assets/character/class_up/crazy/light-crazy-hud.png",
+        description: "Você escolheu transcender para uma louca da luz.",
+        states:{
+            life: 55,
+            attack: 45,
+            armor: 2,
+            agility: 30,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            confusionChance: 10
+        }
+    },
+
+    dark_crazy:{
+        id: "dark_crazy",
+        name: "Louca da Escuridão",
+        image: "assets/img/assets/character/class_up/crazy/dark-crazy.png",
+        hud: "assets/img/assets/character/class_up/crazy/dark-crazy-hud.png",
+        description: "Você escolheu transcender para uma louca da escuridão.",
+        states:{
+            life: 70,
+            attack: 55,
+            armor: 3,
+            agility: 22,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            confusionChance: 7
+        }
     }
 
 };

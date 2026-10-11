@@ -876,7 +876,9 @@ export default class Player {
             putrid: "miasmaChance",
             // Mímico: o especial dele é a Imitação (soma % do Ataque/
             // Armadura/Agilidade do inimigo aos dele — ver MimicService.js).
-            mimic: "reflection"
+            mimic: "reflection",
+            // Louca: o especial dela é a Confusão (ver ConfusionService.js).
+            crazy: "confusionChance"
         }[this.class.id] ?? null;
     }
 
@@ -888,6 +890,7 @@ export default class Player {
             case "lifeSteal": return "Roubo de Vida";
             case "miasmaChance": return "Miasma";
             case "reflection": return "Imitação";
+            case "confusionChance": return "Confusão";
             default: return "Atributo Especial";
         }
     }

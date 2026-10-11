@@ -735,6 +735,126 @@ const helmets = {
         value: 0,
         sellValue: 0
 
+    },
+
+    helmet_crazy_common: {
+
+        id: "helmet_crazy_common",
+        name: "Óculos Tontos",
+        type: "armor",
+        slot: "helmet",
+        class: "crazy",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/helmets/helmets-crazy-rarity-comum.png",
+
+        stats: {
+            armor: 1,
+            confusionChance: 2
+        },
+
+        value: 50,
+        sellValue: 20
+
+    },
+
+    helmet_crazy_uncommon: {
+
+        id: "helmet_crazy_uncommon",
+        name: "Óculos Tontos",
+        type: "armor",
+        slot: "helmet",
+        class: "crazy",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/helmets/helmets-crazy-rarity-incomum.png",
+
+        stats: {
+            armor: 2,
+            confusionChance: 3
+        },
+
+        value: 200,
+        sellValue: 120
+
+    },
+
+    helmet_crazy_rare: {
+
+        id: "helmet_crazy_rare",
+        name: "Óculos Tontos",
+        type: "armor",
+        slot: "helmet",
+        class: "crazy",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/helmets/helmets-crazy-rarity-rare.png",
+
+        stats: {
+            armor: 3,
+            confusionChance: 4
+        },
+
+        value: 720,
+        sellValue: 360
+
+    },
+
+    helmet_crazy_mystic: {
+
+        id: "helmet_crazy_mystic",
+        name: "Óculos Tontos",
+        type: "armor",
+        slot: "helmet",
+        class: "crazy",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/helmets/helmets-crazy-rarity-mistico.png",
+
+        stats: {
+            armor: 5,
+            confusionChance: 6
+        },
+
+        value: 2160,
+        sellValue: 1080
+
+    },
+
+    helmet_crazy_legendary: {
+
+        id: "helmet_crazy_legendary",
+        name: "Óculos Tontos",
+        type: "armor",
+        slot: "helmet",
+        class: "crazy",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/helmets/helmets-crazy-rarity-lendario.png",
+
+        stats: {
+            armor: 8,
+            confusionChance: 8
+        },
+
+        value: 0,
+        sellValue: 13240
+
+    },
+
+    helmet_crazy_ultraje: {
+
+        id: "helmet_crazy_ultraje",
+        name: "Óculos Tontos",
+        type: "armor",
+        slot: "helmet",
+        class: "crazy",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/helmets/helmets-crazy-rarity-ultraje.png",
+
+        stats: {
+            armor: 11,
+            confusionChance: 10
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

@@ -97,7 +97,12 @@ export default class PlayerStats {
 
             // Só o Mímico tem fonte real disso (ver MimicService.js) —
             // mesma regra do Miasma, fica 0 pra qualquer outra classe.
-            reflection: withBaseBonus("reflection")
+            reflection: withBaseBonus("reflection"),
+
+            // Só a Louca tem fonte real disso (ver ConfusionService.js)
+            // — mesma regra do Miasma/Reflection, fica 0 pra qualquer
+            // outra classe.
+            confusionChance: withBaseBonus("confusionChance")
 
         };
     }
@@ -136,6 +141,10 @@ export default class PlayerStats {
 
     get reflection() {
         return this.getFinalStats().reflection;
+    }
+
+    get confusionChance() {
+        return this.getFinalStats().confusionChance;
     }
 
 }

@@ -132,6 +132,12 @@ export default class ClassSelectionScreen {
                 "🪞 Dano verdadeiro pela Vida do Inimigo",
                 "🛡️ Armadura Alta",
                 "🏃 Agilidade acima da Média"
+            ],
+
+            crazy: [
+                "⚔️🏃 Maior Ataque e Agilidade do jogo",
+                "🌀 Confusão: pode fazer o inimigo errar o ataque ou se acertar sozinho",
+                "🛡️❤️ Menor Armadura e Vida do jogo"
             ]
 
         };

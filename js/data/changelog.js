@@ -40,7 +40,8 @@ export default [
             "Informações do Combate ganhou uma aba 'Gráfico': linha por rodada pra cada um dos 14 números, escolhendo uma métrica por vez numa lista colorida",
             "Novo Correio: ícone de envelope na tela inicial, com caixa de entrada (até 3 itens por carta, 30 dias pra coletar antes de expirar). Enviar carta ainda está restrito à administração por enquanto",
             "Convite do Cooperativo: novo botão ao lado do campo de nome que abre a lista dos jogadores online e com nível suficiente pra entrar — clicar num nome já preenche o campo",
-            "Pets: XP necessária pra subir de nível entre o 25 e o 49 ficou 25% mais cara (além do dobro que já valia a partir do 18, os dois juntam: 2,5x a curva normal nessa faixa)"
+            "Pets: XP necessária pra subir de nível entre o 25 e o 49 ficou 25% mais cara (além do dobro que já valia a partir do 18, os dois juntam: 2,5x a curva normal nessa faixa)",
+            "Nova classe: Louca — o maior Ataque e Agilidade do jogo, mas a menor Armadura e Vida de todas. Atributo exclusivo Confusão: chance a cada golpe certeiro de deixar o alvo confuso até o próximo ataque dele, que sai sorteado entre acertar o oponente de sempre (+20% de dano), acertar a si mesmo (+50% de dano) ou errar por completo. Vale contra monstros, chefes, PVP e Cooperativo. Novos itens exclusivos: Marreta Biônica (arma), Óculos Tontos (elmo), Camisa de Força (peitoral), Calça Jagger (calças) e Chinelo (botas)"
         ]
     },
 

@@ -60,7 +60,7 @@ function loadQrLibrary() {
 const PIX_MENSAGEM = "O serviço de pagamento ainda funciona de forma manual e está sendo liberado para testes, para identificar o comportamento dos usuários e do sistema. Por isso, o valor cobrado é simbólico, apenas como um incentivo. Após realizar a transferência, encaminhe o comprovante junto com seu nick para o nosso WhatsApp: 11941377733, e aguarde alguns instantes.";
 
 // O nome vem do save — nunca pode entrar como HTML.
-function escapeHtml(text) {
+export function escapeHtml(text) {
     return String(text ?? "").replace(/[&<>"']/g, char => (
         { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]
     ));

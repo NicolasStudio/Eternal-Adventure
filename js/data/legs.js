@@ -736,6 +736,126 @@ const legs = {
         value: 0,
         sellValue: 0
 
+    },
+
+    legs_crazy_common: {
+
+        id: "legs_crazy_common",
+        name: "Calça Jagger",
+        type: "armor",
+        slot: "leg",
+        class: "crazy",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/legs/legs-crazy-rarity-comum.png",
+
+        stats: {
+            armor: 1,
+            agility: 3
+        },
+
+        value: 95,
+        sellValue: 45
+
+    },
+
+    legs_crazy_uncommon: {
+
+        id: "legs_crazy_uncommon",
+        name: "Calça Jagger",
+        type: "armor",
+        slot: "leg",
+        class: "crazy",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/legs/legs-crazy-rarity-incomum.png",
+
+        stats: {
+            armor: 2,
+            agility: 6
+        },
+
+        value: 285,
+        sellValue: 135
+
+    },
+
+    legs_crazy_rare: {
+
+        id: "legs_crazy_rare",
+        name: "Calça Jagger",
+        type: "armor",
+        slot: "leg",
+        class: "crazy",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/legs/legs-crazy-rarity-rare.png",
+
+        stats: {
+            armor: 3,
+            agility: 10
+        },
+
+        value: 855,
+        sellValue: 405
+
+    },
+
+    legs_crazy_mystic: {
+
+        id: "legs_crazy_mystic",
+        name: "Calça Jagger",
+        type: "armor",
+        slot: "leg",
+        class: "crazy",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/legs/legs-crazy-rarity-mistico.png",
+
+        stats: {
+            armor: 7,
+            agility: 20
+        },
+
+        value: 2565,
+        sellValue: 1215
+
+    },
+
+    legs_crazy_legendary: {
+
+        id: "legs_crazy_legendary",
+        name: "Calça Jagger",
+        type: "armor",
+        slot: "leg",
+        class: "crazy",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/legs/legs-crazy-rarity-lendario.png",
+
+        stats: {
+            armor: 8,
+            agility: 20
+        },
+
+        value: 0,
+        sellValue: 13645
+
+    },
+
+    legs_crazy_ultraje: {
+
+        id: "legs_crazy_ultraje",
+        name: "Calça Jagger",
+        type: "armor",
+        slot: "leg",
+        class: "crazy",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/legs/legs-crazy-rarity-ultraje.png",
+
+        stats: {
+            armor: 10,
+            agility: 16
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

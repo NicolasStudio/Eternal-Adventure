@@ -281,7 +281,9 @@ export default class BlacksmithEnchant {
             // tem Crítico/Roubo de Vida/Penetração/Absorção.
             putrid: "miasmaChance",
             // Mímico: o especial dele é a Imitação (ver MimicService.js).
-            mimic: "reflection"
+            mimic: "reflection",
+            // Louca: o especial dela é a Confusão (ver ConfusionService.js).
+            crazy: "confusionChance"
         }[classId] ?? null;
     }
 
@@ -301,6 +303,7 @@ export default class BlacksmithEnchant {
             case "absorption": return "Absorção";
             case "miasmaChance": return "Miasma";
             case "reflection": return "Imitação";
+            case "confusionChance": return "Confusão";
             default: return stat;
         }
     }
@@ -321,6 +324,7 @@ export default class BlacksmithEnchant {
             case "absorption": return "🪨";
             case "miasmaChance": return "🦠";
             case "reflection": return "🪞";
+            case "confusionChance": return "🌀";
             default: return "•";
         }
     }

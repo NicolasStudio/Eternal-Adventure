@@ -173,6 +173,11 @@ export default class CharacterView {
                         <span>${stats.miasmaChance}%</span>
                     </div>
 
+                    <div class="character-stat character-stat-hoverable" data-stat="confusionChance">
+                        <span>Confusão</span>
+                        <span>${stats.confusionChance}%</span>
+                    </div>
+
                     <div class="character-stat character-stat-hoverable" data-stat="penetration">
                         <span>Penetração</span>
                         <span>${stats.penetration}%</span>
@@ -1389,6 +1394,19 @@ export default class CharacterView {
                 ["Fórmula", "Bônus = Imitação% × Ataque/Armadura/Agilidade do OPONENTE (não o dele) — recalculado a cada golpe, a partir de quem ele está enfrentando."],
                 ["Os três lados", "O bônus de Ataque passa pela mitigação normal (Armadura do alvo); o de Armadura/Agilidade valem o tempo todo, tanto quando ele ataca quanto quando apanha."],
                 ["Quanto mais forte o oponente", "Mais o Mímico ganha — mas o bônus de Ataque ainda é reduzido pela Armadura de quem ele está atacando, igual qualquer outro dano."],
+                CharacterView.SPECIAL_CAP_ROW
+            ]
+        },
+
+        confusionChance: {
+            icon: "fa-dizzy",
+            title: "Confusão",
+            summary: "Exclusivo da Louca: chance de confundir o alvo a cada golpe seu que acerta.",
+            details: [
+                ["O que acontece", "A confusão fica pendente até o PRÓXIMO ataque de quem foi confundido — nesse golpe, em vez do ataque normal, rola um dos três resultados abaixo (1/3 de chance cada)."],
+                ["Ataca o alvo de sempre", "Dano do golpe sai com Ataque ×1,2."],
+                ["Ataca a si mesmo", "Dano do golpe sai com Ataque ×1,5, mirando o próprio confuso."],
+                ["Erra o ataque", "O golpe não acontece — sem dano, sem esquiva, sem crítico."],
                 CharacterView.SPECIAL_CAP_ROW
             ]
         }

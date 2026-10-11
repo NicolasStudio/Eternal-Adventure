@@ -3,7 +3,7 @@ import SaveService from "../services/SaveService.js";
 import SettingsModal from "./components/modals/SettingsModal.js";
 import MusicService from "../services/MusicService.js";
 import NameEntryModal from "./components/modals/NameEntryModal.js";
-import CharacterSelectModal from "./components/modals/CharacterSelectModal.js";
+import CharacterSelectModal, { escapeHtml } from "./components/modals/CharacterSelectModal.js";
 
 export default class HomeScreen {
 
@@ -128,16 +128,39 @@ export default class HomeScreen {
     }
 
     // Todos os slots estão ocupados: criar um personagem sobrescreve o ativo,
-    // então confirma antes de deixar seguir, pra não perder progresso por engano.
+    // então confirma antes de deixar seguir, pra não perder progresso por
+    // engano — mostrando NOME/classe/nível de quem seria sobrescrito, pra
+    // não ser um "tem certeza?" às cegas quando a conta tem mais de um slot.
     confirmNewGame() {
 
         return new Promise(resolve => {
+
+            const container = SaveService.container;
+            const slot = SaveService.activeSlot;
+            const character = container ? container.slots?.[slot] : null;
+
+            const preview = character
+                ? (() => {
+                    const characterClass = CharacterSelectModal.resolveClass(character);
+                    return `
+                        <div class="character-slot character-slot-filled home-confirm-preview">
+                            <img src="${characterClass.image}" alt="${escapeHtml(characterClass.name)}">
+                            <div class="character-slot-info">
+                                <strong>${escapeHtml(character.name ?? characterClass.name)}</strong>
+                                <span>${escapeHtml(characterClass.name)}</span>
+                                <small>Nível ${character.level ?? 1}</small>
+                            </div>
+                        </div>
+                    `;
+                })()
+                : "";
 
             const overlay = document.createElement("div");
             overlay.className = "home-confirm-overlay";
             overlay.innerHTML = `
                 <div class="home-confirm-modal">
-                    <p>Todos os seus personagens estão em uso. Criar um novo sobrescreve o personagem atual. Tem certeza?</p>
+                    ${preview}
+                    <p>Todos os seus personagens estão em uso. Criar um novo sobrescreve ${character ? "esse personagem" : "o personagem atual"}. Tem certeza?</p>
                     <div class="home-confirm-actions">
                         <button class="home-confirm-yes" id="home-confirm-yes">Sim</button>
                         <button class="home-confirm-no" id="home-confirm-no">Não</button>
