@@ -57,247 +57,247 @@ export default {
         required: 6000,
     },
     20: {
-        required: 6500,
+        required: 7150,
     },
     21: {
-        required: 7000,
+        required: 7700,
     },
     22: {
-        required: 7500,
+        required: 8250,
     },
     23: {
-        required: 8000,
+        required: 8800,
     },
     24: {
-        required: 8500,
+        required: 9350,
     },
     25: {
-        required: 9000,
+        required: 9900,
     },
     26: {
-        required: 9500,
+        required: 10450,
     },
     27: {
-        required: 10000,
-    },
-    28: {
         required: 11000,
     },
+    28: {
+        required: 12100,
+    },
     29: {
-        required: 12000,
+        required: 13200,
     },
     30: {
-        required: 13000,
+        required: 14300,
     },
     31: {
-        required: 14000,
+        required: 15400,
     },
     32: {
-        required: 15000,
+        required: 16500,
     },
     33: {
-        required: 16000,
+        required: 17600,
     },
     34: {
-        required: 17000,
+        required: 18700,
     },
     35: {
-        required: 18000,
+        required: 19800,
     },
     36: {
-        required: 19000,
+        required: 20900,
     },
     37: {
-        required: 20000,
-    },
-    38: {
-        required: 21500,
-    },
-    39: {
         required: 22000,
     },
+    38: {
+        required: 23650,
+    },
+    39: {
+        required: 24200,
+    },
     40: {
-        required: 22500,
+        required: 24750,
     },
     41: {
-        required: 23000,
+        required: 25300,
     },
     42: {
-        required: 23500,
+        required: 25850,
     },
     43: {
-        required: 24000,
+        required: 26400,
     },
     44: {
-        required: 24500,
+        required: 26950,
     },
     45: {
-        required: 25000,
-    },
-    46: {
-        required: 25500,
-    },
-    47: {
-        required: 26000,
-    },
-    48: {
-        required: 26500,
-    },
-    49: {
-        required: 27000,
-    },
-    50: {
         required: 27500,
     },
+    46: {
+        required: 28050,
+    },
+    47: {
+        required: 28600,
+    },
+    48: {
+        required: 29150,
+    },
+    49: {
+        required: 29700,
+    },
+    50: {
+        required: 30250,
+    },
     51: {
-        required: 28000,
+        required: 33600,
     },
     52: {
-        required: 28500,
+        required: 34200,
     },
     53: {
-        required: 29000,
+        required: 34800,
     },
     54: {
-        required: 29500,
+        required: 35400,
     },
     55: {
-        required: 30000,
-    },
-    56: {
-        required: 30500,
-    },
-    57: {
-        required: 31000,
-    },
-    58: {
-        required: 31500,
-    },
-    59: {
-        required: 32000,
-    },
-    60: {
-        required: 32500,
-    },
-    61: {
-        required: 33000,
-    },
-    62: {
-        required: 33500,
-    },
-    63: {
-        required: 34000,
-    },
-    64: {
-        required: 34500,
-    },
-    65: {
-        required: 35000,
-    },
-    66: {
-        required: 35500,
-    },
-    67: {
         required: 36000,
     },
-    68: {
-        required: 36500,
+    56: {
+        required: 36600,
     },
-    69: {
-        required: 37000,
+    57: {
+        required: 37200,
     },
-    70: {
-        required: 37500,
+    58: {
+        required: 37800,
     },
-    71: {
-        required: 38000,
+    59: {
+        required: 38400,
     },
-    72: {
-        required: 38500,
-    },
-    73: {
+    60: {
         required: 39000,
     },
-    74: {
-        required: 39500,
+    61: {
+        required: 39600,
     },
-    75: {
-        required: 40000,
+    62: {
+        required: 40200,
     },
-    76: {
-        required: 40500,
+    63: {
+        required: 40800,
     },
-    77: {
-        required: 41000,
+    64: {
+        required: 41400,
     },
-    78: {
-        required: 41500,
-    },
-    79: {
+    65: {
         required: 42000,
     },
-    80: {
-        required: 42500,
+    66: {
+        required: 42600,
     },
-    81: {
-        required: 43000,
+    67: {
+        required: 43200,
     },
-    82: {
-        required: 43500,
+    68: {
+        required: 43800,
     },
-    83: {
-        required: 44000,
+    69: {
+        required: 44400,
     },
-    84: {
-        required: 44500,
-    },
-    85: {
+    70: {
         required: 45000,
     },
-    86: {
-        required: 45500,
-    },
-    87: {
-        required: 46000,
-    },
-    88: {
-        required: 46500,
-    },
-    89: {
-        required: 47000,
-    },
-    90: {
+    71: {
         required: 47500,
     },
-    91: {
-        required: 48000,
+    72: {
+        required: 48150,
     },
-    92: {
-        required: 48500,
+    73: {
+        required: 48750,
     },
-    93: {
-        required: 49000,
+    74: {
+        required: 49400,
     },
-    94: {
-        required: 49500,
-    },
-    95: {
+    75: {
         required: 50000,
     },
+    76: {
+        required: 50650,
+    },
+    77: {
+        required: 51250,
+    },
+    78: {
+        required: 51900,
+    },
+    79: {
+        required: 52500,
+    },
+    80: {
+        required: 55250,
+    },
+    81: {
+        required: 55900,
+    },
+    82: {
+        required: 56550,
+    },
+    83: {
+        required: 57200,
+    },
+    84: {
+        required: 57850,
+    },
+    85: {
+        required: 58500,
+    },
+    86: {
+        required: 59150,
+    },
+    87: {
+        required: 59800,
+    },
+    88: {
+        required: 60450,
+    },
+    89: {
+        required: 61100,
+    },
+    90: {
+        required: 64150,
+    },
+    91: {
+        required: 64800,
+    },
+    92: {
+        required: 65500,
+    },
+    93: {
+        required: 66150,
+    },
+    94: {
+        required: 66850,
+    },
+    95: {
+        required: 67500,
+    },
     96: {
-        required: 50500,
+        required: 68200,
     },
     97: {
-        required: 51000,
+        required: 68850,
     },
     98: {
-        required: 51500,
+        required: 69550,
     },
     99: {
-        required: 52000,
+        required: 70200,
     },
     100: {
-        required: 52500,
+        required: 70900,
     },
 
     // Níveis 101-110: só alcançáveis com o talento único "Rompendo

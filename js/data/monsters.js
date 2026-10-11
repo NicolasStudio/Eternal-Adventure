@@ -626,7 +626,7 @@ const monsters = [
                 chance: 5
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -986,7 +986,7 @@ const monsters = [
                 rarity: "rare"
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             },
             {
@@ -1402,7 +1402,7 @@ const monsters = [
                 rarity: "mystic"
             },
             {
-                item: items.tripleMediumPotion,
+                item: items.mediumPotion,
                 quantidade: 1
             },
             {
@@ -1703,7 +1703,7 @@ const monsters = [
                 rarity: "mystic"
             },
             {
-                item: items.tripleMediumPotion,
+                item: items.mediumPotion,
                 quantidade: 2
             },
             {
@@ -2064,7 +2064,7 @@ const monsters = [
                 rarity: "mystic"
             },
             {
-                item: items.tripleMediumPotion,
+                item: items.mediumPotion,
                 quantidade: 3
             }
         ]

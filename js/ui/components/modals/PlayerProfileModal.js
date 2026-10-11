@@ -32,6 +32,7 @@ const STATS = [
     ["criticalChance", "Chance Crítica", "%"],
     ["reflection", "Imitação", "%"],
     ["miasmaChance", "Miasma", "%"],
+    ["confusionChance", "Confusão", "%"],
     ["penetration", "Penetração", "%"],
     ["lifeSteal", "Roubo de Vida", "%"]
 ];

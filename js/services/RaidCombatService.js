@@ -2,6 +2,7 @@ import PvpCombatService from "./PvpCombatService.js";
 import BoitataBurn from "./BoitataBurn.js";
 import MiasmaService, { PVE_STACK_PERCENTS as MIASMA_PVE_PERCENTS } from "./MiasmaService.js";
 import MimicService from "./MimicService.js";
+import ConfusionService from "./ConfusionService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVE, absorbedAmount } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
@@ -156,6 +157,13 @@ export default class RaidCombatService {
         // combatente (inclui o chefe: ele também pode ser intoxicado).
         const miasmaFlagsById = new Map(all.map(c => [c.id, MiasmaService.createFlags()]));
 
+        // Confusão da Louca (ver ConfusionService.js) — uma marca
+        // pendente por combatente. Na prática só o CHEFE pode acabar
+        // confuso (o squad só ataca o chefe, nunca uns aos outros, e
+        // só a Louca tem confusionChance > 0), então "ataca a si
+        // mesmo" vira o chefe se acertando sozinho.
+        const confusionFlagsById = new Map(all.map(c => [c.id, ConfusionService.createFlags()]));
+
         const tickBurn = (owner) => {
 
             const burn = burns.get(owner.id);
@@ -215,24 +223,59 @@ export default class RaidCombatService {
                     ? attacker.attacks[Math.floor(rng() * attacker.attacks.length)]
                     : null;
 
+                // Confusão da Louca: consome a marca pendente do
+                // ATACANTE — SEMPRE sorteado, mesmo sem marca nenhuma
+                // (mesma regra do resto do combate: nunca pular um
+                // rng() condicionalmente). Na prática só o CHEFE pode
+                // ter ficado confuso (ver comentário acima de
+                // confusionFlagsById), então "ataca a si mesmo" só
+                // acontece no turno dele. Mordida do pet e queimadura
+                // continuam usando `target`/bossCombatant de sempre —
+                // só o GOLPE PRINCIPAL (attackTarget) é redirecionado.
+                const confusionOutcome = ConfusionService.consumePending(confusionFlagsById.get(attacker.id), rng());
+                const confusionMultiplier = ConfusionService.multiplierFor(confusionOutcome);
+
+                const attackTarget = confusionOutcome === "self" ? attacker : target;
+
                 // Acúmulos de Intoxicação do Miasma: Ataque e Agilidade de
                 // quem estiver intoxicado (na prática, o chefe) saem
                 // reduzidos a luta inteira.
                 const attackerMult = MiasmaService.statMultiplier(miasmaFlagsById.get(attacker.id), MIASMA_PVE_PERCENTS);
-                const targetMult = MiasmaService.statMultiplier(miasmaFlagsById.get(target.id), MIASMA_PVE_PERCENTS);
+                const attackTargetMult = MiasmaService.statMultiplier(miasmaFlagsById.get(attackTarget.id), MIASMA_PVE_PERCENTS);
 
                 // Imitação do Mímico: soma Imitação% do Ataque/Armadura/
                 // Agilidade de quem ele enfrenta aos status dele — o chefe
                 // nunca tem Imitação (não é Mímico), mas PODE ser alvo
                 // dela (usa o `attack` de conveniência do snapshot, ver
                 // snapshotBoss). Recalculada a cada golpe.
-                const attackerCopy = MimicService.applyCopy(target, attacker.reflection ?? 0);
-                const targetCopy = MimicService.applyCopy(attacker, target.reflection ?? 0);
+                const attackerCopy = MimicService.applyCopy(attackTarget, attacker.reflection ?? 0);
+                const attackTargetCopy = MimicService.applyCopy(attacker, attackTarget.reflection ?? 0);
 
                 const dodgeChance = PvpCombatService.dodgeChance(
-                    target.agility * targetMult + targetCopy.bonusAgility,
+                    attackTarget.agility * attackTargetMult + attackTargetCopy.bonusAgility,
                     attacker.agility * attackerMult + attackerCopy.bonusAgility
                 );
+
+                if (confusionOutcome === "miss") {
+
+                    log.push({
+                        round: guard,
+                        attackerId: attacker.id,
+                        attackerSide: attacker.side,
+                        targetId: attackTarget.id,
+                        dodged: false,
+                        damage: 0,
+                        attackName: chosenAttack?.name ?? null,
+                        confusionOutcome
+                    });
+
+                    if (!isBossTurn) tickBurn(attacker);
+
+                    if (bossCombatant.currentHP <= 0) break;
+
+                    continue;
+
+                }
 
                 if (rng() * 100 < dodgeChance) {
 
@@ -240,9 +283,10 @@ export default class RaidCombatService {
                         round: guard,
                         attackerId: attacker.id,
                         attackerSide: attacker.side,
-                        targetId: target.id,
+                        targetId: attackTarget.id,
                         dodged: true,
-                        attackName: chosenAttack?.name ?? null
+                        attackName: chosenAttack?.name ?? null,
+                        confusionOutcome
                     });
 
                     // Turno esquivado também é turno do dono: a queimadura
@@ -264,16 +308,17 @@ export default class RaidCombatService {
                 // do squad — mas PODE ser alvo do débuff se for atingido.
                 const attackMark = MiasmaService.consumeAttackMultiplier(miasmaFlagsById.get(attacker.id));
                 const attackDebuff = attackMark * MiasmaService.persistentSpecialMultiplier(miasmaFlagsById.get(attacker.id));
-                const defendMark = MiasmaService.consumeDefendMultiplier(miasmaFlagsById.get(target.id));
-                const defendDebuff = defendMark * MiasmaService.persistentSpecialMultiplier(miasmaFlagsById.get(target.id));
+                const defendMark = MiasmaService.consumeDefendMultiplier(miasmaFlagsById.get(attackTarget.id));
+                const defendDebuff = defendMark * MiasmaService.persistentSpecialMultiplier(miasmaFlagsById.get(attackTarget.id));
 
                 const isCritical = rng() * 100 < attacker.criticalChance * attackDebuff;
                 const criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER : 1;
                 // Miasma (PVE): Armadura de quem está intoxicado também cai,
-                // junto com Ataque/Agilidade (targetMult, calculado acima).
-                const effectiveArmor = (target.armor * targetMult + targetCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
+                // junto com Ataque/Agilidade (attackTargetMult, calculado
+                // acima).
+                const effectiveArmor = (attackTarget.armor * attackTargetMult + attackTargetCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
-                const preAbsorption = Math.max(1, Math.floor((attackPower + attackerCopy.bonusAttack) * criticalMultiplier * mitigation));
+                const preAbsorption = Math.max(1, Math.floor((attackPower + attackerCopy.bonusAttack) * criticalMultiplier * mitigation * confusionMultiplier));
 
                 // Dano ANTES da armadura, com a MESMA fórmula de preAbsorption
                 // só sem o fator de mitigação — existe só pra "Informações do
@@ -282,10 +327,10 @@ export default class RaidCombatService {
                 // nem em nenhuma conta que mude o resultado da luta, então
                 // não arrisca desalinhar o resultado determinístico entre
                 // os 4 clientes.
-                const rawDamage = Math.max(1, Math.floor((attackPower + attackerCopy.bonusAttack) * criticalMultiplier));
+                const rawDamage = Math.max(1, Math.floor((attackPower + attackerCopy.bonusAttack) * criticalMultiplier * confusionMultiplier));
                 const armorMitigated = Math.max(0, rawDamage - preAbsorption);
 
-                const absorptionChance = Math.min(ABSORPTION_CAP, (target.absorption ?? 0) * defendDebuff);
+                const absorptionChance = Math.min(ABSORPTION_CAP, (attackTarget.absorption ?? 0) * defendDebuff);
                 const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance, ABSORPTION_RATIO_PVE);
 
                 const damage = preAbsorption - absorbed;
@@ -294,7 +339,7 @@ export default class RaidCombatService {
                 // pra mensagem (ver MimicService.js).
                 const mimicBonus = attackerCopy.bonusAttack;
 
-                target.currentHP = Math.max(0, target.currentHP - damage);
+                attackTarget.currentHP = Math.max(0, attackTarget.currentHP - damage);
 
                 let lifeStealAmount = 0;
 
@@ -307,13 +352,20 @@ export default class RaidCombatService {
                 // Pútrido tem miasmaChance > 0 — o chefe nunca ativa isso.
                 const miasmaProc = MiasmaService.procs(attacker.miasmaChance ?? 0, rng());
 
-                const miasmaStacks = miasmaProc ? MiasmaService.applyDebuff(miasmaFlagsById.get(target.id)) : 0;
+                const miasmaStacks = miasmaProc ? MiasmaService.applyDebuff(miasmaFlagsById.get(attackTarget.id)) : 0;
+
+                // Confusão: sorteado com o valor ORIGINAL do atacante. Só
+                // a Louca tem confusionChance > 0 — o chefe nunca ativa
+                // isso ao atacar.
+                const confusionProc = ConfusionService.procs(attacker.confusionChance ?? 0, rng());
+
+                if (confusionProc) ConfusionService.applyPending(confusionFlagsById.get(attackTarget.id));
 
                 log.push({
                     round: guard,
                     attackerId: attacker.id,
                     attackerSide: attacker.side,
-                    targetId: target.id,
+                    targetId: attackTarget.id,
                     dodged: false,
                     damage,
                     rawDamage,
@@ -324,13 +376,15 @@ export default class RaidCombatService {
                     mimicBonus,
                     // Nome de quem a Imitação copiou nesse golpe (ver
                     // MimicService.buildMessage).
-                    mimicOpponentName: mimicBonus > 0 ? target.name : null,
+                    mimicOpponentName: mimicBonus > 0 ? attackTarget.name : null,
                     attackName: chosenAttack?.name ?? null,
                     miasmaProc,
                     miasmaStacks,
-                    miasmaTargetHasSpecials: MiasmaService.hasAnySpecials(target),
+                    miasmaTargetHasSpecials: MiasmaService.hasAnySpecials(attackTarget),
                     miasmaAttackWeakened: attackMark < 1 && MiasmaService.hasAttackSpecials(attacker),
-                    miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(target)
+                    miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(attackTarget),
+                    confusionOutcome,
+                    confusionProc
                 });
 
                 // Reviver do Yggdrasil: quem o chefe acabou de derrubar
@@ -338,19 +392,19 @@ export default class RaidCombatService {
                 // só de cura em quem reviveu, que a tela já sabe aplicar.
                 if (isBossTurn) {
 
-                    const reviveHeal = PvpCombatService.reviveIfDead(target);
+                    const reviveHeal = PvpCombatService.reviveIfDead(attackTarget);
 
                     if (reviveHeal > 0) {
                         log.push({
                             round: guard,
-                            attackerId: target.id,
+                            attackerId: attackTarget.id,
                             attackerSide: "squad",
                             targetId: bossCombatant.id,
                             petBite: true,
                             revive: true,
                             damage: 0,
                             heal: reviveHeal,
-                            healedIds: [target.id]
+                            healedIds: [attackTarget.id]
                         });
                     }
 

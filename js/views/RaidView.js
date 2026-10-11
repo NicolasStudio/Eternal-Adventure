@@ -15,6 +15,7 @@ import HitFlash from "../combat/HitFlash.js";
 import BoitataBurn from "../services/BoitataBurn.js";
 import MiasmaService, { PVE_STACK_PERCENTS as MIASMA_PVE_PERCENTS } from "../services/MiasmaService.js";
 import MimicService from "../services/MimicService.js";
+import ConfusionService from "../services/ConfusionService.js";
 
 export default class RaidView {
 
@@ -328,6 +329,13 @@ export default class RaidView {
         const targetName = nameOf(entry.targetId);
         const attackTag = entry.attackName ? ` (${entry.attackName})` : "";
 
+        // Confusão "errou o ataque" — antes mesmo da esquiva (ver
+        // ConfusionService.js). No Cooperativo só o chefe pode ficar
+        // confuso (o esquadrão nunca ataca o esquadrão).
+        if (entry.confusionOutcome === "miss") {
+            return `<div class="pvp-log-line pvp-log-dodge">${attackerName} errou o ataque, confuso!</div>`;
+        }
+
         if (entry.dodged) {
             return `<div class="pvp-log-line pvp-log-dodge">${targetName} esquivou do ataque de ${attackerName}${attackTag}!</div>`;
         }
@@ -352,8 +360,15 @@ export default class RaidView {
         const absorbed = entry.absorbed > 0
             ? ` <span class="pvp-log-absorption">(${targetName} absorveu ${entry.absorbed})</span>`
             : "";
+        const confusion = entry.confusionProc || entry.confusionOutcome
+            ? ` <span class="combat-confusion">(Confusão!)</span>`
+            : "";
 
-        return `<div class="pvp-log-line">${attackerName}${attackTag} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}</div>`;
+        if (entry.confusionOutcome === "self") {
+            return `<div class="pvp-log-line">${attackerName}${attackTag} se atacou sem querer: ${entry.damage} de dano${crit}${confusion}</div>`;
+        }
+
+        return `<div class="pvp-log-line">${attackerName}${attackTag} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}${confusion}</div>`;
 
     }
 
@@ -964,7 +979,7 @@ export default class RaidView {
             const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
             if (!this.shouldSkipMessages(battleStartTime)) {
-                await CombatToast.show(this.buildAttackMessage(entry, squad), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry), speed);
+                await CombatToast.show(this.buildAttackMessage(entry, squad), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry), speed);
             }
 
             await this.sleep(450 / speed);
@@ -1006,6 +1021,13 @@ export default class RaidView {
         const attackerName = isBossAttacker ? this.bossData.name : nameOf(entry.attackerId);
         const targetName = isBossAttacker ? nameOf(entry.targetId) : this.bossData.name;
 
+        // Confusão "errou o ataque" — antes mesmo da esquiva (ver
+        // ConfusionService.js). No Cooperativo só o chefe pode ficar
+        // confuso (o esquadrão nunca ataca o esquadrão).
+        if (entry.confusionOutcome === "miss") {
+            return ConfusionService.buildOutcomeMessage("miss", attackerName);
+        }
+
         if (entry.dodged) {
             return targetName === "Você"
                 ? `<span class="combat-dodge">Você esquivou do ataque de ${attackerName}${entry.attackName ? ` (${entry.attackName})` : ""}!</span>`
@@ -1039,9 +1061,20 @@ export default class RaidView {
             return `<span class="combat-pet-bite">${petName}</span> agiu! ${damage}${heal}`;
         }
 
-        let message = "";
-
         const inSentence = (name) => name === "Você" ? "você" : name;
+
+        // Confusão "ataca a si mesmo" ou "acerta o alvo mesmo confuso" —
+        // prefixo próprio antes da linha de dano normal (ver
+        // CombatEngine.createAttackMessage, mesmo padrão).
+        const confusionSelfPrefix = entry.confusionOutcome === "self"
+            ? `${ConfusionService.buildOutcomeMessage("self", attackerName)}<br>`
+            : "";
+        const confusionOpponentPrefix = entry.confusionOutcome === "opponent"
+            ? `${ConfusionService.buildOutcomeMessage("opponent", attackerName, inSentence(targetName))}<br>`
+            : "";
+
+        let message = confusionSelfPrefix + confusionOpponentPrefix;
+
         message += MiasmaService.buildWeakenedMessage(entry, inSentence(attackerName), inSentence(targetName));
 
         if (isBossAttacker && entry.attackName) {
@@ -1052,7 +1085,9 @@ export default class RaidView {
             message += `<span class="combat-critical">Golpe Crítico!</span><br>`;
         }
 
-        if (targetName === "Você") {
+        if (entry.confusionOutcome === "self") {
+            message += `${attackerName} causou <strong>${entry.damage}</strong> de dano nele mesmo.`;
+        } else if (targetName === "Você") {
             message += `Você recebeu um golpe de <strong>${attackerName}</strong>, <strong>${entry.damage}</strong> de dano.`;
         } else if (attackerName === "Você") {
             message += `Você causou <strong>${entry.damage}</strong> de dano em <strong>${targetName}</strong>.`;
@@ -1074,6 +1109,10 @@ export default class RaidView {
 
         if (entry.miasmaProc) {
             message += `<br>${MiasmaService.buildProcMessage(targetName === "Você" ? "você" : targetName, entry, MIASMA_PVE_PERCENTS)}`;
+        }
+
+        if (entry.confusionProc) {
+            message += `<br>${ConfusionService.buildProcMessage(targetName === "Você" ? "você" : targetName)}`;
         }
 
         return message;

@@ -11,6 +11,13 @@ import { ABSORPTION_RATIO_PVE, ABSORPTION_RATIO_PVP, ABSORPTION_CAP } from "../c
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
 export default class CharacterView {
+
+    // Aba Pets só faz sentido depois que a Fazenda libera — é lá que se
+    // cria/evolui pet (mesmo nível 30 do FARM_UNLOCK_LEVEL em
+    // MarketViewBuy.js, farmLevelLocked em HudScreen.js e
+    // CityView.PET_UNLOCK_LEVEL).
+    static PET_UNLOCK_LEVEL = 30;
+
     constructor(game) {
         this.game = game;
         this.leftTab = "status";
@@ -171,6 +178,11 @@ export default class CharacterView {
                     <div class="character-stat character-stat-hoverable" data-stat="miasmaChance">
                         <span>Miasma</span>
                         <span>${stats.miasmaChance}%</span>
+                    </div>
+
+                    <div class="character-stat character-stat-hoverable" data-stat="confusionChance">
+                        <span>Confusão</span>
+                        <span>${stats.confusionChance}%</span>
                     </div>
 
                     <div class="character-stat character-stat-hoverable" data-stat="penetration">
@@ -340,11 +352,12 @@ export default class CharacterView {
     }
 
     renderLeftTabs() {
+        const petUnlocked = this.game.player.level >= CharacterView.PET_UNLOCK_LEVEL;
         return `
             <div class="character-tabs">
                 <button class="character-tab ${this.leftTab === "status" ? "active" : ""}" data-tab="status">Status</button>
                 <button class="character-tab ${this.leftTab === "equipped" ? "active" : ""}" data-tab="equipped">Equipados</button>
-                <button class="character-tab ${this.leftTab === "pets" ? "active" : ""}" data-tab="pets">Pets</button>
+                ${petUnlocked ? `<button class="character-tab ${this.leftTab === "pets" ? "active" : ""}" data-tab="pets">Pets</button>` : ""}
             </div>
         `;
     }
@@ -1389,6 +1402,19 @@ export default class CharacterView {
                 ["Fórmula", "Bônus = Imitação% × Ataque/Armadura/Agilidade do OPONENTE (não o dele) — recalculado a cada golpe, a partir de quem ele está enfrentando."],
                 ["Os três lados", "O bônus de Ataque passa pela mitigação normal (Armadura do alvo); o de Armadura/Agilidade valem o tempo todo, tanto quando ele ataca quanto quando apanha."],
                 ["Quanto mais forte o oponente", "Mais o Mímico ganha — mas o bônus de Ataque ainda é reduzido pela Armadura de quem ele está atacando, igual qualquer outro dano."],
+                CharacterView.SPECIAL_CAP_ROW
+            ]
+        },
+
+        confusionChance: {
+            icon: "fa-dizzy",
+            title: "Confusão",
+            summary: "Exclusivo da Louca: chance de confundir o alvo a cada golpe seu que acerta.",
+            details: [
+                ["O que acontece", "A confusão fica pendente até o PRÓXIMO ataque de quem foi confundido — nesse golpe, em vez do ataque normal, rola um dos três resultados abaixo (1/3 de chance cada)."],
+                ["Ataca o alvo de sempre", "Dano do golpe sai com Ataque ×1,2."],
+                ["Ataca a si mesmo", "Dano do golpe sai com Ataque ×1,5, mirando o próprio confuso."],
+                ["Erra o ataque", "O golpe não acontece — sem dano, sem esquiva, sem crítico."],
                 CharacterView.SPECIAL_CAP_ROW
             ]
         }

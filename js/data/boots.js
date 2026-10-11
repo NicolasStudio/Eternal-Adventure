@@ -734,6 +734,126 @@ const boots = {
         value: 0,
         sellValue: 0
 
+    },
+
+    boots_crazy_common: {
+
+        id: "boots_crazy_common",
+        name: "Chinelo",
+        type: "armor",
+        slot: "boot",
+        class: "crazy",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/boots/boots-crazy-rarity-comum.png",
+
+        stats: {
+            armor: 1,
+            agility: 8
+        },
+
+        value: 80,
+        sellValue: 40
+
+    },
+
+    boots_crazy_uncommon: {
+
+        id: "boots_crazy_uncommon",
+        name: "Chinelo",
+        type: "armor",
+        slot: "boot",
+        class: "crazy",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/boots/boots-crazy-rarity-incomum.png",
+
+        stats: {
+            armor: 1,
+            agility: 14
+        },
+
+        value: 240,
+        sellValue: 120
+
+    },
+
+    boots_crazy_rare: {
+
+        id: "boots_crazy_rare",
+        name: "Chinelo",
+        type: "armor",
+        slot: "boot",
+        class: "crazy",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/boots/boots-crazy-rarity-rare.png",
+
+        stats: {
+            armor: 2,
+            agility: 20
+        },
+
+        value: 720,
+        sellValue: 360
+
+    },
+
+    boots_crazy_mystic: {
+
+        id: "boots_crazy_mystic",
+        name: "Chinelo",
+        type: "armor",
+        slot: "boot",
+        class: "crazy",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/boots/boots-crazy-rarity-mistico.png",
+
+        stats: {
+            armor: 3,
+            agility: 38
+        },
+
+        value: 2160,
+        sellValue: 1080
+
+    },
+
+    boots_crazy_legendary: {
+
+        id: "boots_crazy_legendary",
+        name: "Chinelo",
+        type: "armor",
+        slot: "boot",
+        class: "crazy",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/boots/boots-crazy-rarity-lendario.png",
+
+        stats: {
+            armor: 4,
+            agility: 34
+        },
+
+        value: 0,
+        sellValue: 13240
+
+    },
+
+    boots_crazy_ultraje: {
+
+        id: "boots_crazy_ultraje",
+        name: "Chinelo",
+        type: "armor",
+        slot: "boot",
+        class: "crazy",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/boots/boots-crazy-rarity-ultraje.png",
+
+        stats: {
+            armor: 5,
+            agility: 30
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

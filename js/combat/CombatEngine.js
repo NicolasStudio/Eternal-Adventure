@@ -2,6 +2,7 @@ import PetService from "../services/PetService.js";
 import BoitataBurn from "../services/BoitataBurn.js";
 import MiasmaService, { PVE_STACK_PERCENTS as MIASMA_PVE_PERCENTS } from "../services/MiasmaService.js";
 import MimicService from "../services/MimicService.js";
+import ConfusionService from "../services/ConfusionService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVE, absorbedAmount } from "./Absorption.js";
 import { CRITICAL_MULTIPLIER } from "./Critical.js";
 
@@ -27,6 +28,13 @@ export default class CombatEngine {
         this.miasmaFlags = {
             player: MiasmaService.createFlags(),
             monster: MiasmaService.createFlags()
+        };
+        // Confusão da Louca (ver ConfusionService.js) — marca pendente
+        // por lado, igual o Miasma, só sem acúmulo (uma marca só,
+        // consumida no PRÓXIMO ataque de quem foi confundido).
+        this.confusionFlags = {
+            player: ConfusionService.createFlags(),
+            monster: ConfusionService.createFlags()
         };
         // Log acumulado desse combate, pro mesmo formato/agregador das
         // "Informações do Combate" do Cooperativo (ver js/combat/
@@ -70,21 +78,37 @@ export default class CombatEngine {
         };
 
         const attacker = playerTurn ? playerStats : this.monster.status;
-        const defender = playerTurn ? this.monster.status : playerStats;
+        let defender = playerTurn ? this.monster.status : playerStats;
         const attackerSide = playerTurn ? "player" : "monster";
-        const defenderSide = playerTurn ? "monster" : "player";
+        let defenderSide = playerTurn ? "monster" : "player";
 
-        if (this.rollDodge(attacker, defender, attackerSide, defenderSide)) {
+        // Confusão da Louca: consome a marca pendente do ATACANTE (se
+        // ele foi confundido no golpe anterior que sofreu) ANTES da
+        // esquiva — "erra o ataque" nem chega a rolar esquiva/dano, e
+        // "ataca a si mesmo" troca quem é o alvo pro resto do turno
+        // (esquiva/dano passam a rodar attacker contra attacker).
+        const confusionOutcome = ConfusionService.consumePending(this.confusionFlags[attackerSide], Math.random());
+        const confusionMultiplier = ConfusionService.multiplierFor(confusionOutcome);
+
+        if (confusionOutcome === "self") {
+            defender = attacker;
+            defenderSide = attackerSide;
+        }
+
+        if (confusionOutcome === "miss") {
             this.log.push({
                 round: this.turnCounter,
                 attackerId: attackerSide,
                 targetId: defenderSide,
-                dodged: true
+                dodged: false,
+                damage: 0,
+                confusionOutcome
             });
             return {
                 attacker: attackerSide,
                 target: defenderSide,
-                dodged: true,
+                dodged: false,
+                confusionOutcome,
                 damage: 0,
                 critical: false,
                 lifeSteal: 0,
@@ -98,18 +122,55 @@ export default class CombatEngine {
             };
         }
 
-        const result = this.calculateDamage(attacker, defender, attackerSide, defenderSide);
-        if (playerTurn) {
+        if (this.rollDodge(attacker, defender, attackerSide, defenderSide)) {
+            this.log.push({
+                round: this.turnCounter,
+                attackerId: attackerSide,
+                targetId: defenderSide,
+                dodged: true
+            });
+            return {
+                attacker: attackerSide,
+                target: defenderSide,
+                dodged: true,
+                confusionOutcome,
+                damage: 0,
+                critical: false,
+                lifeSteal: 0,
+                absorbed: 0,
+                miasmaProc: false,
+                miasmaStacks: 0,
+                miasmaTargetHasSpecials: false,
+                miasmaAttackWeakened: false,
+                miasmaDefendWeakened: false,
+                mimicBonus: 0
+            };
+        }
+
+        const result = this.calculateDamage(attacker, defender, attackerSide, defenderSide, confusionMultiplier);
+
+        // Quem perde HP é sempre o DEFENSOR (defenderSide) — normalmente
+        // o lado oposto de quem ataca, mas a Confusão pode virar os dois
+        // o mesmo lado (ataque em si mesmo).
+        if (defenderSide === "monster") {
             this.monster.status.vidaAtual -= result.damage;
             this.monster.status.vidaAtual = Math.max(0, this.monster.status.vidaAtual);
-            if (result.lifeSteal > 0) {
-                this.player.currentHP = Math.min(this.player.maxHP, this.player.currentHP + result.lifeSteal);
-            }
         } else {
             this.player.currentHP -= result.damage;
             this.player.currentHP = Math.max(0, this.player.currentHP);
         }
-        const revive = playerTurn ? null : this.tryRevive();
+
+        // Roubo de Vida é sempre do ATACANTE (quem bateu), independente
+        // de quem apanhou — monstro nunca tem Roubo de Vida, por isso
+        // só o jogador precisa desse bloco.
+        if (playerTurn && result.lifeSteal > 0) {
+            this.player.currentHP = Math.min(this.player.maxHP, this.player.currentHP + result.lifeSteal);
+        }
+
+        // Reviver do Yggdrasil: agora depende de quem TOMOU o golpe
+        // (defenderSide), não de quem era o atacante — um golpe
+        // confuso em si mesmo também pode derrubar o próprio jogador.
+        const revive = defenderSide === "player" ? this.tryRevive() : null;
 
         this.log.push({
             round: this.turnCounter,
@@ -123,7 +184,8 @@ export default class CombatEngine {
             lifeSteal: result.lifeSteal,
             absorbed: result.absorbed,
             mimicBonus: result.mimicBonus,
-            miasmaProc: result.miasmaProc
+            miasmaProc: result.miasmaProc,
+            confusionOutcome
         });
 
         if (revive) {
@@ -144,6 +206,7 @@ export default class CombatEngine {
             attacker: attackerSide,
             target: defenderSide,
             dodged: false,
+            confusionOutcome,
             damage: result.damage,
             critical: result.critical,
             lifeSteal: result.lifeSteal,
@@ -153,7 +216,8 @@ export default class CombatEngine {
             miasmaTargetHasSpecials: result.miasmaTargetHasSpecials,
             miasmaAttackWeakened: result.miasmaAttackWeakened,
             miasmaDefendWeakened: result.miasmaDefendWeakened,
-            mimicBonus: result.mimicBonus
+            mimicBonus: result.mimicBonus,
+            confusionProc: result.confusionProc
         };
     }
 
@@ -176,13 +240,17 @@ export default class CombatEngine {
 
     }
 
-    calculateDamage(attacker, defender, attackerSide = null, defenderSide = null) {
+    // confusionMultiplier: 1.2 (ataca o alvo de sempre confuso), 1.5
+    // (ataca a si mesmo) ou 1 (ataque normal, sem Confusão) — ver
+    // ConfusionService.multiplierFor, decidido em attack() antes de
+    // chamar isso aqui.
+    calculateDamage(attacker, defender, attackerSide = null, defenderSide = null, confusionMultiplier = 1) {
 
         // Acúmulos de Intoxicação do Miasma reduzem o Ataque de quem
         // estiver intoxicado (ver MiasmaService.statMultiplier). Em PVE
         // também reduz a Armadura de quem está defendendo, se ele
         // estiver intoxicado — só aqui (Dungeons), nunca no PVP.
-        const attack = (attacker.attack ?? attacker.dano) * MiasmaService.statMultiplier(this.miasmaFlags[attackerSide], MIASMA_PVE_PERCENTS);
+        const attack = (attacker.attack ?? attacker.dano) * MiasmaService.statMultiplier(this.miasmaFlags[attackerSide], MIASMA_PVE_PERCENTS) * confusionMultiplier;
         const armor = (defender.armor ?? defender.armadura) * MiasmaService.statMultiplier(this.miasmaFlags[defenderSide], MIASMA_PVE_PERCENTS);
 
         // Miasma do Pútrido: se o ATACANTE tiver uma marca pendente
@@ -265,6 +333,16 @@ export default class CombatEngine {
 
         const miasmaStacks = miasmaProc ? MiasmaService.applyDebuff(this.miasmaFlags[defenderSide]) : 0;
 
+        // ==========================
+        // CONFUSÃO (Louca)
+        // ==========================
+        // Sorteado com o confusionChance ORIGINAL do atacante — só a
+        // Louca tem isso > 0 (vem 100% do equipamento, ver
+        // PlayerStats.js), em qualquer outro atacante nunca ativa.
+        const confusionProc = ConfusionService.procs(attacker.confusionChance ?? 0, Math.random());
+
+        if (confusionProc) ConfusionService.applyPending(this.confusionFlags[defenderSide]);
+
         return {
             miasmaProc,
             miasmaStacks,
@@ -273,6 +351,7 @@ export default class CombatEngine {
             // não tem atributo especial nenhum).
             miasmaAttackWeakened: attackMark < 1 && MiasmaService.hasAttackSpecials(attacker),
             miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(defender),
+            confusionProc,
             damage,
             rawDamage,
             armorMitigated,
@@ -311,24 +390,48 @@ export default class CombatEngine {
 
     createAttackMessage(result) {
 
+        // Confusão "errou o ataque" — antes mesmo de rolar esquiva/dano
+        // (ver attack()), então tem mensagem própria, não é dodge nem
+        // golpe normal.
+        if (result.confusionOutcome === "miss") {
+            return result.attacker === "player"
+                ? ConfusionService.buildOutcomeMessage("miss", "Você")
+                : ConfusionService.buildOutcomeMessage("miss", this.monster.name);
+        }
+
         if (result.dodged) {
             return result.attacker === "player"
                 ? `<span class="combat-dodge">${this.monster.name} esquivou do seu ataque!</span>`
                 : `<span class="combat-dodge">Você esquivou do ataque!</span>`;
         }
 
+        // Confusão "ataca a si mesmo" vira o alvo (ver attack()) — tanto
+        // o jogador quanto o monstro usam a mesma redação "se atacou"
+        // (nome próprio em vez de "você"/monstro.name como alvo).
+        const confusionSelfPrefix = result.confusionOutcome === "self"
+            ? `${ConfusionService.buildOutcomeMessage("self", result.attacker === "player" ? "Você" : this.monster.name)}<br>`
+            : "";
+        const confusionOpponentPrefix = result.confusionOutcome === "opponent"
+            ? `${ConfusionService.buildOutcomeMessage("opponent", result.attacker === "player" ? "Você" : this.monster.name, result.attacker === "player" ? this.monster.name : "você")}<br>`
+            : "";
+
         if (result.attacker === "player") {
-            let message = "";
+            let message = confusionSelfPrefix + confusionOpponentPrefix;
             message += MiasmaService.buildWeakenedMessage(result, "você", this.monster.name);
             if (result.critical) {
                 message += `<span class="combat-critical">Golpe Crítico!</span><br>`;
             }
-            message += `Você causou <strong>${result.damage}</strong> de dano.`;
+            message += result.confusionOutcome === "self"
+                ? `Você causou <strong>${result.damage}</strong> de dano em si mesmo.`
+                : `Você causou <strong>${result.damage}</strong> de dano.`;
             if (result.lifeSteal > 0) {
                 message += `<br><span class="combat-life-steal">Life Steal!</span> Recuperou <strong>${result.lifeSteal}</strong> HP.`;
             }
             if (result.miasmaProc) {
                 message += `<br>${MiasmaService.buildProcMessage(this.monster.name, result, MIASMA_PVE_PERCENTS)}`;
+            }
+            if (result.confusionProc) {
+                message += `<br>${ConfusionService.buildProcMessage(this.monster.name)}`;
             }
             if (result.mimicBonus > 0) {
                 message += `<br>${MimicService.buildMessage(result.mimicBonus, { opponentName: this.monster.name })}`;
@@ -336,14 +439,19 @@ export default class CombatEngine {
             return message;
         }
 
-        let message = "";
+        let message = confusionSelfPrefix + confusionOpponentPrefix;
         message += MiasmaService.buildWeakenedMessage(result, this.monster.name, "você");
         if (result.critical) {
             message += `<span class="combat-critical">Ataque Crítico!</span><br>`;
         }
-        message += ` Você recebeu <strong>${this.monster.status.nomeAtaque}</strong>, <strong>${result.damage}</strong> de dano.`;
+        message += result.confusionOutcome === "self"
+            ? ` ${this.monster.name} causou <strong>${result.damage}</strong> de dano nele mesmo.`
+            : ` Você recebeu <strong>${this.monster.status.nomeAtaque}</strong>, <strong>${result.damage}</strong> de dano.`;
         if (result.absorbed > 0) {
             message += `<br><span class="combat-absorption">Absorção!</span> Absorveu <strong>${result.absorbed}</strong> do golpe.`;
+        }
+        if (result.confusionProc) {
+            message += `<br>${ConfusionService.buildProcMessage("você")}`;
         }
         if (result.revive) {
             message += `<br><span class="combat-pet-bite">${result.revive.petName}</span> reviveu você com <strong>${result.revive.heal}</strong> HP!`;

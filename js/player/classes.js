@@ -55,6 +55,15 @@ const classes = {
         lore: "Os Mímicos são criaturas que possuem a habilidade de imitar outros seres. Alguns boatos dizem que eles conseguem ser melhor que os 'originais'. Apesar de sua aparência divertida e engraçada, são extremamente letais.",
     },
 
+    crazy: {
+        id: "crazy",
+        name: "Louca",
+        image: "assets/img/assets/character/class/crazy.png",
+        hud: "assets/img/assets/character/class/crazy-hud.png",
+        description: "Especialista em ataques imprevisíveis.",
+        lore: "Os loucos são seres que perderam a sanidade, mais que isso. Eles só se contentam quando deixam seu oponente tão malucos quanto eles. Seus ataques são imprevisíveis e podem causar efeitos devastadores em seus inimigos.",
+    },
+
 };
 
 export default classes;

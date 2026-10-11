@@ -64,9 +64,10 @@
 .class-card img{
     width:140px;
     display:block;
+    border-radius: 10px;
     margin:auto;
     image-rendering:pixelated;
-    background-color: #7B7C7D;
+    background-color: #324557;
 }
 .class-card h2{
     margin-top:18px;

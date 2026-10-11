@@ -40,7 +40,15 @@ export default [
             "Informações do Combate ganhou uma aba 'Gráfico': linha por rodada pra cada um dos 14 números, escolhendo uma métrica por vez numa lista colorida",
             "Novo Correio: ícone de envelope na tela inicial, com caixa de entrada (até 3 itens por carta, 30 dias pra coletar antes de expirar). Enviar carta ainda está restrito à administração por enquanto",
             "Convite do Cooperativo: novo botão ao lado do campo de nome que abre a lista dos jogadores online e com nível suficiente pra entrar — clicar num nome já preenche o campo",
-            "Pets: XP necessária pra subir de nível entre o 25 e o 49 ficou 25% mais cara (além do dobro que já valia a partir do 18, os dois juntam: 2,5x a curva normal nessa faixa)"
+            "Pets: XP necessária pra subir de nível entre o 25 e o 49 ficou 25% mais cara (além do dobro que já valia a partir do 18, os dois juntam: 2,5x a curva normal nessa faixa)",
+            "Nova classe: Louca — o maior Ataque e Agilidade do jogo, mas a menor Armadura e Vida de todas. Atributo exclusivo Confusão: chance a cada golpe certeiro de deixar o alvo confuso até o próximo ataque dele, que sai sorteado entre acertar o oponente de sempre (+20% de dano), acertar a si mesmo (+50% de dano) ou errar por completo. Vale contra monstros, chefes, PVP e Cooperativo. Novos itens exclusivos: Marreta Biônica (arma), Óculos Tontos (elmo), Camisa de Força (peitoral), Calça Jagger (calças) e Chinelo (botas)",
+            "Louca: +7 de Armadura e -8 de Ataque a partir do nível 51 (chegando a +9/-10 no nível 110), depois de simulações de PVP mostrarem ela perdendo quase sempre pro Guerreiro e pro Pútrido em níveis altos. Personagens já existentes são atualizados sozinhos ao carregar",
+            "Poções: agora são 6 tipos (Pequena, Tripla Pequena, Média, Tripla Média, Grande e Tripla Grande), e os drops das dungeons e chefes foram reorganizados pra escalar com o nível — Pequena até o nível 18, Tripla Pequena do 20 ao 38, Média do 40 ao 68, Tripla Média do 70 ao 100",
+            "Corrigido o item Tripla Poção Pequena, que estava com identificador, nome e ícone errados (copiados da Poção Pequena), e a raridade da Tripla Poção Média, que aparecia como 'Raro' em vez de 'Místico'",
+            "Vender Pet (Mercado), Veterinário (Saúde) e a aba Pets da tela de Personagem agora só ficam disponíveis a partir do nível 30, mesmo nível que libera a Fazenda",
+            "Novo Jogo: quando todos os personagens da conta já estão em uso, a confirmação de sobrescrever agora mostra nome, classe e nível de quem seria sobrescrito, em vez de perguntar às cegas",
+            "Removido o aviso único 'Aviso de Balanceamento' (pedido de desculpas pela remoção do Rei dos Encantamentos e ajuste do Cara ou Coroa?, com recompensa em ouro, ração e um pet exclusivo) — quem ainda não tinha coletado não recebe mais essa recompensa",
+            "XP necessária pra subir de nível ficou mais cara entre os níveis 20 e 100 — 10% do 20 ao 50, 20% do 51 ao 70, 25% do 71 ao 79, 30% do 80 ao 89 e 35% do 90 ao 100. A XP ganha em combate não mudou, só o quanto precisa pra passar de nível"
         ]
     },
 

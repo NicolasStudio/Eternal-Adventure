@@ -246,7 +246,7 @@ const dungeons = [
                 rarity: "uncommon",
                 chance: 5
             },
-            items.mediumPotion
+            items.tripleSmallPotion
         ]
     },
 
@@ -277,7 +277,7 @@ const dungeons = [
                 item: ring.ringModernIncommon,
                 chance: 5
             },
-            items.smallPotion
+            items.tripleSmallPotion
         ]
     },
 
@@ -307,7 +307,7 @@ const dungeons = [
                 item: amulet.amuletModernIncommon,
                 chance: 5
             },
-            items.smallPotion
+            items.tripleSmallPotion
         ]
     },
 
@@ -339,7 +339,7 @@ const dungeons = [
                 rarity: "uncommon",
                 chance: 5
             },
-            items.smallPotion
+            items.tripleSmallPotion
         ]
     },
 
@@ -366,7 +366,7 @@ const dungeons = [
                 type: ["chest"],
                 rarity: "rare"
             },
-            items.mediumPotion,
+            items.tripleSmallPotion,
             {
                 item: { ...pets.fairyPet1, icon: "assets/img/assets/eggs_drop/egg-duende.png"},
                 chance: 2
@@ -406,7 +406,7 @@ const dungeons = [
                 item: amulet.amuletModernRare,
                 chance: 5
             },
-            items.mediumPotion
+            items.tripleSmallPotion
         ]
     },
 
@@ -435,7 +435,7 @@ const dungeons = [
                 rarity: "rare",
                 chance: 5
             },
-            items.mediumPotion
+            items.tripleSmallPotion
         ]
     },
 
@@ -466,7 +466,7 @@ const dungeons = [
                 rarity: "rare",
                 chance: 5
             },
-            items.mediumPotion
+            items.tripleSmallPotion
         ]
     },
 
@@ -493,7 +493,7 @@ const dungeons = [
                 type: ["boot"],
                 rarity: "mystic"
             },
-            items.tripleMediumPotion,
+            items.mediumPotion,
             {
                 item: { ...pets.spiderPet1, icon: "assets/img/assets/eggs_drop/egg-spider.png"},
                 chance: 2
@@ -605,7 +605,7 @@ const dungeons = [
                 type: ["leg"],
                 rarity: "mystic"
             },
-            items.tripleMediumPotion,
+            items.mediumPotion,
             {
                 item: { ...pets.bearPet1, icon: "assets/img/assets/eggs_drop/egg-bear.png"},
                 chance: 2
@@ -727,7 +727,7 @@ const dungeons = [
                 item: amulet.amuletModernMystic,
                 chance: 5
             },
-            items.tripleMediumPotion
+            items.mediumPotion
         ]
     },
 
@@ -866,7 +866,7 @@ const dungeons = [
         drops: [
             {
             },
-            items.mediumPotion,
+            items.tripleMediumPotion,
             enchantmentStone.marcoSafiraUm,
             enchantmentStone.marcoSafiraDois,
             enchantmentStone.marcoSafiraTres
@@ -896,7 +896,7 @@ const dungeons = [
         drops: [
             {
             },
-            items.mediumPotion,
+            items.tripleMediumPotion,
             enchantmentStone.marcoSafiraUm,
             enchantmentStone.marcoSafiraDois,
             enchantmentStone.marcoSafiraTres
@@ -926,7 +926,7 @@ const dungeons = [
         drops: [
             {
             },
-            items.mediumPotion,
+            items.tripleMediumPotion,
             enchantmentStone.marcoSafiraUm,
             enchantmentStone.marcoSafiraDois,
             enchantmentStone.marcoSafiraTres
@@ -982,7 +982,7 @@ const dungeons = [
         drops: [
             {
             },
-            items.mediumPotion,
+            items.tripleMediumPotion,
             enchantmentStone.essenciaTurmalinaUm,
             enchantmentStone.essenciaTurmalinaDois,
             enchantmentStone.essenciaTurmalinaTres
@@ -1011,7 +1011,7 @@ const dungeons = [
         drops: [
             {
             },
-            items.mediumPotion,
+            items.tripleMediumPotion,
             enchantmentStone.essenciaTurmalinaUm,
             enchantmentStone.essenciaTurmalinaDois,
             enchantmentStone.essenciaTurmalinaTres
@@ -1040,7 +1040,7 @@ const dungeons = [
         drops: [
             {
             },
-            items.mediumPotion,
+            items.tripleMediumPotion,
             enchantmentStone.essenciaTurmalinaUm,
             enchantmentStone.essenciaTurmalinaDois,
             enchantmentStone.essenciaTurmalinaTres

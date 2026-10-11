@@ -3,6 +3,7 @@ import PowerService from "./PowerService.js";
 import BoitataBurn from "./BoitataBurn.js";
 import MiasmaService from "./MiasmaService.js";
 import MimicService from "./MimicService.js";
+import ConfusionService from "./ConfusionService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVP, absorbedAmount } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
@@ -18,8 +19,10 @@ const DODGE_CAP = 40;
 // Imitação vira % da Vida Máxima (÷30 no PVP) · v8 Imitação deixa de
 // ser dano, passa a somar Imitação% de Ataque/Armadura/Agilidade do
 // oponente aos status do Mímico · v9 Miasma ganha 4º acúmulo
-// (3/6/9/15%), reduz também Armadura, especiais −50% (era −25%)
-export const TEAM_SIM_VERSION = 10;
+// (3/6/9/15%), reduz também Armadura, especiais −50% (era −25%) · v10
+// Confusão da Louca — rola todo turno (mesmo sem Confusão nenhuma),
+// por isso qualquer partida antiga desalinha sem o bump de versão.
+export const TEAM_SIM_VERSION = 11;
 
 /*
     Os dois clientes (jogador A e B) precisam chegar no MESMO resultado
@@ -92,6 +95,8 @@ export default class PvpCombatService {
             miasmaChance: stats.miasmaChance ?? 0,
             // Só o Mímico tem isso > 0 (ver MimicService.js).
             reflection: stats.reflection ?? 0,
+            // Só a Louca tem isso > 0 (ver ConfusionService.js).
+            confusionChance: stats.confusionChance ?? 0,
             petBiteDamage: scaledPet?.biteDamage ?? 0,
             petHealAmount: scaledPet?.healAmount ?? 0,
             petMimicRatio: scaledPet?.mimicRatio ?? 0,
@@ -162,6 +167,10 @@ export default class PvpCombatService {
         // débuff por lado.
         const miasmaFlags = { a: MiasmaService.createFlags(), b: MiasmaService.createFlags() };
 
+        // Confusão da Louca (ver ConfusionService.js) — marca pendente
+        // por lado, igual o Miasma, só sem acúmulo.
+        const confusionFlags = { a: ConfusionService.createFlags(), b: ConfusionService.createFlags() };
+
         // Reviver do Yggdrasil: entra no log como uma "mordida" só de cura
         // do lado de quem reviveu, que a tela já sabe aplicar.
         // attackerId/targetId (além do "turn"/"attacker" já existentes)
@@ -197,28 +206,46 @@ export default class PvpCombatService {
 
             const defenderKey = turn === "a" ? "b" : "a";
 
+            // Confusão da Louca: consome a marca pendente do ATACANTE —
+            // SEMPRE sorteado, mesmo sem marca nenhuma (mesma regra do
+            // resto do combate: nunca pular um rng() condicionalmente,
+            // senão a ordem desalinha entre os 2 clientes). "Ataca a si
+            // mesmo" só troca o alvo do GOLPE PRINCIPAL — mordida do
+            // pet e queimadura continuam mirando o oponente de sempre
+            // (defender/defenderKey), nunca o próprio atacante.
+            const confusionOutcome = ConfusionService.consumePending(confusionFlags[turn], rng());
+            const confusionMultiplier = ConfusionService.multiplierFor(confusionOutcome);
+
+            const attackTarget = confusionOutcome === "self" ? attacker : defender;
+            const attackTargetKey = confusionOutcome === "self" ? turn : defenderKey;
+
             // Acúmulos de Intoxicação do Miasma: Ataque e Agilidade de
             // quem estiver intoxicado saem reduzidos a luta inteira.
             const attackerMult = MiasmaService.statMultiplier(miasmaFlags[turn]);
-            const defenderMult = MiasmaService.statMultiplier(miasmaFlags[defenderKey]);
+            const attackTargetMult = MiasmaService.statMultiplier(miasmaFlags[attackTargetKey]);
 
             // Imitação do Mímico: soma Imitação% do Ataque/Armadura/
             // Agilidade de quem ele enfrenta aos status dele — recalculada
             // a cada golpe (quem está nos dois lados não muda no 1x1, mas
             // mantém o mesmo cálculo do 2x2). Não afetado pelo próprio
-            // débuff de Miasma (attackerMult/defenderMult), só a parte
-            // PRÓPRIA do status é reduzida por ele (ver MimicService.js).
-            const attackerCopy = MimicService.applyCopy(defender, attacker.reflection ?? 0);
-            const defenderCopy = MimicService.applyCopy(attacker, defender.reflection ?? 0);
+            // débuff de Miasma (attackerMult/attackTargetMult), só a
+            // parte PRÓPRIA do status é reduzida por ele (ver
+            // MimicService.js).
+            const attackerCopy = MimicService.applyCopy(attackTarget, attacker.reflection ?? 0);
+            const attackTargetCopy = MimicService.applyCopy(attacker, attackTarget.reflection ?? 0);
 
             const dodgeChance = this.dodgeChance(
-                defender.agility * defenderMult + defenderCopy.bonusAgility,
+                attackTarget.agility * attackTargetMult + attackTargetCopy.bonusAgility,
                 attacker.agility * attackerMult + attackerCopy.bonusAgility
             );
 
-            if (rng() * 100 < dodgeChance) {
+            if (confusionOutcome === "miss") {
 
-                log.push({ round: guard, turn, attacker: attacker.name, attackerId: turn, targetId: defenderKey, dodged: true });
+                log.push({ round: guard, turn, attacker: attacker.name, attackerId: turn, targetId: attackTargetKey, dodged: false, damage: 0, confusionOutcome });
+
+            } else if (rng() * 100 < dodgeChance) {
+
+                log.push({ round: guard, turn, attacker: attacker.name, attackerId: turn, targetId: attackTargetKey, dodged: true, confusionOutcome });
 
             } else {
 
@@ -227,16 +254,17 @@ export default class PvpCombatService {
                 // DEFENSOR reduz a Absorção dele ao recebê-lo.
                 const attackMark = MiasmaService.consumeAttackMultiplier(miasmaFlags[turn]);
                 const attackDebuff = attackMark * MiasmaService.persistentSpecialMultiplier(miasmaFlags[turn]);
-                const defendMark = MiasmaService.consumeDefendMultiplier(miasmaFlags[defenderKey]);
-                const defendDebuff = defendMark * MiasmaService.persistentSpecialMultiplier(miasmaFlags[defenderKey]);
+                const defendMark = MiasmaService.consumeDefendMultiplier(miasmaFlags[attackTargetKey]);
+                const defendDebuff = defendMark * MiasmaService.persistentSpecialMultiplier(miasmaFlags[attackTargetKey]);
 
                 const isCritical = rng() * 100 < attacker.criticalChance * attackDebuff;
                 const criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER : 1;
                 // Miasma: Armadura de quem está intoxicado também cai,
-                // junto com Ataque/Agilidade (defenderMult, calculado acima).
-                const effectiveArmor = (defender.armor * defenderMult + defenderCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
+                // junto com Ataque/Agilidade (attackTargetMult, calculado
+                // acima).
+                const effectiveArmor = (attackTarget.armor * attackTargetMult + attackTargetCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
-                const preAbsorption = Math.max(1, Math.floor((attacker.attack * attackerMult + attackerCopy.bonusAttack) * criticalMultiplier * mitigation));
+                const preAbsorption = Math.max(1, Math.floor((attacker.attack * attackerMult + attackerCopy.bonusAttack) * criticalMultiplier * mitigation * confusionMultiplier));
 
                 // Dano ANTES da armadura, com a MESMA fórmula de
                 // preAbsorption só sem o fator de mitigação — existe só
@@ -244,13 +272,13 @@ export default class PvpCombatService {
                 // CombatInfo.js) saber quanto a armadura segurou.
                 // Puramente informativo: nunca entra em currentHP nem em
                 // nenhuma conta que mude o resultado da luta.
-                const rawDamage = Math.max(1, Math.floor((attacker.attack * attackerMult + attackerCopy.bonusAttack) * criticalMultiplier));
+                const rawDamage = Math.max(1, Math.floor((attacker.attack * attackerMult + attackerCopy.bonusAttack) * criticalMultiplier * confusionMultiplier));
                 const armorMitigated = Math.max(0, rawDamage - preAbsorption);
 
                 // Absorção: CHANCE de quem defende absorver parte do golpe
                 // (ver Absorption.js). Sempre consome 1 rng(), ativando ou
                 // não — a ordem dos sorteios não pode mudar.
-                const absorptionChance = Math.min(ABSORPTION_CAP, (defender.absorption ?? 0) * defendDebuff);
+                const absorptionChance = Math.min(ABSORPTION_CAP, (attackTarget.absorption ?? 0) * defendDebuff);
                 const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance, ABSORPTION_RATIO_PVP);
 
                 const damage = preAbsorption - absorbed;
@@ -259,7 +287,7 @@ export default class PvpCombatService {
                 // veio da cópia — só pra mensagem (ver MimicService.js).
                 const mimicBonus = attackerCopy.bonusAttack;
 
-                defender.currentHP = Math.max(0, defender.currentHP - damage);
+                attackTarget.currentHP = Math.max(0, attackTarget.currentHP - damage);
 
                 let lifeStealAmount = 0;
 
@@ -273,14 +301,20 @@ export default class PvpCombatService {
                 // sofrendo). Só Pútrido tem miasmaChance > 0.
                 const miasmaProc = MiasmaService.procs(attacker.miasmaChance ?? 0, rng());
 
-                const miasmaStacks = miasmaProc ? MiasmaService.applyDebuff(miasmaFlags[defenderKey]) : 0;
+                const miasmaStacks = miasmaProc ? MiasmaService.applyDebuff(miasmaFlags[attackTargetKey]) : 0;
+
+                // Confusão: sorteado com o valor ORIGINAL do atacante. Só
+                // a Louca tem confusionChance > 0.
+                const confusionProc = ConfusionService.procs(attacker.confusionChance ?? 0, rng());
+
+                if (confusionProc) ConfusionService.applyPending(confusionFlags[attackTargetKey]);
 
                 log.push({
                     round: guard,
                     turn,
                     attacker: attacker.name,
                     attackerId: turn,
-                    targetId: defenderKey,
+                    targetId: attackTargetKey,
                     dodged: false,
                     damage,
                     rawDamage,
@@ -291,18 +325,23 @@ export default class PvpCombatService {
                     mimicBonus,
                     miasmaProc,
                     miasmaStacks,
-                    miasmaTargetHasSpecials: MiasmaService.hasAnySpecials(defender),
+                    miasmaTargetHasSpecials: MiasmaService.hasAnySpecials(attackTarget),
                     miasmaAttackWeakened: attackMark < 1 && MiasmaService.hasAttackSpecials(attacker),
-                    miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(defender)
+                    miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(attackTarget),
+                    confusionOutcome,
+                    confusionProc
                 });
 
-                revive(defender, turn === "a" ? "b" : "a");
+                revive(attackTarget, attackTargetKey);
 
-                // Mordida do pet: garantida, não consome rng(). Dano e
-                // cura são efeitos independentes — um pet de cura pura
-                // (ex: Duende, sem dano nenhum) ainda precisa disparar
-                // esse bloco só pra curar. petMimicRatio (ex: Aranha)
-                // copia uma fração do `damage` que ACABOU de ser
+                // Mordida do pet: SEMPRE no oponente de verdade (defender/
+                // defenderKey, nunca attackTarget/attackTargetKey) — o
+                // pet morde quem é de verdade, independente de o dono
+                // estar confuso ou não. Garantida, não consome rng().
+                // Dano e cura são efeitos independentes — um pet de cura
+                // pura (ex: Duende, sem dano nenhum) ainda precisa
+                // disparar esse bloco só pra curar. petMimicRatio (ex:
+                // Aranha) copia uma fração do `damage` que ACABOU de ser
                 // causado nesse mesmo golpe (já mitigado pela armadura
                 // do alvo) — nunca do ataque bruto do atacante.
                 const petBiteAmount = attacker.petMimicRatio > 0
@@ -338,7 +377,7 @@ export default class PvpCombatService {
                         heal: petHeal
                     });
 
-                    revive(defender, turn === "a" ? "b" : "a");
+                    revive(defender, defenderKey);
 
                 }
 
@@ -430,6 +469,10 @@ export default class PvpCombatService {
         // independente dos aliados).
         const miasmaFlagsById = new Map(all.map(c => [c.id, MiasmaService.createFlags()]));
 
+        // Confusão da Louca (ver ConfusionService.js) — uma marca
+        // pendente por combatente, igual o Miasma, só sem acúmulo.
+        const confusionFlagsById = new Map(all.map(c => [c.id, ConfusionService.createFlags()]));
+
         // Reviver do Yggdrasil: entra no log como uma "mordida" só de cura
         // em quem reviveu (healedIds), que a tela já sabe aplicar.
         const revive = (combatant, killerId) => {
@@ -502,22 +545,54 @@ export default class PvpCombatService {
 
                 const target = targets[Math.floor(rng() * targets.length)];
 
+                // Confusão da Louca: consome a marca pendente do
+                // ATACANTE — SEMPRE sorteado, mesmo sem marca nenhuma
+                // (mesma regra do resto do combate: nunca pular um
+                // rng() condicionalmente). "Ataca a si mesmo" só troca
+                // o alvo do GOLPE PRINCIPAL (attackTarget) — mordida do
+                // pet e queimadura continuam usando `target` (o inimigo
+                // sorteado de verdade), nunca o próprio atacante.
+                const confusionOutcome = ConfusionService.consumePending(confusionFlagsById.get(attacker.id), rng());
+                const confusionMultiplier = ConfusionService.multiplierFor(confusionOutcome);
+
+                const attackTarget = confusionOutcome === "self" ? attacker : target;
+
                 // Acúmulos de Intoxicação do Miasma: Ataque e Agilidade de
                 // quem estiver intoxicado saem reduzidos a luta inteira.
                 const attackerMult = MiasmaService.statMultiplier(miasmaFlagsById.get(attacker.id));
-                const targetMult = MiasmaService.statMultiplier(miasmaFlagsById.get(target.id));
+                const attackTargetMult = MiasmaService.statMultiplier(miasmaFlagsById.get(attackTarget.id));
 
                 // Imitação do Mímico: soma Imitação% do Ataque/Armadura/
                 // Agilidade de quem ele enfrenta aos status dele — no 2x2
                 // recalculada a cada golpe porque o alvo sorteado pode
                 // mudar de turno pra turno (ver MimicService.js).
-                const attackerCopy = MimicService.applyCopy(target, attacker.reflection ?? 0);
-                const targetCopy = MimicService.applyCopy(attacker, target.reflection ?? 0);
+                const attackerCopy = MimicService.applyCopy(attackTarget, attacker.reflection ?? 0);
+                const attackTargetCopy = MimicService.applyCopy(attacker, attackTarget.reflection ?? 0);
 
                 const dodgeChance = this.dodgeChance(
-                    target.agility * targetMult + targetCopy.bonusAgility,
+                    attackTarget.agility * attackTargetMult + attackTargetCopy.bonusAgility,
                     attacker.agility * attackerMult + attackerCopy.bonusAgility
                 );
+
+                if (confusionOutcome === "miss") {
+
+                    log.push({
+                        round: guard,
+                        attackerId: attacker.id,
+                        attackerTeam: attacker.team,
+                        targetId: attackTarget.id,
+                        dodged: false,
+                        damage: 0,
+                        confusionOutcome
+                    });
+
+                    tickBurn(attacker, enemyTeam);
+
+                    if (aliveOf(enemyTeam).length === 0) break;
+
+                    continue;
+
+                }
 
                 if (rng() * 100 < dodgeChance) {
 
@@ -525,8 +600,9 @@ export default class PvpCombatService {
                         round: guard,
                         attackerId: attacker.id,
                         attackerTeam: attacker.team,
-                        targetId: target.id,
-                        dodged: true
+                        targetId: attackTarget.id,
+                        dodged: true,
+                        confusionOutcome
                     });
 
                     // Turno esquivado também é turno do dono: a
@@ -544,16 +620,17 @@ export default class PvpCombatService {
                 // reduz a Absorção dele ao recebê-lo.
                 const attackMark = MiasmaService.consumeAttackMultiplier(miasmaFlagsById.get(attacker.id));
                 const attackDebuff = attackMark * MiasmaService.persistentSpecialMultiplier(miasmaFlagsById.get(attacker.id));
-                const defendMark = MiasmaService.consumeDefendMultiplier(miasmaFlagsById.get(target.id));
-                const defendDebuff = defendMark * MiasmaService.persistentSpecialMultiplier(miasmaFlagsById.get(target.id));
+                const defendMark = MiasmaService.consumeDefendMultiplier(miasmaFlagsById.get(attackTarget.id));
+                const defendDebuff = defendMark * MiasmaService.persistentSpecialMultiplier(miasmaFlagsById.get(attackTarget.id));
 
                 const isCritical = rng() * 100 < attacker.criticalChance * attackDebuff;
                 const criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER : 1;
                 // Miasma: Armadura de quem está intoxicado também cai,
-                // junto com Ataque/Agilidade (targetMult, calculado acima).
-                const effectiveArmor = (target.armor * targetMult + targetCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
+                // junto com Ataque/Agilidade (attackTargetMult, calculado
+                // acima).
+                const effectiveArmor = (attackTarget.armor * attackTargetMult + attackTargetCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
-                const preAbsorption = Math.max(1, Math.floor((attacker.attack * attackerMult + attackerCopy.bonusAttack) * criticalMultiplier * mitigation));
+                const preAbsorption = Math.max(1, Math.floor((attacker.attack * attackerMult + attackerCopy.bonusAttack) * criticalMultiplier * mitigation * confusionMultiplier));
 
                 // Dano ANTES da armadura, com a MESMA fórmula de
                 // preAbsorption só sem o fator de mitigação — existe só
@@ -561,10 +638,10 @@ export default class PvpCombatService {
                 // CombatInfo.js) saber quanto a armadura segurou.
                 // Puramente informativo: nunca entra em currentHP nem em
                 // nenhuma conta que mude o resultado da luta.
-                const rawDamage = Math.max(1, Math.floor((attacker.attack * attackerMult + attackerCopy.bonusAttack) * criticalMultiplier));
+                const rawDamage = Math.max(1, Math.floor((attacker.attack * attackerMult + attackerCopy.bonusAttack) * criticalMultiplier * confusionMultiplier));
                 const armorMitigated = Math.max(0, rawDamage - preAbsorption);
 
-                const absorptionChance = Math.min(ABSORPTION_CAP, (target.absorption ?? 0) * defendDebuff);
+                const absorptionChance = Math.min(ABSORPTION_CAP, (attackTarget.absorption ?? 0) * defendDebuff);
                 const absorbed = absorbedAmount(preAbsorption, rng() * 100 < absorptionChance, ABSORPTION_RATIO_PVP);
 
                 const damage = preAbsorption - absorbed;
@@ -573,7 +650,7 @@ export default class PvpCombatService {
                 // veio da cópia — só pra mensagem (ver MimicService.js).
                 const mimicBonus = attackerCopy.bonusAttack;
 
-                target.currentHP = Math.max(0, target.currentHP - damage);
+                attackTarget.currentHP = Math.max(0, attackTarget.currentHP - damage);
 
                 let lifeStealAmount = 0;
 
@@ -586,13 +663,19 @@ export default class PvpCombatService {
                 // Pútrido tem miasmaChance > 0.
                 const miasmaProc = MiasmaService.procs(attacker.miasmaChance ?? 0, rng());
 
-                const miasmaStacks = miasmaProc ? MiasmaService.applyDebuff(miasmaFlagsById.get(target.id)) : 0;
+                const miasmaStacks = miasmaProc ? MiasmaService.applyDebuff(miasmaFlagsById.get(attackTarget.id)) : 0;
+
+                // Confusão: sorteado com o valor ORIGINAL do atacante. Só
+                // a Louca tem confusionChance > 0.
+                const confusionProc = ConfusionService.procs(attacker.confusionChance ?? 0, rng());
+
+                if (confusionProc) ConfusionService.applyPending(confusionFlagsById.get(attackTarget.id));
 
                 log.push({
                     round: guard,
                     attackerId: attacker.id,
                     attackerTeam: attacker.team,
-                    targetId: target.id,
+                    targetId: attackTarget.id,
                     dodged: false,
                     damage,
                     rawDamage,
@@ -603,20 +686,25 @@ export default class PvpCombatService {
                     mimicBonus,
                     miasmaProc,
                     miasmaStacks,
-                    miasmaTargetHasSpecials: MiasmaService.hasAnySpecials(target),
+                    miasmaTargetHasSpecials: MiasmaService.hasAnySpecials(attackTarget),
                     miasmaAttackWeakened: attackMark < 1 && MiasmaService.hasAttackSpecials(attacker),
-                    miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(target)
+                    miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(attackTarget),
+                    confusionOutcome,
+                    confusionProc
                 });
 
-                revive(target, attacker.id);
+                revive(attackTarget, attacker.id);
 
-                // Mordida do pet: garantida, não consome rng(). Dano e
-                // cura são efeitos independentes — um pet de cura pura
-                // (ex: Duende, sem dano nenhum) ainda precisa disparar
-                // esse bloco só pra curar. petMimicRatio (ex: Aranha)
-                // copia uma fração do `damage` que ACABOU de ser
-                // causado nesse mesmo golpe (já mitigado pela armadura
-                // do alvo) — nunca do ataque bruto do atacante.
+                // Mordida do pet: SEMPRE no inimigo sorteado de verdade
+                // (`target`, nunca attackTarget) — o pet morde quem é de
+                // verdade, independente de o dono estar confuso ou não.
+                // Garantida, não consome rng(). Dano e cura são efeitos
+                // independentes — um pet de cura pura (ex: Duende, sem
+                // dano nenhum) ainda precisa disparar esse bloco só pra
+                // curar. petMimicRatio (ex: Aranha) copia uma fração do
+                // `damage` que ACABOU de ser causado nesse mesmo golpe
+                // (já mitigado pela armadura do alvo) — nunca do ataque
+                // bruto do atacante.
                 const petBiteAmount = attacker.petMimicRatio > 0
                     ? Math.floor(damage * attacker.petMimicRatio)
                     : attacker.petBiteDamage;

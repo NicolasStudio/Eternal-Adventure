@@ -700,6 +700,120 @@ const chests = {
         value: 0,
         sellValue: 0
 
+    },
+
+    chest_crazy_common: {
+
+        id: "chest_crazy_common",
+        name: "Camisa de Força",
+        type: "armor",
+        slot: "chest",
+        class: "crazy",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/chest/chest-crazy-rarity-comum.png",
+
+        stats: {
+            armor: 2
+        },
+
+        value: 100,
+        sellValue: 50
+
+    },
+
+    chest_crazy_uncommon: {
+
+        id: "chest_crazy_uncommon",
+        name: "Camisa de Força",
+        type: "armor",
+        slot: "chest",
+        class: "crazy",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/chest/chest-crazy-rarity-incomum.png",
+
+        stats: {
+            armor: 4
+        },
+
+        value: 300,
+        sellValue: 150
+
+    },
+
+    chest_crazy_rare: {
+
+        id: "chest_crazy_rare",
+        name: "Camisa de Força",
+        type: "armor",
+        slot: "chest",
+        class: "crazy",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/chest/chest-crazy-rarity-rare.png",
+
+        stats: {
+            armor: 7
+        },
+
+        value: 900,
+        sellValue: 450
+
+    },
+
+    chest_crazy_mystic: {
+
+        id: "chest_crazy_mystic",
+        name: "Camisa de Força",
+        type: "armor",
+        slot: "chest",
+        class: "crazy",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/chest/chest-crazy-rarity-mistico.png",
+
+        stats: {
+            armor: 12
+        },
+
+        value: 2700,
+        sellValue: 1350
+
+    },
+
+    chest_crazy_legendary: {
+
+        id: "chest_crazy_legendary",
+        name: "Camisa de Força",
+        type: "armor",
+        slot: "chest",
+        class: "crazy",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/chest/chest-crazy-rarity-lendario.png",
+
+        stats: {
+            armor: 16
+        },
+
+        value: 0,
+        sellValue: 14050
+
+    },
+
+    chest_crazy_ultraje: {
+
+        id: "chest_crazy_ultraje",
+        name: "Camisa de Força",
+        type: "armor",
+        slot: "chest",
+        class: "crazy",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/chest/chest-crazy-rarity-ultraje.png",
+
+        stats: {
+            armor: 18
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

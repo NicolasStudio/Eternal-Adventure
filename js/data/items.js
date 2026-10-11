@@ -20,10 +20,10 @@ const items = {
         sellValue: 17
     },
 
-    mediumPotion: {
-        id: "mediumPotion",
-        name: "Poção Média",
-        icon: "assets/img/assets/items/consumables/medium_potion.png",
+    tripleSmallPotion: {
+        id: "tripleSmallPotion",
+        name: "Tripla Poção Pequena",
+        icon: "assets/img/assets/items/consumables/triple_small_potion.png",
         type: "item",
         stackable: true,
 
@@ -34,16 +34,16 @@ const items = {
         },
 
         quality: null,
-        heal: 100,
-        effect: "Recupera 100 pontos de Vida.",
-        buyValue: 100,
-        sellValue: 500
+        heal: 75,
+        effect: "Recupera 75 pontos de Vida.",
+        buyValue: 150,
+        sellValue: 50
     },
 
-    tripleMediumPotion: {
-        id: "tripleMediumPotion",
-        name: "Tripla Poção Média",
-        icon: "assets/img/assets/items/consumables/triple_medium_potion.png",
+    mediumPotion: {
+        id: "mediumPotion",
+        name: "Poção Média",
+        icon: "assets/img/assets/items/consumables/medium_potion.png",
         type: "item",
         stackable: true,
 
@@ -54,17 +54,16 @@ const items = {
         },
 
         quality: null,
-        heal: 300,
-        effect: "Recupera 300 pontos de Vida.",
-        buyValue: 800,
-        sellValue: 350
+        heal: 200,
+        effect: "Recupera 200 pontos de Vida.",
+        buyValue: 250,
+        sellValue: 100
     },
 
-
-    largePotion: {
-        id: "largePotion",
-        name: "Poção Grande",
-        icon: "assets/img/assets/items/consumables/large_potion.png",
+    tripleMediumPotion: {
+        id: "tripleMediumPotion",
+        name: "Tripla Poção Média",
+        icon: "assets/img/assets/items/consumables/triple_medium_potion.png",
         type: "item",
         stackable: true,
 
@@ -75,11 +74,53 @@ const items = {
         },
 
         quality: null,
-        heal: 500,
-        effect: "Recupera 500 pontos de Vida.",
+        heal: 600,
+        effect: "Recupera 600 pontos de Vida.",
+        buyValue: 800,
+        sellValue: 250
+    },
+
+    largePotion: {
+        id: "largePotion",
+        name: "Poção Grande",
+        icon: "assets/img/assets/items/consumables/large_potion.png",
+        type: "item",
+        stackable: true,
+
+        rarity: {
+            id: "legendary",
+            name: "Lendário",
+            color: "#ff711f"
+        },
+
+        quality: null,
+        heal: 1000,
+        effect: "Recupera 1000 pontos de Vida.",
         buyValue: 2500,
         sellValue: 500
-    }
+    },
+
+    tripleLargePotion: {
+        id: "tripleLargePotion",
+        name: "Tripla Poção Grande",
+        icon: "assets/img/assets/items/consumables/triple_large_potion.png",
+        type: "item",
+        stackable: true,
+
+        rarity: {
+            id: "ultraje",
+            name: "Ultraje",
+            color: "#ff0000"
+        },
+
+        quality: null,
+        heal: 3000,
+        effect: "Recupera 3000 pontos de Vida.",
+        buyValue: 7500,
+        sellValue: 3050
+    },
+
+
 
 };
 

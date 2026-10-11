@@ -900,6 +900,171 @@ const weapons = {
         value: 0,
         sellValue: 0
 
+    },
+
+/* ==========================================
+       LOUCA (Marreta Biônica)
+========================================== */
+    sledgehammer_common: {
+
+        id: "sledgehammer_common",
+        name: "Marreta Biônica",
+        type: "weapon",
+        slot: "weapon",
+        class: "crazy",
+        weaponType: "sledgehammer",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/weapons/sledgehammer-rarity-comum.png",
+
+        stats: {
+            attack: 6,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            confusionChance: 2
+        },
+
+        value: 120,
+        sellValue: 60
+
+    },
+
+    sledgehammer_uncommon: {
+
+        id: "sledgehammer_uncommon",
+        name: "Marreta Biônica",
+        type: "weapon",
+        slot: "weapon",
+        class: "crazy",
+        weaponType: "sledgehammer",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/weapons/sledgehammer-rarity-incomum.png",
+
+        stats: {
+            attack: 13,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            confusionChance: 5
+        },
+
+        value: 360,
+        sellValue: 180
+
+    },
+
+    sledgehammer_rare: {
+
+        id: "sledgehammer_rare",
+        name: "Marreta Biônica",
+        type: "weapon",
+        slot: "weapon",
+        class: "crazy",
+        weaponType: "sledgehammer",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/weapons/sledgehammer-rarity-rare.png",
+
+        stats: {
+            attack: 22,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            confusionChance: 6
+        },
+
+        value: 1080,
+        sellValue: 540
+
+    },
+
+    sledgehammer_mystic: {
+
+        id: "sledgehammer_mystic",
+        name: "Marreta Biônica",
+        type: "weapon",
+        slot: "weapon",
+        class: "crazy",
+        weaponType: "sledgehammer",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/weapons/sledgehammer-rarity-mistico.png",
+
+        stats: {
+            attack: 55,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            confusionChance: 10
+        },
+
+        value: 3240,
+        sellValue: 1620
+
+    },
+
+    sledgehammer_legendary: {
+
+        id: "sledgehammer_legendary",
+        name: "Marreta Biônica",
+        type: "weapon",
+        slot: "weapon",
+        class: "crazy",
+        weaponType: "sledgehammer",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/weapons/sledgehammer-rarity-lendario.png",
+
+        stats: {
+            attack: 66,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            confusionChance: 11
+        },
+
+        value: 0,
+        sellValue: 18860
+
+    },
+
+    sledgehammer_ultraje: {
+
+        id: "sledgehammer_ultraje",
+        name: "Marreta Biônica",
+        type: "weapon",
+        slot: "weapon",
+        class: "crazy",
+        weaponType: "sledgehammer",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/weapons/sledgehammer-rarity-ultraje.png",
+
+        stats: {
+            attack: 80,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            confusionChance: 15
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

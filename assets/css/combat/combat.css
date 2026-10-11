@@ -344,6 +344,19 @@
     font-weight:800;
     text-shadow:none;
 }
+/* "Confusão!" (louca, tom de delírio roxo): selo violeta — mesma
+   lógica do selo do Miasma/Imitação (fundo próprio pra não sumir em
+   cima de nenhuma outra cor de caixa). */
+.combat-confusion{
+    display:inline-block;
+    padding:1px 8px;
+    border-radius:4px;
+    background:#4a2e5a;
+    color:#e8cff5;
+    border:1px solid #2e1a3a;
+    font-weight:800;
+    text-shadow:none;
+}
 
 /* ==========================================================
    NOTEBOOK

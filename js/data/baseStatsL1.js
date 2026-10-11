@@ -17,4 +17,14 @@ export default {
     // próprio é reforçado até o nível 25 (levels.js) pra não punir o
     // início, quando o inimigo ainda bate fraco e a cópia rende pouco.
     mimic: { attack: 5, armor: 5, agility: 5, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+    // O canhão de vidro do jogo: maior Ataque e Agilidade, menor
+    // Armadura e Vida de todas as 7 classes (ver levels.js — no nível
+    // 100 fecha em Vida 850/Ataque 172/Armadura 15/Agilidade 170).
+    // Ganhou um pouco mais de Armadura e um pouco menos de Ataque a
+    // partir do nível 51 (era Ataque 180/Armadura 8 no nível 100),
+    // depois de simulações mostrarem ela perdendo quase sempre contra
+    // Guerreiro e Pútrido em níveis altos. O especial dela é Confusão
+    // (ver ConfusionService.js), 100% vindo do equipamento, igual o
+    // Miasma do Pútrido.
+    crazy: { attack: 8, armor: 1, agility: 7, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
 };

@@ -10,6 +10,7 @@ import HitFlash from "../combat/HitFlash.js";
 import BoitataBurn from "../services/BoitataBurn.js";
 import MiasmaService from "../services/MiasmaService.js";
 import MimicService from "../services/MimicService.js";
+import ConfusionService from "../services/ConfusionService.js";
 import dungeons from "../data/dungeons.js";
 
 // Só os chefes "normais" (não o final secreto, que fica de fora da
@@ -509,6 +510,11 @@ export default class PvpView {
     renderLogLine(entry, combatantA, combatantB) {
         const name = entry.turn === "a" ? combatantA.name : combatantB.name;
         const defenderName = entry.turn === "a" ? combatantB.name : combatantA.name;
+        // Confusão "errou o ataque" — antes mesmo da esquiva (ver
+        // ConfusionService.js).
+        if (entry.confusionOutcome === "miss") {
+            return `<div class="pvp-log-line pvp-log-dodge">${name} errou o ataque, confuso!</div>`;
+        }
         if (entry.dodged) {
             return `<div class="pvp-log-line pvp-log-dodge">${name} esquivou!</div>`;
         }
@@ -532,12 +538,23 @@ export default class PvpView {
         const absorbed = entry.absorbed > 0
             ? ` <span class="pvp-log-absorption">(${defenderName} absorveu ${entry.absorbed})</span>`
             : "";
-        return `<div class="pvp-log-line">${name} causou ${entry.damage} de dano${crit}${steal}${absorbed}</div>`;
+        const confusion = entry.confusionProc || entry.confusionOutcome
+            ? ` <span class="combat-confusion">(Confusão!)</span>`
+            : "";
+        if (entry.confusionOutcome === "self") {
+            return `<div class="pvp-log-line">${name} se atacou sem querer: ${entry.damage} de dano${crit}${confusion}</div>`;
+        }
+        return `<div class="pvp-log-line">${name} causou ${entry.damage} de dano${crit}${steal}${absorbed}${confusion}</div>`;
     }
 
     renderLogLineTeam(entry, nameOf, petNameOf) {
         const attackerName = nameOf(entry.attackerId);
         const targetName = nameOf(entry.targetId);
+        // Confusão "errou o ataque" — antes mesmo da esquiva (ver
+        // ConfusionService.js).
+        if (entry.confusionOutcome === "miss") {
+            return `<div class="pvp-log-line pvp-log-dodge">${attackerName} errou o ataque, confuso!</div>`;
+        }
         if (entry.dodged) {
             return `<div class="pvp-log-line pvp-log-dodge">${targetName} esquivou de ${attackerName}!</div>`;
         }
@@ -559,7 +576,13 @@ export default class PvpView {
         const absorbed = entry.absorbed > 0
             ? ` <span class="pvp-log-absorption">(${targetName} absorveu ${entry.absorbed})</span>`
             : "";
-        return `<div class="pvp-log-line">${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}</div>`;
+        const confusion = entry.confusionProc || entry.confusionOutcome
+            ? ` <span class="combat-confusion">(Confusão!)</span>`
+            : "";
+        if (entry.confusionOutcome === "self") {
+            return `<div class="pvp-log-line">${attackerName} se atacou sem querer: ${entry.damage} de dano${crit}${confusion}</div>`;
+        }
+        return `<div class="pvp-log-line">${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}${confusion}</div>`;
     }
 
     currentOpponentSnapshot() {
@@ -883,6 +906,14 @@ export default class PvpView {
         const isMe = (entry.turn === "a") === this.isPlayerA;
         const opponentName = this.currentOpponentSnapshot()?.name ?? "Adversário";
 
+        // Confusão "errou o ataque" — antes mesmo da esquiva, tem
+        // mensagem própria (ver ConfusionService.js e CombatEngine.js).
+        if (entry.confusionOutcome === "miss") {
+            return isMe
+                ? ConfusionService.buildOutcomeMessage("miss", "Você")
+                : ConfusionService.buildOutcomeMessage("miss", opponentName);
+        }
+
         if (entry.dodged) {
             return isMe
                 ? `<span class="combat-dodge">${opponentName} esquivou do seu ataque!</span>`
@@ -919,9 +950,19 @@ export default class PvpView {
                 : `<span class="combat-pet-bite">${petName} de ${opponentName} agiu!</span>${damage}${heal}`;
         }
 
+        // Confusão "ataca a si mesmo" ou "acerta o oponente mesmo
+        // confuso" — prefixo próprio antes da linha de dano normal (ver
+        // CombatEngine.createAttackMessage, mesmo padrão).
+        const confusionSelfPrefix = entry.confusionOutcome === "self"
+            ? `${ConfusionService.buildOutcomeMessage("self", isMe ? "Você" : opponentName)}<br>`
+            : "";
+        const confusionOpponentPrefix = entry.confusionOutcome === "opponent"
+            ? `${ConfusionService.buildOutcomeMessage("opponent", isMe ? "Você" : opponentName, isMe ? opponentName : "você")}<br>`
+            : "";
+
         if (isMe) {
 
-            let message = "";
+            let message = confusionSelfPrefix + confusionOpponentPrefix;
 
             message += MiasmaService.buildWeakenedMessage(entry, "você", opponentName);
 
@@ -929,7 +970,9 @@ export default class PvpView {
                 message += `<span class="combat-critical">Golpe Crítico!</span><br>`;
             }
 
-            message += `Você causou <strong>${entry.damage}</strong> de dano.`;
+            message += entry.confusionOutcome === "self"
+                ? `Você causou <strong>${entry.damage}</strong> de dano em si mesmo.`
+                : `Você causou <strong>${entry.damage}</strong> de dano.`;
 
             if (entry.lifeSteal > 0) {
                 message += `<br><span class="combat-life-steal">Life Steal!</span> Recuperou <strong>${entry.lifeSteal}</strong> HP.`;
@@ -943,11 +986,15 @@ export default class PvpView {
                 message += `<br>${MiasmaService.buildProcMessage(opponentName, entry)}`;
             }
 
+            if (entry.confusionProc) {
+                message += `<br>${ConfusionService.buildProcMessage(opponentName)}`;
+            }
+
             return message;
 
         }
 
-        let hitMessage = "";
+        let hitMessage = confusionSelfPrefix + confusionOpponentPrefix;
 
         hitMessage += MiasmaService.buildWeakenedMessage(entry, opponentName, "você");
 
@@ -955,7 +1002,9 @@ export default class PvpView {
             hitMessage += `<span class="combat-critical">Ataque Crítico!</span><br>`;
         }
 
-        hitMessage += ` Você recebeu um golpe de <strong>${opponentName}</strong>, <strong>${entry.damage}</strong> de dano.`;
+        hitMessage += entry.confusionOutcome === "self"
+            ? ` ${opponentName} causou <strong>${entry.damage}</strong> de dano nele mesmo.`
+            : ` Você recebeu um golpe de <strong>${opponentName}</strong>, <strong>${entry.damage}</strong> de dano.`;
 
         if (entry.absorbed > 0) {
             hitMessage += `<br><span class="combat-absorption">Absorção!</span> Absorveu <strong>${entry.absorbed}</strong> do golpe.`;
@@ -970,6 +1019,10 @@ export default class PvpView {
 
         if (entry.miasmaProc) {
             hitMessage += `<br>${MiasmaService.buildProcMessage("você", entry)}`;
+        }
+
+        if (entry.confusionProc) {
+            hitMessage += `<br>${ConfusionService.buildProcMessage("você")}`;
         }
 
         return hitMessage;
@@ -1018,6 +1071,12 @@ export default class PvpView {
             });
         }
 
+        // Confusão "errou o ataque" — antes mesmo da esquiva, tem
+        // mensagem própria (ver ConfusionService.js).
+        if (entry.confusionOutcome === "miss") {
+            return ConfusionService.buildOutcomeMessage("miss", isMe ? "Você" : attackerName);
+        }
+
         if (entry.dodged) {
             if (targetIsMe) return `<span class="combat-dodge">Você esquivou do ataque de ${attackerName}!</span>`;
             return `<span class="combat-dodge">${targetName} esquivou do ataque de ${attackerName}!</span>`;
@@ -1041,9 +1100,19 @@ export default class PvpView {
             return `<span class="combat-pet-bite">${petLabel} agiu!</span>${damage}${heal}`;
         }
 
+        // Confusão "ataca a si mesmo" ou "acerta o alvo mesmo confuso" —
+        // prefixo próprio antes da linha de dano normal (ver
+        // CombatEngine.createAttackMessage, mesmo padrão).
+        const confusionSelfPrefix = entry.confusionOutcome === "self"
+            ? `${ConfusionService.buildOutcomeMessage("self", isMe ? "Você" : attackerName)}<br>`
+            : "";
+        const confusionOpponentPrefix = entry.confusionOutcome === "opponent"
+            ? `${ConfusionService.buildOutcomeMessage("opponent", isMe ? "Você" : attackerName, targetIsMe ? "você" : targetName)}<br>`
+            : "";
+
         if (isMe) {
 
-            let message = "";
+            let message = confusionSelfPrefix + confusionOpponentPrefix;
 
             message += MiasmaService.buildWeakenedMessage(entry, "você", targetName);
 
@@ -1051,7 +1120,9 @@ export default class PvpView {
                 message += `<span class="combat-critical">Golpe Crítico!</span><br>`;
             }
 
-            message += `Você causou <strong>${entry.damage}</strong> de dano em <strong>${targetName}</strong>.`;
+            message += entry.confusionOutcome === "self"
+                ? `Você causou <strong>${entry.damage}</strong> de dano em si mesmo.`
+                : `Você causou <strong>${entry.damage}</strong> de dano em <strong>${targetName}</strong>.`;
 
             if (entry.lifeSteal > 0) {
                 message += `<br><span class="combat-life-steal">Life Steal!</span> Recuperou <strong>${entry.lifeSteal}</strong> HP.`;
@@ -1065,13 +1136,17 @@ export default class PvpView {
                 message += `<br>${MiasmaService.buildProcMessage(targetName, entry)}`;
             }
 
+            if (entry.confusionProc) {
+                message += `<br>${ConfusionService.buildProcMessage(targetName)}`;
+            }
+
             return message;
 
         }
 
         if (targetIsMe) {
 
-            let hitMessage = "";
+            let hitMessage = confusionSelfPrefix + confusionOpponentPrefix;
 
             hitMessage += MiasmaService.buildWeakenedMessage(entry, attackerName, "você");
 
@@ -1079,7 +1154,9 @@ export default class PvpView {
                 hitMessage += `<span class="combat-critical">Ataque Crítico!</span><br>`;
             }
 
-            hitMessage += ` Você recebeu um golpe de <strong>${attackerName}</strong>, <strong>${entry.damage}</strong> de dano.`;
+            hitMessage += entry.confusionOutcome === "self"
+                ? ` ${attackerName} causou <strong>${entry.damage}</strong> de dano nele mesmo.`
+                : ` Você recebeu um golpe de <strong>${attackerName}</strong>, <strong>${entry.damage}</strong> de dano.`;
 
             if (entry.absorbed > 0) {
                 hitMessage += `<br><span class="combat-absorption">Absorção!</span> Absorveu <strong>${entry.absorbed}</strong> do golpe.`;
@@ -1093,6 +1170,10 @@ export default class PvpView {
                 hitMessage += `<br>${MiasmaService.buildProcMessage("você", entry)}`;
             }
 
+            if (entry.confusionProc) {
+                hitMessage += `<br>${ConfusionService.buildProcMessage("você")}`;
+            }
+
             return hitMessage;
 
         }
@@ -1102,7 +1183,13 @@ export default class PvpView {
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const mimic = entry.mimicBonus > 0 ? ` <span class="combat-mimic">(Imitação!)</span>` : "";
         const miasma = entry.miasmaProc ? ` <span class="combat-miasma">(Miasma!)</span>` : "";
-        return `${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${mimic}${miasma}.`;
+        const confusion = entry.confusionProc || entry.confusionOutcome
+            ? ` <span class="combat-confusion">(Confusão!)</span>`
+            : "";
+        if (entry.confusionOutcome === "self") {
+            return `${attackerName} se atacou sem querer, causando ${entry.damage} de dano${crit}${confusion}.`;
+        }
+        return `${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${mimic}${miasma}${confusion}.`;
 
     }
 
@@ -1189,7 +1276,7 @@ export default class PvpView {
 
             const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
-            await CombatToast.show(this.buildAttackMessage(entry), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry), speed);
+            await CombatToast.show(this.buildAttackMessage(entry), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry), speed);
 
             await this.sleep(500 / speed);
 
@@ -1278,7 +1365,7 @@ export default class PvpView {
 
                 const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
-                await CombatToast.show(this.buildTeamAttackMessage(entry, nameOf, petNameOf), this.buildTeamToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry), speed);
+                await CombatToast.show(this.buildTeamAttackMessage(entry, nameOf, petNameOf), this.buildTeamToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry), speed);
 
                 await this.sleep(450 / speed);
 

@@ -331,6 +331,7 @@ export default class BlacksmithWeapon {
             case "absorption": return "Absorção";
             case "miasmaChance": return "Miasma";
             case "reflection": return "Imitação";
+            case "confusionChance": return "Confusão";
             default: return stat;
         }
     }
@@ -346,6 +347,7 @@ export default class BlacksmithWeapon {
             case "absorption": return "🪨";
             case "miasmaChance": return "🦠";
             case "reflection": return "🪞";
+            case "confusionChance": return "🌀";
             default: return "•";
         }
     }
