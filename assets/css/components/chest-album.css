@@ -8,6 +8,14 @@
     gap:12px;
 }
 
+/* Chat + Correio lado a lado (não empilhados) — os dois são o mesmo
+   tipo de botão redondo (.hud-tool), fica estranho um embaixo do outro. */
+.hud-tool-row{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+}
+
 /* ==========================================================
    BAÚ (HUD)
 ========================================================== */

@@ -73,5 +73,40 @@ service cloud.firestore {
         && request.resource.data.power <= 500000;
     }
 
+    // Correio — provisório (ver js/services/MailService.js): só a conta
+    // admin abaixo pode mandar carta normal. O uid é o MESMO de
+    // js/data/admins.js — os dois precisam ficar sincronizados à mão,
+    // regra não lê o array do código. "Devolução automática" (carta
+    // expirada depois de 30 dias sem coleta) é a ÚNICA outra forma de
+    // criar uma carta, e só pode entrar na caixa do próprio admin — ou
+    // seja, mesmo alguém forjando uma devolução falsa não ganha nada
+    // pra si, só "suja" a caixa do admin. Quando existir envio
+    // jogador→jogador, essa parte da regra precisa ficar bem mais
+    // rígida (hoje ela não confirma que a carta original expirada de
+    // verdade existiu).
+    match /mail/{recipientUid}/letters/{letterId} {
+
+      allow read, delete: if isOwner(recipientUid);
+
+      allow create: if signedIn()
+        && recipientUid != request.auth.uid
+        && request.resource.data.senderUid == request.auth.uid
+        && request.resource.data.senderName is string
+        && request.resource.data.senderName.size() <= 60
+        && request.resource.data.title is string
+        && request.resource.data.title.size() <= 30
+        && request.resource.data.body is string
+        && request.resource.data.body.size() <= 250
+        && request.resource.data.items is list
+        && request.resource.data.items.size() <= 3
+        && request.resource.data.sentAt is number
+        && request.resource.data.expiredReturn is bool
+        && (
+          (request.auth.uid == "qgZA5v7Q1IWLjYc99bNrrRJd14X2" && request.resource.data.expiredReturn == false)
+          || (request.resource.data.expiredReturn == true && recipientUid == "qgZA5v7Q1IWLjYc99bNrrRJd14X2")
+        );
+
+    }
+
   }
 }

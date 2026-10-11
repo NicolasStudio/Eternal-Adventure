@@ -51,7 +51,8 @@ import {
     query,
     orderBy,
     limit,
-    getDocs
+    getDocs,
+    onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 // A apiKey abaixo é segura de deixar pública — a proteção de verdade
@@ -122,5 +123,6 @@ export {
     query,
     orderBy,
     limit,
-    getDocs
+    getDocs,
+    onSnapshot
 };
