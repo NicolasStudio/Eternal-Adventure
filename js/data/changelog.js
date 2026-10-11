@@ -39,7 +39,8 @@ export default [
             "Novo botão 'Informações do Combate' depois de cada luta (Dungeons, PVP 1x1, PVP 2x2 e Cooperativo), com 14 números — dano causado, recebido, mitigado pela armadura, real (sem a armadura do alvo), absorvido e vida roubada; quantidade de esquivas, Absorções, Críticos, Imitações, Miasmas e Roubos de Vida; e cura/dano do pet — some ao continuar ou sair da tela",
             "Informações do Combate ganhou uma aba 'Gráfico': linha por rodada pra cada um dos 14 números, escolhendo uma métrica por vez numa lista colorida",
             "Novo Correio: ícone de envelope na tela inicial, com caixa de entrada (até 3 itens por carta, 30 dias pra coletar antes de expirar). Enviar carta ainda está restrito à administração por enquanto",
-            "Convite do Cooperativo: novo botão ao lado do campo de nome que abre a lista dos jogadores online e com nível suficiente pra entrar — clicar num nome já preenche o campo"
+            "Convite do Cooperativo: novo botão ao lado do campo de nome que abre a lista dos jogadores online e com nível suficiente pra entrar — clicar num nome já preenche o campo",
+            "Pets: XP necessária pra subir de nível entre o 25 e o 49 ficou 25% mais cara (além do dobro que já valia a partir do 18, os dois juntam: 2,5x a curva normal nessa faixa)"
         ]
     },
 
