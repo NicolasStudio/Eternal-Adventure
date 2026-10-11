@@ -56,6 +56,12 @@ export default class CityView {
     // conforme o jogador atinge o nível necessário.
     static ENCHANT_UNLOCK_LEVEL = 50;
 
+    // Pet (Vender Pet no Mercado, Veterinário na Saúde) só faz sentido
+    // depois que a Fazenda libera — é lá que se cria/evolui pet (ver
+    // FARM_UNLOCK_LEVEL em MarketViewBuy.js e farmLevelLocked em
+    // HudScreen.js, mesmo nível 30).
+    static PET_UNLOCK_LEVEL = 30;
+
     renderBlacksmith() {
 
         const level = this.game.player.level;
@@ -121,6 +127,11 @@ export default class CityView {
 
     renderMarket() {
 
+        const level = this.game.player.level;
+        const petReady = level >= CityView.PET_UNLOCK_LEVEL;
+
+        const petMessage = `Disponível a partir do nível ${CityView.PET_UNLOCK_LEVEL} (você está no nível ${level}).`;
+
         return `
             <article class="city-card">
 
@@ -144,10 +155,21 @@ export default class CityView {
                         💰 Vender
                     </div>
 
-                    <div class="city-option city-action"
-                         data-view="market-pet">
-                        🐾 Vender Pet
-                    </div>
+                    ${
+                        petReady
+                            ? `
+                                <div class="city-option city-action"
+                                     data-view="market-pet">
+                                    🐾 Vender Pet
+                                </div>
+                            `
+                            : `
+                                <div class="city-option city-action disabled"
+                                     data-message="${petMessage}">
+                                    🐾 Vender Pet
+                                </div>
+                            `
+                    }
 
                 </div>
 
@@ -157,6 +179,11 @@ export default class CityView {
     }
 
     renderHospital() {
+
+        const level = this.game.player.level;
+        const petReady = level >= CityView.PET_UNLOCK_LEVEL;
+
+        const petMessage = `Disponível a partir do nível ${CityView.PET_UNLOCK_LEVEL} (você está no nível ${level}).`;
 
         return `
             <article class="city-card">
@@ -176,10 +203,21 @@ export default class CityView {
                         🏥 Ir para Enfermaria
                     </div>
 
-                    <div class="city-option city-action"
-                         data-view="veterinary">
-                        🐾 Ir para Veterinário
-                    </div>
+                    ${
+                        petReady
+                            ? `
+                                <div class="city-option city-action"
+                                     data-view="veterinary">
+                                    🐾 Ir para Veterinário
+                                </div>
+                            `
+                            : `
+                                <div class="city-option city-action disabled"
+                                     data-message="${petMessage}">
+                                    🐾 Ir para Veterinário
+                                </div>
+                            `
+                    }
 
                 </div>
 

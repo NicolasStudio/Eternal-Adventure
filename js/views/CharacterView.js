@@ -11,6 +11,13 @@ import { ABSORPTION_RATIO_PVE, ABSORPTION_RATIO_PVP, ABSORPTION_CAP } from "../c
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
 export default class CharacterView {
+
+    // Aba Pets só faz sentido depois que a Fazenda libera — é lá que se
+    // cria/evolui pet (mesmo nível 30 do FARM_UNLOCK_LEVEL em
+    // MarketViewBuy.js, farmLevelLocked em HudScreen.js e
+    // CityView.PET_UNLOCK_LEVEL).
+    static PET_UNLOCK_LEVEL = 30;
+
     constructor(game) {
         this.game = game;
         this.leftTab = "status";
@@ -345,11 +352,12 @@ export default class CharacterView {
     }
 
     renderLeftTabs() {
+        const petUnlocked = this.game.player.level >= CharacterView.PET_UNLOCK_LEVEL;
         return `
             <div class="character-tabs">
                 <button class="character-tab ${this.leftTab === "status" ? "active" : ""}" data-tab="status">Status</button>
                 <button class="character-tab ${this.leftTab === "equipped" ? "active" : ""}" data-tab="equipped">Equipados</button>
-                <button class="character-tab ${this.leftTab === "pets" ? "active" : ""}" data-tab="pets">Pets</button>
+                ${petUnlocked ? `<button class="character-tab ${this.leftTab === "pets" ? "active" : ""}" data-tab="pets">Pets</button>` : ""}
             </div>
         `;
     }
