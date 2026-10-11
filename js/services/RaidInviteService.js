@@ -63,6 +63,26 @@ export default class RaidInviteService {
 
     }
 
+    // Candidatos pro autocompletar do campo de nome (ver RaidInviteModal) —
+    // mesmas regras de elegibilidade do resolveTarget (nível mínimo,
+    // não é o próprio host), já filtrando só quem está online agora.
+    // Mesmo cruzamento ranking+presença do GlobalRankingModal.
+    static async listInvitableOnlinePlayers(selfUid) {
+
+        const [entries, onlineUids] = await Promise.all([
+            SaveService.getFullLeaderboard(),
+            PresenceService.getOnlineUids()
+        ]);
+
+        return entries
+            .filter(entry => entry.uid !== selfUid)
+            .filter(entry => onlineUids.has(entry.uid))
+            .filter(entry => (entry.level ?? 0) >= RAID_MIN_LEVEL)
+            .map(entry => ({ uid: entry.uid, name: entry.name, level: entry.level }))
+            .sort((a, b) => a.name.localeCompare(b.name));
+
+    }
+
     // invite: { fromName, matchId (null = fila), waitFloor, floor, count }.
     // onReply(status) — "accepted" | "declined" | "busy" | "timeout".
     static async send(targetUid, invite, onReply) {

@@ -518,6 +518,95 @@
 .raid-invite-input:focus{
     border-color:#c79b37;
 }
+
+/* Campo + botão de jogadores online lado a lado — position:relative
+   aqui é o que ancora o painel (.raid-invite-picker) logo abaixo. */
+.raid-invite-input-row{
+    position:relative;
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
+.raid-invite-input-row .raid-invite-input{
+    flex:1;
+    min-width:0;
+    /* Mesma altura do botão ao lado (.raid-invite-picker-toggle, 46px) —
+       sem isso o padding vertical do input dava uma altura menor,
+       desalinhando os dois na linha. */
+    height:46px;
+    padding-top:0;
+    padding-bottom:0;
+}
+.raid-invite-picker-toggle{
+    flex-shrink:0;
+    width:46px;
+    height:46px;
+    border:1px solid #7d6846;
+    border-radius:6px;
+    background:rgba(0,0,0,.45);
+    color:#d4a373;
+    font-size:16px;
+    cursor:pointer;
+    transition:.2s;
+}
+.raid-invite-picker-toggle:hover{
+    border-color:#c79b37;
+    color:#f1c75c;
+}
+
+/* Painel flutuante abaixo do campo — mesma ideia de popup com
+   clique-fora/Esc fechando do seletor de emoji do chat
+   (.chat-emoji-picker), só em lista em vez de grade. */
+.raid-invite-picker{
+    position:absolute;
+    top:calc(100% + 8px);
+    left:0;
+    right:0;
+    z-index:10;
+    max-height:220px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    padding:8px;
+    background:rgba(18,13,9,.98);
+    border:1px solid #7d6846;
+    border-radius:8px;
+    box-shadow:0 4px 18px rgba(0,0,0,.6);
+}
+.raid-invite-picker-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:8px 10px;
+    border:none;
+    border-radius:5px;
+    background:transparent;
+    color:#efe2bf;
+    font-family:"Cinzel",serif;
+    font-size:.85rem;
+    text-align:left;
+    cursor:pointer;
+    transition:background .15s;
+}
+.raid-invite-picker-item:hover{
+    background:rgba(212,163,115,.18);
+}
+.raid-invite-picker-level{
+    flex-shrink:0;
+    color:#9e8d70;
+    font-size:.75rem;
+}
+.raid-invite-picker-empty{
+    margin:0;
+    padding:10px;
+    text-align:center;
+    color:#9e8d70;
+    font-style:italic;
+    font-size:.82rem;
+}
+
 .raid-invite-error{
     margin:12px 0 0;
     text-align:center;
