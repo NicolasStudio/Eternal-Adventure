@@ -16,6 +16,7 @@ import legacyLevels_v14 from "../data/legacyLevels_v14.js";
 import legacyLevels_v15 from "../data/legacyLevels_v15.js";
 import legacyLevels_v16 from "../data/legacyLevels_v16.js";
 import legacyLevels_v17 from "../data/legacyLevels_v17.js";
+import legacyLevels_v18 from "../data/legacyLevels_v18.js";
 import baseStatsL1 from "../data/baseStatsL1.js";
 
 // Sobe quando a curva de levels.js muda de um jeito que exige recalcular
@@ -45,16 +46,20 @@ import baseStatsL1 from "../data/baseStatsL1.js";
 // Calças/Botas) — total de Armadura dele não muda, só a fonte. Guerreiro
 // fica como estava no v16, sem mudança nenhuma aqui · v18 Pútrido +18 de
 // Ataque entre os níveis 80-100, e mais +15 por cima disso entre os
-// níveis 85-100 (as duas camadas somam nesse trecho)
-export const CURRENT_BALANCE_VERSION = 18;
+// níveis 85-100 (as duas camadas somam nesse trecho) · v19 Louca +7 de
+// Armadura/-8 de Ataque até o nível 100 (mais +2/-2 entre 101-110),
+// depois de simulações de PVP mostrarem ela perdendo quase sempre pro
+// Guerreiro e pro Pútrido em níveis altos
+export const CURRENT_BALANCE_VERSION = 19;
 
-// miasmaChance/reflection entram aqui só pra não serem DESCARTADOS na
-// migração (a tabela de migração nunca tem esses campos, então sempre
-// passam direto como "extra" — preserva o que o Pútrido/Mímico já
-// tinham ganho de equipamento, ex: Quartzo Rosa ou Imitação do item).
-// Nenhuma curva de level up (nem antiga nem atual) dá pontos neles,
-// então isso nunca soma nada por conta própria.
-const STAT_KEYS = ["attack", "armor", "agility", "criticalChance", "lifeSteal", "penetration", "absorption", "miasmaChance", "reflection"];
+// miasmaChance/reflection/confusionChance entram aqui só pra não serem
+// DESCARTADOS na migração (a tabela de migração nunca tem esses
+// campos, então sempre passam direto como "extra" — preserva o que o
+// Pútrido/Mímico/Louca já tinham ganho de fora do level up, ex: Cara
+// ou Coroa? sorteando esse especial). Nenhuma curva de level up (nem
+// antiga nem atual) dá pontos neles, então isso nunca soma nada por
+// conta própria.
+const STAT_KEYS = ["attack", "armor", "agility", "criticalChance", "lifeSteal", "penetration", "absorption", "miasmaChance", "reflection", "confusionChance"];
 
 const LEGACY_TABLES = {
     1: legacyLevels_v1,
@@ -73,7 +78,8 @@ const LEGACY_TABLES = {
     14: legacyLevels_v14,
     15: legacyLevels_v15,
     16: legacyLevels_v16,
-    17: legacyLevels_v17
+    17: legacyLevels_v17,
+    18: legacyLevels_v18
 };
 
 export default class StatsMigrationService {
