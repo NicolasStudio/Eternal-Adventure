@@ -31,6 +31,8 @@ const METRIC_GROUPS = [
             { key: "criticalCount", label: "Críticos", color: "#f032e6" },
             { key: "mimicCount", label: "Imitação", color: "#c99856" },
             { key: "miasmaCount", label: "Miasma", color: "#b5cf4a" },
+            { key: "confusionCount", label: "Confusão", color: "#9d4edd" },
+            { key: "confusedCount", label: "Ataques confusos", color: "#ffa07a" },
             { key: "lifeStealCount", label: "Roubo de vida", color: "#fabebe" }
         ]
     },

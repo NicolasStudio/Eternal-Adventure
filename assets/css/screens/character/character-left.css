@@ -108,12 +108,14 @@
 }
 
 /* ==========================================================
-   LIGHTBOX (pet expandido no centro) — mesmo padrão visual do
-   lightbox de cartas do álbum (ver AlbumModal/chest-album.css),
-   reaproveitando as mesmas animações (rewardFade/rewardPopup, já
-   carregadas globalmente pelo reward-modal.css).
+   LIGHTBOX (pet ou personagem expandido no centro) — mesmo padrão
+   visual do lightbox de cartas do álbum (ver AlbumModal/chest-
+   album.css), reaproveitando as mesmas animações (rewardFade/
+   rewardPopup, já carregadas globalmente pelo reward-modal.css).
+   Genérico o bastante pra servir tanto o pet (uma imagem só) quanto
+   o personagem (crossfade hud/full no hover, ver bloco abaixo).
 ========================================================== */
-.pet-lightbox-overlay{
+.avatar-lightbox-overlay{
     position:fixed;
     inset:0;
     z-index:100000;
@@ -126,7 +128,7 @@
     animation:rewardFade .2s ease;
     cursor:pointer;
 }
-.pet-lightbox-figure{
+.avatar-lightbox-figure{
     max-width:min(420px,86vw);
     display:flex;
     flex-direction:column;
@@ -135,19 +137,35 @@
     cursor:default;
     animation:rewardPopup .25s ease;
 }
-.pet-lightbox-figure img{
+/* Filho DIRETO só (não os img dentro do .character-avatar-wrapper do
+   personagem, ver bloco abaixo — esses já têm moldura própria no
+   wrapper, duplicar aqui dava borda/sombra dobrada). */
+.avatar-lightbox-figure > img{
     width:100%;
     border-radius:12px;
     border:2px solid #7d6846;
     box-shadow:0 0 40px rgba(0,0,0,.7);
     image-rendering:pixelated;
 }
-.pet-lightbox-figure figcaption{
+.avatar-lightbox-figure figcaption{
     font-family:"Cinzel",serif;
     font-size:1.2rem;
     color:#f1c75c;
     text-shadow:0 0 16px rgba(212,163,115,.4);
     text-align:center;
+}
+
+/* Personagem dentro do lightbox: reaproveita o mesmo wrapper/crossfade
+   hud↔full do avatar principal (ver bloco AVATAR acima), só maior e
+   com a moldura do lightbox em vez do quadrado 150x150 padrão. */
+.avatar-lightbox-figure .character-avatar-wrapper{
+    width:min(420px,86vw);
+    height:min(420px,86vw);
+    margin:0;
+    border-radius:12px;
+    border:2px solid #7d6846;
+    box-shadow:0 0 40px rgba(0,0,0,.7);
+    cursor:default;
 }
 
 /* ==========================================================

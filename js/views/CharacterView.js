@@ -29,6 +29,8 @@ export default class CharacterView {
         this.releasePetModal = new FarmConfirmModal();
         this.petLightbox = null;
         this.petLightboxKeyHandler = null;
+        this.characterLightbox = null;
+        this.characterLightboxKeyHandler = null;
     }
 
     // Semente, colheita da Fazenda (petFeedValue) ou Ração de Pet —
@@ -924,6 +926,16 @@ export default class CharacterView {
     }
 
     registerEvents(container = document) {
+
+        // Retrato do personagem (aba Status, não o do pet) — abre o
+        // lightbox (ver showCharacterLightbox). :not(...-pet) porque
+        // as duas abas reaproveitam a mesma classe de wrapper, mas só
+        // uma delas existe de cada vez (nunca colidem de verdade).
+        const characterAvatar = container.querySelector(".character-avatar-wrapper:not(.character-avatar-wrapper-pet)");
+        if (characterAvatar) {
+            characterAvatar.addEventListener("click", () => this.showCharacterLightbox());
+        }
+
         const tabs = container.querySelectorAll(".character-tab");
         tabs.forEach(tab => {
             tab.addEventListener("click", () => {
@@ -1599,9 +1611,9 @@ export default class CharacterView {
         this.hidePetLightbox();
 
         this.petLightbox = document.createElement("div");
-        this.petLightbox.className = "pet-lightbox-overlay";
+        this.petLightbox.className = "avatar-lightbox-overlay";
         this.petLightbox.innerHTML = `
-            <figure class="pet-lightbox-figure">
+            <figure class="avatar-lightbox-figure">
                 <img src="${pet.image ?? pet.icon}" alt="${pet.name}">
                 <figcaption>${pet.name}</figcaption>
             </figure>
@@ -1629,6 +1641,58 @@ export default class CharacterView {
         if (this.petLightboxKeyHandler) {
             document.removeEventListener("keydown", this.petLightboxKeyHandler);
             this.petLightboxKeyHandler = null;
+        }
+
+    }
+
+    // Expande o retrato do personagem no centro da tela — mesmo padrão
+    // do showPetLightbox acima, reaproveitando o wrapper hud↔full que
+    // já existe no avatar principal (ver renderStatus), então o hover
+    // continua alternando entre as duas imagens dentro do lightbox
+    // também. Clicar fora ou Esc fecha.
+    showCharacterLightbox() {
+
+        this.hideCharacterLightbox();
+
+        const player = this.game.player;
+        const name = player.transcendence?.name ?? player.class.name;
+        const hud = player.transcendence?.hud ?? player.class.hud;
+        const full = player.transcendence?.image ?? player.class.image;
+
+        this.characterLightbox = document.createElement("div");
+        this.characterLightbox.className = "avatar-lightbox-overlay";
+        this.characterLightbox.innerHTML = `
+            <figure class="avatar-lightbox-figure">
+                <div class="character-avatar-wrapper">
+                    <img class="character-avatar" src="${hud}" alt="${name}">
+                    <img class="character-avatar character-avatar-full" src="${full}" alt="${name}">
+                </div>
+                <figcaption>${name}</figcaption>
+            </figure>
+        `;
+        document.body.appendChild(this.characterLightbox);
+
+        this.characterLightbox.addEventListener("click", (event) => {
+            if (event.target === this.characterLightbox) this.hideCharacterLightbox();
+        });
+
+        this.characterLightboxKeyHandler = (event) => {
+            if (event.key === "Escape") this.hideCharacterLightbox();
+        };
+        document.addEventListener("keydown", this.characterLightboxKeyHandler);
+
+    }
+
+    hideCharacterLightbox() {
+
+        if (this.characterLightbox) {
+            this.characterLightbox.remove();
+            this.characterLightbox = null;
+        }
+
+        if (this.characterLightboxKeyHandler) {
+            document.removeEventListener("keydown", this.characterLightboxKeyHandler);
+            this.characterLightboxKeyHandler = null;
         }
 
     }

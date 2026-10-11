@@ -17,6 +17,7 @@ import legacyLevels_v15 from "../data/legacyLevels_v15.js";
 import legacyLevels_v16 from "../data/legacyLevels_v16.js";
 import legacyLevels_v17 from "../data/legacyLevels_v17.js";
 import legacyLevels_v18 from "../data/legacyLevels_v18.js";
+import legacyLevels_v19 from "../data/legacyLevels_v19.js";
 import baseStatsL1 from "../data/baseStatsL1.js";
 
 // Sobe quando a curva de levels.js muda de um jeito que exige recalcular
@@ -49,8 +50,12 @@ import baseStatsL1 from "../data/baseStatsL1.js";
 // níveis 85-100 (as duas camadas somam nesse trecho) · v19 Louca +7 de
 // Armadura/-8 de Ataque até o nível 100 (mais +2/-2 entre 101-110),
 // depois de simulações de PVP mostrarem ela perdendo quase sempre pro
-// Guerreiro e pro Pútrido em níveis altos
-export const CURRENT_BALANCE_VERSION = 19;
+// Guerreiro e pro Pútrido em níveis altos · v20 Louca -45 de Agilidade
+// até o nível 100 (mais -4 entre 101-110) — personagens de fim de jogo
+// (equipamento + anel/amuleto + pet + talentos) estavam passando de
+// 500 de Agilidade, desproporcional mesmo pra uma classe desenhada
+// pra ser a mais ágil
+export const CURRENT_BALANCE_VERSION = 20;
 
 // miasmaChance/reflection/confusionChance entram aqui só pra não serem
 // DESCARTADOS na migração (a tabela de migração nunca tem esses
@@ -79,7 +84,8 @@ const LEGACY_TABLES = {
     15: legacyLevels_v15,
     16: legacyLevels_v16,
     17: legacyLevels_v17,
-    18: legacyLevels_v18
+    18: legacyLevels_v18,
+    19: legacyLevels_v19
 };
 
 export default class StatsMigrationService {

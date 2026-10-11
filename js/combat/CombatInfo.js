@@ -6,6 +6,13 @@
 // critical/lifeSteal/absorbed/mimicBonus/miasmaProc) ou os formatos
 // especiais burn/petBite(+revive). Puramente informativo: nada aqui é
 // salvo, cada combate gera um retrato novo.
+//
+// confusionCount/confusedCount são as duas pontas da Confusão da Louca
+// (ver ConfusionService.js): confusionCount conta quantas vezes ESTE
+// jogador confundiu o oponente (confusionProc, igual miasmaCount);
+// confusedCount conta quantas vezes um ataque DELE MESMO saiu errado
+// por já estar confuso (confusionOutcome self/opponent/miss) — as duas
+// podem acontecer em golpes diferentes, não são a mesma coisa.
 
 // Resumo do combate pra UM jogador específico — soma o log inteiro
 // (todos os lados aparecem nele) filtrando só o que é dele.
@@ -25,6 +32,8 @@ export function buildCombatInfo(log, playerId) {
         criticalCount: 0,
         mimicCount: 0,
         miasmaCount: 0,
+        confusionCount: 0,
+        confusedCount: 0,
         lifeStealCount: 0,
         // Pet
         petHealing: 0,
@@ -68,6 +77,8 @@ export function buildCombatInfo(log, playerId) {
             if (entry.critical) info.criticalCount++;
             if (entry.mimicBonus > 0) info.mimicCount++;
             if (entry.miasmaProc) info.miasmaCount++;
+            if (entry.confusionProc) info.confusionCount++;
+            if (entry.confusionOutcome) info.confusedCount++;
 
             if (entry.lifeSteal > 0) {
                 info.lifeStolen += entry.lifeSteal;
@@ -104,8 +115,8 @@ export function buildCombatTimeline(log, playerId) {
     const fields = [
         "damageDealt", "damageReceived", "armorMitigated", "rawDamageDealt",
         "absorbedValue", "lifeStolen", "dodges", "absorptionCount",
-        "criticalCount", "mimicCount", "miasmaCount", "lifeStealCount",
-        "petHealing", "petDamage"
+        "criticalCount", "mimicCount", "miasmaCount", "confusionCount",
+        "confusedCount", "lifeStealCount", "petHealing", "petDamage"
     ];
 
     let maxRound = 0;
@@ -148,6 +159,8 @@ export function buildCombatTimeline(log, playerId) {
             if (entry.critical) addDelta(round, "criticalCount", 1);
             if (entry.mimicBonus > 0) addDelta(round, "mimicCount", 1);
             if (entry.miasmaProc) addDelta(round, "miasmaCount", 1);
+            if (entry.confusionProc) addDelta(round, "confusionCount", 1);
+            if (entry.confusionOutcome) addDelta(round, "confusedCount", 1);
 
             if (entry.lifeSteal > 0) {
                 addDelta(round, "lifeStolen", entry.lifeSteal);

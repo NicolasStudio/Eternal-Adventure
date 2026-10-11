@@ -24,7 +24,7 @@ export default {
         barbarian: { life: 9, attack: 2, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 0, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 7, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 7, attack: 2, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     5: {
         warrior: { life: 16, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -42,7 +42,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 7, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 7, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     7: {
         warrior: { life: 16, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -60,7 +60,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     9: {
         warrior: { life: 16, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -78,7 +78,7 @@ export default {
         barbarian: { life: 9, attack: 2, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 2, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     11: {
         warrior: { life: 17, attack: 1, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -96,7 +96,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     13: {
         warrior: { life: 16, attack: 0, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -123,7 +123,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     16: {
         warrior: { life: 17, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -141,7 +141,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     18: {
         warrior: { life: 16, attack: 0, armor: 2, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -159,7 +159,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 0, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     20: {
         warrior: { life: 16, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -177,7 +177,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 1, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     22: {
         warrior: { life: 18, attack: 0, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -195,7 +195,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 7, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 7, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     24: {
         warrior: { life: 17, attack: 1, armor: 2, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -222,7 +222,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     27: {
         warrior: { life: 17, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -240,7 +240,7 @@ export default {
         barbarian: { life: 9, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     29: {
         warrior: { life: 16, attack: 0, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -258,7 +258,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 7, attack: 2, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 7, attack: 2, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     31: {
         warrior: { life: 16, attack: 1, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -276,7 +276,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 1, armor: 1, agility: 3, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 7, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 7, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     33: {
         warrior: { life: 16, attack: 0, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -294,7 +294,7 @@ export default {
         barbarian: { life: 9, attack: 2, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 0, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     35: {
         warrior: { life: 17, attack: 1, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -321,7 +321,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 7, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 7, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     38: {
         warrior: { life: 17, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -339,7 +339,7 @@ export default {
         barbarian: { life: 9, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 0, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 7, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 7, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     40: {
         warrior: { life: 17, attack: 0, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -357,7 +357,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 2, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     42: {
         warrior: { life: 16, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -375,7 +375,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     44: {
         warrior: { life: 16, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -393,7 +393,7 @@ export default {
         barbarian: { life: 9, attack: 2, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 1, armor: 1, agility: 3, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     46: {
         warrior: { life: 18, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -420,7 +420,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 16, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     49: {
         warrior: { life: 16, attack: 0, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -438,7 +438,7 @@ export default {
         barbarian: { life: 9, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 2, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     51: {
         warrior: { life: 17, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -456,7 +456,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 18, attack: 1, armor: 1, agility: 3, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 2, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     53: {
         warrior: { life: 16, attack: 0, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -474,7 +474,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 18, attack: 0, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     55: {
         warrior: { life: 16, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -492,7 +492,7 @@ export default {
         barbarian: { life: 9, attack: 2, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 18, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 7, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 7, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     57: {
         warrior: { life: 16, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -519,7 +519,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 18, attack: 0, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     60: {
         warrior: { life: 16, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -537,7 +537,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 18, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 2, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     62: {
         warrior: { life: 17, attack: 0, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -555,7 +555,7 @@ export default {
         barbarian: { life: 9, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 18, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 7, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 7, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     64: {
         warrior: { life: 17, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -573,7 +573,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 20, attack: 1, armor: 0, agility: 3, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 7, attack: 2, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 7, attack: 2, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     66: {
         warrior: { life: 16, attack: 1, armor: 2, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -591,7 +591,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 18, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 2, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     68: {
         warrior: { life: 16, attack: 0, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -618,7 +618,7 @@ export default {
         barbarian: { life: 9, attack: 2, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 7, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 7, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     71: {
         warrior: { life: 17, attack: 0, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -636,7 +636,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 7, attack: 2, armor: 2, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 7, attack: 2, armor: 2, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     73: {
         warrior: { life: 17, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -654,7 +654,7 @@ export default {
         barbarian: { life: 9, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 18, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     75: {
         warrior: { life: 18, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -672,7 +672,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     77: {
         warrior: { life: 17, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -690,7 +690,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 1, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     79: {
         warrior: { life: 17, attack: 0, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -717,7 +717,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 2, armor: 2, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 1, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     82: {
         warrior: { life: 18, attack: 0, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -735,7 +735,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 2, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     84: {
         warrior: { life: 17, attack: 1, armor: 2, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -753,7 +753,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 18, attack: 4, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     86: {
         warrior: { life: 18, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -771,7 +771,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 3, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     88: {
         warrior: { life: 18, attack: 0, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -789,7 +789,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 2, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 7, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 7, attack: 1, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     90: {
         warrior: { life: 17, attack: 1, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -816,7 +816,7 @@ export default {
         barbarian: { life: 9, attack: 2, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 2, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 2, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     93: {
         warrior: { life: 17, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -834,7 +834,7 @@ export default {
         barbarian: { life: 8, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 1, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     95: {
         warrior: { life: 17, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -852,7 +852,7 @@ export default {
         barbarian: { life: 7, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 18, attack: 3, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 7, attack: 2, armor: 0, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 7, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     97: {
         warrior: { life: 16, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -870,7 +870,7 @@ export default {
         barbarian: { life: 9, attack: 0, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 3, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 7, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 7, attack: 2, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     99: {
         warrior: { life: 17, attack: 0, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -888,7 +888,7 @@ export default {
         barbarian: { life: 9, attack: 2, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 2, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 1, armor: 2, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 1, armor: 2, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     101: {
         warrior: { life: 16, attack: 0, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -915,7 +915,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 18, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 0, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 7, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 7, attack: 2, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     104: {
         warrior: { life: 16, attack: 0, armor: 1, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -933,7 +933,7 @@ export default {
         barbarian: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 2, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 0, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 1, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     106: {
         warrior: { life: 16, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -960,7 +960,7 @@ export default {
         barbarian: { life: 9, attack: 2, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 7, attack: 2, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 7, attack: 2, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
     109: {
         warrior: { life: 15, attack: 0, armor: 0, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
@@ -978,6 +978,6 @@ export default {
         barbarian: { life: 9, attack: 2, armor: 1, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         putrid: { life: 19, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
         mimic: { life: 9, attack: 1, armor: 1, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
-        crazy: { life: 8, attack: 1, armor: 2, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+        crazy: { life: 8, attack: 1, armor: 2, agility: 1, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
     },
 };
