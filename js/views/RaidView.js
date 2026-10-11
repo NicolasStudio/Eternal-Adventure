@@ -694,13 +694,23 @@ export default class RaidView {
             : this.queue;
     }
 
-    openInvite() {
+    async openInvite() {
 
         // Entre os andares o convidado entra pro PRÓXIMO andar.
         const floor = this.state === "floor-wait" ? this.currentFloor + 1 : 1;
 
+        // Candidatos do autocompletar (ver RaidInviteModal.prompt) — quem
+        // já está na sala não precisa aparecer de novo na lista, mas
+        // continua podendo ser digitado à mão (não é bloqueio, só não
+        // sugere).
+        const roomNames = new Set(this.getRoomMembers().map(member => member.name?.toLowerCase()).filter(Boolean));
+        const candidates = await RaidInviteService.listInvitableOnlinePlayers(AuthService.getCurrentUser()?.uid)
+            .then(list => list.filter(c => !roomNames.has(c.name?.toLowerCase())))
+            .catch(() => []);
+
         this.inviteModal.prompt({
             floor,
+            candidates,
             onSubmit: (name) => this.sendInvite(name, floor)
         });
 

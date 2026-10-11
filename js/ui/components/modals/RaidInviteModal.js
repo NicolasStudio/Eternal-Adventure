@@ -14,6 +14,8 @@ export default class RaidInviteModal {
     constructor() {
         this.overlay = null;
         this.close = null;
+        this.picker = null;
+        this.pickerOutsideClickHandler = null;
     }
 
     mount(html) {
@@ -31,14 +33,26 @@ export default class RaidInviteModal {
 
     // onSubmit(name) valida e envia — devolve a mensagem de erro (o modal
     // continua aberto, mostrando ela) ou null (convite enviado, fecha).
-    prompt({ floor, onSubmit }) {
+    // candidates: [{name, level}] pro painel de jogadores online (ver
+    // RaidInviteService.listInvitableOnlinePlayers) — já vem filtrado
+    // pra quem está online e elegível, aqui é só exibição. Mesmo padrão
+    // do seletor de emoji do chat (ChatHUD.bindEmojiPicker): um botão
+    // ao lado do campo abre um painel próprio, clicar num nome preenche
+    // e fecha — em vez do <datalist> nativo do navegador, que não dá
+    // pra estilizar com a cara do jogo.
+    prompt({ floor, onSubmit, candidates = [] }) {
 
         this.mount(`
             <div class="continue-modal raid-invite-modal">
                 <h2 class="continue-title">Convidar</h2>
                 <hr>
                 <p class="continue-message">Nome do jogador pra chamar pro Andar ${floor}:</p>
-                <input class="raid-invite-input" type="text" maxlength="30" autocomplete="off" placeholder="Nome do personagem">
+                <div class="raid-invite-input-row">
+                    <input class="raid-invite-input" type="text" maxlength="30" autocomplete="off" placeholder="Nome do personagem">
+                    <button type="button" class="raid-invite-picker-toggle" id="raid-invite-picker-toggle" title="Jogadores online">
+                        <i class="fa-solid fa-user"></i>
+                    </button>
+                </div>
                 <p class="raid-invite-error" hidden></p>
                 <div class="continue-actions">
                     <button class="continue-no">Cancelar</button>
@@ -51,6 +65,8 @@ export default class RaidInviteModal {
         const input = overlay.querySelector(".raid-invite-input");
         const error = overlay.querySelector(".raid-invite-error");
         const send = overlay.querySelector(".continue-yes");
+
+        this.bindPicker(candidates, input);
 
         let busy = false;
 
@@ -91,23 +107,108 @@ export default class RaidInviteModal {
 
         const handleKeydown = (event) => {
             if (event.key === "Enter") {
+                // Painel aberto: Enter não deve enviar o convite com o
+                // que já estiver digitado, só fecha o painel — igual
+                // Esc, evita confundir "escolher na lista" com "enviar".
+                if (this.picker) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    this.closePicker();
+                    return;
+                }
                 event.preventDefault();
                 event.stopPropagation();
                 submit();
             } else if (event.key === "Escape") {
                 event.preventDefault();
                 event.stopPropagation();
-                this.hide();
+                // Esc com o painel aberto só fecha ELE — fechar o modal
+                // inteiro de uma vez seria perder o nome já digitado por
+                // um Esc que a pessoa só queria dar no painel (mesmo
+                // raciocínio do seletor de emoji do chat).
+                if (this.picker) {
+                    this.closePicker();
+                } else {
+                    this.hide();
+                }
             }
         };
 
         document.addEventListener("keydown", handleKeydown, true);
-        this.close = () => document.removeEventListener("keydown", handleKeydown, true);
+        this.close = () => {
+            this.closePicker();
+            document.removeEventListener("keydown", handleKeydown, true);
+        };
 
         overlay.querySelector(".continue-no").addEventListener("click", () => this.hide());
         send.addEventListener("click", submit);
 
         input.focus();
+
+    }
+
+    // Botão de jogadores online: abre um painel ao lado do campo —
+    // clicar fora ou Esc fecha, clicar num nome preenche o campo e
+    // fecha (mesmo padrão do seletor de emoji do chat, ver
+    // ChatHUD.bindEmojiPicker/openEmojiPicker).
+    bindPicker(candidates, input) {
+
+        const toggle = this.overlay.querySelector("#raid-invite-picker-toggle");
+
+        toggle.addEventListener("click", event => {
+            event.stopPropagation();
+            if (this.picker) this.closePicker();
+            else this.openPicker(candidates, input, toggle);
+        });
+
+    }
+
+    openPicker(candidates, input, toggle) {
+
+        this.closePicker();
+
+        this.picker = document.createElement("div");
+        this.picker.className = "raid-invite-picker";
+        this.picker.innerHTML = candidates.length
+            ? candidates.map(c => `
+                <button type="button" class="raid-invite-picker-item" data-name="${escapeHtml(c.name)}">
+                    <span class="raid-invite-picker-name">${escapeHtml(c.name)}</span>
+                    <span class="raid-invite-picker-level">Nv. ${c.level}</span>
+                </button>
+            `).join("")
+            : `<p class="raid-invite-picker-empty">Ninguém disponível agora.</p>`;
+
+        toggle.insertAdjacentElement("afterend", this.picker);
+
+        this.picker.querySelectorAll(".raid-invite-picker-item").forEach(button => {
+            button.addEventListener("click", event => {
+                event.stopPropagation();
+                input.value = button.dataset.name;
+                this.closePicker();
+                input.focus();
+            });
+        });
+
+        // Clicar fora fecha — o próprio botão de abrir já tem
+        // stopPropagation(), então um clique nele não conta como "fora".
+        this.pickerOutsideClickHandler = event => {
+            if (!this.picker?.contains(event.target)) this.closePicker();
+        };
+        document.addEventListener("click", this.pickerOutsideClickHandler);
+
+    }
+
+    closePicker() {
+
+        if (this.picker) {
+            this.picker.remove();
+            this.picker = null;
+        }
+
+        if (this.pickerOutsideClickHandler) {
+            document.removeEventListener("click", this.pickerOutsideClickHandler);
+            this.pickerOutsideClickHandler = null;
+        }
 
     }
 
