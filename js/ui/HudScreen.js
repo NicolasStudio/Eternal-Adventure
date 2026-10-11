@@ -21,6 +21,7 @@ import BlacksmithArmor from "./../city/BlacksmithArmor.js";
 import BlacksmithEnchant from "./../city/BlacksmithEnchant.js";
 import ChestHUD from "./components/ChestHUD.js";
 import ChatHUD from "./components/ChatHUD.js";
+import MailModal from "./components/modals/MailModal.js";
 import NewsModal from "./NewsModal.js";
 import ChestRewardModal from "./components/modals/ChestRewardModal.js";
 import AlbumModal from "./components/modals/AlbumModal.js";
@@ -59,6 +60,7 @@ export default class HudScreen {
         this.dungeonHeader = new DungeonHeader(game);
         this.chestHUD = new ChestHUD(game);
         this.chatHUD = new ChatHUD(game);
+        this.mailModal = new MailModal(game);
         this.newsModal = new NewsModal();
         this.chestRewardModal = new ChestRewardModal();
         this.albumModal = new AlbumModal(game);
@@ -116,7 +118,10 @@ export default class HudScreen {
                 <div class="hud-left-column">
                     ${!this.inRaidCombat ? this.playerHUD.render() : ""}
                     ${isPvp2v2 ? this.pvpView.renderAllyCard() : ""}
-                    ${this.chatHUD.renderButton()}
+                    <div class="hud-tool-row">
+                        ${this.chatHUD.renderButton()}
+                        ${this.currentView === "" && !anyCombat ? this.mailModal.renderButton() : ""}
+                    </div>
                     ${!anyCombat ? this.chestHUD.render() : ""}
                 </div>
                 ${this.inCombat ? this.dungeonHeader.render(this.combatView.currentDungeon, this.combatView.currentFloor) : ""}
@@ -472,6 +477,7 @@ export default class HudScreen {
         this.toolbarHUD.registerEvents(this.element);
         if (!this.inCombat) this.chestHUD.registerEvents(this.element);
         this.chatHUD.registerEvents(this.element);
+        this.mailModal.registerEvents(this.element);
         this.registerEvents();
         switch (this.currentView) {
             case "character":
@@ -572,10 +578,15 @@ export default class HudScreen {
         this.raidView.startInviteListener();
         this.setBackground("assets/img/backgrounds/tela_inicial.png");
         this.maybeShowCompensation();
+        // Lembrete de carta pendente no Correio, agora AO VIVO (ver
+        // MailModal.watchPending) — liga uma vez por entrada no HUD e
+        // reage na hora quando chega carta nova, sem precisar recarregar.
+        this.mailModal.watchPending();
         this.render();
         this.toolbarHUD.registerEvents(this.element);
         if (!this.inCombat) this.chestHUD.registerEvents(this.element);
         this.chatHUD.registerEvents(this.element);
+        this.mailModal.registerEvents(this.element);
         this.registerEvents();
         this.updateMusic();
         switch (this.currentView) {

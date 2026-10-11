@@ -190,6 +190,10 @@ export default class Game {
         // ficaria aberto por cima da Home/Login depois de sair do jogo.
         if (screen !== "hud") this.hudScreen.chatHUD.shutdown();
         if (screen !== "hud") this.hudScreen.raidView.stopInviteListener();
+        // Escuta ao vivo do Correio (ver MailModal.watchPending) — sem
+        // isso o listener do Firestore ficava ligado pra sempre depois
+        // de sair da conta.
+        if (screen !== "hud") this.hudScreen.mailModal.stopWatchingPending();
 
         document.getElementById("login-screen").classList.add("hidden");
         document.getElementById("home-screen").classList.add("hidden");
