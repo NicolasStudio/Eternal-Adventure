@@ -1,6 +1,6 @@
 /* ==========================================================
    AVISO NA ABA DO NAVEGADOR (estilo WhatsApp)
-   Aba normal: "(3) Eternal Adventure - Idle". Aba fixada só mostra o
+   Aba normal: "(3) Eternal Adventure". Aba fixada só mostra o
    ícone, então o número também é desenhado em cima do favicon
    (bolinha vermelha no canto). Com 0, volta tudo ao original.
 ========================================================== */
