@@ -4,6 +4,7 @@ import BoitataBurn from "./BoitataBurn.js";
 import MiasmaService from "./MiasmaService.js";
 import MimicService from "./MimicService.js";
 import ConfusionService from "./ConfusionService.js";
+import ParalysisService from "./ParalysisService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVP, absorbedAmount } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
@@ -22,7 +23,9 @@ const DODGE_CAP = 40;
 // (3/6/9/15%), reduz também Armadura, especiais −50% (era −25%) · v10
 // Confusão da Louca — rola todo turno (mesmo sem Confusão nenhuma),
 // por isso qualquer partida antiga desalinha sem o bump de versão.
-export const TEAM_SIM_VERSION = 11;
+// v11 Paralisia do Eletro — consumida todo turno (sem sortear nada,
+// diferente da Confusão), mesmo motivo do bump acima.
+export const TEAM_SIM_VERSION = 12;
 
 /*
     Os dois clientes (jogador A e B) precisam chegar no MESMO resultado
@@ -97,6 +100,8 @@ export default class PvpCombatService {
             reflection: stats.reflection ?? 0,
             // Só a Louca tem isso > 0 (ver ConfusionService.js).
             confusionChance: stats.confusionChance ?? 0,
+            // Só o Eletro tem isso > 0 (ver ParalysisService.js).
+            paralysisChance: stats.paralysisChance ?? 0,
             petBiteDamage: scaledPet?.biteDamage ?? 0,
             petHealAmount: scaledPet?.healAmount ?? 0,
             petMimicRatio: scaledPet?.mimicRatio ?? 0,
@@ -171,6 +176,10 @@ export default class PvpCombatService {
         // por lado, igual o Miasma, só sem acúmulo.
         const confusionFlags = { a: ConfusionService.createFlags(), b: ConfusionService.createFlags() };
 
+        // Paralisia do Eletro (ver ParalysisService.js) — mesmo padrão
+        // acima, marca pendente por lado.
+        const paralysisFlags = { a: ParalysisService.createFlags(), b: ParalysisService.createFlags() };
+
         // Reviver do Yggdrasil: entra no log como uma "mordida" só de cura
         // do lado de quem reviveu, que a tela já sabe aplicar.
         // attackerId/targetId (além do "turn"/"attacker" já existentes)
@@ -205,6 +214,52 @@ export default class PvpCombatService {
             const defender = turn === "a" ? b : a;
 
             const defenderKey = turn === "a" ? "b" : "a";
+
+            // Paralisia do Eletro: consome a marca pendente do ATACANTE
+            // — SEM sortear nada (diferente da Confusão), não consome
+            // rng() nenhum. Paralisado pula Confusão/esquiva/dano/
+            // mordida do pet por completo (a marca de Confusão que
+            // porventura também esteja pendente continua pendente pro
+            // próximo golpe que realmente acontecer) — mas a queimadura
+            // do Boitatá, se já estiver ligada, continua cobrando no
+            // fim do turno normalmente (é dano do PET, não do dono
+            // paralisado), por isso esse branch repete esse pedaço em
+            // vez de só pular pro próximo turno.
+            if (ParalysisService.consumePending(paralysisFlags[turn])) {
+
+                log.push({ round: guard, turn, attacker: attacker.name, attackerId: turn, targetId: defenderKey, dodged: false, damage: 0, paralyzed: true });
+
+                const paralyzedBurn = burns[turn];
+
+                if (paralyzedBurn && a.currentHP > 0 && b.currentHP > 0) {
+
+                    const tickDamage = BoitataBurn.getTickDamage(attacker.petBurnDamage);
+                    const applied = Math.min(defender.currentHP, tickDamage);
+
+                    defender.currentHP = Math.max(0, defender.currentHP - tickDamage);
+
+                    log.push({
+                        round: guard,
+                        turn,
+                        attacker: attacker.name,
+                        attackerId: turn,
+                        targetId: defenderKey,
+                        burn: true,
+                        burnStart: paralyzedBurn.first,
+                        burnTarget: defenderKey,
+                        damage: applied
+                    });
+
+                    paralyzedBurn.first = false;
+
+                    revive(defender, defenderKey);
+
+                }
+
+                turn = turn === "a" ? "b" : "a";
+                continue;
+
+            }
 
             // Confusão da Louca: consome a marca pendente do ATACANTE —
             // SEMPRE sorteado, mesmo sem marca nenhuma (mesma regra do
@@ -309,6 +364,12 @@ export default class PvpCombatService {
 
                 if (confusionProc) ConfusionService.applyPending(confusionFlags[attackTargetKey]);
 
+                // Paralisia: sorteado com o valor ORIGINAL do atacante.
+                // Só o Eletro tem paralysisChance > 0.
+                const paralysisProc = ParalysisService.procs(attacker.paralysisChance ?? 0, rng());
+
+                if (paralysisProc) ParalysisService.applyPending(paralysisFlags[attackTargetKey]);
+
                 log.push({
                     round: guard,
                     turn,
@@ -329,7 +390,8 @@ export default class PvpCombatService {
                     miasmaAttackWeakened: attackMark < 1 && MiasmaService.hasAttackSpecials(attacker),
                     miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(attackTarget),
                     confusionOutcome,
-                    confusionProc
+                    confusionProc,
+                    paralysisProc
                 });
 
                 revive(attackTarget, attackTargetKey);
@@ -473,6 +535,10 @@ export default class PvpCombatService {
         // pendente por combatente, igual o Miasma, só sem acúmulo.
         const confusionFlagsById = new Map(all.map(c => [c.id, ConfusionService.createFlags()]));
 
+        // Paralisia do Eletro (ver ParalysisService.js) — mesmo padrão
+        // acima, uma marca pendente por combatente.
+        const paralysisFlagsById = new Map(all.map(c => [c.id, ParalysisService.createFlags()]));
+
         // Reviver do Yggdrasil: entra no log como uma "mordida" só de cura
         // em quem reviveu (healedIds), que a tela já sabe aplicar.
         const revive = (combatant, killerId) => {
@@ -544,6 +610,32 @@ export default class PvpCombatService {
                 if (targets.length === 0) break; // time inimigo já perdeu
 
                 const target = targets[Math.floor(rng() * targets.length)];
+
+                // Paralisia do Eletro: consome a marca pendente do
+                // ATACANTE — SEM sortear nada (diferente da Confusão),
+                // não consome rng() nenhum. Paralisado pula Confusão/
+                // esquiva/dano/mordida do pet, mas a queimadura (se já
+                // ligada) continua cobrando — mesmo padrão do "miss" da
+                // Confusão logo abaixo.
+                if (ParalysisService.consumePending(paralysisFlagsById.get(attacker.id))) {
+
+                    log.push({
+                        round: guard,
+                        attackerId: attacker.id,
+                        attackerTeam: attacker.team,
+                        targetId: target.id,
+                        dodged: false,
+                        damage: 0,
+                        paralyzed: true
+                    });
+
+                    tickBurn(attacker, enemyTeam);
+
+                    if (aliveOf(enemyTeam).length === 0) break;
+
+                    continue;
+
+                }
 
                 // Confusão da Louca: consome a marca pendente do
                 // ATACANTE — SEMPRE sorteado, mesmo sem marca nenhuma
@@ -671,6 +763,12 @@ export default class PvpCombatService {
 
                 if (confusionProc) ConfusionService.applyPending(confusionFlagsById.get(attackTarget.id));
 
+                // Paralisia: sorteado com o valor ORIGINAL do atacante.
+                // Só o Eletro tem paralysisChance > 0.
+                const paralysisProc = ParalysisService.procs(attacker.paralysisChance ?? 0, rng());
+
+                if (paralysisProc) ParalysisService.applyPending(paralysisFlagsById.get(attackTarget.id));
+
                 log.push({
                     round: guard,
                     attackerId: attacker.id,
@@ -690,7 +788,8 @@ export default class PvpCombatService {
                     miasmaAttackWeakened: attackMark < 1 && MiasmaService.hasAttackSpecials(attacker),
                     miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(attackTarget),
                     confusionOutcome,
-                    confusionProc
+                    confusionProc,
+                    paralysisProc
                 });
 
                 revive(attackTarget, attacker.id);

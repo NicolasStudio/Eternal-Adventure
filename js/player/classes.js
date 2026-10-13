@@ -64,6 +64,14 @@ const classes = {
         lore: "Os loucos são seres que perderam a sanidade, mais que isso. Eles só se contentam quando deixam seu oponente tão malucos quanto eles. Seus ataques são imprevisíveis e podem causar efeitos devastadores em seus inimigos.",
     },
 
+    spark: {
+        id: "spark",
+        name: "Eletro",
+        image: "assets/img/assets/character/class/spark.png",
+        hud: "assets/img/assets/character/class/spark-hud.png",
+        description: "Especialista em eletricidade.",
+        lore: "OS Eletros são mestres no controle de eletricidade, podendo gerar raios e descargas elétricas para atordoar seus inimigos. Sua habilidade de manipular eletricidade com seu bastão de tesla torna-os uma ameaça formidável em qualquer batalha, capaz de incapacitar adversários com um simples toque.",
+    },
 };
 
 export default classes;

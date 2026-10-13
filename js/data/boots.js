@@ -854,6 +854,126 @@ const boots = {
         value: 0,
         sellValue: 0
 
+    },
+
+    boots_spark_common: {
+
+        id: "boots_spark_common",
+        name: "Bota Emborrachada",
+        type: "armor",
+        slot: "boot",
+        class: "spark",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/boots/boots-spark-rarity-comum.png",
+
+        stats: {
+            armor: 1,
+            agility: 4
+        },
+
+        value: 80,
+        sellValue: 40
+
+    },
+
+    boots_spark_uncommon: {
+
+        id: "boots_spark_uncommon",
+        name: "Bota Emborrachada",
+        type: "armor",
+        slot: "boot",
+        class: "spark",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/boots/boots-spark-rarity-incomum.png",
+
+        stats: {
+            armor: 2,
+            agility: 7
+        },
+
+        value: 240,
+        sellValue: 120
+
+    },
+
+    boots_spark_rare: {
+
+        id: "boots_spark_rare",
+        name: "Bota Emborrachada",
+        type: "armor",
+        slot: "boot",
+        class: "spark",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/boots/boots-spark-rarity-rare.png",
+
+        stats: {
+            armor: 3,
+            agility: 12
+        },
+
+        value: 720,
+        sellValue: 360
+
+    },
+
+    boots_spark_mystic: {
+
+        id: "boots_spark_mystic",
+        name: "Bota Emborrachada",
+        type: "armor",
+        slot: "boot",
+        class: "spark",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/boots/boots-spark-rarity-mistico.png",
+
+        stats: {
+            armor: 5,
+            agility: 13
+        },
+
+        value: 2160,
+        sellValue: 1080
+
+    },
+
+    boots_spark_legendary: {
+
+        id: "boots_spark_legendary",
+        name: "Bota Emborrachada",
+        type: "armor",
+        slot: "boot",
+        class: "spark",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/boots/boots-spark-rarity-lendario.png",
+
+        stats: {
+            armor: 7,
+            agility: 14
+        },
+
+        value: 0,
+        sellValue: 13240
+
+    },
+
+    boots_spark_ultraje: {
+
+        id: "boots_spark_ultraje",
+        name: "Bota Emborrachada",
+        type: "armor",
+        slot: "boot",
+        class: "spark",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/boots/boots-spark-rarity-ultraje.png",
+
+        stats: {
+            armor: 9,
+            agility: 16
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

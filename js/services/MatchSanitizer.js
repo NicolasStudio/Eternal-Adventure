@@ -29,7 +29,7 @@ const NUMBER_KEYS = new Set([
     "seed", "floor", "waitFloor", "count", "proceedShort",
     "maxHP", "currentHP", "attack", "armor", "agility",
     "criticalChance", "lifeSteal", "penetration", "absorption",
-    "miasmaChance", "reflection", "confusionChance",
+    "miasmaChance", "reflection", "confusionChance", "paralysisChance",
     "petBiteDamage", "petHealAmount", "petMimicRatio", "petBurnDamage",
     "petRevivePercent"
 ]);

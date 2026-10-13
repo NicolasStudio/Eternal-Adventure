@@ -879,7 +879,9 @@ export default class Player {
             // Armadura/Agilidade do inimigo aos dele — ver MimicService.js).
             mimic: "reflection",
             // Louca: o especial dela é a Confusão (ver ConfusionService.js).
-            crazy: "confusionChance"
+            crazy: "confusionChance",
+            // Eletro: o especial dele é a Paralisia (ver ParalysisService.js).
+            spark: "paralysisChance"
         }[this.class.id] ?? null;
     }
 
@@ -892,6 +894,7 @@ export default class Player {
             case "miasmaChance": return "Miasma";
             case "reflection": return "Imitação";
             case "confusionChance": return "Confusão";
+            case "paralysisChance": return "Paralisia";
             default: return "Atributo Especial";
         }
     }

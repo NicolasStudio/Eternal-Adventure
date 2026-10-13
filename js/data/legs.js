@@ -856,6 +856,126 @@ const legs = {
         value: 0,
         sellValue: 0
 
+    },
+
+    legs_spark_common: {
+
+        id: "legs_spark_common",
+        name: "Calça de Serviço",
+        type: "armor",
+        slot: "leg",
+        class: "spark",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/legs/legs-spark-rarity-comum.png",
+
+        stats: {
+            armor: 2,
+            agility: 1
+        },
+
+        value: 95,
+        sellValue: 45
+
+    },
+
+    legs_spark_uncommon: {
+
+        id: "legs_spark_uncommon",
+        name: "Calça de Serviço",
+        type: "armor",
+        slot: "leg",
+        class: "spark",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/legs/legs-spark-rarity-incomum.png",
+
+        stats: {
+            armor: 4,
+            agility: 3
+        },
+
+        value: 285,
+        sellValue: 135
+
+    },
+
+    legs_spark_rare: {
+
+        id: "legs_spark_rare",
+        name: "Calça de Serviço",
+        type: "armor",
+        slot: "leg",
+        class: "spark",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/legs/legs-spark-rarity-rare.png",
+
+        stats: {
+            armor: 7,
+            agility: 4
+        },
+
+        value: 855,
+        sellValue: 405
+
+    },
+
+    legs_spark_mystic: {
+
+        id: "legs_spark_mystic",
+        name: "Calça de Serviço",
+        type: "armor",
+        slot: "leg",
+        class: "spark",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/legs/legs-spark-rarity-mistico.png",
+
+        stats: {
+            armor: 10,
+            agility: 7
+        },
+
+        value: 2565,
+        sellValue: 1215
+
+    },
+
+    legs_spark_legendary: {
+
+        id: "legs_spark_legendary",
+        name: "Calça de Serviço",
+        type: "armor",
+        slot: "leg",
+        class: "spark",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/legs/legs-spark-rarity-lendario.png",
+
+        stats: {
+            armor: 13,
+            agility: 8
+        },
+
+        value: 0,
+        sellValue: 13645
+
+    },
+
+    legs_spark_ultraje: {
+
+        id: "legs_spark_ultraje",
+        name: "Calça de Serviço",
+        type: "armor",
+        slot: "leg",
+        class: "spark",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/legs/legs-spark-rarity-ultraje.png",
+
+        stats: {
+            armor: 16,
+            agility: 10
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

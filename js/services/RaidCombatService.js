@@ -3,6 +3,7 @@ import BoitataBurn from "./BoitataBurn.js";
 import MiasmaService, { PVE_STACK_PERCENTS as MIASMA_PVE_PERCENTS } from "./MiasmaService.js";
 import MimicService from "./MimicService.js";
 import ConfusionService from "./ConfusionService.js";
+import ParalysisService from "./ParalysisService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVE, absorbedAmount } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
@@ -164,6 +165,12 @@ export default class RaidCombatService {
         // mesmo" vira o chefe se acertando sozinho.
         const confusionFlagsById = new Map(all.map(c => [c.id, ConfusionService.createFlags()]));
 
+        // Paralisia do Eletro (ver ParalysisService.js) — mesmo padrão
+        // acima, uma marca pendente por combatente. Na prática só o
+        // CHEFE pode acabar paralisado (mesmo motivo da Confusão: o
+        // squad só ataca o chefe, só o Eletro tem paralysisChance > 0).
+        const paralysisFlagsById = new Map(all.map(c => [c.id, ParalysisService.createFlags()]));
+
         const tickBurn = (owner) => {
 
             const burn = burns.get(owner.id);
@@ -222,6 +229,33 @@ export default class RaidCombatService {
                 const chosenAttack = isBossTurn
                     ? attacker.attacks[Math.floor(rng() * attacker.attacks.length)]
                     : null;
+
+                // Paralisia do Eletro: consome a marca pendente do
+                // ATACANTE — SEM sortear nada (diferente da Confusão),
+                // não consome rng() nenhum. Paralisado pula Confusão/
+                // esquiva/dano/mordida do pet, mas a queimadura (se já
+                // ligada) continua cobrando — mesmo padrão do "miss" da
+                // Confusão logo abaixo.
+                if (ParalysisService.consumePending(paralysisFlagsById.get(attacker.id))) {
+
+                    log.push({
+                        round: guard,
+                        attackerId: attacker.id,
+                        attackerSide: attacker.side,
+                        targetId: target.id,
+                        dodged: false,
+                        damage: 0,
+                        attackName: chosenAttack?.name ?? null,
+                        paralyzed: true
+                    });
+
+                    if (!isBossTurn) tickBurn(attacker);
+
+                    if (bossCombatant.currentHP <= 0) break;
+
+                    continue;
+
+                }
 
                 // Confusão da Louca: consome a marca pendente do
                 // ATACANTE — SEMPRE sorteado, mesmo sem marca nenhuma
@@ -361,6 +395,13 @@ export default class RaidCombatService {
 
                 if (confusionProc) ConfusionService.applyPending(confusionFlagsById.get(attackTarget.id));
 
+                // Paralisia: sorteado com o valor ORIGINAL do atacante.
+                // Só o Eletro tem paralysisChance > 0 — o chefe nunca
+                // ativa isso ao atacar.
+                const paralysisProc = ParalysisService.procs(attacker.paralysisChance ?? 0, rng());
+
+                if (paralysisProc) ParalysisService.applyPending(paralysisFlagsById.get(attackTarget.id));
+
                 log.push({
                     round: guard,
                     attackerId: attacker.id,
@@ -384,7 +425,8 @@ export default class RaidCombatService {
                     miasmaAttackWeakened: attackMark < 1 && MiasmaService.hasAttackSpecials(attacker),
                     miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(attackTarget),
                     confusionOutcome,
-                    confusionProc
+                    confusionProc,
+                    paralysisProc
                 });
 
                 // Reviver do Yggdrasil: quem o chefe acabou de derrubar

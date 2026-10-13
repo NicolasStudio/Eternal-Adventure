@@ -254,6 +254,44 @@ const upClasse = {
             absorption: 0,
             confusionChance: 7
         }
+    },
+
+    light_spark:{
+        id: "light_spark",
+        name: "Eletro da Luz",
+        image: "assets/img/assets/character/class_up/spark/light-spark.png",
+        hud: "assets/img/assets/character/class_up/spark/light-spark-hud.png",
+        description: "Você escolheu transcender para um eletro da luz.",
+        states:{
+            life: 75,
+            attack: 75,
+            armor: 15,
+            agility: 18,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            paralysisChance: 10
+        }
+    },
+
+    dark_spark:{
+        id: "dark_spark",
+        name: "Eletro da Escuridão",
+        image: "assets/img/assets/character/class_up/spark/dark-spark.png",
+        hud: "assets/img/assets/character/class_up/spark/dark-spark-hud.png",
+        description: "Você escolheu transcender para um eletro da escuridão.",
+        states:{
+            life: 65,
+            attack: 60,
+            armor: 12,
+            agility: 14,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            paralysisChance: 8
+        }
     }
 
 };

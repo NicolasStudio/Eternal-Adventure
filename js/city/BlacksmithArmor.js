@@ -249,6 +249,7 @@ export default class BlacksmithArmor {
             case "miasmaChance": return "Miasma";
             case "reflection": return "Imitação";
             case "confusionChance": return "Confusão";
+            case "paralysisChance": return "Paralisia";
             default: return stat;
         }
     }
@@ -266,6 +267,7 @@ export default class BlacksmithArmor {
             case "miasmaChance": return "🦠";
             case "reflection": return "🪞";
             case "confusionChance": return "🌀";
+            case "paralysisChance": return "⚡";
             default: return "•";
         }
     }
