@@ -194,6 +194,10 @@ export default class Game {
         // isso o listener do Firestore ficava ligado pra sempre depois
         // de sair da conta.
         if (screen !== "hud") this.hudScreen.mailModal.stopWatchingPending();
+        // Alto Falante (ver SpeakerBanner.js) — mesmo motivo do Correio
+        // acima: sem isso o listener do Realtime Database ficava ligado
+        // pra sempre depois de sair da conta.
+        if (screen !== "hud") this.hudScreen.speakerBanner.stop();
 
         document.getElementById("login-screen").classList.add("hidden");
         document.getElementById("home-screen").classList.add("hidden");
