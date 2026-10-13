@@ -87,7 +87,8 @@ const monsters = [
         drops: [
             {
                 type: ["helmet"],
-                rarity: "common"
+                rarity: "common",
+                chance: 40
             },
             {
                 item: items.smallPotion,
@@ -120,7 +121,8 @@ const monsters = [
         drops: [
             {
                 type: ["leg"],
-                rarity: "common"
+                rarity: "common",
+                chance: 40
             },
             {
                 item: items.smallPotion,
@@ -178,7 +180,8 @@ const monsters = [
         drops: [
             {
                 type: ["boot"],
-                rarity: "common"
+                rarity: "common",
+                chance: 40
             },
             {
                 item: items.smallPotion,
@@ -240,7 +243,8 @@ const monsters = [
         drops: [
             {
                 type: ["chest"],
-                rarity: "common"
+                rarity: "common",
+                chance: 40
             },
             {
                 item: items.smallPotion,
@@ -305,7 +309,8 @@ const monsters = [
         drops: [
             {
                 type: ["weapon"],
-                rarity: "uncommon"
+                rarity: "uncommon",
+                chance: 30
             },
             {
                 type: ["amulet"],
@@ -343,7 +348,8 @@ const monsters = [
         drops: [
             {
                 type: ["leg"],
-                rarity: "uncommon"
+                rarity: "uncommon",
+                chance: 30
             },
             {
                 item: items.smallPotion,
@@ -401,7 +407,8 @@ const monsters = [
         drops: [
             {
                 type: ["leg"],
-                rarity: "uncommon"
+                rarity: "uncommon",
+                chance: 30
             },
             {
                 item: items.smallPotion,
@@ -462,7 +469,8 @@ const monsters = [
         drops: [
             {
                 type: ["chest"],
-                rarity: "uncommon"
+                rarity: "uncommon",
+                chance: 30
             },
             {
                 item: items.smallPotion,
@@ -492,7 +500,8 @@ const monsters = [
         drops: [
             {
                 type: ["chest"],
-                rarity: "uncommon"
+                rarity: "uncommon",
+                chance: 30
             },
             {
                 item: items.smallPotion,
@@ -525,7 +534,8 @@ const monsters = [
         drops: [
             {
                 type: ["helmet", "boot"],
-                rarity: "uncommon"
+                rarity: "uncommon",
+                chance: 30
             },
             {
                 item: items.smallPotion,
@@ -555,7 +565,8 @@ const monsters = [
         drops: [
             {
                 type: ["helmet", "boot"],
-                rarity: "uncommon"
+                rarity: "uncommon",
+                chance: 30
             },
             {
                 item: items.smallPotion,
@@ -585,7 +596,8 @@ const monsters = [
         drops: [
             {
                 type: ["helmet", "boot"],
-                rarity: "uncommon"
+                rarity: "uncommon",
+                chance: 30
             },
             {
                 item: items.smallPotion,
@@ -618,7 +630,8 @@ const monsters = [
         drops: [
             {
                 type: ["weapon"],
-                rarity: "rare"
+                rarity: "rare",
+                chance: 18
             },
             {
                 type: ["amulet"],
@@ -740,7 +753,8 @@ const monsters = [
         drops: [
             {
                 type: ["boot"],
-                rarity: "rare"
+                rarity: "rare",
+                chance: 18
             },
             {
                 item: items.smallPotion,
@@ -802,7 +816,8 @@ const monsters = [
         drops: [
             {
                 type: ["leg"],
-                rarity: "rare"
+                rarity: "rare",
+                chance: 18
             },
             {
                 item: items.mediumPotion,
@@ -832,7 +847,8 @@ const monsters = [
         drops: [
             {
                 type: ["leg"],
-                rarity: "rare"
+                rarity: "rare",
+                chance: 18
             },
             {
                 item: items.mediumPotion,
@@ -893,7 +909,8 @@ const monsters = [
         drops: [
             {
                 type: ["helmet"],
-                rarity: "rare"
+                rarity: "rare",
+                chance: 18
             },
             {
             }
@@ -983,7 +1000,8 @@ const monsters = [
         drops: [
             {
                 type: ["chest"],
-                rarity: "rare"
+                rarity: "rare",
+                chance: 18
             },
             {
                 item: items.tripleSmallPotion,
@@ -1399,7 +1417,8 @@ const monsters = [
         drops: [
             {
                 type: ["boot"],
-                rarity: "mystic"
+                rarity: "mystic",
+                chance: 8
             },
             {
                 item: items.mediumPotion,
@@ -1700,7 +1719,8 @@ const monsters = [
         drops: [
             {
                 type: ["leg"],
-                rarity: "mystic"
+                rarity: "mystic",
+                chance: 8
             },
             {
                 item: items.mediumPotion,
@@ -2061,7 +2081,8 @@ const monsters = [
         drops: [
             {
                 type: ["chest"],
-                rarity: "mystic"
+                rarity: "mystic",
+                chance: 8
             },
             {
                 item: items.mediumPotion,
@@ -2453,7 +2474,8 @@ const monsters = [
         drops: [
             {
                 type: ["helmet"],
-                rarity: "mystic"
+                rarity: "mystic",
+                chance: 8
             },
             {
                 item: items.tripleMediumPotion,
@@ -2810,7 +2832,8 @@ const monsters = [
         drops: [
             {
                 type: ["weapon"],
-                rarity: "mystic"
+                rarity: "mystic",
+                chance: 8
             },
             {
                 item: items.tripleMediumPotion,
