@@ -1,0 +1,176 @@
+/* ==========================================================
+   ALTO FALANTE — botão no HUD (só admin) + modal de envio +
+   faixa de aviso pra todo mundo online (ver SpeakerBanner.js)
+========================================================== */
+.hud-tool.speaker-toggle{
+    position:relative;
+    z-index:5;
+    width:34px;
+    height:34px;
+    font-size:15px;
+    border:2px solid #8b7355;
+    border-radius:50%;
+    background:linear-gradient(180deg,#2c1810,#1a0f0a);
+    box-shadow:inset 0 0 12px rgba(0,0,0,.45), 0 3px 8px rgba(0,0,0,.4);
+    margin-left:10px;
+}
+.hud-tool.speaker-toggle:hover{
+    transform:none;
+    border-color:#c79b37;
+}
+
+.speaker-overlay{
+    position:fixed;
+    inset:0;
+    z-index:9500;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:rgba(0,0,0,.65);
+    backdrop-filter:blur(2px);
+    animation:rewardFade .2s ease;
+}
+.speaker-modal{
+    width:440px;
+    max-width:94%;
+    padding:20px;
+    border:1px solid #7d6846;
+    border-radius:8px;
+    background:rgba(18,13,9,.98);
+    box-shadow:0 0 25px rgba(0,0,0,.75);
+    color:#efe2bf;
+    font-family:"Cinzel", serif;
+    animation:rewardPopup .22s ease;
+}
+.speaker-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:14px;
+}
+.speaker-header h2{
+    margin:0;
+    font-size:1.1rem;
+    color:#f6d19c;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+.speaker-field{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    font-size:.78rem;
+    color:#bca46d;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    margin-bottom:14px;
+}
+.speaker-textarea{
+    padding:8px 10px;
+    border:1px solid #8f7144;
+    border-radius:4px;
+    background:rgba(0,0,0,.3);
+    color:#f1c75c;
+    font-family:"Cinzel", serif;
+    font-size:.85rem;
+    text-transform:none;
+    resize:vertical;
+    min-height:90px;
+}
+.speaker-textarea:focus{
+    outline:none;
+    border-color:#c79b37;
+}
+.speaker-feedback{
+    margin:0 0 10px;
+    color:#e68a8a;
+    font-size:.8rem;
+}
+.speaker-send-button{
+    width:100%;
+    padding:10px;
+    cursor:pointer;
+    border:1px solid #2f6b2f;
+    border-radius:4px;
+    background:#173a17;
+    color:#efe2bf;
+    font-family:"Cinzel", serif;
+    font-size:.9rem;
+}
+.speaker-send-button:hover{
+    background:#204e20;
+}
+
+/* ----- Faixa de aviso (quem recebe) -----
+   z-index bem acima de tudo que existe no jogo hoje (o maior usado em
+   qualquer outro lugar é 100000, ver chest-album.css/character-left.css/
+   hud.css) — Alto Falante é aviso da administração, nunca pode ficar
+   escondido atrás de modal nenhum. pointer-events:none pra não travar
+   clique em nada embaixo enquanto a mensagem atravessa a tela. */
+.speaker-banner{
+    position:fixed;
+    top:30px;
+    left:0;
+    right:0;
+    z-index:999999;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    height:54px;
+    padding:0 16px;
+    background:rgba(10,6,3,.72);
+    border-bottom:1px solid rgba(241,199,92,.35);
+    box-shadow:0 4px 18px rgba(0,0,0,.5);
+    pointer-events:none;
+}
+.speaker-banner-icon{
+    flex-shrink:0;
+    width:40px;
+    height:40px;
+    object-fit:contain;
+}
+.speaker-banner-track{
+    flex:1;
+    min-width:0;
+    height:100%;
+    overflow:hidden;
+    position:relative;
+}
+.speaker-banner-text{
+    position:absolute;
+    top:50%;
+    left:0;
+    white-space:nowrap;
+    transform:translate(100vw, -50%);
+    font-family:"Cinzel", serif;
+    font-size:1rem;
+    color:#f1c75c;
+    text-shadow:0 0 10px rgba(241,199,92,.5), 0 1px 2px rgba(0,0,0,.8);
+    animation-name:speakerMarquee;
+    animation-timing-function:linear;
+    animation-fill-mode:forwards;
+}
+.speaker-banner-text strong{
+    color:#fff2cc;
+}
+@keyframes speakerMarquee{
+    from{ transform:translate(100vw, -50%); }
+    to{ transform:translate(-100%, -50%); }
+}
+
+@media (max-width:640px){
+    .speaker-banner{
+        top:20px;
+        height:46px;
+        gap:8px;
+        padding:0 10px;
+    }
+    .speaker-banner-icon{
+        width:32px;
+        height:32px;
+    }
+    .speaker-banner-text{
+        font-size:.85rem;
+    }
+}

@@ -62,6 +62,13 @@
         ".validate": "newData.hasChildren(['text','ts']) && newData.child('text').isString() && newData.child('text').val().length <= 150 && newData.child('ts').val() === now"
       }
     },
+    "speaker": {
+      "broadcast": {
+        ".read": "auth != null",
+        ".write": "auth != null && auth.uid === 'qgZA5v7Q1IWLjYc99bNrrRJd14X2'",
+        ".validate": "newData.hasChildren(['uid','name','text','ts']) && newData.child('uid').val() === auth.uid && newData.child('name').isString() && newData.child('name').val().length <= 30 && newData.child('text').isString() && newData.child('text').val().length >= 1 && newData.child('text').val().length <= 200 && newData.child('ts').val() === now"
+      }
+    },
     "sessions": {
       ".read": "auth != null",
       "$uid": {

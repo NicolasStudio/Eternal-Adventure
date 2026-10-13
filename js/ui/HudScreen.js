@@ -22,6 +22,10 @@ import BlacksmithEnchant from "./../city/BlacksmithEnchant.js";
 import ChestHUD from "./components/ChestHUD.js";
 import ChatHUD from "./components/ChatHUD.js";
 import MailModal from "./components/modals/MailModal.js";
+import SpeakerModal from "./components/modals/SpeakerModal.js";
+import SpeakerBanner from "./components/SpeakerBanner.js";
+import SpeakerService from "../services/SpeakerService.js";
+import AuthService from "../services/AuthService.js";
 import NewsModal from "./NewsModal.js";
 import ChestRewardModal from "./components/modals/ChestRewardModal.js";
 import AlbumModal from "./components/modals/AlbumModal.js";
@@ -60,6 +64,8 @@ export default class HudScreen {
         this.chestHUD = new ChestHUD(game);
         this.chatHUD = new ChatHUD(game);
         this.mailModal = new MailModal(game);
+        this.speakerModal = new SpeakerModal(game);
+        this.speakerBanner = new SpeakerBanner();
         this.newsModal = new NewsModal();
         this.chestRewardModal = new ChestRewardModal();
         this.albumModal = new AlbumModal(game);
@@ -119,6 +125,7 @@ export default class HudScreen {
                     <div class="hud-tool-row">
                         ${this.chatHUD.renderButton()}
                         ${this.currentView === "" && !anyCombat ? this.mailModal.renderButton() : ""}
+                        ${this.currentView === "" && !anyCombat && SpeakerService.isAdmin(AuthService.getCurrentUser()?.uid) ? this.speakerModal.renderButton() : ""}
                     </div>
                     ${!anyCombat ? this.chestHUD.render() : ""}
                 </div>
@@ -476,6 +483,7 @@ export default class HudScreen {
         if (!this.inCombat) this.chestHUD.registerEvents(this.element);
         this.chatHUD.registerEvents(this.element);
         this.mailModal.registerEvents(this.element);
+        this.speakerModal.registerEvents(this.element);
         this.registerEvents();
         switch (this.currentView) {
             case "character":
@@ -568,11 +576,15 @@ export default class HudScreen {
         // MailModal.watchPending) — liga uma vez por entrada no HUD e
         // reage na hora quando chega carta nova, sem precisar recarregar.
         this.mailModal.watchPending();
+        // Alto Falante (ver SpeakerBanner.js) — liga uma vez por entrada
+        // no HUD, igual o lembrete de carta acima.
+        this.speakerBanner.start();
         this.render();
         this.toolbarHUD.registerEvents(this.element);
         if (!this.inCombat) this.chestHUD.registerEvents(this.element);
         this.chatHUD.registerEvents(this.element);
         this.mailModal.registerEvents(this.element);
+        this.speakerModal.registerEvents(this.element);
         this.registerEvents();
         this.updateMusic();
         switch (this.currentView) {
