@@ -50,7 +50,10 @@ export default [
             "Vender Pet (Mercado), Veterinário (Saúde) e a aba Pets da tela de Personagem agora só ficam disponíveis a partir do nível 30, mesmo nível que libera a Fazenda",
             "Novo Jogo: quando todos os personagens da conta já estão em uso, a confirmação de sobrescrever agora mostra nome, classe e nível de quem seria sobrescrito, em vez de perguntar às cegas",
             "Removido o aviso único 'Aviso de Balanceamento' (pedido de desculpas pela remoção do Rei dos Encantamentos e ajuste do Cara ou Coroa?, com recompensa em ouro, ração e um pet exclusivo) — quem ainda não tinha coletado não recebe mais essa recompensa",
-            "XP necessária pra subir de nível ficou mais cara entre os níveis 20 e 100 — 10% do 20 ao 50, 20% do 51 ao 70, 25% do 71 ao 79, 30% do 80 ao 89 e 35% do 90 ao 100. A XP ganha em combate não mudou, só o quanto precisa pra passar de nível"
+            "XP necessária pra subir de nível ficou mais cara entre os níveis 20 e 100 — 10% do 20 ao 50, 20% do 51 ao 70, 25% do 71 ao 79, 30% do 80 ao 89 e 35% do 90 ao 100. A XP ganha em combate não mudou, só o quanto precisa pra passar de nível",
+            "Alto Falante: novo ícone ao lado do Correio, só pra administração — abre um aviso que aparece correndo no topo da tela de todo mundo que estiver online na hora",
+            "Nova classe: Eletro — parecido com o Mago (segundo maior dano do jogo), mas com Armadura, Agilidade e Vida medianas em vez de extremas. Atributo exclusivo Paralisia: chance a cada golpe certeiro de paralisar o alvo até o próximo ataque dele, que simplesmente não acontece (sem sortear nada, diferente da Confusão da Louca). Vale contra monstros, chefes, PVP e Cooperativo. Novos itens exclusivos: Bastão de Tesla (arma), Óculos Chocante (elmo), Jaqueta (peitoral), Calça de Serviço (calças) e Bota Emborrachada (botas)",
+            "Informações do Combate ganhou mais 2 números: Paralisia (quantas vezes você paralisou o oponente) e Ataques paralisados (quantos dos seus próprios ataques se perderam por estar paralisado)"
         ]
     },
 

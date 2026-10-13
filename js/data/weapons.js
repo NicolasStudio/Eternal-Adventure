@@ -1065,6 +1065,171 @@ const weapons = {
         value: 0,
         sellValue: 0
 
+    },
+
+/* ==========================================
+       ELETRO (Bastão de Tesla)
+========================================== */
+    teslacoil_common: {
+
+        id: "teslacoil_common",
+        name: "Bastão de Tesla",
+        type: "weapon",
+        slot: "weapon",
+        class: "spark",
+        weaponType: "teslacoil",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/weapons/tesla-coil-rarity-comum.png",
+
+        stats: {
+            attack: 6,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            paralysisChance: 2
+        },
+
+        value: 120,
+        sellValue: 60
+
+    },
+
+    teslacoil_uncommon: {
+
+        id: "teslacoil_uncommon",
+        name: "Bastão de Tesla",
+        type: "weapon",
+        slot: "weapon",
+        class: "spark",
+        weaponType: "teslacoil",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/weapons/tesla-coil-rarity-incomum.png",
+
+        stats: {
+            attack: 12,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            paralysisChance: 5
+        },
+
+        value: 360,
+        sellValue: 180
+
+    },
+
+    teslacoil_rare: {
+
+        id: "teslacoil_rare",
+        name: "Bastão de Tesla",
+        type: "weapon",
+        slot: "weapon",
+        class: "spark",
+        weaponType: "teslacoil",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/weapons/tesla-coil-rarity-rare.png",
+
+        stats: {
+            attack: 22,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            paralysisChance: 6
+        },
+
+        value: 1080,
+        sellValue: 540
+
+    },
+
+    teslacoil_mystic: {
+
+        id: "teslacoil_mystic",
+        name: "Bastão de Tesla",
+        type: "weapon",
+        slot: "weapon",
+        class: "spark",
+        weaponType: "teslacoil",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/weapons/tesla-coil-rarity-mistico.png",
+
+        stats: {
+            attack: 34,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            paralysisChance: 10
+        },
+
+        value: 3240,
+        sellValue: 1620
+
+    },
+
+    teslacoil_legendary: {
+
+        id: "teslacoil_legendary",
+        name: "Bastão de Tesla",
+        type: "weapon",
+        slot: "weapon",
+        class: "spark",
+        weaponType: "teslacoil",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/weapons/tesla-coil-rarity-lendario.png",
+
+        stats: {
+            attack: 44,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            paralysisChance: 11
+        },
+
+        value: 0,
+        sellValue: 18860
+
+    },
+
+    teslacoil_ultraje: {
+
+        id: "teslacoil_ultraje",
+        name: "Bastão de Tesla",
+        type: "weapon",
+        slot: "weapon",
+        class: "spark",
+        weaponType: "teslacoil",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/weapons/tesla-coil-rarity-ultraje.png",
+
+        stats: {
+            attack: 60,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            paralysisChance: 15
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

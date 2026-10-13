@@ -814,6 +814,120 @@ const chests = {
         value: 0,
         sellValue: 0
 
+    },
+
+    chest_spark_common: {
+
+        id: "chest_spark_common",
+        name: "Jaqueta",
+        type: "armor",
+        slot: "chest",
+        class: "spark",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/chest/chest-spark-rarity-comum.png",
+
+        stats: {
+            armor: 4
+        },
+
+        value: 100,
+        sellValue: 50
+
+    },
+
+    chest_spark_uncommon: {
+
+        id: "chest_spark_uncommon",
+        name: "Jaqueta",
+        type: "armor",
+        slot: "chest",
+        class: "spark",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/chest/chest-spark-rarity-incomum.png",
+
+        stats: {
+            armor: 7
+        },
+
+        value: 300,
+        sellValue: 150
+
+    },
+
+    chest_spark_rare: {
+
+        id: "chest_spark_rare",
+        name: "Jaqueta",
+        type: "armor",
+        slot: "chest",
+        class: "spark",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/chest/chest-spark-rarity-rare.png",
+
+        stats: {
+            armor: 14
+        },
+
+        value: 900,
+        sellValue: 450
+
+    },
+
+    chest_spark_mystic: {
+
+        id: "chest_spark_mystic",
+        name: "Jaqueta",
+        type: "armor",
+        slot: "chest",
+        class: "spark",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/chest/chest-spark-rarity-mistico.png",
+
+        stats: {
+            armor: 18
+        },
+
+        value: 2700,
+        sellValue: 1350
+
+    },
+
+    chest_spark_legendary: {
+
+        id: "chest_spark_legendary",
+        name: "Jaqueta",
+        type: "armor",
+        slot: "chest",
+        class: "spark",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/chest/chest-spark-rarity-lendario.png",
+
+        stats: {
+            armor: 24
+        },
+
+        value: 0,
+        sellValue: 14050
+
+    },
+
+    chest_spark_ultraje: {
+
+        id: "chest_spark_ultraje",
+        name: "Jaqueta",
+        type: "armor",
+        slot: "chest",
+        class: "spark",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/chest/chest-spark-rarity-ultraje.png",
+
+        stats: {
+            armor: 31
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

@@ -855,6 +855,126 @@ const helmets = {
         value: 0,
         sellValue: 0
 
+    },
+
+    helmet_spark_common: {
+
+        id: "helmet_spark_common",
+        name: "Óculos Chocante",
+        type: "armor",
+        slot: "helmet",
+        class: "spark",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/helmets/helmets-spark-rarity-comum.png",
+
+        stats: {
+            armor: 2,
+            paralysisChance: 2
+        },
+
+        value: 50,
+        sellValue: 20
+
+    },
+
+    helmet_spark_uncommon: {
+
+        id: "helmet_spark_uncommon",
+        name: "Óculos Chocante",
+        type: "armor",
+        slot: "helmet",
+        class: "spark",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/helmets/helmets-spark-rarity-incomum.png",
+
+        stats: {
+            armor: 4,
+            paralysisChance: 3
+        },
+
+        value: 200,
+        sellValue: 120
+
+    },
+
+    helmet_spark_rare: {
+
+        id: "helmet_spark_rare",
+        name: "Óculos Chocante",
+        type: "armor",
+        slot: "helmet",
+        class: "spark",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/helmets/helmets-spark-rarity-rare.png",
+
+        stats: {
+            armor: 6,
+            paralysisChance: 4
+        },
+
+        value: 720,
+        sellValue: 360
+
+    },
+
+    helmet_spark_mystic: {
+
+        id: "helmet_spark_mystic",
+        name: "Óculos Chocante",
+        type: "armor",
+        slot: "helmet",
+        class: "spark",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/helmets/helmets-spark-rarity-mistico.png",
+
+        stats: {
+            armor: 9,
+            paralysisChance: 6
+        },
+
+        value: 2160,
+        sellValue: 1080
+
+    },
+
+    helmet_spark_legendary: {
+
+        id: "helmet_spark_legendary",
+        name: "Óculos Chocante",
+        type: "armor",
+        slot: "helmet",
+        class: "spark",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/helmets/helmets-spark-rarity-lendario.png",
+
+        stats: {
+            armor: 14,
+            paralysisChance: 8
+        },
+
+        value: 0,
+        sellValue: 13240
+
+    },
+
+    helmet_spark_ultraje: {
+
+        id: "helmet_spark_ultraje",
+        name: "Óculos Chocante",
+        type: "armor",
+        slot: "helmet",
+        class: "spark",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/helmets/helmets-spark-rarity-ultraje.png",
+
+        stats: {
+            armor: 18,
+            paralysisChance: 10
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

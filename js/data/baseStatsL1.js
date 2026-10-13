@@ -27,4 +27,12 @@ export default {
     // (ver ConfusionService.js), 100% vindo do equipamento, igual o
     // Miasma do Pútrido.
     crazy: { attack: 8, armor: 1, agility: 7, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+    // Parecido com o Mago: dano alto, mas um pouco abaixo (ver
+    // levels.js — no nível 100 fecha em Vida 1200/Ataque 150/Armadura
+    // 60/Agilidade 120, contra Vida 1291/Ataque 162/Armadura 14/
+    // Agilidade 90 do Mago). Diferente dele, Armadura e Agilidade ficam
+    // medianas em vez de extremas — não é um canhão de vidro. O
+    // especial dele é Paralisia (ver ParalysisService.js), 100% vindo
+    // do equipamento, igual a Confusão da Louca.
+    spark: { attack: 7, armor: 4, agility: 5, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
 };

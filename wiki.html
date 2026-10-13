@@ -32,7 +32,7 @@
 
             <nav class="wiki-nav" id="wiki-nav">
 
-                <a href="#classes" class="wiki-nav-item" data-keywords="classes guerreiro arqueiro mago barbaro putrido pútrido mimico mímico louca crazy miasma imitação absorção confusão">
+                <a href="#classes" class="wiki-nav-item" data-keywords="classes guerreiro arqueiro mago barbaro putrido pútrido mimico mímico louca crazy eletro spark miasma imitação absorção confusão paralisia">
                     <i class="fa-solid fa-shield-halved"></i> Classes
                 </a>
 
@@ -138,7 +138,7 @@
             <section id="classes" class="wiki-section">
 
                 <h2><i class="fa-solid fa-shield-halved"></i> Classes</h2>
-                <p class="wiki-intro">Ao começar uma aventura, você escolhe uma entre sete classes. Cada uma tem um jeito bem diferente de jogar — não existe "a melhor", existe a que combina com o seu estilo.</p>
+                <p class="wiki-intro">Ao começar uma aventura, você escolhe uma entre oito classes. Cada uma tem um jeito bem diferente de jogar — não existe "a melhor", existe a que combina com o seu estilo.</p>
 
                 <div class="wiki-cards">
 
@@ -177,6 +177,11 @@
                         <p>O maior Ataque e a maior Agilidade do jogo, de longe — em troca, a menor Armadura e a menor Vida de todas as classes. O forte dela é a <strong>Confusão</strong>: chance, a cada golpe que acerta, de deixar o alvo confuso até o próximo ataque dele. Esse ataque confuso sorteia um de três resultados (33% cada): acerta o oponente de sempre com 20% a mais de dano, acerta a si mesmo com 50% a mais de dano, ou erra por completo. Uma aposta de alto risco tanto pra quem causa quanto pra quem sofre a Confusão.</p>
                     </article>
 
+                    <article class="wiki-card">
+                        <h3><i class="fa-solid fa-bolt"></i> Eletro</h3>
+                        <p>Parecido com o Mago: o segundo maior dano do jogo, um pouco abaixo dele. Diferente do Mago, porém, Armadura, Agilidade e Vida ficam medianas em vez de extremas — não é um canhão de vidro. O forte dele é a <strong>Paralisia</strong>: chance, a cada golpe que acerta, de paralisar o alvo até o próximo ataque dele — diferente da Confusão, não tem resultado alternativo nenhum, o golpe simplesmente não acontece, sem sortear nada.</p>
+                    </article>
+
                 </div>
 
             </section>
@@ -184,7 +189,7 @@
             <section id="comparativo" class="wiki-section">
 
                 <h2><i class="fa-solid fa-chart-line"></i> Comparativo de Classes</h2>
-                <p class="wiki-intro">Um raio-x visual de <strong>Vida, Ataque, Armadura e Agilidade</strong> — só os atributos base de cada classe (sem nenhum equipamento), nos níveis 20, 50 e 100. Cada eixo é comparado contra o maior valor que QUALQUER classe alcança naquele atributo no nível 100 — então dá pra comparar as 7 formas diretamente, olhando o tamanho de cada "pizza".</p>
+                <p class="wiki-intro">Um raio-x visual de <strong>Vida, Ataque, Armadura e Agilidade</strong> — só os atributos base de cada classe (sem nenhum equipamento), nos níveis 20, 50 e 100. Cada eixo é comparado contra o maior valor que QUALQUER classe alcança naquele atributo no nível 100 — então dá pra comparar as 8 formas diretamente, olhando o tamanho de cada "pizza".</p>
 
                 <div class="wiki-radar-grid">
 
@@ -221,6 +226,11 @@
                     <article class="wiki-radar-card">
                         <h3><i class="fa-solid fa-face-dizzy"></i> Louca</h3>
                         <canvas id="radar-crazy"></canvas>
+                    </article>
+
+                    <article class="wiki-radar-card">
+                        <h3><i class="fa-solid fa-bolt"></i> Eletro</h3>
+                        <canvas id="radar-spark"></canvas>
                     </article>
 
                 </div>
@@ -679,7 +689,7 @@
         import baseStatsL1 from "./js/data/baseStatsL1.js";
         import levels from "./js/data/levels.js";
 
-        const CLASS_IDS = ["warrior", "archer", "mage", "barbarian", "putrid", "mimic", "crazy"];
+        const CLASS_IDS = ["warrior", "archer", "mage", "barbarian", "putrid", "mimic", "crazy", "spark"];
         const STAT_KEYS = ["life", "attack", "armor", "agility"];
         const RADAR_LABELS = ["Vida", "Ataque", "Armadura", "Agilidade"];
         const LEVELS_TO_SHOW = [20, 50, 100];

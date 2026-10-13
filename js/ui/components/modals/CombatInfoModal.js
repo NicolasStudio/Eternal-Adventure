@@ -33,6 +33,8 @@ const METRIC_GROUPS = [
             { key: "miasmaCount", label: "Miasma", color: "#b5cf4a" },
             { key: "confusionCount", label: "Confusão", color: "#9d4edd" },
             { key: "confusedCount", label: "Ataques confusos", color: "#ffa07a" },
+            { key: "paralysisCount", label: "Paralisia", color: "#000075" },
+            { key: "paralyzedCount", label: "Ataques paralisados", color: "#808000" },
             { key: "lifeStealCount", label: "Roubo de vida", color: "#fabebe" }
         ]
     },

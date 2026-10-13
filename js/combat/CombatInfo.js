@@ -13,6 +13,12 @@
 // confusedCount conta quantas vezes um ataque DELE MESMO saiu errado
 // por já estar confuso (confusionOutcome self/opponent/miss) — as duas
 // podem acontecer em golpes diferentes, não são a mesma coisa.
+//
+// paralysisCount/paralyzedCount são a mesma ideia pra Paralisia do
+// Eletro (ver ParalysisService.js): paralysisCount conta quantas vezes
+// ESTE jogador paralisou o oponente (paralysisProc); paralyzedCount
+// conta quantas vezes um ataque DELE MESMO se perdeu por já estar
+// paralisado (entry.paralyzed).
 
 // Resumo do combate pra UM jogador específico — soma o log inteiro
 // (todos os lados aparecem nele) filtrando só o que é dele.
@@ -34,6 +40,8 @@ export function buildCombatInfo(log, playerId) {
         miasmaCount: 0,
         confusionCount: 0,
         confusedCount: 0,
+        paralysisCount: 0,
+        paralyzedCount: 0,
         lifeStealCount: 0,
         // Pet
         petHealing: 0,
@@ -79,6 +87,8 @@ export function buildCombatInfo(log, playerId) {
             if (entry.miasmaProc) info.miasmaCount++;
             if (entry.confusionProc) info.confusionCount++;
             if (entry.confusionOutcome) info.confusedCount++;
+            if (entry.paralysisProc) info.paralysisCount++;
+            if (entry.paralyzed) info.paralyzedCount++;
 
             if (entry.lifeSteal > 0) {
                 info.lifeStolen += entry.lifeSteal;
@@ -116,7 +126,8 @@ export function buildCombatTimeline(log, playerId) {
         "damageDealt", "damageReceived", "armorMitigated", "rawDamageDealt",
         "absorbedValue", "lifeStolen", "dodges", "absorptionCount",
         "criticalCount", "mimicCount", "miasmaCount", "confusionCount",
-        "confusedCount", "lifeStealCount", "petHealing", "petDamage"
+        "confusedCount", "paralysisCount", "paralyzedCount",
+        "lifeStealCount", "petHealing", "petDamage"
     ];
 
     let maxRound = 0;
@@ -161,6 +172,8 @@ export function buildCombatTimeline(log, playerId) {
             if (entry.miasmaProc) addDelta(round, "miasmaCount", 1);
             if (entry.confusionProc) addDelta(round, "confusionCount", 1);
             if (entry.confusionOutcome) addDelta(round, "confusedCount", 1);
+            if (entry.paralysisProc) addDelta(round, "paralysisCount", 1);
+            if (entry.paralyzed) addDelta(round, "paralyzedCount", 1);
 
             if (entry.lifeSteal > 0) {
                 addDelta(round, "lifeStolen", entry.lifeSteal);
