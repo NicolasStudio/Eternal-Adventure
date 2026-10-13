@@ -165,7 +165,8 @@ export default class Player {
             archer: prefix === "light" ? "light_archer" : "dark_archer",
             barbarian: prefix === "light" ? "light_barbarian" : "dark_barbarian",
             putrid: prefix === "light" ? "light_putrid" : "dark_putrid",
-            mimic: prefix === "light" ? "light_mimic" : "dark_mimic"
+            mimic: prefix === "light" ? "light_mimic" : "dark_mimic",
+            crazy: prefix === "light" ? "light_crazy" : "dark_crazy"
         }[this.class.id];
 
         return upClasse[classKey] ?? null;
