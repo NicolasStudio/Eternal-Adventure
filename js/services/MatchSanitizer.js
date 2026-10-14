@@ -30,6 +30,7 @@ const NUMBER_KEYS = new Set([
     "maxHP", "currentHP", "attack", "armor", "agility",
     "criticalChance", "lifeSteal", "penetration", "absorption",
     "miasmaChance", "reflection", "confusionChance", "paralysisChance",
+    "doubleStrikeChance",
     "petBiteDamage", "petHealAmount", "petMimicRatio", "petBurnDamage",
     "petRevivePercent"
 ]);

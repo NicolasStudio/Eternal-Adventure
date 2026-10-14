@@ -19,6 +19,13 @@
 // ESTE jogador paralisou o oponente (paralysisProc); paralyzedCount
 // conta quantas vezes um ataque DELE MESMO se perdeu por já estar
 // paralisado (entry.paralyzed).
+//
+// doubleStrikeCount é o Golpe Duplo do Samurai (ver
+// DoubleStrikeService.js): conta quantas vezes ESTE jogador acertou o
+// MESMO golpe uma segunda vez (doubleStrikeProc, na entrada do golpe
+// PRINCIPAL) — a segunda entrada própria no log (entry.doubleStrike)
+// já soma no damageDealt/damageReceived normalmente (é dano de
+// verdade), só não teria doubleStrikeProc próprio pra não contar 2x.
 
 // Resumo do combate pra UM jogador específico — soma o log inteiro
 // (todos os lados aparecem nele) filtrando só o que é dele.
@@ -42,6 +49,7 @@ export function buildCombatInfo(log, playerId) {
         confusedCount: 0,
         paralysisCount: 0,
         paralyzedCount: 0,
+        doubleStrikeCount: 0,
         lifeStealCount: 0,
         // Pet
         petHealing: 0,
@@ -89,6 +97,7 @@ export function buildCombatInfo(log, playerId) {
             if (entry.confusionOutcome) info.confusedCount++;
             if (entry.paralysisProc) info.paralysisCount++;
             if (entry.paralyzed) info.paralyzedCount++;
+            if (entry.doubleStrikeProc) info.doubleStrikeCount++;
 
             if (entry.lifeSteal > 0) {
                 info.lifeStolen += entry.lifeSteal;
@@ -126,7 +135,7 @@ export function buildCombatTimeline(log, playerId) {
         "damageDealt", "damageReceived", "armorMitigated", "rawDamageDealt",
         "absorbedValue", "lifeStolen", "dodges", "absorptionCount",
         "criticalCount", "mimicCount", "miasmaCount", "confusionCount",
-        "confusedCount", "paralysisCount", "paralyzedCount",
+        "confusedCount", "paralysisCount", "paralyzedCount", "doubleStrikeCount",
         "lifeStealCount", "petHealing", "petDamage"
     ];
 
@@ -174,6 +183,7 @@ export function buildCombatTimeline(log, playerId) {
             if (entry.confusionOutcome) addDelta(round, "confusedCount", 1);
             if (entry.paralysisProc) addDelta(round, "paralysisCount", 1);
             if (entry.paralyzed) addDelta(round, "paralyzedCount", 1);
+            if (entry.doubleStrikeProc) addDelta(round, "doubleStrikeCount", 1);
 
             if (entry.lifeSteal > 0) {
                 addDelta(round, "lifeStolen", entry.lifeSteal);

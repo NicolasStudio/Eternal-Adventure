@@ -4,6 +4,7 @@ import MiasmaService, { PVE_STACK_PERCENTS as MIASMA_PVE_PERCENTS } from "../ser
 import MimicService from "../services/MimicService.js";
 import ConfusionService from "../services/ConfusionService.js";
 import ParalysisService from "../services/ParalysisService.js";
+import DoubleStrikeService from "../services/DoubleStrikeService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVE, absorbedAmount } from "./Absorption.js";
 import { CRITICAL_MULTIPLIER } from "./Critical.js";
 
@@ -210,6 +211,19 @@ export default class CombatEngine {
             this.player.currentHP = Math.min(this.player.maxHP, this.player.currentHP + result.lifeSteal);
         }
 
+        // Golpe Duplo do Samurai: repete o MESMO dano já calculado acima
+        // uma segunda vez, na mesma rodada — sem rolar Crítico/Roubo de
+        // Vida/Absorção de novo (ver DoubleStrikeService.js). Acontece
+        // ANTES do Reviver do Yggdrasil, pra ele avaliar o HP já depois
+        // dos dois golpes, não só do primeiro.
+        if (result.doubleStrikeProc) {
+            if (defenderSide === "monster") {
+                this.monster.status.vidaAtual = Math.max(0, this.monster.status.vidaAtual - result.damage);
+            } else {
+                this.player.currentHP = Math.max(0, this.player.currentHP - result.damage);
+            }
+        }
+
         // Reviver do Yggdrasil: agora depende de quem TOMOU o golpe
         // (defenderSide), não de quem era o atacante — um golpe
         // confuso em si mesmo também pode derrubar o próprio jogador.
@@ -229,8 +243,22 @@ export default class CombatEngine {
             mimicBonus: result.mimicBonus,
             miasmaProc: result.miasmaProc,
             confusionOutcome,
-            paralysisProc: result.paralysisProc
+            paralysisProc: result.paralysisProc,
+            doubleStrikeProc: result.doubleStrikeProc
         });
+
+        // Segunda entrada própria no log pro Golpe Duplo — mesmo dano,
+        // sem crítico/absorção/life steal (já não rolam de novo).
+        if (result.doubleStrikeProc) {
+            this.log.push({
+                round: this.turnCounter,
+                attackerId: attackerSide,
+                targetId: defenderSide,
+                dodged: false,
+                damage: result.damage,
+                doubleStrike: true
+            });
+        }
 
         if (revive) {
             this.log.push({
@@ -262,7 +290,8 @@ export default class CombatEngine {
             miasmaDefendWeakened: result.miasmaDefendWeakened,
             mimicBonus: result.mimicBonus,
             confusionProc: result.confusionProc,
-            paralysisProc: result.paralysisProc
+            paralysisProc: result.paralysisProc,
+            doubleStrikeProc: result.doubleStrikeProc
         };
     }
 
@@ -398,6 +427,16 @@ export default class CombatEngine {
 
         if (paralysisProc) ParalysisService.applyPending(this.paralysisFlags[defenderSide]);
 
+        // ==========================
+        // GOLPE DUPLO (Samurai)
+        // ==========================
+        // Sorteado com o doubleStrikeChance ORIGINAL do atacante — só o
+        // Samurai tem isso > 0 (vem 100% do equipamento, ver
+        // PlayerStats.js). Sem estado pendente nenhum: resolve tudo na
+        // hora, aplicado em attack() logo depois do dano principal (ver
+        // DoubleStrikeService.js).
+        const doubleStrikeProc = DoubleStrikeService.procs(attacker.doubleStrikeChance ?? 0, Math.random());
+
         return {
             miasmaProc,
             miasmaStacks,
@@ -408,6 +447,7 @@ export default class CombatEngine {
             miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(defender),
             confusionProc,
             paralysisProc,
+            doubleStrikeProc,
             damage,
             rawDamage,
             armorMitigated,
@@ -500,6 +540,9 @@ export default class CombatEngine {
             if (result.paralysisProc) {
                 message += `<br>${ParalysisService.buildProcMessage(this.monster.name)}`;
             }
+            if (result.doubleStrikeProc) {
+                message += `<br>${DoubleStrikeService.buildMessage(this.monster.name)}`;
+            }
             if (result.mimicBonus > 0) {
                 message += `<br>${MimicService.buildMessage(result.mimicBonus, { opponentName: this.monster.name })}`;
             }
@@ -522,6 +565,9 @@ export default class CombatEngine {
         }
         if (result.paralysisProc) {
             message += `<br>${ParalysisService.buildProcMessage("você")}`;
+        }
+        if (result.doubleStrikeProc) {
+            message += `<br>${DoubleStrikeService.buildMessage("você")}`;
         }
         if (result.revive) {
             message += `<br><span class="combat-pet-bite">${result.revive.petName}</span> reviveu você com <strong>${result.revive.heal}</strong> HP!`;

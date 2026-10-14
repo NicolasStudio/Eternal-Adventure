@@ -231,7 +231,9 @@ export default class ItemTooltip {
             // Louca: o especial dela é a Confusão (ver ConfusionService.js).
             crazy: "confusionChance",
             // Eletro: o especial dele é a Paralisia (ver ParalysisService.js).
-            spark: "paralysisChance"
+            spark: "paralysisChance",
+            // Samurai: o especial dele é o Golpe Duplo (ver DoubleStrikeService.js).
+            samurai: "doubleStrikeChance"
         }[this.item.class] ?? null;
     }
 
@@ -253,6 +255,7 @@ export default class ItemTooltip {
             case "reflection": return "Imitação";
             case "confusionChance": return "Confusão";
             case "paralysisChance": return "Paralisia";
+            case "doubleStrikeChance": return "Golpe Duplo";
             default: return stat;
         }
     }
@@ -274,6 +277,7 @@ export default class ItemTooltip {
             case "reflection": return "🪞";
             case "confusionChance": return "🌀";
             case "paralysisChance": return "⚡";
+            case "doubleStrikeChance": return "⚔️";
             case "life": return "❤️";
             default: return "•";
         }

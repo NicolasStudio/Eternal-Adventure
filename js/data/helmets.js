@@ -975,6 +975,126 @@ const helmets = {
         value: 0,
         sellValue: 0
 
+    },
+
+    helmet_samurai_common: {
+
+        id: "helmet_samurai_common",
+        name: "Máscara Tengu",
+        type: "armor",
+        slot: "helmet",
+        class: "samurai",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/helmets/helmets-samurai-rarity-comum.png",
+
+        stats: {
+            armor: 2,
+            doubleStrikeChance: 2
+        },
+
+        value: 50,
+        sellValue: 20
+
+    },
+
+    helmet_samurai_uncommon: {
+
+        id: "helmet_samurai_uncommon",
+        name: "Máscara Tengu",
+        type: "armor",
+        slot: "helmet",
+        class: "samurai",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/helmets/helmets-samurai-rarity-incomum.png",
+
+        stats: {
+            armor: 4,
+            doubleStrikeChance: 3
+        },
+
+        value: 200,
+        sellValue: 120
+
+    },
+
+    helmet_samurai_rare: {
+
+        id: "helmet_samurai_rare",
+        name: "Máscara Tengu",
+        type: "armor",
+        slot: "helmet",
+        class: "samurai",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/helmets/helmets-samurai-rarity-rare.png",
+
+        stats: {
+            armor: 6,
+            doubleStrikeChance: 4
+        },
+
+        value: 720,
+        sellValue: 360
+
+    },
+
+    helmet_samurai_mystic: {
+
+        id: "helmet_samurai_mystic",
+        name: "Máscara Tengu",
+        type: "armor",
+        slot: "helmet",
+        class: "samurai",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/helmets/helmets-samurai-rarity-mistico.png",
+
+        stats: {
+            armor: 9,
+            doubleStrikeChance: 6
+        },
+
+        value: 2160,
+        sellValue: 1080
+
+    },
+
+    helmet_samurai_legendary: {
+
+        id: "helmet_samurai_legendary",
+        name: "Máscara Tengu",
+        type: "armor",
+        slot: "helmet",
+        class: "samurai",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/helmets/helmets-samurai-rarity-lendario.png",
+
+        stats: {
+            armor: 14,
+            doubleStrikeChance: 8
+        },
+
+        value: 0,
+        sellValue: 13240
+
+    },
+
+    helmet_samurai_ultraje: {
+
+        id: "helmet_samurai_ultraje",
+        name: "Máscara Tengu",
+        type: "armor",
+        slot: "helmet",
+        class: "samurai",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/helmets/helmets-samurai-rarity-ultraje.png",
+
+        stats: {
+            armor: 18,
+            doubleStrikeChance: 10
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

@@ -12,6 +12,7 @@ import MiasmaService from "../services/MiasmaService.js";
 import MimicService from "../services/MimicService.js";
 import ConfusionService from "../services/ConfusionService.js";
 import ParalysisService from "../services/ParalysisService.js";
+import DoubleStrikeService from "../services/DoubleStrikeService.js";
 import dungeons from "../data/dungeons.js";
 
 // Só os chefes "normais" (não o final secreto, que fica de fora da
@@ -539,6 +540,12 @@ export default class PvpView {
             if (entry.heal > 0) parts.push(`curou ${entry.heal} HP`);
             return `<div class="pvp-log-line pvp-log-pet-bite">${petName} agiu! ${parts.join(" e ")}.</div>`;
         }
+        // Golpe Duplo do Samurai: segunda entrada própria no log, mesmo
+        // dano repetido (ver DoubleStrikeService.js) — sem crítico/
+        // absorção/life steal de novo.
+        if (entry.doubleStrike) {
+            return `<div class="pvp-log-line"><span class="combat-double-strike">Golpe Duplo!</span> ${name} acertou ${defenderName} de novo: ${entry.damage} de dano</div>`;
+        }
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
         const absorbed = entry.absorbed > 0
@@ -550,10 +557,13 @@ export default class PvpView {
         const paralysis = entry.paralysisProc
             ? ` <span class="combat-paralysis">(Paralisia!)</span>`
             : "";
+        const doubleStrike = entry.doubleStrikeProc
+            ? ` <span class="combat-double-strike">(Golpe Duplo!)</span>`
+            : "";
         if (entry.confusionOutcome === "self") {
             return `<div class="pvp-log-line">${name} se atacou sem querer: ${entry.damage} de dano${crit}${confusion}</div>`;
         }
-        return `<div class="pvp-log-line">${name} causou ${entry.damage} de dano${crit}${steal}${absorbed}${confusion}${paralysis}</div>`;
+        return `<div class="pvp-log-line">${name} causou ${entry.damage} de dano${crit}${steal}${absorbed}${confusion}${paralysis}${doubleStrike}</div>`;
     }
 
     renderLogLineTeam(entry, nameOf, petNameOf) {
@@ -585,6 +595,12 @@ export default class PvpView {
             if (entry.heal > 0 && healTargetName) parts.push(`curou ${healTargetName} em ${entry.heal} HP`);
             return `<div class="pvp-log-line pvp-log-pet-bite">Pet de ${attackerName} agiu! ${parts.join(" e ")}.</div>`;
         }
+        // Golpe Duplo do Samurai: segunda entrada própria no log, mesmo
+        // dano repetido (ver DoubleStrikeService.js) — sem crítico/
+        // absorção/life steal de novo.
+        if (entry.doubleStrike) {
+            return `<div class="pvp-log-line"><span class="combat-double-strike">Golpe Duplo!</span> ${attackerName} acertou ${targetName} de novo: ${entry.damage} de dano</div>`;
+        }
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
         const absorbed = entry.absorbed > 0
@@ -596,10 +612,13 @@ export default class PvpView {
         const paralysis = entry.paralysisProc
             ? ` <span class="combat-paralysis">(Paralisia!)</span>`
             : "";
+        const doubleStrike = entry.doubleStrikeProc
+            ? ` <span class="combat-double-strike">(Golpe Duplo!)</span>`
+            : "";
         if (entry.confusionOutcome === "self") {
             return `<div class="pvp-log-line">${attackerName} se atacou sem querer: ${entry.damage} de dano${crit}${confusion}</div>`;
         }
-        return `<div class="pvp-log-line">${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}${confusion}${paralysis}</div>`;
+        return `<div class="pvp-log-line">${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}${confusion}${paralysis}${doubleStrike}</div>`;
     }
 
     currentOpponentSnapshot() {
@@ -973,6 +992,14 @@ export default class PvpView {
                 : `<span class="combat-pet-bite">${petName} de ${opponentName} agiu!</span>${damage}${heal}`;
         }
 
+        // Golpe Duplo do Samurai: segunda entrada própria no log, mesmo
+        // dano repetido (ver DoubleStrikeService.js) — sem crítico/
+        // absorção/life steal de novo, mensagem própria em vez da linha
+        // normal de dano.
+        if (entry.doubleStrike) {
+            return `${DoubleStrikeService.buildMessage(isMe ? opponentName : "você")} Causou <strong>${entry.damage}</strong> de dano.`;
+        }
+
         // Confusão "ataca a si mesmo" ou "acerta o oponente mesmo
         // confuso" — prefixo próprio antes da linha de dano normal (ver
         // CombatEngine.createAttackMessage, mesmo padrão).
@@ -1017,6 +1044,10 @@ export default class PvpView {
                 message += `<br>${ParalysisService.buildProcMessage(opponentName)}`;
             }
 
+            if (entry.doubleStrikeProc) {
+                message += `<br>${DoubleStrikeService.buildMessage(opponentName)}`;
+            }
+
             return message;
 
         }
@@ -1054,6 +1085,10 @@ export default class PvpView {
 
         if (entry.paralysisProc) {
             hitMessage += `<br>${ParalysisService.buildProcMessage("você")}`;
+        }
+
+        if (entry.doubleStrikeProc) {
+            hitMessage += `<br>${DoubleStrikeService.buildMessage("você")}`;
         }
 
         return hitMessage;
@@ -1137,6 +1172,17 @@ export default class PvpView {
             return `<span class="combat-pet-bite">${petLabel} agiu!</span>${damage}${heal}`;
         }
 
+        // Golpe Duplo do Samurai: segunda entrada própria no log, mesmo
+        // dano repetido (ver DoubleStrikeService.js) — sem crítico/
+        // absorção/life steal de novo, mensagem própria em vez da linha
+        // normal de dano.
+        if (entry.doubleStrike) {
+            const damageLabel = targetIsMe
+                ? `Você recebeu <strong>${entry.damage}</strong> de dano.`
+                : `Causou <strong>${entry.damage}</strong> de dano em ${targetName}.`;
+            return `${DoubleStrikeService.buildMessage(targetIsMe ? "você" : targetName)} ${damageLabel}`;
+        }
+
         // Confusão "ataca a si mesmo" ou "acerta o alvo mesmo confuso" —
         // prefixo próprio antes da linha de dano normal (ver
         // CombatEngine.createAttackMessage, mesmo padrão).
@@ -1181,6 +1227,10 @@ export default class PvpView {
                 message += `<br>${ParalysisService.buildProcMessage(targetName)}`;
             }
 
+            if (entry.doubleStrikeProc) {
+                message += `<br>${DoubleStrikeService.buildMessage(targetName)}`;
+            }
+
             return message;
 
         }
@@ -1219,6 +1269,10 @@ export default class PvpView {
                 hitMessage += `<br>${ParalysisService.buildProcMessage("você")}`;
             }
 
+            if (entry.doubleStrikeProc) {
+                hitMessage += `<br>${DoubleStrikeService.buildMessage("você")}`;
+            }
+
             return hitMessage;
 
         }
@@ -1234,10 +1288,13 @@ export default class PvpView {
         const paralysis = entry.paralysisProc
             ? ` <span class="combat-paralysis">(Paralisia!)</span>`
             : "";
+        const doubleStrike = entry.doubleStrikeProc
+            ? ` <span class="combat-double-strike">(Golpe Duplo!)</span>`
+            : "";
         if (entry.confusionOutcome === "self") {
             return `${attackerName} se atacou sem querer, causando ${entry.damage} de dano${crit}${confusion}.`;
         }
-        return `${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${mimic}${miasma}${confusion}${paralysis}.`;
+        return `${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${mimic}${miasma}${confusion}${paralysis}${doubleStrike}.`;
 
     }
 
@@ -1324,7 +1381,7 @@ export default class PvpView {
 
             const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
-            await CombatToast.show(this.buildAttackMessage(entry), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry) + ParalysisService.extraToastSeconds(entry), speed);
+            await CombatToast.show(this.buildAttackMessage(entry), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry) + ParalysisService.extraToastSeconds(entry) + DoubleStrikeService.extraToastSeconds(entry), speed);
 
             await this.sleep(500 / speed);
 
@@ -1413,7 +1470,7 @@ export default class PvpView {
 
                 const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
-                await CombatToast.show(this.buildTeamAttackMessage(entry, nameOf, petNameOf), this.buildTeamToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry) + ParalysisService.extraToastSeconds(entry), speed);
+                await CombatToast.show(this.buildTeamAttackMessage(entry, nameOf, petNameOf), this.buildTeamToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry) + ParalysisService.extraToastSeconds(entry) + DoubleStrikeService.extraToastSeconds(entry), speed);
 
                 await this.sleep(450 / speed);
 

@@ -34,6 +34,7 @@ const STATS = [
     ["miasmaChance", "Miasma", "%"],
     ["confusionChance", "Confusão", "%"],
     ["paralysisChance", "Paralisia", "%"],
+    ["doubleStrikeChance", "Golpe Duplo", "%"],
     ["penetration", "Penetração", "%"],
     ["lifeSteal", "Roubo de Vida", "%"]
 ];

@@ -72,6 +72,15 @@ const classes = {
         description: "Especialista em eletricidade.",
         lore: "OS Eletros são mestres no controle de eletricidade, podendo gerar raios e descargas elétricas para atordoar seus inimigos. Sua habilidade de manipular eletricidade com seu bastão de tesla torna-os uma ameaça formidável em qualquer batalha, capaz de incapacitar adversários com um simples toque.",
     },
+
+    // samurai: {
+    //     id: "samurai",
+    //     name: "Samurai",
+    //     image: "assets/img/assets/character/class/samurai.png",
+    //     hud: "assets/img/assets/character/class/samurai-hud.png",
+    //     description: "Especialista em katana e estilo de combate.",
+    //     lore: "Os samurais são guerreiros que seguem o bushido, o código de conduta dos cavaleiros. Eles são mestres em usar a katana com precisão e elegância, e sua disciplina mental os torna formidáveis em batalha. Dizem que um samurai que empunha duas katanas é capaz de derrotar qualquer inimigo que se atreva a enfrentá-lo.",
+    // }
 };
 
 export default classes;

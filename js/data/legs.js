@@ -976,6 +976,129 @@ const legs = {
         value: 0,
         sellValue: 0
 
+    },
+
+/* ==========================================
+       SAMURAI (Hakama)
+========================================== */
+    legs_samurai_common: {
+
+        id: "legs_samurai_common",
+        name: "Hakama",
+        type: "armor",
+        slot: "leg",
+        class: "samurai",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/legs/legs-samurai-rarity-comum.png",
+
+        stats: {
+            armor: 2,
+            agility: 4
+        },
+
+        value: 95,
+        sellValue: 45
+
+    },
+
+    legs_samurai_uncommon: {
+
+        id: "legs_samurai_uncommon",
+        name: "Hakama",
+        type: "armor",
+        slot: "leg",
+        class: "samurai",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/legs/legs-samurai-rarity-incomum.png",
+
+        stats: {
+            armor: 4,
+            agility: 7
+        },
+
+        value: 285,
+        sellValue: 135
+
+    },
+
+    legs_samurai_rare: {
+
+        id: "legs_samurai_rare",
+        name: "Hakama",
+        type: "armor",
+        slot: "leg",
+        class: "samurai",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/legs/legs-samurai-rarity-rare.png",
+
+        stats: {
+            armor: 6,
+            agility: 11
+        },
+
+        value: 855,
+        sellValue: 405
+
+    },
+
+    legs_samurai_mystic: {
+
+        id: "legs_samurai_mystic",
+        name: "Hakama",
+        type: "armor",
+        slot: "leg",
+        class: "samurai",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/legs/legs-samurai-rarity-mistico.png",
+
+        stats: {
+            armor: 9,
+            agility: 18
+        },
+
+        value: 2565,
+        sellValue: 1215
+
+    },
+
+    legs_samurai_legendary: {
+
+        id: "legs_samurai_legendary",
+        name: "Hakama",
+        type: "armor",
+        slot: "leg",
+        class: "samurai",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/legs/legs-samurai-rarity-lendario.png",
+
+        stats: {
+            armor: 12,
+            agility: 22
+        },
+
+        value: 0,
+        sellValue: 13645
+
+    },
+
+    legs_samurai_ultraje: {
+
+        id: "legs_samurai_ultraje",
+        name: "Hakama",
+        type: "armor",
+        slot: "leg",
+        class: "samurai",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/legs/legs-samurai-rarity-ultraje.png",
+
+        stats: {
+            armor: 15,
+            agility: 26
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

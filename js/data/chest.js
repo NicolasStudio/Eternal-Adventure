@@ -928,6 +928,123 @@ const chests = {
         value: 0,
         sellValue: 0
 
+    },
+
+/* ==========================================
+       SAMURAI
+========================================== */
+    chest_samurai_common: {
+
+        id: "chest_samurai_common",
+        name: "Kimono",
+        type: "armor",
+        slot: "chest",
+        class: "samurai",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/chest/chest-samurai-rarity-comum.png",
+
+        stats: {
+            armor: 4
+        },
+
+        value: 100,
+        sellValue: 50
+
+    },
+
+    chest_samurai_uncommon: {
+
+        id: "chest_samurai_uncommon",
+        name: "Kimono",
+        type: "armor",
+        slot: "chest",
+        class: "samurai",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/chest/chest-samurai-rarity-incomum.png",
+
+        stats: {
+            armor: 7
+        },
+
+        value: 300,
+        sellValue: 150
+
+    },
+
+    chest_samurai_rare: {
+
+        id: "chest_samurai_rare",
+        name: "Kimono",
+        type: "armor",
+        slot: "chest",
+        class: "samurai",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/chest/chest-samurai-rarity-rare.png",
+
+        stats: {
+            armor: 14
+        },
+
+        value: 900,
+        sellValue: 450
+
+    },
+
+    chest_samurai_mystic: {
+
+        id: "chest_samurai_mystic",
+        name: "Kimono",
+        type: "armor",
+        slot: "chest",
+        class: "samurai",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/chest/chest-samurai-rarity-mistico.png",
+
+        stats: {
+            armor: 18
+        },
+
+        value: 2700,
+        sellValue: 1350
+
+    },
+
+    chest_samurai_legendary: {
+
+        id: "chest_samurai_legendary",
+        name: "Kimono",
+        type: "armor",
+        slot: "chest",
+        class: "samurai",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/chest/chest-samurai-rarity-lendario.png",
+
+        stats: {
+            armor: 24
+        },
+
+        value: 0,
+        sellValue: 14050
+
+    },
+
+    chest_samurai_ultraje: {
+
+        id: "chest_samurai_ultraje",
+        name: "Kimono",
+        type: "armor",
+        slot: "chest",
+        class: "samurai",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/chest/chest-samurai-rarity-ultraje.png",
+
+        stats: {
+            armor: 31
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

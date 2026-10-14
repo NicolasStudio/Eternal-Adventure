@@ -166,7 +166,9 @@ export default class Player {
             barbarian: prefix === "light" ? "light_barbarian" : "dark_barbarian",
             putrid: prefix === "light" ? "light_putrid" : "dark_putrid",
             mimic: prefix === "light" ? "light_mimic" : "dark_mimic",
-            crazy: prefix === "light" ? "light_crazy" : "dark_crazy"
+            crazy: prefix === "light" ? "light_crazy" : "dark_crazy",
+            spark: prefix === "light" ? "light_spark" : "dark_spark",
+            samurai: prefix === "light" ? "light_samurai" : "dark_samurai"
         }[this.class.id];
 
         return upClasse[classKey] ?? null;
@@ -881,7 +883,9 @@ export default class Player {
             // Louca: o especial dela é a Confusão (ver ConfusionService.js).
             crazy: "confusionChance",
             // Eletro: o especial dele é a Paralisia (ver ParalysisService.js).
-            spark: "paralysisChance"
+            spark: "paralysisChance",
+            // Samurai: o especial dele é o Golpe Duplo (ver DoubleStrikeService.js).
+            samurai: "doubleStrikeChance"
         }[this.class.id] ?? null;
     }
 
@@ -895,6 +899,7 @@ export default class Player {
             case "reflection": return "Imitação";
             case "confusionChance": return "Confusão";
             case "paralysisChance": return "Paralisia";
+            case "doubleStrikeChance": return "Golpe Duplo";
             default: return "Atributo Especial";
         }
     }

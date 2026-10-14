@@ -192,6 +192,11 @@ export default class CharacterView {
                         <span>${stats.paralysisChance}%</span>
                     </div>
 
+                    <div class="character-stat character-stat-hoverable" data-stat="doubleStrikeChance">
+                        <span>Golpe Duplo</span>
+                        <span>${stats.doubleStrikeChance}%</span>
+                    </div>
+
                     <div class="character-stat character-stat-hoverable" data-stat="penetration">
                         <span>Penetração</span>
                         <span>${stats.penetration}%</span>
@@ -1443,6 +1448,17 @@ export default class CharacterView {
             details: [
                 ["O que acontece", "A paralisia fica pendente até o PRÓXIMO ataque de quem foi paralisado — esse golpe simplesmente não acontece, sem sortear nada: paralisado sempre perde o turno."],
                 ["Diferente da Confusão", "Não tem resultado alternativo nenhum (acertar o oponente, acertar a si mesmo) — é sempre o golpe inteiro perdido."],
+                CharacterView.SPECIAL_CAP_ROW
+            ]
+        },
+
+        doubleStrikeChance: {
+            icon: "fa-khanda",
+            title: "Golpe Duplo",
+            summary: "Exclusivo do Samurai: chance de acertar o MESMO golpe uma segunda vez, na mesma rodada.",
+            details: [
+                ["O que acontece", "Resolve na hora, no mesmo golpe — repete o MESMO dano já calculado pro primeiro, sem rolar Crítico/Roubo de Vida/Absorção de novo e sem chance de errar."],
+                ["Diferente da Confusão/Paralisia", "Não existe nenhum estado pendente — não afeta o PRÓXIMO ataque de ninguém, só dobra o golpe atual."],
                 CharacterView.SPECIAL_CAP_ROW
             ]
         }

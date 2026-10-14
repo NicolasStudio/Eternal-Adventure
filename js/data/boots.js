@@ -974,6 +974,129 @@ const boots = {
         value: 0,
         sellValue: 0
 
+    },
+
+/* ==========================================
+       SAMURAI (Chinelo de Japonês)
+========================================== */
+    boots_samurai_common: {
+
+        id: "boots_samurai_common",
+        name: "Chinelo de Japonês",
+        type: "armor",
+        slot: "boot",
+        class: "samurai",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/boots/boots-samurai-rarity-comum.png",
+
+        stats: {
+            armor: 1,
+            agility: 6
+        },
+
+        value: 80,
+        sellValue: 40
+
+    },
+
+    boots_samurai_uncommon: {
+
+        id: "boots_samurai_uncommon",
+        name: "Chinelo de Japonês",
+        type: "armor",
+        slot: "boot",
+        class: "samurai",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/boots/boots-samurai-rarity-incomum.png",
+
+        stats: {
+            armor: 2,
+            agility: 10
+        },
+
+        value: 240,
+        sellValue: 120
+
+    },
+
+    boots_samurai_rare: {
+
+        id: "boots_samurai_rare",
+        name: "Chinelo de Japonês",
+        type: "armor",
+        slot: "boot",
+        class: "samurai",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/boots/boots-samurai-rarity-rare.png",
+
+        stats: {
+            armor: 3,
+            agility: 16
+        },
+
+        value: 720,
+        sellValue: 360
+
+    },
+
+    boots_samurai_mystic: {
+
+        id: "boots_samurai_mystic",
+        name: "Chinelo de Japonês",
+        type: "armor",
+        slot: "boot",
+        class: "samurai",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/boots/boots-samurai-rarity-mistico.png",
+
+        stats: {
+            armor: 5,
+            agility: 24
+        },
+
+        value: 2160,
+        sellValue: 1080
+
+    },
+
+    boots_samurai_legendary: {
+
+        id: "boots_samurai_legendary",
+        name: "Chinelo de Japonês",
+        type: "armor",
+        slot: "boot",
+        class: "samurai",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/boots/boots-samurai-rarity-lendario.png",
+
+        stats: {
+            armor: 6,
+            agility: 28
+        },
+
+        value: 0,
+        sellValue: 13240
+
+    },
+
+    boots_samurai_ultraje: {
+
+        id: "boots_samurai_ultraje",
+        name: "Chinelo de Japonês",
+        type: "armor",
+        slot: "boot",
+        class: "samurai",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/boots/boots-samurai-rarity-ultraje.png",
+
+        stats: {
+            armor: 8,
+            agility: 32
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };
