@@ -292,6 +292,44 @@ const upClasse = {
             absorption: 0,
             paralysisChance: 8
         }
+    },
+
+    light_samurai:{
+        id: "light_samurai",
+        name: "Samurai da Luz",
+        image: "assets/img/assets/character/class_up/samurai/light-samurai.png",
+        hud: "assets/img/assets/character/class_up/samurai/light-samurai-hud.png",
+        description: "Você escolheu transcender para um samurai da luz.",
+        states:{
+            life: 70,
+            attack: 40,
+            armor: 18,
+            agility: 20,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            doubleStrikeChance: 12
+        }
+    },
+
+    dark_samurai:{
+        id: "dark_samurai",
+        name: "Samurai da Escuridão",
+        image: "assets/img/assets/character/class_up/samurai/dark-samurai.png",
+        hud: "assets/img/assets/character/class_up/samurai/dark-samurai-hud.png",
+        description: "Você escolheu transcender para um samurai da escuridão.",
+        states:{
+            life: 85,
+            attack: 48,
+            armor: 15,
+            agility: 16,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            doubleStrikeChance: 9
+        }
     }
 
 };

@@ -29,15 +29,16 @@ export const UNIQUE_RESET_SURCHARGE = 500000;
 export const DEFAULT_MAX_LEVEL = 100;
 export const EXPANDED_MAX_LEVEL = 110;
 
-// Os 8 atributos especiais do jogo — "Cara ou Coroa?" sorteia entre os
+// Os 9 atributos especiais do jogo — "Cara ou Coroa?" sorteia entre os
 // que não são o principal da sua classe (ver Player.getSpecialStatKey).
-// confusionChance/paralysisChance entraram nesse sorteio de propósito:
-// QUALQUER classe pode rolar Confusão ou Paralisia por sorte, não só a
-// Louca/o Eletro (mesma regra que já valia pros outros — nenhum fica
-// travado pra fora da classe dona).
+// confusionChance/paralysisChance/doubleStrikeChance entraram nesse
+// sorteio de propósito: QUALQUER classe pode rolar Confusão, Paralisia
+// ou Golpe Duplo por sorte, não só a Louca/o Eletro/o Samurai (mesma
+// regra que já valia pros outros — nenhum fica travado pra fora da
+// classe dona).
 export const SPECIAL_STAT_KEYS = [
     "criticalChance", "lifeSteal", "penetration",
-    "absorption", "miasmaChance", "reflection", "confusionChance", "paralysisChance"
+    "absorption", "miasmaChance", "reflection", "confusionChance", "paralysisChance", "doubleStrikeChance"
 ];
 export const COIN_FLIP_BONUS_PERCENT = 8;
 
@@ -55,6 +56,7 @@ export function getSpecialStatLabel(key) {
         case "reflection": return "Imitação";
         case "confusionChance": return "Confusão";
         case "paralysisChance": return "Paralisia";
+        case "doubleStrikeChance": return "Golpe Duplo";
         default: return key;
     }
 }

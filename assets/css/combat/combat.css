@@ -370,6 +370,19 @@
     font-weight:800;
     text-shadow:none;
 }
+/* "Golpe Duplo!" (samurai, tom de aço vermelho): selo vermelho escuro —
+   mesma lógica dos selos acima (fundo próprio pra não sumir em cima de
+   nenhuma outra cor de caixa). */
+.combat-double-strike{
+    display:inline-block;
+    padding:1px 8px;
+    border-radius:4px;
+    background:#5a1a1a;
+    color:#f5cfcf;
+    border:1px solid #3a0e0e;
+    font-weight:800;
+    text-shadow:none;
+}
 
 /* ==========================================================
    NOTEBOOK

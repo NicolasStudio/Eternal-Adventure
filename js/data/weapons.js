@@ -1230,6 +1230,171 @@ const weapons = {
         value: 0,
         sellValue: 0
 
+    },
+
+/* ==========================================
+       SAMURAI (Katana)
+========================================== */
+    katana_common: {
+
+        id: "katana_common",
+        name: "Katana",
+        type: "weapon",
+        slot: "weapon",
+        class: "samurai",
+        weaponType: "katana",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/weapons/katana-rarity-comum.png",
+
+        stats: {
+            attack: 5,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            doubleStrikeChance: 2
+        },
+
+        value: 120,
+        sellValue: 60
+
+    },
+
+    katana_uncommon: {
+
+        id: "katana_uncommon",
+        name: "Katana",
+        type: "weapon",
+        slot: "weapon",
+        class: "samurai",
+        weaponType: "katana",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/weapons/katana-rarity-incomum.png",
+
+        stats: {
+            attack: 10,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            doubleStrikeChance: 5
+        },
+
+        value: 360,
+        sellValue: 180
+
+    },
+
+    katana_rare: {
+
+        id: "katana_rare",
+        name: "Katana",
+        type: "weapon",
+        slot: "weapon",
+        class: "samurai",
+        weaponType: "katana",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/weapons/katana-rarity-rare.png",
+
+        stats: {
+            attack: 18,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            doubleStrikeChance: 6
+        },
+
+        value: 1080,
+        sellValue: 540
+
+    },
+
+    katana_mystic: {
+
+        id: "katana_mystic",
+        name: "Katana",
+        type: "weapon",
+        slot: "weapon",
+        class: "samurai",
+        weaponType: "katana",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/weapons/katana-rarity-mistico.png",
+
+        stats: {
+            attack: 28,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            doubleStrikeChance: 10
+        },
+
+        value: 3240,
+        sellValue: 1620
+
+    },
+
+    katana_legendary: {
+
+        id: "katana_legendary",
+        name: "Katana",
+        type: "weapon",
+        slot: "weapon",
+        class: "samurai",
+        weaponType: "katana",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/weapons/katana-rarity-lendario.png",
+
+        stats: {
+            attack: 36,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            doubleStrikeChance: 11
+        },
+
+        value: 0,
+        sellValue: 18860
+
+    },
+
+    katana_ultraje: {
+
+        id: "katana_ultraje",
+        name: "Katana",
+        type: "weapon",
+        slot: "weapon",
+        class: "samurai",
+        weaponType: "katana",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/weapons/katana-rarity-ultraje.png",
+
+        stats: {
+            attack: 48,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            doubleStrikeChance: 15
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

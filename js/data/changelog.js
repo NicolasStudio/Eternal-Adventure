@@ -53,7 +53,9 @@ export default [
             "XP necessária pra subir de nível ficou mais cara entre os níveis 20 e 100 — 10% do 20 ao 50, 20% do 51 ao 70, 25% do 71 ao 79, 30% do 80 ao 89 e 35% do 90 ao 100. A XP ganha em combate não mudou, só o quanto precisa pra passar de nível",
             "Alto Falante: novo ícone ao lado do Correio, só pra administração — abre um aviso que aparece correndo no topo da tela de todo mundo que estiver online na hora",
             "Nova classe: Eletro — parecido com o Mago (segundo maior dano do jogo), mas com Armadura, Agilidade e Vida medianas em vez de extremas. Atributo exclusivo Paralisia: chance a cada golpe certeiro de paralisar o alvo até o próximo ataque dele, que simplesmente não acontece (sem sortear nada, diferente da Confusão da Louca). Vale contra monstros, chefes, PVP e Cooperativo. Novos itens exclusivos: Bastão de Tesla (arma), Óculos Chocante (elmo), Jaqueta (peitoral), Calça de Serviço (calças) e Bota Emborrachada (botas)",
-            "Informações do Combate ganhou mais 2 números: Paralisia (quantas vezes você paralisou o oponente) e Ataques paralisados (quantos dos seus próprios ataques se perderam por estar paralisado)"
+            "Informações do Combate ganhou mais 2 números: Paralisia (quantas vezes você paralisou o oponente) e Ataques paralisados (quantos dos seus próprios ataques se perderam por estar paralisado)",
+            "Nova classe: Samurai — Ataque mediano (metade do normal de propósito), Armadura e Vida também medianas, e Agilidade alta (atrás só do Arqueiro). Atributo exclusivo Golpe Duplo: chance em todo golpe seu que acerta de repetir o MESMO dano uma segunda vez na mesma rodada, sem rolar Crítico, Roubo de Vida ou Absorção de novo. Vale contra monstros, chefes, PVP e Cooperativo. Novos itens exclusivos: Katana (arma), Máscara Tengu (elmo), Kimono (peitoral), Hakama (calças) e Chinelo de Japonês (botas)",
+            "Informações do Combate ganhou mais 1 número: Golpe Duplo (quantas vezes você acertou o mesmo golpe uma segunda vez)"
         ]
     },
 

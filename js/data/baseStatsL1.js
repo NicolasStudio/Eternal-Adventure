@@ -35,4 +35,11 @@ export default {
     // especial dele é Paralisia (ver ParalysisService.js), 100% vindo
     // do equipamento, igual a Confusão da Louca.
     spark: { attack: 7, armor: 4, agility: 5, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+    // Ataque médio — desenhado "pela metade" de propósito (ver
+    // levels.js — no nível 100 fecha em Vida 1150/Ataque 105/Armadura
+    // 62/Agilidade 138), compensado pelo Golpe Duplo (ver
+    // DoubleStrikeService.js): chance de acertar o MESMO dano uma
+    // segunda vez no mesmo golpe, 100% vindo do equipamento. Agilidade
+    // alta, mas bem atrás do Arqueiro; Armadura e Vida medianas.
+    samurai: { attack: 6, armor: 4, agility: 6, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
 };

@@ -144,6 +144,13 @@ export default class ClassSelectionScreen {
                 "⚔️ Segundo maior Ataque do jogo, atrás só do Mago",
                 "⚡ Paralisia: chance de fazer o inimigo perder o próximo ataque por completo",
                 "🛡️🏃❤️ Armadura, Agilidade e Vida medianas"
+            ],
+
+            samurai: [
+                "⚔️ Ataque mediano, compensado pelo Golpe Duplo",
+                "🗡️ Golpe Duplo: chance de acertar o mesmo dano duas vezes no mesmo golpe",
+                "🏃 Agilidade alta, atrás só do Arqueiro",
+                "🛡️❤️ Armadura e Vida medianas"
             ]
 
         };

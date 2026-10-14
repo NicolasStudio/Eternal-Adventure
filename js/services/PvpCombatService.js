@@ -5,6 +5,7 @@ import MiasmaService from "./MiasmaService.js";
 import MimicService from "./MimicService.js";
 import ConfusionService from "./ConfusionService.js";
 import ParalysisService from "./ParalysisService.js";
+import DoubleStrikeService from "./DoubleStrikeService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVP, absorbedAmount } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
@@ -25,7 +26,9 @@ const DODGE_CAP = 40;
 // por isso qualquer partida antiga desalinha sem o bump de versão.
 // v11 Paralisia do Eletro — consumida todo turno (sem sortear nada,
 // diferente da Confusão), mesmo motivo do bump acima.
-export const TEAM_SIM_VERSION = 12;
+// v13 Golpe Duplo do Samurai — rola todo golpe que acerta (igual
+// Miasma/Confusão/Paralisia), mesmo motivo do bump acima.
+export const TEAM_SIM_VERSION = 13;
 
 /*
     Os dois clientes (jogador A e B) precisam chegar no MESMO resultado
@@ -102,6 +105,8 @@ export default class PvpCombatService {
             confusionChance: stats.confusionChance ?? 0,
             // Só o Eletro tem isso > 0 (ver ParalysisService.js).
             paralysisChance: stats.paralysisChance ?? 0,
+            // Só o Samurai tem isso > 0 (ver DoubleStrikeService.js).
+            doubleStrikeChance: stats.doubleStrikeChance ?? 0,
             petBiteDamage: scaledPet?.biteDamage ?? 0,
             petHealAmount: scaledPet?.healAmount ?? 0,
             petMimicRatio: scaledPet?.mimicRatio ?? 0,
@@ -370,6 +375,17 @@ export default class PvpCombatService {
 
                 if (paralysisProc) ParalysisService.applyPending(paralysisFlags[attackTargetKey]);
 
+                // Golpe Duplo: sorteado com o valor ORIGINAL do atacante.
+                // Só o Samurai tem doubleStrikeChance > 0. Sem estado
+                // pendente nenhum — repete o MESMO `damage` já aplicado
+                // acima uma segunda vez, na hora, sem rolar Crítico/Roubo
+                // de Vida/Absorção de novo (ver DoubleStrikeService.js).
+                const doubleStrikeProc = DoubleStrikeService.procs(attacker.doubleStrikeChance ?? 0, rng());
+
+                if (doubleStrikeProc) {
+                    attackTarget.currentHP = Math.max(0, attackTarget.currentHP - damage);
+                }
+
                 log.push({
                     round: guard,
                     turn,
@@ -391,8 +407,24 @@ export default class PvpCombatService {
                     miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(attackTarget),
                     confusionOutcome,
                     confusionProc,
-                    paralysisProc
+                    paralysisProc,
+                    doubleStrikeProc
                 });
+
+                // Segunda entrada própria no log pro Golpe Duplo — mesmo
+                // dano, sem crítico/absorção/life steal (já não rolam de novo).
+                if (doubleStrikeProc) {
+                    log.push({
+                        round: guard,
+                        turn,
+                        attacker: attacker.name,
+                        attackerId: turn,
+                        targetId: attackTargetKey,
+                        dodged: false,
+                        damage,
+                        doubleStrike: true
+                    });
+                }
 
                 revive(attackTarget, attackTargetKey);
 
@@ -769,6 +801,17 @@ export default class PvpCombatService {
 
                 if (paralysisProc) ParalysisService.applyPending(paralysisFlagsById.get(attackTarget.id));
 
+                // Golpe Duplo: sorteado com o valor ORIGINAL do atacante.
+                // Só o Samurai tem doubleStrikeChance > 0. Sem estado
+                // pendente nenhum — repete o MESMO `damage` já aplicado
+                // acima uma segunda vez, na hora, sem rolar Crítico/Roubo
+                // de Vida/Absorção de novo (ver DoubleStrikeService.js).
+                const doubleStrikeProc = DoubleStrikeService.procs(attacker.doubleStrikeChance ?? 0, rng());
+
+                if (doubleStrikeProc) {
+                    attackTarget.currentHP = Math.max(0, attackTarget.currentHP - damage);
+                }
+
                 log.push({
                     round: guard,
                     attackerId: attacker.id,
@@ -789,8 +832,23 @@ export default class PvpCombatService {
                     miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(attackTarget),
                     confusionOutcome,
                     confusionProc,
-                    paralysisProc
+                    paralysisProc,
+                    doubleStrikeProc
                 });
+
+                // Segunda entrada própria no log pro Golpe Duplo — mesmo
+                // dano, sem crítico/absorção/life steal (já não rolam de novo).
+                if (doubleStrikeProc) {
+                    log.push({
+                        round: guard,
+                        attackerId: attacker.id,
+                        attackerTeam: attacker.team,
+                        targetId: attackTarget.id,
+                        dodged: false,
+                        damage,
+                        doubleStrike: true
+                    });
+                }
 
                 revive(attackTarget, attacker.id);
 

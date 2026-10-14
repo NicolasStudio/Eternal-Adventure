@@ -4,6 +4,7 @@ import MiasmaService, { PVE_STACK_PERCENTS as MIASMA_PVE_PERCENTS } from "./Mias
 import MimicService from "./MimicService.js";
 import ConfusionService from "./ConfusionService.js";
 import ParalysisService from "./ParalysisService.js";
+import DoubleStrikeService from "./DoubleStrikeService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVE, absorbedAmount } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
@@ -402,6 +403,18 @@ export default class RaidCombatService {
 
                 if (paralysisProc) ParalysisService.applyPending(paralysisFlagsById.get(attackTarget.id));
 
+                // Golpe Duplo: sorteado com o valor ORIGINAL do atacante.
+                // Só o Samurai tem doubleStrikeChance > 0 — o chefe nunca
+                // ativa isso. Sem estado pendente nenhum — repete o MESMO
+                // `damage` já aplicado acima uma segunda vez, na hora, sem
+                // rolar Crítico/Roubo de Vida/Absorção de novo (ver
+                // DoubleStrikeService.js).
+                const doubleStrikeProc = DoubleStrikeService.procs(attacker.doubleStrikeChance ?? 0, rng());
+
+                if (doubleStrikeProc) {
+                    attackTarget.currentHP = Math.max(0, attackTarget.currentHP - damage);
+                }
+
                 log.push({
                     round: guard,
                     attackerId: attacker.id,
@@ -426,8 +439,24 @@ export default class RaidCombatService {
                     miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(attackTarget),
                     confusionOutcome,
                     confusionProc,
-                    paralysisProc
+                    paralysisProc,
+                    doubleStrikeProc
                 });
+
+                // Segunda entrada própria no log pro Golpe Duplo — mesmo
+                // dano, sem crítico/absorção/life steal (já não rolam de novo).
+                if (doubleStrikeProc) {
+                    log.push({
+                        round: guard,
+                        attackerId: attacker.id,
+                        attackerSide: attacker.side,
+                        targetId: attackTarget.id,
+                        dodged: false,
+                        damage,
+                        attackName: chosenAttack?.name ?? null,
+                        doubleStrike: true
+                    });
+                }
 
                 // Reviver do Yggdrasil: quem o chefe acabou de derrubar
                 // volta uma vez por andar. Entra no log como uma "mordida"

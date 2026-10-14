@@ -107,7 +107,12 @@ export default class PlayerStats {
             // Só o Eletro tem fonte real disso (ver ParalysisService.js)
             // — mesma regra do Miasma/Reflection/Confusão, fica 0 pra
             // qualquer outra classe.
-            paralysisChance: withBaseBonus("paralysisChance")
+            paralysisChance: withBaseBonus("paralysisChance"),
+
+            // Só o Samurai tem fonte real disso (ver DoubleStrikeService.js)
+            // — mesma regra do Miasma/Reflection/Confusão/Paralisia, fica
+            // 0 pra qualquer outra classe.
+            doubleStrikeChance: withBaseBonus("doubleStrikeChance")
 
         };
     }
@@ -154,6 +159,10 @@ export default class PlayerStats {
 
     get paralysisChance() {
         return this.getFinalStats().paralysisChance;
+    }
+
+    get doubleStrikeChance() {
+        return this.getFinalStats().doubleStrikeChance;
     }
 
 }

@@ -17,6 +17,7 @@ import MiasmaService, { PVE_STACK_PERCENTS as MIASMA_PVE_PERCENTS } from "../ser
 import MimicService from "../services/MimicService.js";
 import ConfusionService from "../services/ConfusionService.js";
 import ParalysisService from "../services/ParalysisService.js";
+import DoubleStrikeService from "../services/DoubleStrikeService.js";
 
 export default class RaidView {
 
@@ -363,6 +364,13 @@ export default class RaidView {
             return `<div class="pvp-log-line pvp-log-pet-bite">Pet de ${attackerName} agiu! ${damage}${heal}</div>`;
         }
 
+        // Golpe Duplo do Samurai: segunda entrada própria no log, mesmo
+        // dano repetido (ver DoubleStrikeService.js) — sem crítico/
+        // absorção/life steal de novo.
+        if (entry.doubleStrike) {
+            return `<div class="pvp-log-line"><span class="combat-double-strike">Golpe Duplo!</span> ${attackerName}${attackTag} acertou ${targetName} de novo: ${entry.damage} de dano</div>`;
+        }
+
         const crit = entry.critical ? ` <span class="pvp-log-critical">(Crítico!)</span>` : "";
         const steal = entry.lifeSteal > 0 ? ` <span class="pvp-log-heal">(+${entry.lifeSteal} HP roubado)</span>` : "";
         const absorbed = entry.absorbed > 0
@@ -374,12 +382,15 @@ export default class RaidView {
         const paralysis = entry.paralysisProc
             ? ` <span class="combat-paralysis">(Paralisia!)</span>`
             : "";
+        const doubleStrike = entry.doubleStrikeProc
+            ? ` <span class="combat-double-strike">(Golpe Duplo!)</span>`
+            : "";
 
         if (entry.confusionOutcome === "self") {
             return `<div class="pvp-log-line">${attackerName}${attackTag} se atacou sem querer: ${entry.damage} de dano${crit}${confusion}</div>`;
         }
 
-        return `<div class="pvp-log-line">${attackerName}${attackTag} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}${confusion}${paralysis}</div>`;
+        return `<div class="pvp-log-line">${attackerName}${attackTag} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}${confusion}${paralysis}${doubleStrike}</div>`;
 
     }
 
@@ -990,7 +1001,7 @@ export default class RaidView {
             const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
             if (!this.shouldSkipMessages(battleStartTime)) {
-                await CombatToast.show(this.buildAttackMessage(entry, squad), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry) + ParalysisService.extraToastSeconds(entry), speed);
+                await CombatToast.show(this.buildAttackMessage(entry, squad), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry) + ParalysisService.extraToastSeconds(entry) + DoubleStrikeService.extraToastSeconds(entry), speed);
             }
 
             await this.sleep(450 / speed);
@@ -1079,6 +1090,17 @@ export default class RaidView {
             return `<span class="combat-pet-bite">${petName}</span> agiu! ${damage}${heal}`;
         }
 
+        // Golpe Duplo do Samurai: segunda entrada própria no log, mesmo
+        // dano repetido (ver DoubleStrikeService.js) — sem crítico/
+        // absorção/life steal de novo, mensagem própria em vez da linha
+        // normal de dano.
+        if (entry.doubleStrike) {
+            const damageLabel = targetName === "Você"
+                ? `Você recebeu <strong>${entry.damage}</strong> de dano.`
+                : `Causou <strong>${entry.damage}</strong> de dano em ${targetName}.`;
+            return `${DoubleStrikeService.buildMessage(targetName === "Você" ? "você" : targetName)} ${damageLabel}`;
+        }
+
         const inSentence = (name) => name === "Você" ? "você" : name;
 
         // Confusão "ataca a si mesmo" ou "acerta o alvo mesmo confuso" —
@@ -1135,6 +1157,10 @@ export default class RaidView {
 
         if (entry.paralysisProc) {
             message += `<br>${ParalysisService.buildProcMessage(targetName === "Você" ? "você" : targetName)}`;
+        }
+
+        if (entry.doubleStrikeProc) {
+            message += `<br>${DoubleStrikeService.buildMessage(targetName === "Você" ? "você" : targetName)}`;
         }
 
         return message;
