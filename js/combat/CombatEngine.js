@@ -3,6 +3,7 @@ import BoitataBurn from "../services/BoitataBurn.js";
 import MiasmaService, { PVE_STACK_PERCENTS as MIASMA_PVE_PERCENTS } from "../services/MiasmaService.js";
 import MimicService from "../services/MimicService.js";
 import ConfusionService from "../services/ConfusionService.js";
+import ParalysisService from "../services/ParalysisService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVE, absorbedAmount } from "./Absorption.js";
 import { CRITICAL_MULTIPLIER } from "./Critical.js";
 
@@ -35,6 +36,12 @@ export default class CombatEngine {
         this.confusionFlags = {
             player: ConfusionService.createFlags(),
             monster: ConfusionService.createFlags()
+        };
+        // Paralisia do Eletro (ver ParalysisService.js) — mesmo padrão
+        // da Confusão acima, marca pendente por lado.
+        this.paralysisFlags = {
+            player: ParalysisService.createFlags(),
+            monster: ParalysisService.createFlags()
         };
         // Log acumulado desse combate, pro mesmo formato/agregador das
         // "Informações do Combate" do Cooperativo (ver js/combat/
@@ -81,6 +88,42 @@ export default class CombatEngine {
         let defender = playerTurn ? this.monster.status : playerStats;
         const attackerSide = playerTurn ? "player" : "monster";
         let defenderSide = playerTurn ? "monster" : "player";
+
+        // Paralisia do Eletro: consome a marca pendente do ATACANTE (se
+        // ele foi paralisado no golpe anterior que sofreu) — ANTES até
+        // da Confusão, porque paralisado nem chega a agir: o turno
+        // inteiro se perde, sem rolar esquiva, dano ou Confusão nenhuma
+        // (a marca de Confusão que porventura também esteja pendente
+        // continua pendente pro próximo golpe que realmente acontecer).
+        if (ParalysisService.consumePending(this.paralysisFlags[attackerSide])) {
+
+            this.log.push({
+                round: this.turnCounter,
+                attackerId: attackerSide,
+                targetId: defenderSide,
+                dodged: false,
+                damage: 0,
+                paralyzed: true
+            });
+
+            return {
+                attacker: attackerSide,
+                target: defenderSide,
+                dodged: false,
+                paralyzed: true,
+                damage: 0,
+                critical: false,
+                lifeSteal: 0,
+                absorbed: 0,
+                miasmaProc: false,
+                miasmaStacks: 0,
+                miasmaTargetHasSpecials: false,
+                miasmaAttackWeakened: false,
+                miasmaDefendWeakened: false,
+                mimicBonus: 0
+            };
+
+        }
 
         // Confusão da Louca: consome a marca pendente do ATACANTE (se
         // ele foi confundido no golpe anterior que sofreu) ANTES da
@@ -185,7 +228,8 @@ export default class CombatEngine {
             absorbed: result.absorbed,
             mimicBonus: result.mimicBonus,
             miasmaProc: result.miasmaProc,
-            confusionOutcome
+            confusionOutcome,
+            paralysisProc: result.paralysisProc
         });
 
         if (revive) {
@@ -217,7 +261,8 @@ export default class CombatEngine {
             miasmaAttackWeakened: result.miasmaAttackWeakened,
             miasmaDefendWeakened: result.miasmaDefendWeakened,
             mimicBonus: result.mimicBonus,
-            confusionProc: result.confusionProc
+            confusionProc: result.confusionProc,
+            paralysisProc: result.paralysisProc
         };
     }
 
@@ -343,6 +388,16 @@ export default class CombatEngine {
 
         if (confusionProc) ConfusionService.applyPending(this.confusionFlags[defenderSide]);
 
+        // ==========================
+        // PARALISIA (Eletro)
+        // ==========================
+        // Sorteado com o paralysisChance ORIGINAL do atacante — só o
+        // Eletro tem isso > 0 (vem 100% do equipamento, ver
+        // PlayerStats.js), em qualquer outro atacante nunca ativa.
+        const paralysisProc = ParalysisService.procs(attacker.paralysisChance ?? 0, Math.random());
+
+        if (paralysisProc) ParalysisService.applyPending(this.paralysisFlags[defenderSide]);
+
         return {
             miasmaProc,
             miasmaStacks,
@@ -352,6 +407,7 @@ export default class CombatEngine {
             miasmaAttackWeakened: attackMark < 1 && MiasmaService.hasAttackSpecials(attacker),
             miasmaDefendWeakened: defendMark < 1 && MiasmaService.hasDefendSpecials(defender),
             confusionProc,
+            paralysisProc,
             damage,
             rawDamage,
             armorMitigated,
@@ -389,6 +445,14 @@ export default class CombatEngine {
     }
 
     createAttackMessage(result) {
+
+        // Paralisia "perdeu o ataque" — antes até da Confusão (ver
+        // attack()), mensagem própria, não é dodge nem golpe normal.
+        if (result.paralyzed) {
+            return result.attacker === "player"
+                ? ParalysisService.buildOutcomeMessage("Você")
+                : ParalysisService.buildOutcomeMessage(this.monster.name);
+        }
 
         // Confusão "errou o ataque" — antes mesmo de rolar esquiva/dano
         // (ver attack()), então tem mensagem própria, não é dodge nem
@@ -433,6 +497,9 @@ export default class CombatEngine {
             if (result.confusionProc) {
                 message += `<br>${ConfusionService.buildProcMessage(this.monster.name)}`;
             }
+            if (result.paralysisProc) {
+                message += `<br>${ParalysisService.buildProcMessage(this.monster.name)}`;
+            }
             if (result.mimicBonus > 0) {
                 message += `<br>${MimicService.buildMessage(result.mimicBonus, { opponentName: this.monster.name })}`;
             }
@@ -452,6 +519,9 @@ export default class CombatEngine {
         }
         if (result.confusionProc) {
             message += `<br>${ConfusionService.buildProcMessage("você")}`;
+        }
+        if (result.paralysisProc) {
+            message += `<br>${ParalysisService.buildProcMessage("você")}`;
         }
         if (result.revive) {
             message += `<br><span class="combat-pet-bite">${result.revive.petName}</span> reviveu você com <strong>${result.revive.heal}</strong> HP!`;

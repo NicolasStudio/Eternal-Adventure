@@ -138,6 +138,12 @@ export default class ClassSelectionScreen {
                 "⚔️🏃 Maior Ataque e Agilidade do jogo",
                 "🌀 Confusão: pode fazer o inimigo errar o ataque ou se acertar sozinho",
                 "🛡️❤️ Menor Armadura e Vida do jogo"
+            ],
+
+            spark: [
+                "⚔️ Segundo maior Ataque do jogo, atrás só do Mago",
+                "⚡ Paralisia: chance de fazer o inimigo perder o próximo ataque por completo",
+                "🛡️🏃❤️ Armadura, Agilidade e Vida medianas"
             ]
 
         };

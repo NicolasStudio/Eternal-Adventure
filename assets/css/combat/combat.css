@@ -357,6 +357,19 @@
     font-weight:800;
     text-shadow:none;
 }
+/* "Paralisia!" (eletro, tom elétrico amarelo): selo amarelo/dourado —
+   mesma lógica dos selos acima (fundo próprio pra não sumir em cima
+   de nenhuma outra cor de caixa). */
+.combat-paralysis{
+    display:inline-block;
+    padding:1px 8px;
+    border-radius:4px;
+    background:#5a4e1a;
+    color:#f5eccf;
+    border:1px solid #3a2e0e;
+    font-weight:800;
+    text-shadow:none;
+}
 
 /* ==========================================================
    NOTEBOOK

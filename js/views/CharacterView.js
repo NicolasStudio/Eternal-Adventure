@@ -187,6 +187,11 @@ export default class CharacterView {
                         <span>${stats.confusionChance}%</span>
                     </div>
 
+                    <div class="character-stat character-stat-hoverable" data-stat="paralysisChance">
+                        <span>Paralisia</span>
+                        <span>${stats.paralysisChance}%</span>
+                    </div>
+
                     <div class="character-stat character-stat-hoverable" data-stat="penetration">
                         <span>Penetração</span>
                         <span>${stats.penetration}%</span>
@@ -1427,6 +1432,17 @@ export default class CharacterView {
                 ["Ataca o alvo de sempre", "Dano do golpe sai com Ataque ×1,2."],
                 ["Ataca a si mesmo", "Dano do golpe sai com Ataque ×1,5, mirando o próprio confuso."],
                 ["Erra o ataque", "O golpe não acontece — sem dano, sem esquiva, sem crítico."],
+                CharacterView.SPECIAL_CAP_ROW
+            ]
+        },
+
+        paralysisChance: {
+            icon: "fa-bolt",
+            title: "Paralisia",
+            summary: "Exclusivo do Eletro: chance de paralisar o alvo a cada golpe seu que acerta.",
+            details: [
+                ["O que acontece", "A paralisia fica pendente até o PRÓXIMO ataque de quem foi paralisado — esse golpe simplesmente não acontece, sem sortear nada: paralisado sempre perde o turno."],
+                ["Diferente da Confusão", "Não tem resultado alternativo nenhum (acertar o oponente, acertar a si mesmo) — é sempre o golpe inteiro perdido."],
                 CharacterView.SPECIAL_CAP_ROW
             ]
         }

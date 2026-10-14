@@ -102,7 +102,12 @@ export default class PlayerStats {
             // Só a Louca tem fonte real disso (ver ConfusionService.js)
             // — mesma regra do Miasma/Reflection, fica 0 pra qualquer
             // outra classe.
-            confusionChance: withBaseBonus("confusionChance")
+            confusionChance: withBaseBonus("confusionChance"),
+
+            // Só o Eletro tem fonte real disso (ver ParalysisService.js)
+            // — mesma regra do Miasma/Reflection/Confusão, fica 0 pra
+            // qualquer outra classe.
+            paralysisChance: withBaseBonus("paralysisChance")
 
         };
     }
@@ -145,6 +150,10 @@ export default class PlayerStats {
 
     get confusionChance() {
         return this.getFinalStats().confusionChance;
+    }
+
+    get paralysisChance() {
+        return this.getFinalStats().paralysisChance;
     }
 
 }

@@ -16,6 +16,7 @@ import BoitataBurn from "../services/BoitataBurn.js";
 import MiasmaService, { PVE_STACK_PERCENTS as MIASMA_PVE_PERCENTS } from "../services/MiasmaService.js";
 import MimicService from "../services/MimicService.js";
 import ConfusionService from "../services/ConfusionService.js";
+import ParalysisService from "../services/ParalysisService.js";
 
 export default class RaidView {
 
@@ -336,6 +337,13 @@ export default class RaidView {
             return `<div class="pvp-log-line pvp-log-dodge">${attackerName} errou o ataque, confuso!</div>`;
         }
 
+        // Paralisia "perdeu o ataque" — mesmo padrão acima (ver
+        // ParalysisService.js). No Cooperativo só o chefe pode ficar
+        // paralisado.
+        if (entry.paralyzed) {
+            return `<div class="pvp-log-line pvp-log-dodge">${attackerName} ficou paralisado e perdeu o ataque!</div>`;
+        }
+
         if (entry.dodged) {
             return `<div class="pvp-log-line pvp-log-dodge">${targetName} esquivou do ataque de ${attackerName}${attackTag}!</div>`;
         }
@@ -363,12 +371,15 @@ export default class RaidView {
         const confusion = entry.confusionProc || entry.confusionOutcome
             ? ` <span class="combat-confusion">(Confusão!)</span>`
             : "";
+        const paralysis = entry.paralysisProc
+            ? ` <span class="combat-paralysis">(Paralisia!)</span>`
+            : "";
 
         if (entry.confusionOutcome === "self") {
             return `<div class="pvp-log-line">${attackerName}${attackTag} se atacou sem querer: ${entry.damage} de dano${crit}${confusion}</div>`;
         }
 
-        return `<div class="pvp-log-line">${attackerName}${attackTag} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}${confusion}</div>`;
+        return `<div class="pvp-log-line">${attackerName}${attackTag} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}${confusion}${paralysis}</div>`;
 
     }
 
@@ -979,7 +990,7 @@ export default class RaidView {
             const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
             if (!this.shouldSkipMessages(battleStartTime)) {
-                await CombatToast.show(this.buildAttackMessage(entry, squad), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry), speed);
+                await CombatToast.show(this.buildAttackMessage(entry, squad), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry) + ParalysisService.extraToastSeconds(entry), speed);
             }
 
             await this.sleep(450 / speed);
@@ -1026,6 +1037,13 @@ export default class RaidView {
         // confuso (o esquadrão nunca ataca o esquadrão).
         if (entry.confusionOutcome === "miss") {
             return ConfusionService.buildOutcomeMessage("miss", attackerName);
+        }
+
+        // Paralisia "perdeu o ataque" — mesmo padrão acima (ver
+        // ParalysisService.js). No Cooperativo só o chefe pode ficar
+        // paralisado.
+        if (entry.paralyzed) {
+            return ParalysisService.buildOutcomeMessage(attackerName);
         }
 
         if (entry.dodged) {
@@ -1113,6 +1131,10 @@ export default class RaidView {
 
         if (entry.confusionProc) {
             message += `<br>${ConfusionService.buildProcMessage(targetName === "Você" ? "você" : targetName)}`;
+        }
+
+        if (entry.paralysisProc) {
+            message += `<br>${ParalysisService.buildProcMessage(targetName === "Você" ? "você" : targetName)}`;
         }
 
         return message;

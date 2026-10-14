@@ -283,7 +283,9 @@ export default class BlacksmithEnchant {
             // Mímico: o especial dele é a Imitação (ver MimicService.js).
             mimic: "reflection",
             // Louca: o especial dela é a Confusão (ver ConfusionService.js).
-            crazy: "confusionChance"
+            crazy: "confusionChance",
+            // Eletro: o especial dele é a Paralisia (ver ParalysisService.js).
+            spark: "paralysisChance"
         }[classId] ?? null;
     }
 
@@ -304,6 +306,7 @@ export default class BlacksmithEnchant {
             case "miasmaChance": return "Miasma";
             case "reflection": return "Imitação";
             case "confusionChance": return "Confusão";
+            case "paralysisChance": return "Paralisia";
             default: return stat;
         }
     }
@@ -325,6 +328,7 @@ export default class BlacksmithEnchant {
             case "miasmaChance": return "🦠";
             case "reflection": return "🪞";
             case "confusionChance": return "🌀";
+            case "paralysisChance": return "⚡";
             default: return "•";
         }
     }

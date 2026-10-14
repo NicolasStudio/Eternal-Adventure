@@ -323,6 +323,7 @@ export default class MarketView {
             putrid: "Putrido",
             mimic: "Mímico",
             crazy: "Louca",
+            spark: "Eletro",
             // Anel/Amuleto (ver ring.js/amulet.js) — qualquer classe usa.
             all: "Todas as Classes"
         };

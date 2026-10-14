@@ -11,6 +11,7 @@ import BoitataBurn from "../services/BoitataBurn.js";
 import MiasmaService from "../services/MiasmaService.js";
 import MimicService from "../services/MimicService.js";
 import ConfusionService from "../services/ConfusionService.js";
+import ParalysisService from "../services/ParalysisService.js";
 import dungeons from "../data/dungeons.js";
 
 // Só os chefes "normais" (não o final secreto, que fica de fora da
@@ -515,6 +516,11 @@ export default class PvpView {
         if (entry.confusionOutcome === "miss") {
             return `<div class="pvp-log-line pvp-log-dodge">${name} errou o ataque, confuso!</div>`;
         }
+        // Paralisia "perdeu o ataque" — antes mesmo da esquiva (ver
+        // ParalysisService.js).
+        if (entry.paralyzed) {
+            return `<div class="pvp-log-line pvp-log-dodge">${name} ficou paralisado e perdeu o ataque!</div>`;
+        }
         if (entry.dodged) {
             return `<div class="pvp-log-line pvp-log-dodge">${name} esquivou!</div>`;
         }
@@ -541,10 +547,13 @@ export default class PvpView {
         const confusion = entry.confusionProc || entry.confusionOutcome
             ? ` <span class="combat-confusion">(Confusão!)</span>`
             : "";
+        const paralysis = entry.paralysisProc
+            ? ` <span class="combat-paralysis">(Paralisia!)</span>`
+            : "";
         if (entry.confusionOutcome === "self") {
             return `<div class="pvp-log-line">${name} se atacou sem querer: ${entry.damage} de dano${crit}${confusion}</div>`;
         }
-        return `<div class="pvp-log-line">${name} causou ${entry.damage} de dano${crit}${steal}${absorbed}${confusion}</div>`;
+        return `<div class="pvp-log-line">${name} causou ${entry.damage} de dano${crit}${steal}${absorbed}${confusion}${paralysis}</div>`;
     }
 
     renderLogLineTeam(entry, nameOf, petNameOf) {
@@ -554,6 +563,11 @@ export default class PvpView {
         // ConfusionService.js).
         if (entry.confusionOutcome === "miss") {
             return `<div class="pvp-log-line pvp-log-dodge">${attackerName} errou o ataque, confuso!</div>`;
+        }
+        // Paralisia "perdeu o ataque" — antes mesmo da esquiva (ver
+        // ParalysisService.js).
+        if (entry.paralyzed) {
+            return `<div class="pvp-log-line pvp-log-dodge">${attackerName} ficou paralisado e perdeu o ataque!</div>`;
         }
         if (entry.dodged) {
             return `<div class="pvp-log-line pvp-log-dodge">${targetName} esquivou de ${attackerName}!</div>`;
@@ -579,10 +593,13 @@ export default class PvpView {
         const confusion = entry.confusionProc || entry.confusionOutcome
             ? ` <span class="combat-confusion">(Confusão!)</span>`
             : "";
+        const paralysis = entry.paralysisProc
+            ? ` <span class="combat-paralysis">(Paralisia!)</span>`
+            : "";
         if (entry.confusionOutcome === "self") {
             return `<div class="pvp-log-line">${attackerName} se atacou sem querer: ${entry.damage} de dano${crit}${confusion}</div>`;
         }
-        return `<div class="pvp-log-line">${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}${confusion}</div>`;
+        return `<div class="pvp-log-line">${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}${confusion}${paralysis}</div>`;
     }
 
     currentOpponentSnapshot() {
@@ -914,6 +931,12 @@ export default class PvpView {
                 : ConfusionService.buildOutcomeMessage("miss", opponentName);
         }
 
+        // Paralisia "perdeu o ataque" — antes mesmo da esquiva, tem
+        // mensagem própria (ver ParalysisService.js).
+        if (entry.paralyzed) {
+            return ParalysisService.buildOutcomeMessage(isMe ? "Você" : opponentName);
+        }
+
         if (entry.dodged) {
             return isMe
                 ? `<span class="combat-dodge">${opponentName} esquivou do seu ataque!</span>`
@@ -990,6 +1013,10 @@ export default class PvpView {
                 message += `<br>${ConfusionService.buildProcMessage(opponentName)}`;
             }
 
+            if (entry.paralysisProc) {
+                message += `<br>${ParalysisService.buildProcMessage(opponentName)}`;
+            }
+
             return message;
 
         }
@@ -1023,6 +1050,10 @@ export default class PvpView {
 
         if (entry.confusionProc) {
             hitMessage += `<br>${ConfusionService.buildProcMessage("você")}`;
+        }
+
+        if (entry.paralysisProc) {
+            hitMessage += `<br>${ParalysisService.buildProcMessage("você")}`;
         }
 
         return hitMessage;
@@ -1075,6 +1106,12 @@ export default class PvpView {
         // mensagem própria (ver ConfusionService.js).
         if (entry.confusionOutcome === "miss") {
             return ConfusionService.buildOutcomeMessage("miss", isMe ? "Você" : attackerName);
+        }
+
+        // Paralisia "perdeu o ataque" — antes mesmo da esquiva, tem
+        // mensagem própria (ver ParalysisService.js).
+        if (entry.paralyzed) {
+            return ParalysisService.buildOutcomeMessage(isMe ? "Você" : attackerName);
         }
 
         if (entry.dodged) {
@@ -1140,6 +1177,10 @@ export default class PvpView {
                 message += `<br>${ConfusionService.buildProcMessage(targetName)}`;
             }
 
+            if (entry.paralysisProc) {
+                message += `<br>${ParalysisService.buildProcMessage(targetName)}`;
+            }
+
             return message;
 
         }
@@ -1174,6 +1215,10 @@ export default class PvpView {
                 hitMessage += `<br>${ConfusionService.buildProcMessage("você")}`;
             }
 
+            if (entry.paralysisProc) {
+                hitMessage += `<br>${ParalysisService.buildProcMessage("você")}`;
+            }
+
             return hitMessage;
 
         }
@@ -1186,10 +1231,13 @@ export default class PvpView {
         const confusion = entry.confusionProc || entry.confusionOutcome
             ? ` <span class="combat-confusion">(Confusão!)</span>`
             : "";
+        const paralysis = entry.paralysisProc
+            ? ` <span class="combat-paralysis">(Paralisia!)</span>`
+            : "";
         if (entry.confusionOutcome === "self") {
             return `${attackerName} se atacou sem querer, causando ${entry.damage} de dano${crit}${confusion}.`;
         }
-        return `${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${mimic}${miasma}${confusion}.`;
+        return `${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${mimic}${miasma}${confusion}${paralysis}.`;
 
     }
 
@@ -1276,7 +1324,7 @@ export default class PvpView {
 
             const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
-            await CombatToast.show(this.buildAttackMessage(entry), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry), speed);
+            await CombatToast.show(this.buildAttackMessage(entry), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry) + ParalysisService.extraToastSeconds(entry), speed);
 
             await this.sleep(500 / speed);
 
@@ -1365,7 +1413,7 @@ export default class PvpView {
 
                 const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
-                await CombatToast.show(this.buildTeamAttackMessage(entry, nameOf, petNameOf), this.buildTeamToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry), speed);
+                await CombatToast.show(this.buildTeamAttackMessage(entry, nameOf, petNameOf), this.buildTeamToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry) + ParalysisService.extraToastSeconds(entry), speed);
 
                 await this.sleep(450 / speed);
 

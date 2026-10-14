@@ -205,6 +205,7 @@ export default class ItemTooltip {
             putrid: "Putrido",
             mimic: "Mímico",
             crazy: "Louca",
+            spark: "Eletro",
             // Anel/Amuleto (ver ring.js/amulet.js) — qualquer classe usa.
             all: "Todas as Classes"
         };
@@ -228,7 +229,9 @@ export default class ItemTooltip {
             // Mímico: o especial dele é a Imitação (ver MimicService.js).
             mimic: "reflection",
             // Louca: o especial dela é a Confusão (ver ConfusionService.js).
-            crazy: "confusionChance"
+            crazy: "confusionChance",
+            // Eletro: o especial dele é a Paralisia (ver ParalysisService.js).
+            spark: "paralysisChance"
         }[this.item.class] ?? null;
     }
 
@@ -249,6 +252,7 @@ export default class ItemTooltip {
             case "miasmaChance": return "Miasma";
             case "reflection": return "Imitação";
             case "confusionChance": return "Confusão";
+            case "paralysisChance": return "Paralisia";
             default: return stat;
         }
     }
@@ -269,6 +273,7 @@ export default class ItemTooltip {
             case "miasmaChance": return "🦠";
             case "reflection": return "🪞";
             case "confusionChance": return "🌀";
+            case "paralysisChance": return "⚡";
             case "life": return "❤️";
             default: return "•";
         }
