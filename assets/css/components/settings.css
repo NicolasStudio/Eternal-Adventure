@@ -179,6 +179,55 @@
     color:#d8c39b;
 }
 
+/* Modal de exclusão de UM personagem (ver DeleteCharacterModal.js) —
+   reaproveita .character-select-modal/.character-slot-filled (tela
+   "Continuar" da Home, home.css), só sem o hover de clique (a linha
+   inteira não é botão, só o "Deletar" dentro dela é). */
+.delete-character-warning{
+    margin:0 0 4px;
+    text-align:center;
+    font-size:.8rem;
+    color:#a88;
+}
+.delete-character-empty{
+    text-align:center;
+    color:#8f7a5a;
+    font-size:.9rem;
+    padding:10px 0;
+}
+/* Seletores combinados (2 classes, e 2 classes + :hover) só pra ganhar
+   de .character-slot/.character-slot-filled:hover (home.css é
+   carregado DEPOIS de settings.css no index.html — com a mesma
+   especificidade, a ordem do arquivo decidiria, e home.css venceria). */
+.character-slot-filled.delete-character-slot{
+    cursor:default;
+}
+.character-slot-filled.delete-character-slot:hover{
+    border-color:#8b7355;
+    box-shadow:none;
+}
+.delete-character-button{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-shrink:0;
+    padding:8px 14px;
+    border:2px solid #7a2e2e;
+    border-radius:6px;
+    background:rgba(224,106,106,.1);
+    color:#e0a0a0;
+    font-family:"Cinzel",serif;
+    font-size:.82rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:.15s;
+}
+.delete-character-button:hover{
+    border-color:#e06a6a;
+    color:#ffb3b3;
+    background:rgba(224,106,106,.2);
+}
+
 /* ==========================================================
    AGRADECIMENTOS
 ========================================================== */

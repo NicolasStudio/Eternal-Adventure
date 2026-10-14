@@ -9,21 +9,29 @@ service cloud.firestore {
       allow read, write: if isOwner(uid);
     }
 
-    // Conta com até 2 personagens: slot "1" sempre; slot "2" só se a conta
-    // tiver um slot extra liberado em entitlements (ver abaixo). O teto de
-    // nível é 110 — só quem tem o talento único "Rompendo Limites" passa
-    // de 100 de verdade (TalentService.js), mas a regra não distingue
-    // quem tem o talento, então aceita até o teto pros dois casos.
+    // Conta com até 2 personagens: slot "2" só se a conta tiver um slot
+    // extra liberado em entitlements (ver abaixo). O teto de nível é
+    // 110 — só quem tem o talento único "Rompendo Limites" passa de 100
+    // de verdade (TalentService.js), mas a regra não distingue quem tem
+    // o talento, então aceita até o teto pros dois casos. Nenhum dos
+    // dois slots é obrigatório — excluir um personagem (ver
+    // SaveService.deleteCharacterSlot) grava a conta SEM aquele slot,
+    // então a validação de cada um só roda SE ele existir.
     match /saves/{uid} {
       allow read: if isOwner(uid);
       allow create, update: if isOwner(uid)
         && request.resource.data.version == 2
         && request.resource.data.slots is map
         && request.resource.data.slots.keys().hasOnly(['1', '2'])
-        && request.resource.data.slots['1'].level is number
-        && request.resource.data.slots['1'].level >= 1
-        && request.resource.data.slots['1'].level <= 110
-        && request.resource.data.slots['1'].get('gold', 0) >= 0
+        && (
+          !('1' in request.resource.data.slots)
+          || (
+            request.resource.data.slots['1'].level is number
+            && request.resource.data.slots['1'].level >= 1
+            && request.resource.data.slots['1'].level <= 110
+            && request.resource.data.slots['1'].get('gold', 0) >= 0
+          )
+        )
         && (
           !('2' in request.resource.data.slots)
           || (

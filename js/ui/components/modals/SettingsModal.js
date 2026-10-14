@@ -4,6 +4,7 @@ import PresenceService from "../../../services/PresenceService.js";
 import AudioSettings from "../../../services/AudioSettings.js";
 import MusicService from "../../../services/MusicService.js";
 import AccountDangerModal from "./AccountDangerModal.js";
+import DeleteCharacterModal from "./DeleteCharacterModal.js";
 import Toast from "../Toast.js";
 
 export default class SettingsModal {
@@ -14,6 +15,7 @@ export default class SettingsModal {
         this.modal = null;
         this.settings = AudioSettings.get();
         this.dangerModal = new AccountDangerModal();
+        this.deleteCharacterModal = new DeleteCharacterModal();
     }
 
     show() {
@@ -109,6 +111,10 @@ export default class SettingsModal {
                         <h3>Zona de Perigo</h3>
                         <p class="settings-danger-warning">Ação permanente e não pode ser desfeita.</p>
                         <div class="settings-danger-actions">
+                            <button class="settings-danger-button" id="settings-delete-character">
+                                <i class="fa-solid fa-user-slash"></i>
+                                Excluir Personagem
+                            </button>
                             <button class="settings-danger-button" id="settings-delete-account">
                                 <i class="fa-solid fa-trash"></i>
                                 Excluir Conta e Personagens
@@ -195,6 +201,10 @@ export default class SettingsModal {
             this.game.player = null;
             this.game.showScreen("login");
 
+        });
+
+        this.modal.querySelector("#settings-delete-character")?.addEventListener("click", () => {
+            this.deleteCharacterModal.show();
         });
 
         this.modal.querySelector("#settings-delete-account")?.addEventListener("click", async () => {

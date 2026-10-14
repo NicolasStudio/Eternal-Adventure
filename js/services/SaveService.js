@@ -952,6 +952,33 @@ export default class SaveService {
 
     }
 
+    // Exclusão de UM personagem só (diferente de deleteAccountData, que
+    // apaga a conta inteira) — libera o nome reservado e a entrada no
+    // ranking desse slot (releaseCharacterIdentity, mesma limpeza de
+    // cima), remove só esse slot do container e grava a conta de volta
+    // (local + nuvem). Chamado pela tela de Configurações (ver
+    // SettingsModal.js/DeleteCharacterModal.js) — sempre fora do jogo
+    // (a Zona de Perigo só aparece fora de uma partida em andamento),
+    // então não precisa lidar com "excluir o personagem que está sendo
+    // jogado agora".
+    static async deleteCharacterSlot(uid, slot) {
+
+        const container = this.container ?? await this.loadFromCloud(uid) ?? this.emptyContainer();
+
+        const character = container.slots?.[slot];
+
+        await this.releaseCharacterIdentity(uid, slot, character?.name);
+
+        if (container.slots) delete container.slots[slot];
+        container.savedAt = Date.now();
+
+        this.container = container;
+        this.persist(container);
+
+        await this.saveToCloud(uid, container);
+
+    }
+
     // Dispara a sincronização em paralelo, sem esperar — só se tiver
     // alguém logado no momento (fora do fluxo de login, save local
     // continua funcionando normalmente sem conta nenhuma).
