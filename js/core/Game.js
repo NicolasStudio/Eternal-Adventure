@@ -150,10 +150,14 @@ export default class Game {
         SaveService.useContainer(container);
 
         if (localIsNewer) {
-            // Reenvia pra nuvem o que só existia localmente — cloudStamp já
-            // está certo (acabou de vir do loadFromCloud acima), então essa
-            // gravação não é recusada pela checagem de "versão mais nova
-            // gravada em outro lugar".
+            // Reenvia pra nuvem o que só existia localmente. A gravação da
+            // aba ANTERIOR (antes do reload) pode chegar na nuvem depois do
+            // loadFromCloud acima, com um savedAt até o do localStorage —
+            // sem subir o cloudStamp até lá, esse reenvio (e todo save
+            // seguinte desta sessão) seria recusado como "versão mais nova
+            // gravada em outro lugar", mesmo sendo o mesmo progresso que
+            // já está aqui no localStorage.
+            SaveService.cloudStamp = Math.max(SaveService.cloudStamp ?? 0, localContainer.savedAt ?? 0);
             SaveService.saveToCloud(user.uid, container);
         }
 
