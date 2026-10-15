@@ -1,6 +1,8 @@
 import items from "./items.js";
 import enchantmentStone from "./enchantmentStone.js";
 import pets from "./pet.js";
+import ring from "./ring.js";
+import amulet from "./amulet.js";
 import { scaleMonsters } from "./monsterScaling.js";
 
 const monsters = [
@@ -275,7 +277,7 @@ const monsters = [
             {
                 type: ["ring"],
                 rarity: "common",
-                chance: 5
+                chance: 40
 
             },
             {
@@ -315,7 +317,7 @@ const monsters = [
             {
                 type: ["amulet"],
                 rarity: "common",
-                chance: 5
+                chance: 40
             },
             {
                 item: items.smallPotion,
@@ -405,6 +407,10 @@ const monsters = [
         },
 
         drops: [
+            {
+                item: ring.ringModernCommon,
+                chance: 40
+            },
             {
                 type: ["leg"],
                 rarity: "uncommon",
@@ -498,6 +504,10 @@ const monsters = [
         },
 
         drops: [
+            {
+                item: amulet.amuletModernCommon,
+                chance: 40
+            },
             {
                 type: ["chest"],
                 rarity: "uncommon",
@@ -636,7 +646,7 @@ const monsters = [
             {
                 type: ["amulet"],
                 rarity: "uncommon",
-                chance: 5
+                chance: 30
             },
             {
                 item: items.tripleSmallPotion,
@@ -752,6 +762,10 @@ const monsters = [
 
         drops: [
             {
+                item: ring.ringModernIncommon,
+                chance: 30
+            },
+            {
                 type: ["boot"],
                 rarity: "rare",
                 chance: 18
@@ -846,6 +860,10 @@ const monsters = [
 
         drops: [
             {
+                item: amulet.amuletModernIncommon,
+                chance: 30
+            },
+            {
                 type: ["leg"],
                 rarity: "rare",
                 chance: 18
@@ -939,7 +957,7 @@ const monsters = [
             {
                 type: ["ring"],
                 rarity: "uncommon",
-                chance: 5
+                chance: 30
             },
             {
                 item: items.mediumPotion,
@@ -1093,6 +1111,14 @@ const monsters = [
 
         drops: [
             {
+                item: ring.ringModernRare,
+                chance: 18
+            },
+            {
+                item: amulet.amuletModernRare,
+                chance: 18
+            },
+            {
             },
             {
                 item: items.mediumPotion,
@@ -1182,7 +1208,7 @@ const monsters = [
             {
                 type: ["amulet"],
                 rarity: "rare",
-                chance: 5
+                chance: 18
             },
             {
                 item: items.mediumPotion,
@@ -1384,7 +1410,7 @@ const monsters = [
             {
                 type: ["ring"],
                 rarity: "rare",
-                chance: 5
+                chance: 18
             },
             {
                 item: items.mediumPotion,
@@ -1686,7 +1712,7 @@ const monsters = [
             {
                 type: ["amulet"],
                 rarity: "mystic",
-                chance: 5
+                chance: 8
             },
             {
                 item: items.mediumPotion,
@@ -2079,6 +2105,10 @@ const monsters = [
         },
 
         drops: [
+            {
+                item: amulet.amuletModernMystic,
+                chance: 8
+            },
             {
                 type: ["chest"],
                 rarity: "mystic",
@@ -3296,7 +3326,7 @@ const monsters = [
             {
                 type: ["ring"],
                 rarity: "mystic",
-                chance: 5
+                chance: 8
             },
             {
                 item: items.tripleMediumPotion,
