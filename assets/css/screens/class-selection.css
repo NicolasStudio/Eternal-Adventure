@@ -31,22 +31,87 @@
 }
 
 /* ==========================================================
+   CARROSSEL
+   Uma fileira só, rolando na horizontal — resolve de vez o "fica
+   apertado" de empilhar linha após linha toda vez que entra classe
+   nova (a grade antiga, em flex-wrap, já tinha estourado pra 2 linhas
+   com 10 classes). As setas rolam por "página" (90% da largura
+   visível); arrastar com o mouse/trackpad/touch também funciona, é
+   scroll nativo do navegador.
+========================================================== */
+.class-carousel{
+    width:100%;
+    max-width:1400px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    position:relative;
+    z-index:2;
+}
+.class-carousel-arrow{
+    flex-shrink:0;
+    width:48px;
+    height:48px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    border:2px solid #8b7355;
+    border-radius:50%;
+    background:linear-gradient(180deg,#2c1810 0%,#1a0f0a 100%);
+    color:#d4a373;
+    font-size:18px;
+    transition:.25s;
+    box-shadow:inset 0 0 20px rgba(0,0,0,.45), 0 4px 10px rgba(0,0,0,.5);
+}
+.class-carousel-arrow:hover:not(:disabled){
+    border-color:#d4a373;
+    color:#f0d5b0;
+    transform:scale(1.08);
+    box-shadow:inset 0 0 20px rgba(0,0,0,.45), 0 0 18px rgba(212,163,115,.3);
+}
+.class-carousel-arrow:disabled{
+    opacity:.3;
+    cursor:not-allowed;
+}
+
+/* ==========================================================
    CARDS
 ========================================================== */
 .class-grid{
     display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:28px;
-    position:relative;
-    z-index:2;
+    flex-wrap:nowrap;
+    gap:24px;
+    overflow-x:auto;
+    scroll-snap-type:x proximity;
+    scroll-behavior:smooth;
+    padding:10px 6px 22px;
+    /* Esconde a barra de rolagem nativa (o scroll continua funcionando
+       normalmente) — as setas e o arrastar já deixam claro que rola. */
+    scrollbar-width:none;
+    cursor:grab;
+    /* Evita selecionar texto/"fantasma" de imagem arrastando com o
+       mouse (ver ClassSelectionScreen.bindDragToScroll) — sem isso o
+       navegador tenta selecionar o texto dos cards ou arrastar a
+       imagem em vez de rolar o carrossel. */
+    user-select:none;
+    -webkit-user-select:none;
+}
+.class-grid::-webkit-scrollbar{
+    display:none;
+}
+.class-grid.dragging{
+    cursor:grabbing;
+    scroll-snap-type:none;
 }
 .class-card{
-    width:220px;
-    padding: 18px;
+    flex:0 0 auto;
+    width:260px;
+    padding:16px;
     cursor:pointer;
+    scroll-snap-align:center;
     border:2px solid #8b7355;
-    border-radius:4px;
+    border-radius:6px;
     background:linear-gradient(180deg,#2c1810 0%,#1a0f0a 100%);
     transition:.25s;
     box-shadow:inset 0 0 30px rgba(0,0,0,.45), 0 5px 15px rgba(0,0,0,.5);
@@ -61,20 +126,31 @@
     border-color:#ec9238;
     box-shadow:inset 0 0 30px rgba(0,0,0,.75), 0 0 30px rgba(236,146,56,.35);
 }
+.class-card .class-card-portrait{
+    width:100%;
+    aspect-ratio:1/1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:8px;
+    overflow:hidden;
+    background:radial-gradient(ellipse at center 65%,#3d5570 0%,#283a4d 70%,#1c2a38 100%);
+}
 .class-card img{
-    width:140px;
+    width:100%;
+    height:100%;
+    object-fit:contain;
     display:block;
-    border-radius: 10px;
-    margin:auto;
     image-rendering:pixelated;
-    background-color: #324557;
+    -webkit-user-drag:none;
+    user-drag:none;
 }
 .class-card h2{
-    margin-top:18px;
+    margin-top:16px;
     text-align:center;
     color:#f0d5b0;
     font-family:"Cinzel",serif;
-    font-size:18px;
+    font-size:19px;
     letter-spacing:1px;
 }
 
@@ -82,7 +158,7 @@
    PAINEL
 ========================================================== */
 .class-info{
-    width:min(850px,95%);
+    width:min(900px,95%);
     min-height:210px;
     padding:30px;
     background:linear-gradient(180deg,#1b100b 0%,#100806 100%);
@@ -171,15 +247,20 @@
     .class-selection h1{
         font-size:38px;
     }
+    .class-carousel{
+        gap:8px;
+    }
+    .class-carousel-arrow{
+        width:40px;
+        height:40px;
+        font-size:16px;
+    }
     .class-grid{
-        gap:18px;
+        gap:16px;
     }
     .class-card{
-        width:190px;
-        padding:15px;
-    }
-    .class-card img{
-        width:115px;
+        width:210px;
+        padding:14px;
     }
     .class-card h2{
         margin-top:12px;
@@ -220,11 +301,17 @@
     .class-selection{
         padding:30px 15px;
     }
+    .class-carousel-arrow{
+        width:36px;
+        height:36px;
+        font-size:14px;
+    }
     .class-grid{
-        gap:18px;
+        gap:14px;
     }
     .class-card{
-        width:180px;
+        width:170px;
+        padding:12px;
     }
     .class-info{
         width:100%;
@@ -249,12 +336,21 @@
         font-size:30px;
         text-align:center;
     }
+    /* No touch, arrastar o dedo já é o jeito natural de navegar — as
+       setas (pensadas pra clique de mouse) só ocupam espaço aqui. */
+    .class-carousel-arrow{
+        display:none;
+    }
     .class-grid{
-        flex-direction:column;
-        align-items:center;
+        scroll-snap-type:x mandatory;
+        gap:14px;
+        padding-bottom:16px;
+        margin:0 -15px;
+        padding-left:15px;
+        padding-right:15px;
     }
     .class-card{
-        width:220px;
+        width:200px;
     }
     .class-info{
         padding:18px;
