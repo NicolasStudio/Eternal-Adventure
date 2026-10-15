@@ -35,15 +35,33 @@ export default class DungeonDropPreview {
 
                 drop.type.forEach(type => {
 
-                    const item = this.getEquipment(
+                    // Anel/Amuleto têm DUAS variantes compatíveis com a
+                    // mesma raridade+classe (Primal e Moderno, ver
+                    // ring.js/amulet.js) — LootSystem.pickEquipment
+                    // sorteia entre as duas de verdade, então o preview
+                    // precisa mostrar as DUAS como possibilidade, não só
+                    // a primeira (antes usava .find(), que sempre pegava
+                    // o Primal por vir primeiro no arquivo, fazendo o
+                    // tooltip "prometer" só ele mesmo quando o Moderno
+                    // também podia cair).
+                    const items = this.getEquipment(
                         type,
                         player.class.id,
                         drop.rarity
                     );
 
-                    if (item) {
-                        drops.push({ ...item, dropChance: drop.chance ?? 100 });
-                    }
+                    // Quando dá mais de um item compatível (caso do
+                    // anel/amuleto: Primal e Moderno), LootSystem sorteia
+                    // UM dos dois com peso igual — a chance "de verdade"
+                    // de sair especificamente este aqui é a do drop
+                    // dividida entre eles, não a chance cheia repetida
+                    // pros dois (senão o tooltip mostraria 40%+40%
+                    // quando, de fato, é 40% de "um anel qualquer").
+                    const chance = (drop.chance ?? 100) / items.length;
+
+                    items.forEach(item => {
+                        drops.push({ ...item, dropChance: chance });
+                    });
 
                 });
 
@@ -55,6 +73,10 @@ export default class DungeonDropPreview {
 
     }
 
+    // Devolve TODOS os itens compatíveis (slot+raridade+classe), não só
+    // um — pra anel/amuleto isso é mais de um resultado (Primal e
+    // Moderno), pros outros slots normalmente só um (cada classe tem
+    // exatamente uma peça por raridade).
     static getEquipment(type, playerClass, rarity) {
 
         let collection = null;
@@ -90,18 +112,18 @@ export default class DungeonDropPreview {
                 break;
 
             default:
-                return null;
+                return [];
 
         }
 
-        return Object.values(collection).find(item =>
+        return Object.values(collection).filter(item =>
 
             // "all" = anel/amuleto, qualquer classe pode usar (ver
             // ring.js/amulet.js).
             (item.class === "all" || item.class === playerClass) &&
             item.rarity.id === rarity
 
-        ) || null;
+        );
 
     }
 
