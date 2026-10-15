@@ -1095,6 +1095,126 @@ const helmets = {
         value: 0,
         sellValue: 0
 
+    },
+
+    helmet_singularity_common: {
+
+        id: "helmet_singularity_common",
+        name: "Tiara Cósmica",
+        type: "armor",
+        slot: "helmet",
+        class: "singularity",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/helmets/helmets-singularity-rarity-comum.png",
+
+        stats: {
+            armor: 2,
+            gravityChance: 2
+        },
+
+        value: 50,
+        sellValue: 20
+
+    },
+
+    helmet_singularity_uncommon: {
+
+        id: "helmet_singularity_uncommon",
+        name: "Tiara Cósmica",
+        type: "armor",
+        slot: "helmet",
+        class: "singularity",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/helmets/helmets-singularity-rarity-incomum.png",
+
+        stats: {
+            armor: 4,
+            gravityChance: 3
+        },
+
+        value: 200,
+        sellValue: 120
+
+    },
+
+    helmet_singularity_rare: {
+
+        id: "helmet_singularity_rare",
+        name: "Tiara Cósmica",
+        type: "armor",
+        slot: "helmet",
+        class: "singularity",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/helmets/helmets-singularity-rarity-rare.png",
+
+        stats: {
+            armor: 6,
+            gravityChance: 4
+        },
+
+        value: 720,
+        sellValue: 360
+
+    },
+
+    helmet_singularity_mystic: {
+
+        id: "helmet_singularity_mystic",
+        name: "Tiara Cósmica",
+        type: "armor",
+        slot: "helmet",
+        class: "singularity",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/helmets/helmets-singularity-rarity-mistico.png",
+
+        stats: {
+            armor: 9,
+            gravityChance: 6
+        },
+
+        value: 2160,
+        sellValue: 1080
+
+    },
+
+    helmet_singularity_legendary: {
+
+        id: "helmet_singularity_legendary",
+        name: "Tiara Cósmica",
+        type: "armor",
+        slot: "helmet",
+        class: "singularity",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/helmets/helmets-singularity-rarity-lendario.png",
+
+        stats: {
+            armor: 14,
+            gravityChance: 8
+        },
+
+        value: 0,
+        sellValue: 13240
+
+    },
+
+    helmet_singularity_ultraje: {
+
+        id: "helmet_singularity_ultraje",
+        name: "Tiara Cósmica",
+        type: "armor",
+        slot: "helmet",
+        class: "singularity",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/helmets/helmets-singularity-rarity-ultraje.png",
+
+        stats: {
+            armor: 18,
+            gravityChance: 10
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

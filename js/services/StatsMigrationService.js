@@ -58,14 +58,13 @@ import baseStatsL1 from "../data/baseStatsL1.js";
 export const CURRENT_BALANCE_VERSION = 20;
 
 // miasmaChance/reflection/confusionChance/paralysisChance/
-// doubleStrikeChance entram aqui só pra não serem DESCARTADOS na
-// migração (a tabela de migração nunca tem esses campos, então sempre
-// passam direto como "extra" — preserva o que o Pútrido/Mímico/Louca/
-// Eletro/Samurai já tinham ganho de fora do level up, ex: Cara ou
-// Coroa? sorteando esse especial). Nenhuma curva de level up (nem
-// antiga nem atual) dá pontos neles, então isso nunca soma nada por
-// conta própria.
-const STAT_KEYS = ["attack", "armor", "agility", "criticalChance", "lifeSteal", "penetration", "absorption", "miasmaChance", "reflection", "confusionChance", "paralysisChance", "doubleStrikeChance"];
+// doubleStrikeChance/gravityChance entram aqui só pra não serem
+// DESCARTADOS na migração (a tabela de migração nunca tem esses
+// campos, então sempre passam direto como "extra" — preserva o que o
+// Pútrido/Mímico/Louca/Eletro/Samurai/Singularidade já tinham ganho de
+// fora do level up). Nenhuma curva de level up (nem antiga nem atual)
+// dá pontos neles, então isso nunca soma nada por conta própria.
+const STAT_KEYS = ["attack", "armor", "agility", "criticalChance", "lifeSteal", "penetration", "absorption", "miasmaChance", "reflection", "confusionChance", "paralysisChance", "doubleStrikeChance", "gravityChance"];
 
 const LEGACY_TABLES = {
     1: legacyLevels_v1,

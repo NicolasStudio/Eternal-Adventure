@@ -1099,6 +1099,129 @@ const legs = {
         value: 0,
         sellValue: 0
 
+    },
+
+/* ==========================================
+       SINGULARIDADE (Calça Cósmica)
+========================================== */
+    legs_singularity_common: {
+
+        id: "legs_singularity_common",
+        name: "Calça Cósmica",
+        type: "armor",
+        slot: "leg",
+        class: "singularity",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/legs/legs-singularity-rarity-comum.png",
+
+        stats: {
+            armor: 2,
+            agility: 1
+        },
+
+        value: 95,
+        sellValue: 45
+
+    },
+
+    legs_singularity_uncommon: {
+
+        id: "legs_singularity_uncommon",
+        name: "Calça Cósmica",
+        type: "armor",
+        slot: "leg",
+        class: "singularity",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/legs/legs-singularity-rarity-incomum.png",
+
+        stats: {
+            armor: 4,
+            agility: 1
+        },
+
+        value: 285,
+        sellValue: 135
+
+    },
+
+    legs_singularity_rare: {
+
+        id: "legs_singularity_rare",
+        name: "Calça Cósmica",
+        type: "armor",
+        slot: "leg",
+        class: "singularity",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/legs/legs-singularity-rarity-rare.png",
+
+        stats: {
+            armor: 6,
+            agility: 2
+        },
+
+        value: 855,
+        sellValue: 405
+
+    },
+
+    legs_singularity_mystic: {
+
+        id: "legs_singularity_mystic",
+        name: "Calça Cósmica",
+        type: "armor",
+        slot: "leg",
+        class: "singularity",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/legs/legs-singularity-rarity-mistico.png",
+
+        stats: {
+            armor: 14,
+            agility: 3
+        },
+
+        value: 2565,
+        sellValue: 1215
+
+    },
+
+    legs_singularity_legendary: {
+
+        id: "legs_singularity_legendary",
+        name: "Calça Cósmica",
+        type: "armor",
+        slot: "leg",
+        class: "singularity",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/legs/legs-singularity-rarity-lendario.png",
+
+        stats: {
+            armor: 15,
+            agility: 4
+        },
+
+        value: 0,
+        sellValue: 13645
+
+    },
+
+    legs_singularity_ultraje: {
+
+        id: "legs_singularity_ultraje",
+        name: "Calça Cósmica",
+        type: "armor",
+        slot: "leg",
+        class: "singularity",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/legs/legs-singularity-rarity-ultraje.png",
+
+        stats: {
+            armor: 20,
+            agility: 5
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

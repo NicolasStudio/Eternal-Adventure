@@ -112,7 +112,12 @@ export default class PlayerStats {
             // Só o Samurai tem fonte real disso (ver DoubleStrikeService.js)
             // — mesma regra do Miasma/Reflection/Confusão/Paralisia, fica
             // 0 pra qualquer outra classe.
-            doubleStrikeChance: withBaseBonus("doubleStrikeChance")
+            doubleStrikeChance: withBaseBonus("doubleStrikeChance"),
+
+            // Só a Singularidade tem fonte real disso (ver GravityService.js)
+            // — mesma regra do Miasma/Reflection/Confusão/Paralisia/Golpe
+            // Duplo, fica 0 pra qualquer outra classe.
+            gravityChance: withBaseBonus("gravityChance")
 
         };
     }
@@ -163,6 +168,10 @@ export default class PlayerStats {
 
     get doubleStrikeChance() {
         return this.getFinalStats().doubleStrikeChance;
+    }
+
+    get gravityChance() {
+        return this.getFinalStats().gravityChance;
     }
 
 }

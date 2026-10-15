@@ -36,6 +36,8 @@ const METRIC_GROUPS = [
             { key: "paralysisCount", label: "Paralisia", color: "#000075" },
             { key: "paralyzedCount", label: "Ataques paralisados", color: "#808000" },
             { key: "doubleStrikeCount", label: "Golpe Duplo", color: "#aaffc3" },
+            { key: "gravityProcCount", label: "Pressão Gravitacional", color: "#469990" },
+            { key: "gravityStunnedCount", label: "Ataques sob Gravidade Máxima", color: "#9a6324" },
             { key: "lifeStealCount", label: "Roubo de vida", color: "#fabebe" }
         ]
     },

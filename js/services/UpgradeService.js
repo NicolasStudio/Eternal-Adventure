@@ -20,10 +20,11 @@ const SECONDARY_BONUS_QUALITIES = ["exceptional", LEGENDARY_EXTRA_QUALITY];
 // miasmaChance (especial do Pútrido, na arma e na touca), reflection
 // (especial do Mímico, na arma e no elmo), confusionChance (especial
 // da Louca, na arma e nos óculos), paralysisChance (especial do
-// Eletro, na arma e no óculos) e doubleStrikeChance (especial do
-// Samurai, na katana e na máscara) — sem isso, esses especiais nunca
-// melhoram com a Qualidade.
-const SECONDARY_STATS = ["criticalChance", "lifeSteal", "penetration", "absorption", "miasmaChance", "reflection", "confusionChance", "paralysisChance", "doubleStrikeChance"];
+// Eletro, na arma e no óculos), doubleStrikeChance (especial do
+// Samurai, na katana e na máscara) e gravityChance (especial da
+// Singularidade, na marreta e na tiara) — sem isso, esses especiais
+// nunca melhoram com a Qualidade.
+const SECONDARY_STATS = ["criticalChance", "lifeSteal", "penetration", "absorption", "miasmaChance", "reflection", "confusionChance", "paralysisChance", "doubleStrikeChance", "gravityChance"];
 
 // Bônus de "Excepcional" pra status SECUNDÁRIOS (teto por raridade, ver
 // rarities.js/secondaryCap). Não reaproveita a fórmula dos principais

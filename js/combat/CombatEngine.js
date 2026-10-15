@@ -5,6 +5,7 @@ import MimicService from "../services/MimicService.js";
 import ConfusionService from "../services/ConfusionService.js";
 import ParalysisService from "../services/ParalysisService.js";
 import DoubleStrikeService from "../services/DoubleStrikeService.js";
+import GravityService from "../services/GravityService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVE, absorbedAmount } from "./Absorption.js";
 import { CRITICAL_MULTIPLIER } from "./Critical.js";
 
@@ -43,6 +44,14 @@ export default class CombatEngine {
         this.paralysisFlags = {
             player: ParalysisService.createFlags(),
             monster: ParalysisService.createFlags()
+        };
+        // Pressão Gravitacional/Gravidade Máxima da Singularidade (ver
+        // GravityService.js) — acúmulo por lado (até STACK_THRESHOLD),
+        // que ao estourar liga dois pendentes: perder o turno (igual
+        // Paralisia) e Armadura pela metade no próximo golpe recebido.
+        this.gravityFlags = {
+            player: GravityService.createFlags(),
+            monster: GravityService.createFlags()
         };
         // Log acumulado desse combate, pro mesmo formato/agregador das
         // "Informações do Combate" do Cooperativo (ver js/combat/
@@ -112,6 +121,40 @@ export default class CombatEngine {
                 target: defenderSide,
                 dodged: false,
                 paralyzed: true,
+                damage: 0,
+                critical: false,
+                lifeSteal: 0,
+                absorbed: 0,
+                miasmaProc: false,
+                miasmaStacks: 0,
+                miasmaTargetHasSpecials: false,
+                miasmaAttackWeakened: false,
+                miasmaDefendWeakened: false,
+                mimicBonus: 0
+            };
+
+        }
+
+        // Gravidade Máxima da Singularidade: mesma prioridade da
+        // Paralisia acima (perde o turno inteiro, sem sortear nada) — só
+        // muda a origem (acúmulo de Pressão Gravitacional em vez de
+        // chance direta por golpe, ver GravityService.js).
+        if (GravityService.consumePendingStun(this.gravityFlags[attackerSide])) {
+
+            this.log.push({
+                round: this.turnCounter,
+                attackerId: attackerSide,
+                targetId: defenderSide,
+                dodged: false,
+                damage: 0,
+                gravityStunned: true
+            });
+
+            return {
+                attacker: attackerSide,
+                target: defenderSide,
+                dodged: false,
+                gravityStunned: true,
                 damage: 0,
                 critical: false,
                 lifeSteal: 0,
@@ -244,7 +287,11 @@ export default class CombatEngine {
             miasmaProc: result.miasmaProc,
             confusionOutcome,
             paralysisProc: result.paralysisProc,
-            doubleStrikeProc: result.doubleStrikeProc
+            doubleStrikeProc: result.doubleStrikeProc,
+            gravityProc: result.gravityProc,
+            gravityStacks: result.gravityStacks,
+            gravityTriggered: result.gravityTriggered,
+            gravityArmorHalved: result.gravityArmorHalved
         });
 
         // Segunda entrada própria no log pro Golpe Duplo — mesmo dano,
@@ -291,7 +338,11 @@ export default class CombatEngine {
             mimicBonus: result.mimicBonus,
             confusionProc: result.confusionProc,
             paralysisProc: result.paralysisProc,
-            doubleStrikeProc: result.doubleStrikeProc
+            doubleStrikeProc: result.doubleStrikeProc,
+            gravityProc: result.gravityProc,
+            gravityStacks: result.gravityStacks,
+            gravityTriggered: result.gravityTriggered,
+            gravityArmorHalved: result.gravityArmorHalved
         };
     }
 
@@ -325,7 +376,15 @@ export default class CombatEngine {
         // também reduz a Armadura de quem está defendendo, se ele
         // estiver intoxicado — só aqui (Dungeons), nunca no PVP.
         const attack = (attacker.attack ?? attacker.dano) * MiasmaService.statMultiplier(this.miasmaFlags[attackerSide], MIASMA_PVE_PERCENTS) * confusionMultiplier;
-        const armor = (defender.armor ?? defender.armadura) * MiasmaService.statMultiplier(this.miasmaFlags[defenderSide], MIASMA_PVE_PERCENTS);
+
+        // Gravidade Máxima da Singularidade: se o DEFENSOR tiver a marca
+        // pendente (chegou nos acúmulos no golpe anterior), a Armadura
+        // dele conta só pela metade NESSE golpe — depois volta ao normal
+        // (ver GravityService.js). Independente do Miasma, que é outro
+        // multiplicador por cima.
+        const gravityArmorMultiplier = GravityService.consumeArmorHalf(this.gravityFlags[defenderSide]);
+        const gravityArmorHalved = gravityArmorMultiplier < 1;
+        const armor = (defender.armor ?? defender.armadura) * MiasmaService.statMultiplier(this.miasmaFlags[defenderSide], MIASMA_PVE_PERCENTS) * gravityArmorMultiplier;
 
         // Miasma do Pútrido: se o ATACANTE tiver uma marca pendente
         // (foi intoxicado no golpe anterior que sofreu), Crítico/Roubo
@@ -437,6 +496,23 @@ export default class CombatEngine {
         // DoubleStrikeService.js).
         const doubleStrikeProc = DoubleStrikeService.procs(attacker.doubleStrikeChance ?? 0, Math.random());
 
+        // ==========================
+        // PRESSÃO GRAVITACIONAL (Singularidade)
+        // ==========================
+        // Sorteado com o gravityChance ORIGINAL do atacante — só a
+        // Singularidade tem isso > 0 (vem 100% do equipamento, ver
+        // PlayerStats.js), em qualquer outro atacante nunca ativa.
+        const gravityProc = GravityService.procs(attacker.gravityChance ?? 0, Math.random());
+
+        let gravityStacks = 0;
+        let gravityTriggered = false;
+
+        if (gravityProc) {
+            const stackResult = GravityService.applyStack(this.gravityFlags[defenderSide]);
+            gravityStacks = stackResult.stacks;
+            gravityTriggered = stackResult.triggered;
+        }
+
         return {
             miasmaProc,
             miasmaStacks,
@@ -448,6 +524,10 @@ export default class CombatEngine {
             confusionProc,
             paralysisProc,
             doubleStrikeProc,
+            gravityProc,
+            gravityStacks,
+            gravityTriggered,
+            gravityArmorHalved,
             damage,
             rawDamage,
             armorMitigated,
@@ -492,6 +572,14 @@ export default class CombatEngine {
             return result.attacker === "player"
                 ? ParalysisService.buildOutcomeMessage("Você")
                 : ParalysisService.buildOutcomeMessage(this.monster.name);
+        }
+
+        // Gravidade Máxima "perdeu o turno" — mesma prioridade da
+        // Paralisia acima (ver attack()), mensagem própria.
+        if (result.gravityStunned) {
+            return result.attacker === "player"
+                ? GravityService.buildStunMessage("Você")
+                : GravityService.buildStunMessage(this.monster.name);
         }
 
         // Confusão "errou o ataque" — antes mesmo de rolar esquiva/dano
@@ -543,6 +631,12 @@ export default class CombatEngine {
             if (result.doubleStrikeProc) {
                 message += `<br>${DoubleStrikeService.buildMessage(this.monster.name)}`;
             }
+            if (result.gravityArmorHalved) {
+                message += `<br>${GravityService.buildArmorHalfMessage(this.monster.name)}`;
+            }
+            if (result.gravityProc) {
+                message += `<br>${GravityService.buildProcMessage(this.monster.name, result)}`;
+            }
             if (result.mimicBonus > 0) {
                 message += `<br>${MimicService.buildMessage(result.mimicBonus, { opponentName: this.monster.name })}`;
             }
@@ -568,6 +662,12 @@ export default class CombatEngine {
         }
         if (result.doubleStrikeProc) {
             message += `<br>${DoubleStrikeService.buildMessage("você")}`;
+        }
+        if (result.gravityArmorHalved) {
+            message += `<br>${GravityService.buildArmorHalfMessage("você")}`;
+        }
+        if (result.gravityProc) {
+            message += `<br>${GravityService.buildProcMessage("você", result)}`;
         }
         if (result.revive) {
             message += `<br><span class="combat-pet-bite">${result.revive.petName}</span> reviveu você com <strong>${result.revive.heal}</strong> HP!`;

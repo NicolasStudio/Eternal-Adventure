@@ -13,6 +13,7 @@ import MimicService from "../services/MimicService.js";
 import ConfusionService from "../services/ConfusionService.js";
 import ParalysisService from "../services/ParalysisService.js";
 import DoubleStrikeService from "../services/DoubleStrikeService.js";
+import GravityService, { STACK_THRESHOLD as GRAVITY_STACK_THRESHOLD } from "../services/GravityService.js";
 import dungeons from "../data/dungeons.js";
 
 // Só os chefes "normais" (não o final secreto, que fica de fora da
@@ -522,6 +523,11 @@ export default class PvpView {
         if (entry.paralyzed) {
             return `<div class="pvp-log-line pvp-log-dodge">${name} ficou paralisado e perdeu o ataque!</div>`;
         }
+        // Gravidade Máxima "perdeu o turno" — mesma prioridade da
+        // Paralisia acima (ver GravityService.js).
+        if (entry.gravityStunned) {
+            return `<div class="pvp-log-line pvp-log-dodge">${name} ficou pesado demais e perdeu o ataque!</div>`;
+        }
         if (entry.dodged) {
             return `<div class="pvp-log-line pvp-log-dodge">${name} esquivou!</div>`;
         }
@@ -560,10 +566,16 @@ export default class PvpView {
         const doubleStrike = entry.doubleStrikeProc
             ? ` <span class="combat-double-strike">(Golpe Duplo!)</span>`
             : "";
+        const gravityArmorHalved = entry.gravityArmorHalved
+            ? ` <span class="combat-gravity">(Gravidade Máxima: Armadura pela metade!)</span>`
+            : "";
+        const gravity = entry.gravityProc
+            ? ` <span class="combat-gravity">(Pressão Gravitacional ${entry.gravityStacks}/${GRAVITY_STACK_THRESHOLD}!)</span>`
+            : "";
         if (entry.confusionOutcome === "self") {
             return `<div class="pvp-log-line">${name} se atacou sem querer: ${entry.damage} de dano${crit}${confusion}</div>`;
         }
-        return `<div class="pvp-log-line">${name} causou ${entry.damage} de dano${crit}${steal}${absorbed}${confusion}${paralysis}${doubleStrike}</div>`;
+        return `<div class="pvp-log-line">${name} causou ${entry.damage} de dano${crit}${steal}${absorbed}${confusion}${paralysis}${doubleStrike}${gravityArmorHalved}${gravity}</div>`;
     }
 
     renderLogLineTeam(entry, nameOf, petNameOf) {
@@ -578,6 +590,11 @@ export default class PvpView {
         // ParalysisService.js).
         if (entry.paralyzed) {
             return `<div class="pvp-log-line pvp-log-dodge">${attackerName} ficou paralisado e perdeu o ataque!</div>`;
+        }
+        // Gravidade Máxima "perdeu o turno" — mesma prioridade da
+        // Paralisia acima (ver GravityService.js).
+        if (entry.gravityStunned) {
+            return `<div class="pvp-log-line pvp-log-dodge">${attackerName} ficou pesado demais e perdeu o ataque!</div>`;
         }
         if (entry.dodged) {
             return `<div class="pvp-log-line pvp-log-dodge">${targetName} esquivou de ${attackerName}!</div>`;
@@ -615,10 +632,16 @@ export default class PvpView {
         const doubleStrike = entry.doubleStrikeProc
             ? ` <span class="combat-double-strike">(Golpe Duplo!)</span>`
             : "";
+        const gravityArmorHalved = entry.gravityArmorHalved
+            ? ` <span class="combat-gravity">(Gravidade Máxima: Armadura pela metade!)</span>`
+            : "";
+        const gravity = entry.gravityProc
+            ? ` <span class="combat-gravity">(Pressão Gravitacional ${entry.gravityStacks}/${GRAVITY_STACK_THRESHOLD}!)</span>`
+            : "";
         if (entry.confusionOutcome === "self") {
             return `<div class="pvp-log-line">${attackerName} se atacou sem querer: ${entry.damage} de dano${crit}${confusion}</div>`;
         }
-        return `<div class="pvp-log-line">${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}${confusion}${paralysis}${doubleStrike}</div>`;
+        return `<div class="pvp-log-line">${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}${confusion}${paralysis}${doubleStrike}${gravityArmorHalved}${gravity}</div>`;
     }
 
     currentOpponentSnapshot() {
@@ -956,6 +979,12 @@ export default class PvpView {
             return ParalysisService.buildOutcomeMessage(isMe ? "Você" : opponentName);
         }
 
+        // Gravidade Máxima "perdeu o turno" — mesma prioridade da
+        // Paralisia acima (ver GravityService.js).
+        if (entry.gravityStunned) {
+            return GravityService.buildStunMessage(isMe ? "Você" : opponentName);
+        }
+
         if (entry.dodged) {
             return isMe
                 ? `<span class="combat-dodge">${opponentName} esquivou do seu ataque!</span>`
@@ -1048,6 +1077,14 @@ export default class PvpView {
                 message += `<br>${DoubleStrikeService.buildMessage(opponentName)}`;
             }
 
+            if (entry.gravityArmorHalved) {
+                message += `<br>${GravityService.buildArmorHalfMessage(opponentName)}`;
+            }
+
+            if (entry.gravityProc) {
+                message += `<br>${GravityService.buildProcMessage(opponentName, entry)}`;
+            }
+
             return message;
 
         }
@@ -1089,6 +1126,14 @@ export default class PvpView {
 
         if (entry.doubleStrikeProc) {
             hitMessage += `<br>${DoubleStrikeService.buildMessage("você")}`;
+        }
+
+        if (entry.gravityArmorHalved) {
+            hitMessage += `<br>${GravityService.buildArmorHalfMessage("você")}`;
+        }
+
+        if (entry.gravityProc) {
+            hitMessage += `<br>${GravityService.buildProcMessage("você", entry)}`;
         }
 
         return hitMessage;
@@ -1147,6 +1192,12 @@ export default class PvpView {
         // mensagem própria (ver ParalysisService.js).
         if (entry.paralyzed) {
             return ParalysisService.buildOutcomeMessage(isMe ? "Você" : attackerName);
+        }
+
+        // Gravidade Máxima "perdeu o turno" — mesma prioridade da
+        // Paralisia acima (ver GravityService.js).
+        if (entry.gravityStunned) {
+            return GravityService.buildStunMessage(isMe ? "Você" : attackerName);
         }
 
         if (entry.dodged) {
@@ -1231,6 +1282,14 @@ export default class PvpView {
                 message += `<br>${DoubleStrikeService.buildMessage(targetName)}`;
             }
 
+            if (entry.gravityArmorHalved) {
+                message += `<br>${GravityService.buildArmorHalfMessage(targetName)}`;
+            }
+
+            if (entry.gravityProc) {
+                message += `<br>${GravityService.buildProcMessage(targetName, entry)}`;
+            }
+
             return message;
 
         }
@@ -1273,6 +1332,14 @@ export default class PvpView {
                 hitMessage += `<br>${DoubleStrikeService.buildMessage("você")}`;
             }
 
+            if (entry.gravityArmorHalved) {
+                hitMessage += `<br>${GravityService.buildArmorHalfMessage("você")}`;
+            }
+
+            if (entry.gravityProc) {
+                hitMessage += `<br>${GravityService.buildProcMessage("você", entry)}`;
+            }
+
             return hitMessage;
 
         }
@@ -1291,10 +1358,16 @@ export default class PvpView {
         const doubleStrike = entry.doubleStrikeProc
             ? ` <span class="combat-double-strike">(Golpe Duplo!)</span>`
             : "";
+        const gravityArmorHalved = entry.gravityArmorHalved
+            ? ` <span class="combat-gravity">(Gravidade Máxima: Armadura pela metade!)</span>`
+            : "";
+        const gravity = entry.gravityProc
+            ? ` <span class="combat-gravity">(Pressão Gravitacional ${entry.gravityStacks}/${GRAVITY_STACK_THRESHOLD}!)</span>`
+            : "";
         if (entry.confusionOutcome === "self") {
             return `${attackerName} se atacou sem querer, causando ${entry.damage} de dano${crit}${confusion}.`;
         }
-        return `${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${mimic}${miasma}${confusion}${paralysis}${doubleStrike}.`;
+        return `${attackerName} causou ${entry.damage} de dano em ${targetName}${crit}${mimic}${miasma}${confusion}${paralysis}${doubleStrike}${gravityArmorHalved}${gravity}.`;
 
     }
 
@@ -1381,7 +1454,7 @@ export default class PvpView {
 
             const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
-            await CombatToast.show(this.buildAttackMessage(entry), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry) + ParalysisService.extraToastSeconds(entry) + DoubleStrikeService.extraToastSeconds(entry), speed);
+            await CombatToast.show(this.buildAttackMessage(entry), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry) + ParalysisService.extraToastSeconds(entry) + DoubleStrikeService.extraToastSeconds(entry) + GravityService.extraToastSeconds(entry), speed);
 
             await this.sleep(500 / speed);
 
@@ -1470,7 +1543,7 @@ export default class PvpView {
 
                 const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
-                await CombatToast.show(this.buildTeamAttackMessage(entry, nameOf, petNameOf), this.buildTeamToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry) + ParalysisService.extraToastSeconds(entry) + DoubleStrikeService.extraToastSeconds(entry), speed);
+                await CombatToast.show(this.buildTeamAttackMessage(entry, nameOf, petNameOf), this.buildTeamToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry) + ParalysisService.extraToastSeconds(entry) + DoubleStrikeService.extraToastSeconds(entry) + GravityService.extraToastSeconds(entry), speed);
 
                 await this.sleep(450 / speed);
 

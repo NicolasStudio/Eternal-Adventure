@@ -6,6 +6,7 @@ import MimicService from "./MimicService.js";
 import ConfusionService from "./ConfusionService.js";
 import ParalysisService from "./ParalysisService.js";
 import DoubleStrikeService from "./DoubleStrikeService.js";
+import GravityService from "./GravityService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVP, absorbedAmount } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
@@ -28,7 +29,9 @@ const DODGE_CAP = 40;
 // diferente da Confusão), mesmo motivo do bump acima.
 // v13 Golpe Duplo do Samurai — rola todo golpe que acerta (igual
 // Miasma/Confusão/Paralisia), mesmo motivo do bump acima.
-export const TEAM_SIM_VERSION = 13;
+// v14 Pressão Gravitacional/Gravidade Máxima da Singularidade — rola
+// todo golpe que acerta, mesmo motivo do bump acima.
+export const TEAM_SIM_VERSION = 14;
 
 /*
     Os dois clientes (jogador A e B) precisam chegar no MESMO resultado
@@ -107,6 +110,8 @@ export default class PvpCombatService {
             paralysisChance: stats.paralysisChance ?? 0,
             // Só o Samurai tem isso > 0 (ver DoubleStrikeService.js).
             doubleStrikeChance: stats.doubleStrikeChance ?? 0,
+            // Só a Singularidade tem isso > 0 (ver GravityService.js).
+            gravityChance: stats.gravityChance ?? 0,
             petBiteDamage: scaledPet?.biteDamage ?? 0,
             petHealAmount: scaledPet?.healAmount ?? 0,
             petMimicRatio: scaledPet?.mimicRatio ?? 0,
@@ -184,6 +189,12 @@ export default class PvpCombatService {
         // Paralisia do Eletro (ver ParalysisService.js) — mesmo padrão
         // acima, marca pendente por lado.
         const paralysisFlags = { a: ParalysisService.createFlags(), b: ParalysisService.createFlags() };
+
+        // Pressão Gravitacional/Gravidade Máxima da Singularidade (ver
+        // GravityService.js) — acúmulo por lado, que ao estourar liga
+        // dois pendentes: perder o turno (igual Paralisia) e Armadura
+        // pela metade no próximo golpe recebido.
+        const gravityFlags = { a: GravityService.createFlags(), b: GravityService.createFlags() };
 
         // Reviver do Yggdrasil: entra no log como uma "mordida" só de cura
         // do lado de quem reviveu, que a tela já sabe aplicar.
@@ -266,6 +277,46 @@ export default class PvpCombatService {
 
             }
 
+            // Gravidade Máxima da Singularidade: mesma prioridade/padrão
+            // da Paralisia acima (perde o turno inteiro, sem sortear
+            // nada) — só muda a origem (acúmulo em vez de chance direta
+            // por golpe, ver GravityService.js).
+            if (GravityService.consumePendingStun(gravityFlags[turn])) {
+
+                log.push({ round: guard, turn, attacker: attacker.name, attackerId: turn, targetId: defenderKey, dodged: false, damage: 0, gravityStunned: true });
+
+                const stunnedBurn = burns[turn];
+
+                if (stunnedBurn && a.currentHP > 0 && b.currentHP > 0) {
+
+                    const tickDamage = BoitataBurn.getTickDamage(attacker.petBurnDamage);
+                    const applied = Math.min(defender.currentHP, tickDamage);
+
+                    defender.currentHP = Math.max(0, defender.currentHP - tickDamage);
+
+                    log.push({
+                        round: guard,
+                        turn,
+                        attacker: attacker.name,
+                        attackerId: turn,
+                        targetId: defenderKey,
+                        burn: true,
+                        burnStart: stunnedBurn.first,
+                        burnTarget: defenderKey,
+                        damage: applied
+                    });
+
+                    stunnedBurn.first = false;
+
+                    revive(defender, defenderKey);
+
+                }
+
+                turn = turn === "a" ? "b" : "a";
+                continue;
+
+            }
+
             // Confusão da Louca: consome a marca pendente do ATACANTE —
             // SEMPRE sorteado, mesmo sem marca nenhuma (mesma regra do
             // resto do combate: nunca pular um rng() condicionalmente,
@@ -319,10 +370,18 @@ export default class PvpCombatService {
 
                 const isCritical = rng() * 100 < attacker.criticalChance * attackDebuff;
                 const criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER : 1;
+
+                // Gravidade Máxima da Singularidade: se o ALVO tiver a
+                // marca pendente (chegou nos acúmulos no golpe anterior),
+                // a Armadura dele conta só pela metade NESSE golpe —
+                // depois volta ao normal (ver GravityService.js).
+                const gravityArmorMultiplier = GravityService.consumeArmorHalf(gravityFlags[attackTargetKey]);
+                const gravityArmorHalved = gravityArmorMultiplier < 1;
+
                 // Miasma: Armadura de quem está intoxicado também cai,
                 // junto com Ataque/Agilidade (attackTargetMult, calculado
                 // acima).
-                const effectiveArmor = (attackTarget.armor * attackTargetMult + attackTargetCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
+                const effectiveArmor = (attackTarget.armor * attackTargetMult * gravityArmorMultiplier + attackTargetCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
                 const preAbsorption = Math.max(1, Math.floor((attacker.attack * attackerMult + attackerCopy.bonusAttack) * criticalMultiplier * mitigation * confusionMultiplier));
 
@@ -386,6 +445,19 @@ export default class PvpCombatService {
                     attackTarget.currentHP = Math.max(0, attackTarget.currentHP - damage);
                 }
 
+                // Pressão Gravitacional: sorteado com o valor ORIGINAL do
+                // atacante. Só a Singularidade tem gravityChance > 0.
+                const gravityProc = GravityService.procs(attacker.gravityChance ?? 0, rng());
+
+                let gravityStacks = 0;
+                let gravityTriggered = false;
+
+                if (gravityProc) {
+                    const stackResult = GravityService.applyStack(gravityFlags[attackTargetKey]);
+                    gravityStacks = stackResult.stacks;
+                    gravityTriggered = stackResult.triggered;
+                }
+
                 log.push({
                     round: guard,
                     turn,
@@ -408,7 +480,11 @@ export default class PvpCombatService {
                     confusionOutcome,
                     confusionProc,
                     paralysisProc,
-                    doubleStrikeProc
+                    doubleStrikeProc,
+                    gravityProc,
+                    gravityStacks,
+                    gravityTriggered,
+                    gravityArmorHalved
                 });
 
                 // Segunda entrada própria no log pro Golpe Duplo — mesmo
@@ -571,6 +647,12 @@ export default class PvpCombatService {
         // acima, uma marca pendente por combatente.
         const paralysisFlagsById = new Map(all.map(c => [c.id, ParalysisService.createFlags()]));
 
+        // Pressão Gravitacional/Gravidade Máxima da Singularidade (ver
+        // GravityService.js) — acúmulo por combatente, que ao estourar
+        // liga dois pendentes: perder o turno (igual Paralisia) e
+        // Armadura pela metade no próximo golpe recebido.
+        const gravityFlagsById = new Map(all.map(c => [c.id, GravityService.createFlags()]));
+
         // Reviver do Yggdrasil: entra no log como uma "mordida" só de cura
         // em quem reviveu (healedIds), que a tela já sabe aplicar.
         const revive = (combatant, killerId) => {
@@ -669,6 +751,30 @@ export default class PvpCombatService {
 
                 }
 
+                // Gravidade Máxima da Singularidade: mesma prioridade/
+                // padrão da Paralisia acima (perde o turno inteiro, sem
+                // sortear nada) — só muda a origem (acúmulo em vez de
+                // chance direta por golpe, ver GravityService.js).
+                if (GravityService.consumePendingStun(gravityFlagsById.get(attacker.id))) {
+
+                    log.push({
+                        round: guard,
+                        attackerId: attacker.id,
+                        attackerTeam: attacker.team,
+                        targetId: target.id,
+                        dodged: false,
+                        damage: 0,
+                        gravityStunned: true
+                    });
+
+                    tickBurn(attacker, enemyTeam);
+
+                    if (aliveOf(enemyTeam).length === 0) break;
+
+                    continue;
+
+                }
+
                 // Confusão da Louca: consome a marca pendente do
                 // ATACANTE — SEMPRE sorteado, mesmo sem marca nenhuma
                 // (mesma regra do resto do combate: nunca pular um
@@ -749,10 +855,18 @@ export default class PvpCombatService {
 
                 const isCritical = rng() * 100 < attacker.criticalChance * attackDebuff;
                 const criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER : 1;
+
+                // Gravidade Máxima da Singularidade: se o ALVO tiver a
+                // marca pendente (chegou nos acúmulos no golpe anterior),
+                // a Armadura dele conta só pela metade NESSE golpe —
+                // depois volta ao normal (ver GravityService.js).
+                const gravityArmorMultiplier = GravityService.consumeArmorHalf(gravityFlagsById.get(attackTarget.id));
+                const gravityArmorHalved = gravityArmorMultiplier < 1;
+
                 // Miasma: Armadura de quem está intoxicado também cai,
                 // junto com Ataque/Agilidade (attackTargetMult, calculado
                 // acima).
-                const effectiveArmor = (attackTarget.armor * attackTargetMult + attackTargetCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
+                const effectiveArmor = (attackTarget.armor * attackTargetMult * gravityArmorMultiplier + attackTargetCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
                 const preAbsorption = Math.max(1, Math.floor((attacker.attack * attackerMult + attackerCopy.bonusAttack) * criticalMultiplier * mitigation * confusionMultiplier));
 
@@ -812,6 +926,19 @@ export default class PvpCombatService {
                     attackTarget.currentHP = Math.max(0, attackTarget.currentHP - damage);
                 }
 
+                // Pressão Gravitacional: sorteado com o valor ORIGINAL do
+                // atacante. Só a Singularidade tem gravityChance > 0.
+                const gravityProc = GravityService.procs(attacker.gravityChance ?? 0, rng());
+
+                let gravityStacks = 0;
+                let gravityTriggered = false;
+
+                if (gravityProc) {
+                    const stackResult = GravityService.applyStack(gravityFlagsById.get(attackTarget.id));
+                    gravityStacks = stackResult.stacks;
+                    gravityTriggered = stackResult.triggered;
+                }
+
                 log.push({
                     round: guard,
                     attackerId: attacker.id,
@@ -833,7 +960,11 @@ export default class PvpCombatService {
                     confusionOutcome,
                     confusionProc,
                     paralysisProc,
-                    doubleStrikeProc
+                    doubleStrikeProc,
+                    gravityProc,
+                    gravityStacks,
+                    gravityTriggered,
+                    gravityArmorHalved
                 });
 
                 // Segunda entrada própria no log pro Golpe Duplo — mesmo

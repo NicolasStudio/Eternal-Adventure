@@ -151,6 +151,13 @@ export default class ClassSelectionScreen {
                 "🗡️ Golpe Duplo: chance de acertar o mesmo dano duas vezes no mesmo golpe",
                 "🏃 Agilidade alta, atrás só do Arqueiro",
                 "🛡️❤️ Armadura e Vida medianas"
+            ],
+
+            singularity: [
+                "⚔️ Ataque um pouco acima do Bárbaro",
+                "🌌 Pressão Gravitacional: acumula no inimigo até ele receber Gravidade Máxima (perde o próximo ataque e a Armadura conta pela metade no golpe seguinte)",
+                "🛡️ Armadura parecida com a do Pútrido",
+                "👢 Agilidade baixa, só na frente do Guerreiro"
             ]
 
         };

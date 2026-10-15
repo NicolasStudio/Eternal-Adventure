@@ -197,6 +197,11 @@ export default class CharacterView {
                         <span>${stats.doubleStrikeChance}%</span>
                     </div>
 
+                    <div class="character-stat character-stat-hoverable" data-stat="gravityChance">
+                        <span>Pressão Gravitacional</span>
+                        <span>${stats.gravityChance}%</span>
+                    </div>
+
                     <div class="character-stat character-stat-hoverable" data-stat="penetration">
                         <span>Penetração</span>
                         <span>${stats.penetration}%</span>
@@ -1459,6 +1464,17 @@ export default class CharacterView {
             details: [
                 ["O que acontece", "Resolve na hora, no mesmo golpe — repete o MESMO dano já calculado pro primeiro, sem rolar Crítico/Roubo de Vida/Absorção de novo e sem chance de errar."],
                 ["Diferente da Confusão/Paralisia", "Não existe nenhum estado pendente — não afeta o PRÓXIMO ataque de ninguém, só dobra o golpe atual."],
+                CharacterView.SPECIAL_CAP_ROW
+            ]
+        },
+
+        gravityChance: {
+            icon: "fa-meteor",
+            title: "Pressão Gravitacional",
+            summary: "Exclusivo da Singularidade: chance de acumular Pressão Gravitacional no alvo a cada golpe seu que acerta.",
+            details: [
+                ["O que acontece", "A cada 3 acúmulos, eles são consumidos e o alvo recebe Gravidade Máxima — perde a PRÓXIMA ação de ataque por completo, e o PRÓXIMO golpe que ele receber conta só metade da Armadura dele."],
+                ["Depois disso", "A Armadura volta ao normal e a contagem de acúmulos recomeça do zero."],
                 CharacterView.SPECIAL_CAP_ROW
             ]
         }

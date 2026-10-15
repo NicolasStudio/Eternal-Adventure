@@ -1097,6 +1097,129 @@ const boots = {
         value: 0,
         sellValue: 0
 
+    },
+
+/* ==========================================
+       SINGULARIDADE (Cuturno Intergaláctico)
+========================================== */
+    boots_singularity_common: {
+
+        id: "boots_singularity_common",
+        name: "Cuturno Intergaláctico",
+        type: "armor",
+        slot: "boot",
+        class: "singularity",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/boots/boots-singularity-rarity-comum.png",
+
+        stats: {
+            armor: 1,
+            agility: 2
+        },
+
+        value: 80,
+        sellValue: 40
+
+    },
+
+    boots_singularity_uncommon: {
+
+        id: "boots_singularity_uncommon",
+        name: "Cuturno Intergaláctico",
+        type: "armor",
+        slot: "boot",
+        class: "singularity",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/boots/boots-singularity-rarity-incomum.png",
+
+        stats: {
+            armor: 2,
+            agility: 3
+        },
+
+        value: 240,
+        sellValue: 120
+
+    },
+
+    boots_singularity_rare: {
+
+        id: "boots_singularity_rare",
+        name: "Cuturno Intergaláctico",
+        type: "armor",
+        slot: "boot",
+        class: "singularity",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/boots/boots-singularity-rarity-rare.png",
+
+        stats: {
+            armor: 3,
+            agility: 5
+        },
+
+        value: 720,
+        sellValue: 360
+
+    },
+
+    boots_singularity_mystic: {
+
+        id: "boots_singularity_mystic",
+        name: "Cuturno Intergaláctico",
+        type: "armor",
+        slot: "boot",
+        class: "singularity",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/boots/boots-singularity-rarity-mistico.png",
+
+        stats: {
+            armor: 5,
+            agility: 7
+        },
+
+        value: 2160,
+        sellValue: 1080
+
+    },
+
+    boots_singularity_legendary: {
+
+        id: "boots_singularity_legendary",
+        name: "Cuturno Intergaláctico",
+        type: "armor",
+        slot: "boot",
+        class: "singularity",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/boots/boots-singularity-rarity-lendario.png",
+
+        stats: {
+            armor: 7,
+            agility: 8
+        },
+
+        value: 0,
+        sellValue: 13240
+
+    },
+
+    boots_singularity_ultraje: {
+
+        id: "boots_singularity_ultraje",
+        name: "Cuturno Intergaláctico",
+        type: "armor",
+        slot: "boot",
+        class: "singularity",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/boots/boots-singularity-rarity-ultraje.png",
+
+        stats: {
+            armor: 9,
+            agility: 10
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

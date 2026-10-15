@@ -1395,6 +1395,171 @@ const weapons = {
         value: 0,
         sellValue: 0
 
+    },
+
+/* ==========================================
+       SINGULARIDADE (Marreta Gravítica)
+========================================== */
+    hammer_common: {
+
+        id: "hammer_common",
+        name: "Marreta Gravítica",
+        type: "weapon",
+        slot: "weapon",
+        class: "singularity",
+        weaponType: "hammer",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/weapons/hammer-rarity-comum.png",
+
+        stats: {
+            attack: 5,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            gravityChance: 2
+        },
+
+        value: 120,
+        sellValue: 60
+
+    },
+
+    hammer_uncommon: {
+
+        id: "hammer_uncommon",
+        name: "Marreta Gravítica",
+        type: "weapon",
+        slot: "weapon",
+        class: "singularity",
+        weaponType: "hammer",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/weapons/hammer-rarity-incomum.png",
+
+        stats: {
+            attack: 10,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            gravityChance: 5
+        },
+
+        value: 360,
+        sellValue: 180
+
+    },
+
+    hammer_rare: {
+
+        id: "hammer_rare",
+        name: "Marreta Gravítica",
+        type: "weapon",
+        slot: "weapon",
+        class: "singularity",
+        weaponType: "hammer",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/weapons/hammer-rarity-rare.png",
+
+        stats: {
+            attack: 17,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            gravityChance: 6
+        },
+
+        value: 1080,
+        sellValue: 540
+
+    },
+
+    hammer_mystic: {
+
+        id: "hammer_mystic",
+        name: "Marreta Gravítica",
+        type: "weapon",
+        slot: "weapon",
+        class: "singularity",
+        weaponType: "hammer",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/weapons/hammer-rarity-mistico.png",
+
+        stats: {
+            attack: 32,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            gravityChance: 10
+        },
+
+        value: 3240,
+        sellValue: 1620
+
+    },
+
+    hammer_legendary: {
+
+        id: "hammer_legendary",
+        name: "Marreta Gravítica",
+        type: "weapon",
+        slot: "weapon",
+        class: "singularity",
+        weaponType: "hammer",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/weapons/hammer-rarity-lendario.png",
+
+        stats: {
+            attack: 44,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            gravityChance: 11
+        },
+
+        value: 0,
+        sellValue: 18860
+
+    },
+
+    hammer_ultraje: {
+
+        id: "hammer_ultraje",
+        name: "Marreta Gravítica",
+        type: "weapon",
+        slot: "weapon",
+        class: "singularity",
+        weaponType: "hammer",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/weapons/hammer-rarity-ultraje.png",
+
+        stats: {
+            attack: 59,
+            armor: 0,
+            agility: 0,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            gravityChance: 15
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

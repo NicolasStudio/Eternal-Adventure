@@ -330,6 +330,44 @@ const upClasse = {
             absorption: 0,
             doubleStrikeChance: 9
         }
+    },
+
+    light_singularity:{
+        id: "light_singularity",
+        name: "Singularidade da Luz",
+        image: "assets/img/assets/character/class_up/singularity/light-singularity.png",
+        hud: "assets/img/assets/character/class_up/singularity/light-singularity-hud.png",
+        description: "Você escolheu transcender para uma singularidade da luz.",
+        states:{
+            life: 90,
+            attack: 42,
+            armor: 20,
+            agility: 4,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            gravityChance: 10
+        }
+    },
+
+    dark_singularity:{
+        id: "dark_singularity",
+        name: "Singularidade da Escuridão",
+        image: "assets/img/assets/character/class_up/singularity/dark-singularity.png",
+        hud: "assets/img/assets/character/class_up/singularity/dark-singularity-hud.png",
+        description: "Você escolheu transcender para uma singularidade da escuridão.",
+        states:{
+            life: 80,
+            attack: 52,
+            armor: 17,
+            agility: 6,
+            criticalChance: 0,
+            lifeSteal: 0,
+            penetration: 0,
+            absorption: 0,
+            gravityChance: 8
+        }
     }
 
 };
