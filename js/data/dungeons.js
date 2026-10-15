@@ -152,7 +152,7 @@ const dungeons = [
             },
             {
                 item: ring.ringModernCommon,
-                chance: 5
+                chance: 40
             },
             items.smallPotion
         ]
@@ -184,7 +184,7 @@ const dungeons = [
             },
             {
                 item: amulet.amuletModernCommon,
-                chance: 5
+                chance: 40
             },
             items.smallPotion
         ]
@@ -275,7 +275,7 @@ const dungeons = [
             },
             {
                 item: ring.ringModernIncommon,
-                chance: 5
+                chance: 30
             },
             items.tripleSmallPotion
         ]
@@ -305,7 +305,7 @@ const dungeons = [
             },
             {
                 item: amulet.amuletModernIncommon,
-                chance: 5
+                chance: 30
             },
             items.tripleSmallPotion
         ]
@@ -400,11 +400,11 @@ const dungeons = [
             },
             {
                 item: ring.ringModernRare,
-                chance: 5
+                chance: 18
             },
             {
                 item: amulet.amuletModernRare,
-                chance: 5
+                chance: 18
             },
             items.tripleSmallPotion
         ]
@@ -725,7 +725,7 @@ const dungeons = [
             },
             {
                 item: amulet.amuletModernMystic,
-                chance: 5
+                chance: 8
             },
             items.mediumPotion
         ]
