@@ -1,6 +1,6 @@
 import TalentService, {
     TALENTS, MAX_LEVEL, GAIN_PERCENT_PER_LEVEL, LIFE_LOSS_PERCENT_PER_LEVEL,
-    UNIQUE_TALENTS, UNIQUE_TALENT_COST, getSpecialStatLabel
+    UNIQUE_TALENTS, UNIQUE_TALENT_COST
 } from "../../../services/TalentService.js";
 import SaveService from "../../../services/SaveService.js";
 import AuthService from "../../../services/AuthService.js";
@@ -157,19 +157,18 @@ export default class TalentTreeModal {
 
     }
 
-    // Talento único: 1/1, sem acúmulo — só UM dos três pode estar ativo.
-    // Escolher um bloqueia os outros dois (ficam acinzentados, igual a um
-    // talento simples sem ouro) até resetar.
+    // Talento único: 1/1, sem acúmulo. Só existe "Rompendo Limites" hoje
+    // (ver UNIQUE_TALENTS — "Cara ou Coroa?" e "Rei dos Encantamentos"
+    // saíram do jogo), mas o map() em cima continua genérico, então a
+    // lógica de bloqueio ("lockedByOther") permanece caso outro único
+    // seja adicionado de novo no futuro.
     renderUniqueCard(talent) {
 
         const active = TalentService.hasUniqueTalent(this.player, talent.id);
         const lockedByOther = !!TalentService.getUniqueTalent(this.player) && !active;
         const canInvest = TalentService.canInvestUnique(this.player, talent.id);
-        const bonus = active ? this.player.progress.uniqueTalentBonus : null;
 
-        const effect = talent.id === "cara_ou_coroa" && bonus
-            ? `Ativo: +${bonus.amount}% de ${getSpecialStatLabel(bonus.attribute)}.`
-            : active ? "Ativo." : "Ainda não escolhido.";
+        const effect = active ? "Ativo." : "Ainda não escolhido.";
 
         const hint = active
             ? "Talento ativo."

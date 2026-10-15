@@ -32,7 +32,7 @@
 
             <nav class="wiki-nav" id="wiki-nav">
 
-                <a href="#classes" class="wiki-nav-item" data-keywords="classes guerreiro arqueiro mago barbaro putrido pútrido mimico mímico louca crazy eletro spark samurai miasma imitação absorção confusão paralisia golpe duplo">
+                <a href="#classes" class="wiki-nav-item" data-keywords="classes guerreiro arqueiro mago barbaro putrido pútrido mimico mímico louca crazy eletro spark samurai singularidade miasma imitação absorção confusão paralisia golpe duplo pressão gravitacional gravidade máxima">
                     <i class="fa-solid fa-shield-halved"></i> Classes
                 </a>
 
@@ -138,7 +138,7 @@
             <section id="classes" class="wiki-section">
 
                 <h2><i class="fa-solid fa-shield-halved"></i> Classes</h2>
-                <p class="wiki-intro">Ao começar uma aventura, você escolhe uma entre nove classes. Cada uma tem um jeito bem diferente de jogar — não existe "a melhor", existe a que combina com o seu estilo.</p>
+                <p class="wiki-intro">Ao começar uma aventura, você escolhe uma entre dez classes. Cada uma tem um jeito bem diferente de jogar — não existe "a melhor", existe a que combina com o seu estilo.</p>
 
                 <div class="wiki-cards">
 
@@ -187,6 +187,11 @@
                         <p>Ataque mediano — metade do normal de propósito — com Armadura e Vida também medianas, e Agilidade alta (atrás só do Arqueiro). O forte dele é o <strong>Golpe Duplo</strong>: chance, em todo golpe SEU que acerta, de repetir o MESMO dano uma segunda vez na mesma rodada — sem rolar Crítico, Roubo de Vida ou Absorção de novo. Diferente da Confusão/Paralisia, não existe estado pendente nenhum: resolve tudo na hora, sem afetar o próximo ataque de ninguém.</p>
                     </article>
 
+                    <article class="wiki-card">
+                        <h3><i class="fa-solid fa-meteor"></i> Singularidade</h3>
+                        <p>Ataque um pouco acima do Bárbaro, Armadura parecida com a do Pútrido, Vida um pouco abaixo do Guerreiro e Agilidade baixa (só na frente do Guerreiro). O forte dela é a <strong>Pressão Gravitacional</strong>: chance, a cada golpe que acerta, de acumular 1 marca no alvo — a cada 3 marcas, elas são consumidas e o alvo recebe Gravidade Máxima, perdendo a PRÓXIMA ação de ataque por completo e tendo a Armadura reduzida à metade no PRÓXIMO golpe que receber. Depois disso a Armadura volta ao normal e a contagem recomeça do zero.</p>
+                    </article>
+
                 </div>
 
             </section>
@@ -194,7 +199,7 @@
             <section id="comparativo" class="wiki-section">
 
                 <h2><i class="fa-solid fa-chart-line"></i> Comparativo de Classes</h2>
-                <p class="wiki-intro">Um raio-x visual de <strong>Vida, Ataque, Armadura e Agilidade</strong> — só os atributos base de cada classe (sem nenhum equipamento), nos níveis 20, 50 e 100. Cada eixo é comparado contra o maior valor que QUALQUER classe alcança naquele atributo no nível 100 — então dá pra comparar as 9 formas diretamente, olhando o tamanho de cada "pizza".</p>
+                <p class="wiki-intro">Um raio-x visual de <strong>Vida, Ataque, Armadura e Agilidade</strong> — só os atributos base de cada classe (sem nenhum equipamento), nos níveis 20, 50 e 100. Cada eixo é comparado contra o maior valor que QUALQUER classe alcança naquele atributo no nível 100 — então dá pra comparar as 10 formas diretamente, olhando o tamanho de cada "pizza".</p>
 
                 <div class="wiki-radar-grid">
 
@@ -241,6 +246,11 @@
                     <article class="wiki-radar-card">
                         <h3><i class="fa-solid fa-khanda"></i> Samurai</h3>
                         <canvas id="radar-samurai"></canvas>
+                    </article>
+
+                    <article class="wiki-radar-card">
+                        <h3><i class="fa-solid fa-meteor"></i> Singularidade</h3>
+                        <canvas id="radar-singularity"></canvas>
                     </article>
 
                 </div>
@@ -556,12 +566,11 @@
                 <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: passe o mouse sobre um talento pra ver o texto explicando o efeito dele e quanto ele já está convertendo.</p>
 
                 <h3>Talentos Únicos</h3>
-                <p>Uma segunda linha, abaixo da conversão de vida. Só liberam depois que algum dos três talentos simples (Dano, Armadura ou Velocidade) chega em 3/3. Cada um custa <strong>1.000.000</strong> de ouro, não tem nível (é tudo ou nada) e só <strong>um dos dois</strong> pode estar ativo por vez — escolher um bloqueia o outro até você resetar.</p>
+                <p>Uma segunda linha, abaixo da conversão de vida. Só libera depois que algum dos três talentos simples (Dano, Armadura ou Velocidade) chega em 3/3. Custa <strong>1.000.000</strong> de ouro e não tem nível (é tudo ou nada).</p>
                 <ul>
                     <li><strong>Rompendo Limites:</strong> libera o nível máximo até 110 (o normal é 100).</li>
-                    <li><strong>Cara ou Coroa?:</strong> sorteia um atributo especial que não é o principal da sua classe e soma +8% nele.</li>
                 </ul>
-                <p>Resetar com um talento único ativo custa <strong>500.000</strong> a mais que o reset normal, e desfaz os dois de uma vez.</p>
+                <p>Resetar com o talento único ativo custa <strong>500.000</strong> a mais que o reset normal, e desfaz os dois de uma vez.</p>
 
             </section>
 
@@ -699,7 +708,7 @@
         import baseStatsL1 from "./js/data/baseStatsL1.js";
         import levels from "./js/data/levels.js";
 
-        const CLASS_IDS = ["warrior", "archer", "mage", "barbarian", "putrid", "mimic", "crazy", "spark", "samurai"];
+        const CLASS_IDS = ["warrior", "archer", "mage", "barbarian", "putrid", "mimic", "crazy", "spark", "samurai", "singularity"];
         const STAT_KEYS = ["life", "attack", "armor", "agility"];
         const RADAR_LABELS = ["Vida", "Ataque", "Armadura", "Agilidade"];
         const LEVELS_TO_SHOW = [20, 50, 100];

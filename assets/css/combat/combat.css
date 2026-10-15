@@ -383,6 +383,20 @@
     font-weight:800;
     text-shadow:none;
 }
+/* "Gravidade Máxima!"/"Pressão Gravitacional!" (singularidade, tom de
+   vazio espacial roxo-azulado): selo índigo escuro — mesma lógica dos
+   selos acima (fundo próprio pra não sumir em cima de nenhuma outra cor
+   de caixa). */
+.combat-gravity{
+    display:inline-block;
+    padding:1px 8px;
+    border-radius:4px;
+    background:#1a1a4e;
+    color:#cfcff5;
+    border:1px solid #0e0e2e;
+    font-weight:800;
+    text-shadow:none;
+}
 
 /* ==========================================================
    NOTEBOOK

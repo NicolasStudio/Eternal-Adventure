@@ -334,6 +334,7 @@ export default class BlacksmithWeapon {
             case "confusionChance": return "Confusão";
             case "paralysisChance": return "Paralisia";
             case "doubleStrikeChance": return "Golpe Duplo";
+            case "gravityChance": return "Pressão Gravitacional";
             default: return stat;
         }
     }
@@ -352,6 +353,7 @@ export default class BlacksmithWeapon {
             case "confusionChance": return "🌀";
             case "paralysisChance": return "⚡";
             case "doubleStrikeChance": return "⚔️";
+            case "gravityChance": return "🌌";
             default: return "•";
         }
     }

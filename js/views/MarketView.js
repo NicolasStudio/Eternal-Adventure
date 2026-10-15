@@ -325,6 +325,7 @@ export default class MarketView {
             crazy: "Louca",
             spark: "Eletro",
             samurai: "Samurai",
+            singularity: "Singularidade",
             // Anel/Amuleto (ver ring.js/amulet.js) — qualquer classe usa.
             all: "Todas as Classes"
         };

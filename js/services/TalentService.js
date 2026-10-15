@@ -29,38 +29,6 @@ export const UNIQUE_RESET_SURCHARGE = 500000;
 export const DEFAULT_MAX_LEVEL = 100;
 export const EXPANDED_MAX_LEVEL = 110;
 
-// Os 9 atributos especiais do jogo — "Cara ou Coroa?" sorteia entre os
-// que não são o principal da sua classe (ver Player.getSpecialStatKey).
-// confusionChance/paralysisChance/doubleStrikeChance entraram nesse
-// sorteio de propósito: QUALQUER classe pode rolar Confusão, Paralisia
-// ou Golpe Duplo por sorte, não só a Louca/o Eletro/o Samurai (mesma
-// regra que já valia pros outros — nenhum fica travado pra fora da
-// classe dona).
-export const SPECIAL_STAT_KEYS = [
-    "criticalChance", "lifeSteal", "penetration",
-    "absorption", "miasmaChance", "reflection", "confusionChance", "paralysisChance", "doubleStrikeChance"
-];
-export const COIN_FLIP_BONUS_PERCENT = 8;
-
-// Nome em português de um dos SPECIAL_STAT_KEYS — "Cara ou Coroa?" pode
-// sortear qualquer um deles, não só o principal da classe do jogador (por
-// isso não dá pra usar Player.getEnchantStatName, que só resolve "special"
-// pelo atributo da CLASSE, nunca por uma chave escolhida à parte).
-export function getSpecialStatLabel(key) {
-    switch (key) {
-        case "criticalChance": return "Chance Crítica";
-        case "lifeSteal": return "Roubo de Vida";
-        case "penetration": return "Penetração";
-        case "absorption": return "Absorção";
-        case "miasmaChance": return "Miasma";
-        case "reflection": return "Imitação";
-        case "confusionChance": return "Confusão";
-        case "paralysisChance": return "Paralisia";
-        case "doubleStrikeChance": return "Golpe Duplo";
-        default: return key;
-    }
-}
-
 export const UNIQUE_TALENTS = [
     {
         id: "rompendo_limites",
@@ -68,18 +36,16 @@ export const UNIQUE_TALENTS = [
         icon: "assets/img/assets/talent-tree/lv-up.png",
         description: "Rompe as correntes de nível: libera uma expansão do nível máximo para 110."
     },
-    {
-        id: "cara_ou_coroa",
-        label: "Cara ou Coroa?",
-        icon: "assets/img/assets/talent-tree/percent-up.png",
-        description: `Desconsiderando o atributo principal da sua classe, escolhe aleatoriamente outro atributo especial e soma +${COIN_FLIP_BONUS_PERCENT}%.`
-    },
 ];
 
 // Removido do jogo: desbalanceava as classes e deixava estranho encantar
 // um acessório sim, outro não. Quem já tinha isso ativo é limpo sozinho
 // ao carregar — ver sanitizeRemovedUniqueTalent().
-export const REMOVED_UNIQUE_TALENT_IDS = ["rei_dos_encantamentos"];
+// "Cara ou Coroa?" também saiu: cada classe nova (Pútrido, Mímico, Louca,
+// Eletro, Samurai, Singularidade...) ganha seu próprio atributo especial
+// de porcentagem, e deixar QUALQUER um sortear QUALQUER outro por sorte
+// virou combinação demais pra testar/balancear.
+export const REMOVED_UNIQUE_TALENT_IDS = ["rei_dos_encantamentos", "cara_ou_coroa"];
 
 // Cada grupo = 3 fases + o boss da própria região. Completo (3 vitórias em
 // cada) vale 1 ponto. Caverna tem 6 fases e 2 bosses, então dá 2 pontos.
@@ -275,49 +241,19 @@ export default class TalentService {
         player.gold -= UNIQUE_TALENT_COST;
         player.progress.uniqueTalent = talentId;
 
-        if (talentId === "cara_ou_coroa") {
-
-            const main = player.getSpecialStatKey();
-            const pool = SPECIAL_STAT_KEYS.filter(key => key !== main);
-            const attribute = pool[Math.floor(Math.random() * pool.length)];
-
-            player.progress.uniqueTalentBonus = { attribute, amount: COIN_FLIP_BONUS_PERCENT };
-            player.baseStats[attribute] = (player.baseStats[attribute] ?? 0) + COIN_FLIP_BONUS_PERCENT;
-
-        }
-
         player.notify();
 
         return { ok: true };
 
     }
 
-    // Ajusta quem já tem "Cara ou Coroa?" ativo ao valor atual de
-    // COIN_FLIP_BONUS_PERCENT — sem isso, mudar a % aqui no código não
-    // valeria pra quem já tinha escolhido o talento (mesmo problema que já
-    // resolvemos pra transcendência — ver Player.syncTranscendenceStats).
-    // Chamado uma vez por carregamento, em SaveService.deserialize.
-    static syncCoinFlipBonus(player) {
-
-        if (!this.hasUniqueTalent(player, "cara_ou_coroa")) return;
-
-        const bonus = player.progress.uniqueTalentBonus;
-
-        if (!bonus) return;
-
-        const delta = COIN_FLIP_BONUS_PERCENT - bonus.amount;
-
-        if (!delta) return;
-
-        player.baseStats[bonus.attribute] = Math.max(0, (player.baseStats[bonus.attribute] ?? 0) + delta);
-        bonus.amount = COIN_FLIP_BONUS_PERCENT;
-
-    }
-
     // Desfaz o talento único ativo (chamado só pelo reset() acima): devolve
-    // o bônus de atributo do "Cara ou Coroa?", e se era "Rompendo Limites",
-    // também devolve o personagem pro nível 100 — sem o talento, nível
-    // acima disso não existe mais, nem os status que vieram dele.
+    // o bônus de atributo (se o talento desfeito tinha algum — nenhum dos
+    // que ainda existem tem, ver uniqueTalentBonus abaixo, mas o reverso
+    // genérico continua aqui pra quem ainda estiver sendo limpo pelo
+    // REMOVED_UNIQUE_TALENT_IDS), e se era "Rompendo Limites", também
+    // devolve o personagem pro nível 100 — sem o talento, nível acima
+    // disso não existe mais, nem os status que vieram dele.
     static clearUniqueTalent(player) {
 
         const wasExpandingLevel = this.hasUniqueTalent(player, "rompendo_limites");

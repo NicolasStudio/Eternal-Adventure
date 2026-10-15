@@ -18,6 +18,7 @@ import MimicService from "../services/MimicService.js";
 import ConfusionService from "../services/ConfusionService.js";
 import ParalysisService from "../services/ParalysisService.js";
 import DoubleStrikeService from "../services/DoubleStrikeService.js";
+import GravityService, { STACK_THRESHOLD as GRAVITY_STACK_THRESHOLD } from "../services/GravityService.js";
 
 export default class RaidView {
 
@@ -345,6 +346,13 @@ export default class RaidView {
             return `<div class="pvp-log-line pvp-log-dodge">${attackerName} ficou paralisado e perdeu o ataque!</div>`;
         }
 
+        // Gravidade Máxima "perdeu o turno" — mesmo padrão acima (ver
+        // GravityService.js). No Cooperativo só o chefe pode ficar com
+        // isso ativo.
+        if (entry.gravityStunned) {
+            return `<div class="pvp-log-line pvp-log-dodge">${attackerName} ficou pesado demais e perdeu o ataque!</div>`;
+        }
+
         if (entry.dodged) {
             return `<div class="pvp-log-line pvp-log-dodge">${targetName} esquivou do ataque de ${attackerName}${attackTag}!</div>`;
         }
@@ -385,12 +393,18 @@ export default class RaidView {
         const doubleStrike = entry.doubleStrikeProc
             ? ` <span class="combat-double-strike">(Golpe Duplo!)</span>`
             : "";
+        const gravityArmorHalved = entry.gravityArmorHalved
+            ? ` <span class="combat-gravity">(Gravidade Máxima: Armadura pela metade!)</span>`
+            : "";
+        const gravity = entry.gravityProc
+            ? ` <span class="combat-gravity">(Pressão Gravitacional ${entry.gravityStacks}/${GRAVITY_STACK_THRESHOLD}!)</span>`
+            : "";
 
         if (entry.confusionOutcome === "self") {
             return `<div class="pvp-log-line">${attackerName}${attackTag} se atacou sem querer: ${entry.damage} de dano${crit}${confusion}</div>`;
         }
 
-        return `<div class="pvp-log-line">${attackerName}${attackTag} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}${confusion}${paralysis}${doubleStrike}</div>`;
+        return `<div class="pvp-log-line">${attackerName}${attackTag} causou ${entry.damage} de dano em ${targetName}${crit}${steal}${absorbed}${confusion}${paralysis}${doubleStrike}${gravityArmorHalved}${gravity}</div>`;
 
     }
 
@@ -1001,7 +1015,7 @@ export default class RaidView {
             const speed = this.getBattleSpeedMultiplier(battleStartTime);
 
             if (!this.shouldSkipMessages(battleStartTime)) {
-                await CombatToast.show(this.buildAttackMessage(entry, squad), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry) + ParalysisService.extraToastSeconds(entry) + DoubleStrikeService.extraToastSeconds(entry), speed);
+                await CombatToast.show(this.buildAttackMessage(entry, squad), this.buildToastType(entry), 2 + MiasmaService.extraToastSeconds(entry) + MimicService.extraToastSeconds(entry) + ConfusionService.extraToastSeconds(entry) + ParalysisService.extraToastSeconds(entry) + DoubleStrikeService.extraToastSeconds(entry) + GravityService.extraToastSeconds(entry), speed);
             }
 
             await this.sleep(450 / speed);
@@ -1055,6 +1069,13 @@ export default class RaidView {
         // paralisado.
         if (entry.paralyzed) {
             return ParalysisService.buildOutcomeMessage(attackerName);
+        }
+
+        // Gravidade Máxima "perdeu o turno" — mesmo padrão acima (ver
+        // GravityService.js). No Cooperativo só o chefe pode ficar com
+        // isso ativo.
+        if (entry.gravityStunned) {
+            return GravityService.buildStunMessage(attackerName);
         }
 
         if (entry.dodged) {
@@ -1161,6 +1182,14 @@ export default class RaidView {
 
         if (entry.doubleStrikeProc) {
             message += `<br>${DoubleStrikeService.buildMessage(targetName === "Você" ? "você" : targetName)}`;
+        }
+
+        if (entry.gravityArmorHalved) {
+            message += `<br>${GravityService.buildArmorHalfMessage(targetName === "Você" ? "você" : targetName)}`;
+        }
+
+        if (entry.gravityProc) {
+            message += `<br>${GravityService.buildProcMessage(targetName === "Você" ? "você" : targetName, entry)}`;
         }
 
         return message;

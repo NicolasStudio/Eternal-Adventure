@@ -1045,6 +1045,123 @@ const chests = {
         value: 0,
         sellValue: 0
 
+    },
+
+/* ==========================================
+       SINGULARIDADE (Sobretudo Cósmico)
+========================================== */
+    chest_singularity_common: {
+
+        id: "chest_singularity_common",
+        name: "Sobretudo Cósmico",
+        type: "armor",
+        slot: "chest",
+        class: "singularity",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/chest/chest-singularity-rarity-comum.png",
+
+        stats: {
+            armor: 4
+        },
+
+        value: 100,
+        sellValue: 50
+
+    },
+
+    chest_singularity_uncommon: {
+
+        id: "chest_singularity_uncommon",
+        name: "Sobretudo Cósmico",
+        type: "armor",
+        slot: "chest",
+        class: "singularity",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/chest/chest-singularity-rarity-incomum.png",
+
+        stats: {
+            armor: 8
+        },
+
+        value: 300,
+        sellValue: 150
+
+    },
+
+    chest_singularity_rare: {
+
+        id: "chest_singularity_rare",
+        name: "Sobretudo Cósmico",
+        type: "armor",
+        slot: "chest",
+        class: "singularity",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/chest/chest-singularity-rarity-rare.png",
+
+        stats: {
+            armor: 14
+        },
+
+        value: 900,
+        sellValue: 450
+
+    },
+
+    chest_singularity_mystic: {
+
+        id: "chest_singularity_mystic",
+        name: "Sobretudo Cósmico",
+        type: "armor",
+        slot: "chest",
+        class: "singularity",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/chest/chest-singularity-rarity-mistico.png",
+
+        stats: {
+            armor: 22
+        },
+
+        value: 2700,
+        sellValue: 1350
+
+    },
+
+    chest_singularity_legendary: {
+
+        id: "chest_singularity_legendary",
+        name: "Sobretudo Cósmico",
+        type: "armor",
+        slot: "chest",
+        class: "singularity",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/chest/chest-singularity-rarity-lendario.png",
+
+        stats: {
+            armor: 29
+        },
+
+        value: 0,
+        sellValue: 14050
+
+    },
+
+    chest_singularity_ultraje: {
+
+        id: "chest_singularity_ultraje",
+        name: "Sobretudo Cósmico",
+        type: "armor",
+        slot: "chest",
+        class: "singularity",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/chest/chest-singularity-rarity-ultraje.png",
+
+        stats: {
+            armor: 31
+        },
+
+        value: 0,
+        sellValue: 0
+
     }
 
 };

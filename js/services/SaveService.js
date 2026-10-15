@@ -359,13 +359,9 @@ export default class SaveService {
         // Ajusta a transcendência ao upClasse.js atual (só a diferença).
         player.syncTranscendenceStats();
 
-        // Mesma ideia pro bônus do talento único "Cara ou Coroa?" (ver
-        // TalentService.js).
-        TalentService.syncCoinFlipBonus(player);
-
         // Quem ainda estava com um talento único que saiu do jogo (ex:
-        // Rei dos Encantamentos) é limpo sozinho aqui — ver
-        // TalentService.sanitizeRemovedUniqueTalent.
+        // Rei dos Encantamentos ou Cara ou Coroa?) é limpo sozinho aqui —
+        // ver TalentService.sanitizeRemovedUniqueTalent.
         TalentService.sanitizeRemovedUniqueTalent(player);
 
         player.chest = data.chest ?? player.chest;

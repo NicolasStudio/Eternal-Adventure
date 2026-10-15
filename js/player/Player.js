@@ -168,7 +168,8 @@ export default class Player {
             mimic: prefix === "light" ? "light_mimic" : "dark_mimic",
             crazy: prefix === "light" ? "light_crazy" : "dark_crazy",
             spark: prefix === "light" ? "light_spark" : "dark_spark",
-            samurai: prefix === "light" ? "light_samurai" : "dark_samurai"
+            samurai: prefix === "light" ? "light_samurai" : "dark_samurai",
+            singularity: prefix === "light" ? "light_singularity" : "dark_singularity"
         }[this.class.id];
 
         return upClasse[classKey] ?? null;
@@ -885,7 +886,10 @@ export default class Player {
             // Eletro: o especial dele é a Paralisia (ver ParalysisService.js).
             spark: "paralysisChance",
             // Samurai: o especial dele é o Golpe Duplo (ver DoubleStrikeService.js).
-            samurai: "doubleStrikeChance"
+            samurai: "doubleStrikeChance",
+            // Singularidade: o especial dela é a Pressão Gravitacional
+            // (ver GravityService.js).
+            singularity: "gravityChance"
         }[this.class.id] ?? null;
     }
 
@@ -900,6 +904,7 @@ export default class Player {
             case "confusionChance": return "Confusão";
             case "paralysisChance": return "Paralisia";
             case "doubleStrikeChance": return "Golpe Duplo";
+            case "gravityChance": return "Pressão Gravitacional";
             default: return "Atributo Especial";
         }
     }

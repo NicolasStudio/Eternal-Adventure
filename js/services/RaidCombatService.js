@@ -5,6 +5,7 @@ import MimicService from "./MimicService.js";
 import ConfusionService from "./ConfusionService.js";
 import ParalysisService from "./ParalysisService.js";
 import DoubleStrikeService from "./DoubleStrikeService.js";
+import GravityService from "./GravityService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVE, absorbedAmount } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
 
@@ -172,6 +173,13 @@ export default class RaidCombatService {
         // squad só ataca o chefe, só o Eletro tem paralysisChance > 0).
         const paralysisFlagsById = new Map(all.map(c => [c.id, ParalysisService.createFlags()]));
 
+        // Pressão Gravitacional/Gravidade Máxima da Singularidade (ver
+        // GravityService.js) — mesmo padrão acima, uma marca pendente
+        // por combatente. Na prática só o CHEFE pode acabar com isso
+        // ativo (mesmo motivo da Confusão/Paralisia: o squad só ataca o
+        // chefe, só a Singularidade tem gravityChance > 0).
+        const gravityFlagsById = new Map(all.map(c => [c.id, GravityService.createFlags()]));
+
         const tickBurn = (owner) => {
 
             const burn = burns.get(owner.id);
@@ -248,6 +256,31 @@ export default class RaidCombatService {
                         damage: 0,
                         attackName: chosenAttack?.name ?? null,
                         paralyzed: true
+                    });
+
+                    if (!isBossTurn) tickBurn(attacker);
+
+                    if (bossCombatant.currentHP <= 0) break;
+
+                    continue;
+
+                }
+
+                // Gravidade Máxima da Singularidade: mesma prioridade/
+                // padrão da Paralisia acima (perde o turno inteiro, sem
+                // sortear nada) — só muda a origem (acúmulo em vez de
+                // chance direta por golpe, ver GravityService.js).
+                if (GravityService.consumePendingStun(gravityFlagsById.get(attacker.id))) {
+
+                    log.push({
+                        round: guard,
+                        attackerId: attacker.id,
+                        attackerSide: attacker.side,
+                        targetId: target.id,
+                        dodged: false,
+                        damage: 0,
+                        attackName: chosenAttack?.name ?? null,
+                        gravityStunned: true
                     });
 
                     if (!isBossTurn) tickBurn(attacker);
@@ -348,10 +381,18 @@ export default class RaidCombatService {
 
                 const isCritical = rng() * 100 < attacker.criticalChance * attackDebuff;
                 const criticalMultiplier = isCritical ? CRITICAL_MULTIPLIER : 1;
+
+                // Gravidade Máxima da Singularidade: se o ALVO tiver a
+                // marca pendente (chegou nos acúmulos no golpe anterior),
+                // a Armadura dele conta só pela metade NESSE golpe —
+                // depois volta ao normal (ver GravityService.js).
+                const gravityArmorMultiplier = GravityService.consumeArmorHalf(gravityFlagsById.get(attackTarget.id));
+                const gravityArmorHalved = gravityArmorMultiplier < 1;
+
                 // Miasma (PVE): Armadura de quem está intoxicado também cai,
                 // junto com Ataque/Agilidade (attackTargetMult, calculado
                 // acima).
-                const effectiveArmor = (attackTarget.armor * attackTargetMult + attackTargetCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
+                const effectiveArmor = (attackTarget.armor * attackTargetMult * gravityArmorMultiplier + attackTargetCopy.bonusArmor) * (1 - (attacker.penetration * attackDebuff) / 100);
                 const mitigation = 100 / (100 + Math.max(0, effectiveArmor));
                 const preAbsorption = Math.max(1, Math.floor((attackPower + attackerCopy.bonusAttack) * criticalMultiplier * mitigation * confusionMultiplier));
 
@@ -415,6 +456,20 @@ export default class RaidCombatService {
                     attackTarget.currentHP = Math.max(0, attackTarget.currentHP - damage);
                 }
 
+                // Pressão Gravitacional: sorteado com o valor ORIGINAL do
+                // atacante. Só a Singularidade tem gravityChance > 0 — o
+                // chefe nunca ativa isso ao atacar.
+                const gravityProc = GravityService.procs(attacker.gravityChance ?? 0, rng());
+
+                let gravityStacks = 0;
+                let gravityTriggered = false;
+
+                if (gravityProc) {
+                    const stackResult = GravityService.applyStack(gravityFlagsById.get(attackTarget.id));
+                    gravityStacks = stackResult.stacks;
+                    gravityTriggered = stackResult.triggered;
+                }
+
                 log.push({
                     round: guard,
                     attackerId: attacker.id,
@@ -440,7 +495,11 @@ export default class RaidCombatService {
                     confusionOutcome,
                     confusionProc,
                     paralysisProc,
-                    doubleStrikeProc
+                    doubleStrikeProc,
+                    gravityProc,
+                    gravityStacks,
+                    gravityTriggered,
+                    gravityArmorHalved
                 });
 
                 // Segunda entrada própria no log pro Golpe Duplo — mesmo

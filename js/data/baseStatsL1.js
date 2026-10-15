@@ -42,4 +42,12 @@ export default {
     // segunda vez no mesmo golpe, 100% vindo do equipamento. Agilidade
     // alta, mas bem atrás do Arqueiro; Armadura e Vida medianas.
     samurai: { attack: 6, armor: 4, agility: 6, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
+    // Dano um pouco acima do Bárbaro (ver levels.js — no nível 100 fecha
+    // em Vida 1700/Ataque 132/Armadura 56/Agilidade 62, contra Vida 988/
+    // Ataque 124/Armadura 67/Agilidade 113 do Bárbaro). Armadura parecida
+    // com a do Pútrido (56). Agilidade baixa, só na frente do Guerreiro
+    // (o mais lento do jogo). Vida um pouco abaixo do Guerreiro (1750). O
+    // especial dela é Pressão Gravitacional (ver GravityService.js), 100%
+    // vindo do equipamento, igual os outros especiais por %.
+    singularity: { attack: 7, armor: 3, agility: 2, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 },
 };

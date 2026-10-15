@@ -81,6 +81,15 @@ const classes = {
     //     description: "Especialista em katana e estilo de combate.",
     //     lore: "Os samurais são guerreiros que seguem o bushido, o código de conduta dos cavaleiros. Eles são mestres em usar a katana com precisão e elegância, e sua disciplina mental os torna formidáveis em batalha. Dizem que um samurai que empunha duas katanas é capaz de derrotar qualquer inimigo que se atreva a enfrentá-lo.",
     // }
+
+    singularity: {
+        id: "singularity",
+        name: "Singularidade",
+        image: "assets/img/assets/character/class/singularity.png",
+        hud: "assets/img/assets/character/class/singularity-hud.png",
+        description: "Especialista em manipular a gravidade.",
+        lore: "Um inquisidor cego que percebe as distorções ao seu redor e manipula a gravidade para subjugar seus adversários. Cada golpe aumenta a pressão sobre o inimigo, até que seu corpo fica pesado demais para reagir e sua armadura cede.",
+    }
 };
 
 export default classes;

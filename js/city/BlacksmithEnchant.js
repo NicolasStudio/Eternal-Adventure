@@ -287,7 +287,10 @@ export default class BlacksmithEnchant {
             // Eletro: o especial dele é a Paralisia (ver ParalysisService.js).
             spark: "paralysisChance",
             // Samurai: o especial dele é o Golpe Duplo (ver DoubleStrikeService.js).
-            samurai: "doubleStrikeChance"
+            samurai: "doubleStrikeChance",
+            // Singularidade: o especial dela é a Pressão Gravitacional
+            // (ver GravityService.js).
+            singularity: "gravityChance"
         }[classId] ?? null;
     }
 
@@ -310,6 +313,7 @@ export default class BlacksmithEnchant {
             case "confusionChance": return "Confusão";
             case "paralysisChance": return "Paralisia";
             case "doubleStrikeChance": return "Golpe Duplo";
+            case "gravityChance": return "Pressão Gravitacional";
             default: return stat;
         }
     }
@@ -333,6 +337,7 @@ export default class BlacksmithEnchant {
             case "confusionChance": return "🌀";
             case "paralysisChance": return "⚡";
             case "doubleStrikeChance": return "⚔️";
+            case "gravityChance": return "🌌";
             default: return "•";
         }
     }

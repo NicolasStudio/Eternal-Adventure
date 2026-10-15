@@ -26,6 +26,14 @@
 // PRINCIPAL) — a segunda entrada própria no log (entry.doubleStrike)
 // já soma no damageDealt/damageReceived normalmente (é dano de
 // verdade), só não teria doubleStrikeProc próprio pra não contar 2x.
+//
+// gravityProcCount/gravityStunnedCount são a mesma ideia de
+// paralysisCount/paralyzedCount pra Pressão Gravitacional/Gravidade
+// Máxima da Singularidade (ver GravityService.js): gravityProcCount
+// conta quantas vezes ESTE jogador somou um acúmulo no oponente
+// (gravityProc, dispare ele a Gravidade Máxima ou não); gravityStunnedCount
+// conta quantas vezes um ataque DELE MESMO se perdeu por já estar sob
+// Gravidade Máxima (entry.gravityStunned).
 
 // Resumo do combate pra UM jogador específico — soma o log inteiro
 // (todos os lados aparecem nele) filtrando só o que é dele.
@@ -50,6 +58,8 @@ export function buildCombatInfo(log, playerId) {
         paralysisCount: 0,
         paralyzedCount: 0,
         doubleStrikeCount: 0,
+        gravityProcCount: 0,
+        gravityStunnedCount: 0,
         lifeStealCount: 0,
         // Pet
         petHealing: 0,
@@ -98,6 +108,8 @@ export function buildCombatInfo(log, playerId) {
             if (entry.paralysisProc) info.paralysisCount++;
             if (entry.paralyzed) info.paralyzedCount++;
             if (entry.doubleStrikeProc) info.doubleStrikeCount++;
+            if (entry.gravityProc) info.gravityProcCount++;
+            if (entry.gravityStunned) info.gravityStunnedCount++;
 
             if (entry.lifeSteal > 0) {
                 info.lifeStolen += entry.lifeSteal;
@@ -136,6 +148,7 @@ export function buildCombatTimeline(log, playerId) {
         "absorbedValue", "lifeStolen", "dodges", "absorptionCount",
         "criticalCount", "mimicCount", "miasmaCount", "confusionCount",
         "confusedCount", "paralysisCount", "paralyzedCount", "doubleStrikeCount",
+        "gravityProcCount", "gravityStunnedCount",
         "lifeStealCount", "petHealing", "petDamage"
     ];
 
@@ -184,6 +197,8 @@ export function buildCombatTimeline(log, playerId) {
             if (entry.paralysisProc) addDelta(round, "paralysisCount", 1);
             if (entry.paralyzed) addDelta(round, "paralyzedCount", 1);
             if (entry.doubleStrikeProc) addDelta(round, "doubleStrikeCount", 1);
+            if (entry.gravityProc) addDelta(round, "gravityProcCount", 1);
+            if (entry.gravityStunned) addDelta(round, "gravityStunnedCount", 1);
 
             if (entry.lifeSteal > 0) {
                 addDelta(round, "lifeStolen", entry.lifeSteal);
