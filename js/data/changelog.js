@@ -1,6 +1,23 @@
 export default [
 
     {
+        version: "Beta 0.2.4 — Novas Classes",
+        date: "Outubro de 2026",
+        changes: [
+            "Alto Falante: novo ícone ao lado do Correio, só pra administração — abre um aviso que aparece correndo no topo da tela de todo mundo que estiver online na hora",
+            "Nova classe: Eletro — parecido com o Mago (segundo maior dano do jogo), mas com Armadura, Agilidade e Vida medianas em vez de extremas. Atributo exclusivo Paralisia: chance a cada golpe certeiro de paralisar o alvo até o próximo ataque dele, que simplesmente não acontece (sem sortear nada, diferente da Confusão da Louca). Vale contra monstros, chefes, PVP e Cooperativo. Novos itens exclusivos: Bastão de Tesla (arma), Óculos Chocante (elmo), Jaqueta (peitoral), Calça de Serviço (calças) e Bota Emborrachada (botas)",
+            "Informações do Combate ganhou mais 2 números: Paralisia (quantas vezes você paralisou o oponente) e Ataques paralisados (quantos dos seus próprios ataques se perderam por estar paralisado)",
+            "Nova classe: Samurai — Ataque mediano (metade do normal de propósito), Armadura e Vida também medianas, e Agilidade alta (atrás só do Arqueiro). Atributo exclusivo Golpe Duplo: chance em todo golpe seu que acerta de repetir o MESMO dano uma segunda vez na mesma rodada, sem rolar Crítico, Roubo de Vida ou Absorção de novo. Vale contra monstros, chefes, PVP e Cooperativo. Novos itens exclusivos: Katana (arma), Máscara Tengu (elmo), Kimono (peitoral), Hakama (calças) e Chinelo de Japonês (botas)",
+            "Informações do Combate ganhou mais 1 número: Golpe Duplo (quantas vezes você acertou o mesmo golpe uma segunda vez)",
+            "Removido o talento único 'Cara ou Coroa?' — sortear qualquer atributo especial de qualquer classe estava virando combinação demais pra testar/balancear, agora que cada classe nova ganha o seu próprio. Quem já tinha esse talento ativo é limpo sozinho ao carregar, igual já acontecia com o Rei dos Encantamentos",
+            "Nova classe: Singularidade — Ataque um pouco acima do Bárbaro, Armadura parecida com a do Pútrido, Vida um pouco abaixo do Guerreiro e Agilidade baixa (só na frente do Guerreiro). Atributo exclusivo Pressão Gravitacional: chance a cada golpe certeiro de acumular 1 marca no alvo — a cada 3 marcas, elas são consumidas e o alvo recebe Gravidade Máxima, perdendo a próxima ação de ataque por completo e tendo a Armadura reduzida à metade no próximo golpe recebido (depois volta ao normal e a contagem reinicia). Vale contra monstros, chefes, PVP e Cooperativo. Novos itens exclusivos: Marreta Gravítica (arma), Tiara Cósmica (elmo), Sobretudo Cósmico (peitoral), Calça Cósmica (calças) e Cuturno Intergaláctico (botas)",
+            "Informações do Combate ganhou mais 2 números: Pressão Gravitacional (quantas vezes você acumulou uma marca no oponente) e Ataques sob Gravidade Máxima (quantos dos seus próprios ataques se perderam por estar sob esse efeito)",
+            "Tela de 'Escolha sua Classe' redesenhada: virou um carrossel horizontal (setas ou arrastar com o mouse/touch) em vez de uma grade que empilhava linha após linha a cada classe nova — os retratos também ficaram bem maiores",
+            "Clicar no retrato de um jogador no Ranking ou no Ranking Global agora expande ele no centro da tela, igual já acontecia com o retrato do personagem e do pet no Inventário"
+        ]
+    },
+
+    {
         version: "Beta 0.2.3 — Talentos Únicos",
         date: "Outubro de 2026",
         changes: [
@@ -50,15 +67,7 @@ export default [
             "Vender Pet (Mercado), Veterinário (Saúde) e a aba Pets da tela de Personagem agora só ficam disponíveis a partir do nível 30, mesmo nível que libera a Fazenda",
             "Novo Jogo: quando todos os personagens da conta já estão em uso, a confirmação de sobrescrever agora mostra nome, classe e nível de quem seria sobrescrito, em vez de perguntar às cegas",
             "Removido o aviso único 'Aviso de Balanceamento' (pedido de desculpas pela remoção do Rei dos Encantamentos e ajuste do Cara ou Coroa?, com recompensa em ouro, ração e um pet exclusivo) — quem ainda não tinha coletado não recebe mais essa recompensa",
-            "XP necessária pra subir de nível ficou mais cara entre os níveis 20 e 100 — 10% do 20 ao 50, 20% do 51 ao 70, 25% do 71 ao 79, 30% do 80 ao 89 e 35% do 90 ao 100. A XP ganha em combate não mudou, só o quanto precisa pra passar de nível",
-            "Alto Falante: novo ícone ao lado do Correio, só pra administração — abre um aviso que aparece correndo no topo da tela de todo mundo que estiver online na hora",
-            "Nova classe: Eletro — parecido com o Mago (segundo maior dano do jogo), mas com Armadura, Agilidade e Vida medianas em vez de extremas. Atributo exclusivo Paralisia: chance a cada golpe certeiro de paralisar o alvo até o próximo ataque dele, que simplesmente não acontece (sem sortear nada, diferente da Confusão da Louca). Vale contra monstros, chefes, PVP e Cooperativo. Novos itens exclusivos: Bastão de Tesla (arma), Óculos Chocante (elmo), Jaqueta (peitoral), Calça de Serviço (calças) e Bota Emborrachada (botas)",
-            "Informações do Combate ganhou mais 2 números: Paralisia (quantas vezes você paralisou o oponente) e Ataques paralisados (quantos dos seus próprios ataques se perderam por estar paralisado)",
-            "Nova classe: Samurai — Ataque mediano (metade do normal de propósito), Armadura e Vida também medianas, e Agilidade alta (atrás só do Arqueiro). Atributo exclusivo Golpe Duplo: chance em todo golpe seu que acerta de repetir o MESMO dano uma segunda vez na mesma rodada, sem rolar Crítico, Roubo de Vida ou Absorção de novo. Vale contra monstros, chefes, PVP e Cooperativo. Novos itens exclusivos: Katana (arma), Máscara Tengu (elmo), Kimono (peitoral), Hakama (calças) e Chinelo de Japonês (botas)",
-            "Informações do Combate ganhou mais 1 número: Golpe Duplo (quantas vezes você acertou o mesmo golpe uma segunda vez)",
-            "Removido o talento único 'Cara ou Coroa?' — sortear qualquer atributo especial de qualquer classe estava virando combinação demais pra testar/balancear, agora que cada classe nova ganha o seu próprio. Quem já tinha esse talento ativo é limpo sozinho ao carregar, igual já acontecia com o Rei dos Encantamentos",
-            "Nova classe: Singularidade — Ataque um pouco acima do Bárbaro, Armadura parecida com a do Pútrido, Vida um pouco abaixo do Guerreiro e Agilidade baixa (só na frente do Guerreiro). Atributo exclusivo Pressão Gravitacional: chance a cada golpe certeiro de acumular 1 marca no alvo — a cada 3 marcas, elas são consumidas e o alvo recebe Gravidade Máxima, perdendo a próxima ação de ataque por completo e tendo a Armadura reduzida à metade no próximo golpe recebido (depois volta ao normal e a contagem reinicia). Vale contra monstros, chefes, PVP e Cooperativo. Novos itens exclusivos: Marreta Gravítica (arma), Tiara Cósmica (elmo), Sobretudo Cósmico (peitoral), Calça Cósmica (calças) e Cuturno Intergaláctico (botas)",
-            "Informações do Combate ganhou mais 2 números: Pressão Gravitacional (quantas vezes você acumulou uma marca no oponente) e Ataques sob Gravidade Máxima (quantos dos seus próprios ataques se perderam por estar sob esse efeito)"
+            "XP necessária pra subir de nível ficou mais cara entre os níveis 20 e 100 — 10% do 20 ao 50, 20% do 51 ao 70, 25% do 71 ao 79, 30% do 80 ao 89 e 35% do 90 ao 100. A XP ganha em combate não mudou, só o quanto precisa pra passar de nível"
         ]
     },
 

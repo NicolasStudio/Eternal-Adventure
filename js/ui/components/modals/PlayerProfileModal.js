@@ -50,6 +50,15 @@ const EQUIPMENT_BY_ID = {};
 
 const num = value => Number.isFinite(Number(value)) ? Number(value) : 0;
 
+// O retrato vem do banco (de outro jogador, ver titleImage em
+// SaveService.updateLeaderboardEntry) — nunca pode entrar como HTML/
+// atributo sem escapar, mesma regra do nome (ver registerEvents).
+function escapeHtml(text) {
+    return String(text ?? "").replace(/[&<>"']/g, char => (
+        { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]
+    ));
+}
+
 function pickNumbers(source, allowedKeys) {
 
     const result = {};
@@ -117,6 +126,8 @@ export default class PlayerProfileModal {
     constructor() {
         this.modal = null;
         this.items = {};
+        this.portraitLightbox = null;
+        this.portraitLightboxKeyHandler = null;
     }
 
     show(entry) {
@@ -125,6 +136,10 @@ export default class PlayerProfileModal {
 
         this.items = {};
         this.currentName = String(entry.name ?? "");
+        // Mesmo valor que renderPortrait() calcula — guardado aqui pra
+        // não duplicar a lógica e pro clique no retrato (showPortraitLightbox)
+        // usar sem precisar do "entry" inteiro de novo.
+        this.portraitImage = entry.titleImage ?? classes[entry.classId]?.image ?? null;
 
         SLOTS.forEach(([slot]) => {
             const snapshot = entry.equipment?.[slot];
@@ -144,6 +159,7 @@ export default class PlayerProfileModal {
     hide() {
 
         this.hideTooltip();
+        this.hidePortraitLightbox();
 
         if (this.modal) {
             this.modal.remove();
@@ -180,7 +196,7 @@ export default class PlayerProfileModal {
                     </section>
 
                     <section class="profile-stats">
-                        ${this.renderPortrait(entry)}
+                        ${this.renderPortrait()}
                         ${STATS.map(stat => this.renderStat(stat, entry.stats)).join("")}
                         <div class="profile-divider"></div>
                         <div class="profile-stat profile-power">
@@ -204,19 +220,16 @@ export default class PlayerProfileModal {
 
     // Só o retrato (sem o nome embaixo — o cabeçalho já mostra o
     // título real em "Nv. X · Título") no topo do painel de status,
-    // empurrando a lista de status pra baixo.
-    renderPortrait(entry) {
+    // empurrando a lista de status pra baixo. Clicável — expande igual
+    // o retrato do personagem/pet no inventário (ver
+    // CharacterView.showCharacterLightbox/showPetLightbox).
+    renderPortrait() {
 
-        // Compatibilidade: quem ainda não salvou depois dessa
-        // atualização não tem "titleImage" publicado — cai pro retrato
-        // da classe base, sem a transcendência.
-        const image = entry.titleImage ?? classes[entry.classId]?.image ?? null;
-
-        if (!image) return "";
+        if (!this.portraitImage) return "";
 
         return `
-            <div class="profile-portrait">
-                <img src="${image}" alt="">
+            <div class="profile-portrait profile-portrait-clickable">
+                <img src="${escapeHtml(this.portraitImage)}" alt="">
             </div>
         `;
 
@@ -279,6 +292,10 @@ export default class PlayerProfileModal {
             if (event.target === this.modal) this.hide();
         });
 
+        this.modal.querySelector(".profile-portrait-clickable")?.addEventListener("click", () => {
+            this.showPortraitLightbox();
+        });
+
         this.modal.querySelectorAll(".profile-slot.filled").forEach(slotElement => {
 
             const item = this.items[slotElement.dataset.slot];
@@ -339,6 +356,56 @@ export default class PlayerProfileModal {
 
     hideTooltip() {
         document.getElementById("item-tooltip")?.remove();
+    }
+
+    // Expande o retrato no centro da tela — mesmo padrão visual do
+    // showPetLightbox do inventário (ver CharacterView.js), só uma
+    // imagem (sem o crossfade hud↔full do personagem: o ranking só
+    // publica a imagem "full", nunca o hud do dono de verdade). Nome
+    // via textContent, nunca interpolado no HTML — é dado de OUTRO
+    // jogador, igual o resto do modal (ver registerEvents).
+    showPortraitLightbox() {
+
+        if (!this.portraitImage) return;
+
+        this.hidePortraitLightbox();
+
+        this.portraitLightbox = document.createElement("div");
+        this.portraitLightbox.className = "avatar-lightbox-overlay";
+        this.portraitLightbox.innerHTML = `
+            <figure class="avatar-lightbox-figure">
+                <img src="${escapeHtml(this.portraitImage)}" alt="">
+                <figcaption></figcaption>
+            </figure>
+        `;
+
+        this.portraitLightbox.querySelector("figcaption").textContent = this.currentName ?? "";
+
+        document.body.appendChild(this.portraitLightbox);
+
+        this.portraitLightbox.addEventListener("click", event => {
+            if (event.target === this.portraitLightbox) this.hidePortraitLightbox();
+        });
+
+        this.portraitLightboxKeyHandler = event => {
+            if (event.key === "Escape") this.hidePortraitLightbox();
+        };
+        document.addEventListener("keydown", this.portraitLightboxKeyHandler);
+
+    }
+
+    hidePortraitLightbox() {
+
+        if (this.portraitLightbox) {
+            this.portraitLightbox.remove();
+            this.portraitLightbox = null;
+        }
+
+        if (this.portraitLightboxKeyHandler) {
+            document.removeEventListener("keydown", this.portraitLightboxKeyHandler);
+            this.portraitLightboxKeyHandler = null;
+        }
+
     }
 
 }

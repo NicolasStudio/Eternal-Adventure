@@ -299,6 +299,18 @@
     padding-bottom:10px;
     border-bottom:1px solid rgba(212,163,115,.2);
 }
+/* Clicável só quando há retrato de verdade pra expandir (ver
+   PlayerProfileModal.renderPortrait) — mesma affordance do avatar do
+   personagem/pet no inventário (ver character-left.css). */
+.profile-portrait-clickable{
+    cursor:pointer;
+}
+.profile-portrait-clickable img{
+    transition:.2s;
+}
+.profile-portrait-clickable:hover img{
+    transform:scale(1.05);
+}
 .profile-portrait img{
     width:100px;
     height:100px;
