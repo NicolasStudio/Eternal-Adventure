@@ -959,19 +959,41 @@ export default class SaveService {
     // jogado agora".
     static async deleteCharacterSlot(uid, slot) {
 
-        const container = this.container ?? await this.loadFromCloud(uid) ?? this.emptyContainer();
+        const current = this.container ?? await this.loadFromCloud(uid) ?? this.emptyContainer();
 
-        const character = container.slots?.[slot];
+        const character = current.slots?.[slot];
 
         await this.releaseCharacterIdentity(uid, slot, character?.name);
+
+        // Trabalha numa CÓPIA (não no this.container compartilhado) até
+        // confirmar que a nuvem aceitou — senão "delete container.slots[slot]"
+        // já mutaria o objeto original na hora (container e this.container
+        // são a MESMA referência quando this.container já existia), deixando
+        // o estado local "personagem sumiu" mesmo que a gravação na nuvem
+        // falhe logo abaixo.
+        const container = structuredClone(current);
 
         if (container.slots) delete container.slots[slot];
         container.savedAt = Date.now();
 
+        // saveToCloud() é "best-effort" de propósito pro autosave comum
+        // (nunca trava o jogo por causa da rede) — mas aqui é uma ação
+        // destrutiva que o jogador confirmou de forma explícita: se a
+        // nuvem recusar a gravação (regra do Firestore, conflito de
+        // versão, rede fora), ele PRECISA saber que o personagem não
+        // sumiu de verdade, em vez de ver "excluído" e descobrir só
+        // depois, logando em outro aparelho, que ele continua lá. Por
+        // isso só grava local/memória DEPOIS de confirmar a nuvem — se
+        // falhar, o estado local nem muda, pra não desincronizar dos
+        // dois lados.
+        const written = await this.saveToCloud(uid, container);
+
+        if (!written) {
+            throw new Error("Falha ao excluir o personagem na nuvem.");
+        }
+
         this.container = container;
         this.persist(container);
-
-        await this.saveToCloud(uid, container);
 
     }
 
