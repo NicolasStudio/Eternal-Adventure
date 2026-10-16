@@ -1,4 +1,5 @@
 import ItemValueService from "../services/ItemValueService.js";
+import rarities from "../data/rarities.js";
 
 export default class ItemTooltip {
     // showFooter=false esconde o "Valor de venda" — não faz sentido pro
@@ -31,6 +32,12 @@ export default class ItemTooltip {
 
     renderInfo() {
         const rarity = this.item.rarity ?? { name: "Comum", color: "#FFFFFF" };
+        // Item de conta antiga guarda uma FOTO do rarity de quando caiu —
+        // minLevel não existia ainda naquela foto, então nunca ia bater
+        // aqui se confiasse só em rarity.minLevel. Resolve de novo pelo
+        // ID contra o rarities.js ATUAL (mesmo padrão de
+        // SaveService.refreshAllItemStats pros atributos do item).
+        const minLevel = rarities[rarity.id]?.minLevel ?? rarity.minLevel;
         let itemClass;
         if (this.item.type === "item") {
             itemClass = "Consumível";
@@ -50,6 +57,11 @@ export default class ItemTooltip {
                     <span class="tooltip-label">Raridade</span>
                     <span class="tooltip-rarity" style="color:${rarity.color};">${rarity.name}</span>
                 </div>`}
+                ${this.item.slot && minLevel ? `
+                <div class="tooltip-row">
+                    <span class="tooltip-label">Nível mínimo</span>
+                    <span>${minLevel}</span>
+                </div>` : ""}
                 ${
                     this.item.quality
                         ? `
@@ -131,6 +143,13 @@ export default class ItemTooltip {
 
         }
 
+        // Arma sem encantamento nenhum — "efeito" não existe nela, quem
+        // tem é encantamento (já tratado acima). Some a seção inteira em
+        // vez de mostrar "não possui efeitos especiais.".
+        if (this.item.slot === "weapon") {
+            return "";
+        }
+
         // Alimento de pet (colheita da Fazenda) — em vez do texto
         // genérico de "Efeito", mostra direto quanto enche de fome e
         // quanto vira XP se exceder (a mesma régua usada por
@@ -185,6 +204,13 @@ export default class ItemTooltip {
 
     renderFooter() {
         return `
+            ${this.item.slot ? `
+            <div class="tooltip-row tooltip-used-row">
+                <span class="tooltip-used-badge ${this.item.used ? "tooltip-used" : "tooltip-not-used"}">
+                    ${this.item.used ? "USADO" : "NÃO USADO"}
+                </span>
+            </div>
+            ` : ""}
             <div class="tooltip-footer">
                 <span>Valor de venda</span>
                 <span class="tooltip-gold">${ItemValueService.getSellValue(this.item)} Ouro</span>

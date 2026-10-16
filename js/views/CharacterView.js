@@ -161,55 +161,59 @@ export default class CharacterView {
                     </div>
 
                     <div class="character-divider"><hr></div>
+                    
+                    <div class="box-caracter-stats-special">
+                    
+                        <div class="character-stat character-stat-hoverable" data-stat="absorption">
+                            <span>Absorção</span>
+                            <span>${stats.absorption}%</span>
+                        </div>
 
-                    <div class="character-stat character-stat-hoverable" data-stat="absorption">
-                        <span>Absorção</span>
-                        <span>${stats.absorption}%</span>
-                    </div>
+                        <div class="character-stat character-stat-hoverable" data-stat="criticalChance">
+                            <span>Chance Crítica</span>
+                            <span>${stats.criticalChance}%</span>
+                        </div>
 
-                    <div class="character-stat character-stat-hoverable" data-stat="criticalChance">
-                        <span>Chance Crítica</span>
-                        <span>${stats.criticalChance}%</span>
-                    </div>
+                        <div class="character-stat character-stat-hoverable" data-stat="reflection">
+                            <span>Imitação</span>
+                            <span>${stats.reflection}%</span>
+                        </div>
 
-                    <div class="character-stat character-stat-hoverable" data-stat="reflection">
-                        <span>Imitação</span>
-                        <span>${stats.reflection}%</span>
-                    </div>
+                        <div class="character-stat character-stat-hoverable" data-stat="miasmaChance">
+                            <span>Miasma</span>
+                            <span>${stats.miasmaChance}%</span>
+                        </div>
 
-                    <div class="character-stat character-stat-hoverable" data-stat="miasmaChance">
-                        <span>Miasma</span>
-                        <span>${stats.miasmaChance}%</span>
-                    </div>
+                        <div class="character-stat character-stat-hoverable" data-stat="confusionChance">
+                            <span>Confusão</span>
+                            <span>${stats.confusionChance}%</span>
+                        </div>
 
-                    <div class="character-stat character-stat-hoverable" data-stat="confusionChance">
-                        <span>Confusão</span>
-                        <span>${stats.confusionChance}%</span>
-                    </div>
+                        <div class="character-stat character-stat-hoverable" data-stat="paralysisChance">
+                            <span>Paralisia</span>
+                            <span>${stats.paralysisChance}%</span>
+                        </div>
 
-                    <div class="character-stat character-stat-hoverable" data-stat="paralysisChance">
-                        <span>Paralisia</span>
-                        <span>${stats.paralysisChance}%</span>
-                    </div>
+                        <div class="character-stat character-stat-hoverable" data-stat="doubleStrikeChance">
+                            <span>Golpe Duplo</span>
+                            <span>${stats.doubleStrikeChance}%</span>
+                        </div>
 
-                    <div class="character-stat character-stat-hoverable" data-stat="doubleStrikeChance">
-                        <span>Golpe Duplo</span>
-                        <span>${stats.doubleStrikeChance}%</span>
-                    </div>
+                        <div class="character-stat character-stat-hoverable" data-stat="gravityChance">
+                            <span>Pressão Gravitacional</span>
+                            <span>${stats.gravityChance}%</span>
+                        </div>
 
-                    <div class="character-stat character-stat-hoverable" data-stat="gravityChance">
-                        <span>Pressão Gravitacional</span>
-                        <span>${stats.gravityChance}%</span>
-                    </div>
+                        <div class="character-stat character-stat-hoverable" data-stat="penetration">
+                            <span>Penetração</span>
+                            <span>${stats.penetration}%</span>
+                        </div>
 
-                    <div class="character-stat character-stat-hoverable" data-stat="penetration">
-                        <span>Penetração</span>
-                        <span>${stats.penetration}%</span>
-                    </div>
+                        <div class="character-stat character-stat-hoverable" data-stat="lifeSteal">
+                            <span>Roubo de Vida</span>
+                            <span>${stats.lifeSteal}%</span>
+                        </div>
 
-                    <div class="character-stat character-stat-hoverable" data-stat="lifeSteal">
-                        <span>Roubo de Vida</span>
-                        <span>${stats.lifeSteal}%</span>
                     </div>
 
                     <div class="character-divider"><hr></div>
@@ -648,7 +652,21 @@ export default class CharacterView {
         // Equipamento (inclui pet já chocado, que tem slot:"pet")
         if (this.selectedItem.slot) {
 
-            this.game.player.equipItem(this.selectedItem);
+            const result = this.game.player.equipItem(this.selectedItem);
+
+            if (!result.ok) {
+
+                const message = result.reason === "level"
+                    ? `Nível insuficiente — esse item exige nível ${result.minLevel}.`
+                    : result.reason === "class"
+                        ? "Sua classe não pode usar esse item."
+                        : "Não foi possível equipar esse item.";
+
+                Toast.show(message);
+
+                return;
+
+            }
 
             Toast.show(`${this.selectedItem.name} equipado`);
 

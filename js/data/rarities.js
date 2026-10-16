@@ -1,3 +1,8 @@
+// minLevel: nível mínimo do PERSONAGEM pra poder EQUIPAR um item dessa
+// raridade (ver Player.equipItem) — não tem a ver com em que nível a
+// dungeon começa a soltar o item, só com poder usá-lo depois de já tê-lo
+// em mãos. Ultraje ainda não existe em drop nenhum (dropChance 0 — deve
+// virar prêmio de torneio no futuro); 100 é só um teto seguro provisório.
 const rarities = {
     common: {
         id: "common",
@@ -5,7 +10,8 @@ const rarities = {
         color: "#FFFFFF",
         dropChance: 50,
         qualityStep: 2,
-        secondaryCap: 8
+        secondaryCap: 8,
+        minLevel: 1
     },
 
     uncommon: {
@@ -14,7 +20,8 @@ const rarities = {
         color: "#69d823",
         dropChance: 25,
         qualityStep: 3,
-        secondaryCap: 14
+        secondaryCap: 14,
+        minLevel: 10
     },
 
     rare: {
@@ -23,7 +30,8 @@ const rarities = {
         color: "#0050fc",
         dropChance: 15,
         qualityStep: 5,
-        secondaryCap: 20
+        secondaryCap: 20,
+        minLevel: 20
     },
 
     mystic: {
@@ -32,7 +40,8 @@ const rarities = {
         color: "#a950f7",
         dropChance: 7,
         qualityStep: 7,
-        secondaryCap: 28
+        secondaryCap: 28,
+        minLevel: 40
     },
 
     legendary: {
@@ -41,7 +50,8 @@ const rarities = {
         color: "#ff711f",
         dropChance: 2.5,
         qualityStep: 10,
-        secondaryCap: 35
+        secondaryCap: 35,
+        minLevel: 100
     },
 
     ultraje: {
@@ -50,8 +60,9 @@ const rarities = {
         color: "#ff0000",
         dropChance: 0,
         qualityStep: 12,
-        secondaryCap: 45
-    }   
+        secondaryCap: 45,
+        minLevel: 100
+    }
 };
 
 export default rarities;

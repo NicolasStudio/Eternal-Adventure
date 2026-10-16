@@ -95,6 +95,16 @@ export default class MarketViewBuy {
             });
         });
 
+        // Poção Pequena: libera assim que a PRIMEIRA fase do jogo (Bosque
+        // I, "forest_1") for vencida — não espera o chefe do Bosque como
+        // as outras poções (ver loop acima), senão um jogador no começo
+        // podia ficar sem nenhuma poção pra comprar até vencer aquele
+        // chefe, mesmo ela já caindo desde o primeiro monstro do jogo.
+        if (!unlocked.has(itemsData.smallPotion.id) && this.player.hasCompletedDungeon("forest_1")) {
+            unlocked.add(itemsData.smallPotion.id);
+            items.push(itemsData.smallPotion);
+        }
+
         // Poção Grande: só dropa dos dragões do Cooperativo (ver
         // monstersRaid.js), que não passam pelo loop de `dungeons` acima
         // — libera na loja assim que o primeiro drake (Dragão Abissal,
