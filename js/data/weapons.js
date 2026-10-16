@@ -1328,7 +1328,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/katana-rarity-mistico.png",
 
         stats: {
-            attack: 28,
+            attack: 32,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -1355,7 +1355,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/katana-rarity-lendario.png",
 
         stats: {
-            attack: 36,
+            attack: 40,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -1382,7 +1382,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/katana-rarity-ultraje.png",
 
         stats: {
-            attack: 48,
+            attack: 50,
             armor: 0,
             agility: 0,
             criticalChance: 0,
