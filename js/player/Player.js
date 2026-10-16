@@ -16,6 +16,7 @@ import baseStatsL1 from "../data/baseStatsL1.js";
 import { CURRENT_BALANCE_VERSION } from "../services/StatsMigrationService.js";
 import pets from "../data/pet.js";
 import TalentService from "../services/TalentService.js";
+import rarities from "../data/rarities.js";
 
 export default class Player {
     constructor(characterClass, name) {
@@ -373,15 +374,30 @@ export default class Player {
 
     }
 
+    // Devolve { ok: true } ou { ok: false, reason, ...detalhes } — nunca
+    // só um boolean, pra quem chama (CharacterView.equipSelectedItem)
+    // conseguir mostrar o motivo certo em vez de um "não deu" genérico.
     equipItem(item) {
 
-        if (!item) return false;
+        if (!item) return { ok: false, reason: "invalid" };
 
         // Itens sem `class` (ex: pet) ou com class "all" (anel/amuleto —
         // ver ring.js/amulet.js) valem pra qualquer classe — só barra
         // quando o item REALMENTE exige uma classe específica.
         if (item.class && item.class !== "all" && item.class !== this.class.id) {
-            return false;
+            return { ok: false, reason: "class" };
+        }
+
+        // Nível mínimo por raridade (ver rarities.js/minLevel) — pets não
+        // têm `rarity`, então nunca travam aqui. Resolvido pelo ID contra
+        // o rarities.js ATUAL, nunca confiando em item.rarity.minLevel
+        // puro: item de conta antiga guarda uma FOTO do rarity de quando
+        // caiu, de antes desse campo existir, e ficaria sempre liberado
+        // (minLevel undefined) se a checagem confiasse só nela.
+        const minLevel = rarities[item.rarity?.id]?.minLevel ?? item.rarity?.minLevel ?? 1;
+
+        if (this.level < minLevel) {
+            return { ok: false, reason: "level", minLevel };
         }
 
         const slot = item.slot;
@@ -394,11 +410,17 @@ export default class Player {
 
         this.equipment[slot] = item;
 
+        // Selo [USADO] do tooltip (ver ItemTooltip.js) — preparação pro
+        // sistema de transferência de item, que ainda não existe: item
+        // usado (equipado/upgradado/encantado pelo menos uma vez) não
+        // poderá ser transferido quando essa regra for implementada.
+        item.used = true;
+
         this.syncEquipmentLifeBonus();
 
         this.notify();
 
-        return true;
+        return { ok: true };
 
     }
 
@@ -827,6 +849,11 @@ export default class Player {
         }
 
         weaponInstance.enchantments[statKey] = newValue;
+
+        // Selo [USADO] do tooltip (ver ItemTooltip.js) — mesma regra do
+        // Player.equipItem/UpgradeService.upgrade: encantar também marca
+        // o item como usado.
+        weaponInstance.used = true;
 
         // Rastreia a FAMÍLIA da pedra (rubi/safira/imperial/turmalina) e
         // se algum dia já usou uma de nível 3 — só pra alimentar as

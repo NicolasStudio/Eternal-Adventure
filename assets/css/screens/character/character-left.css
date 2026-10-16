@@ -320,6 +320,26 @@ hr{
     font-size:1.1em;
 }
 
+/* Atributos especiais (Crítico/Roubo de Vida/Penetração/Absorção/Miasma/
+   Imitação/Confusão/Paralisia/Golpe Duplo/Pressão Gravitacional) — a
+   lista já cresceu bastante a cada classe nova, e .character-left tem
+   overflow:hidden (a tela não rola inteira), então sem isso as últimas
+   linhas (Penetração/Roubo de Vida/Poder) ficavam cortadas fora da tela
+   em telas mais baixas. Rola só esse pedaço — o resto (avatar, barras,
+   Poder) continua sempre visível. display:flex+gap aqui porque, sendo
+   filha de .character-stats (que também é flex+gap), essas linhas
+   tinham parado de herdar o espaçamento entre si.
+   A barra em si usa o estilo global (::-webkit-scrollbar em style.css),
+   não precisa de CSS próprio aqui. */
+.box-caracter-stats-special{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+    max-height:190px;
+    overflow-y:auto;
+    padding-right:4px;
+}
+
 /* Atributos especiais (Crítico/Roubo de Vida/Penetração/Absorção/Miasma)
    têm tooltip explicando a mecânica — cursor de ajuda + destaque sutil
    no hover deixam claro que dá pra passar o mouse ali. */
@@ -460,6 +480,9 @@ hr{
     .character-stat{
         padding:8px 10px;
         font-size:14px;
+    }
+    .box-caracter-stats-special{
+        max-height:140px;
     }
     .equipment-slot{
         padding:10px;

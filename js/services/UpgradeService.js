@@ -188,6 +188,10 @@ export default class UpgradeService {
 
         this.applyStats(item);
 
+        // Selo [USADO] do tooltip (ver ItemTooltip.js) — mesma regra do
+        // Player.equipItem: upgradar também marca o item como usado.
+        item.used = true;
+
         return true;
 
     }

@@ -266,6 +266,14 @@ export default class SaveService {
         // null (funciona igual em todo `if`, mas evita a chave sumir).
         player.equipment.pet ??= null;
 
+        // Selo [USADO] do tooltip (ver ItemTooltip.js/Player.equipItem):
+        // todo item já equipado é, por definição, usado — sem isso, save
+        // de antes desse campo existir mostraria "NÃO USADO" num item que
+        // o personagem já está vestindo.
+        Object.values(player.equipment).forEach(item => {
+            if (item) item.used = true;
+        });
+
         // Arma/armadura guardam uma FOTO dos próprios atributos-base no
         // momento em que foram coletadas (item.baseStats) — se os
         // valores de weapons.js/helmets.js/etc. mudarem depois (ex: esse
@@ -615,7 +623,12 @@ export default class SaveService {
 
         const { album, progress = {}, ...rest } = flat;
         const { achievements, stats = {}, ...progressRest } = progress;
-        const { wolfEggGranted, ...accountStats } = stats;
+        // wolfEggGranted e raidBossesDefeated são DO PERSONAGEM, não da
+        // conta — sem puxar os dois pra fora de `stats` aqui, um
+        // personagem novo na mesma conta herdava os dragões que outro
+        // personagem já tinha vencido (ex: Poção Grande liberada na loja
+        // de um nível 1 só porque outro slot já venceu o Dragão Abissal).
+        const { wolfEggGranted, raidBossesDefeated, ...accountStats } = stats;
 
         return {
             account: {
@@ -627,7 +640,12 @@ export default class SaveService {
                 ...rest,
                 // O Ovo de Lobo é do personagem: cada um ganha o seu no nível 30.
                 wolfEggGranted: wolfEggGranted === true,
-                progress: progressRest
+                progress: {
+                    ...progressRest,
+                    stats: {
+                        raidBossesDefeated: Array.isArray(raidBossesDefeated) ? raidBossesDefeated : []
+                    }
+                }
             }
         };
 
@@ -642,6 +660,7 @@ export default class SaveService {
         if (!character) return null;
 
         const { wolfEggGranted, progress = {}, ...rest } = character;
+        const characterStats = progress.stats ?? {};
 
         return {
             ...rest,
@@ -651,6 +670,18 @@ export default class SaveService {
                 achievements: [...(container.account?.achievements ?? [])],
                 stats: {
                     ...(container.account?.stats ?? {}),
+                    // raidBossesDefeated é do PRÓPRIO personagem (ver
+                    // splitCharacter) — só cai pro valor antigo "da conta"
+                    // se ESTE personagem ainda não tiver o seu (rede de
+                    // segurança pra quem já tinha dragão vencido ANTES
+                    // desse campo virar por-personagem não perder o
+                    // progresso; assim que esse personagem salvar de
+                    // novo, splitCharacter já não grava mais isso em
+                    // account.stats, então o vazamento pros outros slots
+                    // se resolve sozinho).
+                    raidBossesDefeated: characterStats.raidBossesDefeated?.length
+                        ? characterStats.raidBossesDefeated
+                        : (container.account?.stats?.raidBossesDefeated ?? []),
                     wolfEggGranted: wolfEggGranted === true
                 }
             }
