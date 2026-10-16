@@ -80,7 +80,7 @@
                     <i class="fa-solid fa-dungeon"></i> Dungeons
                 </a>
 
-                <a href="#pvp" class="wiki-nav-item" data-keywords="pvp arena 1v1 2v2 duelo jogador contra jogador informações informacoes do combate gráfico grafico">
+                <a href="#pvp" class="wiki-nav-item" data-keywords="pvp arena lobby 1v1 2v2 3v3 1x1 2x2 3x3 trio duelo combate livre combate ranqueado modo torneio jogador contra jogador informações informacoes do combate gráfico grafico">
                     <i class="fa-solid fa-people-arrows"></i> PVP
                 </a>
 
@@ -88,7 +88,7 @@
                     <i class="fa-solid fa-users"></i> Cooperativo
                 </a>
 
-                <a href="#ranking" class="wiki-nav-item" data-keywords="ranking rankings top 10 mais fortes poder nível classe lupa equipamentos global todos os jogadores online offline bolinha presença">
+                <a href="#ranking" class="wiki-nav-item" data-keywords="ranking rankings top 10 mais fortes poder nível classe lupa equipamentos global todos os jogadores online offline bolinha presença torneio troféu trofeu pontos ouro prata bronze combate ranqueado">
                     <i class="fa-solid fa-ranking-star"></i> Ranking
                 </a>
 
@@ -148,7 +148,7 @@
                     </article>
 
                     <article class="wiki-card">
-                        <h3><i class="fa-solid fa-bow-arrow"></i> Arqueiro</h3>
+                        <h3><i class="fa-solid fa-bullseye"></i> Arqueiro</h3>
                         <p>Focado em agilidade — na prática, isso significa que ele quase sempre age primeiro no combate, e tem mais chance de esquivar de ataques inimigos. O dano dele é mediano, mas a <strong>Chance Crítica</strong> alta faz ele estourar golpes 60% mais fortes de vez em quando. Perdeu um pouco de Armadura, pra não ficar perto do Guerreiro nesse atributo.</p>
                     </article>
 
@@ -209,7 +209,7 @@
                     </article>
 
                     <article class="wiki-radar-card">
-                        <h3><i class="fa-solid fa-bow-arrow"></i> Arqueiro</h3>
+                        <h3><i class="fa-solid fa-bullseye"></i> Arqueiro</h3>
                         <canvas id="radar-archer"></canvas>
                     </article>
 
@@ -381,7 +381,7 @@
                 <p class="wiki-intro">Também fica na Cidade, no card Mercado, com três opções: Comprar, Vender e Vender Pet.</p>
 
                 <h3>Comprar</h3>
-                <p>Mostra os itens disponíveis pra compra direta com ouro, organizados em abas (Armas, Cabeça, Peitoral, Calça, Botas, Itens e Sementes — essa última só a partir do nível 30, veja a seção <a href="#fazenda">Fazenda</a>). Selecione o item, veja o preço e confirme a compra. Nem tudo que existe no jogo está à venda aqui; muita coisa boa só vem de drop de monstro.</p>
+                <p>Mostra os itens disponíveis pra compra direta com ouro, organizados em abas (Armas, Cabeça, Peitoral, Calça, Botas, Anéis, Amuletos, Itens e Sementes — essa última só a partir do nível 30, veja a seção <a href="#fazenda">Fazenda</a>). Selecione o item, veja o preço e confirme a compra. Nem tudo que existe no jogo está à venda aqui; muita coisa boa só vem de drop de monstro — inclusive Anel e Amuleto de raridade Lendária, que só saem dos dragões do Cooperativo.</p>
                 <p>Poções e sementes podem ser compradas em quantidade: ao selecionar uma delas, aparece o campo <strong>QTD</strong> no rodapé. Use <strong>−</strong> e <strong>+</strong>, digite o número direto (até 999) ou clique em <strong>Máx</strong> pra comprar o máximo que seu ouro permite. O preço mostrado já é o total. Equipamentos continuam sendo comprados um por vez.</p>
                 <p>A Poção Pequena já aparece à venda assim que você vence a primeira fase do Bosque (Bosque I) — não precisa chegar no chefe do Bosque, só terminar essa primeira fase — pra garantir que ninguém fique sem nenhuma poção pra comprar logo no começo da jornada.</p>
                 <p>A Poção Grande só aparece à venda depois de vencer o primeiro dragão do <a href="#cooperativo">Cooperativo</a> (Dragão Abissal) uma vez — não precisa ter caído o drop de verdade, só ter vencido a luta. Essa liberação vale só pra esse personagem: outro personagem na mesma conta precisa vencer o dragão de novo com ele pra liberar a própria Poção Grande.</p>
@@ -527,7 +527,10 @@
             <section id="pvp" class="wiki-section">
 
                 <h2><i class="fa-solid fa-people-arrows"></i> PVP</h2>
-                <p class="wiki-intro">A Arena PVP coloca seu personagem contra o de outro jogador de verdade, num combate resolvido pelos status de cada um — a mesma tela e as mesmas mensagens de ataque do combate normal, só que o oponente entra no lugar do monstro.</p>
+                <p class="wiki-intro">Ao clicar em PVP você cai primeiro num lobby — clique em <strong>Entrar</strong> pra escolher entre <strong>Combate Livre</strong> e <strong>Combate Ranqueado</strong>. O fundo continua sendo o do lobby durante toda a escolha de modo e a fila; só muda pra arena de verdade quando a luta em si começa.</p>
+
+                <h3>Combate Livre</h3>
+                <p>Coloca seu personagem contra o de outro jogador de verdade, num combate resolvido pelos status de cada um — a mesma tela e as mesmas mensagens de ataque do combate normal, só que o oponente entra no lugar do monstro. A arena é sorteada entre os chefes do jogo, igual em todos os participantes da partida.</p>
 
                 <div class="wiki-cards">
 
@@ -541,9 +544,19 @@
                         <p>Duplas enfrentando duplas: 4 jogadores são pareados automaticamente e divididos em dois times de Poder equilibrado. Quanto mais tempo você espera na fila, mais ampla fica a faixa de Poder aceita, pra a partida fechar mesmo com poucos jogadores online. O pet Boitatá também queima os adversários aqui, na vez do dono.</p>
                     </article>
 
+                    <article class="wiki-card">
+                        <h3><i class="fa-solid fa-user-group"></i> 3x3</h3>
+                        <p>Mesma ideia do 2x2, só que com trios: 6 jogadores pareados automaticamente e divididos em dois times de Poder equilibrado. Mantém a mesma faixa de Poder que cresce com a espera.</p>
+                    </article>
+
                 </div>
 
-                <p>Ao fim de cada partida (1x1 ou 2x2), o botão <strong>Informações do Combate</strong> mostra o resumo da luta — mesmo recurso descrito na seção <a href="#dungeons">Dungeons</a>.</p>
+                <p>Em todos os modos, a diferença de Poder entre os jogadores pareados é limitada — até <strong>5.000</strong> de diferença (mais largo quanto mais tempo você espera na fila, no 2x2 e no 3x3).</p>
+
+                <p>Ao fim de cada partida, o botão <strong>Informações do Combate</strong> mostra o resumo da luta — mesmo recurso descrito na seção <a href="#dungeons">Dungeons</a>.</p>
+
+                <h3><i class="fa-solid fa-trophy"></i> Combate Ranqueado</h3>
+                <p>Leva pro <strong>Modo Torneio</strong> — ainda em construção, por enquanto só mostra um aviso de "em breve". Quando estiver pronto: modos 1x1, 2x2 e 3x3 próprios, pareamento mais restrito (até <strong>2.500</strong> de diferença de Poder, pra não desbalancear), arena sempre fixa (sem sorteio), e pontos de ranking na vitória — <strong>1 ponto no 1x1, 2 no 2x2 e 3 no 3x3</strong>, contabilizados no <a href="#ranking">Torneio</a>.</p>
 
             </section>
 
@@ -628,6 +641,9 @@
                 <h3><i class="fa-solid fa-globe"></i> Ranking Global</h3>
                 <p>Ícone do globo, ao lado do Ranking na barra de ferramentas. Mesma ideia, mas sem o corte dos 10 primeiros — lista <strong>todos os jogadores</strong> do servidor por Poder, com Nome, Nível, Poder e a lupa de detalhe de sempre.</p>
                 <p>Cada jogador tem uma bolinha ao lado: <strong>verde</strong> (ONLINE) se a conta está com o jogo aberto agora, <strong>vermelha</strong> (OFFLINE) caso contrário.</p>
+
+                <h3><i class="fa-solid fa-trophy"></i> Torneio</h3>
+                <p>Ícone do troféu, ao lado do Ranking Global. Lista todos os jogadores por <strong>pontos do Combate Ranqueado</strong> (ver <a href="#pvp">PVP</a>) em vez de Poder — 1º, 2º e 3º lugar aparecem destacados em ouro, prata e bronze. Como o Combate Ranqueado ainda está travado ("Modo Torneio — em breve"), por enquanto essa lista fica vazia/zerada.</p>
 
             </section>
 

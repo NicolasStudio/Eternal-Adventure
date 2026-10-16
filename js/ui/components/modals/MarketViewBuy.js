@@ -19,6 +19,8 @@ const TABS = [
     { id: "chest", label: "Peitoral" },
     { id: "leg", label: "Calça" },
     { id: "boot", label: "Botas" },
+    { id: "ring", label: "Anéis" },
+    { id: "amulet", label: "Amuletos" },
     { id: "item", label: "Itens" },
     { id: "seed", label: "Sementes" }
 ];
@@ -46,13 +48,15 @@ export default class MarketViewBuy {
             helmets: Object.values(helmets),
             chests: Object.values(chests),
             legs: Object.values(legs),
-            boots: Object.values(boots)
+            boots: Object.values(boots),
+            rings: Object.values(rings),
+            amulets: Object.values(amulets)
         };
     }
 
     getAllEquipments() {
-        const { weapons, helmets, chests, legs, boots } = this.getEquipments();
-        return [...weapons, ...helmets, ...chests, ...legs, ...boots];
+        const { weapons, helmets, chests, legs, boots, rings, amulets } = this.getEquipments();
+        return [...weapons, ...helmets, ...chests, ...legs, ...boots, ...rings, ...amulets];
     }
 
     getShopItems() {
@@ -64,6 +68,25 @@ export default class MarketViewBuy {
                 return;
             }
             dungeon.drops.forEach(drop => {
+
+                // Anel/Amuleto Moderno (ver ring.js/amulet.js) não cai pelo
+                // formato genérico type+rarity acima — o drop referencia o
+                // item direto (`{ item: ring.ringModernCommon, chance }`).
+                // Libera na loja com o mesmo critério: dungeon vencida +
+                // classe compatível.
+                if (drop.item) {
+                    const item = drop.item;
+                    if (item.class && item.class !== "all" && item.class !== this.player.class.id) {
+                        return;
+                    }
+                    if (unlocked.has(item.id)) {
+                        return;
+                    }
+                    unlocked.add(item.id);
+                    items.push(item);
+                    return;
+                }
+
                 if (!drop.type) return;
                 equipments.forEach(item => {
                     if (item.class !== "all" && item.class !== this.player.class.id) {
@@ -138,6 +161,8 @@ export default class MarketViewBuy {
                 case "chest": return item.slot === "chest";
                 case "leg": return item.slot === "leg";
                 case "boot": return item.slot === "boot";
+                case "ring": return item.slot === "ring";
+                case "amulet": return item.slot === "amulet";
                 case "item": return item.type === "item" && item.category !== "seed";
                 case "seed": return item.category === "seed";
                 default: return false;

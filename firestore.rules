@@ -78,7 +78,16 @@ service cloud.firestore {
         && request.resource.data.level <= 110
         && request.resource.data.power is number
         && request.resource.data.power >= 0
-        && request.resource.data.power <= 500000;
+        && request.resource.data.power <= 500000
+        // Pontos do Torneio (Combate Ranqueado, ainda travado — ver
+        // PvpView.js) — mesmo teto de segurança do power, pra ninguém
+        // forjar um valor direto no console e aparecer em 1º sem jogar.
+        // Opcional por enquanto: cliente antigo que ainda não salvou
+        // depois dessa atualização não manda esse campo.
+        && (!('rankedPoints' in request.resource.data)
+            || (request.resource.data.rankedPoints is int
+                && request.resource.data.rankedPoints >= 0
+                && request.resource.data.rankedPoints <= 999999));
     }
 
     // Correio — provisório (ver js/services/MailService.js): só a conta
