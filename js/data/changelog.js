@@ -1,6 +1,20 @@
 export default [
 
     {
+        version: "Beta 0.2.5 — Regras de Item",
+        date: "Outubro de 2026",
+        changes: [
+            "Cada raridade agora exige um nível mínimo pra ser equipada: Comum 1, Incomum 10, Raro 20 e Místico 40 — raridades mais altas pedem nível ainda maior. Tentar equipar algo acima do seu nível mostra o motivo, em vez de simplesmente não fazer nada",
+            "Itens agora guardam um selo USADO/NÃO USADO, visível no tooltip — equipar, melhorar na Ferraria ou encantar uma arma marca o item como usado. Ainda não tem efeito nenhum hoje, mas prepara o terreno pra quando a transferência de itens entre contas existir",
+            "Tooltip de arma: a seção 'Efeito' só aparece quando ela tem encantamento de verdade — sem encantamento, a seção some (antes mostrava 'Este item não possui efeitos especiais' sem necessidade, já que quem tem efeito é o encantamento, não a arma em si)",
+            "Corrigido o tooltip e o equipar não reconhecendo o nível mínimo em itens de contas mais antigas — o jogo agora resolve esse valor direto pela raridade atual do item, em vez de confiar só no que foi salvo na hora do drop",
+            "Poção Pequena passa a aparecer na loja assim que a primeira fase do Bosque (Bosque I) é vencida, em vez de esperar o chefe do Bosque — evita deixar alguém sem nenhuma poção pra comprar logo no começo da jornada",
+            "Corrigido o progresso dos dragões do Cooperativo (e a liberação da Poção Grande) vazando entre os personagens da mesma conta — vencer um dragão com um personagem não libera mais a poção nem as conquistas de dragão pros outros personagens da mesma conta",
+            "Corrigida a tentativa de equipar um item de nível ou classe incompatível não mostrando nenhum aviso — agora o jogo avisa o motivo exato de não poder equipar"
+        ]
+    },
+
+    {
         version: "Beta 0.2.4 — Novas Classes",
         date: "Outubro de 2026",
         changes: [
