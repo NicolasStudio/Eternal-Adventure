@@ -680,7 +680,7 @@ const monsters = [
             {
             },
             {
-                item: items.smallPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -708,7 +708,7 @@ const monsters = [
             {
             },
             {
-                item: items.smallPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -736,7 +736,7 @@ const monsters = [
             {
             },
             {
-                item: items.smallPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -771,7 +771,7 @@ const monsters = [
                 chance: 18
             },
             {
-                item: items.smallPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -803,7 +803,7 @@ const monsters = [
 
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -834,7 +834,7 @@ const monsters = [
                 chance: 18
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -869,7 +869,7 @@ const monsters = [
                 chance: 18
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -900,7 +900,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -931,6 +931,8 @@ const monsters = [
                 chance: 18
             },
             {
+                item: items.tripleSmallPotion,
+                quantidade: 2
             }
         ]
     },
@@ -960,7 +962,7 @@ const monsters = [
                 chance: 30
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -988,7 +990,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -1057,7 +1059,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -1085,7 +1087,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -1121,7 +1123,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -1152,7 +1154,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -1180,7 +1182,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -1211,7 +1213,7 @@ const monsters = [
                 chance: 18
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 3
             }
         ]
@@ -1242,7 +1244,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -1270,7 +1272,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -1298,7 +1300,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -1326,7 +1328,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -1354,7 +1356,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -1382,7 +1384,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 2
             }
         ]
@@ -1413,7 +1415,7 @@ const monsters = [
                 chance: 18
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleSmallPotion,
                 quantidade: 3
             }
         ]
@@ -2539,7 +2541,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -2574,7 +2576,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -2609,7 +2611,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -2647,7 +2649,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -2682,7 +2684,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -2717,7 +2719,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -2755,7 +2757,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -2790,7 +2792,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -2825,7 +2827,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -2897,7 +2899,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -2932,7 +2934,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -2967,7 +2969,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -3002,7 +3004,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -3040,7 +3042,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -3075,7 +3077,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -3110,7 +3112,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -3145,7 +3147,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -3183,7 +3185,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -3218,7 +3220,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -3253,7 +3255,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {
@@ -3288,7 +3290,7 @@ const monsters = [
             {
             },
             {
-                item: items.mediumPotion,
+                item: items.tripleMediumPotion,
                 quantidade: 2
             },
             {

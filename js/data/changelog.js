@@ -11,7 +11,8 @@ export default [
             "Corrigido o fundo do Combate Livre: antes trocava pra tela de arena genérica assim que você escolhia o modo; agora continua mostrando o lobby até o combate em si começar",
             "Corrigidos ícones quebrados que não apareciam: os de 'escolher combate' no PVP (trocados por um punho) e o do Arqueiro na Wiki (trocado por um alvo) — eram ícones que só existem na versão paga do Font Awesome",
             "Corrigido os botões de Dungeons, PVP e Cooperativo continuando com aparência de travados depois de curar na Enfermaria e passar dos 5% de vida — antes só destravavam ao trocar de menu na mão",
-            "Corrigido Anel e Amuleto não aparecendo pra comprar na loja — novas abas Anéis e Amuletos, liberadas pelos mesmos critérios dos outros equipamentos (vencer a dungeon que os dropa)"
+            "Corrigido Anel e Amuleto não aparecendo pra comprar na loja — novas abas Anéis e Amuletos, liberadas pelos mesmos critérios dos outros equipamentos (vencer a dungeon que os dropa)",
+            "Corrigido Caverna IV-VI, Oceano I-III, Floresta I-III e Inferno I-III: a tooltip da dungeon prometia Tripla Poção (Pequena ou Média, conforme o nível), mas os monstros de lá ainda soltavam poção de um estágio mais antigo — agora o drop bate com o que a tooltip mostra"
         ]
     },
 
