@@ -3,6 +3,7 @@ import PowerService from "../services/PowerService.js";
 import PvpCombatService from "../services/PvpCombatService.js";
 import { buildCombatInfo, buildCombatTimeline } from "../combat/CombatInfo.js";
 import CombatInfoModal from "../ui/components/modals/CombatInfoModal.js";
+import PvpModeChoiceModal from "../ui/components/modals/PvpModeChoiceModal.js";
 import Toast from "../ui/components/Toast.js";
 import CombatToast from "../combat/CombatToast.js";
 import HealFlash from "../combat/HealFlash.js";
@@ -42,8 +43,8 @@ export default class PvpView {
 
     constructor(game) {
         this.game = game;
-        this.state = "mode"; // mode | idle | searching | found | ceremony | battle | result
-        this.mode = null; // "1v1" | "2v2"
+        this.state = "lobby"; // lobby | mode | idle | searching | found | ceremony | battle | result | ranked-locked
+        this.mode = null; // "1v1" | "2v2" | "3v3"
         this.opponentWaiting = false;
         this.matchData = null;
         this.matchId = null;
@@ -63,10 +64,54 @@ export default class PvpView {
         // (renderResult/renderResultTeam). Nunca guarda nada: cada
         // combatResult novo substitui o anterior.
         this.combatInfoModal = new CombatInfoModal();
+        // Modal do lobby (ver renderLobby): Combate Livre / Combate
+        // Ranqueado (este travado por enquanto).
+        this.modeChoiceModal = new PvpModeChoiceModal();
     }
 
     get player() {
         return this.game.player;
+    }
+
+    // "2v2"/"3v3" compartilham todo o fluxo de time (fila com range de
+    // Poder crescente, cartões de vida, resultado em time) — só muda a
+    // quantidade de gente. "1v1" não entra aqui.
+    isTeamMode() {
+        return this.mode === "2v2" || this.mode === "3v3";
+    }
+
+    // Quantos jogadores por lado (1v1 = 1, 2v2 = 2, 3v3 = 3).
+    getTeamSize() {
+        return { "2v2": 2, "3v3": 3 }[this.mode] ?? 1;
+    }
+
+    // Combate Livre escolhido no modal do lobby — segue pro picker de
+    // modo de sempre (1x1/2x2/3x3). O fundo CONTINUA sendo o lobby
+    // (lobby_pvp.png) por todo o picker/fila/partida encontrada — só
+    // muda pra arena de verdade quando o combate em si começa (ver
+    // onMatchFound/onTeamMatchFound, que trocam o fundo depois da
+    // cerimônia).
+    enterFreeMode() {
+        this.state = "mode";
+        this.refresh();
+    }
+
+    // Combate Ranqueado escolhido no modal do lobby — "Modo Torneio"
+    // ainda travado (ver renderRankedLocked), com a tela fixa
+    // arena_pvp.png (diferente do Combate Livre, que mantém o lobby).
+    enterRankedLocked() {
+        this.state = "ranked-locked";
+        this.game.hudScreen.setBackground("assets/img/backgrounds/arena_pvp.png");
+        this.refresh();
+    }
+
+    // Volta pro lobby (lobby_pvp.png) a partir do picker de modo ou da
+    // tela travada do Ranqueado.
+    backToLobby() {
+        this.state = "lobby";
+        this.mode = null;
+        this.game.hudScreen.setBackground("assets/img/backgrounds/lobby_pvp.png");
+        this.refresh();
     }
 
     sleep(ms) {
@@ -105,18 +150,53 @@ export default class PvpView {
 
     renderState() {
         switch (this.state) {
+            case "lobby": return this.renderLobby();
+            case "ranked-locked": return this.renderRankedLocked();
             case "idle": return this.renderIdle();
             case "searching": return this.renderSearching();
-            case "found": return this.mode === "2v2" ? this.renderFoundTeam() : this.renderFound();
-            case "result": return this.mode === "2v2" ? this.renderResultTeam() : this.renderResult();
+            case "found": return this.isTeamMode() ? this.renderFoundTeam() : this.renderFound();
+            case "result": return this.isTeamMode() ? this.renderResultTeam() : this.renderResult();
             default: return this.renderModeSelect();
         }
+    }
+
+    // Primeira tela ao abrir o PVP (fundo lobby_pvp.png, ver
+    // HudScreen.changeView) — só um convite pra abrir o modal de
+    // escolha (Combate Livre / Combate Ranqueado).
+    renderLobby() {
+        return `
+            <div class="pvp-lobby">
+                <i class="fa-solid fa-hand-fist pvp-icon"></i>
+                <p class="pvp-description">Prepare-se para a batalha. Escolha como quer entrar na arena hoje.</p>
+                <button class="pvp-lobby-enter-button">Entrar</button>
+            </div>
+        `;
+    }
+
+    // Combate Ranqueado ainda não existe de verdade — leva pra essa
+    // tela fixa (fundo arena_pvp.png, igual o Combate Livre) com o
+    // aviso de "em breve" e um resumo das regras já definidas, pra
+    // quando for implementado.
+    renderRankedLocked() {
+        return `
+            <div class="pvp-ranked-locked">
+                <i class="fa-solid fa-lock pvp-ranked-locked-icon"></i>
+                <h3 class="pvp-found-title">Modo Torneio</h3>
+                <p class="pvp-description">Em breve. O Combate Ranqueado ainda está em construção.</p>
+                <p class="pvp-ranked-locked-rules">
+                    Quando estiver pronto: modos 1x1, 2x2 e 3x3 próprios, pareamento mais
+                    restrito (até 2.500 de diferença de Poder), arena sempre fixa, e pontos
+                    de ranking na vitória — 1 ponto no 1x1, 2 no 2x2 e 3 no 3x3.
+                </p>
+                <button class="pvp-lobby-back-button">Voltar</button>
+            </div>
+        `;
     }
 
     renderModeSelect() {
         return `
             <div class="pvp-mode-select">
-                <i class="fa-solid fa-swords pvp-icon"></i>
+                <i class="fa-solid fa-hand-fist pvp-icon"></i>
                 <p class="pvp-description">Escolha o modo de combate:</p>
                 <div class="pvp-mode-options">
                     <button class="pvp-mode-btn" data-mode="1v1">
@@ -127,7 +207,12 @@ export default class PvpView {
                         <span class="pvp-mode-label">2x2</span>
                         <span class="pvp-mode-sub">Duplas</span>
                     </button>
+                    <button class="pvp-mode-btn" data-mode="3v3">
+                        <span class="pvp-mode-label">3x3</span>
+                        <span class="pvp-mode-sub">Trios</span>
+                    </button>
                 </div>
+                <button class="pvp-lobby-back-button">Voltar ao lobby</button>
             </div>
         `;
     }
@@ -135,10 +220,10 @@ export default class PvpView {
     renderIdle() {
         return `
             <div class="pvp-idle">
-                <i class="fa-solid fa-swords pvp-icon"></i>
+                <i class="fa-solid fa-hand-fist pvp-icon"></i>
                 <p class="pvp-description">
-                    ${this.mode === "2v2"
-                        ? "Entre na fila e você será agrupado automaticamente com outro jogador contra uma dupla adversária, decidido pelos status de cada personagem no momento da partida. Quanto mais você espera, mais ampla fica a busca por Poder."
+                    ${this.isTeamMode()
+                        ? `Entre na fila e você será agrupado automaticamente com ${this.getTeamSize() === 3 ? "outros dois jogadores" : "outro jogador"} contra ${this.getTeamSize() === 3 ? "um trio adversário" : "uma dupla adversária"}, decidido pelos status de cada personagem no momento da partida. Quanto mais você espera, mais ampla fica a busca por Poder.`
                         : "Entre na fila e enfrente outro jogador em um combate automático, decidido pelos status do seu personagem no momento da partida."}
                 </p>
                 <button class="pvp-join-button">Entrar na Fila</button>
@@ -147,7 +232,7 @@ export default class PvpView {
     }
 
     renderSearching() {
-        if (this.mode === "2v2") return this.renderSearchingTeam();
+        if (this.isTeamMode()) return this.renderSearchingTeam();
         return `
             <div class="pvp-searching">
                 <div class="pvp-spinner"></div>
@@ -162,10 +247,11 @@ export default class PvpView {
         `;
     }
 
-    // 2x2: mostra quantos jogadores compatíveis já estão na fila (precisa
-    // de 3 além de você), o tempo de espera e o limite de Poder atual —
-    // que cresce sozinho com a espera. Só esses três trechos são
-    // atualizados depois (updateSearchInfo), sem refazer a tela toda.
+    // Modo de time: mostra quantos jogadores compatíveis já estão na
+    // fila (precisa de teamSize*2-1 além de você: 3 no 2x2, 5 no 3x3),
+    // o tempo de espera e o limite de Poder atual — que cresce sozinho
+    // com a espera. Só esses três trechos são atualizados depois
+    // (updateSearchInfo), sem refazer a tela toda.
     renderSearchingTeam() {
         return `
             <div class="pvp-searching">
@@ -181,8 +267,13 @@ export default class PvpView {
         `;
     }
 
+    getRequiredCandidates() {
+        return this.getTeamSize() * 2 - 1;
+    }
+
     getTeamSearchStatus() {
-        return `Procurando jogadores compatíveis... (${Math.min(this.candidateCount, 3)}/3 na fila)`;
+        const needed = this.getRequiredCandidates();
+        return `Procurando jogadores compatíveis... (${Math.min(this.candidateCount, needed)}/${needed} na fila)`;
     }
 
     getSearchElapsed() {
@@ -192,7 +283,7 @@ export default class PvpView {
 
     updateSearchInfo() {
 
-        if (this.state !== "searching" || this.mode !== "2v2") return;
+        if (this.state !== "searching" || !this.isTeamMode()) return;
 
         const status = document.getElementById("pvp-search-status");
         const elapsed = document.getElementById("pvp-search-elapsed");
@@ -222,13 +313,13 @@ export default class PvpView {
 
     }
 
-    // Chamado pelo HudScreen ao sair da tela de PVP. No 2x2, interrompe a
-    // cerimônia/luta em andamento (os passos assíncronos conferem o
-    // flowId e param sozinhos) e libera a partida no banco. No 1x1 não
-    // faz nada.
+    // Chamado pelo HudScreen ao sair da tela de PVP. No modo de time
+    // (2x2/3x3), interrompe a cerimônia/luta em andamento (os passos
+    // assíncronos conferem o flowId e param sozinhos) e libera a
+    // partida no banco. No 1x1 não faz nada.
     abortFlow() {
 
-        if (this.mode !== "2v2") return;
+        if (!this.isTeamMode()) return;
 
         this.stopSearchTimer();
 
@@ -280,12 +371,14 @@ export default class PvpView {
             `;
         };
 
+        const myLabel = this.getTeamSize() === 3 ? "Seu time" : "Sua dupla";
+
         return `
             <div class="pvp-found">
                 <h3 class="pvp-found-title">Partida Encontrada!</h3>
                 <div class="pvp-versus pvp-versus-team">
                     <div class="pvp-team-column pvp-team-mine">
-                        <span class="pvp-team-label">Sua dupla</span>
+                        <span class="pvp-team-label">${myLabel}</span>
                         ${myTeam.map(fighter).join("")}
                     </div>
                     <span class="pvp-vs">VS</span>
@@ -339,19 +432,21 @@ export default class PvpView {
 
     }
 
-    renderAllyCard() {
+    // 2x2 tem 1 aliado, 3x3 tem 2 — mapeia todos os colegas de time que
+    // não sou eu, em vez de assumir exatamente 1 (find).
+    renderAllyCards() {
 
-        if (this.mode !== "2v2" || !this.matchData) return "";
+        if (!this.isTeamMode() || !this.matchData) return "";
 
-        const ally = this.getMyTeamCombatants().find(c => c.id !== PvpLobbyService.playerId);
+        const allies = this.getMyTeamCombatants().filter(c => c.id !== PvpLobbyService.playerId);
 
-        return ally ? this.renderTeamCard(ally) : "";
+        return allies.map(ally => this.renderTeamCard(ally)).join("");
 
     }
 
     renderEnemyCards() {
 
-        if (this.mode !== "2v2" || !this.matchData) return "";
+        if (!this.isTeamMode() || !this.matchData) return "";
 
         return `
             <div class="pvp2v2-enemy-cards">
@@ -384,7 +479,7 @@ export default class PvpView {
     // estiver true — mesmo espírito do DungeonHeader durante combate PVE.
     renderArenaHeader() {
 
-        if (this.mode === "2v2") {
+        if (this.isTeamMode()) {
             const myTeam = this.getMyTeamCombatants();
             const enemyTeam = this.getEnemyTeamCombatants();
             const myId = PvpLobbyService.playerId;
@@ -393,7 +488,7 @@ export default class PvpView {
             const enemyNames = enemyTeam.map(c => escapeHtml(c.name)).join(" & ");
             return `
                 <section class="pvp2v2-header-inline">
-                    <h2 class="pvp2v2-title">Arena PVP · 2x2</h2>
+                    <h2 class="pvp2v2-title">Arena PVP · ${this.mode === "3v3" ? "3x3" : "2x2"}</h2>
                     <span class="pvp2v2-subtitle"><strong>${myNames}</strong> vs ${enemyNames}</span>
                 </section>
             `;
@@ -414,14 +509,14 @@ export default class PvpView {
     // inimigos aparecem lado a lado num container próprio.
     renderBattleArena() {
 
-        if (this.mode === "2v2") {
+        if (this.isTeamMode()) {
 
             const enemyTeam = this.getEnemyTeamCombatants();
 
             return `
                 <section class="pvp2v2-window">
                     <div class="pvp2v2-arena">
-                        <div class="pvp2v2-portraits">
+                        <div class="pvp2v2-portraits${enemyTeam.length > 2 ? " is-trio" : ""}">
                             ${enemyTeam.map(c => `
                                 <div class="pvp2v2-portrait-slot" data-combatant-id="${escapeHtml(c.id)}">
                                     <img src="${escapeHtml(c.image ?? "")}" alt="${escapeHtml(c.name)}">
@@ -695,7 +790,7 @@ export default class PvpView {
         this.opponentWaiting = false;
         this.candidateCount = 0;
 
-        if (this.mode === "2v2") this.startSearchTimer();
+        if (this.isTeamMode()) this.startSearchTimer();
 
         this.refresh();
 
@@ -707,7 +802,7 @@ export default class PvpView {
             (matchData, matchId) => this.onMatchFound(matchData, matchId),
             (waiting, count) => {
                 this.opponentWaiting = waiting;
-                if (this.mode === "2v2") {
+                if (this.isTeamMode()) {
                     // Só atualiza os textos (sem refazer a tela toda).
                     this.candidateCount = count ?? 0;
                     this.updateSearchInfo();
@@ -728,7 +823,7 @@ export default class PvpView {
 
     async onMatchFound(matchData, matchId) {
 
-        if (this.mode === "2v2") {
+        if (this.isTeamMode()) {
             return this.onTeamMatchFound(matchData, matchId);
         }
 
@@ -770,10 +865,10 @@ export default class PvpView {
 
     }
 
-    // Fluxo do 2x2 (separado do 1x1 de propósito): confere que a partida
-    // é válida e que eu faço parte dela, e a cada etapa assíncrona confere
-    // se o jogador não saiu da tela (abortFlow) — se saiu, para sem
-    // mexer em mais nada.
+    // Fluxo do modo de time (2x2/3x3, separado do 1x1 de propósito):
+    // confere que a partida é válida e que eu faço parte dela, e a cada
+    // etapa assíncrona confere se o jogador não saiu da tela
+    // (abortFlow) — se saiu, para sem mexer em mais nada.
     async onTeamMatchFound(matchData, matchId) {
 
         this.stopSearchTimer();
@@ -781,11 +876,12 @@ export default class PvpView {
         const flow = ++this.flowId;
         const aborted = () => flow !== this.flowId;
         const myId = PvpLobbyService.playerId;
+        const teamSize = this.getTeamSize();
 
         const teamAIds = Object.keys(matchData?.teamA ?? {});
         const teamBIds = Object.keys(matchData?.teamB ?? {});
 
-        if (teamAIds.length !== 2 || teamBIds.length !== 2
+        if (teamAIds.length !== teamSize || teamBIds.length !== teamSize
             || !(teamAIds.includes(myId) || teamBIds.includes(myId))) {
 
             Toast.show("Não foi possível iniciar a partida. Entre na fila de novo.");
@@ -836,7 +932,7 @@ export default class PvpView {
 
         } catch (error) {
 
-            console.error("Erro na partida 2x2:", error);
+            console.error("Erro na partida em equipe:", error);
 
         }
 
@@ -919,7 +1015,8 @@ export default class PvpView {
         if (aborted()) return;
 
         const iWon = result.winner === this.myTeamKey;
-        await CombatToast.show(iWon ? "Sua dupla venceu!" : "Sua dupla foi derrotada!", "system", 2);
+        const teamLabel = this.getTeamSize() === 3 ? "Seu time" : "Sua dupla";
+        await CombatToast.show(iWon ? `${teamLabel} venceu!` : `${teamLabel} foi derrotado!`, "system", 2);
         if (aborted()) return;
 
         if (iWon) {
@@ -1619,6 +1716,17 @@ export default class PvpView {
 
         }
 
+        container.querySelector(".pvp-lobby-enter-button")?.addEventListener("click", () => {
+            this.modeChoiceModal.show({
+                onFree: () => this.enterFreeMode(),
+                onRanked: () => this.enterRankedLocked()
+            });
+        });
+
+        container.querySelector(".pvp-lobby-back-button")?.addEventListener("click", () => {
+            this.backToLobby();
+        });
+
         container.querySelectorAll(".pvp-mode-btn").forEach(button => {
             button.addEventListener("click", () => {
                 if (button.disabled) return;
@@ -1647,7 +1755,7 @@ export default class PvpView {
             // PvpCombatService.simulate) — "a"/"b" já servem de id ali,
             // e isPlayerA diz qual dos dois sou eu. O 2x2 usa o id de
             // verdade (PvpLobbyService.playerId), igual o Cooperativo.
-            const playerId = this.mode === "2v2"
+            const playerId = this.isTeamMode()
                 ? PvpLobbyService.playerId
                 : (this.isPlayerA ? "a" : "b");
 

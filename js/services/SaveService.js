@@ -1148,6 +1148,13 @@ export default class SaveService {
                 title: player.transcendence?.name ?? player.class.name,
                 titleImage: player.transcendence?.image ?? player.class.image,
                 power: PowerService.getPower(player),
+                // Pontos do Combate Ranqueado (ver PvpView.js) — campo
+                // passivo por enquanto: o modo Ranqueado ainda está
+                // travado ("Modo Torneio — em breve"), então esse valor
+                // fica em 0 até ele ser implementado de verdade. Já
+                // publicado aqui pra o ranking do Torneio (ver
+                // TournamentRankingModal.js) funcionar desde já.
+                rankedPoints: player.progress.stats?.pvpRankedPoints ?? 0,
                 ...this.buildProfileSnapshot(player)
             });
 
@@ -1231,6 +1238,33 @@ export default class SaveService {
         } catch (err) {
 
             console.warn("Falha ao carregar o ranking global:", err);
+            return [];
+
+        }
+
+    }
+
+    // Ranking do Torneio (ver TournamentRankingModal.js) — mesma ideia
+    // de getFullLeaderboard, só ordenado por rankedPoints em vez de
+    // power. Enquanto o Combate Ranqueado estiver travado, todo mundo
+    // fica empatado em 0 — a tela mostra normalmente, só vazia de
+    // destaque até alguém pontuar de verdade.
+    static async getFullRankedLeaderboard() {
+
+        try {
+
+            const leaderboardQuery = query(
+                collection(firestore, LEADERBOARD_COLLECTION),
+                orderBy("rankedPoints", "desc")
+            );
+
+            const snapshot = await getDocs(leaderboardQuery);
+
+            return snapshot.docs.map(entry => ({ ...sanitizeRemote(entry.data()), uid: entry.id.split("_")[0] }));
+
+        } catch (err) {
+
+            console.warn("Falha ao carregar o ranking do torneio:", err);
             return [];
 
         }

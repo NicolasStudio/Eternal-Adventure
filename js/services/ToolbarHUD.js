@@ -46,6 +46,9 @@ export default class Toolbar {
                     <button class="hud-tool" id="btn-ranking" data-tooltip="Rankings">
                         <i class="fa-solid fa-ranking-star"></i>
                     </button>
+                    <button class="hud-tool" id="btn-torneio" data-tooltip="Torneio">
+                        <i class="fa-solid fa-trophy"></i>
+                    </button>
                     <button class="hud-tool" id="btn-news" data-tooltip="Atualizações">
                         <i class="fa-solid fa-scroll"></i>
                     </button>
@@ -131,6 +134,10 @@ export default class Toolbar {
 
         toolbar.querySelector("#btn-global")?.addEventListener("click", () => {
             this.game.hudScreen.globalRankingModal.show();
+        });
+
+        toolbar.querySelector("#btn-torneio")?.addEventListener("click", () => {
+            this.game.hudScreen.tournamentRankingModal.show();
         });
 
         toolbar.querySelector("#btn-talents")?.addEventListener("click", () => {

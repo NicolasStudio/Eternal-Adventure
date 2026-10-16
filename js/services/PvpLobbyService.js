@@ -16,21 +16,23 @@ const STALE_CLAIM_TIMEOUT_MS = 8000;
 
 // Matchmaking por Poder (PowerService): só pareia quem estiver a no
 // máximo essa diferença de Poder — ex: com 10k, aceita de 5k a 15k.
-// No 2x2 vale entre TODOS os 4 (maior - menor <= limite).
+// No modo de time (2x2/3x3) vale entre TODOS os jogadores do grupo
+// (maior - menor <= limite).
 export const PVP_POWER_RANGE = 5000;
 
-// 2x2 apenas: quanto mais tempo na fila, mais largo o limite de Poder
-// — sem isso, com poucos jogadores online (precisa de 4 dentro do
-// limite entre si) a fila nunca fechava. Sobe POWER_RANGE_STEP a cada
-// POWER_RANGE_STEP_MS de espera, até POWER_RANGE_MAX — que é atingido
-// com 2 minutos de espera (4 passos de 30s: 5000 → 20000).
+// Modo de time (2x2/3x3) apenas: quanto mais tempo na fila, mais largo
+// o limite de Poder — sem isso, com poucos jogadores online (precisa
+// de vários dentro do limite entre si) a fila nunca fechava. Sobe
+// POWER_RANGE_STEP a cada POWER_RANGE_STEP_MS de espera, até
+// POWER_RANGE_MAX — que é atingido com 2 minutos de espera (4 passos
+// de 30s: 5000 → 20000).
 const POWER_RANGE_STEP_MS = 30 * 1000;
 const POWER_RANGE_STEP = 3750;
 const POWER_RANGE_MAX = 20000;
 
-// De quanto em quanto tempo o 2x2 reavalia a fila sozinho (o limite de
-// Poder cresce com o tempo, então a fila pode passar a fechar mesmo
-// sem ninguém novo entrar ou sair).
+// De quanto em quanto tempo o modo de time reavalia a fila sozinho (o
+// limite de Poder cresce com o tempo, então a fila pode passar a
+// fechar mesmo sem ninguém novo entrar ou sair).
 const RECHECK_INTERVAL_MS = 10 * 1000;
 
 // Entrada sem `power` (cliente desatualizado) nunca é compatível —
@@ -40,20 +42,25 @@ function isPowerCompatible(a, b, range = PVP_POWER_RANGE) {
     return Math.abs(a.power - b.power) <= range;
 }
 
-// Limita a busca de grupos 2x2 (combinações de 3 entre os candidatos)
-// pra não explodir se a fila ficar grande.
+// Limita a busca de grupos do modo de time (combinações entre os
+// candidatos) pra não explodir se a fila ficar grande.
 const MAX_TEAM_CANDIDATES = 30;
+
+// Tamanho do time por modo — usado pra generalizar findTeamCandidates/
+// splitBalancedTeams/tryMatchTeam em vez de hardcoded pro 2x2.
+const TEAM_SIZES = { "2v2": 2, "3v3": 3 };
 
 /*
     Evita "roubar" o mesmo adversário: 1x1 reivindica via transação no
     nó do OUTRO jogador (só vira par se `matchedWith` dele ainda estiver
     vazio — o Firebase garante que só uma transação concorrente vence).
-    2x2 reivindica 3 jogadores da mesma forma, mas só quem tem o menor
-    ID entre os compatíveis tenta formar o grupo, pra não multiplicar o
-    risco de corrida; se uma das 3 reivindicações falhar, desfaz as
-    outras e tenta de novo depois. Só entram candidatos dentro do
-    PVP_POWER_RANGE do meu Poder. Cada modo tem fila própria
-    (pvpLobby/1v1, pvpLobby/2v2), sem cruzar uma com a outra.
+    O modo de time (2x2/3x3) reivindica os demais jogadores do grupo da
+    mesma forma, mas só quem tem o menor ID entre os compatíveis tenta
+    formar o grupo, pra não multiplicar o risco de corrida; se uma das
+    reivindicações falhar, desfaz as outras e tenta de novo depois. Só
+    entram candidatos dentro do PVP_POWER_RANGE do meu Poder. Cada modo
+    tem fila própria (pvpLobby/1v1, pvpLobby/2v2, pvpLobby/3v3), sem
+    cruzar uma com a outra.
 */
 export default class PvpLobbyService {
 
@@ -81,10 +88,21 @@ export default class PvpLobbyService {
         return `pvpMatches/${this.mode}`;
     }
 
-    // Limite de Poder atual (2x2 cresce com a espera; 1x1 é fixo).
+    // 2x2 e 3x3 compartilham todo o fluxo de time (fila com range de
+    // Poder crescente, reivindicação em grupo, divisão balanceada) — só
+    // muda quantos jogadores por lado.
+    static isTeamMode() {
+        return this.mode === "2v2" || this.mode === "3v3";
+    }
+
+    static getTeamSize() {
+        return TEAM_SIZES[this.mode] ?? 1;
+    }
+
+    // Limite de Poder atual (modo de time cresce com a espera; 1x1 é fixo).
     static getPowerRange() {
 
-        if (this.mode !== "2v2") return PVP_POWER_RANGE;
+        if (!this.isTeamMode()) return PVP_POWER_RANGE;
 
         const steps = Math.floor((Date.now() - this.queuedAt) / POWER_RANGE_STEP_MS);
 
@@ -108,7 +126,7 @@ export default class PvpLobbyService {
             // já saiu da fila) nesse meio-tempo, não mexe em nada.
             if (data?.claimedBy && !data?.matchedWith) {
 
-                if (this.mode === "2v2") {
+                if (this.isTeamMode()) {
 
                     // Só apaga se a reivindicação ainda for a MESMA que
                     // foi vista — senão poderia desfazer uma reivindicação
@@ -145,7 +163,7 @@ export default class PvpLobbyService {
 
     }
 
-    // Entra na fila de espera de um MODO específico ("1v1" ou "2v2").
+    // Entra na fila de espera de um MODO específico ("1v1", "2v2" ou "3v3").
     // onMatchFound(matchData) é chamado quando uma partida envolvendo
     // este jogador é criada — seja porque ELE formou ela, seja porque
     // outra pessoa formou e o incluiu.
@@ -197,14 +215,14 @@ export default class PvpLobbyService {
 
             if (data?.matchedWith) {
 
-                // 2x2: o ouvinte pode disparar de novo enquanto a partida
-                // ainda está sendo buscada — sem isso, onMatchFound rodava
-                // duas vezes.
-                if (this.mode === "2v2" && matchHandled) return;
+                // Modo de time: o ouvinte pode disparar de novo enquanto
+                // a partida ainda está sendo buscada — sem isso,
+                // onMatchFound rodava duas vezes.
+                if (this.isTeamMode() && matchHandled) return;
 
                 this.clearStaleClaimTimer();
 
-                if (this.mode === "2v2") matchHandled = true;
+                if (this.isTeamMode()) matchHandled = true;
 
                 const matchSnapshot = await get(ref(db, `${this.matchesPath()}/${data.matchId}`));
                 // Os combatentes foram gravados por outros navegadores —
@@ -216,7 +234,7 @@ export default class PvpLobbyService {
                     this.stopListening();
                     onMatchFound(match, data.matchId);
 
-                } else if (this.mode === "2v2" && this.playerId) {
+                } else if (this.isTeamMode() && this.playerId) {
 
                     // Marcado como pareado mas a partida não existe mais
                     // (já foi apagada): limpa a marca e volta pra fila —
@@ -238,9 +256,9 @@ export default class PvpLobbyService {
                 // quem reivindicou provavelmente caiu da conexão no meio
                 // do processo — libera a reivindicação sozinho pra não
                 // ficar invisível pro resto da sessão.
-                // (2x2: quando a reivindicação é MINHA, montando o grupo,
-                // não há o que liberar por timeout.)
-                if (!(this.mode === "2v2" && data.claimedBy === this.playerId)) {
+                // (Modo de time: quando a reivindicação é MINHA, montando
+                // o grupo, não há o que liberar por timeout.)
+                if (!(this.isTeamMode() && data.claimedBy === this.playerId)) {
                     this.scheduleStaleClaimRelease(`${this.lobbyPath()}/${this.playerId}`);
                 }
 
@@ -252,10 +270,11 @@ export default class PvpLobbyService {
 
         });
 
-        // 2x2: uma queda de conexão, mesmo curta, faz o servidor apagar a
-        // minha entrada (onDisconnect) — ao reconectar a tela continuava
-        // em "Procurando" sem eu existir mais na fila. Recria a entrada.
-        if (this.mode === "2v2") {
+        // Modo de time: uma queda de conexão, mesmo curta, faz o servidor
+        // apagar a minha entrada (onDisconnect) — ao reconectar a tela
+        // continuava em "Procurando" sem eu existir mais na fila. Recria
+        // a entrada.
+        if (this.isTeamMode()) {
 
             const selfId = this.playerId;
 
@@ -275,23 +294,26 @@ export default class PvpLobbyService {
         }
 
         // Escuta a fila inteira: assim que aparecerem candidatos o
-        // bastante (1 pro 1v1, 3 pro 2v2), tenta formar a partida.
+        // bastante (1 pro 1v1, teamSize*2-1 pro modo de time: 3 no 2x2,
+        // 5 no 3x3), tenta formar a partida.
         const lobbyRef = ref(db, this.lobbyPath());
 
         const evaluateLobby = async (all) => {
 
-            const twoVsTwo = this.mode === "2v2";
-            const range = twoVsTwo ? this.getPowerRange() : PVP_POWER_RANGE;
+            const teamMode = this.isTeamMode();
+            const teamSize = this.getTeamSize();
+            const range = teamMode ? this.getPowerRange() : PVP_POWER_RANGE;
 
             const others = Object.entries(all)
                 .filter(([id, entry]) => id !== this.playerId && !entry.matchedWith && !entry.claimedBy)
                 .filter(([, entry]) => isPowerCompatible(combatant, entry, range))
-                // 2x2: só junta quem roda a MESMA versão da simulação
-                // (senão os 4 navegadores calculariam lutas diferentes).
-                .filter(([, entry]) => !twoVsTwo || entry.simVersion === TEAM_SIM_VERSION)
+                // Modo de time: só junta quem roda a MESMA versão da
+                // simulação (senão os navegadores calculariam lutas
+                // diferentes).
+                .filter(([, entry]) => !teamMode || entry.simVersion === TEAM_SIM_VERSION)
                 .sort(([idA], [idB]) => idA < idB ? -1 : 1);
 
-            const requiredOthers = twoVsTwo ? 3 : 1;
+            const requiredOthers = teamMode ? (teamSize * 2 - 1) : 1;
 
             if (others.length < requiredOthers) {
                 onOpponentJoined?.(others.length > 0, others.length);
@@ -305,7 +327,7 @@ export default class PvpLobbyService {
 
             if (selfData?.matchedWith) return;
 
-            if (twoVsTwo) {
+            if (teamMode) {
 
                 // Já reivindicado por outra pessoa (ou por mim mesmo,
                 // montando um grupo): não inicia outro.
@@ -315,14 +337,14 @@ export default class PvpLobbyService {
                 // encontrado — evita que duas pessoas tentem formar o
                 // mesmo time ao mesmo tempo (se ainda assim correrem,
                 // as transações de claim resolvem).
-                const candidateEntries = this.findTeamCandidates(combatant, others, range);
+                const candidateEntries = this.findTeamCandidates(combatant, others, range, teamSize);
 
                 if (!candidateEntries) return;
 
                 const candidateIds = candidateEntries.map(([id]) => id);
                 const candidateData = Object.fromEntries(candidateEntries);
 
-                await this.tryMatchTeam(candidateIds, candidateData, combatant);
+                await this.tryMatchTeam(candidateIds, candidateData, combatant, teamSize);
 
             } else {
 
@@ -348,9 +370,10 @@ export default class PvpLobbyService {
 
         });
 
-        // 2x2: o limite de Poder cresce com o tempo de espera, então
-        // reavalia a fila periodicamente mesmo sem ninguém novo entrar.
-        if (this.mode === "2v2") {
+        // Modo de time: o limite de Poder cresce com o tempo de espera,
+        // então reavalia a fila periodicamente mesmo sem ninguém novo
+        // entrar.
+        if (this.isTeamMode()) {
 
             this.recheckTimer = setInterval(() => {
 
@@ -364,11 +387,16 @@ export default class PvpLobbyService {
 
     }
 
-    // Procura 3 candidatos que, junto comigo, fiquem todos dentro do
-    // limite de Poder entre si, e em que eu seja o menor ID. Entre os
-    // grupos válidos prefere o de menor diferença de Poder. Devolve as
-    // 3 entradas [id, data] ou null.
-    static findTeamCandidates(selfCombatant, others, range = PVP_POWER_RANGE) {
+    // Procura "teamSize*2-1" candidatos (3 no 2x2, 5 no 3x3) que, junto
+    // comigo, fiquem todos dentro do limite de Poder entre si, e em que
+    // eu seja o menor ID. Entre os grupos válidos prefere o de menor
+    // diferença de Poder. Devolve as entradas [id, data] escolhidas ou
+    // null. Generaliza o antigo loop triplo (hardcoded pro 2x2) com uma
+    // busca recursiva de combinações, do mesmo tamanho que o 2x2 tinha
+    // quando teamSize=2 (mesmo resultado, mesma ordem de desempate).
+    static findTeamCandidates(selfCombatant, others, range = PVP_POWER_RANGE, teamSize = 2) {
+
+        const otherCount = teamSize * 2 - 1;
 
         const pool = others
             .filter(([id]) => id > this.playerId)
@@ -377,46 +405,83 @@ export default class PvpLobbyService {
         let best = null;
         let bestSpread = Infinity;
 
-        for (let i = 0; i < pool.length; i++) {
-            for (let j = i + 1; j < pool.length; j++) {
-                for (let k = j + 1; k < pool.length; k++) {
+        const combine = (start, picked) => {
 
-                    const group = [pool[i], pool[j], pool[k]];
-                    const powers = [selfCombatant.power, ...group.map(([, data]) => data.power)];
-                    const spread = Math.max(...powers) - Math.min(...powers);
+            if (picked.length === otherCount) {
 
-                    if (spread <= range && spread < bestSpread) {
-                        best = group;
-                        bestSpread = spread;
-                    }
+                const powers = [selfCombatant.power, ...picked.map(([, data]) => data.power)];
+                const spread = Math.max(...powers) - Math.min(...powers);
 
+                if (spread <= range && spread < bestSpread) {
+                    best = [...picked];
+                    bestSpread = spread;
                 }
+
+                return;
+
             }
-        }
+
+            // Poda: não sobra candidato suficiente pra completar o grupo.
+            if (pool.length - start < otherCount - picked.length) return;
+
+            for (let i = start; i < pool.length; i++) {
+                picked.push(pool[i]);
+                combine(i + 1, picked);
+                picked.pop();
+            }
+
+        };
+
+        combine(0, []);
 
         return best;
 
     }
 
-    // Das 3 formas de dividir 4 jogadores em 2 duplas, escolhe a de
-    // menor diferença de Poder somado entre os times.
-    static splitBalancedTeams(combatants) {
+    // Dentre todas as formas de dividir "teamSize*2" jogadores em 2
+    // times de "teamSize", escolhe a de menor diferença de Poder somado
+    // entre os lados. Generaliza a antiga versão (só 2x2, "escolhe 1
+    // parceiro pro primeiro jogador") — pra teamSize=2 dá exatamente o
+    // mesmo resultado (mesma ordem de desempate).
+    static splitBalancedTeams(combatants, teamSize = 2) {
 
         const [first, ...rest] = combatants;
         const total = team => team.reduce((sum, c) => sum + (c.power ?? 0), 0);
+        const partnersNeeded = teamSize - 1;
 
         let bestSplit = null;
         let bestDiff = Infinity;
 
-        rest.forEach((partner, index) => {
-            const teamA = [first, partner];
-            const teamB = rest.filter((_, i) => i !== index);
-            const diff = Math.abs(total(teamA) - total(teamB));
-            if (diff < bestDiff) {
-                bestDiff = diff;
-                bestSplit = { teamA, teamB };
+        // "first" sempre fica no time A — escolhe quem mais acompanha
+        // ele dentre o resto; o restante vira o time B.
+        const combine = (start, picked) => {
+
+            if (picked.length === partnersNeeded) {
+
+                const teamA = [first, ...picked];
+                const teamB = rest.filter(c => !picked.includes(c));
+                const diff = Math.abs(total(teamA) - total(teamB));
+
+                if (diff < bestDiff) {
+                    bestDiff = diff;
+                    bestSplit = { teamA, teamB };
+                }
+
+                return;
+
             }
-        });
+
+            if (rest.length - start < partnersNeeded - picked.length) return;
+
+            for (let i = start; i < rest.length; i++) {
+                picked.push(rest[i]);
+                combine(i + 1, picked);
+                picked.pop();
+            }
+
+        };
+
+        combine(0, []);
 
         return bestSplit;
 
@@ -499,13 +564,13 @@ export default class PvpLobbyService {
 
     }
 
-    // Versão 2x2: reivindica A MIM MESMO e os 3 candidatos, um de cada
-    // vez. Reivindicar a si mesmo impede que eu entre em duas partidas
-    // (ser reivindicado por outra pessoa E montar o meu próprio grupo).
-    // Se qualquer passo falhar no meio, libera tudo que já tinha sido
-    // reivindicado e desiste — quem ainda estiver esperando tenta de
-    // novo no próximo evento da fila.
-    static async tryMatchTeam(candidateIds, candidateData, selfCombatant) {
+    // Modo de time: reivindica A MIM MESMO e os demais candidatos (2 no
+    // 2x2, 4 no 3x3), um de cada vez. Reivindicar a si mesmo impede que
+    // eu entre em duas partidas (ser reivindicado por outra pessoa E
+    // montar o meu próprio grupo). Se qualquer passo falhar no meio,
+    // libera tudo que já tinha sido reivindicado e desiste — quem ainda
+    // estiver esperando tenta de novo no próximo evento da fila.
+    static async tryMatchTeam(candidateIds, candidateData, selfCombatant, teamSize = 2) {
 
         if (this.forming) return;
 
@@ -539,7 +604,7 @@ export default class PvpLobbyService {
 
             }
 
-            // Confere, ANTES de gravar, que os 4 continuam na fila e
+            // Confere, ANTES de gravar, que todos continuam na fila e
             // reivindicados por mim — a gravação final não é condicional e
             // recriaria como "fantasma" a entrada de quem saiu nesse meio
             // tempo, montando uma partida com alguém que não existe mais.
@@ -566,12 +631,12 @@ export default class PvpLobbyService {
                 ...candidateIds.map(id => ({ ...candidateData[id], id }))
             ];
 
-            const split = this.splitBalancedTeams(allCombatants);
+            const split = this.splitBalancedTeams(allCombatants, teamSize);
             const toTeamObject = team => Object.fromEntries(team.map(c => [c.id, c]));
 
-            // Cria a partida E marca os 4 jogadores como pareados num
-            // commit atômico só (update multi-caminho: 1 + 4×2 = 9
-            // caminhos) — ou tudo é gravado, ou nada.
+            // Cria a partida E marca todos os jogadores como pareados num
+            // commit atômico só (update multi-caminho) — ou tudo é
+            // gravado, ou nada.
             const updates = {
                 [`${matchesPath}/${matchId}`]: {
                     teamA: toTeamObject(split.teamA),
@@ -593,7 +658,7 @@ export default class PvpLobbyService {
 
         } catch (error) {
 
-            console.warn("Falha ao montar a partida 2x2:", error);
+            console.warn("Falha ao montar a partida em equipe:", error);
 
         } finally {
 

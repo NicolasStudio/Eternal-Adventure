@@ -25,7 +25,7 @@ const IMAGE_KEYS = new Set(["image", "hud", "icon", "titleImage"]);
 
 // Campos que as telas e a simulação tratam como número.
 const NUMBER_KEYS = new Set([
-    "level", "power", "simVersion", "seat", "joinedAt", "createdAt", "sentAt",
+    "level", "power", "rankedPoints", "simVersion", "seat", "joinedAt", "createdAt", "sentAt",
     "seed", "floor", "waitFloor", "count", "proceedShort",
     "maxHP", "currentHP", "attack", "armor", "agility",
     "criticalChance", "lifeSteal", "penetration", "absorption",

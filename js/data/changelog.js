@@ -1,6 +1,21 @@
 export default [
 
     {
+        version: "Beta 0.2.6 — Lobby e Torneio",
+        date: "Outubro de 2026",
+        changes: [
+            "PVP redesenhado: agora abre num lobby — clique em 'Entrar' pra escolher entre Combate Livre e Combate Ranqueado, em vez de cair direto na escolha de modo",
+            "Combate Livre ganhou o modo 3x3 (trios), além do 1x1 e 2x2 de sempre — mesma regra de até 5.000 de diferença de Poder entre os pareados e arena sorteada entre os chefes do jogo",
+            "Novo Combate Ranqueado: leva pro Modo Torneio, que por enquanto mostra um aviso de 'em breve' — quando estiver pronto, terá 1x1/2x2/3x3 próprios, pareamento mais restrito (até 2.500 de diferença de Poder), arena sempre fixa e pontos de ranking na vitória (1 no 1x1, 2 no 2x2, 3 no 3x3)",
+            "Novo ícone de Torneio na barra de ferramentas, ao lado do Ranking Global: lista os jogadores pelos pontos do Combate Ranqueado, com 1º/2º/3º lugar destacados em ouro, prata e bronze. Começa vazio até o Combate Ranqueado ser destravado",
+            "Corrigido o fundo do Combate Livre: antes trocava pra tela de arena genérica assim que você escolhia o modo; agora continua mostrando o lobby até o combate em si começar",
+            "Corrigidos ícones quebrados que não apareciam: os de 'escolher combate' no PVP (trocados por um punho) e o do Arqueiro na Wiki (trocado por um alvo) — eram ícones que só existem na versão paga do Font Awesome",
+            "Corrigido os botões de Dungeons, PVP e Cooperativo continuando com aparência de travados depois de curar na Enfermaria e passar dos 5% de vida — antes só destravavam ao trocar de menu na mão",
+            "Corrigido Anel e Amuleto não aparecendo pra comprar na loja — novas abas Anéis e Amuletos, liberadas pelos mesmos critérios dos outros equipamentos (vencer a dungeon que os dropa)"
+        ]
+    },
+
+    {
         version: "Beta 0.2.5 — Regras de Item",
         date: "Outubro de 2026",
         changes: [

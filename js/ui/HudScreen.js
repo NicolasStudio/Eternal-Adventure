@@ -32,6 +32,7 @@ import AlbumModal from "./components/modals/AlbumModal.js";
 import LoadGameModal from "./components/modals/LoadGameModal.js";
 import RankingModal from "./components/modals/RankingModal.js";
 import GlobalRankingModal from "./components/modals/GlobalRankingModal.js";
+import TournamentRankingModal from "./components/modals/TournamentRankingModal.js";
 import TalentTreeModal from "./components/modals/TalentTreeModal.js";
 import SettingsModal from "./components/modals/SettingsModal.js";
 import MusicService from "../services/MusicService.js";
@@ -73,6 +74,7 @@ export default class HudScreen {
         this.loadGameModal = new LoadGameModal(game);
         this.rankingModal = new RankingModal(game);
         this.globalRankingModal = new GlobalRankingModal(game);
+        this.tournamentRankingModal = new TournamentRankingModal(game);
         this.talentTreeModal = new TalentTreeModal(game);
         this.settingsModal = new SettingsModal(game, { inGame: true });
         this.currentView = "";
@@ -115,13 +117,13 @@ export default class HudScreen {
 
     renderHeader() {
         const anyCombat = this.inCombat || this.inPvpCombat || this.inRaidCombat;
-        const isPvp2v2 = this.inPvpCombat && this.pvpView.mode === "2v2";
+        const isPvp2v2 = this.inPvpCombat && this.pvpView.isTeamMode();
         const headerModeClass = isPvp2v2 ? "pvp2v2" : (anyCombat ? "combat" : "exploration");
         return `
             <header class="hud-header ${headerModeClass}">
                 <div class="hud-left-column">
                     ${!this.inRaidCombat ? this.playerHUD.render() : ""}
-                    ${isPvp2v2 ? this.pvpView.renderAllyCard() : ""}
+                    ${isPvp2v2 ? this.pvpView.renderAllyCards() : ""}
                     <div class="hud-tool-row">
                         ${this.chatHUD.renderButton()}
                         ${this.currentView === "" && !anyCombat ? this.mailModal.renderButton() : ""}
@@ -142,7 +144,7 @@ export default class HudScreen {
         // MonsterHUD), aqui ela simplesmente some.
         if (this.currentView === "farm") return "";
         if (this.inCombat) return this.monsterHUD.render(this.combatView.currentMonster);
-        if (this.inPvpCombat && this.pvpView.mode !== "2v2") return this.monsterHUD.render(this.pvpView.opponentAsMonster());
+        if (this.inPvpCombat && !this.pvpView.isTeamMode()) return this.monsterHUD.render(this.pvpView.opponentAsMonster());
         if (this.inPvpCombat) return this.pvpView.renderEnemyCards();
         if (this.inRaidCombat) return "";
         return this.toolbarHUD.render();
@@ -161,7 +163,29 @@ export default class HudScreen {
         if (this.currentView === "character") {
             this.refreshCurrentView();
         }
+        // A barra de navegação (Dungeons/PVP/Cooperativo travados por
+        // vida baixa, Fazenda/Cooperativo travados por nível) só é
+        // desenhada de novo num render() completo — sem isso, curar na
+        // Enfermaria e passar de 5% de vida deixava o botão de Dungeons
+        // com a aparência de travado até o jogador trocar de tela na
+        // mão (qualquer troca já dispara um render() completo sozinha).
+        this.updateNavigation();
         this.checkAchievements();
+    }
+
+    // Redesenha só a <nav> (sem refazer a tela inteira) e religa os
+    // cliques — outerHTML troca os elementos antigos por novos, que
+    // nascem sem os listeners de bindNavigationEvents().
+    updateNavigation() {
+
+        const nav = this.element.querySelector(".hud-navigation");
+
+        if (!nav) return;
+
+        nav.outerHTML = this.renderNavigation();
+
+        this.bindNavigationEvents();
+
     }
 
     // updateHUD() já roda depois de TODA mutação relevante do player
@@ -292,26 +316,27 @@ export default class HudScreen {
         `;
     }
 
-    registerEvents() {
+    // Blindagem: se por algum motivo uma tooltip flutuante ficou
+    // "presa" na tela (não recebeu o mouseleave corretamente), encostar
+    // na barra de navegação/ferramentas já força ela a fechar, antes
+    // mesmo do clique.
+    closeStaleTooltip() {
+        document.getElementById("item-tooltip")?.remove();
+    }
 
-        // Blindagem: se por algum motivo uma tooltip flutuante ficou
-        // "presa" na tela (não recebeu o mouseleave corretamente),
-        // encostar na barra de navegação/ferramentas já força ela a
-        // fechar, antes mesmo do clique.
-        const forceCloseStaleTooltip = () => {
-            document.getElementById("item-tooltip")?.remove();
-        };
-        this.element.querySelector(".hud-navigation")?.addEventListener("mouseenter", forceCloseStaleTooltip);
-        this.element.querySelector(".hud-toolbar")?.addEventListener("mouseenter", forceCloseStaleTooltip);
+    // Liga os cliques (e o fechamento de tooltip presa) da <nav> —
+    // separado de registerEvents() pra poder religar depois de
+    // updateNavigation() trocar a <nav> inteira por uma nova (outerHTML
+    // destrói os listeners antigos junto com os elementos antigos).
+    bindNavigationEvents() {
 
-        this.element.querySelector("#btn-conquistas")?.addEventListener("click", () => {
-            this.achievementModal.show();
-        });
+        const nav = this.element.querySelector(".hud-navigation");
 
-        this.element.querySelector("#btn-album")?.addEventListener("click", () => {
-            this.albumModal.show();
-        });
-        this.element.querySelectorAll(".nav-item").forEach(button => {
+        if (!nav) return;
+
+        nav.addEventListener("mouseenter", () => this.closeStaleTooltip());
+
+        nav.querySelectorAll(".nav-item").forEach(button => {
             button.addEventListener("click", () => {
                 // Cada botão já sabe se está desabilitado (calculado em
                 // renderNavigation, é a mesma fonte usada pro visual) —
@@ -336,6 +361,23 @@ export default class HudScreen {
                 this.changeView(this.currentView === view ? "" : view);
             });
         });
+
+    }
+
+    registerEvents() {
+
+        this.element.querySelector(".hud-toolbar")?.addEventListener("mouseenter", () => this.closeStaleTooltip());
+
+        this.element.querySelector("#btn-conquistas")?.addEventListener("click", () => {
+            this.achievementModal.show();
+        });
+
+        this.element.querySelector("#btn-album")?.addEventListener("click", () => {
+            this.albumModal.show();
+        });
+
+        this.bindNavigationEvents();
+
     }
 
     changeView(view) {
@@ -359,17 +401,18 @@ export default class HudScreen {
         }
 
         // Sair da tela de PVP por qualquer caminho (X, menu de
-        // navegação) sempre volta pra pergunta de modo na próxima vez
-        // que abrir — e sai da fila de espera do Firebase se estava
-        // procurando partida, pra não deixar "fantasma" pra trás.
+        // navegação) sempre volta pro lobby na próxima vez que abrir —
+        // e sai da fila de espera do Firebase se estava procurando
+        // partida, pra não deixar "fantasma" pra trás.
         if (this.currentView === "pvp" && view !== "pvp") {
-            // 2x2: interrompe a cerimônia/luta em andamento (senão ela
-            // continuava rodando "por baixo" e travava o jogador).
+            // Modo de time (2x2/3x3): interrompe a cerimônia/luta em
+            // andamento (senão ela continuava rodando "por baixo" e
+            // travava o jogador).
             this.pvpView.abortFlow();
             if (this.pvpView.state === "searching") {
                 PvpLobbyService.leaveQueue();
             }
-            this.pvpView.state = "mode";
+            this.pvpView.state = "lobby";
             this.pvpView.mode = null;
             this.pvpView.matchData = null;
             this.pvpView.combatResult = null;
@@ -379,10 +422,14 @@ export default class HudScreen {
             this.setBackground("assets/img/backgrounds/tela_inicial.png");
         }
 
-        // Entrar na tela do PVP troca o fundo pra arena_pvp.png — sai
-        // dela (bloco acima) já restaura o tela_inicial.png.
+        // Entrar na tela do PVP troca o fundo pro lobby (lobby_pvp.png)
+        // — primeira tela do novo fluxo, com o modal de Combate Livre/
+        // Ranqueado. Combate Livre MANTÉM esse fundo até o combate em si
+        // começar; só o Ranqueado troca pro arena_pvp.png por conta
+        // própria (ver PvpView.enterFreeMode/enterRankedLocked). Sair da
+        // tela de PVP (bloco acima) já restaura o tela_inicial.png.
         if (this.currentView !== "pvp" && view === "pvp") {
-            this.setBackground("assets/img/backgrounds/arena_pvp.png");
+            this.setBackground("assets/img/backgrounds/lobby_pvp.png");
         }
 
         // Mesma lógica do bloco de PVP acima, só que pro Cooperativo

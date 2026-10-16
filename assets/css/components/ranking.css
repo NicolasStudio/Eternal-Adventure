@@ -168,6 +168,37 @@
     color:#8b3a3a;
 }
 
+/* ==========================================================
+   MODAL - RANKING DO TORNEIO (pontos do Combate Ranqueado)
+   Mesma linha/colunas do ranking normal (Nome/Nível/Classe/Pontos) —
+   só o 1º/2º/3º lugar ganham um destaque de ouro/prata/bronze na
+   linha inteira.
+========================================================== */
+.tournament-rank-gold{
+    background:linear-gradient(90deg,rgba(255,215,0,.16),transparent);
+    border-bottom-color:rgba(255,215,0,.35);
+}
+.tournament-rank-gold .ranking-position{
+    color:#ffd700;
+    text-shadow:0 0 8px rgba(255,215,0,.5);
+}
+.tournament-rank-silver{
+    background:linear-gradient(90deg,rgba(201,201,201,.14),transparent);
+    border-bottom-color:rgba(201,201,201,.3);
+}
+.tournament-rank-silver .ranking-position{
+    color:#c9c9c9;
+    text-shadow:0 0 8px rgba(201,201,201,.45);
+}
+.tournament-rank-bronze{
+    background:linear-gradient(90deg,rgba(205,127,50,.16),transparent);
+    border-bottom-color:rgba(205,127,50,.3);
+}
+.tournament-rank-bronze .ranking-position{
+    color:#cd7f32;
+    text-shadow:0 0 8px rgba(205,127,50,.45);
+}
+
 .profile-empty{
     grid-column:1 / -1;
     margin:0;
