@@ -48,8 +48,13 @@ export default class DungeonCard {
         if (!drops.length) {
             return `<span class="drops-empty">Nenhum drop</span>`;
         }
+        // Teto de 4 ícones por card — dungeon com anel/amuleto de duas
+        // variantes (Primal+Moderno) facilmente passa disso e lotava o
+        // card. Só limita o PREVIEW visual; o drop de verdade (LootSystem)
+        // continua considerando tudo, sem recorte nenhum.
         return drops
             .filter(item => item && item.icon)
+            .slice(0, 4)
             .map(item => `
                 <div class="dungeon-drop" data-item='${JSON.stringify(item).replace(/'/g, "&apos;")}'>
                     <img src="${item.icon}" alt="${item.name}" loading="lazy">

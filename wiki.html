@@ -56,8 +56,8 @@
                     <i class="fa-solid fa-fire-flame-curved"></i> Poder
                 </a>
 
-                <a href="#ferraria" class="wiki-nav-item" data-keywords="ferraria melhoria arma equipamento encantamento encantar pedras">
-                    <i class="fa-solid fa-hammer"></i> Ferraria
+                <a href="#ferraria" class="wiki-nav-item" data-keywords="ferraria equipamentos melhoria arma equipamento encantamento encantar pedras fusão fusao fundir sorte nível de fusão proteção de sorte crânio">
+                    <i class="fa-solid fa-hammer"></i> Equipamentos
                 </a>
 
                 <a href="#mercado" class="wiki-nav-item" data-keywords="mercado comprar vender venda loja quantidade qtd máx max poção poções semente sementes">
@@ -270,14 +270,14 @@
                     <div class="wiki-table-row"><span><i class="fa-solid fa-shirt"></i> Peitoral</span><span>A peça de armadura mais robusta do conjunto.</span></div>
                     <div class="wiki-table-row"><span><i class="fa-solid fa-socks"></i> Calça</span><span>Mais um pedaço de armadura, com sua própria progressão de raridade.</span></div>
                     <div class="wiki-table-row"><span><i class="fa-solid fa-shoe-prints"></i> Botas</span><span>Fecham o conjunto de armadura, e costumam contribuir também com Agilidade.</span></div>
-                    <div class="wiki-table-row"><span><i class="fa-solid fa-ring"></i> Anel</span><span>"Anel do Primeiro Imperador" — soma Vida e Armadura. Usável por qualquer classe, sem restrição.</span></div>
-                    <div class="wiki-table-row"><span><i class="fa-solid fa-gem"></i> Amuleto</span><span>"Amuleto Primal" — soma Ataque e Agilidade. Também usável por qualquer classe.</span></div>
+                    <div class="wiki-table-row"><span><i class="fa-solid fa-ring"></i> Anel</span><span>Existem 3 variantes, sorteadas aleatoriamente no drop: "Anel Primal" (Ataque e Agilidade), "Anel do Primeiro Imperador" (Vida e Armadura) e "Anel do Crânio" (Ataque, Armadura e <a href="#poder">Sorte</a>). Usável por qualquer classe, sem restrição.</span></div>
+                    <div class="wiki-table-row"><span><i class="fa-solid fa-gem"></i> Amuleto</span><span>Mesma lógica do Anel, com 3 variantes: "Amuleto Primal" (Ataque e Agilidade), "Amuleto Moderno" (Vida e Armadura) e "Amuleto do Crânio" (Ataque, Armadura e Sorte). Também usável por qualquer classe.</span></div>
                     <div class="wiki-table-row"><span><i class="fa-solid fa-flask"></i> Poções</span><span>Consumíveis que recuperam vida na hora. Você pode usar uma de cada vez, ou usar o botão de "Curar Vida Completa" pra gastar automaticamente quantas forem necessárias e ficar com a vida cheia numa tacada só.</span></div>
                 </div>
 
                 <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: Anel e Amuleto não dropam de monstros comuns — só de pontos fixos específicos em algumas dungeons e chefes, com 5% de chance cada, em raridades de Comum a Místico.</p>
 
-                <p>Equipar um item, melhorar ele na Ferraria ou encantar uma arma marca esse item como <strong>USADO</strong> no tooltip; um item que você ainda não tocou aparece como <strong>NÃO USADO</strong>. Por enquanto essa marca é só informativa, mas já prepara o terreno pra quando a transferência de itens entre contas existir.</p>
+                <p>Equipar um item, melhorar ele em <a href="#ferraria">Equipamentos</a> ou encantar uma arma marca esse item como <strong>USADO</strong> no tooltip; um item que você ainda não tocou aparece como <strong>NÃO USADO</strong>. Por enquanto essa marca é só informativa, mas já prepara o terreno pra quando a transferência de itens entre contas existir.</p>
 
                 <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: o tooltip de uma arma só mostra a seção "Efeito" quando ela tem encantamento de verdade — sem encantamento, a seção simplesmente não aparece.</p>
 
@@ -304,7 +304,7 @@
             <section id="qualidade" class="wiki-section">
 
                 <h2><i class="fa-solid fa-star"></i> Qualidade</h2>
-                <p class="wiki-intro">Diferente da raridade, a Qualidade você controla: é o quanto você já melhorou aquele item específico na Ferraria. Todo item começa em <strong>Nenhuma</strong> (sem melhoria nenhuma) e pode subir três estágios, gastando ouro em cada um — itens de raridade <strong>Lendária</strong> ganham um quarto estágio exclusivo.</p>
+                <p class="wiki-intro">Diferente da raridade, a Qualidade você controla: é o quanto você já melhorou aquele item específico em <a href="#ferraria">Equipamentos</a>. Todo item começa em <strong>Nenhuma</strong> (sem melhoria nenhuma) e pode subir três estágios, gastando ouro em cada um — itens de raridade <strong>Lendária</strong> ganham um quarto estágio exclusivo.</p>
 
                 <div class="wiki-steps">
                     <div class="wiki-step"><span class="wiki-step-num">1</span><div><h4>Ordinário</h4><p>O primeiro upgrade. Um reforço já perceptível nos atributos principais do item.</p></div></div>
@@ -323,6 +323,8 @@
                 <p class="wiki-intro">O Poder é um número único que resume a força do seu personagem. Ele aparece no Status, logo abaixo dos atributos especiais (Chance Crítica, Roubo de Vida, Penetração e Absorção). É só um indicador: <strong>não altera o dano nem nenhum cálculo de combate</strong>.</p>
 
                 <p>Só os atributos primários entram na conta — <strong>Ataque</strong>, <strong>Armadura</strong> e <strong>Agilidade</strong> — somados de quatro fontes:</p>
+
+                <p><strong>Sorte</strong> é um atributo novo, na mesma fileira principal de Ataque/Armadura/Agilidade. Só vem de equipamento (os itens "do Crânio", veja a seção <a href="#itens">Itens</a>) ou de talento — ninguém tem curva de Sorte por nível, todo mundo começa em 0. Tem dois efeitos: aumenta a chance de sucesso da <a href="#ferraria">Fusão</a>, e converte direto em % extra no atributo especial da SUA classe (Crítico pro Arqueiro, Roubo de Vida pro Bárbaro, Penetração pro Mago, e assim por diante) — <strong>0,5% a cada 50 pontos de Sorte</strong>, sem teto algum (soma por cima mesmo com equipamento já no teto de raridade). Assim como Chance Crítica, Roubo de Vida, Penetração e Absorção, Sorte <strong>não entra no cálculo de Poder</strong>.</p>
 
                 <div class="wiki-table">
                     <div class="wiki-table-row"><span><i class="fa-solid fa-user-shield"></i> Atributos base</span><span>Os atributos do seu personagem (os de nível 1 mais os bônus de cada level up), multiplicados por 10.</span></div>
@@ -348,17 +350,11 @@
 
             <section id="ferraria" class="wiki-section">
 
-                <h2><i class="fa-solid fa-hammer"></i> Ferraria</h2>
-                <p class="wiki-intro">Fica na Cidade. É onde você investe seu ouro pra deixar seu equipamento mais forte.</p>
+                <h2><i class="fa-solid fa-hammer"></i> Equipamentos</h2>
+                <p class="wiki-intro">Fica na Cidade (o card que antes se chamava Ferraria). É onde você investe seu ouro pra deixar seu equipamento mais forte, com três opções: Melhorar Equipamentos, Encantar e Fundir.</p>
 
-                <h3>Melhoria de Arma</h3>
-                <p>Selecione a arma que você tem equipada (ou no inventário) e pague o custo pra subir a Qualidade dela em um estágio. Cada melhoria é permanente.</p>
-
-                <h3>Melhoria de Equipamento</h3>
-                <p>Mesma lógica da arma, só que pra Cabeça, Peitoral, Calça e Botas — cada peça de armadura melhora de forma independente.</p>
-
-                <h3>Acessórios</h3>
-                <p>Aba própria pra melhorar Anel e Amuleto — os dois aparecem juntos aqui, já que dividem a mesma aba no inventário. Seguem a mesma regra de Qualidade de qualquer outro item, incluindo o estágio extra Lendário pras peças de raridade Lendária.</p>
+                <h3>Melhorar Equipamentos</h3>
+                <p>Uma tela só, com abas pra <strong>Arma, Elmo, Peitoral, Perna, Bota e Acessórios</strong> (Anel e Amuleto juntos, já que dividem a mesma aba no inventário). Selecione o item equipado (ou no inventário) e pague o custo pra subir a Qualidade dele em um estágio — cada peça melhora de forma independente, e cada melhoria é permanente. Segue a mesma regra de Qualidade de qualquer item, incluindo o estágio extra Lendário pras peças de raridade Lendária.</p>
 
                 <h3>Encantamento</h3>
                 <p>Liberado a partir do nível 50. Aqui você usa Pedras de Encantamento (que caem de monstros específicos) pra dar um bônus <strong>permanente</strong> no seu personagem através de uma arma.</p>
@@ -372,6 +368,31 @@
                 <p>Existem diferentes tipos de pedra, cada uma ligada a um atributo diferente do seu personagem — e cada arma pode acumular um encantamento de <em>cada tipo</em> ao mesmo tempo, só não pode repetir o mesmo tipo duas vezes sem ser um upgrade de verdade.</p>
 
                 <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: clicar numa pedra dentro do seu inventário já te leva direto pra essa tela.</p>
+
+                <h3><i class="fa-solid fa-dna"></i> Fusão</h3>
+                <p>Combine <strong>4 equipamentos</strong> da mesma categoria (Arma, Elmo, Peitoral, Perna, Bota, Anel ou Amuleto), mesma raridade e mesmo nível de fusão, pra tentar criar uma versão aprimorada de um deles: +1, +2, +3... No caso de Anel/Amuleto, os 4 também precisam ser exatamente a mesma peça (ex: 4x Anel Primal) — não dá pra misturar Primal, Moderno e Crânio na mesma fusão, já que cada um soma atributos diferentes. O item que vira a base do resultado é sempre o <strong>melhor dos 4</strong> (maior Qualidade; empate é desempatado pelo maior valor de encantamento) — os outros 3 são consumidos no processo, sucesso ou falha.</p>
+                <p>Cada nível de fusão soma <strong>+5 em TODO atributo não-especial</strong> do equipamento — uma arma só tem Ataque, então ganha só nele; uma peça de armadura com Armadura e Agilidade ganha nos dois; um Anel/Amuleto do Crânio ganha em Ataque, Armadura E Sorte ao mesmo tempo. Atributos especiais de classe (Crítico, Roubo de Vida, Penetração, Absorção, Miasma, etc) nunca recebem esse bônus. Cada um aparece separado do valor base no tooltip (ex: "+33&nbsp;&nbsp;+5"), com uma borda azul no ícone indicando que o item foi fundido.</p>
+                <p>É a primeira mecânica do jogo com <strong>risco real de falha</strong>. A chance de sucesso cai conforme o nível de fusão atual dos 4 itens sobe, e pode ser aumentada pelo atributo <strong>Sorte</strong> (veja a seção <a href="#poder">Poder</a>):</p>
+
+                <div class="wiki-table">
+                    <div class="wiki-table-row"><span>+0 → +1</span><span>70%</span></div>
+                    <div class="wiki-table-row"><span>+1 → +2</span><span>55%</span></div>
+                    <div class="wiki-table-row"><span>+2 → +3</span><span>40%</span></div>
+                    <div class="wiki-table-row"><span>+3 → +4</span><span>30%</span></div>
+                    <div class="wiki-table-row"><span>+4 → +5</span><span>15%</span></div>
+                </div>
+
+                <p><strong>O ouro gasto é perdido mesmo se a fusão falhar.</strong> Sem nada no 5º slot (veja abaixo), falhar também consome os 4 equipamentos selecionados. O custo depende só da raridade dos itens, não do nível de fusão:</p>
+
+                <div class="wiki-table">
+                    <div class="wiki-table-row"><span style="color:#ffffff;">Comum</span><span>30 mil</span></div>
+                    <div class="wiki-table-row"><span style="color:#69d823;">Incomum</span><span>60 mil</span></div>
+                    <div class="wiki-table-row"><span style="color:#0050fc;">Raro</span><span>90 mil</span></div>
+                    <div class="wiki-table-row"><span style="color:#a950f7;">Místico</span><span>120 mil</span></div>
+                    <div class="wiki-table-row"><span style="color:#ff711f;">Lendário</span><span>150 mil</span></div>
+                </div>
+
+                <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: a tela de Fusão tem um 5º slot, separado da grade dos 4 equipamentos, pro item <strong>Proteção de Sorte</strong> (vendido no Mercado a partir do nível 10, por 30 mil de ouro). Colocando ele nesse slot, uma falha destrói só a Proteção — os 4 equipamentos continuam intactos e elegíveis pra tentar de novo (o ouro gasto na tentativa ainda é perdido do mesmo jeito).</p>
 
             </section>
 
@@ -516,7 +537,7 @@
 
                 <p>Cada dungeon tem um nível mínimo pra ser liberada, e pra chegar nesse nível você precisa upar. Como upar exige lutar, e as dungeons anteriores ficam mais fracas conforme você cresce, é bem comum (e válido!) voltar numa dungeon já conhecida só pra enfrentar um monstro específico repetidas vezes até bater o nível necessário pra seguir em frente, em vez de tentar forçar a passagem numa dungeon que ainda está difícil demais.</p>
 
-                <p>Alguns inimigos — principalmente os finais de cada dungeon e os chefes — são propositalmente duros. Se você está apanhando demais numa dungeon específica, o problema quase sempre não é "sorte", é equipamento: vale a pena voltar pra Ferraria e melhorar a Qualidade do que você já tem antes de insistir. Dependendo da classe que você escolheu, uma dungeon pode simplesmente não estar no seu alcance ainda — e tudo bem, ela vai estar, mais pra frente.</p>
+                <p>Alguns inimigos — principalmente os finais de cada dungeon e os chefes — são propositalmente duros. Se você está apanhando demais numa dungeon específica, o problema quase sempre não é "sorte", é equipamento: vale a pena voltar pra <a href="#ferraria">Equipamentos</a> e melhorar a Qualidade do que você já tem antes de insistir. Dependendo da classe que você escolheu, uma dungeon pode simplesmente não estar no seu alcance ainda — e tudo bem, ela vai estar, mais pra frente.</p>
 
                 <p>Depois de vencer uma luta, o botão <strong>Informações do Combate</strong> mostra um resumo dela: dano causado, recebido, mitigado pela armadura, real (ignorando a armadura do alvo), absorvido e vida roubada; quantidade de esquivas, absorções, críticos e outros efeitos da sua classe; e quanto seu pet causou ou curou. A aba <strong>Gráfico</strong> deixa acompanhar qualquer um desses números rodada a rodada, escolhendo um de cada vez numa lista colorida. O mesmo botão aparece em PVP e Cooperativo.</p>
 

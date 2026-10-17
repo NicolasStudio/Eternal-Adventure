@@ -14,6 +14,7 @@ import pets from "../data/pet.js";
 import farmCrops from "../data/farmCrops.js";
 import Toast from "../ui/components/Toast.js";
 import AuthService from "./AuthService.js";
+import PresenceService from "./PresenceService.js";
 import PowerService from "./PowerService.js";
 import TalentService from "./TalentService.js";
 import { PET_MAX_LEVEL } from "../data/levelsPet.js";
@@ -890,7 +891,7 @@ export default class SaveService {
 
         if (!ranked) return null;
 
-        return { uid: ranked.uid, name: ranked.name, level: ranked.level ?? null };
+        return { uid: ranked.uid, slot: ranked.slot ?? null, name: ranked.name, level: ranked.level ?? null };
 
     }
 
@@ -1115,7 +1116,10 @@ export default class SaveService {
             rarity: pickInfo(item.rarity),
             quality: pickInfo(item.quality),
             stats: item.stats ? { ...item.stats } : null,
-            enchantments: item.enchantments ? { ...item.enchantments } : null
+            enchantments: item.enchantments ? { ...item.enchantments } : null,
+            // Fusão (ver FusionService.js) — pra tooltip do perfil
+            // público (ranking) também mostrar o selo "(+N)".
+            fusionLevel: item.fusionLevel ?? 0
         };
 
     }
@@ -1233,7 +1237,17 @@ export default class SaveService {
 
             const snapshot = await getDocs(leaderboardQuery);
 
-            return snapshot.docs.map(entry => ({ ...sanitizeRemote(entry.data()), uid: entry.id.split("_")[0] }));
+            // id é "uid_slot" (ver leaderboardId) — mantém os dois
+            // separados. Perder o slot aqui foi a causa de dois bugs
+            // reais: Correio não deixava mandar carta de um personagem
+            // pro outro DA MESMA conta (os dois pareciam ter o mesmo
+            // "destinatário"), e o Ranking Global mostrava os dois
+            // personagens da mesma conta como "online" ao mesmo tempo,
+            // mesmo só um estando em jogo (ver PresenceService.js).
+            return snapshot.docs.map(entry => {
+                const [uid, slot] = entry.id.split("_");
+                return { ...sanitizeRemote(entry.data()), uid, slot };
+            });
 
         } catch (err) {
 
@@ -1246,9 +1260,10 @@ export default class SaveService {
 
     // Ranking do Torneio (ver TournamentRankingModal.js) — mesma ideia
     // de getFullLeaderboard, só ordenado por rankedPoints em vez de
-    // power. Enquanto o Combate Ranqueado estiver travado, todo mundo
-    // fica empatado em 0 — a tela mostra normalmente, só vazia de
-    // destaque até alguém pontuar de verdade.
+    // power. Só entra quem já pontuou de verdade (rankedPoints > 0) —
+    // como pontos só sobem na vitória (nunca descem), 0 significa "nunca
+    // jogou Combate Ranqueado" tanto quanto "jogou e nunca venceu", e os
+    // dois não deveriam poluir a lista enquanto o modo estiver travado.
     static async getFullRankedLeaderboard() {
 
         try {
@@ -1260,7 +1275,9 @@ export default class SaveService {
 
             const snapshot = await getDocs(leaderboardQuery);
 
-            return snapshot.docs.map(entry => ({ ...sanitizeRemote(entry.data()), uid: entry.id.split("_")[0] }));
+            return snapshot.docs
+                .map(entry => ({ ...sanitizeRemote(entry.data()), uid: entry.id.split("_")[0] }))
+                .filter(entry => (Number(entry.rankedPoints) || 0) > 0);
 
         } catch (err) {
 
@@ -1363,6 +1380,12 @@ export default class SaveService {
         if (!this.isValidSave(flat)) return;
 
         this.activeSlot = Number(slot);
+
+        // Avisa a trava de sessão (ver PresenceService) qual dos 2
+        // personagens da conta é esse, pro Ranking Global não mostrar
+        // os 2 como "online" ao mesmo tempo (a trava em si é por
+        // CONTA, reivindicada antes de se saber qual slot ia carregar).
+        PresenceService.setActiveSlot(this.activeSlot);
 
         // Antes do deserialize() mexer em nada — pra saber se a
         // concessão retroativa do ovo (ver deserialize) é coisa NOVA

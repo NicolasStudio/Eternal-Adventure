@@ -228,7 +228,123 @@ const ring = {
 
         value: 0,
         sellValue: 0
-    }
+    },
+
+    ringSkullCommon: {
+        id: "ringSkullCommon",
+        name: "Anel do Crânio",
+        type: "ring",
+        slot: "ring",
+        class: "all", // todas as classes podem usar
+        description: "Um anel do crânio.",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/ring/ring-skull-rarity-comum.png",
+
+        stats: {
+            attack: 1,
+            sorte: 1,
+        },
+
+        value: 80,
+        sellValue: 40
+    },
+
+    ringSkullIncommon: {
+        id: "ringSkullIncommon",
+        name: "Anel do Crânio",
+        type: "ring",
+        slot: "ring",
+        class: "all", // todas as classes podem usar
+        description: "Um anel do crânio.",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/ring/ring-skull-rarity-incomum.png",
+
+        stats: {
+            attack: 1,
+            sorte: 3,
+        },
+
+        value: 240,
+        sellValue: 120
+    },
+
+    ringSkullRare: {
+        id: "ringSkullRare",
+        name: "Anel do Crânio",
+        type: "ring",
+        slot: "ring",
+        class: "all", // todas as classes podem usar
+        description: "Um anel do crânio.",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/ring/ring-skull-rarity-rare.png",
+
+        stats: {
+            attack: 1,
+            sorte: 5,
+        },
+
+        value: 720,
+        sellValue: 360
+    },
+
+    ringSkullMystic: {
+        id: "ringSkullMystic",
+        name: "Anel do Crânio",
+        type: "ring",
+        slot: "ring",
+        class: "all", // todas as classes podem usar
+        description: "Um anel do crânio.",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/ring/ring-skull-rarity-mistico.png",
+
+        stats: {
+            attack: 2,
+            sorte: 10,
+        },
+
+        value: 2160,
+        sellValue: 1080
+    },
+
+    ringSkullLegendary: {
+        id: "ringSkullLegendary",
+        name: "Anel do Crânio",
+        type: "ring",
+        slot: "ring",
+        class: "all", // todas as classes podem usar
+        description: "Um anel do crânio.",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/ring/ring-skull-rarity-lendario.png",
+
+        stats: {
+            attack: 5,
+            sorte: 15,
+        },
+
+        value: 0,
+        sellValue: 13240
+    },
+
+    // Mesma regra do Primal/Moderno: Ultraje ainda não existe em drop
+    // nenhum no jogo (ver rarities.js) — item provisório, sem fonte.
+    ringSkullUltraje: {
+        id: "ringSkullUltraje",
+        name: "Anel do Crânio",
+        type: "ring",
+        slot: "ring",
+        class: "all", // todas as classes podem usar
+        description: "Um anel do crânio.",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/ring/ring-skull-rarity-ultraje.png",
+
+        stats: {
+            attack: 5,
+            sorte: 20,
+        },
+
+        value: 0,
+        sellValue: 0
+    },
 
 }
 

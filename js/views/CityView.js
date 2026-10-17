@@ -75,27 +75,20 @@ export default class CityView {
             <article class="city-card">
 
                 <div class="city-card-image">
-                    <img src="./assets/img/backgrounds/cards_city/card_ferraria.png" alt="Ferraria">
+                    <img src="./assets/img/backgrounds/cards_city/card_ferraria.png" alt="Equipamentos">
                 </div>
 
                 <div class="city-card-header">
-                    <h3 class="city-name">Ferraria</h3>
+                    <h3 class="city-name">Equipamentos</h3>
                 </div>
 
                 <div class="city-card-actions">
 
                     <div
-                            class="city-option city-action"
-    data-view="blacksmith-weapon"
-                    >
-                        🔨 Melhorar Arma
-                    </div>
-
-                    <div
                         class="city-option city-action"
-                        data-view="blacksmith-armor"
+                        data-view="blacksmith-upgrade"
                     >
-                        🛡️ Melhorar Armadura
+                        🔨 Melhorar Equipamentos
                     </div>
 
                     ${
@@ -117,6 +110,13 @@ export default class CityView {
                                 </div>
                             `
                     }
+
+                    <div
+                        class="city-option city-action"
+                        data-view="blacksmith-fusion"
+                    >
+                        🧬 Fundir
+                    </div>
 
                 </div>
 

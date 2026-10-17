@@ -1,5 +1,6 @@
 import ItemValueService from "../services/ItemValueService.js";
 import rarities from "../data/rarities.js";
+import FusionService from "../services/FusionService.js";
 
 export default class ItemTooltip {
     // showFooter=false esconde o "Valor de venda" — não faz sentido pro
@@ -22,10 +23,15 @@ export default class ItemTooltip {
     }
 
     renderHeader() {
+        // "(+N)" só na EXIBIÇÃO — item.name nunca é alterado de verdade
+        // (ver FusionService.js), consistente com quality/used, que
+        // também são campos à parte, nunca viram texto dentro do nome.
+        const fusionLevel = this.item.fusionLevel ?? 0;
+        const fusionSuffix = fusionLevel > 0 ? ` (+${fusionLevel})` : "";
         return `
             <div class="tooltip-header">
                 <img class="tooltip-image" src="${this.item.icon}" alt="${this.item.name}">
-                <h2 class="tooltip-name">${this.item.name.toUpperCase()}</h2>
+                <h2 class="tooltip-name">${this.item.name.toUpperCase()}${fusionSuffix}</h2>
             </div>
         `;
     }
@@ -52,7 +58,7 @@ export default class ItemTooltip {
                     <span class="tooltip-label">Classe</span>
                     <span>${itemClass}</span>
                 </div>
-                ${this.item.category === "ration" ? "" : `
+                ${this.item.category === "ration" || !this.item.rarity ? "" : `
                 <div class="tooltip-row">
                     <span class="tooltip-label">Raridade</span>
                     <span class="tooltip-rarity" style="color:${rarity.color};">${rarity.name}</span>
@@ -100,6 +106,31 @@ export default class ItemTooltip {
 
     renderStat(key, value) {
         const statClass = value > 0 ? "tooltip-stat-positive" : value < 0 ? "tooltip-stat-negative" : "tooltip-stat-neutral";
+
+        // Atributo de um item fundido que recebeu bônus de Fusão (ver
+        // FusionService.js): mostra o valor base e o bônus separados,
+        // igual o protótipo (ex: "+33  +5"), em vez de somar tudo num
+        // número só — deixa claro pro jogador quanto veio da Fusão. Pode
+        // aparecer em mais de uma linha (Anel/Amuleto do Crânio ganham
+        // em Ataque, Armadura E Sorte ao mesmo tempo).
+        const fusionBonus = FusionService.getFusionBonus(this.item);
+
+        if (fusionBonus > 0 && FusionService.isFusionBonusStat(key)) {
+
+            const baseValue = value - fusionBonus;
+
+            return `
+                <div class="tooltip-stat">
+                    <span>${this.getStatIcon(key)} ${this.getStatName(key)}</span>
+                    <span>
+                        <span class="${statClass}">${baseValue > 0 ? "+" : ""}${baseValue}</span>
+                        <span class="tooltip-stat-fusion-bonus">+${fusionBonus}</span>
+                    </span>
+                </div>
+            `;
+
+        }
+
         return `
             <div class="tooltip-stat">
                 <span>${this.getStatIcon(key)} ${this.getStatName(key)}</span>
@@ -276,6 +307,7 @@ export default class ItemTooltip {
             case "attack": return "Ataque";
             case "armor": return "Armadura";
             case "agility": return "Agilidade";
+            case "sorte": return "Sorte";
             case "criticalChance": return "Chance Crítica";
             case "lifeSteal": return "Roubo de Vida";
             case "penetration": return "Penetração";
@@ -299,6 +331,7 @@ export default class ItemTooltip {
             case "attack": return "⚔️";
             case "armor": return "🛡️";
             case "agility": return "👢";
+            case "sorte": return "🎲";
             case "criticalChance": return "🎯";
             case "lifeSteal": return "🩸";
             case "penetration": return "💥";

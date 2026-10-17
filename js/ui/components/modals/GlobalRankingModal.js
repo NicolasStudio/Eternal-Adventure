@@ -18,14 +18,14 @@ export default class GlobalRankingModal {
         this.modal = null;
         this.status = "loading";
         this.entries = [];
-        this.onlineUids = new Set();
+        this.onlinePresence = new Map();
         this.profileModal = new PlayerProfileModal();
     }
 
     show() {
         this.status = "loading";
         this.entries = [];
-        this.onlineUids = new Set();
+        this.onlinePresence = new Map();
         this.mount();
         this.fetchRanking();
     }
@@ -60,13 +60,13 @@ export default class GlobalRankingModal {
 
     async fetchRanking() {
 
-        const [entries, onlineUids] = await Promise.all([
+        const [entries, onlinePresence] = await Promise.all([
             SaveService.getFullLeaderboard(),
-            PresenceService.getOnlineUids()
+            PresenceService.getOnlinePresence()
         ]);
 
         this.entries = entries;
-        this.onlineUids = onlineUids;
+        this.onlinePresence = onlinePresence;
 
         this.status = this.entries.length > 0 ? "loaded" : "empty";
 
@@ -135,7 +135,18 @@ export default class GlobalRankingModal {
         // mas mais apagada, e o modal explica o motivo.
         const hasDetails = !!entry.equipment && !!entry.stats;
 
-        const online = entry.uid && this.onlineUids.has(entry.uid);
+        // Uma conta pode ter 2 personagens com o MESMO uid — a trava de
+        // sessão é por CONTA, então os 2 aparecem na lista de presença
+        // juntos. Só conta como "online" quando o slot bate também;
+        // activeSlot ausente (sessão de antes dessa trava existir) cai
+        // pro comportamento antigo, pra não esconder a bolinha de quem
+        // já estava online.
+        const presence = entry.uid && this.onlinePresence.get(entry.uid);
+        const online = !!presence && (
+            presence.activeSlot == null
+            || entry.slot == null
+            || String(presence.activeSlot) === String(entry.slot)
+        );
         const presenceClass = online ? "presence-dot-online" : "presence-dot-offline";
         const presenceTitle = online ? "ONLINE" : "OFFLINE";
 

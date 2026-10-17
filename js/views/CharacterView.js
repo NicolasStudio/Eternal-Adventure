@@ -160,6 +160,11 @@ export default class CharacterView {
                         <span>${stats.agility}</span>
                     </div>
 
+                    <div class="character-stat character-stat-hoverable" data-stat="sorte">
+                        <span>Sorte</span>
+                        <span>${stats.sorte}</span>
+                    </div>
+
                     <div class="character-divider"><hr></div>
                     
                     <div class="box-caracter-stats-special">
@@ -1376,6 +1381,18 @@ export default class CharacterView {
                 ["Esquiva nas Dungeons", "Só esquiva quem for mais ágil que o adversário: a diferença de Agilidade vira a chance (teto de 40%)."],
                 ["Esquiva no PVP/Cooperativo", "Proporcional à Agilidade dos dois — até o mais lento tem alguma chance, e o mais ágil tem mais (teto de 40%)."],
                 ["Contra o Pútrido", `Os acúmulos de Intoxicação do Miasma tiram ${CharacterView.MIASMA_STACKS_TEXT} da sua Agilidade (1, 2 ou 3 acúmulos) até o fim da luta.`]
+            ]
+        },
+
+        sorte: {
+            icon: "fa-dice",
+            title: "Sorte",
+            suffix: "",
+            summary: "Melhora sua chance de sucesso na Fusão de Equipamentos — não afeta combate.",
+            details: [
+                ["Fusão", "Soma diretamente na chance de sucesso ao fundir 4 equipamentos — quanto maior o nível de fusão dos itens, mais ela ajuda a compensar a chance-base, que cai conforme o nível sobe."],
+                ["Só de equipamento/talento", "Diferente de Ataque/Armadura/Agilidade, Sorte não cresce com o nível — o único jeito de aumentar é equipando itens (ou investindo talentos) que a concedam."],
+                ["Fora do Poder", "Não entra no cálculo de Poder, igual Crítico/Roubo de Vida/Penetração/Absorção."]
             ]
         },
 

@@ -75,6 +75,12 @@
         ".write": "auth != null && auth.uid === $uid",
         "sessionId": { ".validate": "newData.isString() && newData.val().length <= 80" },
         "lastSeen": { ".validate": "newData.isNumber()" },
+        // Qual dos 2 personagens (slot "1"/"2") da conta está sendo
+        // jogado nesta sessão — ver PresenceService.setActiveSlot. Sem
+        // essa regra, a escrita era bloqueada pelo "$other": false
+        // abaixo, e o Ranking Global nunca conseguia saber qual
+        // personagem estava realmente ativo.
+        "activeSlot": { ".validate": "newData.isString() && newData.val().length <= 2" },
         "$other": { ".validate": false }
       }
     }

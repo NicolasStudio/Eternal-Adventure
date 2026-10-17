@@ -1,5 +1,6 @@
 import qualities from "../data/quality.js";
 import upgradeCosts from "../data/upgradeCosts.js";
+import FusionService from "./FusionService.js";
 
 // Ordem fixa de progressão da qualidade de um item.
 const QUALITY_ORDER = ["none", "ordinary", "mediocre", "exceptional"];
@@ -23,8 +24,10 @@ const SECONDARY_BONUS_QUALITIES = ["exceptional", LEGENDARY_EXTRA_QUALITY];
 // Eletro, na arma e no óculos), doubleStrikeChance (especial do
 // Samurai, na katana e na máscara) e gravityChance (especial da
 // Singularidade, na marreta e na tiara) — sem isso, esses especiais
-// nunca melhoram com a Qualidade.
-const SECONDARY_STATS = ["criticalChance", "lifeSteal", "penetration", "absorption", "miasmaChance", "reflection", "confusionChance", "paralysisChance", "doubleStrikeChance", "gravityChance"];
+// nunca melhoram com a Qualidade. Mesma lista que FusionService usa pra
+// saber quais atributos NUNCA recebem bônus de Fusão — fonte única em
+// FusionService.specialStats, pra nunca ficar fora de sincronia.
+const SECONDARY_STATS = FusionService.specialStats;
 
 // Bônus de "Excepcional" pra status SECUNDÁRIOS (teto por raridade, ver
 // rarities.js/secondaryCap). Não reaproveita a fórmula dos principais
@@ -126,18 +129,28 @@ export default class UpgradeService {
     }
 
     // Recalcula item.stats a partir do item.baseStats (o valor original,
-    // sem melhoria nenhuma) + o bônus da qualidade atual.
-    // Só os atributos que o item já possui (valor != 0) recebem o bônus.
+    // sem melhoria nenhuma) + o bônus da qualidade atual + o bônus de
+    // Fusão (ver FusionService.js), se houver. Só os atributos que o
+    // item já possui (valor != 0) recebem bônus de qualidade; o bônus de
+    // Fusão soma em TODO atributo não-zero que não seja especial de
+    // classe (ver FusionService.isFusionBonusStat) — uma arma só tem
+    // Ataque, mas Anel/Amuleto do Crânio ganham em Ataque, Armadura E
+    // Sorte ao mesmo tempo.
     //
     // Status secundários (criticalChance, lifeSteal, penetration) só
-    // começam a ganhar bônus quando a qualidade chega em "Excepcional".
-    // Antes disso (Ordinário, Medíocre) só os principais (attack, armor,
-    // agility) recebem os pontos da melhoria.
+    // começam a ganhar bônus de qualidade quando ela chega em
+    // "Excepcional". Antes disso (Ordinário, Medíocre) só os principais
+    // (attack, armor, agility) recebem os pontos da melhoria.
+    //
+    // SEMPRE recalculado do zero a partir de baseStats — nunca somado em
+    // cima de item.stats já mutado — pra o bônus de Fusão nunca dobrar
+    // em reload/requip/novo upgrade de qualidade.
     static applyStats(item) {
 
         if (!item?.baseStats) return;
 
         const quality = this.getCurrentQuality(item);
+        const fusionBonus = FusionService.getFusionBonus(item);
 
         const stats = {};
 
@@ -149,6 +162,10 @@ export default class UpgradeService {
             }
 
             stats[key] = value + this.getBonusForStat(item, quality, key);
+
+            if (fusionBonus > 0 && FusionService.isFusionBonusStat(key)) {
+                stats[key] += fusionBonus;
+            }
 
         });
 

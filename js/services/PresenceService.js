@@ -202,6 +202,48 @@ export default class PresenceService {
 
     }
 
+    // Marca qual personagem (slot "1"/"2") esta aba está jogando —
+    // grava no MESMO nó da sessão (sessions/{uid}), um campo a mais.
+    // Chamado por SaveService.applyLoadedData assim que o slot é
+    // conhecido (a trava de sessão em si é reivindicada ANTES disso,
+    // em Game.enterWithAccount, quando ainda não se sabe qual
+    // personagem vai ser carregado). Sem isso, as 2 contas de uma
+    // mesma conta apareciam "online" juntas no Ranking Global, já que
+    // a trava é por CONTA, não por personagem.
+    static setActiveSlot(slot) {
+        if (!currentUid) return;
+        update(ref(rtdb, `${SESSIONS_PATH}/${currentUid}`), { activeSlot: String(slot) });
+    }
+
+    // Mesmo critério de getOnlineUids(), mas devolve também qual
+    // personagem (activeSlot) cada conta está jogando — uid -> {
+    // activeSlot }. activeSlot pode vir ausente (sessão antiga, de
+    // antes dessa trava existir) — quem usar isso deve tratar null
+    // como "não dá pra saber, mostra como online" pra não esconder a
+    // bolinha de sessões legítimas mais antigas.
+    static async getOnlinePresence() {
+
+        try {
+
+            const snapshot = await get(ref(rtdb, SESSIONS_PATH));
+            const data = snapshot.val() ?? {};
+            const now = Date.now();
+            const presence = new Map();
+
+            for (const [uid, session] of Object.entries(data)) {
+                if ((now - (session?.lastSeen ?? 0)) < STALE_AFTER_MS) {
+                    presence.set(uid, { activeSlot: session?.activeSlot ?? null });
+                }
+            }
+
+            return presence;
+
+        } catch {
+            return new Map();
+        }
+
+    }
+
     // uids com heartbeat dentro do prazo AGORA — usado pelo Ranking
     // Global pra pintar a bolinha verde/vermelha.
     static async getOnlineUids() {

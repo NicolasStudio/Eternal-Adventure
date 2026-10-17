@@ -26,6 +26,7 @@ const TABS = [
 ];
 
 const FARM_UNLOCK_LEVEL = 30;
+const LUCK_PROTECTION_UNLOCK_LEVEL = 10;
 const MAX_BUY_QUANTITY = 999;
 
 export default class MarketViewBuy {
@@ -144,6 +145,13 @@ export default class MarketViewBuy {
         // aparecem de uma vez a partir do nível 30 (ver Fazenda).
         if (this.player.level >= FARM_UNLOCK_LEVEL) {
             items.push(...Object.values(seeds));
+        }
+
+        // Proteção de Sorte (ver FusionService.js) — liberada por nível,
+        // não por dungeon, igual as sementes acima.
+        if (!unlocked.has(itemsData.luckProtection.id) && this.player.level >= LUCK_PROTECTION_UNLOCK_LEVEL) {
+            unlocked.add(itemsData.luckProtection.id);
+            items.push(itemsData.luckProtection);
         }
 
         return items;
