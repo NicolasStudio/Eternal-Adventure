@@ -1,6 +1,25 @@
 export default [
 
     {
+        version: "Beta 0.2.7 — Fusão de Equipamentos",
+        date: "Outubro de 2026",
+        changes: [
+            "Novo sistema de Fusão: combine 4 equipamentos da mesma categoria (Arma, Elmo, Peitoral, Perna, Bota, Anel ou Amuleto), raridade e nível de fusão pra tentar criar uma versão aprimorada de um deles (+1, +2, +3...). Anel/Amuleto também precisam ser exatamente a mesma peça (não dá pra misturar Primal/Moderno/Crânio). O item que vira a base é sempre o melhor dos 4 (maior qualidade, desempate por encantamento) — os outros 3 são consumidos",
+            "Cada nível de fusão soma +5 em TODO atributo não-especial do equipamento (Ataque na arma; Armadura e Agilidade na calça; Ataque, Armadura e Sorte no Anel/Amuleto do Crânio) — atributos especiais de classe (Crítico, Roubo de Vida, etc) nunca recebem esse bônus. Cada um aparece separado na tooltip (ex: '+33  +5')",
+            "Fusão tem chance de sucesso, caindo quanto maior o nível de fusão dos itens (70% de +0 pra +1, até 15% de +4 pra +5) — a primeira mecânica do jogo com risco de falha de verdade. Falhar consome os 4 itens e o ouro gasto",
+            "Novo atributo Sorte: melhora a chance de sucesso da Fusão E converte direto em % extra no atributo especial da sua classe (Crítico pro Arqueiro, Roubo de Vida pro Bárbaro, etc) — 0,5% a cada 50 pontos de Sorte, sem teto. Só vem de equipamento/talento (sem curva por nível) e não entra no cálculo de Poder",
+            "Custo da Fusão varia pela raridade dos itens: 30 mil (Comum) até 150 mil de ouro (Lendário)",
+            "Menu da Cidade reorganizado: Ferraria virou Equipamentos, com Melhorar Equipamentos (Arma, Elmo, Peitoral, Perna, Bota e Acessórios numa tela só, em vez de Melhorar Arma e Melhorar Armadura separados), Encantar (sem mudança) e a nova Fundir",
+            "Novo item: Proteção de Sorte — vendido na loja a partir do nível 10 (30 mil de ouro). Se colocado no 5º slot da Fusão, uma falha destrói só ele em vez dos 4 equipamentos (o ouro gasto na fusão ainda é perdido)",
+            "Novo Anel/Amuleto do Crânio — terceira variante (além de Primal e Moderno), com Ataque, Armadura e a nova Sorte. Comum na Caverna III e no chefe do nível 30, Incomum no chefe do nível 40 e no Deserto I, Raro no Deserto II, Místico nos chefes dos níveis 60 e 70 — o Lendário cai dos mesmos dragões do Cooperativo que já soltam anel/amuleto lendário",
+            "Corrigido o Anel do Primeiro Imperador (Moderno) aparecendo duplicado na prévia de drops do chefe do nível 90 (Inferno)",
+            "Corrigido o Correio não deixando mandar carta de um personagem pro outro da mesma conta — antes era tratado como 'enviar pra si mesmo' mesmo sendo um personagem diferente",
+            "Corrigido o Ranking Global mostrando os dois personagens de uma mesma conta como online ao mesmo tempo — agora só aparece com a bolinha verde o personagem realmente ativo no momento",
+            "Removida a 'Chance de Drop' da tooltip dos itens de masmorra"
+        ]
+    },
+
+    {
         version: "Beta 0.2.6 — Lobby e Torneio",
         date: "Outubro de 2026",
         changes: [
@@ -12,7 +31,9 @@ export default [
             "Corrigidos ícones quebrados que não apareciam: os de 'escolher combate' no PVP (trocados por um punho) e o do Arqueiro na Wiki (trocado por um alvo) — eram ícones que só existem na versão paga do Font Awesome",
             "Corrigido os botões de Dungeons, PVP e Cooperativo continuando com aparência de travados depois de curar na Enfermaria e passar dos 5% de vida — antes só destravavam ao trocar de menu na mão",
             "Corrigido Anel e Amuleto não aparecendo pra comprar na loja — novas abas Anéis e Amuletos, liberadas pelos mesmos critérios dos outros equipamentos (vencer a dungeon que os dropa)",
-            "Corrigido Caverna IV-VI, Oceano I-III, Floresta I-III e Inferno I-III: a tooltip da dungeon prometia Tripla Poção (Pequena ou Média, conforme o nível), mas os monstros de lá ainda soltavam poção de um estágio mais antigo — agora o drop bate com o que a tooltip mostra"
+            "Corrigido Caverna IV-VI, Oceano I-III, Floresta I-III e Inferno I-III: a tooltip da dungeon prometia Tripla Poção (Pequena ou Média, conforme o nível), mas os monstros de lá ainda soltavam poção de um estágio mais antigo — agora o drop bate com o que a tooltip mostra",
+            "Botão de Maximizar/Minimizar saiu da barra de ferramentas e virou uma opção dentro de Configurações",
+            "Corrigido o jogo travando (nenhum clique funcionava) depois de maximizar — a tela cheia pedia só a área do jogo, deixando qualquer modal aberto (incluindo o próprio de Configurações) fora dela e sem resposta a clique"
         ]
     },
 

@@ -120,7 +120,27 @@ const items = {
         sellValue: 3050
     },
 
+    // Fusão de Equipamentos (ver FusionService.js/BlacksmithFusion.js) —
+    // `fusionProtection: true` é o único campo que a Fusão checa pra
+    // aceitar um item no 5º slot (não precisa ser este item específico,
+    // qualquer item com essa flag serve). Esse aqui NÃO cura (sem campo
+    // `heal`) — por isso fica fora da aba "Itens" do botão genérico de
+    // "usar" (ver CharacterView.js, que só mostra o botão de uso pra
+    // item com `heal`), só pode ser consumido de verdade dentro da tela
+    // de Fusão.
+    luckProtection: {
+        id: "luckProtection",
+        name: "Proteção de Sorte",
+        icon: "assets/img/assets/items/fusion/luck-protect.png",
+        type: "item",
+        stackable: true,
 
+        quality: null,
+        fusionProtection: true,
+        effect: "Protege você de uma falha, evitando que você perca seus itens durante uma fusão. Quando a fusão falha, esse item é destruído no lugar dos seus equipamentos — porém isso NÃO vale para o ouro gasto.",
+        buyValue: 30000,
+        sellValue: 10000
+    },
 
 };
 

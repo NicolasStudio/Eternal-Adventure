@@ -214,6 +214,10 @@ const dungeons = [
                 type: ["helmet", "boot"],
                 rarity: "uncommon"
             },
+            {
+                item: ring.ringSkullCommon,
+                chance: 30
+            },
             items.smallPotion
         ]
     },
@@ -366,6 +370,10 @@ const dungeons = [
                 type: ["chest"],
                 rarity: "rare"
             },
+            {
+                item: amulet.amuletSkullCommon,
+                chance: 18
+            },
             items.tripleSmallPotion,
             {
                 item: { ...pets.fairyPet1, icon: "assets/img/assets/eggs_drop/egg-duende.png"},
@@ -493,6 +501,10 @@ const dungeons = [
                 type: ["boot"],
                 rarity: "mystic"
             },
+            {
+                item: ring.ringSkullIncommon,
+                chance: 18
+            },
             items.mediumPotion,
             {
                 item: { ...pets.spiderPet1, icon: "assets/img/assets/eggs_drop/egg-spider.png"},
@@ -522,6 +534,8 @@ const dungeons = [
 
         drops: [
             {
+                item: amulet.amuletSkullIncommon,
+                chance: 18
             },
             items.mediumPotion
         ]
@@ -548,6 +562,12 @@ const dungeons = [
 
         drops: [
             {
+                item: ring.ringSkullRare,
+                chance: 18
+            },
+            {
+                item: amulet.amuletSkullRare,
+                chance: 18
             },
             items.mediumPotion
         ]
@@ -727,6 +747,10 @@ const dungeons = [
                 item: amulet.amuletModernMystic,
                 chance: 8
             },
+            {
+                item: ring.ringSkullMystic,
+                chance: 8
+            },
             items.mediumPotion
         ]
     },
@@ -838,6 +862,10 @@ const dungeons = [
             {
                 type: ["helmet"],
                 rarity: "mystic"
+            },
+            {
+                item: amulet.amuletSkullMystic,
+                chance: 8
             },
             items.tripleMediumPotion
         ]
@@ -1069,10 +1097,6 @@ const dungeons = [
             {
                 type: ["ring"],
                 rarity: "mystic",
-                chance: 5
-            },
-            {
-                item: ring.ringModernMystic,
                 chance: 5
             },
             items.tripleMediumPotion

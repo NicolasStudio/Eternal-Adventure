@@ -228,7 +228,123 @@ const amulet = {
 
         value: 0,
         sellValue: 0
-    }
+    },
+
+    amuletSkullCommon: {
+        id: "amuletSkullCommon",
+        name: "Amuleto do Crânio",
+        type: "amulet",
+        slot: "amulet",
+        class: "all", // todas as classes podem usar
+        description: "Um amuleto do crânio.",
+        rarity: rarities.common,
+        icon: "assets/img/assets/items/amulet/amulet-skull-rarity-comum.png",
+
+        stats: {
+            attack: 1,
+            sorte: 1,
+        },
+
+        value: 80,
+        sellValue: 40
+    },
+
+    amuletSkullIncommon: {
+        id: "amuletSkullIncommon",
+        name: "Amuleto do Crânio",
+        type: "amulet",
+        slot: "amulet",
+        class: "all", // todas as classes podem usar
+        description: "Um amuleto do crânio.",
+        rarity: rarities.uncommon,
+        icon: "assets/img/assets/items/amulet/amulet-skull-rarity-incomum.png",
+
+        stats: {
+            attack: 1,
+            sorte: 3,
+        },
+
+        value: 240,
+        sellValue: 120
+    },
+
+    amuletSkullRare: {
+        id: "amuletSkullRare",
+        name: "Amuleto do Crânio",
+        type: "amulet",
+        slot: "amulet",
+        class: "all", // todas as classes podem usar
+        description: "Um amuleto do crânio.",
+        rarity: rarities.rare,
+        icon: "assets/img/assets/items/amulet/amulet-skull-rarity-rare.png",
+
+        stats: {
+            attack: 1,
+            sorte: 5,
+        },
+
+        value: 720,
+        sellValue: 360
+    },
+
+    amuletSkullMystic: {
+        id: "amuletSkullMystic",
+        name: "Amuleto do Crânio",
+        type: "amulet",
+        slot: "amulet",
+        class: "all", // todas as classes podem usar
+        description: "Um amuleto do crânio.",
+        rarity: rarities.mystic,
+        icon: "assets/img/assets/items/amulet/amulet-skull-rarity-mistico.png",
+
+        stats: {
+            attack: 2,
+            sorte: 10,
+        },
+
+        value: 2160,
+        sellValue: 1080
+    },
+
+    amuletSkullLegendary: {
+        id: "amuletSkullLegendary",
+        name: "Amuleto do Crânio",
+        type: "amulet",
+        slot: "amulet",
+        class: "all", // todas as classes podem usar
+        description: "Um amuleto do crânio.",
+        rarity: rarities.legendary,
+        icon: "assets/img/assets/items/amulet/amulet-skull-rarity-lendario.png",
+
+        stats: {
+            attack: 5,
+            sorte: 15,
+        },
+
+        value: 0,
+        sellValue: 13240
+    },
+
+    // Mesma regra do Primal/Moderno: Ultraje ainda não existe em drop
+    // nenhum no jogo (ver rarities.js) — item provisório, sem fonte.
+    amuletSkullUltraje: {
+        id: "amuletSkullUltraje",
+        name: "Amuleto do Crânio",
+        type: "amulet",
+        slot: "amulet",
+        class: "all", // todas as classes podem usar
+        description: "Um amuleto do crânio.",
+        rarity: rarities.ultraje,
+        icon: "assets/img/assets/items/amulet/amulet-skull-rarity-ultraje.png",
+
+        stats: {
+            attack: 5,
+            sorte: 20,
+        },
+
+        value: 0,
+        sellValue: 0
+    },
 
 }
 

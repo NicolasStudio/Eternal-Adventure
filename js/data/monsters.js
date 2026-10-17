@@ -610,6 +610,10 @@ const monsters = [
                 chance: 30
             },
             {
+                item: ring.ringSkullCommon,
+                chance: 30
+            },
+            {
                 item: items.smallPotion,
                 quantidade: 3
             }
@@ -1021,6 +1025,10 @@ const monsters = [
             {
                 type: ["chest"],
                 rarity: "rare",
+                chance: 18
+            },
+            {
+                item: amulet.amuletSkullCommon,
                 chance: 18
             },
             {
@@ -1449,6 +1457,10 @@ const monsters = [
                 chance: 8
             },
             {
+                item: ring.ringSkullIncommon,
+                chance: 18
+            },
+            {
                 item: items.mediumPotion,
                 quantidade: 1
             },
@@ -1538,6 +1550,8 @@ const monsters = [
 
         drops: [
             {
+                item: amulet.amuletSkullIncommon,
+                chance: 18
             },
             {
                 item: items.mediumPotion,
@@ -1597,6 +1611,8 @@ const monsters = [
 
         drops: [
             {
+                item: ring.ringSkullRare,
+                chance: 18
             },
             {
                 item: items.mediumPotion,
@@ -1625,6 +1641,8 @@ const monsters = [
 
         drops: [
             {
+                item: amulet.amuletSkullRare,
+                chance: 18
             },
             {
                 item: items.mediumPotion,
@@ -2112,6 +2130,10 @@ const monsters = [
                 chance: 8
             },
             {
+                item: ring.ringSkullMystic,
+                chance: 8
+            },
+            {
                 type: ["chest"],
                 rarity: "mystic",
                 chance: 8
@@ -2507,6 +2529,10 @@ const monsters = [
             {
                 type: ["helmet"],
                 rarity: "mystic",
+                chance: 8
+            },
+            {
+                item: amulet.amuletSkullMystic,
                 chance: 8
             },
             {

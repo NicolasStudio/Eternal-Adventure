@@ -3,12 +3,17 @@ import ItemTooltip from "../../js/views/ItemTooltip.js";
 import UpgradeService from "../services/UpgradeService.js";
 import SaveService from "../services/SaveService.js";
 
+// "category" decide a tabela de preço usada por UpgradeService.getUpgradeCost
+// (upgradeCosts.js só tem 2 baldes: "weapon" e "armor") — Arma entrou
+// aqui pra unificar as telas "Melhorar Arma" e "Melhorar Armadura" numa
+// só, com uma aba a mais (BlacksmithWeapon.js foi removido).
 const ARMOR_SLOTS = [
-    { id: "helmet", label: "Elmo", icon: "fa-solid fa-hat-wizard" },
-    { id: "chest", label: "Peitoral", icon: "fa-solid fa-shirt" },
-    { id: "leg", label: "Pernas", icon: "fa-solid fa-socks" },
-    { id: "boot", label: "Botas", icon: "fa-solid fa-shoe-prints" },
-    { id: "accessory", label: "Acessórios", icon: "fa-solid fa-gem" }
+    { id: "weapon", label: "Arma", icon: "fa-solid fa-khanda", category: "weapon" },
+    { id: "helmet", label: "Elmo", icon: "fa-solid fa-hat-wizard", category: "armor" },
+    { id: "chest", label: "Peitoral", icon: "fa-solid fa-shirt", category: "armor" },
+    { id: "leg", label: "Pernas", icon: "fa-solid fa-socks", category: "armor" },
+    { id: "boot", label: "Botas", icon: "fa-solid fa-shoe-prints", category: "armor" },
+    { id: "accessory", label: "Acessórios", icon: "fa-solid fa-gem", category: "armor" }
 ];
 
 // Acessórios (ver ring.js/amulet.js) são DOIS slots de equipamento
@@ -23,7 +28,7 @@ export default class BlacksmithArmor {
 
     constructor(game) {
         this.game = game;
-        this.activeSlot = "helmet";
+        this.activeSlot = "weapon";
         this.selectedItem = null;
         this.anvilItem = null;
         this.items = [];
@@ -242,6 +247,7 @@ export default class BlacksmithArmor {
             case "attack": return "Ataque";
             case "armor": return "Armadura";
             case "agility": return "Agilidade";
+            case "sorte": return "Sorte";
             case "criticalChance": return "Chance Crítica";
             case "lifeSteal": return "Roubo de Vida";
             case "penetration": return "Penetração";
@@ -262,6 +268,7 @@ export default class BlacksmithArmor {
             case "attack": return "⚔️";
             case "armor": return "🛡️";
             case "agility": return "👢";
+            case "sorte": return "🎲";
             case "criticalChance": return "🎯";
             case "lifeSteal": return "🩸";
             case "penetration": return "💥";
@@ -311,7 +318,8 @@ export default class BlacksmithArmor {
     getUpgradeCost() {
         const item = this.anvilItem ?? this.selectedItem;
         if (!item) return 0;
-        return UpgradeService.getUpgradeCost(item, "armor");
+        const category = ARMOR_SLOTS.find(slot => slot.id === this.activeSlot)?.category ?? "armor";
+        return UpgradeService.getUpgradeCost(item, category);
     }
 
     canUpgrade() {
@@ -339,7 +347,8 @@ export default class BlacksmithArmor {
             return;
         }
 
-        const upgraded = UpgradeService.upgrade(this.anvilItem, "armor", this.player);
+        const category = ARMOR_SLOTS.find(slot => slot.id === this.activeSlot)?.category ?? "armor";
+        const upgraded = UpgradeService.upgrade(this.anvilItem, category, this.player);
 
         if (!upgraded) {
             Toast.show("Não foi possível melhorar o equipamento.");

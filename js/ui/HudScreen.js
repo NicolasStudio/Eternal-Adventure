@@ -16,9 +16,9 @@ import Toast from "../ui/components/Toast.js";
 import MarketView from "../views/MarketView.js";
 import MarketViewBuy from "./components/modals/MarketViewBuy.js";
 import MarketPetView from "../views/MarketPetView.js";
-import BlacksmithWeapon from "./../city/BlacksmithWeapon.js";
 import BlacksmithArmor from "./../city/BlacksmithArmor.js";
 import BlacksmithEnchant from "./../city/BlacksmithEnchant.js";
+import BlacksmithFusion from "./../city/BlacksmithFusion.js";
 import ChestHUD from "./components/ChestHUD.js";
 import ChatHUD from "./components/ChatHUD.js";
 import MailModal from "./components/modals/MailModal.js";
@@ -55,9 +55,9 @@ export default class HudScreen {
         this.farmView = new FarmView(game);
         this.marketView = new MarketView(game);
         this.marketPetView = new MarketPetView(game);
-        this.blacksmithWeapon = new BlacksmithWeapon(this.game);
         this.blacksmithArmor = new BlacksmithArmor(this.game);
         this.blacksmithEnchant = new BlacksmithEnchant(this.game);
+        this.blacksmithFusion = new BlacksmithFusion(this.game);
         this.playerHUD = new PlayerHUD(game);
         this.monsterHUD = new MonsterHUD(game);
         this.toolbarHUD = new ToolbarHUD(game);
@@ -139,9 +139,9 @@ export default class HudScreen {
     }
 
     renderRightPanel() {
-        // Fazenda não usa a toolbar (Wiki/Salvar/Carregar/Maximizar/
-        // Configurações) — diferente do combate (que troca ela pelo
-        // MonsterHUD), aqui ela simplesmente some.
+        // Fazenda não usa a toolbar (Wiki/Salvar/Carregar/Configurações)
+        // — diferente do combate (que troca ela pelo MonsterHUD), aqui
+        // ela simplesmente some.
         if (this.currentView === "farm") return "";
         if (this.inCombat) return this.monsterHUD.render(this.combatView.currentMonster);
         if (this.inPvpCombat && !this.pvpView.isTeamMode()) return this.monsterHUD.render(this.pvpView.opponentAsMonster());
@@ -239,14 +239,14 @@ export default class HudScreen {
             case "market-pet":
                 return this.marketPetView.render();
 
-            case "blacksmith-weapon":
-                return this.blacksmithWeapon.render();
-
-            case "blacksmith-armor":
+            case "blacksmith-upgrade":
                 return this.blacksmithArmor.render();
 
             case "blacksmith-enchant":
                 return this.blacksmithEnchant.render();
+
+            case "blacksmith-fusion":
+                return this.blacksmithFusion.render();
 
             default:
                 return "";
@@ -392,12 +392,12 @@ export default class HudScreen {
         // encantamento devolve o item pro inventário (nada fica "preso"
         // no slot se o jogador fechar a aba no meio do caminho).
         if (this.currentView !== view) {
-            if (this.currentView === "blacksmith-weapon") this.blacksmithWeapon.anvilWeapon = null;
-            if (this.currentView === "blacksmith-armor") this.blacksmithArmor.anvilItem = null;
+            if (this.currentView === "blacksmith-upgrade") this.blacksmithArmor.anvilItem = null;
             if (this.currentView === "blacksmith-enchant") {
                 this.blacksmithEnchant.anvilWeapon = null;
                 this.blacksmithEnchant.anvilStone = null;
             }
+            if (this.currentView === "blacksmith-fusion") this.blacksmithFusion.resetSelection?.();
         }
 
         // Sair da tela de PVP por qualquer caminho (X, menu de
@@ -506,9 +506,9 @@ export default class HudScreen {
             case "market":
             case "market-buy":
             case "market-pet":
-            case "blacksmith-weapon":
-            case "blacksmith-armor":
+            case "blacksmith-upgrade":
             case "blacksmith-enchant":
+            case "blacksmith-fusion":
                 MusicService.play("city");
                 break;
 
@@ -561,14 +561,14 @@ export default class HudScreen {
             case "market-pet":
                 this.marketPetView.registerEvents(document);
                 break;
-            case "blacksmith-weapon":
-                this.blacksmithWeapon.registerEvents(document);
-                break;
-            case "blacksmith-armor":
+            case "blacksmith-upgrade":
                 this.blacksmithArmor.registerEvents(document);
                 break;
             case "blacksmith-enchant":
                 this.blacksmithEnchant.registerEvents(document);
+                break;
+            case "blacksmith-fusion":
+                this.blacksmithFusion.registerEvents(document);
                 break;
 
         }
@@ -663,14 +663,14 @@ export default class HudScreen {
             case "market-pet":
                 this.marketPetView.registerEvents(document);
                 break;
-            case "blacksmith-weapon":
-                this.blacksmithWeapon.registerEvents(document);
-                break;
-            case "blacksmith-armor":
+            case "blacksmith-upgrade":
                 this.blacksmithArmor.registerEvents(document);
                 break;
             case "blacksmith-enchant":
                 this.blacksmithEnchant.registerEvents(document);
+                break;
+            case "blacksmith-fusion":
+                this.blacksmithFusion.registerEvents(document);
                 break;
         }
         this.element.classList.remove("hidden");

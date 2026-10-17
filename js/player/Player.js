@@ -304,7 +304,7 @@ export default class Player {
         const stats = baseStatsL1[this.class.id];
         return stats
             ? { ...stats }
-            : { attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0 };
+            : { attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0, sorte: 0 };
     }
 
     getRequiredXP() {

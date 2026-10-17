@@ -73,6 +73,14 @@
     filter:drop-shadow(0 4px 8px rgba(0,0,0,.8));
 }
 
+/* Bônus de atributo vindo da Fusão, mostrado separado do valor base
+   (ex: "+33  +5") — mesma régua de cor usada no protótipo visual. */
+.tooltip-stat-fusion-bonus{
+    margin-left:4px;
+    color:#ff9d4d;
+    font-weight:700;
+}
+
 /* ==========================================================
    DIVISÓRIA
 ========================================================== */
