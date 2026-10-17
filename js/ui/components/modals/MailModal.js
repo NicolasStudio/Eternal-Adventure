@@ -129,7 +129,18 @@ export default class MailModal {
         if (!uid || !this.overlay) return;
 
         try {
-            this.letters = await MailService.fetchInbox(uid);
+
+            const inbox = await MailService.fetchInbox(uid);
+
+            // A caixa é da CONTA (mail/{uid}), compartilhada pelos 2
+            // personagens — só mostra pra este personagem o que foi
+            // endereçado a ele OU cartas sem personagem marcado
+            // (devolução automática, cartas antigas de antes dessa
+            // distinção existir).
+            this.letters = inbox.filter(letter =>
+                letter.recipientSlot == null || String(letter.recipientSlot) === String(SaveService.activeSlot)
+            );
+
         } catch {
             this.letters = [];
             Toast.show("Não foi possível carregar o correio agora.");
@@ -620,7 +631,11 @@ export default class MailModal {
             return;
         }
 
-        if (recipient.uid === this.uid) {
+        // Uma conta pode ter 2 personagens (slots) com o MESMO uid —
+        // só bloqueia de verdade quando uid E slot batem os dois,
+        // senão mandar carta de um personagem pro outro da própria
+        // conta ficava impossível (parecia "enviar pra si mesmo").
+        if (recipient.uid === this.uid && String(recipient.slot) === String(SaveService.activeSlot)) {
             this.composeFeedback = "Você não pode enviar uma carta para si mesmo.";
             this.render();
             return;
@@ -637,14 +652,17 @@ export default class MailModal {
 
             await MailService.sendLetter({
                 senderUid: this.uid,
+                senderSlot: SaveService.activeSlot,
                 senderName: this.game.player.name,
                 recipientUid: recipient.uid,
+                recipientSlot: recipient.slot,
                 title,
                 body,
                 items
             });
 
-        } catch {
+        } catch (err) {
+            console.error("Falha ao enviar carta:", err);
             this.composeFeedback = "Não foi possível enviar a carta agora.";
             this.render();
             return;

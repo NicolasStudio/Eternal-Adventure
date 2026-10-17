@@ -88,9 +88,15 @@ export default class MailService {
     // [{..itemSnapshot, quantity}] — cada item é uma cópia completa do
     // que estava no inventário de quem envia, sem o `uid` (que é só
     // da instância de inventário de origem, não faz sentido copiar).
-    static async sendLetter({ senderUid, senderName, recipientUid, title, body, items }) {
+    //
+    // Uma conta pode ter 2 personagens (slots "1"/"2") com o MESMO uid
+    // — bloquear só por uid impedia mandar carta de um personagem pro
+    // outro da própria conta (parecia "enviar pra si mesmo" mesmo sendo
+    // um personagem diferente). Só bloqueia de verdade quando uid E
+    // slot batem os dois.
+    static async sendLetter({ senderUid, senderSlot, senderName, recipientUid, recipientSlot, title, body, items }) {
 
-        if (recipientUid === senderUid) {
+        if (recipientUid === senderUid && String(recipientSlot) === String(senderSlot)) {
             throw new Error("Não é possível enviar uma carta para si mesmo.");
         }
 
@@ -102,12 +108,22 @@ export default class MailService {
 
         await setDoc(this.letterRef(recipientUid, letterId), {
             senderUid,
+            // Só pra regra do Firestore conseguir distinguir "mesma conta,
+            // personagem diferente" de "pra mim mesmo" de verdade — ver
+            // firestore.rules, match /mail/.../letters.
+            senderSlot: senderSlot != null ? String(senderSlot) : null,
             senderName,
             title: title.slice(0, MAIL_MAX_TITLE_LENGTH),
             body: body.slice(0, MAIL_MAX_BODY_LENGTH),
             items,
             sentAt: Date.now(),
-            expiredReturn: false
+            expiredReturn: false,
+            // Só informativo pro destinatário saber qual dos 2
+            // personagens da conta a carta era "pra" — a caixa de
+            // entrada é da CONTA (mail/{uid}), compartilhada pelos 2
+            // personagens; null = sempre visível pros dois (cartas
+            // antigas, devolução automática, etc).
+            recipientSlot: recipientSlot != null ? String(recipientSlot) : null
         });
 
     }

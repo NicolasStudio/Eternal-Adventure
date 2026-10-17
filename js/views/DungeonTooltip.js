@@ -63,12 +63,6 @@ export default class DungeonTooltip {
             </div>
             <div class="tooltip-divider"></div>
             <div class="tooltip-section">
-                ${item.dropChance != null && item.dropChance < 100 ? `
-                    <div class="tooltip-row">
-                        <span class="tooltip-label">Chance de Drop</span>
-                        <span class="tooltip-rarity" style="color:#f1c75c;">${item.dropChance}%</span>
-                    </div>
-                ` : ""}
                 ${
                     hasRarity
                         ? `

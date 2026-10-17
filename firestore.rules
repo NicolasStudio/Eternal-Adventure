@@ -101,13 +101,27 @@ service cloud.firestore {
     // jogador→jogador, essa parte da regra precisa ficar bem mais
     // rígida (hoje ela não confirma que a carta original expirada de
     // verdade existiu).
+    //
+    // A caixa é por CONTA (mail/{uid}), mas uma conta pode ter 2
+    // personagens (slots "1"/"2") com o MESMO uid — recipientUid ==
+    // auth.uid só é permitido quando senderSlot/recipientSlot existem
+    // E são diferentes (mandando pro OUTRO personagem da própria
+    // conta); sem os dois slots ou com eles iguais, continua barrado
+    // (manda pra si mesmo de verdade).
     match /mail/{recipientUid}/letters/{letterId} {
 
       allow read, delete: if isOwner(recipientUid);
 
       allow create: if signedIn()
-        && recipientUid != request.auth.uid
+        && (
+          recipientUid != request.auth.uid
+          || (request.resource.data.senderSlot is string
+              && request.resource.data.recipientSlot is string
+              && request.resource.data.senderSlot != request.resource.data.recipientSlot)
+        )
         && request.resource.data.senderUid == request.auth.uid
+        && (!('senderSlot' in request.resource.data) || request.resource.data.senderSlot == null || (request.resource.data.senderSlot is string && request.resource.data.senderSlot.size() <= 2))
+        && (!('recipientSlot' in request.resource.data) || request.resource.data.recipientSlot == null || (request.resource.data.recipientSlot is string && request.resource.data.recipientSlot.size() <= 2))
         && request.resource.data.senderName is string
         && request.resource.data.senderName.size() <= 60
         && request.resource.data.title is string
