@@ -113,9 +113,16 @@ export default class ItemTooltip {
         // número só — deixa claro pro jogador quanto veio da Fusão. Pode
         // aparecer em mais de uma linha (Anel/Amuleto do Crânio ganham
         // em Ataque, Armadura E Sorte ao mesmo tempo).
+        //
+        // getBonusStatKeys() (não isFusionBonusStat sozinho) de propósito:
+        // arma sempre mostra Armadura/Agilidade na tooltip mesmo valendo
+        // 0 (ver alwaysShown em renderStats) — isFusionBonusStat('armor')
+        // sozinho diria "sim" mesmo quando o item não tem Armadura de
+        // verdade, inventando um "valor base" negativo fictício (0 menos
+        // o bônus) que nunca existiu.
         const fusionBonus = FusionService.getFusionBonus(this.item);
 
-        if (fusionBonus > 0 && FusionService.isFusionBonusStat(key)) {
+        if (fusionBonus > 0 && FusionService.getBonusStatKeys(this.item).includes(key)) {
 
             const baseValue = value - fusionBonus;
 
