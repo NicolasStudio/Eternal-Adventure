@@ -61,9 +61,6 @@ export default class Toolbar {
                     <button id="btn-settings" class="hud-tool" data-tooltip="Configurações">
                         <i class="fa-solid fa-gears"></i>
                     </button>
-                    <button id="btn-maximize" class="hud-tool" data-tooltip="Maximizar">
-                        <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
-                    </button>
                     <button class="hud-tool" id="btn-wiki" data-tooltip="Wiki">
                         <i class="fa-brands fa-wikipedia-w"></i>
                     </button>
@@ -83,15 +80,6 @@ export default class Toolbar {
             return;
         }
 
-        // Cada botão é ligado de forma independente — se o de maximizar
-        // não for encontrado por qualquer motivo, os outros continuam
-        // funcionando (antes, um travava todos os demais).
-        const maximizeButton = toolbar.querySelector("#btn-maximize");
-
-        maximizeButton?.addEventListener("click", () => {
-            this.toggleFullscreen();
-        });
-
         // Expande/recolhe a toolbar. Recolhida mostra "<" (clique abre,
         // puxando os atalhos pra esquerda); expandida mostra ">" (clique
         // recolhe pra direita). O estado é guardado pra manter a escolha
@@ -110,14 +98,6 @@ export default class Toolbar {
                 arrow.classList.toggle("fa-angle-right", !nowCollapsed);
             }
         });
-
-        if (!Toolbar.fullscreenListenerBound) {
-            document.addEventListener("fullscreenchange", () => {
-                const currentToolbar = document.querySelector(".hud-toolbar");
-                if (currentToolbar) this.updateIcon(currentToolbar);
-            });
-            Toolbar.fullscreenListenerBound = true;
-        }
 
         toolbar.querySelector("#btn-save")?.addEventListener("click", () => {
             SaveService.save(this.game.player);
@@ -158,33 +138,5 @@ export default class Toolbar {
             window.open("wiki.html", "_blank");
         });
 
-    }
-
-    async toggleFullscreen() {
-        const game = document.getElementById("game");
-        if (!game) {
-            return;
-        }
-        try {
-            if (!document.fullscreenElement) {
-                await game.requestFullscreen();
-            } else {
-                await document.exitFullscreen();
-            }
-        } catch (e) {
-        }
-    }
-
-    updateIcon(toolbar) {
-        const button = toolbar.querySelector("#btn-maximize");
-        const icon = button?.querySelector("i");
-        if (!button || !icon) return;
-        if (document.fullscreenElement) {
-            icon.className = "fa-solid fa-down-left-and-up-right-to-center";
-            button.dataset.tooltip = "Minimizar";
-        } else {
-            icon.className = "fa-solid fa-up-right-and-down-left-from-center";
-            button.dataset.tooltip = "Maximizar";
-        }
     }
 }

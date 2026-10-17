@@ -253,6 +253,27 @@
     transition: 300ms;
 }
 
+.settings-fullscreen-button{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border:none;
+    background:none;
+    padding:0;
+    color:#d8c39b;
+    font-size:.92rem;
+    font-family:inherit;
+    cursor:pointer;
+    white-space:nowrap;
+    transition: 300ms;
+}
+.settings-fullscreen-button i{
+    color:#c77b4f;
+}
+.settings-fullscreen-button:hover{
+    color:#f0a878;
+}
+
 .report-bug-link{
     text-decoration: none;
     display:flex;

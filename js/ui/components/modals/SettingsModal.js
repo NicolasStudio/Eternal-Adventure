@@ -35,12 +35,19 @@ export default class SettingsModal {
 
         this.registerEvents();
 
+        // Qual instância (HomeScreen ou HudScreen) está aberta agora —
+        // ver o listener de fullscreenchange em registerEvents().
+        SettingsModal.activeInstance = this;
+
     }
 
     hide() {
         if (this.modal) {
             this.modal.remove();
             this.modal = null;
+        }
+        if (SettingsModal.activeInstance === this) {
+            SettingsModal.activeInstance = null;
         }
     }
 
@@ -89,6 +96,14 @@ export default class SettingsModal {
                             value="${this.settings.sfxVolume}"
                             ${this.settings.sfxEnabled ? "" : "disabled"}>
                     </div>
+                </section>
+
+                <section class="settings-section">
+                    <h3>Tela</h3>
+                    <button class="settings-fullscreen-button" id="settings-fullscreen">
+                        <i class="fa-solid ${this.isFullscreen() ? "fa-down-left-and-up-right-to-center" : "fa-up-right-and-down-left-from-center"}"></i>
+                        ${this.isFullscreen() ? "Minimizar" : "Maximizar"}
+                    </button>
                 </section>
 
                 <section class="settings-section">
@@ -145,6 +160,22 @@ export default class SettingsModal {
         this.modal.querySelector("#settings-close")?.addEventListener("click", () => {
             this.hide();
         });
+
+        this.modal.querySelector("#settings-fullscreen")?.addEventListener("click", () => {
+            this.toggleFullscreen();
+        });
+
+        // Atualiza o ícone/texto sozinho se o jogador sair da tela cheia
+        // por fora (Esc, F11) em vez de clicar aqui de novo — um só
+        // listener pra sessão inteira; refresh() só mexe em algo se ESTE
+        // modal for o que está aberto no momento (os dois, de HomeScreen
+        // e HudScreen, podem existir, mas só um por vez fica montado).
+        if (!SettingsModal.fullscreenListenerBound) {
+            document.addEventListener("fullscreenchange", () => {
+                SettingsModal.activeInstance?.refresh();
+            });
+            SettingsModal.fullscreenListenerBound = true;
+        }
 
         this.modal.querySelector("#settings-music-enabled")?.addEventListener("change", (event) => {
             this.settings.musicEnabled = event.target.checked;
@@ -255,6 +286,33 @@ export default class SettingsModal {
             }
 
         });
+
+    }
+
+    isFullscreen() {
+        return !!document.fullscreenElement;
+    }
+
+    async toggleFullscreen() {
+
+        try {
+            if (!document.fullscreenElement) {
+                // A página INTEIRA entra em tela cheia (documentElement),
+                // não só #game — todo modal do jogo (Configurações
+                // incluído) é anexado direto em document.body
+                // (document.body.appendChild), fora de #game. Pedindo
+                // fullscreen só em #game, qualquer modal aberto no
+                // momento virava invisível E parava de receber clique
+                // (fica fora da "top layer" da tela cheia) — inclusive
+                // o próprio modal de Configurações, de onde esse botão é
+                // clicado, travando o jogo inteiro sem resposta a clique
+                // nenhum.
+                await document.documentElement.requestFullscreen();
+            } else {
+                await document.exitFullscreen();
+            }
+        } catch (e) {
+        }
 
     }
 
