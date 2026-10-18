@@ -1,14 +1,31 @@
+// "type: trade" é a segunda família de talento simples (3/3, mesmo pool
+// de pontos e mesma tabela de custo dos "type: life" acima) — em vez de
+// converter vida em atributo, troca um atributo pelo outro num valor
+// FIXO por nível (ver TRADE_AMOUNT_PER_LEVEL), sem nenhum custo de vida.
+// "from"/"to" são as chaves em player.baseStats; "fromLabel"/"toLabel"
+// só pra exibição. `label` continua sendo o nome do atributo GANHO (pro
+// ícone/alt text), igual já funciona pros talentos de vida.
 export const TALENTS = [
-    { id: "attack", stat: "attack", label: "Dano de ataque", icon: "assets/img/assets/talent-tree/up-sword.png" },
-    { id: "armor", stat: "armor", label: "Armadura", icon: "assets/img/assets/talent-tree/up-shild.png" },
-    { id: "agility", stat: "agility", label: "Velocidade", icon: "assets/img/assets/talent-tree/up-speed.png" }
+    { id: "attack", type: "life", stat: "attack", label: "Dano de ataque", icon: "assets/img/assets/talent-tree/down-life-up-sword.png" },
+    { id: "armor", type: "life", stat: "armor", label: "Armadura", icon: "assets/img/assets/talent-tree/down-life-up-shild.png" },
+    { id: "agility", type: "life", stat: "agility", label: "Velocidade", icon: "assets/img/assets/talent-tree/down-life-up-speed.png" },
+
+    { id: "armor_to_agility", type: "trade", from: "armor", to: "agility", fromLabel: "Armadura", toLabel: "Velocidade", label: "Velocidade", icon: "assets/img/assets/talent-tree/down-shild-up-speed.png" },
+    { id: "armor_to_attack", type: "trade", from: "armor", to: "attack", fromLabel: "Armadura", toLabel: "Dano de ataque", label: "Dano de ataque", icon: "assets/img/assets/talent-tree/down-shild-up-sword.png" },
+    { id: "attack_to_armor", type: "trade", from: "attack", to: "armor", fromLabel: "Dano de ataque", toLabel: "Armadura", label: "Armadura", icon: "assets/img/assets/talent-tree/down-sword-up-shild.png" },
+    { id: "attack_to_agility", type: "trade", from: "attack", to: "agility", fromLabel: "Dano de ataque", toLabel: "Velocidade", label: "Velocidade", icon: "assets/img/assets/talent-tree/down-sword-up-speed.png" },
+    { id: "agility_to_attack", type: "trade", from: "agility", to: "attack", fromLabel: "Velocidade", toLabel: "Dano de ataque", label: "Dano de ataque", icon: "assets/img/assets/talent-tree/down-speed-up-sword.png" },
+    { id: "agility_to_armor", type: "trade", from: "agility", to: "armor", fromLabel: "Velocidade", toLabel: "Armadura", label: "Armadura", icon: "assets/img/assets/talent-tree/down-speed-up-shild.png" }
 ];
 
 export const MAX_LEVEL = 3;
 // Ganho do atributo e custo de vida são independentes: o atributo sobe
-// pouco, mas a vida perdida pesa mais.
+// pouco, mas a vida perdida pesa mais. Só vale pros talentos "life".
 export const GAIN_PERCENT_PER_LEVEL = 1;
 export const LIFE_LOSS_PERCENT_PER_LEVEL = 3;
+// Só vale pros talentos "trade": valor fixo (não %) indo de um atributo
+// pro outro a cada nível — ex: nível 3 move 45 de Ataque pra Velocidade.
+export const TRADE_AMOUNT_PER_LEVEL = 15;
 export const REQUIRED_CLEARS = 3;
 export const UPGRADE_COSTS = [50000, 70000, 100000];
 export const RESET_COST = 100000;
@@ -63,8 +80,12 @@ export const POINT_GROUPS = [
 
 export default class TalentService {
 
+    // Defaults derivados de TALENTS (não mais hardcoded attack/armor/
+    // agility) — sem isso, investir pela 1ª vez num talento novo lia
+    // `levels[id]` como undefined e `undefined + 1` virava NaN.
     static getLevels(player) {
-        return { attack: 0, armor: 0, agility: 0, ...(player.progress.talents ?? {}) };
+        const defaults = Object.fromEntries(TALENTS.map(talent => [talent.id, 0]));
+        return { ...defaults, ...(player.progress.talents ?? {}) };
     }
 
     static getEarnedPoints(player) {
@@ -121,18 +142,23 @@ export default class TalentService {
 
     // Vida perdida e atributo ganho são calculados sobre a vida máxima "crua"
     // (sem os cortes dos talentos). Idempotente: só aplica a diferença em
-    // relação ao que já foi aplicado.
+    // relação ao que já foi aplicado. Os talentos "trade" (troca de
+    // atributo) são sincronizados pelo mesmo padrão idempotente/diff,
+    // só que sem envolver vida nenhuma — ver bloco abaixo.
     static sync(player) {
 
         const levels = this.getLevels(player);
-        const applied = player.talentApplied ?? { lifeLost: 0, attack: 0, armor: 0, agility: 0 };
+        const applied = player.talentApplied ?? { lifeLost: 0 };
+
+        const lifeTalents = TALENTS.filter(talent => talent.type !== "trade");
+        const tradeTalents = TALENTS.filter(talent => talent.type === "trade");
 
         const rawMaxHP = player.maxHP + applied.lifeLost;
 
         const desiredGain = {};
         let totalLost = 0;
 
-        TALENTS.forEach(talent => {
+        lifeTalents.forEach(talent => {
             const level = levels[talent.id] ?? 0;
             totalLost += Math.floor(rawMaxHP * (LIFE_LOSS_PERCENT_PER_LEVEL / 100) * level);
             desiredGain[talent.id] = Math.floor(rawMaxHP * (GAIN_PERCENT_PER_LEVEL / 100) * level);
@@ -143,13 +169,27 @@ export default class TalentService {
         player.maxHP = Math.max(1, player.maxHP - lifeDiff);
         player.currentHP = Math.min(player.currentHP, player.maxHP);
 
-        TALENTS.forEach(talent => {
+        lifeTalents.forEach(talent => {
             const diff = desiredGain[talent.id] - (applied[talent.id] ?? 0);
             player.baseStats[talent.stat] = (player.baseStats[talent.stat] ?? 0) + diff;
             applied[talent.id] = desiredGain[talent.id];
         });
 
         applied.lifeLost = totalLost;
+
+        // Troca de atributo: valor fixo (TRADE_AMOUNT_PER_LEVEL por
+        // nível), tira de "from" e soma em "to" — sem envolver maxHP.
+        tradeTalents.forEach(talent => {
+            const level = levels[talent.id] ?? 0;
+            const desired = TRADE_AMOUNT_PER_LEVEL * level;
+            const diff = desired - (applied[talent.id] ?? 0);
+
+            player.baseStats[talent.from] = (player.baseStats[talent.from] ?? 0) - diff;
+            player.baseStats[talent.to] = (player.baseStats[talent.to] ?? 0) + diff;
+
+            applied[talent.id] = desired;
+        });
+
         player.talentApplied = applied;
 
     }
@@ -171,7 +211,7 @@ export default class TalentService {
         }
 
         player.gold -= cost;
-        player.progress.talents = { attack: 0, armor: 0, agility: 0 };
+        player.progress.talents = Object.fromEntries(TALENTS.map(talent => [talent.id, 0]));
 
         this.sync(player);
         this.clearUniqueTalent(player);
@@ -190,6 +230,9 @@ export default class TalentService {
     }
 
     static describe(talent) {
+        if (talent.type === "trade") {
+            return `Converte ${talent.fromLabel} em ${talent.toLabel}`;
+        }
         return `Converte ${GAIN_PERCENT_PER_LEVEL}% da sua vida em ${talent.label}`;
     }
 

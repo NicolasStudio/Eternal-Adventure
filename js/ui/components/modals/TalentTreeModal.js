@@ -1,5 +1,5 @@
 import TalentService, {
-    TALENTS, MAX_LEVEL, GAIN_PERCENT_PER_LEVEL, LIFE_LOSS_PERCENT_PER_LEVEL,
+    TALENTS, MAX_LEVEL, GAIN_PERCENT_PER_LEVEL, LIFE_LOSS_PERCENT_PER_LEVEL, TRADE_AMOUNT_PER_LEVEL,
     UNIQUE_TALENTS, UNIQUE_TALENT_COST
 } from "../../../services/TalentService.js";
 import SaveService from "../../../services/SaveService.js";
@@ -37,10 +37,8 @@ export default class TalentTreeModal {
 
     render() {
 
-        const levels = TalentService.getLevels(this.player);
         const earned = TalentService.getEarnedPoints(this.player);
         const available = TalentService.getAvailablePoints(this.player);
-        const applied = this.player.talentApplied ?? {};
 
         this.overlay.innerHTML = `
             <section class="talent-window">
@@ -61,36 +59,11 @@ export default class TalentTreeModal {
                 <div class="talent-body">
 
                     <div class="talent-row">
-                        ${TALENTS.map(talent => {
-                            const level = levels[talent.id] ?? 0;
-                            const gain = applied[talent.id] ?? 0;
-                            const canInvest = TalentService.canInvest(this.player, talent.id);
-                            return `
-                                <div class="talent-item">
-                                <button class="talent-card ${this.selectedId === talent.id ? "selected" : ""} ${level >= MAX_LEVEL ? "maxed" : ""}"
-                                        data-talent="${talent.id}">
-                                    <img class="talent-icon" src="${talent.icon}" alt="${talent.label}">
-                                    <div class="talent-tooltip">
-                                        <strong>${TalentService.describe(talent)}</strong>
-                                        <p>Cada nível: +${GAIN_PERCENT_PER_LEVEL}% da vida máxima em ${talent.label} e −${LIFE_LOSS_PERCENT_PER_LEVEL}% da vida máxima.</p>
-                                        <p class="talent-tooltip-effect">
-                                            ${level > 0
-                                                ? `Nível ${level}/${MAX_LEVEL}: +${level * GAIN_PERCENT_PER_LEVEL}% → +${gain} de ${talent.label}. Vida máxima: −${level * LIFE_LOSS_PERCENT_PER_LEVEL}% (−${TalentService.lifeLostFor(this.player, talent.id)}).`
-                                                : "Ainda não investido."}
-                                        </p>
-                                        <p class="talent-tooltip-hint">
-                                            ${level >= MAX_LEVEL
-                                                ? "Nível máximo."
-                                                : canInvest
-                                                    ? "Clique pra selecionar e depois em Melhorar."
-                                                    : "Sem pontos disponíveis."}
-                                        </p>
-                                    </div>
-                                </button>
-                                <span class="talent-progress">${level}/${MAX_LEVEL}</span>
-                                </div>
-                            `;
-                        }).join("")}
+                        ${TALENTS.filter(talent => talent.type !== "trade").map(talent => this.renderTalentCard(talent)).join("")}
+                    </div>
+
+                    <div class="talent-row">
+                        ${TALENTS.filter(talent => talent.type === "trade").map(talent => this.renderTalentCard(talent)).join("")}
                     </div>
 
                     <div class="talent-divider">Talentos Únicos</div>
@@ -153,6 +126,51 @@ export default class TalentTreeModal {
                 </footer>
 
             </section>
+        `;
+
+    }
+
+    // Talento simples (3/3) — "life" (converte vida em atributo) ou
+    // "trade" (troca um atributo fixo pelo outro, ver TalentService.js).
+    // Mesmo card/grade pros dois tipos, só o texto da tooltip muda.
+    renderTalentCard(talent) {
+
+        const levels = TalentService.getLevels(this.player);
+        const applied = this.player.talentApplied ?? {};
+        const level = levels[talent.id] ?? 0;
+        const canInvest = TalentService.canInvest(this.player, talent.id);
+        const isTrade = talent.type === "trade";
+
+        const effectLine = isTrade
+            ? `Cada nível: ${talent.fromLabel} −${TRADE_AMOUNT_PER_LEVEL}, ${talent.toLabel} +${TRADE_AMOUNT_PER_LEVEL}.`
+            : `Cada nível: +${GAIN_PERCENT_PER_LEVEL}% da vida máxima em ${talent.label} e −${LIFE_LOSS_PERCENT_PER_LEVEL}% da vida máxima.`;
+
+        const progressLine = level === 0
+            ? "Ainda não investido."
+            : isTrade
+                ? `Nível ${level}/${MAX_LEVEL}: ${talent.fromLabel} −${level * TRADE_AMOUNT_PER_LEVEL}, ${talent.toLabel} +${level * TRADE_AMOUNT_PER_LEVEL}.`
+                : `Nível ${level}/${MAX_LEVEL}: +${level * GAIN_PERCENT_PER_LEVEL}% → +${applied[talent.id] ?? 0} de ${talent.label}. Vida máxima: −${level * LIFE_LOSS_PERCENT_PER_LEVEL}% (−${TalentService.lifeLostFor(this.player, talent.id)}).`;
+
+        return `
+            <div class="talent-item">
+            <button class="talent-card ${this.selectedId === talent.id ? "selected" : ""} ${level >= MAX_LEVEL ? "maxed" : ""}"
+                    data-talent="${talent.id}">
+                <img class="talent-icon" src="${talent.icon}" alt="${talent.label}">
+                <div class="talent-tooltip">
+                    <strong>${TalentService.describe(talent)}</strong>
+                    <p>${effectLine}</p>
+                    <p class="talent-tooltip-effect">${progressLine}</p>
+                    <p class="talent-tooltip-hint">
+                        ${level >= MAX_LEVEL
+                            ? "Nível máximo."
+                            : canInvest
+                                ? "Clique pra selecionar e depois em Melhorar."
+                                : "Sem pontos disponíveis."}
+                    </p>
+                </div>
+            </button>
+            <span class="talent-progress">${level}/${MAX_LEVEL}</span>
+            </div>
         `;
 
     }
