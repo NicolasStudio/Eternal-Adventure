@@ -391,6 +391,36 @@
     font-size:20px;
 }
 
+/* UpdateRewardModal — mensagem de texto corrido (não a pergunta curta
+   e centralizada de .continue-message) + grade de itens compacta, já
+   que pode ter bem mais de 2 itens (ver ChestRewardModal/RewardModal
+   pro mesmo .reward-item reaproveitado aqui). */
+.update-reward-modal{
+    max-height:80vh;
+    overflow-y:auto;
+    padding-right:16px;
+}
+.update-reward-message{
+    margin:16px 0 20px;
+    text-align:left;
+    font-size:15px;
+    line-height:1.5;
+    color:#d8c39b;
+}
+.update-reward-items{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:14px;
+    margin-top:10px;
+}
+.update-reward-items .reward-item{
+    padding:10px 12px;
+}
+
+.update-reward-modal .continue-actions{
+    margin-top:26px;
+}
+
 .continue-actions{
     display:flex;
     gap:16px;

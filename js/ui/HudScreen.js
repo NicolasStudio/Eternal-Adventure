@@ -40,6 +40,7 @@ import SaveService from "../services/SaveService.js";
 import AchievementModal from "./components/modals/AchievementModal.js";
 import AchievementService from "../services/AchievementService.js";
 import AchievementToast from "./components/AchievementToast.js";
+import UpdateRewardModal from "./components/modals/UpdateRewardModal.js";
 
 export default class HudScreen {
     constructor(game) {
@@ -77,6 +78,7 @@ export default class HudScreen {
         this.tournamentRankingModal = new TournamentRankingModal(game);
         this.talentTreeModal = new TalentTreeModal(game);
         this.settingsModal = new SettingsModal(game, { inGame: true });
+        this.updateRewardModal = new UpdateRewardModal(game);
         this.currentView = "";
         this.characterVisible = true;
         this.inCombat = false;
@@ -615,10 +617,23 @@ export default class HudScreen {
         this.refreshCurrentView();
     }
 
+    // Ver UpdateRewardModal.js — só mostra se esse personagem ainda não
+    // coletou (mesmo padrão da antiga CompensationModal/
+    // maybeShowCompensation, removida no Beta 0.2.3).
+    maybeShowUpdateReward() {
+        if (this.game.player.progress.updateRewardClaimed) return;
+        this.updateRewardModal.show();
+    }
+
     show() {
         // Convites do Cooperativo chegam em qualquer tela do jogo.
         this.raidView.startInviteListener();
         this.setBackground("assets/img/backgrounds/tela_inicial.png");
+        // Aviso único de atualização com recompensa pra coletar (ver
+        // UpdateRewardModal.js) — dispara toda entrada no HUD, mas o
+        // flag em player.progress.updateRewardClaimed faz virar no-op
+        // depois que o jogador já coletou uma vez.
+        this.maybeShowUpdateReward();
         // Lembrete de carta pendente no Correio, agora AO VIVO (ver
         // MailModal.watchPending) — liga uma vez por entrada no HUD e
         // reage na hora quando chega carta nova, sem precisar recarregar.
