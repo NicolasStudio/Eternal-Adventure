@@ -17,18 +17,38 @@ const STALE_CLAIM_TIMEOUT_MS = 8000;
 // Matchmaking por Poder (PowerService): só pareia quem estiver a no
 // máximo essa diferença de Poder — ex: com 10k, aceita de 5k a 15k.
 // No modo de time (2x2/3x3) vale entre TODOS os jogadores do grupo
-// (maior - menor <= limite).
+// (maior - menor <= limite). Mantido como export pra não quebrar quem
+// já importa (ex: PvpView.js, valor default de renderPowerRange).
 export const PVP_POWER_RANGE = 5000;
 
 // Modo de time (2x2/3x3) apenas: quanto mais tempo na fila, mais largo
 // o limite de Poder — sem isso, com poucos jogadores online (precisa
 // de vários dentro do limite entre si) a fila nunca fechava. Sobe
 // POWER_RANGE_STEP a cada POWER_RANGE_STEP_MS de espera, até
-// POWER_RANGE_MAX — que é atingido com 2 minutos de espera (4 passos
-// de 30s: 5000 → 20000).
+// POWER_RANGE_MAX. Mesmo passo de tempo (30s) vale pros dois tipos de
+// fila — só o Poder em si muda (ver MODE_CONFIG).
 const POWER_RANGE_STEP_MS = 30 * 1000;
-const POWER_RANGE_STEP = 3750;
-const POWER_RANGE_MAX = 20000;
+
+// Cada "mode" de verdade (string usada em pvpLobby/{mode} e
+// pvpMatches/{mode}) tem seu próprio tamanho de time e limite de Poder
+// — Combate Ranqueado ("-ranked") é mais restrito: 2.500 em vez de
+// 5.000, crescendo até 10.000 em vez de 20.000 (mesma proporção de 4x
+// o Livre já usa, só com teto final mais baixo pra ficar competitivo
+// de verdade). Isso generaliza TEAM_SIZES + PVP_POWER_RANGE/STEP/MAX
+// (que existiam soltos antes, só pro Livre) sem mudar nada do
+// comportamento do Livre em si.
+const MODE_CONFIG = {
+    "1v1": { teamSize: 1, powerRange: 5000, rangeStep: 0, rangeMax: 5000 },
+    "2v2": { teamSize: 2, powerRange: 5000, rangeStep: 3750, rangeMax: 20000 },
+    "3v3": { teamSize: 3, powerRange: 5000, rangeStep: 3750, rangeMax: 20000 },
+    "1v1-ranked": { teamSize: 1, powerRange: 2500, rangeStep: 0, rangeMax: 2500 },
+    "2v2-ranked": { teamSize: 2, powerRange: 2500, rangeStep: 1875, rangeMax: 10000 },
+    "3v3-ranked": { teamSize: 3, powerRange: 2500, rangeStep: 1875, rangeMax: 10000 }
+};
+
+// Pontos de ranking por vitória, por tamanho de time (1 no 1x1, 2 no
+// 2x2, 3 no 3x3) — usado por quem resolve a partida (ver PvpView.js).
+export const RANKED_POINTS_BY_TEAM_SIZE = { 1: 1, 2: 2, 3: 3 };
 
 // De quanto em quanto tempo o modo de time reavalia a fila sozinho (o
 // limite de Poder cresce com o tempo, então a fila pode passar a
@@ -45,10 +65,6 @@ function isPowerCompatible(a, b, range = PVP_POWER_RANGE) {
 // Limita a busca de grupos do modo de time (combinações entre os
 // candidatos) pra não explodir se a fila ficar grande.
 const MAX_TEAM_CANDIDATES = 30;
-
-// Tamanho do time por modo — usado pra generalizar findTeamCandidates/
-// splitBalancedTeams/tryMatchTeam em vez de hardcoded pro 2x2.
-const TEAM_SIZES = { "2v2": 2, "3v3": 3 };
 
 /*
     Evita "roubar" o mesmo adversário: 1x1 reivindica via transação no
@@ -88,25 +104,40 @@ export default class PvpLobbyService {
         return `pvpMatches/${this.mode}`;
     }
 
-    // 2x2 e 3x3 compartilham todo o fluxo de time (fila com range de
-    // Poder crescente, reivindicação em grupo, divisão balanceada) — só
-    // muda quantos jogadores por lado.
+    // 2x2 e 3x3 (Livre OU Ranqueado) compartilham todo o fluxo de time
+    // (fila com range de Poder crescente, reivindicação em grupo,
+    // divisão balanceada) — só muda quantos jogadores por lado.
     static isTeamMode() {
-        return this.mode === "2v2" || this.mode === "3v3";
+        return this.getTeamSize() > 1;
+    }
+
+    static getModeConfig() {
+        return MODE_CONFIG[this.mode] ?? MODE_CONFIG["1v1"];
     }
 
     static getTeamSize() {
-        return TEAM_SIZES[this.mode] ?? 1;
+        return this.getModeConfig().teamSize;
     }
 
-    // Limite de Poder atual (modo de time cresce com a espera; 1x1 é fixo).
+    // "-ranked" no fim do mode é a única diferença entre a fila do
+    // Combate Livre e a do Ranqueado (ver lobbyPath/matchesPath) —
+    // nunca cruzam porque vivem em caminhos diferentes no banco.
+    static isRanked() {
+        return !!this.mode && this.mode.endsWith("-ranked");
+    }
+
+    // Limite de Poder atual (modo de time cresce com a espera; 1x1 é
+    // fixo). Ranqueado usa os mesmos passos de tempo do Livre, só com
+    // valores base/teto mais baixos (ver MODE_CONFIG).
     static getPowerRange() {
 
-        if (!this.isTeamMode()) return PVP_POWER_RANGE;
+        const config = this.getModeConfig();
+
+        if (!this.isTeamMode()) return config.powerRange;
 
         const steps = Math.floor((Date.now() - this.queuedAt) / POWER_RANGE_STEP_MS);
 
-        return Math.min(POWER_RANGE_MAX, PVP_POWER_RANGE + Math.max(0, steps) * POWER_RANGE_STEP);
+        return Math.min(config.rangeMax, config.powerRange + Math.max(0, steps) * config.rangeStep);
 
     }
 
@@ -302,7 +333,7 @@ export default class PvpLobbyService {
 
             const teamMode = this.isTeamMode();
             const teamSize = this.getTeamSize();
-            const range = teamMode ? this.getPowerRange() : PVP_POWER_RANGE;
+            const range = this.getPowerRange();
 
             const others = Object.entries(all)
                 .filter(([id, entry]) => id !== this.playerId && !entry.matchedWith && !entry.claimedBy)
@@ -527,6 +558,7 @@ export default class PvpLobbyService {
                 combatantA: { ...selfCombatant, id: this.playerId },
                 combatantB: { ...opponentCombatant, id: opponentId },
                 players: { [this.playerId]: true, [opponentId]: true },
+                ranked: this.isRanked(),
                 seed,
                 createdAt: serverTimestamp()
             },
@@ -642,6 +674,7 @@ export default class PvpLobbyService {
                     teamA: toTeamObject(split.teamA),
                     teamB: toTeamObject(split.teamB),
                     players: Object.fromEntries(claimedIds.map(id => [id, true])),
+                    ranked: this.isRanked(),
                     seed,
                     createdAt: serverTimestamp()
                 }

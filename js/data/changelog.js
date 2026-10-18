@@ -1,6 +1,15 @@
 export default [
 
     {
+        version: "Beta 0.2.8 — Troca de Atributo",
+        date: "Outubro de 2026",
+        changes: [
+            "Árvore de Talentos: 6 novos talentos de Troca de Atributo, abaixo dos 3 de sempre e usando o mesmo pool de pontos por região. Cada um troca uma quantidade FIXA (não porcentagem de vida) de um atributo pelo outro: 15 por nível, até 45 no 3/3, sem custar vida máxima — Armadura↔Velocidade, Armadura↔Ataque e Ataque↔Velocidade, nos dois sentidos cada",
+            "Maxear qualquer um dos 9 talentos simples agora libera os Talentos Únicos, não só os 3 originais (Dano/Armadura/Velocidade)"
+        ]
+    },
+
+    {
         version: "Beta 0.2.7 — Fusão de Equipamentos",
         date: "Outubro de 2026",
         changes: [

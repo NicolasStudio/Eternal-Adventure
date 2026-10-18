@@ -334,6 +334,12 @@
     color:#e05a5a;
     text-shadow:0 0 20px rgba(224,90,90,.4);
 }
+.pvp-ranked-points-earned{
+    color:#f1c75c;
+    font-weight:700;
+    font-size:.95rem;
+    margin:-8px 0 4px;
+}
 
 .pvp-versus{
     display:flex;
