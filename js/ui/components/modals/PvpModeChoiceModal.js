@@ -1,8 +1,15 @@
+// TRAVA DE LANÇAMENTO do Combate Ranqueado: com false, o botão continua
+// clicável mas mostra "em breve" (ver PvpView.enterRankedLocked) — toda
+// a mecânica (fila própria, pareamento de até 2.500 de Poder, arena
+// fixa, pontos na vitória) já funciona de verdade por trás disso. Pra
+// liberar ao público, troque só isso aqui pra true.
+export const RANKED_COMBAT_ENABLED = false;
+
 // Modal do lobby de PVP (ver PvpView.renderLobby): primeira escolha ao
 // entrar na Arena — Combate Livre (1x1/2x2/3x3 de sempre) ou Combate
-// Ranqueado (Modo Torneio, travado por enquanto — ver
-// PvpView.enterRankedLocked). show({ onFree, onRanked }) guarda os
-// callbacks e cada clique já fecha o modal antes de chamar o escolhido.
+// Ranqueado (Modo Torneio — ver RANKED_COMBAT_ENABLED acima).
+// show({ onFree, onRanked }) guarda os callbacks e cada clique já fecha
+// o modal antes de chamar o escolhido.
 export default class PvpModeChoiceModal {
 
     constructor() {
@@ -50,10 +57,10 @@ export default class PvpModeChoiceModal {
                         <span class="pvp-mode-label">Combate Livre</span>
                         <span class="pvp-mode-sub">1x1, 2x2 e 3x3</span>
                     </button>
-                    <button class="pvp-mode-btn pvp-mode-locked pvp-choice-btn" data-choice="ranked">
+                    <button class="pvp-mode-btn ${RANKED_COMBAT_ENABLED ? "" : "pvp-mode-locked"} pvp-choice-btn" data-choice="ranked">
                         <i class="fa-solid fa-trophy pvp-choice-icon"></i>
                         <span class="pvp-mode-label">Combate Ranqueado</span>
-                        <span class="pvp-mode-sub">Modo Torneio — em breve</span>
+                        <span class="pvp-mode-sub">${RANKED_COMBAT_ENABLED ? "Modo Torneio" : "Modo Torneio — em breve"}</span>
                     </button>
                 </div>
             </div>

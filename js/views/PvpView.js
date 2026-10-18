@@ -1,9 +1,10 @@
-import PvpLobbyService, { PVP_POWER_RANGE } from "../services/PvpLobbyService.js";
+import PvpLobbyService, { PVP_POWER_RANGE, RANKED_POINTS_BY_TEAM_SIZE } from "../services/PvpLobbyService.js";
 import PowerService from "../services/PowerService.js";
 import PvpCombatService from "../services/PvpCombatService.js";
 import { buildCombatInfo, buildCombatTimeline } from "../combat/CombatInfo.js";
 import CombatInfoModal from "../ui/components/modals/CombatInfoModal.js";
-import PvpModeChoiceModal from "../ui/components/modals/PvpModeChoiceModal.js";
+import PvpModeChoiceModal, { RANKED_COMBAT_ENABLED } from "../ui/components/modals/PvpModeChoiceModal.js";
+import SaveService from "../services/SaveService.js";
 import Toast from "../ui/components/Toast.js";
 import CombatToast from "../combat/CombatToast.js";
 import HealFlash from "../combat/HealFlash.js";
@@ -44,11 +45,19 @@ export default class PvpView {
     constructor(game) {
         this.game = game;
         this.state = "lobby"; // lobby | mode | idle | searching | found | ceremony | battle | result | ranked-locked
-        this.mode = null; // "1v1" | "2v2" | "3v3"
+        this.mode = null; // "1v1" | "2v2" | "3v3" (sem sufixo — ranked é um flag à parte, ver this.ranked)
+        // Combate Ranqueado escolhido no modal do lobby, em vez do Livre —
+        // só muda o que ENTRA na fila (ver joinQueue: mode vira
+        // "{mode}-ranked") e como a partida encontrada é tratada (arena
+        // fixa, pontos na vitória). this.mode continua "1v1"/"2v2"/"3v3"
+        // normalmente, pra todo o resto da tela (telas/ícones/textos que
+        // já distinguem por this.mode) não precisar saber de ranked.
+        this.ranked = false;
         this.opponentWaiting = false;
         this.matchData = null;
         this.matchId = null;
         this.combatResult = null;
+        this.rankedPointsEarned = 0; // pontos do Torneio ganhos na última vitória ranqueada (ver startSoloBattle/startTeamBattle)
         this.isPlayerA = null; // 1v1
         this.myTeamKey = null; // 2v2: "a" | "b"
         this.chosenBossDungeon = null;
@@ -92,13 +101,25 @@ export default class PvpView {
     // onMatchFound/onTeamMatchFound, que trocam o fundo depois da
     // cerimônia).
     enterFreeMode() {
+        this.ranked = false;
         this.state = "mode";
         this.refresh();
     }
 
-    // Combate Ranqueado escolhido no modal do lobby — "Modo Torneio"
-    // ainda travado (ver renderRankedLocked), com a tela fixa
-    // arena_pvp.png (diferente do Combate Livre, que mantém o lobby).
+    // Combate Ranqueado de verdade (RANKED_COMBAT_ENABLED true) — mesmo
+    // picker de modo do Livre (renderModeSelect já lê this.ranked pro
+    // texto), mas o fundo já troca pra arena_pvp.png aqui (igual a tela
+    // travada fazia), já que aqui não existe "lobby" nenhum pra manter.
+    enterRankedMode() {
+        this.ranked = true;
+        this.state = "mode";
+        this.game.hudScreen.setBackground("assets/img/backgrounds/arena_pvp.png");
+        this.refresh();
+    }
+
+    // Combate Ranqueado escolhido no modal do lobby, mas ainda travado
+    // (RANKED_COMBAT_ENABLED false) — tela fixa arena_pvp.png (diferente
+    // do Combate Livre, que mantém o lobby) com o aviso de "em breve".
     enterRankedLocked() {
         this.state = "ranked-locked";
         this.game.hudScreen.setBackground("assets/img/backgrounds/arena_pvp.png");
@@ -110,6 +131,7 @@ export default class PvpView {
     backToLobby() {
         this.state = "lobby";
         this.mode = null;
+        this.ranked = false;
         this.game.hudScreen.setBackground("assets/img/backgrounds/lobby_pvp.png");
         this.refresh();
     }
@@ -196,8 +218,10 @@ export default class PvpView {
     renderModeSelect() {
         return `
             <div class="pvp-mode-select">
-                <i class="fa-solid fa-hand-fist pvp-icon"></i>
-                <p class="pvp-description">Escolha o modo de combate:</p>
+                <i class="fa-solid ${this.ranked ? "fa-trophy" : "fa-hand-fist"} pvp-icon"></i>
+                <p class="pvp-description">
+                    ${this.ranked ? "Combate Ranqueado — escolha o modo:" : "Escolha o modo de combate:"}
+                </p>
                 <div class="pvp-mode-options">
                     <button class="pvp-mode-btn" data-mode="1v1">
                         <span class="pvp-mode-label">1x1</span>
@@ -225,6 +249,7 @@ export default class PvpView {
                     ${this.isTeamMode()
                         ? `Entre na fila e você será agrupado automaticamente com ${this.getTeamSize() === 3 ? "outros dois jogadores" : "outro jogador"} contra ${this.getTeamSize() === 3 ? "um trio adversário" : "uma dupla adversária"}, decidido pelos status de cada personagem no momento da partida. Quanto mais você espera, mais ampla fica a busca por Poder.`
                         : "Entre na fila e enfrente outro jogador em um combate automático, decidido pelos status do seu personagem no momento da partida."}
+                    ${this.ranked ? ` Pareamento mais restrito que o Combate Livre, arena sempre a mesma, e vitória soma pontos pro Torneio.` : ""}
                 </p>
                 <button class="pvp-join-button">Entrar na Fila</button>
             </div>
@@ -241,7 +266,7 @@ export default class PvpView {
                         ? (this.mode === "2v2" ? "Jogadores encontrados, preparando a partida..." : "Oponente encontrado, preparando a partida...")
                         : (this.mode === "2v2" ? "Procurando outros jogadores..." : "Procurando um oponente...")}
                 </p>
-                ${this.renderPowerRange()}
+                ${this.renderPowerRange(PvpLobbyService.getPowerRange())}
                 <button class="pvp-cancel-button">Cancelar</button>
             </div>
         `;
@@ -488,7 +513,7 @@ export default class PvpView {
             const enemyNames = enemyTeam.map(c => escapeHtml(c.name)).join(" & ");
             return `
                 <section class="pvp2v2-header-inline">
-                    <h2 class="pvp2v2-title">Arena PVP · ${this.mode === "3v3" ? "3x3" : "2x2"}</h2>
+                    <h2 class="pvp2v2-title">${this.matchData?.ranked ? "Ranqueado" : `Arena PVP · ${this.mode === "3v3" ? "3x3" : "2x2"}`}</h2>
                     <span class="pvp2v2-subtitle"><strong>${myNames}</strong> vs ${enemyNames}</span>
                 </section>
             `;
@@ -497,7 +522,7 @@ export default class PvpView {
         const opponent = this.currentOpponentSnapshot();
         return `
             <section class="combat-header-inline">
-                <h2 class="combat-title">Arena PVP</h2>
+                <h2 class="combat-title">${this.matchData?.ranked ? "Ranqueado" : "Arena PVP"}</h2>
                 <span class="combat-floor">vs ${opponent?.name ?? "..."}</span>
             </section>
         `;
@@ -556,6 +581,7 @@ export default class PvpView {
                 <h3 class="pvp-result-title ${iWon ? "win" : "lose"}">
                     ${iWon ? "Vitória!" : "Derrota"}
                 </h3>
+                ${this.rankedPointsEarned > 0 ? `<p class="pvp-ranked-points-earned"><i class="fa-solid fa-trophy"></i> +${this.rankedPointsEarned} ponto${this.rankedPointsEarned === 1 ? "" : "s"} do Torneio</p>` : ""}
                 <div class="pvp-versus">
                     <span class="pvp-fighter-name ${this.combatResult.winner === "a" ? "winner" : ""}">${combatantA.name}</span>
                     <span class="pvp-vs">VS</span>
@@ -586,6 +612,7 @@ export default class PvpView {
                 <h3 class="pvp-result-title ${iWon ? "win" : "lose"}">
                     ${iWon ? "Vitória!" : "Derrota"}
                 </h3>
+                ${this.rankedPointsEarned > 0 ? `<p class="pvp-ranked-points-earned"><i class="fa-solid fa-trophy"></i> +${this.rankedPointsEarned} ponto${this.rankedPointsEarned === 1 ? "" : "s"} do Torneio</p>` : ""}
                 <div class="pvp-versus pvp-versus-team">
                     <div class="pvp-team-column ${this.combatResult.winner === "a" ? "winner" : ""}">
                         ${teamA.map(c => `<span class="pvp-fighter-name">${escapeHtml(c.name)}</span>`).join("")}
@@ -796,8 +823,11 @@ export default class PvpView {
 
         const combatant = PvpCombatService.snapshotCombatant(this.player);
 
+        // Fila própria pro Ranqueado ("1v1-ranked" etc) — nunca cruza
+        // com a do Livre, mesmo pareamento/fila genéricos por trás (ver
+        // PvpLobbyService.MODE_CONFIG).
         await PvpLobbyService.joinQueue(
-            this.mode,
+            this.ranked ? `${this.mode}-ranked` : this.mode,
             combatant,
             (matchData, matchId) => this.onMatchFound(matchData, matchId),
             (waiting, count) => {
@@ -837,20 +867,32 @@ export default class PvpView {
 
         await this.sleep(1500);
 
-        // A arena é sorteada, mas com a MESMA semente da partida — os
-        // jogadores todos veem exatamente o mesmo cenário, sem
-        // precisar combinar nada entre si.
-        const chosenIndex = Math.abs(matchData.seed) % BOSS_DUNGEONS.length;
-        this.chosenBossDungeon = BOSS_DUNGEONS[chosenIndex];
-
         this.game.hudScreen.inPvpCombat = true;
         this.game.hudScreen.updateMusic();
-        this.state = "ceremony";
-        this.refresh();
 
-        await this.runCeremonyAnimation(chosenIndex);
+        // Ranqueado: sem sorteio de cenário — fica na tela fixa
+        // arena_pvp.png (já era o fundo desde a escolha do modo, ver
+        // enterRankedMode) e vai direto pra luta, sem cerimônia. Livre
+        // continua sorteando a arena, com a MESMA semente da partida
+        // pros dois jogadores verem exatamente o mesmo cenário sem
+        // precisar combinar nada entre si.
+        if (matchData.ranked) {
 
-        this.game.hudScreen.setBackground(this.chosenBossDungeon.background);
+            this.chosenBossDungeon = null;
+
+        } else {
+
+            const chosenIndex = Math.abs(matchData.seed) % BOSS_DUNGEONS.length;
+            this.chosenBossDungeon = BOSS_DUNGEONS[chosenIndex];
+
+            this.state = "ceremony";
+            this.refresh();
+
+            await this.runCeremonyAnimation(chosenIndex);
+
+            this.game.hudScreen.setBackground(this.chosenBossDungeon.background);
+
+        }
 
         await this.startSoloBattle();
 
@@ -908,19 +950,30 @@ export default class PvpView {
             await this.sleep(1500);
             if (aborted()) return;
 
-            // Mesma semente da partida — todos veem o mesmo cenário.
-            const chosenIndex = Math.abs(matchData.seed) % BOSS_DUNGEONS.length;
-            this.chosenBossDungeon = BOSS_DUNGEONS[chosenIndex];
-
             this.game.hudScreen.inPvpCombat = true;
             this.game.hudScreen.updateMusic();
-            this.state = "ceremony";
-            this.refresh();
 
-            await this.runCeremonyAnimation(chosenIndex);
-            if (aborted()) return;
+            // Ranqueado: sem cerimônia, fica na arena_pvp.png fixa (ver
+            // onMatchFound acima — mesmo critério).
+            if (matchData.ranked) {
 
-            this.game.hudScreen.setBackground(this.chosenBossDungeon.background);
+                this.chosenBossDungeon = null;
+
+            } else {
+
+                // Mesma semente da partida — todos veem o mesmo cenário.
+                const chosenIndex = Math.abs(matchData.seed) % BOSS_DUNGEONS.length;
+                this.chosenBossDungeon = BOSS_DUNGEONS[chosenIndex];
+
+                this.state = "ceremony";
+                this.refresh();
+
+                await this.runCeremonyAnimation(chosenIndex);
+                if (aborted()) return;
+
+                this.game.hudScreen.setBackground(this.chosenBossDungeon.background);
+
+            }
 
             await this.startTeamBattle(aborted);
             if (aborted()) return;
@@ -983,12 +1036,28 @@ export default class PvpView {
         const iWon = (result.winner === "a") === this.isPlayerA;
         await CombatToast.show(iWon ? `${opponent.name} derrotado!` : "Você foi derrotado!", "system", 2);
 
+        this.rankedPointsEarned = 0;
+
         // Só pra alimentar a conquista de PVP — notify() explícito
         // porque vencer uma partida, sozinho, não muda nada em
         // player.gold/level/etc que já dispararia isso.
         if (iWon) {
+
             this.player.progress.stats.pvpWins = (this.player.progress.stats.pvpWins ?? 0) + 1;
+
+            // Pontos do Torneio só na vitória, só se a partida for
+            // ranqueada (ver matchData.ranked) — 1 ponto no 1x1. Salva
+            // na nuvem NA HORA (não espera o autoSave de 1h em 1h, ver
+            // Game.js) — diferente de pvpWins (só conquista local), o
+            // Torneio é um ranking que outros jogadores veem.
+            if (this.matchData.ranked) {
+                this.rankedPointsEarned = RANKED_POINTS_BY_TEAM_SIZE[1];
+                this.player.progress.stats.pvpRankedPoints = (this.player.progress.stats.pvpRankedPoints ?? 0) + this.rankedPointsEarned;
+                SaveService.autoSave(this.player);
+            }
+
             this.player.notify();
+
         }
 
     }
@@ -1019,9 +1088,22 @@ export default class PvpView {
         await CombatToast.show(iWon ? `${teamLabel} venceu!` : `${teamLabel} foi derrotado!`, "system", 2);
         if (aborted()) return;
 
+        this.rankedPointsEarned = 0;
+
         if (iWon) {
+
             this.player.progress.stats.pvpWins = (this.player.progress.stats.pvpWins ?? 0) + 1;
+
+            // 2 pontos no 2x2, 3 no 3x3 — ver RANKED_POINTS_BY_TEAM_SIZE.
+            // Salva na nuvem na hora, mesmo motivo do 1x1 acima.
+            if (this.matchData.ranked) {
+                this.rankedPointsEarned = RANKED_POINTS_BY_TEAM_SIZE[this.getTeamSize()] ?? 0;
+                this.player.progress.stats.pvpRankedPoints = (this.player.progress.stats.pvpRankedPoints ?? 0) + this.rankedPointsEarned;
+                SaveService.autoSave(this.player);
+            }
+
             this.player.notify();
+
         }
 
     }
@@ -1719,7 +1801,7 @@ export default class PvpView {
         container.querySelector(".pvp-lobby-enter-button")?.addEventListener("click", () => {
             this.modeChoiceModal.show({
                 onFree: () => this.enterFreeMode(),
-                onRanked: () => this.enterRankedLocked()
+                onRanked: () => RANKED_COMBAT_ENABLED ? this.enterRankedMode() : this.enterRankedLocked()
             });
         });
 
