@@ -1,6 +1,10 @@
 import SaveService from "../../../services/SaveService.js";
 import classes from "../../../player/classes.js";
 import PlayerProfileModal from "./PlayerProfileModal.js";
+import FarmConfirmModal from "./FarmConfirmModal.js";
+import AuthService from "../../../services/AuthService.js";
+import MailService from "../../../services/MailService.js";
+import Toast from "../Toast.js";
 
 // O nome vem do banco (de outro jogador) — nunca pode entrar como HTML.
 function escapeHtml(text) {
@@ -23,6 +27,14 @@ export default class TournamentRankingModal {
         this.status = "loading";
         this.entries = [];
         this.profileModal = new PlayerProfileModal();
+        // Botão "Zerar Ranking" (reset de temporada) — só a conta admin
+        // vê, ver firestore.rules pro lado do servidor dessa trava.
+        this.confirmModal = new FarmConfirmModal();
+        this.resetting = false;
+    }
+
+    get isAdmin() {
+        return MailService.isAdmin(AuthService.getCurrentUser()?.uid ?? null);
     }
 
     show() {
@@ -84,6 +96,15 @@ export default class TournamentRankingModal {
                 <div class="ranking-body">
                     ${this.renderBody()}
                 </div>
+
+                ${this.isAdmin ? `
+                    <footer class="ranking-footer tournament-admin-footer">
+                        <button class="tournament-reset-button" ${this.resetting ? "disabled" : ""}>
+                            <i class="fa-solid ${this.resetting ? "fa-circle-notch fa-spin" : "fa-trash"}"></i>
+                            ${this.resetting ? "Zerando..." : "Zerar Ranking"}
+                        </button>
+                    </footer>
+                ` : ""}
 
             </div>
         `;
@@ -166,6 +187,53 @@ export default class TournamentRankingModal {
                 this.profileModal.show(this.entries[Number(cell.dataset.index)]);
             });
         });
+
+        this.modal.querySelector(".tournament-reset-button")?.addEventListener("click", () => {
+            this.confirmReset();
+        });
+
+    }
+
+    // Zera rankedPoints de TODOS os jogadores (não só quem aparece na
+    // lista aberta agora) — pede confirmação antes, já que não tem
+    // como desfazer. Só chega até aqui se this.isAdmin (botão nem
+    // aparece pra quem não é admin, e a regra do Firestore barra a
+    // escrita do lado do servidor mesmo que alguém force o clique).
+    async confirmReset() {
+
+        if (this.resetting) return;
+
+        const confirmed = await this.confirmModal.show({
+            title: "Zerar o Ranking do Torneio?",
+            message: "Isso zera os pontos de TODOS os jogadores que já pontuaram — início de temporada nova. Não tem como desfazer.",
+            confirmLabel: "SIM, ZERAR",
+            cancelLabel: "CANCELAR",
+            danger: true
+        });
+
+        if (!confirmed) return;
+
+        this.resetting = true;
+        this.refresh();
+
+        try {
+
+            const count = await SaveService.resetAllRankedPoints();
+
+            Toast.show(`Ranking zerado — ${count} registro${count === 1 ? "" : "s"} afetado${count === 1 ? "" : "s"}.`);
+
+        } catch (err) {
+
+            console.warn("Falha ao zerar o ranking do Torneio:", err);
+            Toast.show("Não foi possível zerar o ranking. Tenta de novo.");
+
+        } finally {
+
+            this.resetting = false;
+
+        }
+
+        await this.fetchRanking();
 
     }
 

@@ -20,7 +20,7 @@ import TalentService from "./TalentService.js";
 import { PET_MAX_LEVEL } from "../data/levelsPet.js";
 import cards from "../data/cards.js";
 import { sanitizeRemote, sanitizeText } from "./MatchSanitizer.js";
-import { firestore, doc, getDoc, getDocs, setDoc, deleteDoc, runFirestoreTransaction, collection, query, orderBy, limit } from "./FirebaseService.js";
+import { firestore, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, runFirestoreTransaction, collection, query, orderBy, limit } from "./FirebaseService.js";
 
 const STORAGE_KEY = "eternal-adventure-save";
 // Formato de UM personagem (ver serialize). A conta inteira usa CONTAINER_VERSION.
@@ -1285,6 +1285,33 @@ export default class SaveService {
             return [];
 
         }
+
+    }
+
+    // Reset de temporada do Torneio — zera rankedPoints de TODO MUNDO
+    // que já pontuou (ver TournamentRankingModal.js, botão só visível
+    // pra conta admin). A regra do Firestore só deixa a conta admin
+    // escrever esse UM campo em registro de outro jogador (nada mais —
+    // ver firestore.rules), então updateDoc (não setDoc) é obrigatório
+    // aqui: um setDoc normal tentaria regravar o documento inteiro e
+    // esbarraria na mesma regra. Devolve quantos registros foram
+    // zerados.
+    static async resetAllRankedPoints() {
+
+        const leaderboardQuery = query(
+            collection(firestore, LEADERBOARD_COLLECTION),
+            orderBy("rankedPoints", "desc")
+        );
+
+        const snapshot = await getDocs(leaderboardQuery);
+
+        const toReset = snapshot.docs.filter(entry => (Number(entry.data().rankedPoints) || 0) > 0);
+
+        await Promise.all(
+            toReset.map(entry => updateDoc(doc(firestore, LEADERBOARD_COLLECTION, entry.id), { rankedPoints: 0 }))
+        );
+
+        return toReset.length;
 
     }
 

@@ -88,6 +88,19 @@ service cloud.firestore {
             || (request.resource.data.rankedPoints is int
                 && request.resource.data.rankedPoints >= 0
                 && request.resource.data.rankedPoints <= 999999));
+
+      // Reset de temporada do Torneio (ver TournamentRankingModal.js,
+      // botão só visível pra conta admin): só esse uid, só o campo
+      // rankedPoints, documento já precisa existir (reset não cria
+      // entrada nova) — nunca dá acesso a mais nada do registro de
+      // outro jogador (nome, nível, power, etc continuam travados pro
+      // dono de verdade).
+      allow update: if signedIn()
+        && request.auth.uid == "qgZA5v7Q1IWLjYc99bNrrRJd14X2"
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['rankedPoints'])
+        && request.resource.data.rankedPoints is int
+        && request.resource.data.rankedPoints >= 0
+        && request.resource.data.rankedPoints <= 999999;
     }
 
     // Correio — provisório (ver js/services/MailService.js): só a conta

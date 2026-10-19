@@ -36,6 +36,38 @@
     padding:10px 18px 20px;
 }
 
+/* Reset de temporada do Torneio — só a conta admin vê esse rodapé (ver
+   TournamentRankingModal.isAdmin). Separado visualmente do resto da
+   lista com borda em cima, pra não parecer uma ação "normal" do
+   ranking. */
+.tournament-admin-footer{
+    display:flex;
+    justify-content:center;
+    padding:12px 18px 16px;
+    border-top:1px solid rgba(212,163,115,.25);
+}
+.tournament-reset-button{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 20px;
+    cursor:pointer;
+    border:1px solid #7a1f1f;
+    border-radius:6px;
+    background:#3a1010;
+    color:#f3c7c7;
+    font-family:"Cinzel", serif;
+    font-size:14px;
+    transition:.2s;
+}
+.tournament-reset-button:hover:not(:disabled){
+    background:#5c1818;
+}
+.tournament-reset-button:disabled{
+    opacity:.6;
+    cursor:default;
+}
+
 .ranking-status{
     display:flex;
     flex-direction:column;
