@@ -48,7 +48,7 @@ const rarities = {
         id: "legendary",
         name: "Lendário",
         color: "#ff711f",
-        dropChance: 2.5,
+        dropChance: 5,
         qualityStep: 10,
         secondaryCap: 35,
         minLevel: 100
