@@ -88,7 +88,17 @@ function hydrateItem(snapshot) {
         ...structuredClone(canonical),
         quality: qualities[snapshot.quality?.id] ?? qualities.none,
         stats,
-        enchantments: Object.keys(enchantments).length ? enchantments : null
+        enchantments: Object.keys(enchantments).length ? enchantments : null,
+        // Fusão (ver FusionService.js) — sem isso o tooltip do perfil
+        // público nunca mostra o selo "(+N)" nem separa o bônus de
+        // fusão do valor base, mesmo quando o item publicado é um item
+        // fundido de verdade. baseStats aqui não precisa ser os valores
+        // ORIGINAIS pré-melhoria (isso não vem no snapshot) — só serve
+        // pra FusionService.getBonusStatKeys saber QUAIS atributos são
+        // elegíveis (não-zero, não-especiais), e canonical.stats já tem
+        // o mesmo padrão de zero/não-zero que o baseStats de verdade.
+        fusionLevel: Math.max(0, Math.floor(num(snapshot.fusionLevel))),
+        baseStats: canonical.stats
     };
 
 }
