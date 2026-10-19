@@ -3,7 +3,7 @@
 // a mecânica (fila própria, pareamento de até 2.500 de Poder, arena
 // fixa, pontos na vitória) já funciona de verdade por trás disso. Pra
 // liberar ao público, troque só isso aqui pra true.
-export const RANKED_COMBAT_ENABLED = false;
+export const RANKED_COMBAT_ENABLED = true;
 
 // Modal do lobby de PVP (ver PvpView.renderLobby): primeira escolha ao
 // entrar na Arena — Combate Livre (1x1/2x2/3x3 de sempre) ou Combate
