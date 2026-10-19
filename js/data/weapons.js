@@ -1301,7 +1301,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/katana-rarity-rare.png",
 
         stats: {
-            attack: 18,
+            attack: 21,
             armor: 0,
             agility: 0,
             criticalChance: 0,
