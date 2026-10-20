@@ -36,7 +36,7 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-warrior-rarity-incomum.png",
 
         stats: {
-            armor: 2,
+            armor: 1,
             agility: 4
         },
 
@@ -56,7 +56,7 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-warrior-rarity-rare.png",
 
         stats: {
-            armor: 4,
+            armor: 2,
             agility: 7
         },
 
@@ -76,7 +76,7 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-warrior-rarity-mistico.png",
 
         stats: {
-            armor: 6
+            armor: 4
         },
 
         value: 2160,
@@ -95,7 +95,7 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-warrior-rarity-lendario.png",
 
         stats: {
-            armor: 18
+            armor: 3
         },
 
         value: 0,
@@ -114,7 +114,7 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-warrior-rarity-ultraje.png",
 
         stats: {
-            armor: 15,
+            armor: 7,
             agility: 18
         },
 
@@ -197,8 +197,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-mage-rarity-mistico.png",
 
         stats: {
-            armor: 5,
-            agility: 15
+            armor: 6,
+            agility: 16
         },
 
         value: 2160,
@@ -217,8 +217,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-mage-rarity-lendario.png",
 
         stats: {
-            armor: 10,
-            agility: 20
+            armor: 5,
+            agility: 14
         },
 
         value: 0,
@@ -319,8 +319,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-archer-rarity-mistico.png",
 
         stats: {
-            armor: 5,
-            agility: 13
+            armor: 6,
+            agility: 14
         },
 
         value: 2160,
@@ -339,7 +339,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-archer-rarity-lendario.png",
 
         stats: {
-            agility: 14
+            armor: 1,
+            agility: 9
         },
 
         value: 0,
@@ -441,8 +442,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-barbarian-rarity-mistico.png",
 
         stats: {
-            armor: 5,
-            agility: 13
+            armor: 6,
+            agility: 14
         },
 
         value: 2160,
@@ -461,8 +462,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-barbarian-rarity-lendario.png",
 
         stats: {
-            armor: 7,
-            agility: 14
+            armor: 2,
+            agility: 9
         },
 
         value: 0,
@@ -564,8 +565,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-putrid-rarity-mistico.png",
 
         stats: {
-            armor: 5,
-            agility: 19
+            armor: 6,
+            agility: 20
         },
 
         value: 2160,
@@ -584,8 +585,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-putrid-rarity-lendario.png",
 
         stats: {
-            armor: 7,
-            agility: 17
+            armor: 2,
+            agility: 11
         },
 
         value: 0,
@@ -687,8 +688,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-mimic-rarity-mistico.png",
 
         stats: {
-            armor: 9,
-            agility: 19
+            armor: 10,
+            agility: 20
         },
 
         value: 2160,
@@ -707,8 +708,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-mimic-rarity-lendario.png",
 
         stats: {
-            armor: 11,
-            agility: 20
+            armor: 6,
+            agility: 14
         },
 
         value: 0,
@@ -807,8 +808,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-crazy-rarity-mistico.png",
 
         stats: {
-            armor: 3,
-            agility: 25
+            armor: 4,
+            agility: 26
         },
 
         value: 2160,
@@ -827,8 +828,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-crazy-rarity-lendario.png",
 
         stats: {
-            armor: 4,
-            agility: 31
+            armor: 1,
+            agility: 24
         },
 
         value: 0,
@@ -927,8 +928,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-spark-rarity-mistico.png",
 
         stats: {
-            armor: 5,
-            agility: 13
+            armor: 6,
+            agility: 14
         },
 
         value: 2160,
@@ -947,8 +948,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-spark-rarity-lendario.png",
 
         stats: {
-            armor: 7,
-            agility: 14
+            armor: 2,
+            agility: 9
         },
 
         value: 0,
@@ -1050,8 +1051,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-samurai-rarity-mistico.png",
 
         stats: {
-            armor: 5,
-            agility: 24
+            armor: 6,
+            agility: 25
         },
 
         value: 2160,
@@ -1070,8 +1071,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-samurai-rarity-lendario.png",
 
         stats: {
-            armor: 6,
-            agility: 28
+            armor: 1,
+            agility: 21
         },
 
         value: 0,
@@ -1173,8 +1174,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-singularity-rarity-mistico.png",
 
         stats: {
-            armor: 5,
-            agility: 7
+            armor: 6,
+            agility: 8
         },
 
         value: 2160,
@@ -1193,8 +1194,8 @@ const boots = {
         icon: "assets/img/assets/items/boots/boots-singularity-rarity-lendario.png",
 
         stats: {
-            armor: 7,
-            agility: 8
+            armor: 2,
+            agility: 3
         },
 
         value: 0,

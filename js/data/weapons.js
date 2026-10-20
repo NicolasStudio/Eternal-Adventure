@@ -95,7 +95,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/sword-rarity-mistico.png",
 
         stats: {
-            attack: 40,
+            attack: 42,
             armor: 0,
             agility: -5,
             criticalChance: 0,
@@ -121,7 +121,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/sword-rarity-lendario.png",
 
         stats: {
-            attack: 52,
+            attack: 43,
             armor: 0,
             agility: -8,
             criticalChance: 0,
@@ -241,7 +241,7 @@ const weapons = {
         rarity: rarities.mystic,
         icon: "assets/img/assets/items/weapons/scepter-rarity-mistico.png",
         stats: {
-            attack: 38,
+            attack: 40,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -263,7 +263,7 @@ const weapons = {
         rarity: rarities.legendary,
         icon: "assets/img/assets/items/weapons/scepter-rarity-lendario.png",
         stats: {
-            attack: 50,
+            attack: 25,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -376,9 +376,9 @@ const weapons = {
         rarity: rarities.mystic,
         icon: "assets/img/assets/items/weapons/arch-rarity-mistico.png",
         stats: {
-            attack: 28,
+            attack: 29,
             armor: 0,
-            agility: 8,
+            agility: 9,
             criticalChance: 10,
             lifeSteal: 0,
             penetration: 0
@@ -398,9 +398,9 @@ const weapons = {
         rarity: rarities.legendary,
         icon: "assets/img/assets/items/weapons/arch-rarity-lendario.png",
         stats: {
-            attack: 40,
+            attack: 32,
             armor: 0,
-            agility: 9,
+            agility: 4,
             criticalChance: 11,
             lifeSteal: 0,
             penetration: 0
@@ -514,9 +514,9 @@ const weapons = {
         rarity: rarities.mystic,
         icon: "assets/img/assets/items/weapons/ax-rarity-mistico.png",
         stats: {
-            attack: 30,
+            attack: 32,
             armor: 0,
-            agility: 5,
+            agility: 6,
             criticalChance: 0,
             lifeSteal: 10,
             penetration: 0,
@@ -537,9 +537,9 @@ const weapons = {
         rarity: rarities.legendary,
         icon: "assets/img/assets/items/weapons/ax-rarity-lendario.png",
         stats: {
-            attack: 42,
+            attack: 34,
             armor: 0,
-            agility: 7,
+            agility: 2,
             criticalChance: 0,
             lifeSteal: 11,
             penetration: 0,
@@ -668,7 +668,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/stink-rarity-mistico.png",
 
         stats: {
-            attack: 40,
+            attack: 42,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -695,7 +695,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/stink-rarity-lendario.png",
 
         stats: {
-            attack: 48,
+            attack: 39,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -833,7 +833,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/mirror-rarity-mistico.png",
 
         stats: {
-            attack: 25,
+            attack: 26,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -860,7 +860,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/mirror-rarity-lendario.png",
 
         stats: {
-            attack: 36,
+            attack: 15,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -998,7 +998,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/sledgehammer-rarity-mistico.png",
 
         stats: {
-            attack: 55,
+            attack: 57,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -1025,7 +1025,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/sledgehammer-rarity-lendario.png",
 
         stats: {
-            attack: 66,
+            attack: 55,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -1163,7 +1163,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/tesla-coil-rarity-mistico.png",
 
         stats: {
-            attack: 34,
+            attack: 36,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -1190,7 +1190,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/tesla-coil-rarity-lendario.png",
 
         stats: {
-            attack: 44,
+            attack: 36,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -1328,7 +1328,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/katana-rarity-mistico.png",
 
         stats: {
-            attack: 32,
+            attack: 34,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -1355,7 +1355,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/katana-rarity-lendario.png",
 
         stats: {
-            attack: 40,
+            attack: 32,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -1493,7 +1493,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/hammer-rarity-mistico.png",
 
         stats: {
-            attack: 32,
+            attack: 34,
             armor: 0,
             agility: 0,
             criticalChance: 0,
@@ -1520,7 +1520,7 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/hammer-rarity-lendario.png",
 
         stats: {
-            attack: 44,
+            attack: 36,
             armor: 0,
             agility: 0,
             criticalChance: 0,

@@ -1,4 +1,5 @@
 import PvpCombatService from "./PvpCombatService.js";
+import PetService from "./PetService.js";
 import BoitataBurn from "./BoitataBurn.js";
 import MiasmaService, { PVE_STACK_PERCENTS as MIASMA_PVE_PERCENTS } from "./MiasmaService.js";
 import MimicService from "./MimicService.js";
@@ -69,10 +70,16 @@ export default class RaidCombatService {
     // Mesmo snapshot do PVP (PvpCombatService.snapshotCombatant), só
     // acrescentando `level` — a simulação em si não usa isso, mas o HUD
     // da raid mostra o nível de cada um dos 4 jogadores nos cards.
+    // A Queimadura do Boitatá volta pro valor de PVE (cresce com o nível
+    // do pet) — o snapshot do PVP usa o tick fixo contra jogador (ver
+    // PetService.getScaledStats/burnDamagePvp), e aqui o alvo é o boss.
     static snapshotCombatant(player) {
+
+        const pet = player.equipment.pet;
 
         return {
             ...PvpCombatService.snapshotCombatant(player),
+            petBurnDamage: pet ? PetService.getScaledStats(pet).burnDamage : 0,
             level: player.level
         };
 

@@ -31,7 +31,11 @@ const DODGE_CAP = 40;
 // Miasma/Confusão/Paralisia), mesmo motivo do bump acima.
 // v14 Pressão Gravitacional/Gravidade Máxima da Singularidade — rola
 // todo golpe que acerta, mesmo motivo do bump acima.
-export const TEAM_SIM_VERSION = 14;
+// v15 1x1 que estoura o limite de rodadas passa a desempatar pela % de
+// vida restante (antes o lado "a" vencia sempre); Queimadura do Boitatá
+// contra jogador vira tick fixo (burnDamagePvp) e a cura do Duende cai
+// pro nível do pet — muda o resultado de lutas já existentes.
+export const TEAM_SIM_VERSION = 15;
 
 /*
     Os dois clientes (jogador A e B) precisam chegar no MESMO resultado
@@ -115,7 +119,10 @@ export default class PvpCombatService {
             petBiteDamage: scaledPet?.biteDamage ?? 0,
             petHealAmount: scaledPet?.healAmount ?? 0,
             petMimicRatio: scaledPet?.mimicRatio ?? 0,
-            petBurnDamage: scaledPet?.burnDamage ?? 0,
+            // Tick fixo contra jogador (ver PetService/burnDamagePvp) — o
+            // Cooperativo troca de volta pro valor de PVE no snapshot dele
+            // (ver RaidCombatService.snapshotCombatant).
+            petBurnDamage: scaledPet?.burnDamagePvp ?? 0,
             // Yggdrasil: % da Vida Máxima com que o dono volta ao morrer,
             // uma vez por luta (ver reviveIfDead).
             petRevivePercent: scaledPet?.revivePercent ?? 0,
@@ -591,7 +598,14 @@ export default class PvpCombatService {
 
         }
 
-        const winner = a.currentHP > 0 ? "a" : "b";
+        // Se o limite de rodadas estourar com os dois ainda vivos, vence
+        // quem tem mais vida restante (proporcional), igual o 2x2 — antes
+        // o lado "a" ganhava sempre nesse caso.
+        let winner;
+
+        if (b.currentHP <= 0) winner = "a";
+        else if (a.currentHP <= 0) winner = "b";
+        else winner = a.currentHP / a.maxHP >= b.currentHP / b.maxHP ? "a" : "b";
 
         return {
             winner,
