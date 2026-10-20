@@ -47,10 +47,10 @@ const monstersRaid = [
             {
                 pool: [
                     { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
-                    { type: ["boot"], rarity: "legendary", chance: 5 },
+                    { type: ["boot"], rarity: "legendary", chance: 7 },
                     { item: enchantmentStone.quartzoRosaTres, chance: 10 },
                     { item: enchantmentStone.quartzoRosaDois, chance: 13 },
-                    { item: enchantmentStone.quartzoRosaUm, chance: 67 }
+                    { item: enchantmentStone.quartzoRosaUm, chance: 65 }
                 ]
             }
         ]
@@ -96,10 +96,10 @@ const monstersRaid = [
             {
                 pool: [
                     { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
-                    { type: ["leg"], rarity: "legendary", chance: 5 },
+                    { type: ["leg"], rarity: "legendary", chance: 7 },
                     { item: enchantmentStone.quartzoRosaTres, chance: 10 },
                     { item: enchantmentStone.quartzoRosaDois, chance: 13 },
-                    { item: enchantmentStone.quartzoRosaUm, chance: 67 }
+                    { item: enchantmentStone.quartzoRosaUm, chance: 65 }
                 ]
             }
         ]
@@ -145,10 +145,10 @@ const monstersRaid = [
             {
                 pool: [
                     { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
-                    { type: ["ring", "amulet"], rarity: "legendary", chance: 5 },
+                    { type: ["ring", "amulet"], rarity: "legendary", chance: 7 },
                     { item: enchantmentStone.quartzoRosaTres, chance: 10 },
                     { item: enchantmentStone.quartzoRosaDois, chance: 13 },
-                    { item: enchantmentStone.quartzoRosaUm, chance: 67 }
+                    { item: enchantmentStone.quartzoRosaUm, chance: 65 }
                 ]
             }
         ]
@@ -194,10 +194,10 @@ const monstersRaid = [
             {
                 pool: [
                     { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
-                    { type: ["ring", "amulet"], rarity: "legendary", chance: 5 },
+                    { type: ["ring", "amulet"], rarity: "legendary", chance: 7 },
                     { item: enchantmentStone.quartzoRosaTres, chance: 10 },
                     { item: enchantmentStone.quartzoRosaDois, chance: 13 },
-                    { item: enchantmentStone.quartzoRosaUm, chance: 67 }
+                    { item: enchantmentStone.quartzoRosaUm, chance: 65 }
                 ]
             }
         ]
@@ -243,10 +243,10 @@ const monstersRaid = [
             {
                 pool: [
                     { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
-                    { type: ["chest"], rarity: "legendary", chance: 5 },
+                    { type: ["chest"], rarity: "legendary", chance: 7 },
                     { item: enchantmentStone.quartzoRosaTres, chance: 10 },
                     { item: enchantmentStone.quartzoRosaDois, chance: 13 },
-                    { item: enchantmentStone.quartzoRosaUm, chance: 67 }
+                    { item: enchantmentStone.quartzoRosaUm, chance: 65 }
                 ]
             }
         ]
@@ -292,10 +292,10 @@ const monstersRaid = [
             {
                 pool: [
                     { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
-                    { type: ["helmet"], rarity: "legendary", chance: 5 },
+                    { type: ["helmet"], rarity: "legendary", chance: 7 },
                     { item: enchantmentStone.quartzoRosaTres, chance: 10 },
                     { item: enchantmentStone.quartzoRosaDois, chance: 13 },
-                    { item: enchantmentStone.quartzoRosaUm, chance: 67 }
+                    { item: enchantmentStone.quartzoRosaUm, chance: 65 }
                 ]
             }
         ]
@@ -341,10 +341,10 @@ const monstersRaid = [
             {
                 pool: [
                     { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
-                    { type: ["weapon"], rarity: "legendary", chance: 5 },
+                    { type: ["weapon"], rarity: "legendary", chance: 7 },
                     { item: enchantmentStone.quartzoRosaTres, chance: 10 },
                     { item: enchantmentStone.quartzoRosaDois, chance: 13 },
-                    { item: enchantmentStone.quartzoRosaUm, chance: 67 }
+                    { item: enchantmentStone.quartzoRosaUm, chance: 65 }
                 ]
             },
             // Ovo do Yggdrasil: sorteio à parte (2%), além do pool acima —

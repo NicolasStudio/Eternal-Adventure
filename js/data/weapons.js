@@ -78,7 +78,7 @@ const weapons = {
             absorption: 6
         },
 
-        value: 1080,
+        value: 3240,
         sellValue: 540
 
     },
@@ -104,7 +104,7 @@ const weapons = {
             absorption: 10
         },
 
-        value: 3240,
+        value: 9720,
         sellValue: 1620
 
     },
@@ -226,7 +226,7 @@ const weapons = {
             lifeSteal: 0,
             penetration: 6
         },
-        value: 1080,
+        value: 3240,
         sellValue: 540
     },
 
@@ -248,7 +248,7 @@ const weapons = {
             lifeSteal: 0,
             penetration: 10
         },
-        value: 3240,
+        value: 9720,
         sellValue: 1620  
     },
 
@@ -361,7 +361,7 @@ const weapons = {
             lifeSteal: 0,
             penetration: 0
         },
-        value: 1080,
+        value: 3240,
         sellValue: 540
     },
 
@@ -383,7 +383,7 @@ const weapons = {
             lifeSteal: 0,
             penetration: 0
         },
-        value: 3240,
+        value: 9720,
         sellValue: 1620  
     },
 
@@ -499,7 +499,7 @@ const weapons = {
             penetration: 0,
             absorption: 0
         },
-        value: 1080,
+        value: 3240,
         sellValue: 540
     },
 
@@ -522,7 +522,7 @@ const weapons = {
             penetration: 0,
             absorption: 0
         },
-        value: 3240,
+        value: 9720,
         sellValue: 1620
     },
 
@@ -651,7 +651,7 @@ const weapons = {
             miasmaChance: 6
         },
 
-        value: 1080,
+        value: 3240,
         sellValue: 540
 
     },
@@ -678,7 +678,7 @@ const weapons = {
             miasmaChance: 10
         },
 
-        value: 3240,
+        value: 9720,
         sellValue: 1620
 
     },
@@ -816,7 +816,7 @@ const weapons = {
             reflection: 3
         },
 
-        value: 1080,
+        value: 3240,
         sellValue: 540
 
     },
@@ -843,7 +843,7 @@ const weapons = {
             reflection: 4
         },
 
-        value: 3240,
+        value: 9720,
         sellValue: 1620
 
     },
@@ -981,7 +981,7 @@ const weapons = {
             confusionChance: 6
         },
 
-        value: 1080,
+        value: 3240,
         sellValue: 540
 
     },
@@ -1008,7 +1008,7 @@ const weapons = {
             confusionChance: 10
         },
 
-        value: 3240,
+        value: 9720,
         sellValue: 1620
 
     },
@@ -1146,7 +1146,7 @@ const weapons = {
             paralysisChance: 6
         },
 
-        value: 1080,
+        value: 3240,
         sellValue: 540
 
     },
@@ -1173,7 +1173,7 @@ const weapons = {
             paralysisChance: 10
         },
 
-        value: 3240,
+        value: 9720,
         sellValue: 1620
 
     },
@@ -1311,7 +1311,7 @@ const weapons = {
             doubleStrikeChance: 6
         },
 
-        value: 1080,
+        value: 3240,
         sellValue: 540
 
     },
@@ -1338,7 +1338,7 @@ const weapons = {
             doubleStrikeChance: 10
         },
 
-        value: 3240,
+        value: 9720,
         sellValue: 1620
 
     },
@@ -1476,7 +1476,7 @@ const weapons = {
             gravityChance: 6
         },
 
-        value: 1080,
+        value: 3240,
         sellValue: 540
 
     },
@@ -1503,7 +1503,7 @@ const weapons = {
             gravityChance: 10
         },
 
-        value: 3240,
+        value: 9720,
         sellValue: 1620
 
     },

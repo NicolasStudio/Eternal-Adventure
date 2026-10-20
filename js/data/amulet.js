@@ -55,7 +55,7 @@ const amulet = {
             agility: 4
         },
 
-        value: 720,
+        value: 2160,
         sellValue: 360
     },
 
@@ -74,7 +74,7 @@ const amulet = {
             agility: 9
         },
 
-        value: 2160,
+        value: 6480,
         sellValue: 1080
     },
 
@@ -169,7 +169,7 @@ const amulet = {
             armor: 2
         },
 
-        value: 720,
+        value: 2160,
         sellValue: 360
     },
 
@@ -188,7 +188,7 @@ const amulet = {
             armor: 7
         },
 
-        value: 2160,
+        value: 6480,
         sellValue: 1080
     },
 
@@ -283,7 +283,7 @@ const amulet = {
             sorte: 5,
         },
 
-        value: 720,
+        value: 2160,
         sellValue: 360
     },
 
@@ -302,7 +302,7 @@ const amulet = {
             sorte: 11,
         },
 
-        value: 2160,
+        value: 6480,
         sellValue: 1080
     },
 
