@@ -60,7 +60,7 @@ const legs = {
             agility: 3
         },
 
-        value: 855,
+        value: 2565,
         sellValue: 405
 
     },
@@ -79,7 +79,7 @@ const legs = {
             armor: 6
         },
 
-        value: 2565,
+        value: 7695,
         sellValue: 1215
 
     },
@@ -181,7 +181,7 @@ const legs = {
             agility: 3
         },
 
-        value: 855,
+        value: 2565,
         sellValue: 405
 
     },
@@ -201,7 +201,7 @@ const legs = {
             agility: 5
         },
 
-        value: 2565,
+        value: 7695,
         sellValue: 1215
 
     },
@@ -304,7 +304,7 @@ const legs = {
             agility: 4
         },
 
-        value: 855,
+        value: 2565,
         sellValue: 405
 
     },
@@ -324,7 +324,7 @@ const legs = {
             agility: 6
         },
 
-        value: 2565,
+        value: 7695,
         sellValue: 1215
 
     },
@@ -427,7 +427,7 @@ const legs = {
             agility: 4
         },
 
-        value: 855,
+        value: 2565,
         sellValue: 405
 
     },
@@ -447,7 +447,7 @@ const legs = {
             agility: 8
         },
 
-        value: 2565,
+        value: 7695,
         sellValue: 1215
 
     },
@@ -550,7 +550,7 @@ const legs = {
             agility: 4
         },
 
-        value: 855,
+        value: 2565,
         sellValue: 405
 
     },
@@ -570,7 +570,7 @@ const legs = {
             agility: 11
         },
 
-        value: 2565,
+        value: 7695,
         sellValue: 1215
 
     },
@@ -673,7 +673,7 @@ const legs = {
             agility: 4
         },
 
-        value: 855,
+        value: 2565,
         sellValue: 405
 
     },
@@ -693,7 +693,7 @@ const legs = {
             agility: 12
         },
 
-        value: 2565,
+        value: 7695,
         sellValue: 1215
 
     },
@@ -793,7 +793,7 @@ const legs = {
             agility: 10
         },
 
-        value: 855,
+        value: 2565,
         sellValue: 405
 
     },
@@ -813,7 +813,7 @@ const legs = {
             agility: 21
         },
 
-        value: 2565,
+        value: 7695,
         sellValue: 1215
 
     },
@@ -913,7 +913,7 @@ const legs = {
             agility: 4
         },
 
-        value: 855,
+        value: 2565,
         sellValue: 405
 
     },
@@ -933,7 +933,7 @@ const legs = {
             agility: 8
         },
 
-        value: 2565,
+        value: 7695,
         sellValue: 1215
 
     },
@@ -1036,7 +1036,7 @@ const legs = {
             agility: 11
         },
 
-        value: 855,
+        value: 2565,
         sellValue: 405
 
     },
@@ -1056,7 +1056,7 @@ const legs = {
             agility: 19
         },
 
-        value: 2565,
+        value: 7695,
         sellValue: 1215
 
     },
@@ -1159,7 +1159,7 @@ const legs = {
             agility: 2
         },
 
-        value: 855,
+        value: 2565,
         sellValue: 405
 
     },
@@ -1179,7 +1179,7 @@ const legs = {
             agility: 4
         },
 
-        value: 2565,
+        value: 7695,
         sellValue: 1215
 
     },

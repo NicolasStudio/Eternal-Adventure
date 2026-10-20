@@ -645,7 +645,7 @@ const monsters = [
             {
                 type: ["weapon"],
                 rarity: "rare",
-                chance: 18
+                chance: 23
             },
             {
                 type: ["amulet"],
@@ -772,7 +772,7 @@ const monsters = [
             {
                 type: ["boot"],
                 rarity: "rare",
-                chance: 18
+                chance: 23
             },
             {
                 item: items.tripleSmallPotion,
@@ -835,7 +835,7 @@ const monsters = [
             {
                 type: ["leg"],
                 rarity: "rare",
-                chance: 18
+                chance: 23
             },
             {
                 item: items.tripleSmallPotion,
@@ -870,7 +870,7 @@ const monsters = [
             {
                 type: ["leg"],
                 rarity: "rare",
-                chance: 18
+                chance: 23
             },
             {
                 item: items.tripleSmallPotion,
@@ -932,7 +932,7 @@ const monsters = [
             {
                 type: ["helmet"],
                 rarity: "rare",
-                chance: 18
+                chance: 23
             },
             {
                 item: items.tripleSmallPotion,
@@ -1025,7 +1025,7 @@ const monsters = [
             {
                 type: ["chest"],
                 rarity: "rare",
-                chance: 18
+                chance: 23
             },
             {
                 item: amulet.amuletSkullCommon,
@@ -1218,7 +1218,7 @@ const monsters = [
             {
                 type: ["amulet"],
                 rarity: "rare",
-                chance: 18
+                chance: 23
             },
             {
                 item: items.tripleSmallPotion,
@@ -1420,7 +1420,7 @@ const monsters = [
             {
                 type: ["ring"],
                 rarity: "rare",
-                chance: 18
+                chance: 23
             },
             {
                 item: items.tripleSmallPotion,
@@ -1454,7 +1454,7 @@ const monsters = [
             {
                 type: ["boot"],
                 rarity: "mystic",
-                chance: 8
+                chance: 13
             },
             {
                 item: ring.ringSkullIncommon,
@@ -1732,7 +1732,7 @@ const monsters = [
             {
                 type: ["amulet"],
                 rarity: "mystic",
-                chance: 8
+                chance: 13
             },
             {
                 item: items.mediumPotion,
@@ -1766,7 +1766,7 @@ const monsters = [
             {
                 type: ["leg"],
                 rarity: "mystic",
-                chance: 8
+                chance: 13
             },
             {
                 item: items.mediumPotion,
@@ -2136,7 +2136,7 @@ const monsters = [
             {
                 type: ["chest"],
                 rarity: "mystic",
-                chance: 8
+                chance: 13
             },
             {
                 item: items.mediumPotion,
@@ -2529,7 +2529,7 @@ const monsters = [
             {
                 type: ["helmet"],
                 rarity: "mystic",
-                chance: 8
+                chance: 13
             },
             {
                 item: amulet.amuletSkullMystic,
@@ -2891,7 +2891,7 @@ const monsters = [
             {
                 type: ["weapon"],
                 rarity: "mystic",
-                chance: 8
+                chance: 13
             },
             {
                 item: items.tripleMediumPotion,
@@ -3354,7 +3354,7 @@ const monsters = [
             {
                 type: ["ring"],
                 rarity: "mystic",
-                chance: 8
+                chance: 13
             },
             {
                 item: items.tripleMediumPotion,

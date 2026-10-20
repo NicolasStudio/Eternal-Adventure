@@ -7,7 +7,7 @@
 // depender de um "atributo principal" único por slot (ver SPECIAL_STATS
 // abaixo): agora soma em TODOS os atributos não-especiais do item, então
 // não importa se a peça tem 1 stat (arma: só Ataque) ou 3 (Anel/Amuleto
-// do Crânio: Ataque+Armadura+Sorte) — todos ganham o mesmo +5/nível.
+// do Crânio: Ataque+Armadura+Sorte) — todos ganham o mesmo +7/nível.
 const FUSABLE_SLOTS = ["weapon", "helmet", "chest", "leg", "boot", "ring", "amulet"];
 
 // Atributos "especiais" (% exclusiva da classe) NUNCA recebem bônus de
@@ -19,22 +19,25 @@ const FUSABLE_SLOTS = ["weapon", "helmet", "chest", "leg", "boot", "ring", "amul
 // ganham bônus de Fusão nela também.
 const SPECIAL_STATS = ["criticalChance", "lifeSteal", "penetration", "absorption", "miasmaChance", "reflection", "confusionChance", "paralysisChance", "doubleStrikeChance", "gravityChance"];
 
-// Quanto cada nível de fusão soma no atributo principal (ver protótipo
-// visual: Katana Rara +1 mostrou "+33  +5" no Ataque — 5 pontos por
-// nível, mostrados separados do valor base na tooltip).
-const FUSION_BONUS_PER_LEVEL = 5;
+// Quanto cada nível de fusão soma em cada atributo não-especial — 7 por
+// nível (+1 = 7, +5 = 35), mostrados separados do valor base na tooltip
+// (ex: Katana Rara +1 "+33  +7" no Ataque).
+const FUSION_BONUS_PER_LEVEL = 7;
 
 // Chance-base de sucesso por NÍVEL DE ORIGEM dos 4 itens selecionados
-// (antes da fusão, não depois) — cobre os 2 pontos dados: +0→+1 = 70%,
-// +4→+5 = 15%. Valor inicial de balanceamento, ajustável sem tocar em
-// mais nada (único lugar que define isso).
+// (antes da fusão, não depois): +0→+1 = 60% ... +4→+5 = 10%. Ajustável
+// sem tocar em mais nada (único lugar que define isso).
 const BASE_CHANCE_BY_LEVEL = {
-    0: 70,
-    1: 55,
-    2: 40,
-    3: 30,
-    4: 15
+    0: 60,
+    1: 45,
+    2: 30,
+    3: 20,
+    4: 10
 };
+
+// Nível máximo de fusão — itens já nesse nível não podem ser fundidos de
+// novo (ver validateSelection).
+const MAX_FUSION_LEVEL = 5;
 
 // Nível de fusão acima do maior mapeado em BASE_CHANCE_BY_LEVEL: cada
 // nível extra cai mais isso, até o piso de CHANCE_FLOOR.
@@ -100,6 +103,10 @@ export default class FusionService {
 
     static get bonusPerLevel() {
         return FUSION_BONUS_PER_LEVEL;
+    }
+
+    static get maxFusionLevel() {
+        return MAX_FUSION_LEVEL;
     }
 
     static getBaseChance(fusionLevel) {
@@ -208,6 +215,10 @@ export default class FusionService {
 
         if (!items.every(item => (item.fusionLevel ?? 0) === (first.fusionLevel ?? 0))) {
             return { ok: false, reason: "Os equipamentos precisam estar no mesmo nível de fusão." };
+        }
+
+        if ((first.fusionLevel ?? 0) >= MAX_FUSION_LEVEL) {
+            return { ok: false, reason: `Esses equipamentos já estão no nível máximo de fusão (+${MAX_FUSION_LEVEL}).` };
         }
 
         const equippedUids = new Set(
