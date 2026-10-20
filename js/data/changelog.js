@@ -1,6 +1,32 @@
 export default [
 
     {
+        version: "Beta 0.2.9 — Rebalanceamento de Classes e Pets",
+        date: "Outubro de 2026",
+        changes: [
+            "Rebalanceamento geral das 10 classes, feito a partir de milhares de lutas simuladas no Combate Ranqueado (1x1) nos níveis 20, 40, 60, 80 e 100. Antes, algumas classes venciam quase todos os confrontos e outras quase nenhum; agora todas ficam perto de 50% de vitória média em todos os níveis. Seus status são recalculados automaticamente ao entrar no jogo (encantamentos e bônus já conquistados são mantidos). Agilidade não mudou em nenhuma classe. Valores abaixo são o total da curva de nível no nível 100",
+            "Guerreiro: menos resistente e mais ofensivo, pra encurtar as lutas mais longas do jogo — Vida 1750→1869, Ataque 75→117, Armadura 95→48 na curva de nível, e a Armadura base de Elmo, Peitoral, Calças e Botas do Guerreiro cai cerca de 55% em todas as raridades. Continua sendo a classe mais resistente do jogo",
+            "Arqueiro: Vida 1189→1351, Ataque 94→107, Armadura 55→62. Elmo, Colete, Calças e Botas Lendários, que davam menos Armadura que os Místicos, foram corrigidos (Armadura 5→12, 5→22, 3→14 e 0→6)",
+            "Mago: Vida 1291→1211, Ataque 162→151, Armadura 14→13 — mais forte entre os níveis 81 e 110, em troca de um Cetro Lendário mais fraco (Ataque base 41→25)",
+            "Bárbaro: Vida 988→1085, Ataque 124→136, Armadura 67→74",
+            "Pútrido: era a classe mais forte do jogo com folga, vencendo quase todos os confrontos a partir do nível 40 — Vida 1818→1388, Ataque 122→87, Armadura 56→42. O Miasma não mudou",
+            "Mímico: era a classe mais fraca do nível 60 em diante — Vida 991→1192, Ataque 70→84, Armadura 85→103, com reforço extra entre os níveis 81 e 110, em troca de um Espelho Lendário mais fraco (Ataque base 28→15)",
+            "Louca: Vida 850→903, Ataque 172→183, Armadura 15→17",
+            "Eletro: Vida 1200→1093, Ataque 150→136, Armadura 60→55",
+            "Samurai: Vida 1150→1195, Ataque 105→109, Armadura 62→64",
+            "Singularidade: Vida 1700→1568, Ataque 132→122, Armadura 56→52",
+            "Equipamentos Místicos ficam 3% mais fortes e Lendários 10% mais fracos (valor final na qualidade máxima da Ferraria), pra diminuir o salto entre as duas raridades — vale pra Ataque, Armadura, Agilidade, Vida e Sorte de armas, armaduras, anéis e amuletos de todas as classes. Ex: Cetro Místico Excepcional 59→61, Espada Lendária com qualidade Lendária 92→83. Atributos especiais (Crítico, Miasma, Confusão etc.) não mudaram. Itens que você já tem são atualizados sozinhos",
+            "Duende: a cura passa a ser igual ao nível do pet (nível 50 = 50 de cura, antes 82) — antes curava mais do que um golpe inteiro do oponente no fim de jogo",
+            "Urso: era o pet menos atrativo — agora dá +10 de Armadura e +10 de Agilidade em todos os níveis e bem mais Ataque, com menos Vida. No nível 50: Vida 294→200, Ataque 6→36, Armadura 42→52, Agilidade 2→12",
+            "Aranha e Aranha de Halloween: Vida máxima 152→120 e Agilidade máxima 30→24 (nível 50). A cópia de dano não mudou",
+            "Boitatá: Vida máxima 435→150 (nível 50). Contra jogadores (Ranqueado 1x1 e 2x2), a Queimadura passa a ter dano fixo por estágio — 10 (Filhote), 20 (Jovem) e 30 (Adulto), antes chegava a 82 por turno. Contra monstros, nas Masmorras e no Cooperativo, continua igual",
+            "Yggdrasil: Vida máxima 730→200 e Ataque máximo 71→50 (nível 50). Mordida e Reviver não mudaram",
+            "Corrigido: no Combate Ranqueado 1x1, uma luta que chegava ao limite de rodadas com os dois vivos dava a vitória sempre ao mesmo lado — agora vence quem tem mais vida restante (proporcional), igual ao 2x2",
+            "O pareamento do Ranqueado (1x1 e 2x2) agora só junta jogadores com a mesma versão do jogo, pra os dois lados sempre verem o mesmo resultado da luta — se a fila demorar, recarregue a página"
+        ]
+    },
+
+    {
         version: "Beta 0.2.8 — Troca de Atributo",
         date: "Outubro de 2026",
         changes: [
