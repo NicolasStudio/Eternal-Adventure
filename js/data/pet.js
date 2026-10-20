@@ -320,7 +320,7 @@ const pets = {
         fome: 0,
 
         stats: {
-            life: 2,
+            life: 0,
             attack: 2,
             armor: 0,
             agility: 3,
@@ -463,7 +463,7 @@ const pets = {
         fome: 0,
 
         stats: {
-            life: 2,
+            life: 0,
             attack: 2,
             armor: 0,
             agility: 3,
@@ -602,10 +602,10 @@ const pets = {
         fome: 0,
 
         stats: {
-            life: 9,
+            life: 55,
             attack: 1,
-            armor: 4,
-            agility: 0,
+            armor: 14,
+            agility: 10,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,

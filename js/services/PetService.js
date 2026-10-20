@@ -201,14 +201,14 @@ export default class PetService {
         const stats = this.getStatsForLevel(petInstance.family, petInstance.level);
 
         if (!stage) {
-            return { life: 0, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0, biteDamage: 0, healAmount: 0, mimicRatio: 0, burnDamage: 0, revivePercent: 0 };
+            return { life: 0, attack: 0, armor: 0, agility: 0, criticalChance: 0, lifeSteal: 0, penetration: 0, absorption: 0, biteDamage: 0, healAmount: 0, mimicRatio: 0, burnDamage: 0, burnDamagePvp: 0, revivePercent: 0 };
         }
 
-        // Cura (Duende) e Queimadura (Boitatá) crescem com o pet: nível em
-        // que o estágio atual evolui (1/18/32) + nível atual do pet. O
-        // valor de `heal`/`burnDamage` em pet.js só marca QUAL habilidade
-        // o pet tem. Ex: Duende Adulto nível 50 = 32 + 50 = 82 de cura.
-        const levelPower = (stage.nivel ?? 0) + Math.min(petInstance.level ?? 1, PET_MAX_LEVEL);
+        // Queimadura (Boitatá) cresce com o pet: nível em que o estágio
+        // atual evolui (1/18/32) + nível atual do pet. Ex: Boitatá Adulto
+        // nível 50 = 32 + 50 = 82 por tick.
+        const petLevel = Math.min(petInstance.level ?? 1, PET_MAX_LEVEL);
+        const levelPower = (stage.nivel ?? 0) + petLevel;
 
         return {
             life: scale(stats.life),
@@ -220,11 +220,21 @@ export default class PetService {
             penetration: scale(stats.penetration),
             absorption: scale(stats.absorption),
             biteDamage: scale(ability?.damage),
-            healAmount: ability?.heal ? scale(levelPower) : 0,
+            // Duende: cura o próprio nível (nível 50 = 50 de cura) — sem
+            // somar o nível do estágio como a Queimadura, senão no fim de
+            // jogo a cura passava de um golpe inteiro do oponente no PVP
+            // (golpe médio ~50 no nível 100) e a luta não acabava nunca.
+            // O valor de `heal` em pet.js só marca QUAL habilidade o pet tem.
+            healAmount: ability?.heal ? scale(petLevel) : 0,
             mimicRatio: (ability?.mimicRatio ?? 0) * multiplier,
             // Boitatá: dano de UM tick da queimadura, antes da efetividade
             // do elemento do alvo (ver BoitataBurn.js).
             burnDamage: ability?.burnDamage ? scale(levelPower) : 0,
+            // Boitatá contra JOGADOR (PVP): tick fixo no `burnDamage` do
+            // estágio em pet.js (10/20/30), sem crescer com o nível — o
+            // tick de PVE (acima) ignora armadura e passava de um golpe
+            // inteiro do oponente no fim de jogo.
+            burnDamagePvp: ability?.burnDamage ? scale(ability.burnDamage) : 0,
             // Yggdrasil: % da Vida Máxima com que o dono volta ao morrer,
             // uma vez por combate. A % é a do estágio, sem escalar pela
             // fome — mas com a fome zerada o pet não revive ninguém.

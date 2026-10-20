@@ -18,6 +18,7 @@ import legacyLevels_v16 from "../data/legacy/legacyLevels_v16.js";
 import legacyLevels_v17 from "../data/legacy/legacyLevels_v17.js";
 import legacyLevels_v18 from "../data/legacy/legacyLevels_v18.js";
 import legacyLevels_v19 from "../data/legacy/legacyLevels_v19.js";
+import legacyLevels_v20 from "../data/legacy/legacyLevels_v20.js";
 import baseStatsL1 from "../data/baseStatsL1.js";
 
 // Sobe quando a curva de levels.js muda de um jeito que exige recalcular
@@ -54,8 +55,17 @@ import baseStatsL1 from "../data/baseStatsL1.js";
 // até o nível 100 (mais -4 entre 101-110) — personagens de fim de jogo
 // (equipamento + anel/amuleto + pet + talentos) estavam passando de
 // 500 de Agilidade, desproporcional mesmo pra uma classe desenhada
-// pra ser a mais ágil
-export const CURRENT_BALANCE_VERSION = 20;
+// pra ser a mais ágil · v21 rebalanceamento de TODAS as classes por
+// simulação de PVP 1x1 (Lv20-100): Vida/Ataque/Armadura ganhos por nível
+// multiplicados por faixa (2-20/21-40/41-60/61-80/81-110), Agilidade
+// intacta — Pútrido/Mago/Eletro/Singularidade caem, Mímico/Arqueiro/
+// Bárbaro/Guerreiro/Louca/Samurai sobem (ver legacyLevels_v20.js).
+// Guerreiro ainda troca resistência por dano: Armadura da curva ×0,45
+// (e das peças de armadura dele — ver helmets/chest/legs/boots.js) e
+// Ataque da curva ×1,50, pra encurtar as lutas mais longas do jogo.
+// Mago e Mímico +12% de Vida/Ataque/Armadura do 81 ao 110 (compensado
+// pelo Cetro/Espelho Lendários mais fracos — ver weapons.js)
+export const CURRENT_BALANCE_VERSION = 21;
 
 // miasmaChance/reflection/confusionChance/paralysisChance/
 // doubleStrikeChance/gravityChance entram aqui só pra não serem
@@ -85,7 +95,8 @@ const LEGACY_TABLES = {
     16: legacyLevels_v16,
     17: legacyLevels_v17,
     18: legacyLevels_v18,
-    19: legacyLevels_v19
+    19: legacyLevels_v19,
+    20: legacyLevels_v20
 };
 
 export default class StatsMigrationService {

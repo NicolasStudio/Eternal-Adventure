@@ -338,10 +338,10 @@ export default class PvpLobbyService {
             const others = Object.entries(all)
                 .filter(([id, entry]) => id !== this.playerId && !entry.matchedWith && !entry.claimedBy)
                 .filter(([, entry]) => isPowerCompatible(combatant, entry, range))
-                // Modo de time: só junta quem roda a MESMA versão da
-                // simulação (senão os navegadores calculariam lutas
-                // diferentes).
-                .filter(([, entry]) => !teamMode || entry.simVersion === TEAM_SIM_VERSION)
+                // Só junta quem roda a MESMA versão da simulação (senão
+                // os navegadores calculariam lutas diferentes) — vale pro
+                // 1x1 também desde a v15, que mudou o desempate dele.
+                .filter(([, entry]) => entry.simVersion === TEAM_SIM_VERSION)
                 .sort(([idA], [idB]) => idA < idB ? -1 : 1);
 
             const requiredOthers = teamMode ? (teamSize * 2 - 1) : 1;

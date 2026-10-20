@@ -16,7 +16,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-warrior-rarity-comum.png",
 
         stats: {
-            armor: 4
+            armor: 2
         },
 
         value: 100,
@@ -35,7 +35,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-warrior-rarity-incomum.png",
 
         stats: {
-            armor: 9
+            armor: 4
         },
 
         value: 300,
@@ -54,7 +54,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-warrior-rarity-rare.png",
 
         stats: {
-            armor: 16
+            armor: 7
         },
 
         value: 900,
@@ -73,7 +73,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-warrior-rarity-mistico.png",
 
         stats: {
-            armor: 21
+            armor: 10
         },
 
         value: 2700,
@@ -92,7 +92,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-warrior-rarity-lendario.png",
 
         stats: {
-            armor: 38
+            armor: 11
         },
 
         value: 0,
@@ -111,7 +111,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-warrior-rarity-ultraje.png",
 
         stats: {
-            armor: 39
+            armor: 18
         },
 
         value: 0,
@@ -190,7 +190,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-mage-rarity-mistico.png",
 
         stats: {
-            armor: 18
+            armor: 19
         },
 
         value: 2700,
@@ -209,7 +209,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-mage-rarity-lendario.png",
 
         stats: {
-            armor: 30
+            armor: 23
         },
 
         value: 0,
@@ -307,7 +307,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-archer-rarity-mistico.png",
 
         stats: {
-            armor: 16
+            armor: 17
         },
 
         value: 2700,
@@ -326,7 +326,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-archer-rarity-lendario.png",
 
         stats: {
-            armor: 5
+            armor: 16
         },
 
         value: 0,
@@ -424,7 +424,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-barbarian-rarity-mistico.png",
 
         stats: {
-            armor: 18
+            armor: 19
         },
 
         value: 2700,
@@ -443,7 +443,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-barbarian-rarity-lendario.png",
 
         stats: {
-            armor: 24
+            armor: 18
         },
 
         value: 0,
@@ -539,7 +539,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-putrid-rarity-mistico.png",
 
         stats: {
-            armor: 22
+            armor: 23
         },
 
         value: 2700,
@@ -558,7 +558,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-putrid-rarity-lendario.png",
 
         stats: {
-            armor: 29
+            armor: 22
         },
 
         value: 0,
@@ -656,7 +656,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-mimic-rarity-mistico.png",
 
         stats: {
-            armor: 25
+            armor: 26
         },
 
         value: 2700,
@@ -675,7 +675,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-mimic-rarity-lendario.png",
 
         stats: {
-            armor: 32
+            armor: 25
         },
 
         value: 0,
@@ -770,7 +770,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-crazy-rarity-mistico.png",
 
         stats: {
-            armor: 12
+            armor: 13
         },
 
         value: 2700,
@@ -789,7 +789,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-crazy-rarity-lendario.png",
 
         stats: {
-            armor: 16
+            armor: 10
         },
 
         value: 0,
@@ -884,7 +884,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-spark-rarity-mistico.png",
 
         stats: {
-            armor: 18
+            armor: 19
         },
 
         value: 2700,
@@ -903,7 +903,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-spark-rarity-lendario.png",
 
         stats: {
-            armor: 24
+            armor: 18
         },
 
         value: 0,
@@ -1001,7 +1001,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-samurai-rarity-mistico.png",
 
         stats: {
-            armor: 18
+            armor: 19
         },
 
         value: 2700,
@@ -1020,7 +1020,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-samurai-rarity-lendario.png",
 
         stats: {
-            armor: 24
+            armor: 18
         },
 
         value: 0,
@@ -1118,7 +1118,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-singularity-rarity-mistico.png",
 
         stats: {
-            armor: 22
+            armor: 23
         },
 
         value: 2700,
@@ -1137,7 +1137,7 @@ const chests = {
         icon: "assets/img/assets/items/chest/chest-singularity-rarity-lendario.png",
 
         stats: {
-            armor: 29
+            armor: 22
         },
 
         value: 0,

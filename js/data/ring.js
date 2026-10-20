@@ -70,8 +70,8 @@ const ring = {
         icon: "assets/img/assets/items/ring/ring-primal-rarity-mistico.png",
 
         stats: {
-            attack: 6,
-            agility: 8
+            attack: 7,
+            agility: 9
         },
 
         value: 2160,
@@ -89,8 +89,8 @@ const ring = {
         icon: "assets/img/assets/items/ring/ring-primal-rarity-lendario.png",
 
         stats: {
-            attack: 10,
-            agility: 13
+            attack: 5,
+            agility: 8
         },
 
         value: 0,
@@ -184,8 +184,8 @@ const ring = {
         icon: "assets/img/assets/items/ring/ring-modern-rarity-mistico.png",
 
         stats: {
-            life: 13,
-            armor: 6
+            life: 14,
+            armor: 7
         },
 
         value: 2160,
@@ -203,8 +203,8 @@ const ring = {
         icon: "assets/img/assets/items/ring/ring-modern-rarity-lendario.png",
 
         stats: {
-            life: 20,
-            armor: 8
+            life: 14,
+            armor: 3
         },
 
         value: 0,
@@ -298,8 +298,8 @@ const ring = {
         icon: "assets/img/assets/items/ring/ring-skull-rarity-mistico.png",
 
         stats: {
-            attack: 2,
-            sorte: 10,
+            attack: 3,
+            sorte: 11,
         },
 
         value: 2160,
@@ -317,8 +317,8 @@ const ring = {
         icon: "assets/img/assets/items/ring/ring-skull-rarity-lendario.png",
 
         stats: {
-            attack: 5,
-            sorte: 15,
+            attack: 1,
+            sorte: 10,
         },
 
         value: 0,

@@ -16,7 +16,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-comum.png",
 
         stats: {
-            armor: 2,
+            armor: 1,
             absorption: 2
         },
 
@@ -36,7 +36,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-incomum.png",
 
         stats: {
-            armor: 4,
+            armor: 2,
             absorption: 3
         },
 
@@ -56,7 +56,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-rare.png",
 
         stats: {
-            armor: 6,
+            armor: 3,
             absorption: 4
         },
 
@@ -76,7 +76,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-mistico.png",
 
         stats: {
-            armor: 11,
+            armor: 6,
             absorption: 6
         },
 
@@ -96,7 +96,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-lendario.png",
 
         stats: {
-            armor: 21,
+            armor: 4,
             absorption: 8
         },
 
@@ -116,7 +116,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-warrior-rarity-ultraje.png",
 
         stats: {
-            armor: 18,
+            armor: 8,
             absorption: 10
         },
 
@@ -199,7 +199,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-mage-rarity-mistico.png",
 
         stats: {
-            armor: 8,
+            armor: 9,
             penetration: 6
         },
 
@@ -219,7 +219,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-mage-rarity-lendario.png",
 
         stats: {
-            armor: 14,
+            armor: 9,
             penetration: 8
         },
 
@@ -321,7 +321,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-archer-rarity-mistico.png",
 
         stats: {
-            armor: 8,
+            armor: 9,
             criticalChance: 6
         },
 
@@ -341,7 +341,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-archer-rarity-lendario.png",
 
         stats: {
-            armor: 5,
+            armor: 7,
             criticalChance: 8
         },
 
@@ -444,7 +444,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-barbarian-rarity-mistico.png",
 
         stats: {
-            armor: 7,
+            armor: 8,
             lifeSteal: 6
         },
 
@@ -464,7 +464,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-barbarian-rarity-lendario.png",
 
         stats: {
-            armor: 12,
+            armor: 7,
             lifeSteal: 8
         },
 
@@ -565,7 +565,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-putrid-rarity-mistico.png",
 
         stats: {
-            armor: 9,
+            armor: 10,
             miasmaChance: 6
         },
 
@@ -585,7 +585,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-putrid-rarity-lendario.png",
 
         stats: {
-            armor: 14,
+            armor: 9,
             miasmaChance: 8
         },
 
@@ -688,7 +688,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-mimic-rarity-mistico.png",
 
         stats: {
-            armor: 11,
+            armor: 12,
             reflection: 2
         },
 
@@ -708,7 +708,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-mimic-rarity-lendario.png",
 
         stats: {
-            armor: 17,
+            armor: 11,
             reflection: 3
         },
 
@@ -808,7 +808,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-crazy-rarity-mistico.png",
 
         stats: {
-            armor: 5,
+            armor: 6,
             confusionChance: 6
         },
 
@@ -828,7 +828,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-crazy-rarity-lendario.png",
 
         stats: {
-            armor: 8,
+            armor: 3,
             confusionChance: 8
         },
 
@@ -928,7 +928,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-spark-rarity-mistico.png",
 
         stats: {
-            armor: 9,
+            armor: 10,
             paralysisChance: 6
         },
 
@@ -948,7 +948,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-spark-rarity-lendario.png",
 
         stats: {
-            armor: 14,
+            armor: 9,
             paralysisChance: 8
         },
 
@@ -1048,7 +1048,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-samurai-rarity-mistico.png",
 
         stats: {
-            armor: 9,
+            armor: 10,
             doubleStrikeChance: 6
         },
 
@@ -1068,7 +1068,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-samurai-rarity-lendario.png",
 
         stats: {
-            armor: 14,
+            armor: 9,
             doubleStrikeChance: 8
         },
 
@@ -1168,7 +1168,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-singularity-rarity-mistico.png",
 
         stats: {
-            armor: 9,
+            armor: 10,
             gravityChance: 6
         },
 
@@ -1188,7 +1188,7 @@ const helmets = {
         icon: "assets/img/assets/items/helmets/helmets-singularity-rarity-lendario.png",
 
         stats: {
-            armor: 14,
+            armor: 9,
             gravityChance: 8
         },
 
