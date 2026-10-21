@@ -222,6 +222,68 @@ export default class TalentService {
 
     }
 
+    // Reset de UM talento simples (o selecionado na árvore): zera só ele,
+    // pelo mesmo RESET_COST do reset completo. Se ele era o único talento
+    // em 3/3 e há um talento único ativo, o único sai junto — ter um
+    // talento simples em 3/3 é pré-requisito dele (ver hasMaxedTalent).
+    static resetTalent(player, talentId) {
+
+        const levels = this.getLevels(player);
+
+        if (!TALENTS.some(talent => talent.id === talentId) || !(levels[talentId] > 0)) {
+            return { ok: false, message: "Esse talento não tem pontos pra resetar." };
+        }
+
+        if (player.gold < RESET_COST) {
+            return { ok: false, message: "Ouro insuficiente pra resetar." };
+        }
+
+        const removesUnique = this.resetRemovesUnique(player, talentId);
+
+        player.gold -= RESET_COST;
+        player.progress.talents = { ...levels, [talentId]: 0 };
+        this.sync(player);
+
+        if (removesUnique) this.clearUniqueTalent(player);
+
+        player.notify();
+
+        return { ok: true, uniqueCleared: removesUnique };
+
+    }
+
+    // true se zerar `talentId` deixa o talento único ativo sem o
+    // pré-requisito (nenhum outro talento simples em 3/3).
+    static resetRemovesUnique(player, talentId) {
+
+        if (!this.getUniqueTalent(player)) return false;
+
+        const levels = this.getLevels(player);
+
+        return !TALENTS.some(talent => talent.id !== talentId && (levels[talent.id] ?? 0) >= MAX_LEVEL);
+
+    }
+
+    // Reset só do talento único ativo (o selecionado na árvore) — custa a
+    // mesma sobretaxa que ele já soma no reset completo.
+    static resetUnique(player) {
+
+        if (!this.getUniqueTalent(player)) {
+            return { ok: false, message: "Nenhum talento único ativo." };
+        }
+
+        if (player.gold < UNIQUE_RESET_SURCHARGE) {
+            return { ok: false, message: "Ouro insuficiente pra resetar." };
+        }
+
+        player.gold -= UNIQUE_RESET_SURCHARGE;
+        this.clearUniqueTalent(player);
+        player.notify();
+
+        return { ok: true };
+
+    }
+
     static lifeLostFor(player, talentId) {
         const applied = player.talentApplied ?? { lifeLost: 0 };
         const rawMaxHP = player.maxHP + applied.lifeLost;

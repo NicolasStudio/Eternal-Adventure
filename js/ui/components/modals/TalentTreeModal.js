@@ -1,6 +1,6 @@
 import TalentService, {
     TALENTS, MAX_LEVEL, GAIN_PERCENT_PER_LEVEL, LIFE_LOSS_PERCENT_PER_LEVEL, TRADE_AMOUNT_PER_LEVEL,
-    UNIQUE_TALENTS, UNIQUE_TALENT_COST
+    UNIQUE_TALENTS, UNIQUE_TALENT_COST, RESET_COST, UNIQUE_RESET_SURCHARGE
 } from "../../../services/TalentService.js";
 import SaveService from "../../../services/SaveService.js";
 import AuthService from "../../../services/AuthService.js";
@@ -113,9 +113,15 @@ export default class TalentTreeModal {
                     </div>
 
                     <div class="talent-footer-actions">
-                        <button class="talent-reset" ${(TalentService.getSpentPoints(this.player) > 0 || TalentService.getUniqueTalent(this.player)) ? "" : "disabled"}>
+                        <button class="talent-reset talent-reset-selected" ${this.canResetSelected() ? "" : "disabled"}
+                                title="Reseta só o talento selecionado">
                             <i class="fa-solid fa-rotate-left"></i>
                             Resetar
+                        </button>
+                        <button class="talent-reset talent-reset-all" ${(TalentService.getSpentPoints(this.player) > 0 || TalentService.getUniqueTalent(this.player)) ? "" : "disabled"}
+                                title="Reseta todos os talentos, inclusive o único">
+                            <i class="fa-solid fa-trash-arrow-up"></i>
+                            Resetar tudo
                         </button>
                         <button class="blacksmith-upgrade-button talent-upgrade" ${this.canUpgradeSelected() ? "" : "disabled"}>
                             <i class="fa-solid fa-arrow-up"></i>
@@ -224,7 +230,9 @@ export default class TalentTreeModal {
 
         this.overlay.querySelector(".talent-close").addEventListener("click", () => this.hide());
 
-        this.overlay.querySelector(".talent-reset")?.addEventListener("click", async () => {
+        this.overlay.querySelector(".talent-reset-selected")?.addEventListener("click", () => this.resetSelected());
+
+        this.overlay.querySelector(".talent-reset-all")?.addEventListener("click", async () => {
             const cost = TalentService.getResetCost(this.player);
             const uniqueId = TalentService.getUniqueTalent(this.player);
             const willRevertLevel = uniqueId === "rompendo_limites" && this.player.level > 100;
@@ -307,6 +315,61 @@ export default class TalentTreeModal {
         const result = await SaveService.autoSave(this.player);
 
         return Array.isArray(result) && result[0] === true;
+
+    }
+
+    // "Resetar" (sem ser o "Resetar tudo") só age no talento selecionado:
+    // um simples com pelo menos 1 ponto, ou o único se ele estiver ativo.
+    canResetSelected() {
+        if (!this.selectedId) return false;
+        if (this.isUniqueSelected()) return TalentService.hasUniqueTalent(this.player, this.selectedId);
+        return (TalentService.getLevels(this.player)[this.selectedId] ?? 0) > 0;
+    }
+
+    async resetSelected() {
+
+        if (!this.canResetSelected()) return;
+
+        const uniqueSelected = this.isUniqueSelected();
+        const talent = (uniqueSelected ? UNIQUE_TALENTS : TALENTS).find(t => t.id === this.selectedId);
+        const name = uniqueSelected ? talent.label : TalentService.describe(talent);
+        const uniqueId = TalentService.getUniqueTalent(this.player);
+        const levelWarning = uniqueId === "rompendo_limites" && this.player.level > 100
+            ? " Seu nível também volta pra 100, desfazendo os status ganhos nos níveis acima disso."
+            : "";
+
+        let message;
+
+        if (uniqueSelected) {
+            message = `Resetar "${name}" custa ${UNIQUE_RESET_SURCHARGE.toLocaleString("pt-BR")} de ouro. Os outros talentos continuam como estão.${levelWarning}`;
+        } else {
+            const removesUnique = TalentService.resetRemovesUnique(this.player, this.selectedId);
+            const uniqueLabel = UNIQUE_TALENTS.find(t => t.id === uniqueId)?.label ?? "talento único";
+            message = `Resetar "${name}" custa ${RESET_COST.toLocaleString("pt-BR")} de ouro. Os pontos dele voltam pro saldo e os atributos convertidos são devolvidos; os outros talentos continuam como estão.`
+                + (removesUnique
+                    ? ` Atenção: ele é seu único talento em 3/3, que é pré-requisito do "${uniqueLabel}" — o talento único também será desfeito.${levelWarning}`
+                    : "");
+        }
+
+        const confirmed = await this.confirmModal.show({
+            title: "Tem certeza?",
+            message,
+            confirmLabel: "SIM",
+            cancelLabel: "NÃO",
+            yesClass: "continue-yes-success",
+            noClass: "continue-no-danger"
+        });
+
+        if (!confirmed) return;
+
+        const result = uniqueSelected
+            ? TalentService.resetUnique(this.player)
+            : TalentService.resetTalent(this.player, this.selectedId);
+
+        if (result.ok) SaveService.autoSave(this.player);
+        else Toast.show(result.message);
+
+        this.refresh();
 
     }
 
