@@ -462,10 +462,14 @@ export default class HudScreen {
         // limpar aqui (diferente de PVP/Coop), é só o background mesmo.
         if (this.currentView === "farm" && view !== "farm") {
             this.setBackground("assets/img/backgrounds/tela_inicial.png");
+            this.farmView.onClose();
         }
 
         if (this.currentView !== "farm" && view === "farm") {
             this.setBackground("assets/img/backgrounds/celeiro.png");
+            // Sincroniza com a nuvem (o que visitantes fizeram) e carrega
+            // a lista de fazendas pra visitar — ver FarmView.onOpen.
+            this.farmView.onOpen();
         }
 
         this.currentView = view;

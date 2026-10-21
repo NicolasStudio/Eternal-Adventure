@@ -1053,6 +1053,8 @@ export default class PvpView {
             if (this.matchData.ranked) {
                 this.rankedPointsEarned = RANKED_POINTS_BY_TEAM_SIZE[1];
                 this.player.progress.stats.pvpRankedPoints = (this.player.progress.stats.pvpRankedPoints ?? 0) + this.rankedPointsEarned;
+                // Conquistas "Já ta valendo?" — vitórias, não pontos.
+                this.player.progress.stats.pvpRankedWins = (this.player.progress.stats.pvpRankedWins ?? 0) + 1;
                 SaveService.autoSave(this.player);
             }
 
@@ -1099,6 +1101,8 @@ export default class PvpView {
             if (this.matchData.ranked) {
                 this.rankedPointsEarned = RANKED_POINTS_BY_TEAM_SIZE[this.getTeamSize()] ?? 0;
                 this.player.progress.stats.pvpRankedPoints = (this.player.progress.stats.pvpRankedPoints ?? 0) + this.rankedPointsEarned;
+                // Conquistas "Já ta valendo?" — vitórias, não pontos.
+                this.player.progress.stats.pvpRankedWins = (this.player.progress.stats.pvpRankedWins ?? 0) + 1;
                 SaveService.autoSave(this.player);
             }
 

@@ -102,6 +102,23 @@ function hasTwoClassesAtLevel(player, level) {
 
 }
 
+// "Amigo ou inimigo?" — as TRÊS ações na fazenda de outro jogador (ver
+// FarmView.handleVisitClick), cada uma pelo menos `count` vezes.
+function hasNeighborActions(player, count) {
+    const stats = player.progress.stats ?? {};
+    return (stats.neighborWaterCount ?? 0) >= count
+        && (stats.neighborPestCount ?? 0) >= count
+        && (stats.neighborStealCount ?? 0) >= count;
+}
+
+// Fusão — maior nível já alcançado numa fusão (FusionService grava em
+// highestFusionLevel), ou o de algum item que o jogador tem agora (cobre
+// quem fundiu antes desse contador existir).
+function highestFusionLevel(player) {
+    const fromItems = allEquippedAndInventoryItems(player).reduce((max, item) => Math.max(max, item.fusionLevel ?? 0), 0);
+    return Math.max(player.progress.stats?.highestFusionLevel ?? 0, fromItems);
+}
+
 // Um checador por conquista, indexado pelo MESMO id semântico usado em
 // achievements.js (kill_1, level_5, silence, the_end, etc.) — nunca
 // pela posição/ordem no array. Isso é o que evita o bug de reordenar
@@ -159,6 +176,9 @@ const CHECKS = {
     album_100: player => player.album.length >= 100,
 
     pvp_first_win: player => (player.progress.stats?.pvpWins ?? 0) >= 1,
+    pvp_ranked_5: player => (player.progress.stats?.pvpRankedWins ?? 0) >= 5,
+    pvp_ranked_15: player => (player.progress.stats?.pvpRankedWins ?? 0) >= 15,
+    pvp_ranked_30: player => (player.progress.stats?.pvpRankedWins ?? 0) >= 30,
 
     dragon_first: player => (player.progress.stats?.raidBossesDefeated?.length ?? 0) >= 1,
     dragon_all: player => (player.progress.stats?.raidBossesDefeated?.length ?? 0) >= monstersRaid.length,
@@ -224,6 +244,15 @@ const CHECKS = {
     farm_food_collection: player => hasOneOfEachFood(player),
 
     farm_pest_100: player => (player.progress.stats?.pestsRemoved ?? 0) >= 100,
+    farm_neighbor_all_1: player => hasNeighborActions(player, 1),
+    farm_neighbor_all_50: player => hasNeighborActions(player, 50),
+    farm_neighbor_all_100: player => hasNeighborActions(player, 100),
+    farm_stolen_food_1000: player => (player.progress.stats?.stolenFoodCount ?? 0) >= 1000,
+    farm_visits_100: player => (player.progress.stats?.farmVisits ?? 0) >= 100,
+    fusion_1: player => highestFusionLevel(player) >= 1,
+    fusion_2: player => highestFusionLevel(player) >= 2,
+    fusion_3: player => highestFusionLevel(player) >= 3,
+    fusion_5: player => highestFusionLevel(player) >= 5,
 
     silence: () => allSoundMuted(),
 

@@ -253,6 +253,194 @@
     color:#d4a373;
     font-size:.72rem;
 }
+/* ==========================================================
+   VISITA — lista de fazendas (direita), faixa "Fazenda de X" e o
+   resumo do que visitantes fizeram (ver FarmView/FarmSyncService)
+========================================================== */
+.farm-visit-panel{
+    position:absolute;
+    top:110px;
+    right:16px;
+    width:240px;
+    max-height:calc(100% - 300px);
+    display:flex;
+    flex-direction:column;
+    background:linear-gradient(180deg,#2c1810,#1a0f0a);
+    border:2px solid #8b7355;
+    border-radius:10px;
+    box-shadow:0 10px 30px rgba(0,0,0,.5);
+    font-family:"Cinzel",serif;
+    overflow:hidden;
+}
+.farm-visit-panel h3{
+    margin:0;
+    padding:12px 14px;
+    color:#f1c75c;
+    font-size:1rem;
+    letter-spacing:1px;
+    border-bottom:1px solid #5b4633;
+}
+.farm-visit-list{
+    overflow-y:auto;
+    padding:6px;
+}
+.farm-visit-row{
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    align-items:center;
+    gap:8px;
+    padding:6px 8px;
+    border-radius:6px;
+    color:#e6d2b5;
+    font-size:.8rem;
+}
+.farm-visit-row:nth-child(odd){
+    background:rgba(0,0,0,.2);
+}
+.farm-visit-row.current{
+    outline:1px solid #f1c75c;
+}
+.farm-visit-level{
+    color:#d4a373;
+    font-size:.72rem;
+    white-space:nowrap;
+}
+.farm-visit-name{
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.farm-visit-button{
+    padding:4px 10px;
+    background:rgba(60,90,30,.35);
+    border:1px solid #5d7a3a;
+    border-radius:5px;
+    color:#d8ecb8;
+    font-family:"Cinzel",serif;
+    font-size:.7rem;
+    cursor:pointer;
+    transition:.15s;
+}
+.farm-visit-button:hover:not(:disabled){
+    border-color:#a8d26a;
+    background:rgba(90,130,40,.45);
+}
+.farm-visit-button:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+}
+.farm-visit-status{
+    margin:0;
+    padding:14px;
+    color:#c7b08d;
+    font-size:.8rem;
+    text-align:center;
+}
+
+.farm-visit-banner{
+    position:absolute;
+    top:100px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:8px 10px 8px 16px;
+    background:linear-gradient(180deg,#2c1810,#1a0f0a);
+    border:2px solid #f1c75c;
+    border-radius:8px;
+    color:#e6d2b5;
+    font-family:"Cinzel",serif;
+    font-size:.9rem;
+    white-space:nowrap;
+    z-index:16;
+}
+.farm-visit-banner strong{
+    color:#f1c75c;
+}
+.farm-visit-steals{
+    padding:3px 8px;
+    border:1px solid #5b4633;
+    border-radius:5px;
+    color:#d4a373;
+    font-size:.78rem;
+}
+.farm-visit-steals.maxed{
+    border-color:#8a3a3a;
+    color:#f0a0a0;
+}
+.farm-visit-back{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 12px;
+    background:rgba(0,0,0,.3);
+    border:1px solid #8b7355;
+    border-radius:6px;
+    color:#e6d2b5;
+    font-family:"Cinzel",serif;
+    font-size:.78rem;
+    cursor:pointer;
+}
+.farm-visit-back:hover{
+    border-color:#f1c75c;
+}
+/* Fazenda de outro jogador: borda dourada na grade, pra não confundir
+   com a sua. */
+.farm-visiting .farm-plot-grid{
+    border-color:#f1c75c;
+}
+
+.farm-summary{
+    width:min(460px,90vw);
+}
+.farm-summary-list{
+    margin:0 0 18px;
+    padding:0;
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    text-align:left;
+}
+.farm-summary-list li{
+    padding:8px 10px;
+    background:rgba(0,0,0,.25);
+    border:1px solid #5b4633;
+    border-radius:6px;
+    color:#e6d2b5;
+    font-size:.82rem;
+    line-height:1.45;
+}
+.farm-summary-list strong{
+    color:#f1c75c;
+}
+.farm-summary-stolen{
+    color:#f0a0a0;
+}
+
+/* Telas onde a lista ao lado cobriria a grade: ela desce pro canto
+   inferior direito, menor. */
+@media (max-width:1200px){
+    .farm-visit-panel{
+        width:190px;
+    }
+}
+@media (max-width:900px){
+    .farm-visit-panel{
+        top:auto;
+        bottom:160px;
+        right:8px;
+        width:170px;
+        max-height:30vh;
+    }
+    .farm-visit-banner{
+        top:70px;
+        font-size:.78rem;
+    }
+}
+
 /* Semente + botão "Plantar em todos" logo abaixo dela, ocupando a mesma
    célula da grade. */
 .farm-seed-picker-option{

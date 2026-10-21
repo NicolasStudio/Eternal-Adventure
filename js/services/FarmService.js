@@ -26,6 +26,11 @@ const PEST_SPAWN_INTERVAL_MS = 5 * 60 * 60 * 1000; // 5h
 // que uma infestação termina, e somado ao vivo enquanto está ativa.
 const PEST_GROWTH_PENALTY = 0.15;
 
+// Visitante rouba esse tanto de UMA planta pronta, uma vez só por
+// plantio (o próximo que tentar vê "esse alimento já foi roubado") —
+// toda cultura rende pelo menos 4, então o dono sempre fica com o resto.
+const STEAL_AMOUNT = 2;
+
 // Multiplicador de tempo de crescimento aplicado UMA VEZ, no instante
 // do plantio, conforme a umidade da terra NAQUELE momento — plantar em
 // terra seca atrasa a colheita (debuff), em terra molhada adianta
@@ -189,6 +194,35 @@ export default class FarmService {
             SaveService.autoSave(player);
         }
 
+        // true quando nasceu praga — quem chama espelha a fazenda na
+        // nuvem (ver FarmSyncService), pra visitantes verem as pragas.
+        return spawned;
+
+    }
+
+    // pestLostMs de um canteiro DEPOIS de tirar a praga agora — mesma
+    // conta do removePest, exposta pro visitante (FarmSyncService) fazer
+    // igual na fazenda de outro jogador.
+    static pestLostAfterRemoval(plot, now = Date.now()) {
+        return (plot.pestLostMs ?? 0) + (now - plot.pestAt) * PEST_GROWTH_PENALTY;
+    }
+
+    /* =====================================================
+       ROUBO (visita à fazenda de outro jogador)
+    ===================================================== */
+
+    // Quanto um visitante leva de cada planta pronta — uma vez só por
+    // plantio (o primeiro que chegar leva; ver FarmSyncService.steal).
+    static get STEAL_AMOUNT() {
+        return STEAL_AMOUNT;
+    }
+
+    // Quanto essa planta ainda rende pro dono: a colheita cheia menos o
+    // que já foi roubado nesse plantio (ex: Melancia 7 − 2 = 5).
+    static getHarvestRemaining(plot) {
+        const crop = this.getCrop(plot.seedId);
+        if (!crop) return 0;
+        return Math.max(0, crop.harvestYield - (plot.stolen ?? 0));
     }
 
     // Ação da ferramenta Anti-Praga: só funciona em canteiro COM praga —
@@ -288,6 +322,8 @@ export default class FarmService {
         plot.growthModifier = null;
         plot.pestAt = null;
         plot.pestLostMs = null;
+        plot.stolen = 0;
+        plot.stolenBy = null;
 
         player.progress.stats.removedPlantedSeed = true;
 
@@ -376,6 +412,8 @@ export default class FarmService {
         plot.seedId = seedItem.id;
         plot.plantedAt = Date.now();
         plot.growthModifier = GROWTH_MODIFIER[moisture] ?? 1;
+        plot.stolen = 0;
+        plot.stolenBy = null;
 
         player.progress.stats.seedsPlanted = (player.progress.stats.seedsPlanted ?? 0) + 1;
 
@@ -419,21 +457,24 @@ export default class FarmService {
         const crop = this.getCrop(plot.seedId);
         const moisture = this.getMoistureState(plot);
 
-        for (let i = 0; i < crop.harvestYield; i++) {
+        // Colheita cheia menos o que um visitante roubou desse plantio.
+        const amount = this.getHarvestRemaining(plot);
+
+        for (let i = 0; i < amount; i++) {
             player.addItem(crop.harvestedItem);
         }
 
         player.farm.petXP = (player.farm.petXP ?? 0) + crop.petXP;
 
         player.progress.stats.harvests = (player.progress.stats.harvests ?? 0) + 1;
-        player.progress.stats.harvestedFoodCount = (player.progress.stats.harvestedFoodCount ?? 0) + crop.harvestYield;
+        player.progress.stats.harvestedFoodCount = (player.progress.stats.harvestedFoodCount ?? 0) + amount;
 
         // Contagem POR cultura (Mió/Pop corn/Intrigado/Seu-Bolinha/
         // Abrobra — ver AchievementService) — cada crop.id vira uma
         // chave nesse mapa, sem precisar de um contador solto por
         // cultura no progress.stats.
         player.progress.stats.harvestedByCrop ??= {};
-        player.progress.stats.harvestedByCrop[crop.id] = (player.progress.stats.harvestedByCrop[crop.id] ?? 0) + crop.harvestYield;
+        player.progress.stats.harvestedByCrop[crop.id] = (player.progress.stats.harvestedByCrop[crop.id] ?? 0) + amount;
 
         if (moisture === "dry") player.progress.stats.harvestedWithDrySoil = true;
         if (crop.id === "strawberry") player.progress.stats.harvestedStrawberry = true;
@@ -445,6 +486,8 @@ export default class FarmService {
         plot.growthModifier = null;
         plot.pestAt = null;
         plot.pestLostMs = null;
+        plot.stolen = 0;
+        plot.stolenBy = null;
 
         player.notify();
         SaveService.autoSave(player);

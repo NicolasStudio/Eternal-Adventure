@@ -52,8 +52,8 @@ const weapons = {
             absorption: 5
         },
 
-        value: 360,
-        sellValue: 180
+        value: 1080,
+        sellValue: 360
 
     },
 
@@ -78,8 +78,8 @@ const weapons = {
             absorption: 6
         },
 
-        value: 3240,
-        sellValue: 540
+        value: 9720,
+        sellValue: 3240
 
     },
 
@@ -104,8 +104,8 @@ const weapons = {
             absorption: 10
         },
 
-        value: 9720,
-        sellValue: 1620
+        value: 29160,
+        sellValue: 9720
 
     },
 
@@ -204,8 +204,8 @@ const weapons = {
             lifeSteal: 0,
             penetration: 5
         },
-        value: 360,
-        sellValue: 180
+        value: 1080,
+        sellValue: 360
     },
 
     scepter_rare: {
@@ -226,8 +226,8 @@ const weapons = {
             lifeSteal: 0,
             penetration: 6
         },
-        value: 3240,
-        sellValue: 540
+        value: 9720,
+        sellValue: 3240
     },
 
     scepter_mystic: {
@@ -248,8 +248,8 @@ const weapons = {
             lifeSteal: 0,
             penetration: 10
         },
-        value: 9720,
-        sellValue: 1620  
+        value: 29160,
+        sellValue: 9720  
     },
 
     scepter_legendary: {
@@ -339,8 +339,8 @@ const weapons = {
             lifeSteal: 0,
             penetration: 0
         },
-        value: 360,
-        sellValue: 180
+        value: 1080,
+        sellValue: 360
     },
 
     arch_rare: {
@@ -361,8 +361,8 @@ const weapons = {
             lifeSteal: 0,
             penetration: 0
         },
-        value: 3240,
-        sellValue: 540
+        value: 9720,
+        sellValue: 3240
     },
 
     arch_mystic: {
@@ -383,8 +383,8 @@ const weapons = {
             lifeSteal: 0,
             penetration: 0
         },
-        value: 9720,
-        sellValue: 1620  
+        value: 29160,
+        sellValue: 9720  
     },
 
     arch_legendary: {
@@ -476,8 +476,8 @@ const weapons = {
             penetration: 0,
             absorption: 0
         },
-        value: 360,
-        sellValue: 180
+        value: 1080,
+        sellValue: 360
     },
 
     ax_rare: {
@@ -499,8 +499,8 @@ const weapons = {
             penetration: 0,
             absorption: 0
         },
-        value: 3240,
-        sellValue: 540
+        value: 9720,
+        sellValue: 3240
     },
 
     ax_mystic: {
@@ -522,8 +522,8 @@ const weapons = {
             penetration: 0,
             absorption: 0
         },
-        value: 9720,
-        sellValue: 1620
+        value: 29160,
+        sellValue: 9720
     },
 
     ax_legendary: {
@@ -624,8 +624,8 @@ const weapons = {
             miasmaChance: 5
         },
 
-        value: 360,
-        sellValue: 180
+        value: 1080,
+        sellValue: 360
 
     },
 
@@ -651,8 +651,8 @@ const weapons = {
             miasmaChance: 6
         },
 
-        value: 3240,
-        sellValue: 540
+        value: 9720,
+        sellValue: 3240
 
     },
 
@@ -678,8 +678,8 @@ const weapons = {
             miasmaChance: 10
         },
 
-        value: 9720,
-        sellValue: 1620
+        value: 29160,
+        sellValue: 9720
 
     },
 
@@ -789,8 +789,8 @@ const weapons = {
             reflection: 2
         },
 
-        value: 360,
-        sellValue: 180
+        value: 1080,
+        sellValue: 360
 
     },
 
@@ -816,8 +816,8 @@ const weapons = {
             reflection: 3
         },
 
-        value: 3240,
-        sellValue: 540
+        value: 9720,
+        sellValue: 3240
 
     },
 
@@ -843,8 +843,8 @@ const weapons = {
             reflection: 4
         },
 
-        value: 9720,
-        sellValue: 1620
+        value: 29160,
+        sellValue: 9720
 
     },
 
@@ -954,8 +954,8 @@ const weapons = {
             confusionChance: 5
         },
 
-        value: 360,
-        sellValue: 180
+        value: 1080,
+        sellValue: 360
 
     },
 
@@ -981,8 +981,8 @@ const weapons = {
             confusionChance: 6
         },
 
-        value: 3240,
-        sellValue: 540
+        value: 9720,
+        sellValue: 3240
 
     },
 
@@ -1008,8 +1008,8 @@ const weapons = {
             confusionChance: 10
         },
 
-        value: 9720,
-        sellValue: 1620
+        value: 29160,
+        sellValue: 9720
 
     },
 
@@ -1119,8 +1119,8 @@ const weapons = {
             paralysisChance: 5
         },
 
-        value: 360,
-        sellValue: 180
+        value: 1080,
+        sellValue: 360
 
     },
 
@@ -1146,8 +1146,8 @@ const weapons = {
             paralysisChance: 6
         },
 
-        value: 3240,
-        sellValue: 540
+        value: 9720,
+        sellValue: 3240
 
     },
 
@@ -1173,8 +1173,8 @@ const weapons = {
             paralysisChance: 10
         },
 
-        value: 9720,
-        sellValue: 1620
+        value: 29160,
+        sellValue: 9720
 
     },
 
@@ -1284,8 +1284,8 @@ const weapons = {
             doubleStrikeChance: 5
         },
 
-        value: 360,
-        sellValue: 180
+        value: 1080,
+        sellValue: 360
 
     },
 
@@ -1311,8 +1311,8 @@ const weapons = {
             doubleStrikeChance: 6
         },
 
-        value: 3240,
-        sellValue: 540
+        value: 9720,
+        sellValue: 3240
 
     },
 
@@ -1338,8 +1338,8 @@ const weapons = {
             doubleStrikeChance: 10
         },
 
-        value: 9720,
-        sellValue: 1620
+        value: 29160,
+        sellValue: 9720
 
     },
 
@@ -1449,8 +1449,8 @@ const weapons = {
             gravityChance: 5
         },
 
-        value: 360,
-        sellValue: 180
+        value: 1080,
+        sellValue: 360
 
     },
 
@@ -1476,8 +1476,8 @@ const weapons = {
             gravityChance: 6
         },
 
-        value: 3240,
-        sellValue: 540
+        value: 9720,
+        sellValue: 3240
 
     },
 
@@ -1503,8 +1503,8 @@ const weapons = {
             gravityChance: 10
         },
 
-        value: 9720,
-        sellValue: 1620
+        value: 29160,
+        sellValue: 9720
 
     },
 

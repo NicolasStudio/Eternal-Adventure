@@ -274,6 +274,10 @@ export default class FusionService {
             bestItem.fusionLevel = (bestItem.fusionLevel ?? 0) + 1;
             bestItem.used = true;
 
+            // Conquistas "Fuuuuusão" — maior nível já alcançado, mesmo que
+            // o item seja vendido/fundido de novo depois.
+            player.progress.stats.highestFusionLevel = Math.max(player.progress.stats.highestFusionLevel ?? 0, bestItem.fusionLevel);
+
             consumed.forEach(item => player.removeItem(item));
 
             return {

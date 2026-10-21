@@ -40,8 +40,8 @@ const boots = {
             agility: 4
         },
 
-        value: 240,
-        sellValue: 120
+        value: 720,
+        sellValue: 240
 
     },
 
@@ -60,8 +60,8 @@ const boots = {
             agility: 7
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -79,8 +79,8 @@ const boots = {
             armor: 4
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 
@@ -161,8 +161,8 @@ const boots = {
             agility: 6
         },
 
-        value: 240,
-        sellValue: 120
+        value: 720,
+        sellValue: 240
 
     },
 
@@ -181,8 +181,8 @@ const boots = {
             agility: 11
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -201,8 +201,8 @@ const boots = {
             agility: 16
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 
@@ -283,8 +283,8 @@ const boots = {
             agility: 8
         },
 
-        value: 240,
-        sellValue: 120
+        value: 720,
+        sellValue: 240
 
     },
 
@@ -303,8 +303,8 @@ const boots = {
             agility: 12
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -323,8 +323,8 @@ const boots = {
             agility: 14
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 
@@ -406,8 +406,8 @@ const boots = {
             agility: 7
         },
 
-        value: 240,
-        sellValue: 120
+        value: 720,
+        sellValue: 240
 
     },
 
@@ -426,8 +426,8 @@ const boots = {
             agility: 12
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -446,8 +446,8 @@ const boots = {
             agility: 14
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 
@@ -529,8 +529,8 @@ const boots = {
             agility: 7
         },
 
-        value: 240,
-        sellValue: 120
+        value: 720,
+        sellValue: 240
 
     },
 
@@ -549,8 +549,8 @@ const boots = {
             agility: 10
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -569,8 +569,8 @@ const boots = {
             agility: 20
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 
@@ -652,8 +652,8 @@ const boots = {
             agility: 7
         },
 
-        value: 240,
-        sellValue: 120
+        value: 720,
+        sellValue: 240
 
     },
 
@@ -672,8 +672,8 @@ const boots = {
             agility: 12
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -692,8 +692,8 @@ const boots = {
             agility: 20
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 
@@ -772,8 +772,8 @@ const boots = {
             agility: 14
         },
 
-        value: 240,
-        sellValue: 120
+        value: 720,
+        sellValue: 240
 
     },
 
@@ -792,8 +792,8 @@ const boots = {
             agility: 20
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -812,8 +812,8 @@ const boots = {
             agility: 26
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 
@@ -892,8 +892,8 @@ const boots = {
             agility: 7
         },
 
-        value: 240,
-        sellValue: 120
+        value: 720,
+        sellValue: 240
 
     },
 
@@ -912,8 +912,8 @@ const boots = {
             agility: 12
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -932,8 +932,8 @@ const boots = {
             agility: 14
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 
@@ -1015,8 +1015,8 @@ const boots = {
             agility: 10
         },
 
-        value: 240,
-        sellValue: 120
+        value: 720,
+        sellValue: 240
 
     },
 
@@ -1035,8 +1035,8 @@ const boots = {
             agility: 16
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -1055,8 +1055,8 @@ const boots = {
             agility: 25
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 
@@ -1138,8 +1138,8 @@ const boots = {
             agility: 3
         },
 
-        value: 240,
-        sellValue: 120
+        value: 720,
+        sellValue: 240
 
     },
 
@@ -1158,8 +1158,8 @@ const boots = {
             agility: 5
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -1178,8 +1178,8 @@ const boots = {
             agility: 8
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 

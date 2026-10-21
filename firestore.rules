@@ -103,6 +103,142 @@ service cloud.firestore {
         && request.resource.data.rankedPoints <= 999999;
     }
 
+    // Fazenda compartilhada (ver js/services/FarmSyncService.js): cada
+    // personagem logado espelha os 24 canteiros aqui pra outros jogadores
+    // poderem visitar. Id = "uid_slot", igual ao leaderboard — o dono é a
+    // parte antes do "_". O save de verdade continua privado em /saves.
+    match /farms/{farmId} {
+
+      function isFarmOwner() {
+        return signedIn() && farmId.split('_')[0] == request.auth.uid;
+      }
+
+      // Dia de Brasília (UTC−3) em número — mesma conta de
+      // FarmSyncService.today() no jogo.
+      function today() {
+        return math.floor((request.time.toMillis() - 10800000) / 86400000);
+      }
+
+      // Limite diário de roubo (FarmSyncService.DAILY_STEAL_LIMIT): o
+      // contador do ladrão nessa fazenda precisa subir exatamente 1 na
+      // MESMA transação do roubo, ficando no máximo em 12 no dia de hoje.
+      function stealCounterOk() {
+        let path = /databases/$(database)/documents/farms/$(farmId)/thieves/$(request.auth.uid);
+        let after = getAfter(path).data;
+        let countedToday = exists(path) && get(path).data.day == today();
+        return after.day == today()
+          && after.count <= 12
+          && (
+            (countedToday && after.count == get(path).data.count + 1)
+            || (!countedToday && after.count == 1)
+          );
+      }
+
+      match /plots/{plotId} {
+
+        function changed(key) {
+          return request.resource.data.diff(resource.data).affectedKeys().hasAny([key]);
+        }
+
+        // Horários gravados por visitante precisam ser "agora" (±2 min) —
+        // não dá pra regar com um horário no futuro, por exemplo.
+        function nearNow(value) {
+          return value is int
+            && value > request.time.toMillis() - 120000
+            && value < request.time.toMillis() + 120000;
+        }
+
+        function visitorWaterOk() {
+          return !changed('wateredAt') || nearNow(request.resource.data.wateredAt);
+        }
+
+        // Tirar praga: só se havia praga, e os 3 campos mudam juntos.
+        function visitorPestOk() {
+          return changed('pestAt') == changed('pestRemovedAt')
+            && (!changed('pestLostMs') || changed('pestAt'))
+            && (!changed('pestAt') || (
+              resource.data.get('pestAt', null) != null
+              && request.resource.data.pestAt == null
+              && nearNow(request.resource.data.pestRemovedAt)
+              && request.resource.data.pestLostMs is number
+              && request.resource.data.pestLostMs >= 0
+            ));
+        }
+
+        // Roubo: uma vez só por plantio (stolen de 0 pra 2), só com algo
+        // plantado, e dentro do limite diário do ladrão nessa fazenda.
+        // "Já foi roubado" = stolen já está em 2.
+        function visitorStealOk() {
+          return (!changed('stolenBy') || changed('stolen'))
+            && (!changed('stolen') || (
+              resource.data.get('seedId', null) != null
+              && resource.data.get('stolen', 0) == 0
+              && request.resource.data.stolen == 2
+              && request.resource.data.stolenBy is string
+              && request.resource.data.stolenBy.size() <= 30
+              && stealCounterOk()
+            ));
+        }
+
+        allow read: if signedIn();
+        allow create, update, delete: if isFarmOwner();
+
+        // Visitante: só regar, tirar praga ou roubar — nunca mexe em
+        // semente, plantio, terra ou crescimento.
+        allow update: if signedIn() && !isFarmOwner()
+          && resource.data.tilled == true
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['wateredAt', 'pestAt', 'pestLostMs', 'pestRemovedAt', 'stolen', 'stolenBy'])
+          && visitorWaterOk()
+          && visitorPestOk()
+          && visitorStealOk();
+
+      }
+
+      // Contador de roubo de cada visitante nesta fazenda: { day, count }.
+      // Só o próprio ladrão escreve, de 1 em 1, e nunca apaga (senão
+      // zeraria o limite). Num dia novo recomeça em 1.
+      match /thieves/{thiefUid} {
+
+        allow read: if isOwner(thiefUid);
+
+        allow create, update: if isOwner(thiefUid) && !isFarmOwner()
+          && request.resource.data.keys().hasOnly(['day', 'count'])
+          && request.resource.data.day == today()
+          && request.resource.data.count is int
+          && request.resource.data.count <= 12
+          && (
+            ((resource == null || resource.data.day != today()) && request.resource.data.count == 1)
+            || (resource != null && resource.data.day == today() && request.resource.data.count == resource.data.count + 1)
+          );
+
+      }
+
+      // O que cada visitante fez — o dono lê pro resumo e apaga.
+      match /events/{eventId} {
+
+        allow read, delete: if isFarmOwner();
+
+        allow create: if signedIn() && !isFarmOwner()
+          && request.resource.data.keys().hasOnly(['type', 'visitorUid', 'visitorName', 'plotIndex', 'cropName', 'amount', 'at'])
+          && request.resource.data.visitorUid == request.auth.uid
+          && request.resource.data.type in ['water', 'pest', 'steal']
+          && request.resource.data.visitorName is string
+          && request.resource.data.visitorName.size() <= 30
+          && request.resource.data.plotIndex is int
+          && request.resource.data.plotIndex >= 0
+          && request.resource.data.plotIndex < 24
+          && (request.resource.data.cropName == null
+              || (request.resource.data.cropName is string && request.resource.data.cropName.size() <= 30))
+          && request.resource.data.amount is int
+          && request.resource.data.amount >= 0
+          && request.resource.data.amount <= 2
+          && request.resource.data.at is int;
+
+      }
+
+    }
+
     // Correio — provisório (ver js/services/MailService.js): só a conta
     // admin abaixo pode mandar carta normal. O uid é o MESMO de
     // js/data/admins.js — os dois precisam ficar sincronizados à mão,

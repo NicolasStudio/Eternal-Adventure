@@ -435,6 +435,11 @@ export default class SaveService {
         // "Máscara" e virou "Touca") continuava com o nome antigo.
         item.name = canonical.name;
         item.icon = canonical.icon;
+        // Preço também — senão um item que já estava no inventário
+        // continuaria vendendo pelo valor de quando caiu, mesmo depois de
+        // um reajuste em weapons.js/helmets.js/etc.
+        item.value = canonical.value;
+        item.sellValue = canonical.sellValue;
         item.baseStats = structuredClone(canonical.stats);
 
         UpgradeService.applyStats(item);

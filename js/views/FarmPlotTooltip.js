@@ -1,5 +1,12 @@
 import FarmService from "../services/FarmService.js";
 
+// stolenBy é o nome de outro jogador (vem do banco) — nunca entra como HTML.
+function escapeHtml(text) {
+    return String(text ?? "").replace(/[&<>"']/g, char => (
+        { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]
+    ));
+}
+
 // Tooltip de hover pra um canteiro plantado — mesma estrutura/CSS das
 // outras (DungeonTooltip.js, SeedTooltip.js: tooltip-header,
 // tooltip-section, tooltip-row), só com o tempo restante até a
@@ -86,6 +93,11 @@ export default class FarmPlotTooltip {
 
         const hasPest = FarmService.hasPest(plot);
 
+        // Quanto essa planta ainda rende / colheita cheia — ex: 7/7, ou
+        // 5/7 depois que um visitante roubou (ver FarmService.STEAL_AMOUNT).
+        const harvestLeft = FarmService.getHarvestRemaining(plot);
+        const stolenBy = plot.stolen > 0 ? escapeHtml(plot.stolenBy ?? "um visitante") : null;
+
         return `
             <div class="tooltip-header">
                 <img class="tooltip-image" src="${crop.harvestedItem.icon}" alt="${crop.name}">
@@ -95,8 +107,9 @@ export default class FarmPlotTooltip {
             <div class="tooltip-section">
                 <div class="tooltip-row">
                     <span class="tooltip-label">${ready ? "Pronto para colher!" : "Tempo restante"}</span>
-                    ${ready ? "" : `<span class="tooltip-value">${this.formatDuration(remaining)}</span>`}
+                    <span class="tooltip-value">${ready ? `${harvestLeft}/${crop.harvestYield}` : this.formatDuration(remaining)}</span>
                 </div>
+                ${stolenBy ? `<p class="tooltip-description tooltip-stat-negative">Roubado por ${stolenBy} (−${plot.stolen}).</p>` : ""}
                 ${modifierLabel ? `<p class="tooltip-description">${modifierLabel}</p>` : ""}
                 ${hasPest ? `<p class="tooltip-description tooltip-stat-negative">Praga ativa! Crescimento 15% mais lento — use a Anti-Praga pra remover.</p>` : ""}
             </div>

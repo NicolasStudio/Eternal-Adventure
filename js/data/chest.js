@@ -38,8 +38,8 @@ const chests = {
             armor: 4
         },
 
-        value: 300,
-        sellValue: 130
+        value: 900,
+        sellValue: 300
 
     },
 
@@ -57,8 +57,8 @@ const chests = {
             armor: 7
         },
 
-        value: 2700,
-        sellValue: 450
+        value: 8100,
+        sellValue: 2700
 
     },
 
@@ -76,8 +76,8 @@ const chests = {
             armor: 10
         },
 
-        value: 8100,
-        sellValue: 1350
+        value: 24300,
+        sellValue: 8100
 
     },
 
@@ -155,8 +155,8 @@ const chests = {
             armor: 8
         },
 
-        value: 300,
-        sellValue: 150
+        value: 900,
+        sellValue: 300
 
     },
 
@@ -174,8 +174,8 @@ const chests = {
             armor: 13
         },
 
-        value: 2700,
-        sellValue: 450
+        value: 8100,
+        sellValue: 2700
 
     },
 
@@ -193,8 +193,8 @@ const chests = {
             armor: 19
         },
 
-        value: 8100,
-        sellValue: 1350
+        value: 24300,
+        sellValue: 8100
 
     },
 
@@ -272,8 +272,8 @@ const chests = {
             armor: 7
         },
 
-        value: 300,
-        sellValue: 150
+        value: 900,
+        sellValue: 300
 
     },
 
@@ -291,8 +291,8 @@ const chests = {
             armor: 11
         },
 
-        value: 2700,
-        sellValue: 450
+        value: 8100,
+        sellValue: 2700
 
     },
 
@@ -310,8 +310,8 @@ const chests = {
             armor: 17
         },
 
-        value: 8100,
-        sellValue: 1350
+        value: 24300,
+        sellValue: 8100
 
     },
 
@@ -389,8 +389,8 @@ const chests = {
             armor: 7
         },
 
-        value: 300,
-        sellValue: 150
+        value: 900,
+        sellValue: 300
 
     },
 
@@ -408,8 +408,8 @@ const chests = {
             armor: 14
         },
 
-        value: 2700,
-        sellValue: 450
+        value: 8100,
+        sellValue: 2700
 
     },
 
@@ -427,8 +427,8 @@ const chests = {
             armor: 19
         },
 
-        value: 8100,
-        sellValue: 1350
+        value: 24300,
+        sellValue: 8100
 
     },
 
@@ -504,8 +504,8 @@ const chests = {
             armor: 8
         },
 
-        value: 300,
-        sellValue: 150
+        value: 900,
+        sellValue: 300
 
     },
 
@@ -523,8 +523,8 @@ const chests = {
             armor: 14
         },
 
-        value: 2700,
-        sellValue: 450
+        value: 8100,
+        sellValue: 2700
 
     },
 
@@ -542,8 +542,8 @@ const chests = {
             armor: 23
         },
 
-        value: 8100,
-        sellValue: 1350
+        value: 24300,
+        sellValue: 8100
 
     },
 
@@ -621,8 +621,8 @@ const chests = {
             armor: 9
         },
 
-        value: 300,
-        sellValue: 150
+        value: 900,
+        sellValue: 300
 
     },
 
@@ -640,8 +640,8 @@ const chests = {
             armor: 16
         },
 
-        value: 2700,
-        sellValue: 450
+        value: 8100,
+        sellValue: 2700
 
     },
 
@@ -659,8 +659,8 @@ const chests = {
             armor: 26
         },
 
-        value: 8100,
-        sellValue: 1350
+        value: 24300,
+        sellValue: 8100
 
     },
 
@@ -735,8 +735,8 @@ const chests = {
             armor: 4
         },
 
-        value: 300,
-        sellValue: 150
+        value: 900,
+        sellValue: 300
 
     },
 
@@ -754,8 +754,8 @@ const chests = {
             armor: 7
         },
 
-        value: 2700,
-        sellValue: 450
+        value: 8100,
+        sellValue: 2700
 
     },
 
@@ -773,8 +773,8 @@ const chests = {
             armor: 13
         },
 
-        value: 8100,
-        sellValue: 1350
+        value: 24300,
+        sellValue: 8100
 
     },
 
@@ -849,8 +849,8 @@ const chests = {
             armor: 7
         },
 
-        value: 300,
-        sellValue: 150
+        value: 900,
+        sellValue: 300
 
     },
 
@@ -868,8 +868,8 @@ const chests = {
             armor: 14
         },
 
-        value: 2700,
-        sellValue: 450
+        value: 8100,
+        sellValue: 2700
 
     },
 
@@ -887,8 +887,8 @@ const chests = {
             armor: 19
         },
 
-        value: 8100,
-        sellValue: 1350
+        value: 24300,
+        sellValue: 8100
 
     },
 
@@ -966,8 +966,8 @@ const chests = {
             armor: 7
         },
 
-        value: 300,
-        sellValue: 150
+        value: 900,
+        sellValue: 300
 
     },
 
@@ -985,8 +985,8 @@ const chests = {
             armor: 14
         },
 
-        value: 2700,
-        sellValue: 450
+        value: 8100,
+        sellValue: 2700
 
     },
 
@@ -1004,8 +1004,8 @@ const chests = {
             armor: 19
         },
 
-        value: 8100,
-        sellValue: 1350
+        value: 24300,
+        sellValue: 8100
 
     },
 
@@ -1083,8 +1083,8 @@ const chests = {
             armor: 8
         },
 
-        value: 300,
-        sellValue: 150
+        value: 900,
+        sellValue: 300
 
     },
 
@@ -1102,8 +1102,8 @@ const chests = {
             armor: 14
         },
 
-        value: 2700,
-        sellValue: 450
+        value: 8100,
+        sellValue: 2700
 
     },
 
@@ -1121,8 +1121,8 @@ const chests = {
             armor: 23
         },
 
-        value: 8100,
-        sellValue: 1350
+        value: 24300,
+        sellValue: 8100
 
     },
 

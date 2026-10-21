@@ -40,8 +40,8 @@ const helmets = {
             absorption: 3
         },
 
-        value: 200,
-        sellValue: 120
+        value: 600,
+        sellValue: 200
 
     },
 
@@ -60,8 +60,8 @@ const helmets = {
             absorption: 4
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -80,8 +80,8 @@ const helmets = {
             absorption: 6
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 
@@ -163,8 +163,8 @@ const helmets = {
             penetration: 3
         },
 
-        value: 200,
-        sellValue: 120
+        value: 600,
+        sellValue: 200
 
     },
 
@@ -183,8 +183,8 @@ const helmets = {
             penetration: 4
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -203,8 +203,8 @@ const helmets = {
             penetration: 6
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 
@@ -285,8 +285,8 @@ const helmets = {
             criticalChance: 3
         },
 
-        value: 200,
-        sellValue: 120
+        value: 600,
+        sellValue: 200
 
     },
 
@@ -305,8 +305,8 @@ const helmets = {
             criticalChance: 4
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -325,8 +325,8 @@ const helmets = {
             criticalChance: 6
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 
@@ -408,8 +408,8 @@ const helmets = {
             lifeSteal: 3
         },
 
-        value: 200,
-        sellValue: 120
+        value: 600,
+        sellValue: 200
 
     },
 
@@ -428,8 +428,8 @@ const helmets = {
             lifeSteal: 4
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -448,8 +448,8 @@ const helmets = {
             lifeSteal: 6
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 
@@ -529,8 +529,8 @@ const helmets = {
             miasmaChance: 3
         },
 
-        value: 200,
-        sellValue: 120
+        value: 600,
+        sellValue: 200
 
     },
 
@@ -549,8 +549,8 @@ const helmets = {
             miasmaChance: 4
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -569,8 +569,8 @@ const helmets = {
             miasmaChance: 6
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 
@@ -652,8 +652,8 @@ const helmets = {
             reflection: 1
         },
 
-        value: 200,
-        sellValue: 120
+        value: 600,
+        sellValue: 200
 
     },
 
@@ -672,8 +672,8 @@ const helmets = {
             reflection: 2
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -692,8 +692,8 @@ const helmets = {
             reflection: 2
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 
@@ -772,8 +772,8 @@ const helmets = {
             confusionChance: 3
         },
 
-        value: 200,
-        sellValue: 120
+        value: 600,
+        sellValue: 200
 
     },
 
@@ -792,8 +792,8 @@ const helmets = {
             confusionChance: 4
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -812,8 +812,8 @@ const helmets = {
             confusionChance: 6
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 
@@ -892,8 +892,8 @@ const helmets = {
             paralysisChance: 3
         },
 
-        value: 200,
-        sellValue: 120
+        value: 600,
+        sellValue: 200
 
     },
 
@@ -912,8 +912,8 @@ const helmets = {
             paralysisChance: 4
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -932,8 +932,8 @@ const helmets = {
             paralysisChance: 6
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 
@@ -1012,8 +1012,8 @@ const helmets = {
             doubleStrikeChance: 3
         },
 
-        value: 200,
-        sellValue: 120
+        value: 600,
+        sellValue: 200
 
     },
 
@@ -1032,8 +1032,8 @@ const helmets = {
             doubleStrikeChance: 4
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -1052,8 +1052,8 @@ const helmets = {
             doubleStrikeChance: 6
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 
@@ -1132,8 +1132,8 @@ const helmets = {
             gravityChance: 3
         },
 
-        value: 200,
-        sellValue: 120
+        value: 600,
+        sellValue: 200
 
     },
 
@@ -1152,8 +1152,8 @@ const helmets = {
             gravityChance: 4
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
 
     },
 
@@ -1172,8 +1172,8 @@ const helmets = {
             gravityChance: 6
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
 
     },
 
