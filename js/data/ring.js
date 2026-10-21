@@ -36,8 +36,8 @@ const ring = {
             agility: 2
         },
 
-        value: 240,
-        sellValue: 120
+        value: 720,
+        sellValue: 240
     },
 
     ringPrimalRare: {
@@ -55,8 +55,8 @@ const ring = {
             agility: 4
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
     },
 
     ringPrimalMystic: {
@@ -74,8 +74,8 @@ const ring = {
             agility: 9
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
     },
 
     ringPrimalLegendary: {
@@ -150,8 +150,8 @@ const ring = {
             armor: 1
         },
 
-        value: 240,
-        sellValue: 120
+        value: 720,
+        sellValue: 240
     },
 
     ringModernRare: {
@@ -169,8 +169,8 @@ const ring = {
             armor: 2
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
     },
 
     ringModernMystic: {
@@ -188,8 +188,8 @@ const ring = {
             armor: 7
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
     },
 
     ringModernLegendary: {
@@ -264,8 +264,8 @@ const ring = {
             sorte: 3,
         },
 
-        value: 240,
-        sellValue: 120
+        value: 720,
+        sellValue: 240
     },
 
     ringSkullRare: {
@@ -283,8 +283,8 @@ const ring = {
             sorte: 5,
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
     },
 
     ringSkullMystic: {
@@ -302,8 +302,8 @@ const ring = {
             sorte: 11,
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
     },
 
     ringSkullLegendary: {

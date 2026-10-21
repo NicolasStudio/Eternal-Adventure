@@ -1,6 +1,19 @@
 export default [
 
     {
+        version: "Beta 0.3.0 — Vizinhos na Fazenda",
+        date: "Outubro de 2026",
+        changes: [
+            "Visite fazendas! Na Fazenda, o novo botão de casinha (ao lado do chat) abre a lista de jogadores acima do nível 30 — clique em Visitar pra ver a fazenda deles. Lá você pode regar, eliminar pragas e roubar 2 alimentos de cada planta pronta (uma vez só por planta: quem chegar depois vê 'Esse alimento já foi roubado'), até 12 canteiros de cada fazenda por dia (zera à meia-noite). Ao abrir a sua Fazenda, um resumo mostra quem regou, tirou pragas ou roubou de você. Precisa estar logado na sua conta",
+            "Fazenda: a dica de uma planta pronta mostra quanto ela rende (ex: Melancia 7/7)",
+            "Fazenda: ao escolher a semente, o novo botão Plantar em todos planta a mesma semente em todos os canteiros arados e vazios de uma vez (até acabar a semente)",
+            "12 conquistas novas: Amigo ou inimigo? (I, II e III), Senhor Furtado e Acho que a grama do vizinho é mais verde na Fazenda; Fuuuuusão (I a IV) na Fusão; e Já ta valendo? (I, II e III) pelas vitórias no Combate Ranqueado",
+            "Mercado: equipamentos Incomuns, Raros e Místicos ficaram mais caros de novo — a compra triplicou e a venda passou a valer o antigo preço de compra (ex: Espada Incomum 360→1.080, Rara 3.240→9.720, Mística 9.720→29.160; venda da Mística 1.620→9.720). Itens que você já tem passam a vender pelo valor novo",
+            "Árvore de Talentos: os talentos de Troca de Atributo passam a mover 10 por nível (antes 15) — até 30 no 3/3"
+        ]
+    },
+
+    {
         version: "Beta 0.2.9 — Rebalanceamento de Classes e Pets",
         date: "Outubro de 2026",
         changes: [

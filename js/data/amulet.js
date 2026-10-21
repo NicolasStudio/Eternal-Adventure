@@ -36,8 +36,8 @@ const amulet = {
             agility: 2
         },
 
-        value: 240,
-        sellValue: 120
+        value: 720,
+        sellValue: 240
     },
 
     amuletPrimalRare: {
@@ -55,8 +55,8 @@ const amulet = {
             agility: 4
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
     },
 
     amuletPrimalMystic: {
@@ -74,8 +74,8 @@ const amulet = {
             agility: 9
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
     },
 
     amuletPrimalLegendary: {
@@ -150,8 +150,8 @@ const amulet = {
             armor: 1
         },
 
-        value: 240,
-        sellValue: 120
+        value: 720,
+        sellValue: 240
     },
 
     amuletModernRare: {
@@ -169,8 +169,8 @@ const amulet = {
             armor: 2
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
     },
 
     amuletModernMystic: {
@@ -188,8 +188,8 @@ const amulet = {
             armor: 7
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
     },
 
     amuletModernLegendary: {
@@ -264,8 +264,8 @@ const amulet = {
             sorte: 3,
         },
 
-        value: 240,
-        sellValue: 120
+        value: 720,
+        sellValue: 240
     },
 
     amuletSkullRare: {
@@ -283,8 +283,8 @@ const amulet = {
             sorte: 5,
         },
 
-        value: 2160,
-        sellValue: 360
+        value: 6480,
+        sellValue: 2160
     },
 
     amuletSkullMystic: {
@@ -302,8 +302,8 @@ const amulet = {
             sorte: 11,
         },
 
-        value: 6480,
-        sellValue: 1080
+        value: 19440,
+        sellValue: 6480
     },
 
     amuletSkullLegendary: {

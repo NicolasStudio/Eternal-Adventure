@@ -314,6 +314,71 @@ const achievements = [
         icon: 'assets/img/icons/achievements/prata.png',
         iconLocked:'assets/img/icons/achievements/bloqueado.png'
     },
+    // Fazenda — visita a vizinhos (ver FarmView/FarmSyncService)
+    {
+        id: 'farm_neighbor_all_1',
+        name: 'Amigo ou inimigo?',
+        description: 'Regue, remova pragas e roube um vizinho',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_neighbor_all_50',
+        name: 'Amigo ou inimigo II',
+        description: 'Regue 50 vezes, remova 50 pragas e roube um vizinho 50 vezes',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_neighbor_all_100',
+        name: 'Amigo ou inimigo III',
+        description: 'Regue 100 vezes, remova 100 pragas e roube um vizinho 100 vezes',
+        icon: 'assets/img/icons/achievements/prata.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_stolen_food_1000',
+        name: 'Senhor Furtado',
+        description: 'Roube 1000 alimentos',
+        icon: 'assets/img/icons/achievements/ouro.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'farm_visits_100',
+        name: 'Acho que a grama do vizinho é mais verde',
+        description: 'Entre na fazenda dos vizinhos 100 vezes',
+        icon: 'assets/img/icons/achievements/ouro.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    // Fusão
+    {
+        id: 'fusion_1',
+        name: 'Fuuuuusão',
+        description: 'Funda seu primeiro equipamento +1',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'fusion_2',
+        name: 'Fuuuuusão II',
+        description: 'Funda seus equipamentos +2',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'fusion_3',
+        name: 'Fuuuuusão III',
+        description: 'Funda seus equipamentos +3',
+        icon: 'assets/img/icons/achievements/prata.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'fusion_5',
+        name: 'Fuuuuusão IV',
+        description: 'Funda seus equipamentos +5',
+        icon: 'assets/img/icons/achievements/ouro.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
     // Itens equipados
     {
         id: 'equip_common',
@@ -461,6 +526,27 @@ const achievements = [
         name: 'O pai ta on!',
         description: 'Vença seu primeiro combate pvp!',
         icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'pvp_ranked_5',
+        name: 'Já ta valendo?',
+        description: 'Vença 5 combates pvp competitivo (1x1, 2x2 ou 3x3)',
+        icon: 'assets/img/icons/achievements/bronze.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'pvp_ranked_15',
+        name: 'Já ta valendo II',
+        description: 'Vença 15 combates pvp competitivo (1x1, 2x2 ou 3x3)',
+        icon: 'assets/img/icons/achievements/prata.png',
+        iconLocked:'assets/img/icons/achievements/bloqueado.png'
+    },
+    {
+        id: 'pvp_ranked_30',
+        name: 'Já ta valendo III',
+        description: 'Vença 30 combates pvp competitivo (1x1, 2x2 ou 3x3)',
+        icon: 'assets/img/icons/achievements/prata.png',
         iconLocked:'assets/img/icons/achievements/bloqueado.png'
     },
     // Cooperativo (dragões)

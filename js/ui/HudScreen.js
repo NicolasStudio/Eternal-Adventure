@@ -128,6 +128,7 @@ export default class HudScreen {
                     ${isPvp2v2 ? this.pvpView.renderAllyCards() : ""}
                     <div class="hud-tool-row">
                         ${this.chatHUD.renderButton()}
+                        ${this.currentView === "farm" ? this.farmView.renderVisitButton() : ""}
                         ${this.currentView === "" && !anyCombat ? this.mailModal.renderButton() : ""}
                         ${this.currentView === "" && !anyCombat && SpeakerService.isAdmin(AuthService.getCurrentUser()?.uid) ? this.speakerModal.renderButton() : ""}
                     </div>
@@ -462,10 +463,14 @@ export default class HudScreen {
         // limpar aqui (diferente de PVP/Coop), é só o background mesmo.
         if (this.currentView === "farm" && view !== "farm") {
             this.setBackground("assets/img/backgrounds/tela_inicial.png");
+            this.farmView.onClose();
         }
 
         if (this.currentView !== "farm" && view === "farm") {
             this.setBackground("assets/img/backgrounds/celeiro.png");
+            // Sincroniza com a nuvem (o que visitantes fizeram) e carrega
+            // a lista de fazendas pra visitar — ver FarmView.onOpen.
+            this.farmView.onOpen();
         }
 
         this.currentView = view;
