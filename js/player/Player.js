@@ -787,15 +787,23 @@ export default class Player {
 
     }
 
+    // Melhor encanto de cada tipo que o PERSONAGEM tem (registro em
+    // progress.enchantBonuses — ver StatsMigrationService.recalculate).
+    getEnchantBonus(statKey) {
+        return this.progress.enchantBonuses?.[statKey] ?? 0;
+    }
+
     // Aplica o bônus de uma pedra de encantamento permanentemente no
     // personagem (canalizado através da arma, mas o efeito fica com
     // você, não preso no item — trocar de arma depois não tira o bônus
     // já aplicado). Consome 1 unidade da pedra do inventário.
     //
-    // Cada arma só pode ter UM encantamento por tipo de atributo (vida,
-    // armadura, ataque, agilidade) — usar uma pedra melhor do MESMO tipo
-    // SUBSTITUI o bônus anterior daquela arma (não soma os dois); usar
-    // uma pedra igual ou pior que a já aplicada é bloqueado.
+    // UM encanto de cada tipo (vida, armadura, ataque, agilidade,
+    // especial) por PERSONAGEM, não por arma: uma pedra melhor do mesmo
+    // tipo SUBSTITUI o bônus que você já tem (soma só a diferença), e uma
+    // pedra igual ou pior que a sua melhor é bloqueada — em qualquer
+    // arma. Antes o limite era por arma, mas o bônus ia pro personagem:
+    // encantar duas armas somava dois Rubis.
     applyEnchantment(stone, weapon) {
 
         if (!stone?.stats) return { success: false, reason: "Pedra inválida." };
@@ -817,19 +825,20 @@ export default class Player {
 
         const [statKey, newValue] = Object.entries(inventoryStone.stats)[0];
 
-        const currentValue = weaponInstance.enchantments[statKey] ?? 0;
+        const currentValue = this.getEnchantBonus(statKey);
 
         if (newValue <= currentValue) {
             return {
                 success: false,
-                reason: `Essa arma já tem um encantamento de ${this.getEnchantStatName(statKey)} igual ou melhor.`
+                reason: `Você já tem um encantamento de ${this.getEnchantStatName(statKey)} igual ou melhor (+${currentValue}).`
             };
         }
 
-        // Se já havia um encantamento mais fraco desse mesmo tipo nessa
-        // arma, primeiro desfaz o bônus antigo antes de aplicar o novo
-        // (upgrade, não soma dos dois).
+        // Se já havia um encantamento mais fraco desse mesmo tipo (em
+        // qualquer arma), soma só a diferença (upgrade, não soma dos dois).
         const delta = newValue - currentValue;
+
+        this.progress.enchantBonuses = { ...(this.progress.enchantBonuses ?? {}), [statKey]: newValue };
 
         if (statKey === "life") {
             this.maxHP += delta;
