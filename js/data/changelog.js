@@ -1,6 +1,19 @@
 export default [
 
     {
+        version: "Beta 0.3.0 — Vizinhos na Fazenda",
+        date: "Outubro de 2026",
+        changes: [
+            "Visite fazendas! Na Fazenda, o novo botão de casinha (ao lado do chat) abre a lista de jogadores acima do nível 30 — clique em Visitar pra ver a fazenda deles. Lá você pode regar, eliminar pragas e roubar 2 alimentos de cada planta pronta (uma vez só por planta: quem chegar depois vê 'Esse alimento já foi roubado'), até 12 canteiros de cada fazenda por dia (zera à meia-noite). Ao abrir a sua Fazenda, um resumo mostra quem regou, tirou pragas ou roubou de você. Precisa estar logado na sua conta",
+            "Fazenda: a dica de uma planta pronta mostra quanto ela rende (ex: Melancia 7/7)",
+            "Fazenda: ao escolher a semente, o novo botão Plantar em todos planta a mesma semente em todos os canteiros arados e vazios de uma vez (até acabar a semente)",
+            "12 conquistas novas: Amigo ou inimigo? (I, II e III), Senhor Furtado e Acho que a grama do vizinho é mais verde na Fazenda; Fuuuuusão (I a IV) na Fusão; e Já ta valendo? (I, II e III) pelas vitórias no Combate Ranqueado",
+            "Mercado: equipamentos Incomuns, Raros e Místicos ficaram mais caros de novo — a compra triplicou e a venda passou a valer o antigo preço de compra (ex: Espada Incomum 360→1.080, Rara 3.240→9.720, Mística 9.720→29.160; venda da Mística 1.620→9.720). Itens que você já tem passam a vender pelo valor novo",
+            "Árvore de Talentos: os talentos de Troca de Atributo passam a mover 10 por nível (antes 15) — até 30 no 3/3"
+        ]
+    },
+
+    {
         version: "Beta 0.2.9 — Rebalanceamento de Classes e Pets",
         date: "Outubro de 2026",
         changes: [
@@ -18,17 +31,13 @@ export default [
             "Upgrade de Classe (Portal da Luz/Trevas): rebalanceado junto com o resto pela primeira vez — o bônus de cada lado (Luz e Trevas) muda de tamanho por classe, mas a chance de vitória média continua perto de 50% dos dois lados pra todo mundo. Maiores mudanças além das já citadas: Eletro (Luz/Trevas Vida e Ataque caem ~30%, estava forte demais combinado com o equipamento) e Louca (Luz Ataque 45→61 e Agilidade 30→41, estava fraca combinada)",
             "Equipamentos Místicos ficam 3% mais fortes e Lendários 10% mais fracos (valor final na qualidade máxima da Ferraria), pra diminuir o salto entre as duas raridades — vale pra Ataque, Armadura, Agilidade, Vida e Sorte de armas, armaduras, anéis e amuletos de todas as classes. Ex: Cetro Místico Excepcional 59→61, Espada Lendária com qualidade Lendária 92→83. Atributos especiais (Crítico, Miasma, Confusão etc.) não mudaram. Itens que você já tem são atualizados sozinhos",
             "Drops mais generosos: equipamentos Raros caem com 23% de chance (antes 18%) e Místicos com 13% (antes 8%) nas Masmorras; nos dragões do Cooperativo, o equipamento Lendário passa a cair com 7% de chance (antes 5%)",
-            "Mercado: equipamentos Incomuns, Raros e Místicos ficaram bem mais caros pra comprar e passaram a valer mais na venda — o preço de venda virou o antigo preço de compra, e a compra triplicou (ex: Espada Incomum 360→1.080, Rara 3.240→9.720, Mística 9.720→29.160; venda da Mística 1.620→9.720). Itens que você já tem passam a vender pelo valor novo",
+            "Mercado: equipamentos Raros e Místicos custam 3x mais pra comprar (ex: Espada Rara 1.080→3.240, Mística 3.240→9.720). O valor de venda não mudou",
             "Fusão: o nível máximo agora é +5, e a chance de sucesso ficou menor — +0→+1 60% (antes 70%), +1→+2 45% (55%), +2→+3 30% (40%), +3→+4 20% (30%), +4→+5 10% (15%). A Sorte continua somando até +20 pontos de chance. Em compensação, cada nível de fusão agora soma +7 (antes +5) em cada atributo não-especial: +7, +14, +21, +28 e +35 no +5. Itens já fundidos são atualizados sozinhos",
             "Duende: a cura passa a ser igual ao nível do pet (nível 50 = 50 de cura, antes 82) — antes curava mais do que um golpe inteiro do oponente no fim de jogo",
             "Urso: era o pet menos atrativo — agora dá +10 de Armadura e +10 de Agilidade em todos os níveis e bem mais Ataque, com menos Vida. No nível 50: Vida 294→200, Ataque 6→36, Armadura 42→52, Agilidade 2→12",
             "Aranha e Aranha de Halloween: Vida máxima 152→120 e Agilidade máxima 30→24 (nível 50). A cópia de dano não mudou",
             "Boitatá: Vida máxima 435→150 (nível 50). Contra jogadores (Ranqueado 1x1 e 2x2), a Queimadura passa a ter dano fixo por estágio — 10 (Filhote), 20 (Jovem) e 30 (Adulto), antes chegava a 82 por turno. Contra monstros, nas Masmorras e no Cooperativo, continua igual",
             "Yggdrasil: Vida máxima 730→200 e Ataque máximo 71→50 (nível 50). Mordida e Reviver não mudaram",
-            "Fazenda: a dica de uma planta pronta mostra quanto ela rende (ex: Melancia 7/7)",
-            "Visite fazendas! Na Fazenda, o novo botão de casinha (ao lado do chat) abre a lista de jogadores acima do nível 30 — clique em Visitar pra ver a fazenda deles. Lá você pode regar, eliminar pragas e roubar 2 alimentos de cada planta pronta (uma vez só por planta: quem chegar depois vê 'Esse alimento já foi roubado'), até 12 canteiros de cada fazenda por dia (zera à meia-noite). Ao abrir a sua Fazenda, um resumo mostra quem regou, tirou pragas ou roubou de você. Precisa estar logado na sua conta",
-            "Fazenda: ao escolher a semente, o novo botão Plantar em todos planta a mesma semente em todos os canteiros arados e vazios de uma vez (até acabar a semente)",
-            "12 conquistas novas: Amigo ou inimigo? (I, II e III), Senhor Furtado e Acho que a grama do vizinho é mais verde na Fazenda; Fuuuuusão (I a IV) na Fusão; e Já ta valendo? (I, II e III) pelas vitórias no Combate Ranqueado",
             "Árvore de Talentos: o botão Resetar agora reseta só o talento selecionado (100 mil de ouro, ou 500 mil se for o talento único). O novo botão Resetar tudo desfaz todos os talentos de uma vez, inclusive o único. Se o talento resetado for o seu único em 3/3, o talento único também é desfeito, já que é pré-requisito dele",
             "Corrigido: na Árvore de Talentos, os botões do rodapé ficavam fora da tela em monitores menores — agora a lista de talentos rola dentro da janela",
             "Corrigido: no Combate Ranqueado 1x1, uma luta que chegava ao limite de rodadas com os dois vivos dava a vitória sempre ao mesmo lado — agora vence quem tem mais vida restante (proporcional), igual ao 2x2",
