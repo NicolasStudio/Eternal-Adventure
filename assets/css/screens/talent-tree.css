@@ -36,16 +36,40 @@
     text-shadow:0 0 18px rgba(212,163,115,.3);
 }
 
+/* Cabeçalho e rodapé nunca encolhem — só o meio rola. Sem isso, em telas
+   mais baixas as linhas de talento empurravam o rodapé (com os botões)
+   pra fora da janela. */
+.talent-header,
+.talent-window .blacksmith-footer{
+    flex-shrink:0;
+}
+
 /* Duas linhas empilhadas: talentos simples em cima, únicos embaixo —
-   flex-wrap deixa espaço pra mais talentos em qualquer uma das duas. */
+   flex-wrap deixa espaço pra mais talentos em qualquer uma das duas.
+   min-height:0 + overflow-y deixam o meio rolar quando não cabe;
+   "safe center" volta a alinhar no topo quando há rolagem (center puro
+   cortaria o começo da lista). */
 .talent-body{
     flex:1;
+    min-height:0;
+    overflow-y:auto;
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:center;
+    justify-content:safe center;
     gap:22px;
     padding:26px 24px;
+}
+
+/* A tooltip abre pra cima por padrão; na primeira linha ela seria
+   cortada pelo topo da área rolável, então ali abre pra baixo. */
+.talent-body > .talent-row:first-child .talent-tooltip{
+    bottom:auto;
+    top:calc(100% + 12px);
+    transform:translateX(-50%) translateY(-6px);
+}
+.talent-body > .talent-row:first-child .talent-card:hover .talent-tooltip{
+    transform:translateX(-50%) translateY(0);
 }
 .talent-row{
     display:flex;
@@ -230,20 +254,33 @@
     gap:12px;
 }
 
+/* Com 3 botões (Resetar, Resetar tudo, Melhorar) não cabe tudo numa
+   linha em janelas estreitas — os botões descem pra linha de baixo em
+   vez de serem cortados. */
 .talent-window .blacksmith-footer{
+    flex-wrap:wrap;
+    justify-content:center;
     gap:16px;
     padding:16px 22px;
-    overflow:hidden;
 }
+/* min-width:max-content — a área de informações nunca encolhe abaixo do
+   próprio conteúdo; quando não sobra espaço, são os botões que descem
+   pra linha de baixo (flex-wrap no rodapé), em vez de se sobreporem. */
 .talent-window .blacksmith-footer-info{
-    flex:1;
-    min-width:0;
+    flex:0 1 auto;
+    min-width:max-content;
+    justify-content:center;
 }
 .talent-window .blacksmith-footer-divider{
     margin:0 16px;
 }
 .talent-footer-actions{
     flex-shrink:0;
+    justify-content:center;
+}
+.talent-window .talent-reset.talent-reset-all{
+    width:auto;
+    padding:0 16px;
 }
 .talent-window .blacksmith-upgrade-button{
     width:135px;
