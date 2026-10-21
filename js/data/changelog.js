@@ -25,6 +25,7 @@ export default [
             "Aranha e Aranha de Halloween: Vida máxima 152→120 e Agilidade máxima 30→24 (nível 50). A cópia de dano não mudou",
             "Boitatá: Vida máxima 435→150 (nível 50). Contra jogadores (Ranqueado 1x1 e 2x2), a Queimadura passa a ter dano fixo por estágio — 10 (Filhote), 20 (Jovem) e 30 (Adulto), antes chegava a 82 por turno. Contra monstros, nas Masmorras e no Cooperativo, continua igual",
             "Yggdrasil: Vida máxima 730→200 e Ataque máximo 71→50 (nível 50). Mordida e Reviver não mudaram",
+            "Fazenda: ao escolher a semente, o novo botão Plantar em todos planta a mesma semente em todos os canteiros arados e vazios de uma vez (até acabar a semente)",
             "Corrigido: no Combate Ranqueado 1x1, uma luta que chegava ao limite de rodadas com os dois vivos dava a vitória sempre ao mesmo lado — agora vence quem tem mais vida restante (proporcional), igual ao 2x2",
             "O pareamento do Ranqueado (1x1 e 2x2) agora só junta jogadores com a mesma versão do jogo, pra os dois lados sempre verem o mesmo resultado da luta — se a fila demorar, recarregue a página"
         ]

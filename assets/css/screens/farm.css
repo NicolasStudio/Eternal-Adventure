@@ -253,6 +253,28 @@
     color:#d4a373;
     font-size:.72rem;
 }
+/* Semente + botão "Plantar em todos" logo abaixo dela, ocupando a mesma
+   célula da grade. */
+.farm-seed-picker-option{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+.farm-seed-picker-all{
+    padding:6px 8px;
+    background:rgba(60,90,30,.35);
+    border:2px solid #5d7a3a;
+    border-radius:6px;
+    color:#d8ecb8;
+    font-family:"Cinzel",serif;
+    font-size:.72rem;
+    cursor:pointer;
+    transition:.15s;
+}
+.farm-seed-picker-all:hover{
+    border-color:#a8d26a;
+    background:rgba(90,130,40,.45);
+}
 .farm-seed-picker-empty{
     color:#c7b08d;
     font-size:.85rem;

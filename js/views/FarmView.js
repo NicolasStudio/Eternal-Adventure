@@ -101,6 +101,7 @@ export default class FarmView {
     renderSeedPicker() {
 
         const ownedSeeds = this.player.inventory.filter(item => item.category === "seed" && (item.quantity ?? 1) > 0);
+        const emptyPlots = FarmService.getEmptyTilledIndexes(this.player).length;
 
         return `
             <div class="farm-seed-picker-overlay">
@@ -110,13 +111,25 @@ export default class FarmView {
                         ownedSeeds.length
                             ? `
                                 <div class="farm-seed-picker-grid">
-                                    ${ownedSeeds.map(item => `
-                                        <button class="farm-seed-picker-item" data-uid="${item.uid}">
-                                            <img src="${item.icon}" alt="${item.name}">
-                                            <span>${item.name}</span>
-                                            <span class="farm-seed-picker-qty">x${item.quantity ?? 1}</span>
-                                        </button>
-                                    `).join("")}
+                                    ${ownedSeeds.map(item => {
+                                        // Quantos canteiros "Plantar em todos" vai ocupar:
+                                        // limitado pela semente e pelos canteiros livres.
+                                        const plantAllCount = Math.min(item.quantity ?? 1, emptyPlots);
+                                        return `
+                                            <div class="farm-seed-picker-option">
+                                                <button class="farm-seed-picker-item" data-uid="${item.uid}">
+                                                    <img src="${item.icon}" alt="${item.name}">
+                                                    <span>${item.name}</span>
+                                                    <span class="farm-seed-picker-qty">x${item.quantity ?? 1}</span>
+                                                </button>
+                                                ${plantAllCount > 1 ? `
+                                                    <button class="farm-seed-picker-all" data-uid="${item.uid}">
+                                                        Plantar em todos (${plantAllCount})
+                                                    </button>
+                                                ` : ""}
+                                            </div>
+                                        `;
+                                    }).join("")}
                                 </div>
                             `
                             : `<p class="farm-seed-picker-empty">Você não possui nenhuma semente. Compre no Mercado.</p>`
@@ -202,6 +215,18 @@ export default class FarmView {
                 const item = this.player.inventory.find(i => i.uid === button.dataset.uid);
                 if (!item) return;
                 const result = FarmService.plantSeed(this.player, this.seedPickerIndex, item);
+                Toast.show(result.message);
+                this.seedPickerIndex = null;
+                this.refresh();
+            });
+        });
+
+        screen.querySelectorAll(".farm-seed-picker-all").forEach(button => {
+            button.addEventListener("click", (event) => {
+                event.stopPropagation();
+                const item = this.player.inventory.find(i => i.uid === button.dataset.uid);
+                if (!item) return;
+                const result = FarmService.plantSeedInAllEmpty(this.player, this.seedPickerIndex, item);
                 Toast.show(result.message);
                 this.seedPickerIndex = null;
                 this.refresh();

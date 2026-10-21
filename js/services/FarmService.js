@@ -313,6 +313,62 @@ export default class FarmService {
 
         if (!crop) return { ok: false, message: "Semente inválida." };
 
+        this.plantInPlot(player, plot, seedItem);
+
+        player.notify();
+        SaveService.autoSave(player);
+
+        return { ok: true, message: `${crop.name} plantado!` };
+
+    }
+
+    // Canteiros arados e vazios — onde dá pra plantar agora.
+    static getEmptyTilledIndexes(player) {
+        return player.farm.plots
+            .map((plot, index) => (plot.tilled && !plot.seedId ? index : -1))
+            .filter(index => index >= 0);
+    }
+
+    // Planta a MESMA semente no canteiro clicado e em todos os outros
+    // arados e vazios, até acabar a semente ou os canteiros. Um save só
+    // no fim (em vez de um por canteiro, como plantSeed faria).
+    static plantSeedInAllEmpty(player, startIndex, seedItem) {
+
+        const crop = farmCrops[seedItem.cropId];
+
+        if (!crop) return { ok: false, message: "Semente inválida." };
+
+        const indexes = this.getEmptyTilledIndexes(player);
+
+        // O canteiro clicado vai primeiro; o resto segue a ordem da grade.
+        indexes.sort((a, b) => (a === startIndex ? -1 : b === startIndex ? 1 : a - b));
+
+        let planted = 0;
+
+        for (const index of indexes) {
+
+            if (!player.inventory.some(item => item.uid === seedItem.uid)) break;
+
+            this.plantInPlot(player, player.farm.plots[index], seedItem);
+            planted++;
+
+        }
+
+        if (planted === 0) return { ok: false, message: "Isso não pode ser feito!" };
+
+        player.notify();
+        SaveService.autoSave(player);
+
+        return { ok: true, message: `${crop.name} plantado em ${planted} canteiro${planted === 1 ? "" : "s"}!` };
+
+    }
+
+    // Pode plantar em terra seca, normal ou molhada — a umidade NAQUELE
+    // instante só decide o buff/debuff de crescimento (GROWTH_MODIFIER).
+    // Sem notify/save: quem chama decide quando (ver plantSeed e
+    // plantSeedInAllEmpty).
+    static plantInPlot(player, plot, seedItem) {
+
         const moisture = this.getMoistureState(plot);
 
         player.removeItem(seedItem, 1);
@@ -322,11 +378,6 @@ export default class FarmService {
         plot.growthModifier = GROWTH_MODIFIER[moisture] ?? 1;
 
         player.progress.stats.seedsPlanted = (player.progress.stats.seedsPlanted ?? 0) + 1;
-
-        player.notify();
-        SaveService.autoSave(player);
-
-        return { ok: true, message: `${crop.name} plantado!` };
 
     }
 
