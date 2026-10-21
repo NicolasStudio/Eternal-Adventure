@@ -53,8 +53,10 @@ export default class FarmView {
         this.visitBusy = false; // ação de visita esperando o servidor
         this.visitTicks = 0;
 
-        // Lista do lado direito.
+        // Lista de fazendas pra visitar — painel flutuante aberto pelo
+        // botão de casinha no HUD, ao lado do chat (ver renderVisitButton).
         this.visitList = { status: "idle", entries: [] };
+        this.visitPanelOpen = false;
 
         // Eventos dos visitantes pro modal de resumo (null = sem modal).
         this.summaryEvents = null;
@@ -75,6 +77,7 @@ export default class FarmView {
 
     onOpen() {
         this.visit = null;
+        this.visitPanelOpen = false;
         this.selectedTool = null;
         this.seedPickerIndex = null;
         this.summaryEvents = null;
@@ -84,6 +87,7 @@ export default class FarmView {
 
     onClose() {
         this.visit = null;
+        this.visitPanelOpen = false;
         this.plotTooltip.hide();
     }
 
@@ -105,6 +109,7 @@ export default class FarmView {
 
         if (!FarmSyncService.currentFarmId()) {
             this.visitList = { status: "offline", entries: [] };
+            if (this.isOnScreen()) this.refresh();
             return;
         }
 
@@ -138,7 +143,7 @@ export default class FarmView {
                 ${this.visit ? this.renderVisitBanner() : ""}
                 ${this.renderTools()}
                 ${this.renderGrid()}
-                ${this.renderVisitPanel()}
+                ${this.visitPanelOpen ? this.renderVisitPanel() : ""}
                 ${this.seedPickerIndex !== null && !this.visit ? this.renderSeedPicker() : ""}
                 ${this.summaryEvents ? this.renderSummary() : ""}
             </section>
@@ -213,8 +218,18 @@ export default class FarmView {
 
     }
 
-    // Lista do lado direito — mesmo espírito do Ranking Global, só com
-    // nome, nível e o botão de visitar.
+    // Botão redondo no HUD (mesmo estilo do chat) que abre/fecha a lista
+    // de fazendas — o HudScreen só desenha ele na tela da Fazenda.
+    renderVisitButton() {
+        return `
+            <button class="hud-tool chat-toggle farm-visit-toggle ${this.visitPanelOpen ? "active" : ""}" id="farm-visit-toggle" data-tooltip="Visitar fazendas">
+                <i class="fa-solid fa-house"></i>
+            </button>
+        `;
+    }
+
+    // Lista de fazendas — mesmo espírito do Ranking Global, só com nome,
+    // nível e o botão de visitar. Abre logo abaixo do botão de casinha.
     renderVisitPanel() {
 
         let body;
@@ -243,7 +258,12 @@ export default class FarmView {
 
         return `
             <aside class="farm-visit-panel">
-                <h3>Fazendas</h3>
+                <header class="farm-visit-panel-header">
+                    <h3><i class="fa-solid fa-house"></i> Fazendas</h3>
+                    <button class="farm-visit-panel-close" aria-label="Fechar">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </header>
                 ${body}
             </aside>
         `;
@@ -457,13 +477,36 @@ export default class FarmView {
             this.refresh();
         });
 
-        // Lista de fazendas / visita.
+        // Botão de casinha no HUD (fora da .farm-screen — o HudScreen
+        // desenha ele junto do chat): abre/fecha a lista de fazendas.
+        document.getElementById("farm-visit-toggle")?.addEventListener("click", (event) => {
+            event.stopPropagation();
+            this.visitPanelOpen = !this.visitPanelOpen;
+            if (this.visitPanelOpen && this.visitList.status !== "loading") this.loadVisitList();
+            this.refresh();
+        });
+
+        screen.querySelector(".farm-visit-panel-close")?.addEventListener("click", (event) => {
+            event.stopPropagation();
+            this.visitPanelOpen = false;
+            this.refresh();
+        });
+
+        // Clique dentro do painel não conta como "clicar fora" (que
+        // desmarcaria a ferramenta selecionada — ver listener da tela).
+        screen.querySelector(".farm-visit-panel")?.addEventListener("click", event => event.stopPropagation());
+
+        // Lista de fazendas / visita — visitar fecha o painel pra mostrar
+        // a fazenda inteira; o botão de casinha reabre.
         screen.querySelectorAll(".farm-visit-button").forEach(button => {
             button.addEventListener("click", (event) => {
                 event.stopPropagation();
+                this.visitPanelOpen = false;
                 this.startVisit(this.visitList.entries[Number(button.dataset.index)]);
             });
         });
+
+        this.positionVisitPanel();
 
         screen.querySelector(".farm-visit-back")?.addEventListener("click", (event) => {
             event.stopPropagation();
@@ -471,6 +514,26 @@ export default class FarmView {
         });
 
         this.startTicking();
+
+    }
+
+    // Painel flutuante logo abaixo do botão de casinha (mesmo jeito do
+    // painel do chat, ver ChatHUD.positionPanel) — sem ficar pra fora da
+    // tela em janelas baixas.
+    positionVisitPanel() {
+
+        const panel = document.querySelector(".farm-visit-panel");
+        const anchor = document.getElementById("farm-visit-toggle");
+
+        if (!panel || !anchor) return;
+
+        const rect = anchor.getBoundingClientRect();
+        const margin = 8;
+        const left = Math.max(margin, Math.min(rect.left, window.innerWidth - panel.offsetWidth - margin));
+        const top = Math.max(margin, Math.min(rect.bottom + margin, window.innerHeight - panel.offsetHeight - margin));
+
+        panel.style.left = `${left}px`;
+        panel.style.top = `${top}px`;
 
     }
 

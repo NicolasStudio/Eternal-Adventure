@@ -128,6 +128,7 @@ export default class HudScreen {
                     ${isPvp2v2 ? this.pvpView.renderAllyCards() : ""}
                     <div class="hud-tool-row">
                         ${this.chatHUD.renderButton()}
+                        ${this.currentView === "farm" ? this.farmView.renderVisitButton() : ""}
                         ${this.currentView === "" && !anyCombat ? this.mailModal.renderButton() : ""}
                         ${this.currentView === "" && !anyCombat && SpeakerService.isAdmin(AuthService.getCurrentUser()?.uid) ? this.speakerModal.renderButton() : ""}
                     </div>
