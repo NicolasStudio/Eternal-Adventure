@@ -20,6 +20,10 @@ const VISIT_TOOLS = TOOLS
 
 const TICK_INTERVAL_MS = 5000;
 
+// Distância mínima do painel de fazendas até a borda da tela (ao abrir
+// e ao arrastar — ver positionVisitPanel/bindVisitPanelDrag).
+const VISIT_PANEL_MARGIN = 8;
+
 // Durante a visita, recarrega a fazenda visitada a cada tantos ticks
 // (6 × 5s = 30s) — pra ver o que o dono ou outros visitantes fizeram.
 const VISIT_RELOAD_TICKS = 6;
@@ -57,6 +61,9 @@ export default class FarmView {
         // botão de casinha no HUD, ao lado do chat (ver renderVisitButton).
         this.visitList = { status: "idle", entries: [] };
         this.visitPanelOpen = false;
+        // { left, top } depois que o jogador arrasta o painel — vale até
+        // recarregar a página (null = logo abaixo do botão de casinha).
+        this.visitPanelPos = null;
 
         // Eventos dos visitantes pro modal de resumo (null = sem modal).
         this.summaryEvents = null;
@@ -517,9 +524,10 @@ export default class FarmView {
 
     }
 
-    // Painel flutuante logo abaixo do botão de casinha (mesmo jeito do
-    // painel do chat, ver ChatHUD.positionPanel) — sem ficar pra fora da
-    // tela em janelas baixas.
+    // Painel flutuante: onde o jogador arrastou por último (ver
+    // bindVisitPanelDrag) ou, até ele mexer, logo abaixo do botão de
+    // casinha (mesmo jeito do painel do chat, ver ChatHUD.positionPanel).
+    // Sempre travado dentro da tela.
     positionVisitPanel() {
 
         const panel = document.querySelector(".farm-visit-panel");
@@ -527,13 +535,70 @@ export default class FarmView {
 
         if (!panel || !anchor) return;
 
-        const rect = anchor.getBoundingClientRect();
-        const margin = 8;
-        const left = Math.max(margin, Math.min(rect.left, window.innerWidth - panel.offsetWidth - margin));
-        const top = Math.max(margin, Math.min(rect.bottom + margin, window.innerHeight - panel.offsetHeight - margin));
+        let left;
+        let top;
 
-        panel.style.left = `${left}px`;
-        panel.style.top = `${top}px`;
+        if (this.visitPanelPos) {
+            ({ left, top } = this.visitPanelPos);
+        } else {
+            const rect = anchor.getBoundingClientRect();
+            left = rect.left;
+            top = rect.bottom + VISIT_PANEL_MARGIN;
+        }
+
+        this.applyVisitPanelPosition(panel, left, top);
+        this.bindVisitPanelDrag(panel);
+
+    }
+
+    applyVisitPanelPosition(panel, left, top) {
+
+        const maxLeft = Math.max(VISIT_PANEL_MARGIN, window.innerWidth - panel.offsetWidth - VISIT_PANEL_MARGIN);
+        const maxTop = Math.max(VISIT_PANEL_MARGIN, window.innerHeight - panel.offsetHeight - VISIT_PANEL_MARGIN);
+
+        panel.style.left = `${Math.min(Math.max(VISIT_PANEL_MARGIN, left), maxLeft)}px`;
+        panel.style.top = `${Math.min(Math.max(VISIT_PANEL_MARGIN, top), maxTop)}px`;
+
+    }
+
+    // Arrasta o painel pelo cabeçalho (exceto o X), igual o chat (ver
+    // ChatHUD.bindDrag): Pointer Events + captura, funciona com mouse e
+    // toque. A posição fica guardada em visitPanelPos — o painel é
+    // redesenhado a cada refresh da Fazenda (visitar, roubar...) e sem
+    // isso voltaria pra baixo do botão toda vez.
+    bindVisitPanelDrag(panel) {
+
+        const header = panel.querySelector(".farm-visit-panel-header");
+
+        header?.addEventListener("pointerdown", event => {
+
+            if (event.target.closest(".farm-visit-panel-close")) return;
+
+            event.preventDefault();
+
+            const startX = event.clientX;
+            const startY = event.clientY;
+            const startLeft = panel.offsetLeft;
+            const startTop = panel.offsetTop;
+
+            header.setPointerCapture(event.pointerId);
+            header.classList.add("dragging");
+
+            const onMove = moveEvent => {
+                this.applyVisitPanelPosition(panel, startLeft + (moveEvent.clientX - startX), startTop + (moveEvent.clientY - startY));
+            };
+
+            const onUp = () => {
+                header.classList.remove("dragging");
+                header.removeEventListener("pointermove", onMove);
+                this.visitPanelPos = { left: panel.offsetLeft, top: panel.offsetTop };
+            };
+
+            header.addEventListener("pointermove", onMove);
+            header.addEventListener("pointerup", onUp, { once: true });
+            header.addEventListener("pointercancel", onUp, { once: true });
+
+        });
 
     }
 

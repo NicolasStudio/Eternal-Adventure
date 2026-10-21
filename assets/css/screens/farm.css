@@ -277,12 +277,23 @@
     font-family:"Cinzel",serif;
     overflow:hidden;
 }
+/* Cabeçalho é a "alça" pra arrastar o painel (ver
+   FarmView.bindVisitPanelDrag) — mesmo cursor do chat (.chat-header). */
 .farm-visit-panel-header{
     display:flex;
     align-items:center;
     justify-content:space-between;
     padding:10px 10px 10px 14px;
     border-bottom:1px solid #5b4633;
+    cursor:grab;
+    user-select:none;
+    touch-action:none;
+}
+.farm-visit-panel-header.dragging{
+    cursor:grabbing;
+}
+.farm-visit-panel-close{
+    cursor:pointer;
 }
 .farm-visit-panel h3{
     margin:0;
