@@ -40,6 +40,10 @@
                     <i class="fa-solid fa-chart-line"></i> Comparativo
                 </a>
 
+                <a href="#classe-vs-classe" class="wiki-nav-item" data-keywords="classe vs classe contra matriz vitoria vitória taxa simulação simulacao balanceamento equilibrio equilíbrio pvp luz trevas">
+                    <i class="fa-solid fa-scale-balanced"></i> Classe vs Classe
+                </a>
+
                 <a href="#itens" class="wiki-nav-item" data-keywords="itens armas cabeça peitoral calça botas poções equipamento">
                     <i class="fa-solid fa-shirt"></i> Itens
                 </a>
@@ -256,6 +260,23 @@
                 </div>
 
                 <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: o eixo cheio (100%) sempre pertence a alguém — não significa "o máximo possível", só "quem é o mais forte nesse atributo específico no nível 100". Ex: a Vida do Pútrido sempre fecha o eixo por completo, porque é ele quem detém o maior valor.</p>
+
+            </section>
+
+            <section id="classe-vs-classe" class="wiki-section">
+
+                <h2><i class="fa-solid fa-scale-balanced"></i> Classe vs Classe</h2>
+                <p class="wiki-intro">Taxa de vitória média de cada classe contra as outras 9, simulada AGORA MESMO no seu navegador com o motor de combate de verdade do jogo (o mesmo do PVP) — não é uma tabela fixa: se o balanceamento mudar, o resultado aqui muda sozinho. Linha em 50% = equilíbrio perfeito contra o restante do grupo.</p>
+
+                <div class="wiki-cvc-tabs" id="cvc-tabs"></div>
+
+                <div id="cvc-loading" class="wiki-cvc-loading"><i class="fa-solid fa-dice-d20 fa-spin"></i> Simulando milhares de combates...</div>
+
+                <div id="cvc-panels" class="wiki-cvc-panels" hidden></div>
+
+                <p id="cvc-note" class="wiki-cvc-note"></p>
+
+                <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: as 5 primeiras abas testam as classes "cruas" (só a curva de nível, sem nenhum equipamento) nos níveis 20/40/60/80/100. As duas últimas mostram o cenário de fim de jogo de verdade: nível 100, Upgrade de Classe (Luz ou Trevas) e equipamento Lendário no teto de qualidade, com encantamento máximo.</p>
 
             </section>
 
@@ -885,6 +906,337 @@
             });
 
         });
+    </script>
+
+    <script type="module">
+        // Classe vs Classe — simula AGORA, no navegador, usando o motor de
+        // combate de verdade do jogo (PvpCombatService) e os dados reais
+        // (levels.js, baseStatsL1.js, equipamento Lendário, Upgrade de
+        // Classe). Nenhum número fixo: se o balanceamento mudar, essa
+        // seção muda sozinha na próxima vez que a wiki carregar.
+        import baseStatsL1CVC from "./js/data/baseStatsL1.js";
+        import levelsCVC from "./js/data/levels.js";
+        import weaponsCVC from "./js/data/weapons.js";
+        import helmetsCVC from "./js/data/helmets.js";
+        import chestsCVC from "./js/data/chest.js";
+        import legsCVC from "./js/data/legs.js";
+        import bootsCVC from "./js/data/boots.js";
+        import ringCVC from "./js/data/ring.js";
+        import amuletCVC from "./js/data/amulet.js";
+        import qualitiesCVC from "./js/data/quality.js";
+        import upClasseCVC from "./js/player/upClasse.js";
+        import UpgradeServiceCVC from "./js/services/UpgradeService.js";
+        import PlayerStatsCVC from "./js/core/PlayerStats.js";
+        import PvpCombatServiceCVC, { TEAM_SIM_VERSION as CVC_SIM_VERSION } from "./js/services/PvpCombatService.js";
+
+        const CVC_CLASSES = ["warrior", "archer", "mage", "barbarian", "putrid", "mimic", "crazy", "spark", "samurai", "singularity"];
+        const CVC_LABEL = { warrior: "Guerreiro", archer: "Arqueiro", mage: "Mago", barbarian: "Bárbaro", putrid: "Pútrido", mimic: "Mímico", crazy: "Louca", spark: "Eletro", samurai: "Samurai", singularity: "Singularidade" };
+        const CVC_ICON = { warrior: "fa-shield", archer: "fa-bullseye", mage: "fa-hat-wizard", barbarian: "fa-mitten", putrid: "fa-skull-crossbones", mimic: "fa-masks-theater", crazy: "fa-face-dizzy", spark: "fa-bolt", samurai: "fa-khanda", singularity: "fa-meteor" };
+        const CVC_KEY_MAP = { warrior: "Warrior", archer: "archer", mage: "mage", barbarian: "barbarian", putrid: "putrid", mimic: "mimic", crazy: "crazy", spark: "spark", samurai: "samurai", singularity: "singularity" };
+        const CVC_EXTRA_KEYS = ["criticalChance", "lifeSteal", "penetration", "absorption", "miasmaChance", "reflection", "confusionChance", "paralysisChance", "doubleStrikeChance", "gravityChance"];
+
+        function cvcCumulative(classId, level) {
+            const base1 = baseStatsL1CVC[classId];
+            const stats = { life: 100, ...(base1 ?? {}) };
+            stats.attack ??= 0; stats.armor ??= 0; stats.agility ??= 0;
+            for (const key of CVC_EXTRA_KEYS) stats[key] ??= 0;
+            for (let lvl = 2; lvl <= level; lvl++) {
+                const bonus = levelsCVC[lvl]?.[classId];
+                if (!bonus) continue;
+                stats.life += bonus.life ?? 0;
+                stats.attack += bonus.attack ?? 0;
+                stats.armor += bonus.armor ?? 0;
+                stats.agility += bonus.agility ?? 0;
+                for (const key of CVC_EXTRA_KEYS) stats[key] += bonus[key] ?? 0;
+            }
+            return stats;
+        }
+
+        function cvcFindClassLegendary(pool, classId) {
+            return Object.values(pool).find(i => i.class === classId && i.rarity?.id === "legendary");
+        }
+        function cvcFindAccessoryLegendary(pool, idPrefix) {
+            return Object.values(pool).find(i => i.id.startsWith(idPrefix) && i.rarity?.id === "legendary");
+        }
+        function cvcBuildMaxItem(catalogItem) {
+            if (!catalogItem) return null;
+            const item = structuredClone(catalogItem);
+            item.quality = qualitiesCVC.lendary;
+            item.baseStats = structuredClone(item.stats);
+            item.fusionLevel = 0;
+            UpgradeServiceCVC.applyStats(item);
+            return item;
+        }
+
+        const CVC_ENCHANT_LIFE = 300, CVC_ENCHANT_ARMOR = 15, CVC_ENCHANT_ATTACK = 15, CVC_ENCHANT_AGILITY = 15, CVC_ENCHANT_SPECIAL = 3;
+        const CVC_SPECIAL_BY_CLASS = { warrior: "absorption", archer: "criticalChance", mage: "penetration", barbarian: "lifeSteal", putrid: "miasmaChance", mimic: "reflection", crazy: "confusionChance", spark: "paralysisChance", samurai: "doubleStrikeChance", singularity: "gravityChance" };
+
+        // tier "bare": só curva de nível, sem equipamento nem transcendência
+        function cvcBuildBare(classId, level) {
+            const base = cvcCumulative(classId, level);
+            return { finalStats: base, maxHP: base.life };
+        }
+
+        // tier "completo": curva (nível 100) + Upgrade de Classe (Luz/Trevas) +
+        // equipamento Lendário no teto de qualidade + encantamento máximo
+        function cvcBuildComplete(classId, side) {
+            const base = cvcCumulative(classId, 100);
+            const baseStats = { ...base };
+            delete baseStats.life;
+            let maxHP = base.life;
+
+            const t = upClasseCVC[`${side}_${CVC_KEY_MAP[classId]}`].states;
+            maxHP += t.life ?? 0;
+            baseStats.attack += t.attack ?? 0;
+            baseStats.armor += t.armor ?? 0;
+            baseStats.agility += t.agility ?? 0;
+            CVC_EXTRA_KEYS.forEach(k => { baseStats[k] = (baseStats[k] ?? 0) + (t[k] ?? 0); });
+
+            maxHP += CVC_ENCHANT_LIFE;
+            baseStats.armor += CVC_ENCHANT_ARMOR;
+            baseStats.attack += CVC_ENCHANT_ATTACK;
+            baseStats.agility += CVC_ENCHANT_AGILITY;
+            const specialKey = CVC_SPECIAL_BY_CLASS[classId];
+            baseStats[specialKey] = (baseStats[specialKey] ?? 0) + CVC_ENCHANT_SPECIAL;
+
+            const weapon = cvcBuildMaxItem(cvcFindClassLegendary(weaponsCVC, classId));
+            const helmet = cvcBuildMaxItem(cvcFindClassLegendary(helmetsCVC, classId));
+            const chest = cvcBuildMaxItem(cvcFindClassLegendary(chestsCVC, classId));
+            const leg = cvcBuildMaxItem(cvcFindClassLegendary(legsCVC, classId));
+            const boot = cvcBuildMaxItem(cvcFindClassLegendary(bootsCVC, classId));
+            const ring = cvcBuildMaxItem(cvcFindAccessoryLegendary(ringCVC, "ringPrimal"));
+            const amulet = cvcBuildMaxItem(cvcFindAccessoryLegendary(amuletCVC, "amuletPrimal"));
+            const mockPlayer = { baseStats, equipment: { weapon, helmet, chest, leg, boot, ring, amulet, pet: null } };
+            const finalStats = new PlayerStatsCVC(mockPlayer).getFinalStats();
+            return { finalStats, maxHP };
+        }
+
+        function cvcToCombatant(classId, finalStats, maxHP) {
+            return {
+                name: classId, class: classId, maxHP: Math.round(maxHP), currentHP: Math.round(maxHP),
+                attack: Math.round(finalStats.attack), armor: Math.round(finalStats.armor), agility: Math.round(finalStats.agility),
+                criticalChance: finalStats.criticalChance ?? 0, lifeSteal: finalStats.lifeSteal ?? 0,
+                penetration: finalStats.penetration ?? 0, absorption: finalStats.absorption ?? 0,
+                miasmaChance: finalStats.miasmaChance ?? 0, reflection: finalStats.reflection ?? 0,
+                confusionChance: finalStats.confusionChance ?? 0, paralysisChance: finalStats.paralysisChance ?? 0,
+                doubleStrikeChance: finalStats.doubleStrikeChance ?? 0, gravityChance: finalStats.gravityChance ?? 0,
+                petBiteDamage: 0, petHealAmount: 0, petMimicRatio: 0, petBurnDamage: 0, petRevivePercent: 0, petName: null,
+                simVersion: CVC_SIM_VERSION
+            };
+        }
+
+        const CVC_SEEDS_PER_PAIR = 120;
+
+        function cvcRunTier(buildFn) {
+            const combatants = {};
+            CVC_CLASSES.forEach(c => {
+                const { finalStats, maxHP } = buildFn(c);
+                combatants[c] = cvcToCombatant(c, finalStats, maxHP);
+            });
+            const matrix = {};
+            CVC_CLASSES.forEach(a => { matrix[a] = {}; });
+            for (let i = 0; i < CVC_CLASSES.length; i++) {
+                for (let j = 0; j < CVC_CLASSES.length; j++) {
+                    if (i === j) continue;
+                    const a = CVC_CLASSES[i], b = CVC_CLASSES[j];
+                    if (matrix[a][b] != null) continue;
+                    let winsA = 0;
+                    for (let s = 0; s < CVC_SEEDS_PER_PAIR; s++) {
+                        const seed = (i * 1000003 + j * 7919 + s * 131) | 0;
+                        const combatantA = { ...combatants[a], currentHP: combatants[a].maxHP };
+                        const combatantB = { ...combatants[b], currentHP: combatants[b].maxHP };
+                        const result = PvpCombatServiceCVC.simulate(combatantA, combatantB, seed);
+                        if (result.winner === "a") winsA++;
+                    }
+                    const pctA = (winsA / CVC_SEEDS_PER_PAIR) * 100;
+                    matrix[a][b] = pctA;
+                    matrix[b][a] = 100 - pctA;
+                }
+            }
+            const overall = {};
+            CVC_CLASSES.forEach(a => {
+                const values = CVC_CLASSES.filter(b => b !== a).map(b => matrix[a][b]);
+                overall[a] = values.reduce((s, v) => s + v, 0) / values.length;
+            });
+            return { matrix, overall };
+        }
+
+        const CVC_TIERS = [
+            { id: "lv20", label: "Nv.20", fn: () => cvcRunTier((c) => cvcBuildBare(c, 20)) },
+            { id: "lv40", label: "Nv.40", fn: () => cvcRunTier((c) => cvcBuildBare(c, 40)) },
+            { id: "lv60", label: "Nv.60", fn: () => cvcRunTier((c) => cvcBuildBare(c, 60)) },
+            { id: "lv80", label: "Nv.80", fn: () => cvcRunTier((c) => cvcBuildBare(c, 80)) },
+            { id: "lv100", label: "Nv.100", fn: () => cvcRunTier((c) => cvcBuildBare(c, 100)) },
+            { id: "completeLight", label: "Completo Luz", fn: () => cvcRunTier((c) => cvcBuildComplete(c, "light")) },
+            { id: "completeDark", label: "Completo Trevas", fn: () => cvcRunTier((c) => cvcBuildComplete(c, "dark")) }
+        ];
+
+        function cvcFmtPct(v) { return v.toFixed(1).replace(".", ",") + "%"; }
+
+        // cor da célula: dourado acima de 50% (favorável pra quem ataca
+        // na linha), vermelho abaixo — mesma lógica das barras, só que
+        // célula a célula.
+        function cvcCellColor(v) {
+            const d = v - 50;
+            const pct = Math.max(0, Math.min(70, Math.round(Math.abs(d) / 25 * 70)));
+            const anchor = d >= 0 ? "#f1c75c" : "#8b3a3a";
+            return `color-mix(in oklab, rgba(18,13,9,.9), ${anchor} ${pct}%)`;
+        }
+
+        function cvcRenderBars(overall) {
+            const wrap = document.createElement("div");
+            wrap.className = "wiki-cvc-bars";
+            const order = CVC_CLASSES.slice().sort((a, b) => overall[b] - overall[a]);
+            order.forEach(classId => {
+                const v = overall[classId];
+                const row = document.createElement("div");
+                row.className = "wiki-cvc-row";
+
+                const name = document.createElement("div");
+                name.className = "wiki-cvc-name";
+                name.innerHTML = `<i class="fa-solid ${CVC_ICON[classId]}"></i> ${CVC_LABEL[classId]}`;
+                row.appendChild(name);
+
+                const track = document.createElement("div");
+                track.className = "wiki-cvc-track";
+                const fill = document.createElement("div");
+                fill.className = "wiki-cvc-fill" + (v < 50 ? " below" : "");
+                fill.style.width = Math.min(100, v) + "%";
+                track.appendChild(fill);
+                const mid = document.createElement("div");
+                mid.className = "wiki-cvc-mid";
+                track.appendChild(mid);
+                row.appendChild(track);
+
+                const val = document.createElement("div");
+                val.className = "wiki-cvc-val";
+                val.textContent = cvcFmtPct(v);
+                row.appendChild(val);
+
+                wrap.appendChild(row);
+            });
+            return wrap;
+        }
+
+        // Confronto direto: linha ATACA, coluna DEFENDE — célula = % de
+        // vitória da classe da LINHA contra a classe da COLUNA.
+        function cvcRenderMatrix(matrix) {
+            const wrapOuter = document.createElement("div");
+            wrapOuter.className = "wiki-cvc-matrix-wrap";
+
+            const caption = document.createElement("p");
+            caption.className = "wiki-cvc-matrix-caption";
+            caption.innerHTML = `<i class="fa-solid fa-table-cells"></i> Confronto direto — linha ataca, coluna defende; célula = % de vitória de quem ataca (a linha).`;
+            wrapOuter.appendChild(caption);
+
+            const table = document.createElement("table");
+            table.className = "wiki-cvc-matrix";
+
+            const thead = document.createElement("thead");
+            const headRow = document.createElement("tr");
+            headRow.appendChild(document.createElement("th"));
+            CVC_CLASSES.forEach(classId => {
+                const th = document.createElement("th");
+                th.title = CVC_LABEL[classId];
+                th.innerHTML = `<i class="fa-solid ${CVC_ICON[classId]}"></i>`;
+                headRow.appendChild(th);
+            });
+            thead.appendChild(headRow);
+            table.appendChild(thead);
+
+            const tbody = document.createElement("tbody");
+            CVC_CLASSES.forEach(rowClass => {
+                const tr = document.createElement("tr");
+                const th = document.createElement("th");
+                th.className = "wiki-cvc-matrix-rowhead";
+                th.innerHTML = `<i class="fa-solid ${CVC_ICON[rowClass]}"></i> ${CVC_LABEL[rowClass]}`;
+                tr.appendChild(th);
+                CVC_CLASSES.forEach(colClass => {
+                    const td = document.createElement("td");
+                    if (rowClass === colClass) {
+                        td.className = "wiki-cvc-matrix-self";
+                        td.textContent = "—";
+                    } else {
+                        const v = matrix[rowClass][colClass];
+                        td.textContent = v.toFixed(0) + "%";
+                        td.style.background = cvcCellColor(v);
+                    }
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+
+            wrapOuter.appendChild(table);
+            return wrapOuter;
+        }
+
+        function cvcRenderPanel(matrix, overall) {
+            const panel = document.createElement("div");
+            panel.className = "wiki-cvc-panel";
+            panel.appendChild(cvcRenderBars(overall));
+            panel.appendChild(cvcRenderMatrix(matrix));
+            return panel;
+        }
+
+        async function cvcInit() {
+            const tabsEl = document.getElementById("cvc-tabs");
+            const panelsEl = document.getElementById("cvc-panels");
+            const loadingEl = document.getElementById("cvc-loading");
+            if (!tabsEl || !panelsEl) return;
+
+            // uma pausa de verdade (setTimeout, não requestAnimationFrame)
+            // entre cada tier pra o navegador conseguir pintar o
+            // "Simulando..." antes de travar a thread principal calculando
+            // — rAF fica pausado em aba em segundo plano (o usuário pode
+            // abrir a wiki numa aba e trocar de aba enquanto carrega), o
+            // que travaria o cálculo indefinidamente; setTimeout não.
+            const nextFrame = () => new Promise(r => setTimeout(r, 0));
+
+            const panelById = {};
+            for (const tier of CVC_TIERS) {
+                await nextFrame();
+                const { matrix, overall } = tier.fn();
+                const panel = cvcRenderPanel(matrix, overall);
+                panel.id = `cvc-panel-${tier.id}`;
+                panel.hidden = true;
+                panelsEl.appendChild(panel);
+                panelById[tier.id] = panel;
+
+                const tab = document.createElement("button");
+                tab.type = "button";
+                tab.className = "wiki-cvc-tab";
+                tab.textContent = tier.label;
+                tab.addEventListener("click", () => {
+                    tabsEl.querySelectorAll(".wiki-cvc-tab").forEach(b => b.classList.remove("active"));
+                    tab.classList.add("active");
+                    Object.values(panelById).forEach(p => { p.hidden = true; });
+                    panel.hidden = false;
+                });
+                tabsEl.appendChild(tab);
+
+                if (tier === CVC_TIERS[0]) {
+                    tab.classList.add("active");
+                    panel.hidden = false;
+                }
+            }
+
+            loadingEl.hidden = true;
+            panelsEl.hidden = false;
+
+            const noteEl = document.getElementById("cvc-note");
+            if (noteEl) {
+                const now = new Date();
+                const dateStr = now.toLocaleDateString("pt-BR");
+                const timeStr = now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+                const totalPairs = (CVC_CLASSES.length * (CVC_CLASSES.length - 1)) / 2;
+                const totalPerTier = totalPairs * CVC_SEEDS_PER_PAIR;
+                const totalGeral = totalPerTier * CVC_TIERS.length;
+                noteEl.textContent = `Última simulação: ${dateStr} às ${timeStr} — ${CVC_SEEDS_PER_PAIR} combates por confronto, ${totalPerTier.toLocaleString("pt-BR")} combates por aba, ${totalGeral.toLocaleString("pt-BR")} no total.`;
+            }
+        }
+
+        cvcInit();
     </script>
 
 </body>

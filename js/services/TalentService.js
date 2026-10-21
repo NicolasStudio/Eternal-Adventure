@@ -25,7 +25,7 @@ export const GAIN_PERCENT_PER_LEVEL = 1;
 export const LIFE_LOSS_PERCENT_PER_LEVEL = 3;
 // Só vale pros talentos "trade": valor fixo (não %) indo de um atributo
 // pro outro a cada nível — ex: nível 3 move 45 de Ataque pra Velocidade.
-export const TRADE_AMOUNT_PER_LEVEL = 15;
+export const TRADE_AMOUNT_PER_LEVEL = 10;
 export const REQUIRED_CLEARS = 3;
 export const UPGRADE_COSTS = [50000, 70000, 100000];
 export const RESET_COST = 100000;

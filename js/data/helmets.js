@@ -97,7 +97,7 @@ const helmets = {
 
         stats: {
             armor: 4,
-            absorption: 8
+            absorption: 8.1
         },
 
         value: 0,
@@ -220,7 +220,7 @@ const helmets = {
 
         stats: {
             armor: 9,
-            penetration: 8
+            penetration: 4.5
         },
 
         value: 0,
@@ -342,7 +342,7 @@ const helmets = {
 
         stats: {
             armor: 7,
-            criticalChance: 8
+            criticalChance: 12.5
         },
 
         value: 0,
@@ -465,7 +465,7 @@ const helmets = {
 
         stats: {
             armor: 7,
-            lifeSteal: 8
+            lifeSteal: 20.6
         },
 
         value: 0,
@@ -709,7 +709,7 @@ const helmets = {
 
         stats: {
             armor: 11,
-            reflection: 3
+            reflection: 0.9
         },
 
         value: 0,
@@ -829,7 +829,7 @@ const helmets = {
 
         stats: {
             armor: 3,
-            confusionChance: 8
+            confusionChance: 8.7
         },
 
         value: 0,
@@ -949,7 +949,7 @@ const helmets = {
 
         stats: {
             armor: 9,
-            paralysisChance: 8
+            paralysisChance: 7.6
         },
 
         value: 0,
@@ -1069,7 +1069,7 @@ const helmets = {
 
         stats: {
             armor: 9,
-            doubleStrikeChance: 8
+            doubleStrikeChance: 7.6
         },
 
         value: 0,
@@ -1189,7 +1189,7 @@ const helmets = {
 
         stats: {
             armor: 9,
-            gravityChance: 8
+            gravityChance: 10.5
         },
 
         value: 0,

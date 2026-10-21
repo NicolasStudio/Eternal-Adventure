@@ -4,7 +4,7 @@ import BoitataBurn from "./BoitataBurn.js";
 import MiasmaService, { PVE_STACK_PERCENTS as MIASMA_PVE_PERCENTS } from "./MiasmaService.js";
 import MimicService from "./MimicService.js";
 import ConfusionService from "./ConfusionService.js";
-import ParalysisService from "./ParalysisService.js";
+import ParalysisService, { RAID_CHANCE_MULTIPLIER as PARALYSIS_RAID_MULTIPLIER } from "./ParalysisService.js";
 import DoubleStrikeService from "./DoubleStrikeService.js";
 import GravityService from "./GravityService.js";
 import { ABSORPTION_CAP, ABSORPTION_RATIO_PVE, absorbedAmount } from "../combat/Absorption.js";
@@ -446,8 +446,11 @@ export default class RaidCombatService {
 
                 // Paralisia: sorteado com o valor ORIGINAL do atacante.
                 // Só o Eletro tem paralysisChance > 0 — o chefe nunca
-                // ativa isso ao atacar.
-                const paralysisProc = ParalysisService.procs(attacker.paralysisChance ?? 0, rng());
+                // ativa isso ao atacar. Chance reduzida aqui (ver
+                // RAID_CHANCE_MULTIPLIER em ParalysisService.js) — com 4
+                // jogadores tentando por rodada contra 1 chefe só, a
+                // chance cheia travava o chefe quase a luta inteira.
+                const paralysisProc = ParalysisService.procs((attacker.paralysisChance ?? 0) * PARALYSIS_RAID_MULTIPLIER, rng());
 
                 if (paralysisProc) ParalysisService.applyPending(paralysisFlagsById.get(attackTarget.id));
 

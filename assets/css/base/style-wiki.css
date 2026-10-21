@@ -401,6 +401,177 @@ body::before {
     margin: 0;
 }
 
+/* Classe vs Classe */
+.wiki-cvc-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 16px 0 14px;
+}
+
+.wiki-cvc-tab {
+    padding: 8px 14px;
+    background: rgba(18, 13, 9, .6);
+    border: 1px solid #5b4633;
+    border-radius: 20px;
+    color: #c7b08d;
+    font-family: "Cinzel", serif;
+    font-size: .8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: color .15s, border-color .15s, background .15s;
+}
+
+.wiki-cvc-tab:hover {
+    color: #f1c75c;
+}
+
+.wiki-cvc-tab.active {
+    color: #f1c75c;
+    border-color: #c79b37;
+    background: linear-gradient(180deg, rgba(216, 159, 27, .18), rgba(155, 102, 4, .1));
+}
+
+.wiki-cvc-loading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 30px 0;
+    color: #c7b08d;
+    font-family: "MedievalSharp", cursive;
+    font-size: .95rem;
+}
+
+.wiki-cvc-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px;
+    background: rgba(18, 13, 9, .6);
+    border: 1px solid #5b4633;
+    border-radius: 8px;
+}
+
+.wiki-cvc-panel[hidden] {
+    display: none;
+}
+
+.wiki-cvc-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 54px;
+    align-items: center;
+    gap: 12px;
+}
+
+.wiki-cvc-name {
+    font-size: .85rem;
+    font-weight: 700;
+    color: #f1c75c;
+    white-space: nowrap;
+}
+
+.wiki-cvc-track {
+    position: relative;
+    height: 16px;
+    background: rgba(0, 0, 0, .35);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.wiki-cvc-fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: 4px;
+    background: linear-gradient(90deg, rgba(216, 159, 27, .55), #f1c75c);
+}
+
+.wiki-cvc-fill.below {
+    background: linear-gradient(90deg, #8b3a3a, rgba(139, 58, 58, .55));
+}
+
+.wiki-cvc-mid {
+    position: absolute;
+    top: -2px;
+    bottom: -2px;
+    left: 50%;
+    width: 1px;
+    background: rgba(216, 195, 155, .5);
+}
+
+.wiki-cvc-val {
+    font-size: .82rem;
+    text-align: right;
+    color: #d8c39b;
+    font-variant-numeric: tabular-nums;
+}
+
+.wiki-cvc-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.wiki-cvc-matrix-wrap {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid #5b4633;
+    overflow-x: auto;
+}
+
+.wiki-cvc-matrix-caption {
+    margin: 0 0 10px;
+    font-size: .8rem;
+    color: #a8977a;
+}
+
+.wiki-cvc-matrix-caption i {
+    color: #f1c75c;
+}
+
+.wiki-cvc-matrix {
+    border-collapse: separate;
+    border-spacing: 2px;
+    font-size: .78rem;
+}
+
+.wiki-cvc-matrix th,
+.wiki-cvc-matrix td {
+    text-align: center;
+    padding: 6px 8px;
+}
+
+.wiki-cvc-matrix thead th {
+    color: #f1c75c;
+    font-size: .85rem;
+}
+
+.wiki-cvc-matrix-rowhead {
+    white-space: nowrap;
+    text-align: left !important;
+    color: #f1c75c;
+    font-size: .78rem;
+    font-weight: 700;
+}
+
+.wiki-cvc-matrix td {
+    color: #f0e8d5;
+    font-variant-numeric: tabular-nums;
+    border-radius: 4px;
+}
+
+.wiki-cvc-matrix-self {
+    color: #5b4633;
+}
+
+.wiki-cvc-note {
+    margin: 16px 0 0;
+    font-size: .76rem;
+    color: #6b5a44;
+    font-style: italic;
+}
+
 .wiki-footer {
     text-align: center;
     padding-top: 30px;

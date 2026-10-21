@@ -18,22 +18,22 @@ const monstersRaid = [
         floor: 1,
 
         status: {
-            vidaMaxima: 17000,
+            vidaMaxima: 20903,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
-                    dano: 280,
+                    dano: 318,
                 },
                 {
                     nomeAtaque: "Jato d'gua",
-                    dano: 300,
+                    dano: 341,
                 },
                 {
                     nomeAtaque: "Hidro Bomba",
-                    dano: 340,
+                    dano: 386,
                 },
             ],
-            armadura: 220,
+            armadura: 271,
             agilidade: 200,
             xp: 0,
             ouro: 70000
@@ -67,22 +67,22 @@ const monstersRaid = [
         floor: 2,
 
         status: {
-            vidaMaxima: 18000,
+            vidaMaxima: 21417,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
-                    dano: 300,
+                    dano: 338,
                 },
                 {
                     nomeAtaque: "Baforada",
-                    dano: 320,
+                    dano: 361,
                 },
                 {
                     nomeAtaque: "Chamas infernais",
-                    dano: 320,
+                    dano: 361,
                 },
             ],
-            armadura: 240,
+            armadura: 286,
             agilidade: 250,
             xp: 0,
             ouro: 70000
@@ -106,6 +106,55 @@ const monstersRaid = [
     },
 
     {
+        id: "drake_skull",
+        element: "skull",
+        name: "Dragão Caveira",
+        level: 150,
+        type: "beast",
+
+        sprite: "assets/img/monstersRaid/drake-skull.png",
+        floor: 3,
+
+        status: {
+            vidaMaxima: 22400,
+            ataque:[
+                {
+                    nomeAtaque: "Mordida",
+                    dano: 340,
+                },
+                {
+                    nomeAtaque: "Olhar da Morte",
+                    dano: 362,
+                },
+                {
+                    nomeAtaque: "Baforada da Morte",
+                    dano: 362,
+                },
+            ],
+            armadura: 286,
+            agilidade: 260,
+            xp: 0,
+            ouro: 70000
+        },
+
+        drops: [
+            {
+                item: items.largePotion,
+                quantidade: 10
+            },
+            {
+                pool: [
+                    { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
+                    { type: ["ring", "amulet"], rarity: "legendary", chance: 7 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 10 },
+                    { item: enchantmentStone.quartzoRosaDois, chance: 13 },
+                    { item: enchantmentStone.quartzoRosaUm, chance: 65 }
+                ]
+            }
+        ]
+    },
+
+    {
         id: "drake_bug",
         element: "bug",
         name: "Dragão Varejeiro",
@@ -113,25 +162,25 @@ const monstersRaid = [
         type: "beast",
 
         sprite: "assets/img/monstersRaid/drake-bug.png",
-        floor: 3,
+        floor: 4,
 
         status: {
-            vidaMaxima: 20000,
+            vidaMaxima: 22449,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
-                    dano: 300,
+                    dano: 357,
                 },
                 {
                     nomeAtaque: "Ferroada Acida",
-                    dano: 320,
+                    dano: 380,
                 },
                 {
                     nomeAtaque: "Jato Acido",
-                    dano: 320,
+                    dano: 380,
                 },
             ],
-            armadura: 255,
+            armadura: 286,
             agilidade: 260,
             xp: 0,
             ouro: 70000
@@ -162,25 +211,25 @@ const monstersRaid = [
         type: "beast",
 
         sprite: "assets/img/monstersRaid/drake-energy.png",
-        floor: 4,
+        floor: 5,
 
         status: {
-            vidaMaxima: 22000,
+            vidaMaxima: 24496,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
-                    dano: 300,
+                    dano: 353,
                 },
                 {
                     nomeAtaque: "Choque Elétrico",
-                    dano: 320,
+                    dano: 377,
                 },
                 {
                     nomeAtaque: "Trovão",
-                    dano: 320,
+                    dano: 377,
                 },
             ],
-            armadura: 255,
+            armadura: 284,
             agilidade: 260,
             xp: 0,
             ouro: 70000
@@ -211,25 +260,25 @@ const monstersRaid = [
         type: "beast",
 
         sprite: "assets/img/monstersRaid/drake-light.png",
-        floor: 5,
+        floor: 6,
 
         status: {
-            vidaMaxima: 30000,
+            vidaMaxima: 22004,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
-                    dano: 520,
+                    dano: 489,
                 },
                 {
                     nomeAtaque: "Iluminar",
-                    dano: 550,
+                    dano: 517,
                 },
                 {
                     nomeAtaque: "Raio Aurora",
-                    dano: 600,
+                    dano: 564,
                 },
             ],
-            armadura: 310,
+            armadura: 227,
             agilidade: 270,
             xp: 0,
             ouro: 95000
@@ -260,25 +309,25 @@ const monstersRaid = [
         type: "beast",
 
         sprite: "assets/img/monstersRaid/drake-dark.png",
-        floor: 6,
+        floor: 7,
 
         status: {
-            vidaMaxima: 34000,
+            vidaMaxima: 24288,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
-                    dano: 560,
+                    dano: 477,
                 },
                 {
                     nomeAtaque: "Ofuscar",
-                    dano: 580,
+                    dano: 494,
                 },
                 {
                     nomeAtaque: "Raio Negro",
-                    dano: 630,
+                    dano: 537,
                 },
             ],
-            armadura: 340,
+            armadura: 243,
             agilidade: 290,
             xp: 0,
             ouro: 100000
@@ -309,25 +358,25 @@ const monstersRaid = [
         type: "beast",
 
         sprite: "assets/img/monstersRaid/drake-plant.png",
-        floor: 7,
+        floor: 8,
 
         status: {
-            vidaMaxima: 40000,
+            vidaMaxima: 24443,
             ataque:[
                 {
                     nomeAtaque: "Mordida",
-                    dano: 600,
+                    dano: 453,
                 },
                 {
                     nomeAtaque: "Chicote de Vinha",
-                    dano: 650,
+                    dano: 491,
                 },
                 {
                     nomeAtaque: "Raio Solar",
-                    dano: 700,
+                    dano: 529,
                 },
             ],
-            armadura: 450,
+            armadura: 275,
             agilidade: 320,
             xp: 0,
             ouro: 120000

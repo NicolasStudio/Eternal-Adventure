@@ -10,6 +10,17 @@
    SEMPRE perde o golpe, sem meio-termo.
 ========================================================== */
 
+// No Cooperativo (4 jogadores x 1 chefe), a chance efetiva de travar o
+// chefe soma rápido demais — com 4 atacantes tentando a cada rodada, a
+// chance de PELO MENOS UM acertar a Paralisia antes do turno do chefe
+// fica perto de 100% mesmo com paralysisChance moderado, travando o
+// chefe quase a luta inteira (um problema que só existe em N atacantes
+// contra 1 alvo — não acontece no PVP nem no Dungeon, que são 1 contra
+// 1). Esse multiplicador só se aplica no RaidCombatService (ver
+// chamada de ParalysisService.procs lá) — reduz a chance POR GOLPE sem
+// zerar a utilidade da Paralisia no Cooperativo.
+export const RAID_CHANCE_MULTIPLIER = 0.35;
+
 export default class ParalysisService {
 
     // roll: um número [0,1) já sorteado por quem chamou (Math.random()

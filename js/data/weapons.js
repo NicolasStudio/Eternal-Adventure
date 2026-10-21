@@ -121,13 +121,13 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/sword-rarity-lendario.png",
 
         stats: {
-            attack: 43,
+            attack: 44,
             armor: 0,
             agility: -8,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
-            absorption: 11
+            absorption: 11.2
         },
 
         value: 0,
@@ -263,12 +263,12 @@ const weapons = {
         rarity: rarities.legendary,
         icon: "assets/img/assets/items/weapons/scepter-rarity-lendario.png",
         stats: {
-            attack: 25,
+            attack: 14,
             armor: 0,
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
-            penetration: 11
+            penetration: 6.2
         },
         value: 0,
         sellValue: 18860
@@ -398,10 +398,10 @@ const weapons = {
         rarity: rarities.legendary,
         icon: "assets/img/assets/items/weapons/arch-rarity-lendario.png",
         stats: {
-            attack: 32,
+            attack: 50,
             armor: 0,
             agility: 4,
-            criticalChance: 11,
+            criticalChance: 17.2,
             lifeSteal: 0,
             penetration: 0
         },
@@ -537,11 +537,11 @@ const weapons = {
         rarity: rarities.legendary,
         icon: "assets/img/assets/items/weapons/ax-rarity-lendario.png",
         stats: {
-            attack: 34,
+            attack: 87,
             armor: 0,
             agility: 2,
             criticalChance: 0,
-            lifeSteal: 11,
+            lifeSteal: 28.3,
             penetration: 0,
             absorption: 0
         },
@@ -702,7 +702,7 @@ const weapons = {
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            miasmaChance: 11
+            miasmaChance: 11.1
         },
 
         value: 0,
@@ -860,14 +860,14 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/mirror-rarity-lendario.png",
 
         stats: {
-            attack: 15,
+            attack: 4,
             armor: 0,
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            reflection: 5
+            reflection: 1.5
         },
 
         value: 0,
@@ -1025,14 +1025,14 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/sledgehammer-rarity-lendario.png",
 
         stats: {
-            attack: 55,
+            attack: 60,
             armor: 0,
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            confusionChance: 11
+            confusionChance: 12
         },
 
         value: 0,
@@ -1190,14 +1190,14 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/tesla-coil-rarity-lendario.png",
 
         stats: {
-            attack: 36,
+            attack: 34,
             armor: 0,
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            paralysisChance: 11
+            paralysisChance: 10.4
         },
 
         value: 0,
@@ -1355,14 +1355,14 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/katana-rarity-lendario.png",
 
         stats: {
-            attack: 32,
+            attack: 30,
             armor: 0,
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            doubleStrikeChance: 11
+            doubleStrikeChance: 10.5
         },
 
         value: 0,
@@ -1520,14 +1520,14 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/hammer-rarity-lendario.png",
 
         stats: {
-            attack: 36,
+            attack: 48,
             armor: 0,
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            gravityChance: 11
+            gravityChance: 14.5
         },
 
         value: 0,
