@@ -192,4 +192,84 @@ export default class StatsMigrationService {
 
     }
 
+    // Melhor encanto de cada tipo (life/attack/armor/agility/special)
+    // entre TODOS os itens do personagem — equipados e no inventário.
+    static enchantBonusesFromItems(player) {
+
+        const best = {};
+
+        [...Object.values(player.equipment ?? {}), ...(player.inventory ?? [])].forEach(item => {
+            Object.entries(item?.enchantments ?? {}).forEach(([key, value]) => {
+                const amount = Number(value) || 0;
+                if (amount > (best[key] ?? 0)) best[key] = amount;
+            });
+        });
+
+        return best;
+
+    }
+
+    // Recalcula baseStats/maxHP DO ZERO a partir das fontes que existem
+    // de verdade, em vez de confiar no valor acumulado no save:
+    //
+    //   curva ATUAL até o nível + Upgrade de Classe + o MELHOR encanto de
+    //   cada tipo (um só por personagem)
+    //
+    // Fica de fora (quem chama soma depois — ver
+    // SaveService.recalculateStats): Vida de Anel/Amuleto e do pet, e os
+    // talentos (TalentService.sync reaplica sobre a Vida nova).
+    //
+    // Corrige dois problemas de uma vez: curva de levels.js que mudou SEM
+    // subir CURRENT_BALANCE_VERSION (quem migrou antes ficava com os
+    // números velhos — aconteceu entre 20/10 e 21/10) e encanto acumulado
+    // (antes cada ARMA tinha o próprio limite, mas o bônus ia pro
+    // PERSONAGEM — encantar 2 armas somava 2 Rubis, e o bônus ficava
+    // mesmo depois de fundir/vender a arma).
+    //
+    // progress.enchantBonuses é o registro do melhor encanto de cada tipo
+    // que o personagem já aplicou (ver Player.applyEnchantment). Save sem
+    // esse registro começa pelo que os itens dele ainda têm.
+    //
+    // Qualquer fonte NOVA de status permanente precisa entrar aqui também,
+    // senão some no próximo carregamento.
+    static recalculate(player) {
+
+        const curve = this.cumulative(levels, player.class.id, player.level);
+
+        // Bônus do Upgrade de Classe só existe depois de vencer a dungeon
+        // (player.transcendence) — transcendenceApplied é o que
+        // syncTranscendenceStats() já alinhou ao upClasse.js atual.
+        const transcendence = player.transcendence ? (player.progress.transcendenceApplied ?? {}) : {};
+
+        const enchant = this.enchantBonusesFromItems(player);
+
+        Object.entries(player.progress.enchantBonuses ?? {}).forEach(([key, value]) => {
+            enchant[key] = Math.max(enchant[key] ?? 0, Number(value) || 0);
+        });
+
+        player.progress.enchantBonuses = enchant;
+
+        const specialKey = player.getSpecialStatKey();
+        const baseStats = {};
+
+        Object.entries(curve).forEach(([key, value]) => {
+            if (key !== "life") baseStats[key] = value;
+        });
+
+        Object.entries(transcendence).forEach(([key, value]) => {
+            if (key !== "life") baseStats[key] = (baseStats[key] ?? 0) + (Number(value) || 0);
+        });
+
+        Object.entries(enchant).forEach(([key, value]) => {
+            if (key === "life") return;
+            const statKey = key === "special" ? specialKey : key;
+            if (statKey) baseStats[statKey] = (baseStats[statKey] ?? 0) + value;
+        });
+
+        const maxHP = curve.life + (Number(transcendence.life) || 0) + (enchant.life ?? 0);
+
+        return { baseStats, maxHP };
+
+    }
+
 }

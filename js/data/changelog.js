@@ -1,6 +1,15 @@
 export default [
 
     {
+        version: "Beta 0.3.1 — Correções de Status",
+        date: "Outubro de 2026",
+        changes: [
+            "Encantamento: agora vale UM de cada tipo (Vida, Ataque, Armadura, Agilidade e Especial) por personagem, não por arma — antes dava pra encantar várias armas e somar os bônus (ex: dois Rubis III = +600 de Vida), e o bônus continuava mesmo depois de fundir ou vender a arma. Uma pedra melhor que a sua melhor daquele tipo continua substituindo a anterior; uma igual ou pior é bloqueada, sem gastar a pedra. Quem tinha encantamentos acumulados fica com o melhor de cada tipo",
+            "Corrigido: o rebalanceamento da versão 0.2.9 não chegou pra quem já tinha entrado no jogo um dia antes dele — esses personagens continuavam com a curva de nível anterior. Agora os status de todo personagem são recalculados ao entrar no jogo, a partir do nível, do Upgrade de Classe, do encantamento, dos talentos e do equipamento",
+            "Wiki (Classe vs Classe): a simulação agora alterna os lados a cada luta — antes a classe da linha sempre começava atacando nos empates de Agilidade e levava o desempate no limite de rodadas, o que deixava algumas células do confronto direto até ~8 pontos fora. A legenda da tabela também foi corrigida: cada célula é a % de vitória da classe da linha contra a da coluna (não existe atacante/defensor no combate)"
+        ]
+    },
+    {
         version: "Beta 0.3.0 — Vizinhos na Fazenda",
         date: "Outubro de 2026",
         changes: [

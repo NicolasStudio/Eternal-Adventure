@@ -154,14 +154,16 @@ export default class BlacksmithEnchant {
         if (!this.anvilStone) return "";
         const [statKey, value] = Object.entries(this.anvilStone.stats)[0];
 
-        const currentValue = this.anvilWeapon?.enchantments?.[statKey] ?? 0;
-        const blocked = this.anvilWeapon && value <= currentValue;
+        // Um encanto de cada tipo por PERSONAGEM (ver Player.applyEnchantment)
+        // — compara com o melhor que você já tem, em qualquer arma.
+        const currentValue = this.player.getEnchantBonus(statKey);
+        const blocked = value <= currentValue;
 
         if (blocked) {
             return `
                 <div class="blacksmith-upgrade-info">
                     <p class="enchant-warning">
-                        Essa arma já tem um encantamento de ${this.getStatName(statKey)} igual ou melhor (+${currentValue}).
+                        Você já tem um encantamento de ${this.getStatName(statKey)} igual ou melhor (+${currentValue}).
                     </p>
                 </div>
             `;
@@ -216,8 +218,7 @@ export default class BlacksmithEnchant {
         if (!this.anvilWeapon || !this.anvilStone) return false;
         if (this.player.gold < (this.anvilStone.enchantPrice ?? 0)) return false;
         const [statKey, value] = Object.entries(this.anvilStone.stats)[0];
-        const currentValue = this.anvilWeapon.enchantments?.[statKey] ?? 0;
-        return value > currentValue;
+        return value > this.player.getEnchantBonus(statKey);
     }
 
     refresh() {

@@ -389,6 +389,11 @@ export default class SaveService {
             TalentService.sync(player);
         }
 
+        // Status sempre recalculados do zero a partir das fontes (curva
+        // atual, Upgrade de Classe, melhor encanto de cada tipo, talentos,
+        // Anel/Amuleto e pet) — ver StatsMigrationService.recalculate.
+        this.recalculateStats(player);
+
         // Saves de antes da Anti-Praga existir não têm esses campos —
         // sem isso, applyPestSpawn() trataria "nunca nasceu nenhuma
         // praga ainda" como se lastPestSpawnAt fosse `undefined`, o que
@@ -409,6 +414,36 @@ export default class SaveService {
         }
 
         return player;
+
+    }
+
+    // Refaz baseStats/maxHP do personagem a partir das fontes (ver
+    // StatsMigrationService.recalculate) e reaplica o que vem por cima:
+    // Vida do Anel/Amuleto e do pet (do jeito que já estava aplicada —
+    // equipmentLifeBonusApplied/petLifeBonusApplied) e os talentos,
+    // recalculados do zero sobre a Vida nova (a conversão deles é % da
+    // Vida máxima).
+    static recalculateStats(player) {
+
+        const { baseStats, maxHP } = StatsMigrationService.recalculate(player);
+
+        player.baseStats = baseStats;
+        player.maxHP = maxHP + (player.equipmentLifeBonusApplied ?? 0) + (player.petLifeBonusApplied ?? 0);
+
+        // Corrige o bônus de Vida do Anel/Amuleto se ele estava
+        // desatualizado — ANTES dos talentos, que são % da Vida máxima
+        // (senão a conta deles muda 1 ponto a cada carregamento).
+        player.syncEquipmentLifeBonus();
+
+        player.talentApplied = { lifeLost: 0 };
+        TalentService.sync(player);
+
+        for (const key of Object.keys(player.baseStats)) {
+            player.baseStats[key] = Math.max(0, player.baseStats[key] ?? 0);
+        }
+
+        player.maxHP = Math.max(1, player.maxHP);
+        player.currentHP = Math.min(player.currentHP, player.maxHP);
 
     }
 
