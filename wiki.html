@@ -386,7 +386,7 @@
                     <div class="wiki-step"><span class="wiki-step-num">III</span><div><h4>Pedra Nível III</h4><p>O encantamento mais poderoso desse tipo de pedra.</p></div></div>
                 </div>
 
-                <p>Existem diferentes tipos de pedra, cada uma ligada a um atributo diferente do seu personagem — e cada arma pode acumular um encantamento de <em>cada tipo</em> ao mesmo tempo, só não pode repetir o mesmo tipo duas vezes sem ser um upgrade de verdade.</p>
+                <p>Existem diferentes tipos de pedra, cada uma ligada a um atributo diferente do seu personagem. Você pode ter um encantamento de <em>cada tipo</em> ao mesmo tempo (Vida, Ataque, Armadura, Agilidade e Especial) — <strong>um por personagem</strong>, não por arma: encantar uma segunda arma com uma pedra igual ou pior que a sua melhor daquele tipo não soma nada (o jogo bloqueia, pra você não gastar a pedra). Uma pedra melhor substitui a anterior, somando só a diferença. O bônus continua seu mesmo se você trocar de arma.</p>
 
                 <p class="wiki-tip"><i class="fa-solid fa-lightbulb"></i> Dica: clicar numa pedra dentro do seu inventário já te leva direto pra essa tela.</p>
 
@@ -1040,13 +1040,20 @@
                     if (i === j) continue;
                     const a = CVC_CLASSES[i], b = CVC_CLASSES[j];
                     if (matrix[a][b] != null) continue;
+                    // Alterna os lados a cada luta: o lado "a" da simulação
+                    // começa atacando quando a Agilidade empata e vence o
+                    // desempate quando a luta estoura o limite de rodadas —
+                    // sem alternar, a classe da linha levava essa vantagem
+                    // nas 120 lutas (até ~8 pontos numa célula).
                     let winsA = 0;
                     for (let s = 0; s < CVC_SEEDS_PER_PAIR; s++) {
                         const seed = (i * 1000003 + j * 7919 + s * 131) | 0;
-                        const combatantA = { ...combatants[a], currentHP: combatants[a].maxHP };
-                        const combatantB = { ...combatants[b], currentHP: combatants[b].maxHP };
+                        const swap = s % 2 === 1;
+                        const first = swap ? b : a, second = swap ? a : b;
+                        const combatantA = { ...combatants[first], currentHP: combatants[first].maxHP };
+                        const combatantB = { ...combatants[second], currentHP: combatants[second].maxHP };
                         const result = PvpCombatServiceCVC.simulate(combatantA, combatantB, seed);
-                        if (result.winner === "a") winsA++;
+                        if ((result.winner === "a") !== swap) winsA++;
                     }
                     const pctA = (winsA / CVC_SEEDS_PER_PAIR) * 100;
                     matrix[a][b] = pctA;
@@ -1118,15 +1125,16 @@
             return wrap;
         }
 
-        // Confronto direto: linha ATACA, coluna DEFENDE — célula = % de
-        // vitória da classe da LINHA contra a classe da COLUNA.
+        // Confronto direto: célula = % de vitória da classe da LINHA contra
+        // a classe da COLUNA (os dois atacam e se defendem — não existe
+        // papel de atacante/defensor no combate).
         function cvcRenderMatrix(matrix) {
             const wrapOuter = document.createElement("div");
             wrapOuter.className = "wiki-cvc-matrix-wrap";
 
             const caption = document.createElement("p");
             caption.className = "wiki-cvc-matrix-caption";
-            caption.innerHTML = `<i class="fa-solid fa-table-cells"></i> Confronto direto — linha ataca, coluna defende; célula = % de vitória de quem ataca (a linha).`;
+            caption.innerHTML = `<i class="fa-solid fa-table-cells"></i> Confronto direto — célula = % de vitória da classe da linha contra a classe da coluna.`;
             wrapOuter.appendChild(caption);
 
             const table = document.createElement("table");
