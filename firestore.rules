@@ -288,5 +288,36 @@ service cloud.firestore {
 
     }
 
+    // Cassino — 3 giros grátis por dia, por personagem (id = "uid_slot",
+    // igual farms/leaderboard). A proteção real está aqui: "today()" usa
+    // request.time (relógio do SERVIDOR), então mudar a hora do PC não
+    // adianta — o cliente só propõe {day, used}, essa regra é quem
+    // decide se aceita. Mesmo padrão de farms/thieves acima.
+    match /casinoDaily/{entryId} {
+
+      function isCasinoOwner() {
+        return signedIn() && entryId.split('_')[0] == request.auth.uid;
+      }
+
+      // Dia de Brasília (UTC−3) — mesma conta de farms/thieves acima.
+      function today() {
+        return math.floor((request.time.toMillis() - 10800000) / 86400000);
+      }
+
+      allow read: if isCasinoOwner();
+
+      allow create, update: if isCasinoOwner()
+        && request.resource.data.keys().hasOnly(['day', 'used'])
+        && request.resource.data.day == today()
+        && request.resource.data.used is int
+        && request.resource.data.used >= 1
+        && request.resource.data.used <= 3
+        && (
+          ((resource == null || resource.data.day != today()) && request.resource.data.used == 1)
+          || (resource != null && resource.data.day == today() && request.resource.data.used == resource.data.used + 1)
+        );
+
+    }
+
   }
 }

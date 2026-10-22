@@ -1,0 +1,177 @@
+/* ==========================================================
+   CASSINO — botão no HUD (só na home) + modal (caça-níquel)
+========================================================== */
+.hud-tool.casino-toggle{
+    position:relative;
+    z-index:5;
+    width:34px;
+    height:34px;
+    font-size:15px;
+    border:2px solid #8b7355;
+    border-radius:50%;
+    background:linear-gradient(180deg,#2c1810,#1a0f0a);
+    box-shadow:inset 0 0 12px rgba(0,0,0,.45), 0 3px 8px rgba(0,0,0,.4);
+    margin-left:10px;
+}
+.hud-tool.casino-toggle:hover{
+    transform:none;
+    border-color:#f1c75c;
+}
+
+.casino-overlay{
+    position:fixed;
+    inset:0;
+    z-index:9500;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:rgba(0,0,0,.65);
+    backdrop-filter:blur(2px);
+    animation:rewardFade .2s ease;
+}
+.casino-modal{
+    width:380px;
+    max-width:92%;
+    padding:20px;
+    border:1px solid #7d6846;
+    border-radius:8px;
+    background:rgba(18,13,9,.98);
+    box-shadow:0 0 25px rgba(0,0,0,.75);
+    color:#efe2bf;
+    font-family:"Cinzel", serif;
+    animation:rewardPopup .22s ease;
+}
+
+.casino-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:8px;
+    padding-bottom:12px;
+    border-bottom:1px solid rgba(212,163,115,.25);
+}
+.casino-header h2{
+    margin:0;
+    font-size:1.1rem;
+    color:#f6d19c;
+}
+
+.casino-subtitle{
+    margin:0 0 10px;
+    font-size:.76rem;
+    color:#9e8d70;
+    text-align:center;
+    line-height:1.4;
+}
+
+.casino-free-spins{
+    margin:0 0 16px;
+    font-size:.8rem;
+    color:#f1c75c;
+    text-align:center;
+}
+
+/* ----- Bobinas ----- */
+.casino-reels{
+    position:relative;
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin-bottom:14px;
+}
+.casino-reel{
+    width:68px;
+    height:174px; /* 3 * .casino-cell */
+    overflow:hidden;
+    border:2px solid #5b4633;
+    border-radius:6px;
+    background:rgba(0,0,0,.35);
+}
+.casino-reel-strip{
+    display:flex;
+    flex-direction:column;
+    will-change:transform;
+}
+.casino-cell{
+    width:68px;
+    height:58px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.casino-cell img{
+    width:36px;
+    height:36px;
+    image-rendering:pixelated;
+}
+
+/* Realça a linha do meio — é a única que conta pro resultado. */
+.casino-mid-line{
+    position:absolute;
+    left:0;
+    right:0;
+    top:58px;
+    height:58px;
+    pointer-events:none;
+    box-shadow:inset 0 0 0 2px #f1c75c, inset 0 0 14px rgba(241,199,92,.25);
+    border-radius:2px;
+}
+
+.casino-result{
+    margin:0 0 14px;
+    padding:8px 10px;
+    text-align:center;
+    font-size:.82rem;
+    border-radius:6px;
+}
+.casino-result.casino-win{
+    color:#9be37a;
+    background:rgba(105,216,35,.1);
+    border:1px solid rgba(105,216,35,.35);
+}
+.casino-result.casino-lose{
+    color:#bca46d;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.casino-footer{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+}
+.casino-gold{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:.95rem;
+    color:#f1c75c;
+}
+.casino-spin-button{
+    flex:1;
+    padding:10px;
+    cursor:pointer;
+    border:1px solid #2f6b2f;
+    border-radius:4px;
+    background:#173a17;
+    color:#f3e5b7;
+    font-family:"Cinzel", serif;
+    font-size:.85rem;
+    transition:.2s;
+}
+.casino-spin-button:hover:not(:disabled){
+    background:#204e20;
+}
+.casino-spin-button:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}
+
+.casino-insufficient{
+    margin:10px 0 0;
+    text-align:center;
+    font-size:.76rem;
+    color:#e06a6a;
+}
