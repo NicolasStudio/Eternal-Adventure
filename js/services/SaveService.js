@@ -972,6 +972,127 @@ export default class SaveService {
 
     }
 
+    /* =====================================================
+       NOME DO PERSONAGEM — formato e troca de nome
+    ===================================================== */
+
+    static NAME_MIN_LENGTH = 5;
+    static NAME_MAX_LENGTH = 8;
+    static NAME_PATTERN = /^[A-Za-zÀ-ÿ0-9]+$/;
+
+    // Troca de nome grátis, uma vez a cada tantos meses (por personagem).
+    static RENAME_COOLDOWN_MONTHS = 6;
+
+    // Só o formato — instantâneo, sem rede. Mesma regra da criação de
+    // personagem (ver NameEntryModal). null = válido.
+    static validateCharacterNameFormat(value) {
+
+        const name = String(value ?? "").trim();
+
+        if (name.length < this.NAME_MIN_LENGTH) return "Seu nome tem que ter mais de 4 caracteres.";
+        if (name.length > this.NAME_MAX_LENGTH) return `Seu nome pode ter no máximo ${this.NAME_MAX_LENGTH} caracteres.`;
+        if (!this.NAME_PATTERN.test(name)) return "Não pode caractere especial.";
+
+        return null;
+
+    }
+
+    // "Está em uso por OUTRA conta?" — diferente de isCharacterNameTaken,
+    // um nome reservado pela própria conta conta como livre (ex: trocar
+    // só maiúsculas/minúsculas do próprio nome). Sem cache: na hora de
+    // trocar de nome precisa da resposta atual.
+    static async isCharacterNameTakenByOther(name, uid) {
+
+        try {
+            const snapshot = await getDoc(doc(firestore, CHARACTER_NAMES_COLLECTION, name.trim().toLowerCase()));
+            return snapshot.exists() && snapshot.data().uid !== uid;
+        } catch (err) {
+            console.warn("Falha ao checar nome do personagem:", err);
+            return false;
+        }
+
+    }
+
+    // Data a partir da qual o personagem pode trocar de nome de novo, ou
+    // null se ele nunca trocou (pode trocar já).
+    static getNextRenameDate(player) {
+
+        const last = player?.progress?.lastRenameAt;
+
+        if (!last) return null;
+
+        const next = new Date(last);
+        next.setMonth(next.getMonth() + this.RENAME_COOLDOWN_MONTHS);
+
+        return next;
+
+    }
+
+    static canRenameCharacter(player) {
+        const next = this.getNextRenameDate(player);
+        return !next || Date.now() >= next.getTime();
+    }
+
+    // Troca o nome do personagem: reserva o novo (characterNames), libera
+    // o antigo se ele era desta conta, grava a data da troca e salva — o
+    // ranking passa a mostrar o nome novo no mesmo salvamento. Sem conta
+    // logada não existe reserva na nuvem: só troca o nome localmente.
+    // Devolve { ok, message }.
+    static async renameCharacter(player, newName) {
+
+        const name = String(newName ?? "").trim();
+
+        const formatError = this.validateCharacterNameFormat(name);
+
+        if (formatError) return { ok: false, message: formatError };
+
+        if (!this.canRenameCharacter(player)) {
+            return { ok: false, message: `Você só pode trocar de nome de novo em ${this.getNextRenameDate(player).toLocaleDateString("pt-BR")}.` };
+        }
+
+        if (name === player.name) return { ok: false, message: "Esse já é o seu nome." };
+
+        const user = AuthService.getCurrentUser();
+        const oldKey = String(player.name ?? "").trim().toLowerCase();
+        const newKey = name.toLowerCase();
+
+        if (user) {
+
+            if (await this.isCharacterNameTakenByOther(name, user.uid)) {
+                return { ok: false, message: "Esse nome já está sendo usado." };
+            }
+
+            try {
+                // Sem catch silencioso aqui (diferente de
+                // reserveCharacterName): se outra conta reservou o nome no
+                // meio do caminho, as regras recusam e a troca não acontece.
+                await setDoc(doc(firestore, CHARACTER_NAMES_COLLECTION, newKey), { uid: user.uid });
+            } catch (err) {
+                console.warn("Falha ao reservar o novo nome:", err);
+                return { ok: false, message: "Não foi possível reservar esse nome agora. Tente de novo." };
+            }
+
+            // Libera o nome antigo — as regras só deixam apagar se ele for
+            // desta conta; se for de outra (reserva antiga), só ignora.
+            if (oldKey && oldKey !== newKey) {
+                deleteDoc(doc(firestore, CHARACTER_NAMES_COLLECTION, oldKey)).catch(() => {});
+            }
+
+            this.nameOwnerCache.delete(oldKey);
+            this.nameOwnerCache.delete(newKey);
+
+        }
+
+        player.name = name;
+        player.progress.lastRenameAt = Date.now();
+        player.notify();
+
+        await this.autoSave(player);
+
+        return { ok: true, message: `Seu personagem agora se chama ${name}!` };
+
+    }
+
     // Libera o que é SÓ desse personagem (nome reservado + entrada no
     // ranking) — chamado tanto ao excluir um personagem quanto, pra
     // cada slot, ao excluir a conta inteira. As Regras de Segurança só

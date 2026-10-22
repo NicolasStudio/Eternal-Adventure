@@ -120,6 +120,28 @@ const items = {
         sellValue: 3050
     },
 
+    // Pote de XP — consumível que dá experiência direto, usado pelo
+    // inventário igual uma poção (campo `xp`, ver
+    // CharacterView.useXpPotion). Ainda sem drop nem loja: por enquanto só
+    // entra no jogo dado à mão. Sem sellValue: não dá pra vender.
+    xpPotion5: {
+        id: "xpPotion5",
+        name: "Pote de XP Nível 5",
+        icon: "assets/img/assets/items/pot_xp/pot_xp5.png",
+        type: "item",
+        stackable: true,
+
+        rarity: {
+            id: "legendary",
+            name: "Lendário",
+            color: "#ff711f"
+        },
+
+        quality: null,
+        xp: 20000,
+        effect: "Concede 20.000 de experiência."
+    },
+
     // Fusão de Equipamentos (ver FusionService.js/BlacksmithFusion.js) —
     // `fusionProtection: true` é o único campo que a Fusão checa pra
     // aceitar um item no 5º slot (não precisa ser este item específico,

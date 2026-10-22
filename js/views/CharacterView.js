@@ -6,6 +6,7 @@ import PetService from "../services/PetService.js";
 import PowerService from "../services/PowerService.js";
 import PetFeedModal from "../ui/components/modals/PetFeedModal.js";
 import FarmConfirmModal from "../ui/components/modals/FarmConfirmModal.js";
+import LevelUpModal from "../ui/components/modals/LevelUpModal.js";
 import { STACK_PERCENTS as MIASMA_STACK_PERCENTS, PVE_STACK_PERCENTS as MIASMA_PVE_PERCENTS, PERSISTENT_SPECIAL_MULTIPLIER as MIASMA_SPECIAL_KEEP } from "../services/MiasmaService.js";
 import { ABSORPTION_RATIO_PVE, ABSORPTION_RATIO_PVP, ABSORPTION_CAP } from "../combat/Absorption.js";
 import { CRITICAL_MULTIPLIER } from "../combat/Critical.js";
@@ -27,6 +28,8 @@ export default class CharacterView {
         this.selectedEquipment = null;
         this.petFeedModal = new PetFeedModal();
         this.releasePetModal = new FarmConfirmModal();
+        // Pote de XP pode subir de nível — mesmo modal do fim de combate.
+        this.levelUpModal = new LevelUpModal(game);
         this.petLightbox = null;
         this.petLightboxKeyHandler = null;
         this.characterLightbox = null;
@@ -578,6 +581,12 @@ export default class CharacterView {
 
         if (!this.selectedItem) return;
 
+        // Pote de XP — usado igual uma poção, mas dá experiência.
+        if (this.selectedItem.xp) {
+            this.useXpPotion();
+            return;
+        }
+
         // Consumível
         if (this.selectedItem.heal) {
 
@@ -810,6 +819,39 @@ export default class CharacterView {
         this.selectedItem = null;
 
         this.refresh();
+
+    }
+
+    // Pote de XP: soma `item.xp` de experiência e mostra o modal de level
+    // up pra cada nível que subir (igual o fim de um combate). Bloqueado
+    // no nível máximo — addXP() descarta toda XP nesse caso, o pote seria
+    // gasto à toa.
+    async useXpPotion() {
+
+        const item = this.selectedItem;
+
+        if (!item?.xp) return;
+
+        const player = this.game.player;
+
+        if (player.getRequiredXP() <= 0) {
+            Toast.show("Você já está no nível máximo.");
+            return;
+        }
+
+        const levelUps = player.addXP(item.xp);
+
+        player.removeItem(item);
+
+        Toast.show(`${item.name} utilizado! (+${item.xp.toLocaleString("pt-BR")} XP)`);
+
+        this.selectedItem = null;
+
+        this.refresh();
+
+        for (const levelUp of levelUps) {
+            await this.levelUpModal.show(levelUp.level, levelUp.bonus, levelUp.petReward);
+        }
 
     }
 
@@ -1123,6 +1165,13 @@ export default class CharacterView {
 
                         const missing = this.game.player.maxHP - this.game.player.currentHP;
                         equipButton.disabled = missing <= 0;
+
+                    } else if (this.selectedItem.xp) {
+
+                        // Pote de XP — desabilitado só no nível máximo.
+                        equipButton.textContent = "Usar";
+                        equipButton.classList.add("use-potion-button");
+                        equipButton.disabled = this.game.player.getRequiredXP() <= 0;
 
                     } else if (this.selectedItem.type === "pet" && !this.selectedItem.shocked) {
 

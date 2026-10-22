@@ -5,7 +5,16 @@ import AudioSettings from "../../../services/AudioSettings.js";
 import MusicService from "../../../services/MusicService.js";
 import AccountDangerModal from "./AccountDangerModal.js";
 import DeleteCharacterModal from "./DeleteCharacterModal.js";
+import NameEntryModal from "./NameEntryModal.js";
 import Toast from "../Toast.js";
+
+// O nome atual pode ser de antes da regra de formato existir — nunca
+// entra cru no HTML.
+function escapeHtml(text) {
+    return String(text ?? "").replace(/[&<>"']/g, char => (
+        { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]
+    ));
+}
 
 export default class SettingsModal {
 
@@ -16,6 +25,8 @@ export default class SettingsModal {
         this.settings = AudioSettings.get();
         this.dangerModal = new AccountDangerModal();
         this.deleteCharacterModal = new DeleteCharacterModal();
+        this.nameEntryModal = new NameEntryModal();
+        this.renaming = false;
     }
 
     show() {
@@ -106,6 +117,8 @@ export default class SettingsModal {
                     </button>
                 </section>
 
+                ${this.inGame && this.game.player ? this.renderCharacterSection() : ""}
+
                 <section class="settings-section">
                     <h3>Agradecimentos</h3>
                     <a href="acknowledgments.html" class="acknowledgments" target="_blank">Ver sobre</a>
@@ -155,10 +168,72 @@ export default class SettingsModal {
         `;
     }
 
+    // Troca de nome — grátis, 1 vez a cada 6 meses (ver
+    // SaveService.renameCharacter). Só dentro do jogo (precisa do
+    // personagem carregado).
+    renderCharacterSection() {
+
+        const player = this.game.player;
+        const canRename = SaveService.canRenameCharacter(player);
+        const nextDate = SaveService.getNextRenameDate(player);
+
+        return `
+            <section class="settings-section">
+                <h3>Personagem</h3>
+                <div class="settings-rename-row">
+                    <span class="settings-rename-current">Nome: <strong>${escapeHtml(player.name)}</strong></span>
+                    <button class="settings-fullscreen-button" id="settings-rename" ${canRename && !this.renaming ? "" : "disabled"}>
+                        <i class="fa-solid fa-signature"></i>
+                        Trocar nome
+                    </button>
+                </div>
+                <p class="settings-rename-hint">
+                    ${canRename
+                        ? `Grátis, uma vez a cada ${SaveService.RENAME_COOLDOWN_MONTHS} meses.`
+                        : `Próxima troca disponível em ${nextDate.toLocaleDateString("pt-BR")}.`}
+                </p>
+            </section>
+        `;
+
+    }
+
+    async renameCharacter() {
+
+        const player = this.game.player;
+
+        if (!player || this.renaming || !SaveService.canRenameCharacter(player)) return;
+
+        const uid = AuthService.getCurrentUser()?.uid;
+
+        const newName = await this.nameEntryModal.show({
+            title: "Trocar Nome",
+            hint: `Novo nome do personagem. Grátis, mas depois só dá pra trocar de novo daqui a ${SaveService.RENAME_COOLDOWN_MONTHS} meses.`,
+            confirmLabel: "Trocar",
+            isTaken: (value) => uid ? SaveService.isCharacterNameTakenByOther(value, uid) : SaveService.isCharacterNameTaken(value)
+        });
+
+        if (!newName) return;
+
+        this.renaming = true;
+        this.refresh();
+
+        const result = await SaveService.renameCharacter(player, newName);
+
+        this.renaming = false;
+        this.refresh();
+
+        Toast.show(result.message);
+
+    }
+
     registerEvents() {
 
         this.modal.querySelector("#settings-close")?.addEventListener("click", () => {
             this.hide();
+        });
+
+        this.modal.querySelector("#settings-rename")?.addEventListener("click", () => {
+            this.renameCharacter();
         });
 
         this.modal.querySelector("#settings-fullscreen")?.addEventListener("click", () => {

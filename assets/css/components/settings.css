@@ -273,6 +273,31 @@
 .settings-fullscreen-button:hover{
     color:#f0a878;
 }
+.settings-fullscreen-button:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+}
+.settings-fullscreen-button:disabled:hover{
+    color:inherit;
+}
+
+/* Troca de nome (seção "Personagem", só dentro do jogo). */
+.settings-rename-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+}
+.settings-rename-current strong{
+    color:#f1c75c;
+}
+.settings-rename-hint{
+    margin:8px 0 0;
+    font-size:.78rem;
+    color:#8f7a5a;
+    font-style:italic;
+}
 
 .report-bug-link{
     text-decoration: none;
