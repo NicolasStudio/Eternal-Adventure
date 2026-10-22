@@ -35,7 +35,9 @@ const DODGE_CAP = 40;
 // vida restante (antes o lado "a" vencia sempre); Queimadura do Boitatá
 // contra jogador vira tick fixo (burnDamagePvp) e a cura do Duende cai
 // pro nível do pet — muda o resultado de lutas já existentes.
-export const TEAM_SIM_VERSION = 15;
+// v16 pet não morde nem cura depois que o golpe do dono já decidiu a
+// luta (inclusive dono que se matou confuso).
+export const TEAM_SIM_VERSION = 16;
 
 /*
     Os dois clientes (jogador A e B) precisam chegar no MESMO resultado
@@ -525,7 +527,11 @@ export default class PvpCombatService {
                     ? Math.floor(damage * attacker.petMimicRatio)
                     : attacker.petBiteDamage;
 
-                if (petBiteAmount > 0 || attacker.petHealAmount > 0) {
+                // Só se a luta continua depois do golpe principal (os dois
+                // vivos, já contando o Reviver do Yggdrasil acima) — antes
+                // o pet curava depois da vitória, e até "revivia" o dono
+                // que tinha acabado de se matar confuso.
+                if ((petBiteAmount > 0 || attacker.petHealAmount > 0) && a.currentHP > 0 && b.currentHP > 0) {
 
                     let biteDamage = 0;
 
@@ -1011,7 +1017,10 @@ export default class PvpCombatService {
                     ? Math.floor(damage * attacker.petMimicRatio)
                     : attacker.petBiteDamage;
 
-                if (petBiteAmount > 0 || attacker.petHealAmount > 0) {
+                // Só se o dono continua vivo e o time inimigo ainda tem
+                // alguém em pé (mesma regra do 1x1 acima) — sem isso o pet
+                // curava depois da luta acabar.
+                if ((petBiteAmount > 0 || attacker.petHealAmount > 0) && attacker.currentHP > 0 && aliveOf(enemyTeam).length > 0) {
 
                     let biteDamage = 0;
 

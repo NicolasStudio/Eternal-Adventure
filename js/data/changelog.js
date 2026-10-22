@@ -1,6 +1,14 @@
 export default [
 
     {
+        version: "Beta 0.3.5 — Correções de Combate",
+        date: "Outubro de 2026",
+        changes: [
+            "Corrigido: o pet continuava mordendo e curando depois que o seu golpe já tinha decidido a luta — nas Masmorras, no PVP (1x1, 2x2 e 3x3) e no Cooperativo. O pior caso: se você se atacasse confuso e morresse, a cura do Duende te trazia de volta. Agora o pet só age se a luta continua e você ainda está vivo (o Reviver do Yggdrasil continua funcionando normalmente)",
+            "Corrigido: no Cooperativo, a luta podia travar quando o último jogador vivo do grupo se atacava confuso tendo um pet de cura equipado"
+        ]
+    },
+    {
         version: "Beta 0.3.4 — Troca de Nome",
         date: "Outubro de 2026",
         changes: [

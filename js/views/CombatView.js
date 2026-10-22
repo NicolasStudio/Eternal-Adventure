@@ -221,7 +221,11 @@ export default class CombatView {
         // linha própria no log, sem esquiva/crítico. Roda antes do
         // combatLoop() checar checkCombatState(), então um golpe que
         // mate o monstro aqui já é detectado como vitória na sequência.
-        if (result.attacker === "player") {
+        //
+        // Só se a luta AINDA não acabou com o golpe do jogador: monstro
+        // já morto não leva mordida (nem o pet cura depois da vitória), e
+        // jogador que se matou confuso não é "revivido" pela cura do pet.
+        if (result.attacker === "player" && !this.engine.checkCombatState().finished) {
 
             const petResult = this.engine.petBite(result.damage);
 
