@@ -1,6 +1,15 @@
 export default [
 
     {
+        version: "Beta 0.3.2 — Cassino",
+        date: "Outubro de 2026",
+        changes: [
+            "Novo: Cassino! O dado ao lado do Correio, na tela inicial, abre um caça-níquel de 3 bobinas — só a linha do meio conta, e ganha quem tirar o mesmo símbolo nas 3 bobinas dela. Prêmios, do mais comum ao mais raro: Semente de Batata, 5x Tripla Poção Média, o dobro do valor apostado em ouro, 1x Morango, 1x Quartzo Rosa Nível I e, muitíssimo mais raro que todo o resto, a arma Lendária da sua própria classe (cada classe só pode ganhar a própria arma)",
+            "Cassino: 3 giros grátis por dia, por personagem, que resetam à meia-noite de Brasília — validado pelo relógio do servidor, não pelo do computador. Depois das 3 grátis, cada giro custa 5.000 de ouro"
+        ]
+    },
+
+    {
         version: "Beta 0.3.1 — Correções de Status",
         date: "Outubro de 2026",
         changes: [
