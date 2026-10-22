@@ -1,11 +1,11 @@
 import SaveService from "../../../services/SaveService.js";
 
-const MAX_LENGTH = 8;
-const MIN_LENGTH = 5;
-const VALID_NAME = /^[A-Za-zÀ-ÿ0-9]+$/;
-const CHECK_SPECIAL_CHARS = true;
+const MAX_LENGTH = SaveService.NAME_MAX_LENGTH;
 const CHECK_DEBOUNCE_MS = 450;
 
+// Nome do personagem — usado na criação (HomeScreen) e na troca de nome
+// (Configurações). Formato vem de SaveService.validateCharacterNameFormat,
+// a mesma regra que a troca de nome confere de novo antes de gravar.
 export default class NameEntryModal {
     constructor() {
         this.overlay = null;
@@ -13,20 +13,18 @@ export default class NameEntryModal {
 
     // Só o formato — instantâneo, sem rede.
     validateFormat(value) {
-
-        if (value.length < MIN_LENGTH) {
-            return "Seu nome tem que ter mais de 4 caracteres.";
-        }
-
-        if (CHECK_SPECIAL_CHARS && !VALID_NAME.test(value)) {
-            return "Não pode caractere especial.";
-        }
-
-        return null;
-
+        return SaveService.validateCharacterNameFormat(value);
     }
 
-    show() {
+    // title/hint/confirmLabel: textos do modal. isTaken: checagem de nome
+    // em uso — na troca de nome, o nome da própria conta conta como livre
+    // (ver SaveService.isCharacterNameTakenByOther).
+    show({
+        title = "Nova Aventura",
+        hint = "Como devemos te chamar?",
+        confirmLabel = "Confirmar",
+        isTaken = (value) => SaveService.isCharacterNameTaken(value)
+    } = {}) {
         return new Promise(resolve => {
 
             this.overlay = document.createElement("div");
@@ -34,8 +32,8 @@ export default class NameEntryModal {
             this.overlay.innerHTML = `
                 <div class="continue-modal">
                     <button class="close-btn close-btn--corner reward-close" id="name-entry-close"><i class="fa-solid fa-xmark"></i></button>
-                    <h2 class="continue-title">Nova Aventura</h2>
-                    <p class="name-entry-hint">Como devemos te chamar?</p>
+                    <h2 class="continue-title">${title}</h2>
+                    <p class="name-entry-hint">${hint}</p>
                     <input
                         type="text"
                         class="name-entry-input"
@@ -46,7 +44,7 @@ export default class NameEntryModal {
                     <div class="name-entry-count">0/${MAX_LENGTH}</div>
                     <span class="continue-warning name-entry-error" hidden></span>
                     <div class="continue-actions">
-                        <button class="name-entry-confirm" disabled>Confirmar</button>
+                        <button class="name-entry-confirm" disabled>${confirmLabel}</button>
                     </div>
                 </div>
             `;
@@ -77,7 +75,7 @@ export default class NameEntryModal {
                 setError("Verificando nome...");
                 confirmButton.disabled = true;
 
-                const taken = await SaveService.isCharacterNameTaken(value);
+                const taken = await isTaken(value);
 
                 if (myToken !== checkToken) return;
 
@@ -129,7 +127,7 @@ export default class NameEntryModal {
                 clearTimeout(debounceTimer);
                 confirmButton.disabled = true;
 
-                const taken = await SaveService.isCharacterNameTaken(value);
+                const taken = await isTaken(value);
 
                 if (taken) {
                     setError("Esse nome já está sendo usado.");

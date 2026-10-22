@@ -1,6 +1,13 @@
 export default [
 
     {
+        version: "Beta 0.3.4 — Troca de Nome",
+        date: "Outubro de 2026",
+        changes: [
+            "Agora dá pra trocar o nome do personagem: Configurações (dentro do jogo) → Personagem → Trocar nome. É grátis, uma vez a cada 6 meses por personagem, com as mesmas regras de nome da criação (5 a 8 letras ou números, sem caractere especial, e não pode estar em uso por outro jogador). O nome antigo fica livre pra outros jogadores e o Ranking passa a mostrar o novo"
+        ]
+    },
+    {
         version: "Beta 0.3.3 — Cassino",
         date: "Outubro de 2026",
         changes: [
