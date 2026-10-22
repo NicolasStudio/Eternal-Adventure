@@ -659,6 +659,16 @@
         height:44px;
         font-size:16px;
     }
+    /* Card mais estreito (190px) nesse breakpoint não cabe 4 ícones de
+       34px numa linha só — o 4º quebrava pra uma segunda linha sozinho.
+       Encolhe ícone/gap só aqui pra sempre caber os 4 numa linha. */
+    .drops-list{
+        gap:6px;
+    }
+    .dungeon-drop img{
+        width:28px;
+        height:28px;
+    }
 }
 
 /* ----------------------------------------------------------

@@ -1,6 +1,8 @@
 import items from "./items.js";
 import enchantmentStone from "./enchantmentStone.js";
 import pets from "./pet.js";
+import ring from "./ring.js";
+import amulet from "./amulet.js";
 
 const monstersRaid = [
 
@@ -46,7 +48,6 @@ const monstersRaid = [
             },
             {
                 pool: [
-                    { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
                     { type: ["boot"], rarity: "legendary", chance: 7 },
                     { item: enchantmentStone.quartzoRosaTres, chance: 10 },
                     { item: enchantmentStone.quartzoRosaDois, chance: 13 },
@@ -95,7 +96,6 @@ const monstersRaid = [
             },
             {
                 pool: [
-                    { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
                     { type: ["leg"], rarity: "legendary", chance: 7 },
                     { item: enchantmentStone.quartzoRosaTres, chance: 10 },
                     { item: enchantmentStone.quartzoRosaDois, chance: 13 },
@@ -144,8 +144,8 @@ const monstersRaid = [
             },
             {
                 pool: [
-                    { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
-                    { type: ["ring", "amulet"], rarity: "legendary", chance: 7 },
+                    { item: ring.ringSkullLegendary, chance: 3.5 },
+                    { item: amulet.amuletSkullLegendary, chance: 3.5 },
                     { item: enchantmentStone.quartzoRosaTres, chance: 10 },
                     { item: enchantmentStone.quartzoRosaDois, chance: 13 },
                     { item: enchantmentStone.quartzoRosaUm, chance: 65 }
@@ -193,8 +193,8 @@ const monstersRaid = [
             },
             {
                 pool: [
-                    { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
-                    { type: ["ring", "amulet"], rarity: "legendary", chance: 7 },
+                    { item: ring.ringPrimalLegendary, chance: 3.5 },
+                    { item: amulet.amuletPrimalLegendary, chance: 3.5 },
                     { item: enchantmentStone.quartzoRosaTres, chance: 10 },
                     { item: enchantmentStone.quartzoRosaDois, chance: 13 },
                     { item: enchantmentStone.quartzoRosaUm, chance: 65 }
@@ -243,7 +243,8 @@ const monstersRaid = [
             {
                 pool: [
                     { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
-                    { type: ["ring", "amulet"], rarity: "legendary", chance: 7 },
+                    { item: ring.ringModernLegendary, chance: 3.5 },
+                    { item: amulet.amuletModernLegendary, chance: 3.5 },
                     { item: enchantmentStone.quartzoRosaTres, chance: 10 },
                     { item: enchantmentStone.quartzoRosaDois, chance: 13 },
                     { item: enchantmentStone.quartzoRosaUm, chance: 65 }
@@ -291,7 +292,6 @@ const monstersRaid = [
             },
             {
                 pool: [
-                    { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
                     { type: ["chest"], rarity: "legendary", chance: 7 },
                     { item: enchantmentStone.quartzoRosaTres, chance: 10 },
                     { item: enchantmentStone.quartzoRosaDois, chance: 13 },
@@ -351,6 +351,57 @@ const monstersRaid = [
     },
 
     {
+        id: "drake_sakura",
+        element: "plant",
+        name: "Dragão de Sakura",
+        level: 180,
+        type: "beast",
+
+        sprite: "assets/img/monstersRaid/drake-sakura.png",
+        floor: 8,
+
+        status: {
+            vidaMaxima: 22443,
+            ataque:[
+                {
+                    nomeAtaque: "Mordida",
+                    dano: 433,
+                },
+                {
+                    nomeAtaque: "Chicote de Vinha",
+                    dano: 451,
+                },
+                {
+                    nomeAtaque: "Dança das Pétalas",
+                    dano: 500,
+                },
+            ],
+            armadura: 265,
+            agilidade: 320,
+            xp: 0,
+            ouro: 120000
+        },
+
+        drops: [
+            {
+                item: items.largePotion,
+                quantidade: 10
+            },
+            {
+                pool: [
+                    { item: ring.ringLoveLegendary, chance: 2.75 },
+                    { item: amulet.amuletLoveLegendary, chance: 2.75 },
+                    { item: ring.ringLuckLegendary, chance: 2.75 },
+                    { item: amulet.amuletLuckLegendary, chance: 2.75 },
+                    { item: enchantmentStone.quartzoRosaTres, chance: 10 },
+                    { item: enchantmentStone.quartzoRosaDois, chance: 13 },
+                    { item: enchantmentStone.quartzoRosaUm, chance: 65 }
+                ]
+            }
+        ]
+    },
+
+    {
         id: "drake_plant",
         element: "plant",
         name: "Dragão Yggdrasil",
@@ -389,7 +440,6 @@ const monstersRaid = [
             },
             {
                 pool: [
-                    { item: { ...pets.boitataPet1, icon: "assets/img/assets/eggs_drop/egg-snake.png" }, chance: 5 },
                     { type: ["weapon"], rarity: "legendary", chance: 7 },
                     { item: enchantmentStone.quartzoRosaTres, chance: 10 },
                     { item: enchantmentStone.quartzoRosaDois, chance: 13 },
