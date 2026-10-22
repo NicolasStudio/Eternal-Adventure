@@ -1,11 +1,22 @@
 export default [
 
     {
-        version: "Beta 0.3.2 — Cassino",
+        version: "Beta 0.3.3 — Cassino",
         date: "Outubro de 2026",
         changes: [
             "Novo: Cassino! O dado ao lado do Correio, na tela inicial, abre um caça-níquel de 3 bobinas — só a linha do meio conta, e ganha quem tirar o mesmo símbolo nas 3 bobinas dela. Prêmios, do mais comum ao mais raro: Semente de Batata, 5x Tripla Poção Média, o dobro do valor apostado em ouro, 1x Morango, 1x Quartzo Rosa Nível I e, muitíssimo mais raro que todo o resto, a arma Lendária da sua própria classe (cada classe só pode ganhar a própria arma)",
             "Cassino: 3 giros grátis por dia, por personagem, que resetam à meia-noite de Brasília — validado pelo relógio do servidor, não pelo do computador. Depois das 3 grátis, cada giro custa 5.000 de ouro"
+        ]
+    },
+
+    {
+        version: "Beta 0.3.2 — Anéis e Amuletos",
+        date: "Outubro de 2026",
+        changes: [
+            "Anel e Amuleto reorganizados: cada variante agora dá só UM atributo (antes dava dois). Anel/Amuleto Primal passa a dar só Agilidade (antes Ataque+Agilidade); Anel/Amuleto do Primeiro Imperador (Amuleto renomeado de 'Moderno') passa a dar só Armadura (antes Vida+Armadura); Anel/Amuleto do Crânio, renomeado para 'do Cavaleiro Caveira', passa a dar só Ataque (antes Ataque+Sorte)",
+            "2 variantes novas de Anel/Amuleto: 'do Amor' (dá Vida) e 'do Leprechaun' (dá Sorte) — reaproveitam as curvas de valor das variantes antigas",
+            "2 novos chefes no Cooperativo: Dragão Caveira e Dragão de Sakura",
+            "A versão Lendária de cada Anel/Amuleto agora é fixa por chefe do Cooperativo, em vez de sorteada entre todas as variantes: Dragão Caveira dropa 'do Cavaleiro Caveira', Dragão Varejeiro dropa 'Primal', Dragão de Indra dropa 'do Primeiro Imperador', e Dragão de Sakura dropa 'do Amor' e 'do Leprechaun'"
         ]
     },
 
