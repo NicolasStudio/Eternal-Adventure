@@ -5,7 +5,9 @@ export default [
         date: "Outubro de 2026",
         changes: [
             "Corrigido: o pet continuava mordendo e curando depois que o seu golpe já tinha decidido a luta — nas Masmorras, no PVP (1x1, 2x2 e 3x3) e no Cooperativo. O pior caso: se você se atacasse confuso e morresse, a cura do Duende te trazia de volta. Agora o pet só age se a luta continua e você ainda está vivo (o Reviver do Yggdrasil continua funcionando normalmente)",
-            "Corrigido: no Cooperativo, a luta podia travar quando o último jogador vivo do grupo se atacava confuso tendo um pet de cura equipado"
+            "Corrigido: no Cooperativo, a luta podia travar quando o último jogador vivo do grupo se atacava confuso tendo um pet de cura equipado",
+            "Corrigido: os pontos do Torneio eram da conta, então todos os personagens dela apareciam no ranking com a mesma pontuação, mesmo os que nunca jogaram o Ranqueado. Agora cada personagem tem os seus. Os pontos que já existiam ficam com o personagem de maior nível da conta, e os outros começam do zero",
+            "Corrigido: depois de um reset de temporada do Torneio, os pontos antigos voltavam para o ranking assim que o jogador salvava. Agora o reset vale também para o save de cada personagem, inclusive de quem estava offline"
         ]
     },
     {

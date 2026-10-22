@@ -1051,6 +1051,10 @@ export default class PvpView {
             // Game.js) — diferente de pvpWins (só conquista local), o
             // Torneio é um ranking que outros jogadores veem.
             if (this.matchData.ranked) {
+                // Temporada nova desde o último save? Zera os pontos
+                // antigos ANTES de somar — senão o próximo save zeraria
+                // esta vitória junto (ver SaveService.syncTournamentSeason).
+                await SaveService.syncTournamentSeason(this.player, true);
                 this.rankedPointsEarned = RANKED_POINTS_BY_TEAM_SIZE[1];
                 this.player.progress.stats.pvpRankedPoints = (this.player.progress.stats.pvpRankedPoints ?? 0) + this.rankedPointsEarned;
                 // Conquistas "Já ta valendo?" — vitórias, não pontos.
@@ -1099,6 +1103,7 @@ export default class PvpView {
             // 2 pontos no 2x2, 3 no 3x3 — ver RANKED_POINTS_BY_TEAM_SIZE.
             // Salva na nuvem na hora, mesmo motivo do 1x1 acima.
             if (this.matchData.ranked) {
+                await SaveService.syncTournamentSeason(this.player, true);
                 this.rankedPointsEarned = RANKED_POINTS_BY_TEAM_SIZE[this.getTeamSize()] ?? 0;
                 this.player.progress.stats.pvpRankedPoints = (this.player.progress.stats.pvpRankedPoints ?? 0) + this.rankedPointsEarned;
                 // Conquistas "Já ta valendo?" — vitórias, não pontos.

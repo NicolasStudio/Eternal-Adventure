@@ -30,6 +30,10 @@ const SAVES_COLLECTION = "saves";
 const CHARACTER_NAMES_COLLECTION = "characterNames";
 const LEADERBOARD_COLLECTION = "leaderboard";
 const ENTITLEMENTS_COLLECTION = "entitlements";
+// Temporada atual do Torneio (ver syncTournamentSeason) — só a conta
+// admin escreve, todo mundo lê.
+const TOURNAMENT_SEASON_DOC = ["tournament", "season"];
+const TOURNAMENT_SEASON_CACHE_MS = 5 * 60 * 1000;
 
 // Quantos personagens uma conta pode ter: 1 grátis + 1 pago (ver entitlements).
 export const MAX_SLOTS = 2;
@@ -634,13 +638,13 @@ export default class SaveService {
         if (!raw || typeof raw !== "object") return null;
 
         if (raw.version === CONTAINER_VERSION && raw.slots && typeof raw.slots === "object") {
-            return {
+            return this.migrateRankedPoints({
                 version: CONTAINER_VERSION,
                 savedAt: raw.savedAt ?? Date.now(),
                 activeSlot: Number(raw.activeSlot) || 1,
                 account: { ...this.emptyAccount(), ...raw.account },
                 slots: { ...raw.slots }
-            };
+            });
         }
 
         if (!raw.classId) return null;
@@ -658,6 +662,42 @@ export default class SaveService {
 
     }
 
+    // Saves de antes dos pontos do Torneio virarem por personagem: o valor
+    // ficava em account.stats e aparecia igual em TODOS os slots (e no
+    // ranking de cada um). Não dá pra saber qual personagem pontuou de
+    // verdade, então o valor vai pro de maior nível (empate → menor slot),
+    // que é quase sempre o principal; os outros começam do zero. Só roda
+    // se nenhum slot ainda tiver os seus pontos próprios.
+    static migrateRankedPoints(container) {
+
+        const legacy = container.account.stats?.pvpRankedPoints;
+
+        if (legacy === undefined) return container;
+
+        const { pvpRankedPoints, ...accountStats } = container.account.stats;
+        container.account = { ...container.account, stats: accountStats };
+
+        const slots = Object.keys(container.slots)
+            .filter(slot => container.slots[slot])
+            .sort((a, b) => (container.slots[b].level ?? 0) - (container.slots[a].level ?? 0) || a - b);
+
+        const alreadyMigrated = slots.some(slot => container.slots[slot].progress?.stats?.pvpRankedPoints !== undefined);
+
+        if (!alreadyMigrated && slots.length && Number(legacy) > 0) {
+            const main = container.slots[slots[0]];
+            container.slots[slots[0]] = {
+                ...main,
+                progress: {
+                    ...main.progress,
+                    stats: { ...main.progress?.stats, pvpRankedPoints: Number(legacy) }
+                }
+            };
+        }
+
+        return container;
+
+    }
+
     // Separa um personagem (formato plano do serialize) entre o que é da
     // conta e o que é dele.
     static splitCharacter(flat) {
@@ -669,7 +709,9 @@ export default class SaveService {
         // personagem novo na mesma conta herdava os dragões que outro
         // personagem já tinha vencido (ex: Poção Grande liberada na loja
         // de um nível 1 só porque outro slot já venceu o Dragão Abissal).
-        const { wolfEggGranted, raidBossesDefeated, ...accountStats } = stats;
+        // pvpRankedPoints (pontos do Torneio) idem: cada personagem tem a
+        // sua linha no ranking, então cada um pontua sozinho.
+        const { wolfEggGranted, raidBossesDefeated, pvpRankedPoints, ...accountStats } = stats;
 
         return {
             account: {
@@ -684,7 +726,8 @@ export default class SaveService {
                 progress: {
                     ...progressRest,
                     stats: {
-                        raidBossesDefeated: Array.isArray(raidBossesDefeated) ? raidBossesDefeated : []
+                        raidBossesDefeated: Array.isArray(raidBossesDefeated) ? raidBossesDefeated : [],
+                        pvpRankedPoints: Number(pvpRankedPoints) || 0
                     }
                 }
             }
@@ -723,6 +766,9 @@ export default class SaveService {
                     raidBossesDefeated: characterStats.raidBossesDefeated?.length
                         ? characterStats.raidBossesDefeated
                         : (container.account?.stats?.raidBossesDefeated ?? []),
+                    // Sem fallback pra conta: o valor antigo da conta já
+                    // foi entregue a um slot só em migrateRankedPoints.
+                    pvpRankedPoints: Number(characterStats.pvpRankedPoints) || 0,
                     wolfEggGranted: wolfEggGranted === true
                 }
             }
@@ -1299,6 +1345,8 @@ export default class SaveService {
 
         try {
 
+            await this.syncTournamentSeason(player);
+
             await setDoc(doc(firestore, LEADERBOARD_COLLECTION, this.leaderboardId(uid, slot)), {
                 name: player.name ?? player.class.name,
                 level: player.level,
@@ -1457,7 +1505,20 @@ export default class SaveService {
     // aqui: um setDoc normal tentaria regravar o documento inteiro e
     // esbarraria na mesma regra. Devolve quantos registros foram
     // zerados.
+    //
+    // Zerar só o ranking não basta: os pontos também ficam no save de
+    // cada personagem, e o próximo save republicaria o valor antigo. Por
+    // isso a temporada sobe ANTES — cada personagem zera os próprios
+    // pontos sozinho quando vê uma temporada diferente da sua (ver
+    // syncTournamentSeason), inclusive quem está offline agora.
     static async resetAllRankedPoints() {
+
+        const season = (await this.getTournamentSeason(true)) + 1;
+
+        await setDoc(doc(firestore, ...TOURNAMENT_SEASON_DOC), { season, resetAt: Date.now() });
+
+        this.tournamentSeason = season;
+        this.tournamentSeasonFetchedAt = Date.now();
 
         const leaderboardQuery = query(
             collection(firestore, LEADERBOARD_COLLECTION),
@@ -1473,6 +1534,50 @@ export default class SaveService {
         );
 
         return toReset.length;
+
+    }
+
+    // Temporada atual do Torneio (0 enquanto nunca houve reset). Guardada
+    // por alguns minutos pra não ler o Firestore a cada save; `fresh`
+    // força a leitura (vitória ranqueada, reset). Se a leitura falhar,
+    // devolve null e ninguém tem os pontos zerados por engano.
+    static async getTournamentSeason(fresh = false) {
+
+        const cached = Number.isInteger(this.tournamentSeason)
+            && Date.now() - (this.tournamentSeasonFetchedAt ?? 0) < TOURNAMENT_SEASON_CACHE_MS;
+
+        if (cached && !fresh) return this.tournamentSeason;
+
+        try {
+
+            const snapshot = await getDoc(doc(firestore, ...TOURNAMENT_SEASON_DOC));
+            this.tournamentSeason = Number(snapshot.exists() ? snapshot.data().season : 0) || 0;
+            this.tournamentSeasonFetchedAt = Date.now();
+            return this.tournamentSeason;
+
+        } catch (err) {
+
+            console.warn("Falha ao ler a temporada do Torneio:", err);
+            return Number.isInteger(this.tournamentSeason) ? this.tournamentSeason : null;
+
+        }
+
+    }
+
+    // Personagem que pontuou numa temporada anterior começa a atual do
+    // zero. progress.rankedSeason fica fora de progress.stats, então é
+    // por personagem (igual aos pontos — ver splitCharacter). Personagem
+    // sem o campo é de antes da primeira temporada (0).
+    static async syncTournamentSeason(player, fresh = false) {
+
+        const season = await this.getTournamentSeason(fresh);
+
+        if (season === null) return;
+
+        if ((player.progress.rankedSeason ?? 0) !== season) {
+            player.progress.stats.pvpRankedPoints = 0;
+            player.progress.rankedSeason = season;
+        }
 
     }
 

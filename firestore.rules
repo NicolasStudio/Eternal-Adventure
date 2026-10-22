@@ -103,6 +103,19 @@ service cloud.firestore {
         && request.resource.data.rankedPoints <= 999999;
     }
 
+    // Temporada do Torneio (ver SaveService.syncTournamentSeason): todo
+    // mundo lê pra saber se os próprios pontos são de uma temporada
+    // antiga; só a conta admin avança, e sempre de 1 em 1.
+    match /tournament/season {
+      allow read: if signedIn();
+      allow create, update: if signedIn()
+        && request.auth.uid == "qgZA5v7Q1IWLjYc99bNrrRJd14X2"
+        && request.resource.data.keys().hasOnly(['season', 'resetAt'])
+        && request.resource.data.season is int
+        && request.resource.data.season == (resource == null ? 0 : resource.data.season) + 1
+        && request.resource.data.resetAt is int;
+    }
+
     // Fazenda compartilhada (ver js/services/FarmSyncService.js): cada
     // personagem logado espelha os 24 canteiros aqui pra outros jogadores
     // poderem visitar. Id = "uid_slot", igual ao leaderboard — o dono é a
