@@ -22,6 +22,7 @@ import BlacksmithFusion from "./../city/BlacksmithFusion.js";
 import ChestHUD from "./components/ChestHUD.js";
 import ChatHUD from "./components/ChatHUD.js";
 import MailModal from "./components/modals/MailModal.js";
+import CasinoModal from "./components/modals/CasinoModal.js";
 import SpeakerModal from "./components/modals/SpeakerModal.js";
 import SpeakerBanner from "./components/SpeakerBanner.js";
 import SpeakerService from "../services/SpeakerService.js";
@@ -66,6 +67,7 @@ export default class HudScreen {
         this.chestHUD = new ChestHUD(game);
         this.chatHUD = new ChatHUD(game);
         this.mailModal = new MailModal(game);
+        this.casinoModal = new CasinoModal(game);
         this.speakerModal = new SpeakerModal(game);
         this.speakerBanner = new SpeakerBanner();
         this.newsModal = new NewsModal();
@@ -130,6 +132,7 @@ export default class HudScreen {
                         ${this.chatHUD.renderButton()}
                         ${this.currentView === "farm" ? this.farmView.renderVisitButton() : ""}
                         ${this.currentView === "" && !anyCombat ? this.mailModal.renderButton() : ""}
+                        ${this.currentView === "" && !anyCombat ? this.casinoModal.renderButton() : ""}
                         ${this.currentView === "" && !anyCombat && SpeakerService.isAdmin(AuthService.getCurrentUser()?.uid) ? this.speakerModal.renderButton() : ""}
                     </div>
                     ${!anyCombat ? this.chestHUD.render() : ""}
@@ -537,6 +540,7 @@ export default class HudScreen {
         if (!this.inCombat) this.chestHUD.registerEvents(this.element);
         this.chatHUD.registerEvents(this.element);
         this.mailModal.registerEvents(this.element);
+        this.casinoModal.registerEvents(this.element);
         this.speakerModal.registerEvents(this.element);
         this.registerEvents();
         switch (this.currentView) {
@@ -651,6 +655,7 @@ export default class HudScreen {
         if (!this.inCombat) this.chestHUD.registerEvents(this.element);
         this.chatHUD.registerEvents(this.element);
         this.mailModal.registerEvents(this.element);
+        this.casinoModal.registerEvents(this.element);
         this.speakerModal.registerEvents(this.element);
         this.registerEvents();
         this.updateMusic();
