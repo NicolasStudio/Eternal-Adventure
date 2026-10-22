@@ -562,7 +562,13 @@ export default class RaidCombatService {
                     ? Math.floor(damage * attacker.petMimicRatio)
                     : attacker.petBiteDamage;
 
-                if (!isBossTurn && (petBiteAmount > 0 || attacker.petHealAmount > 0)) {
+                // Só se a luta continua: chefe ainda vivo e o dono do pet
+                // também (ele pode ter se matado confuso). Sem isso o pet
+                // curava depois da vitória — e, se o dono era o último vivo
+                // do squad, a cura procurava alguém numa lista vazia e
+                // quebrava a simulação.
+                if (!isBossTurn && (petBiteAmount > 0 || attacker.petHealAmount > 0)
+                    && bossCombatant.currentHP > 0 && attacker.currentHP > 0) {
 
                     let biteDamage = 0;
 
