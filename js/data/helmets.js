@@ -97,7 +97,7 @@ const helmets = {
 
         stats: {
             armor: 4,
-            absorption: 13.4
+            absorption: 15.1
         },
 
         value: 0,
@@ -220,7 +220,7 @@ const helmets = {
 
         stats: {
             armor: 9,
-            penetration: 13.4
+            penetration: 9.7
         },
 
         value: 0,
@@ -342,7 +342,7 @@ const helmets = {
 
         stats: {
             armor: 7,
-            criticalChance: 13.4
+            criticalChance: 15.7
         },
 
         value: 0,
@@ -465,7 +465,7 @@ const helmets = {
 
         stats: {
             armor: 7,
-            lifeSteal: 13.4
+            lifeSteal: 13
         },
 
         value: 0,
@@ -586,7 +586,7 @@ const helmets = {
 
         stats: {
             armor: 9,
-            miasmaChance: 13.4
+            miasmaChance: 15.9
         },
 
         value: 0,
@@ -714,7 +714,7 @@ const helmets = {
         // (PvpCombatService): 40% dava ~84% de taxa de vitória.
         stats: {
             armor: 11,
-            reflection: 5.9
+            reflection: 5.5
         },
 
         value: 0,
@@ -834,7 +834,7 @@ const helmets = {
 
         stats: {
             armor: 3,
-            confusionChance: 13.4
+            confusionChance: 11.4
         },
 
         value: 0,
@@ -954,7 +954,7 @@ const helmets = {
 
         stats: {
             armor: 9,
-            paralysisChance: 13.4
+            paralysisChance: 11.8
         },
 
         value: 0,
@@ -1074,7 +1074,7 @@ const helmets = {
 
         stats: {
             armor: 9,
-            doubleStrikeChance: 13.4
+            doubleStrikeChance: 15.2
         },
 
         value: 0,
@@ -1194,7 +1194,7 @@ const helmets = {
 
         stats: {
             armor: 9,
-            gravityChance: 13.4
+            gravityChance: 14.7
         },
 
         value: 0,
