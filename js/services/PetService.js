@@ -27,9 +27,15 @@ const HARD_XP_MULTIPLIER = 2;
 
 // Do nível 25 ao 50, além do HARD_XP_MULTIPLIER acima, mais
 // EXTRA_HARD_XP_MULTIPLIER (25% a mais) — os dois multiplicam juntos,
-// então 25-49 fica em 2 × 1.25 = 2.5x a curva normal.
+// então 25-34 fica em 2 × 1.25 = 2.5x a curva normal.
 const EXTRA_HARD_XP_FROM_LEVEL = 25;
 const EXTRA_HARD_XP_MULTIPLIER = 1.25;
+
+// Do nível 35 ao 50, mais um VERY_HARD_XP_MULTIPLIER (dobro) em cima dos
+// dois de cima — reto final ficando mais lento ainda. 35-49 fica em
+// 2 × 1.25 × 2 = 5x a curva normal.
+const VERY_HARD_XP_FROM_LEVEL = 35;
+const VERY_HARD_XP_MULTIPLIER = 2;
 
 // Controla o pet-instância que mora no inventário/equipamento do
 // jogador (seu próprio uid, level, xp, fome, lastHungerTickAt). Os
@@ -79,6 +85,7 @@ export default class PetService {
 
         if (level >= HARD_XP_FROM_LEVEL) multiplier *= HARD_XP_MULTIPLIER;
         if (level >= EXTRA_HARD_XP_FROM_LEVEL) multiplier *= EXTRA_HARD_XP_MULTIPLIER;
+        if (level >= VERY_HARD_XP_FROM_LEVEL) multiplier *= VERY_HARD_XP_MULTIPLIER;
 
         return Math.round(XP_BASE * Math.pow(Math.max(1, level), XP_EXPONENT) * multiplier);
 
