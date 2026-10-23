@@ -305,6 +305,156 @@ const farmCrops = {
             sellValue: 6000, // preço da semente (5000) + 20%
             petFeedValue: 100 // preço da semente (5000) / 50
         }
+    },
+
+    pod: {
+        id: "pod",
+        seedId: "seed_pod",
+        name: "Vagem",
+        growTimeMs: 45 * 60 * 1000, // 45min
+        stageImages: [
+            "assets/img/assets/farm/stageSeed/pod-stage-1.png",
+            "assets/img/assets/farm/stageSeed/pod-stage-2.png",
+            "assets/img/assets/farm/stageSeed/pod-stage-3.png",
+            "assets/img/assets/farm/stageSeed/pod-stage-4.png",
+            "assets/img/assets/farm/stageSeed/pod-stage-5.png"
+        ],
+        harvestYield: 5,
+        petXP: 45,
+        harvestedItem: {
+            id: "pod",
+            name: "Vagem",
+            type: "item",
+            icon: "assets/img/assets/farm/seed/pod.png",
+            effect: "Um alimento colhido na Fazenda. Pode ser consumido por um pet.",
+            sellValue: 540, // preço da semente (450) + 20%
+            petFeedValue: 9 // preço da semente (450) / 50
+        }
+    },
+
+    cabbage: {
+        id: "cabbage",
+        seedId: "seed_cabbage",
+        name: "Repolho",
+        growTimeMs: 2 * 60 * 60 * 1000, // 2h
+        stageImages: [
+            "assets/img/assets/farm/stageSeed/cabbage-stage-1.png",
+            "assets/img/assets/farm/stageSeed/cabbage-stage-2.png",
+            "assets/img/assets/farm/stageSeed/cabbage-stage-3.png",
+            "assets/img/assets/farm/stageSeed/cabbage-stage-4.png",
+            "assets/img/assets/farm/stageSeed/cabbage-stage-5.png"
+        ],
+        harvestYield: 5,
+        petXP: 120,
+        harvestedItem: {
+            id: "cabbage",
+            name: "Repolho",
+            type: "item",
+            icon: "assets/img/assets/farm/seed/cabbage.png",
+            effect: "Um alimento colhido na Fazenda. Pode ser consumido por um pet.",
+            sellValue: 1020, // preço da semente (850) + 20%
+            petFeedValue: 17 // preço da semente (850) / 50
+        }
+    },
+
+    cranberry: {
+        id: "cranberry",
+        seedId: "seed_cranberry",
+        name: "Oxicoco",
+        growTimeMs: 10 * 60 * 60 * 1000, // 10h
+        stageImages: [
+            "assets/img/assets/farm/stageSeed/cranberry-stage-1.png",
+            "assets/img/assets/farm/stageSeed/cranberry-stage-2.png",
+            "assets/img/assets/farm/stageSeed/cranberry-stage-3.png",
+            "assets/img/assets/farm/stageSeed/cranberry-stage-4.png",
+            "assets/img/assets/farm/stageSeed/cranberry-stage-5.png"
+        ],
+        harvestYield: 7,
+        petXP: 600,
+        harvestedItem: {
+            id: "cranberry",
+            name: "Oxicoco",
+            type: "item",
+            icon: "assets/img/assets/farm/seed/cranberry.png",
+            effect: "Um alimento colhido na Fazenda. Pode ser consumido por um pet.",
+            sellValue: 2640, // preço da semente (2200) + 20%
+            petFeedValue: 44 // preço da semente (2200) / 50
+        }
+    },
+
+    banana: {
+        id: "banana",
+        seedId: "seed_banana",
+        name: "Banana",
+        growTimeMs: 18 * 60 * 60 * 1000, // 18h
+        stageImages: [
+            "assets/img/assets/farm/stageSeed/banana-stage-1.png",
+            "assets/img/assets/farm/stageSeed/banana-stage-2.png",
+            "assets/img/assets/farm/stageSeed/banana-stage-3.png",
+            "assets/img/assets/farm/stageSeed/banana-stage-4.png",
+            "assets/img/assets/farm/stageSeed/banana-stage-5.png"
+        ],
+        harvestYield: 8,
+        petXP: 1080,
+        harvestedItem: {
+            id: "banana",
+            name: "Banana",
+            type: "item",
+            icon: "assets/img/assets/farm/seed/banana.png",
+            effect: "Um alimento colhido na Fazenda. Pode ser consumido por um pet.",
+            sellValue: 3960, // preço da semente (3300) + 20%
+            petFeedValue: 66 // preço da semente (3300) / 50
+        }
+    },
+
+    mango: {
+        id: "mango",
+        seedId: "seed_mango",
+        name: "Manga",
+        growTimeMs: 24 * 60 * 60 * 1000, // 24h (valor dado pelo usuário)
+        stageImages: [
+            "assets/img/assets/farm/stageSeed/mango-stage-1.png",
+            "assets/img/assets/farm/stageSeed/mango-stage-2.png",
+            "assets/img/assets/farm/stageSeed/mango-stage-3.png",
+            "assets/img/assets/farm/stageSeed/mango-stage-4.png",
+            "assets/img/assets/farm/stageSeed/mango-stage-5.png"
+        ],
+        harvestYield: 7,
+        petXP: 1440,
+        harvestedItem: {
+            id: "mango",
+            name: "Manga",
+            type: "item",
+            icon: "assets/img/assets/farm/seed/mango.png",
+            effect: "Um alimento colhido na Fazenda. Pode ser consumido por um pet.",
+            sellValue: 6240, // preço da semente (5200) + 20%
+            petFeedValue: 104 // preço da semente (5200) / 50
+        }
+    },
+
+    avocado: {
+        id: "avocado",
+        seedId: "seed_avocado",
+        name: "Abacate",
+        growTimeMs: 42 * 60 * 60 * 1000, // 42h (valor dado pelo usuário) — a cultura mais longa do jogo
+        stageImages: [
+            "assets/img/assets/farm/stageSeed/avocado-stage-1.png",
+            "assets/img/assets/farm/stageSeed/avocado-stage-2.png",
+            "assets/img/assets/farm/stageSeed/avocado-stage-3.png",
+            "assets/img/assets/farm/stageSeed/avocado-stage-4.png",
+            "assets/img/assets/farm/stageSeed/avocado-stage-5.png"
+        ],
+        harvestYield: 8,
+        petXP: 2520,
+        harvestedItem: {
+            id: "avocado",
+            name: "Abacate",
+            type: "item",
+            icon: "assets/img/assets/farm/seed/avocado.png",
+            effect: "Um alimento colhido na Fazenda. Pode ser consumido por um pet.",
+            sellValue: 8400, // preço da semente (7000) + 20%
+            petFeedValue: 140 // preço da semente (7000) / 50
+        }
     }
 
 };

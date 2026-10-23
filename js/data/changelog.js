@@ -1,6 +1,15 @@
 export default [
 
     {
+        version: "Beta 0.3.6 — Novas Culturas",
+        date: "Outubro de 2026",
+        changes: [
+            "6 culturas novas na Fazenda: Vagem (45 minutos), Repolho (2 horas), Oxicoco (10 horas), Banana (18 horas), Manga (24 horas) e Abacate (42 horas) — este último é a cultura mais longa e mais valiosa do jogo até agora. Sementes à venda no Mercado, junto com as demais",
+            "A conquista Quitandinha agora pede os 18 alimentos"
+        ]
+    },
+
+    {
         version: "Beta 0.3.5 — Correções de Combate",
         date: "Outubro de 2026",
         changes: [
