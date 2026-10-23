@@ -29,17 +29,21 @@ const SECONDARY_BONUS_QUALITIES = ["exceptional", LEGENDARY_EXTRA_QUALITY];
 // FusionService.specialStats, pra nunca ficar fora de sincronia.
 const SECONDARY_STATS = FusionService.specialStats;
 
-// Bônus de "Excepcional" pra status SECUNDÁRIOS (teto por raridade, ver
-// rarities.js/secondaryCap). Não reaproveita a fórmula dos principais
-// (qualityStep × stepMultiplier) de propósito — daria um valor gigante
-// numa peça só. Crítico/Roubo de Vida/Penetração/Absorção só vêm de
-// Arma+Chapéu (Arma+Elmo no Bárbaro) desde a v3; os dois itens foram
-// calibrados pra, completos e no Excepcional, baterem exato no teto.
+// Bônus de "Excepcional" pra status SECUNDÁRIOS, por raridade. Não
+// reaproveita a fórmula dos principais (qualityStep × stepMultiplier) de
+// propósito — daria um valor gigante numa peça só. Crítico/Roubo de
+// Vida/Penetração/Absorção/etc só vêm de Arma+Chapéu (Arma+Elmo no
+// Bárbaro) — os dois itens de cada classe são calibrados pra, completos,
+// somarem um valor-alvo igual pra todas as classes (hoje 48% no
+// Lendário/55% no Ultraje — ver js/data/weapons.js e helmets.js).
 //
-// Exceção: Imitação do Mímico (reflection) tem teto próprio de 30 (bem
-// abaixo do secondaryCap normal), porque soma de uma vez em Ataque,
-// Armadura E Agilidade (ver MimicService.js) — curva da arma/elmo dela
-// recalibrada à parte pra fechar em 30 no Ultraje+Lendário.
+// Atenção Mímico: Imitação (reflection) copia o valor INTEIRO pra
+// Ataque, Armadura E Agilidade do oponente ao mesmo tempo (ver
+// MimicService.getCopiedBonus) — cada ponto percentual vale ~3x o de
+// qualquer outro atributo especial. Calibrar a arma/elmo dele pro MESMO
+// valor-alvo das outras classes, sem levar isso em conta, provavelmente
+// deixa o Mímico mais forte que as outras 9 — vale conferir com
+// simulação antes de confiar nesse número pra ele.
 const SECONDARY_EXCEPTIONAL_BONUS = {
     common: 2,
     uncommon: 3,

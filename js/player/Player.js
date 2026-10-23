@@ -847,8 +847,8 @@ export default class Player {
             // Quartzo Rosa: o bônus é sempre "special" na pedra/arma, mas
             // vira o atributo secundário real da classe do jogador
             // (Guerreiro = Absorção, Mago = Penetração, Bárbaro = Roubo de
-            // Vida, Arqueiro = Crítico, Pútrido = Miasma) — mesmo teto de secondaryCap das
-            // demais fontes desse atributo (ver PlayerStats.getFinalStats).
+            // Vida, Arqueiro = Crítico, Pútrido = Miasma) — soma direto,
+            // sem teto nenhum (ver PlayerStats.getFinalStats).
             const specialKey = this.getSpecialStatKey();
             if (specialKey) {
                 this.baseStats[specialKey] = (this.baseStats[specialKey] ?? 0) + delta;

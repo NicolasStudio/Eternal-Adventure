@@ -1387,8 +1387,9 @@ export default class CharacterView {
     ===================================================== */
 
     // Linhas repetidas nos 5 atributos especiais (ver PlayerStats.getFinalStats
-    // pro teto e MiasmaService.js pro corte do Miasma).
-    static SPECIAL_CAP_ROW = ["Teto", "A parte que vem do equipamento é limitada pela maior raridade equipada (Comum 8% … Ultraje 45%). O Quartzo Rosa soma por cima, sem limite."];
+    // pra fonte e MiasmaService.js pro corte do Miasma). Sem teto: o valor
+    // final é exatamente a soma de Arma + Elmo + Quartzo Rosa.
+    static SPECIAL_SOURCE_ROW = ["Fonte", "Soma direta do que Arma e Elmo equipados dão, mais o Quartzo Rosa (se tiver). Sem teto — melhorar qualquer um dos dois aumenta o valor final na mesma quantidade."];
     static MIASMA_PVE_TEXT = MIASMA_PVE_PERCENTS.slice(1).map(p => `${p}%`).join("/");
     static MIASMA_PVP_TEXT = MIASMA_STACK_PERCENTS.slice(1).map(p => `${p}%`).join("/");
     static MIASMA_SPECIAL_CUT = Math.round((1 - MIASMA_SPECIAL_KEEP) * 100);
@@ -1452,7 +1453,7 @@ export default class CharacterView {
             details: [
                 ["Quando ativa", `Multiplica o dano daquele golpe por ${CRITICAL_MULTIPLIER}×.`],
                 ["Chance", "Rolada de novo em todo ataque — não acumula, não garante o próximo."],
-                CharacterView.SPECIAL_CAP_ROW,
+                CharacterView.SPECIAL_SOURCE_ROW,
                 CharacterView.MIASMA_CUT_ROW
             ]
         },
@@ -1464,7 +1465,7 @@ export default class CharacterView {
             details: [
                 ["Quando ativa", "Recupera 20% do dano causado + 2% da sua Vida Máxima."],
                 ["Chance", "Rolada de novo em todo ataque, independente de crítico."],
-                CharacterView.SPECIAL_CAP_ROW,
+                CharacterView.SPECIAL_SOURCE_ROW,
                 CharacterView.MIASMA_CUT_ROW
             ]
         },
@@ -1476,7 +1477,7 @@ export default class CharacterView {
             details: [
                 ["Efeito", "A Armadura do alvo vale (100 − Penetração)% do valor real antes do dano ser calculado."],
                 ["Sempre ativa", "Ao contrário dos outros atributos especiais, não precisa de nenhuma sorte pra funcionar."],
-                CharacterView.SPECIAL_CAP_ROW,
+                CharacterView.SPECIAL_SOURCE_ROW,
                 CharacterView.MIASMA_CUT_ROW
             ]
         },
@@ -1489,7 +1490,7 @@ export default class CharacterView {
                 ["Contra monstros e chefes", `Absorve ${Math.round(ABSORPTION_RATIO_PVE * 100)}% do golpe.`],
                 ["Contra jogadores (PVP)", `Absorve ${Math.round(ABSORPTION_RATIO_PVP * 100)}% do golpe — você toma o resto.`],
                 ["Não é esquiva", "A Esquiva evita o golpe inteiro; a Absorção entra DEPOIS do golpe acertar. As duas se somam."],
-                ["Teto", `Nunca passa de ${ABSORPTION_CAP}% de chance. A parte do equipamento também é limitada pela maior raridade equipada (Comum 8% … Ultraje 45%); o Quartzo Rosa soma por cima.`],
+                ["Teto", `Nunca passa de ${ABSORPTION_CAP}% de chance — único atributo especial com um teto absoluto desses. Fora isso, é soma direta de Arma + Elmo + Quartzo Rosa, sem outro limite.`],
                 CharacterView.MIASMA_CUT_ROW
             ]
         },
@@ -1501,7 +1502,7 @@ export default class CharacterView {
             details: [
                 ["Intoxicação", `Até 4 acúmulos, reduzindo mais o Ataque, a Agilidade e a Armadura do alvo a cada um: −${CharacterView.MIASMA_PVE_TEXT}% contra monstro/chefe, −${CharacterView.MIASMA_PVP_TEXT}% no PVP.`],
                 ["Contra jogadores", `Também corta o Crítico/Roubo de Vida/Penetração/Absorção do alvo — ${CharacterView.MIASMA_SPECIAL_CUT}% até o fim da luta, e pela metade no golpe seguinte. Monstro e chefe não têm esses atributos, então essa parte só pesa no PVP.`],
-                CharacterView.SPECIAL_CAP_ROW
+                CharacterView.SPECIAL_SOURCE_ROW
             ]
         },
 
@@ -1513,7 +1514,7 @@ export default class CharacterView {
                 ["Fórmula", "Bônus = Imitação% × Ataque/Armadura/Agilidade do OPONENTE (não o dele) — recalculado a cada golpe, a partir de quem ele está enfrentando."],
                 ["Os três lados", "O bônus de Ataque passa pela mitigação normal (Armadura do alvo); o de Armadura/Agilidade valem o tempo todo, tanto quando ele ataca quanto quando apanha."],
                 ["Quanto mais forte o oponente", "Mais o Mímico ganha — mas o bônus de Ataque ainda é reduzido pela Armadura de quem ele está atacando, igual qualquer outro dano."],
-                CharacterView.SPECIAL_CAP_ROW
+                CharacterView.SPECIAL_SOURCE_ROW
             ]
         },
 
@@ -1526,7 +1527,7 @@ export default class CharacterView {
                 ["Ataca o alvo de sempre", "Dano do golpe sai com Ataque ×1,2."],
                 ["Ataca a si mesmo", "Dano do golpe sai com Ataque ×1,5, mirando o próprio confuso."],
                 ["Erra o ataque", "O golpe não acontece — sem dano, sem esquiva, sem crítico."],
-                CharacterView.SPECIAL_CAP_ROW
+                CharacterView.SPECIAL_SOURCE_ROW
             ]
         },
 
@@ -1537,7 +1538,7 @@ export default class CharacterView {
             details: [
                 ["O que acontece", "A paralisia fica pendente até o PRÓXIMO ataque de quem foi paralisado — esse golpe simplesmente não acontece, sem sortear nada: paralisado sempre perde o turno."],
                 ["Diferente da Confusão", "Não tem resultado alternativo nenhum (acertar o oponente, acertar a si mesmo) — é sempre o golpe inteiro perdido."],
-                CharacterView.SPECIAL_CAP_ROW
+                CharacterView.SPECIAL_SOURCE_ROW
             ]
         },
 
@@ -1548,7 +1549,7 @@ export default class CharacterView {
             details: [
                 ["O que acontece", "Resolve na hora, no mesmo golpe — repete o MESMO dano já calculado pro primeiro, sem rolar Crítico/Roubo de Vida/Absorção de novo e sem chance de errar."],
                 ["Diferente da Confusão/Paralisia", "Não existe nenhum estado pendente — não afeta o PRÓXIMO ataque de ninguém, só dobra o golpe atual."],
-                CharacterView.SPECIAL_CAP_ROW
+                CharacterView.SPECIAL_SOURCE_ROW
             ]
         },
 
@@ -1559,7 +1560,7 @@ export default class CharacterView {
             details: [
                 ["O que acontece", "A cada 3 acúmulos, eles são consumidos e o alvo recebe Gravidade Máxima — perde a PRÓXIMA ação de ataque por completo, e o PRÓXIMO golpe que ele receber conta só metade da Armadura dele."],
                 ["Depois disso", "A Armadura volta ao normal e a contagem de acúmulos recomeça do zero."],
-                CharacterView.SPECIAL_CAP_ROW
+                CharacterView.SPECIAL_SOURCE_ROW
             ]
         }
 

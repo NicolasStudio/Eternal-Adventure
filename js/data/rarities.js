@@ -10,7 +10,6 @@ const rarities = {
         color: "#FFFFFF",
         dropChance: 50,
         qualityStep: 2,
-        secondaryCap: 8,
         minLevel: 1
     },
 
@@ -20,7 +19,6 @@ const rarities = {
         color: "#69d823",
         dropChance: 25,
         qualityStep: 3,
-        secondaryCap: 14,
         minLevel: 10
     },
 
@@ -30,7 +28,6 @@ const rarities = {
         color: "#0050fc",
         dropChance: 15,
         qualityStep: 5,
-        secondaryCap: 20,
         minLevel: 20
     },
 
@@ -40,7 +37,6 @@ const rarities = {
         color: "#a950f7",
         dropChance: 7,
         qualityStep: 7,
-        secondaryCap: 28,
         minLevel: 40
     },
 
@@ -50,7 +46,6 @@ const rarities = {
         color: "#ff711f",
         dropChance: 5,
         qualityStep: 10,
-        secondaryCap: 35,
         minLevel: 100
     },
 
@@ -60,7 +55,6 @@ const rarities = {
         color: "#ff0000",
         dropChance: 0,
         qualityStep: 12,
-        secondaryCap: 45,
         minLevel: 100
     }
 };

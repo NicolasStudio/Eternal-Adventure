@@ -97,7 +97,7 @@ const helmets = {
 
         stats: {
             armor: 4,
-            absorption: 8.1
+            absorption: 13.4
         },
 
         value: 0,
@@ -220,7 +220,7 @@ const helmets = {
 
         stats: {
             armor: 9,
-            penetration: 4.5
+            penetration: 13.4
         },
 
         value: 0,
@@ -342,7 +342,7 @@ const helmets = {
 
         stats: {
             armor: 7,
-            criticalChance: 12.5
+            criticalChance: 13.4
         },
 
         value: 0,
@@ -465,7 +465,7 @@ const helmets = {
 
         stats: {
             armor: 7,
-            lifeSteal: 20.6
+            lifeSteal: 13.4
         },
 
         value: 0,
@@ -586,7 +586,7 @@ const helmets = {
 
         stats: {
             armor: 9,
-            miasmaChance: 8
+            miasmaChance: 13.4
         },
 
         value: 0,
@@ -707,9 +707,14 @@ const helmets = {
         rarity: rarities.legendary,
         icon: "assets/img/assets/items/helmets/helmets-mimic-rarity-lendario.png",
 
+        // Imitação (reflection) calibrada pra 30% no teto junto com a
+        // arma, não os 48% das outras classes — ela copia o % pra
+        // Ataque+Armadura+Agilidade do oponente AO MESMO TEMPO (ver
+        // MimicService.getCopiedBonus). Testado por simulação de combate
+        // (PvpCombatService): 40% dava ~84% de taxa de vitória.
         stats: {
             armor: 11,
-            reflection: 0.9
+            reflection: 5.9
         },
 
         value: 0,
@@ -829,7 +834,7 @@ const helmets = {
 
         stats: {
             armor: 3,
-            confusionChance: 8.7
+            confusionChance: 13.4
         },
 
         value: 0,
@@ -949,7 +954,7 @@ const helmets = {
 
         stats: {
             armor: 9,
-            paralysisChance: 7.6
+            paralysisChance: 13.4
         },
 
         value: 0,
@@ -1069,7 +1074,7 @@ const helmets = {
 
         stats: {
             armor: 9,
-            doubleStrikeChance: 7.6
+            doubleStrikeChance: 13.4
         },
 
         value: 0,
@@ -1189,7 +1194,7 @@ const helmets = {
 
         stats: {
             armor: 9,
-            gravityChance: 10.5
+            gravityChance: 13.4
         },
 
         value: 0,

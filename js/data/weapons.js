@@ -127,7 +127,7 @@ const weapons = {
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
-            absorption: 11.2
+            absorption: 18.6
         },
 
         value: 0,
@@ -262,13 +262,22 @@ const weapons = {
         weaponType: "scepter",
         rarity: rarities.legendary,
         icon: "assets/img/assets/items/weapons/scepter-rarity-lendario.png",
+        // Ataque subiu (14→24) porque rebalanceamentos anteriores
+        // cortaram só o Lendário (41→25→15) sem nunca tocar no Místico —
+        // no teto de qualidade o Cetro Lendário tinha ficado mais fraco
+        // que o Místico, mesmo totalmente upado (ver Espada/warrior pro
+        // mesmo padrão). Penetração recalibrada separado pra, somada com
+        // o Elmo, dar exatos 48% no teto de qualidade sem pedra — o valor
+        // final é só a soma dos itens (sem teto artificial, ver
+        // PlayerStats.getFinalStats), então mudar esse número aqui muda
+        // o resultado do jogador direto, sem nada escondendo a diferença.
         stats: {
-            attack: 14,
+            attack: 24,
             armor: 0,
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
-            penetration: 6.2
+            penetration: 18.6
         },
         value: 0,
         sellValue: 18860
@@ -401,7 +410,7 @@ const weapons = {
             attack: 50,
             armor: 0,
             agility: 4,
-            criticalChance: 17.2,
+            criticalChance: 18.6,
             lifeSteal: 0,
             penetration: 0
         },
@@ -541,7 +550,7 @@ const weapons = {
             armor: 0,
             agility: 2,
             criticalChance: 0,
-            lifeSteal: 28.3,
+            lifeSteal: 18.6,
             penetration: 0,
             absorption: 0
         },
@@ -702,7 +711,7 @@ const weapons = {
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            miasmaChance: 11.1
+            miasmaChance: 18.6
         },
 
         value: 0,
@@ -859,15 +868,24 @@ const weapons = {
         rarity: rarities.legendary,
         icon: "assets/img/assets/items/weapons/mirror-rarity-lendario.png",
 
+        // Ataque subiu (4→10) pelo mesmo motivo do Cetro do Mago acima: o
+        // corte anterior (Ataque 15→5) só mexeu no Lendário, nunca no
+        // Místico, e ele tinha ficado mais fraco que o Místico mesmo no
+        // teto. Imitação (reflection) calibrada à parte das outras
+        // classes: elas somam 48% no teto (Arma+Elmo), mas a Imitação
+        // copia esse % de Ataque+Armadura+Agilidade do oponente AO MESMO
+        // TEMPO (ver MimicService.getCopiedBonus) — testado por simulação
+        // de combate (PvpCombatService), 40% dava ~84% de taxa de
+        // vitória pro Mímico contra as outras classes. Teto-alvo: 30%.
         stats: {
-            attack: 4,
+            attack: 10,
             armor: 0,
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            reflection: 1.5
+            reflection: 8.1
         },
 
         value: 0,
@@ -1032,7 +1050,7 @@ const weapons = {
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            confusionChance: 12
+            confusionChance: 18.6
         },
 
         value: 0,
@@ -1197,7 +1215,7 @@ const weapons = {
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            paralysisChance: 10.4
+            paralysisChance: 18.6
         },
 
         value: 0,
@@ -1362,7 +1380,7 @@ const weapons = {
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            doubleStrikeChance: 10.5
+            doubleStrikeChance: 18.6
         },
 
         value: 0,
@@ -1527,7 +1545,7 @@ const weapons = {
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            gravityChance: 14.5
+            gravityChance: 18.6
         },
 
         value: 0,
