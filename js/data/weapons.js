@@ -121,13 +121,13 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/sword-rarity-lendario.png",
 
         stats: {
-            attack: 44,
+            attack: 49,
             armor: 0,
             agility: -8,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
-            absorption: 18.6
+            absorption: 20.9
         },
 
         value: 0,
@@ -272,12 +272,12 @@ const weapons = {
         // PlayerStats.getFinalStats), então mudar esse número aqui muda
         // o resultado do jogador direto, sem nada escondendo a diferença.
         stats: {
-            attack: 24,
+            attack: 17,
             armor: 0,
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
-            penetration: 18.6
+            penetration: 13.5
         },
         value: 0,
         sellValue: 18860
@@ -407,10 +407,10 @@ const weapons = {
         rarity: rarities.legendary,
         icon: "assets/img/assets/items/weapons/arch-rarity-lendario.png",
         stats: {
-            attack: 50,
+            attack: 58,
             armor: 0,
             agility: 4,
-            criticalChance: 18.6,
+            criticalChance: 21.7,
             lifeSteal: 0,
             penetration: 0
         },
@@ -546,11 +546,11 @@ const weapons = {
         rarity: rarities.legendary,
         icon: "assets/img/assets/items/weapons/ax-rarity-lendario.png",
         stats: {
-            attack: 87,
+            attack: 84,
             armor: 0,
             agility: 2,
             criticalChance: 0,
-            lifeSteal: 18.6,
+            lifeSteal: 18,
             penetration: 0,
             absorption: 0
         },
@@ -704,14 +704,14 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/stink-rarity-lendario.png",
 
         stats: {
-            attack: 39,
+            attack: 46,
             armor: 0,
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            miasmaChance: 18.6
+            miasmaChance: 22.1
         },
 
         value: 0,
@@ -878,14 +878,14 @@ const weapons = {
         // de combate (PvpCombatService), 40% dava ~84% de taxa de
         // vitória pro Mímico contra as outras classes. Teto-alvo: 30%.
         stats: {
-            attack: 10,
+            attack: 9,
             armor: 0,
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            reflection: 8.1
+            reflection: 7.6
         },
 
         value: 0,
@@ -1043,14 +1043,14 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/sledgehammer-rarity-lendario.png",
 
         stats: {
-            attack: 60,
+            attack: 51,
             armor: 0,
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            confusionChance: 18.6
+            confusionChance: 15.9
         },
 
         value: 0,
@@ -1208,14 +1208,14 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/tesla-coil-rarity-lendario.png",
 
         stats: {
-            attack: 34,
+            attack: 30,
             armor: 0,
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            paralysisChance: 18.6
+            paralysisChance: 16.4
         },
 
         value: 0,
@@ -1373,14 +1373,14 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/katana-rarity-lendario.png",
 
         stats: {
-            attack: 30,
+            attack: 34,
             armor: 0,
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            doubleStrikeChance: 18.6
+            doubleStrikeChance: 21.1
         },
 
         value: 0,
@@ -1538,14 +1538,14 @@ const weapons = {
         icon: "assets/img/assets/items/weapons/hammer-rarity-lendario.png",
 
         stats: {
-            attack: 48,
+            attack: 53,
             armor: 0,
             agility: 0,
             criticalChance: 0,
             lifeSteal: 0,
             penetration: 0,
             absorption: 0,
-            gravityChance: 18.6
+            gravityChance: 20.4
         },
 
         value: 0,
