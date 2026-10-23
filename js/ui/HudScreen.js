@@ -462,7 +462,7 @@ export default class HudScreen {
             this.setBackground("assets/img/backgrounds/arena_pvp.png");
         }
 
-        // Fazenda troca o fundo pro celeiro — sem fila/lobby pra
+        // Fazenda troca o fundo pro cenário dela — sem fila/lobby pra
         // limpar aqui (diferente de PVP/Coop), é só o background mesmo.
         if (this.currentView === "farm" && view !== "farm") {
             this.setBackground("assets/img/backgrounds/tela_inicial.png");
@@ -470,7 +470,7 @@ export default class HudScreen {
         }
 
         if (this.currentView !== "farm" && view === "farm") {
-            this.setBackground("assets/img/backgrounds/celeiro.png");
+            this.setBackground("assets/img/backgrounds/fazenda.png");
             // Sincroniza com a nuvem (o que visitantes fizeram) e carrega
             // a lista de fazendas pra visitar — ver FarmView.onOpen.
             this.farmView.onOpen();
