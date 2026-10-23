@@ -148,6 +148,78 @@ const seeds = {
         effect: "Plante num canteiro da Fazenda para cultivar Melancias.",
         value: 5000,
         sellValue: 2500
+    },
+
+    seed_pod: {
+        id: "seed_pod",
+        name: "Semente de Vagem",
+        type: "item",
+        category: "seed",
+        cropId: "pod",
+        icon: "assets/img/assets/farm/seed/seed-pod.png",
+        effect: "Plante num canteiro da Fazenda para cultivar Vagens.",
+        value: 450,
+        sellValue: 225
+    },
+
+    seed_cabbage: {
+        id: "seed_cabbage",
+        name: "Semente de Repolho",
+        type: "item",
+        category: "seed",
+        cropId: "cabbage",
+        icon: "assets/img/assets/farm/seed/seed-cabbage.png",
+        effect: "Plante num canteiro da Fazenda para cultivar Repolhos.",
+        value: 850,
+        sellValue: 425
+    },
+
+    seed_cranberry: {
+        id: "seed_cranberry",
+        name: "Semente de Oxicoco",
+        type: "item",
+        category: "seed",
+        cropId: "cranberry",
+        icon: "assets/img/assets/farm/seed/seed-cranberry.png",
+        effect: "Plante num canteiro da Fazenda para cultivar Oxicocos.",
+        value: 2200,
+        sellValue: 1100
+    },
+
+    seed_banana: {
+        id: "seed_banana",
+        name: "Semente de Banana",
+        type: "item",
+        category: "seed",
+        cropId: "banana",
+        icon: "assets/img/assets/farm/seed/seed-banana.png",
+        effect: "Plante num canteiro da Fazenda para cultivar Bananas.",
+        value: 3300,
+        sellValue: 1650
+    },
+
+    seed_mango: {
+        id: "seed_mango",
+        name: "Semente de Manga",
+        type: "item",
+        category: "seed",
+        cropId: "mango",
+        icon: "assets/img/assets/farm/seed/seed-mango.png",
+        effect: "Plante num canteiro da Fazenda para cultivar Mangas.",
+        value: 5200,
+        sellValue: 2600
+    },
+
+    seed_avocado: {
+        id: "seed_avocado",
+        name: "Semente de Abacate",
+        type: "item",
+        category: "seed",
+        cropId: "avocado",
+        icon: "assets/img/assets/farm/seed/seed-avocado.png",
+        effect: "Plante num canteiro da Fazenda para cultivar Abacates.",
+        value: 7000,
+        sellValue: 3500
     }
 
 };
