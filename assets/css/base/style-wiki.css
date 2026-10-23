@@ -302,6 +302,56 @@ body::before {
     height: 230px !important;
 }
 
+/* Tabela de dados (Sementes/Fazenda) */
+.wiki-food-table-wrap {
+    margin-top: 10px;
+    border: 1px solid #5b4633;
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+.wiki-food-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .85rem;
+}
+
+.wiki-food-table th,
+.wiki-food-table td {
+    padding: 10px 16px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.wiki-food-table thead th {
+    background: rgba(18, 13, 9, .8);
+    color: #f1c75c;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    border-bottom: 1px solid #5b4633;
+}
+
+.wiki-food-table tbody tr {
+    background: rgba(18, 13, 9, .5);
+}
+
+.wiki-food-table tbody tr:nth-child(even) {
+    background: rgba(18, 13, 9, .3);
+}
+
+.wiki-food-table td {
+    font-family: "MedievalSharp", cursive;
+    color: #e8d9b8;
+    font-variant-numeric: tabular-nums;
+}
+
+.wiki-food-table td:first-child {
+    font-family: inherit;
+    color: #f1c75c;
+    font-weight: 700;
+}
+
 /* Tabela simples (itens) */
 .wiki-table {
     display: flex;
