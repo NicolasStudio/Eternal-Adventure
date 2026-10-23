@@ -1,6 +1,17 @@
 export default [
 
     {
+        version: "Beta 0.3.7 — Celeiro",
+        date: "Outubro de 2026",
+        changes: [
+            "Novo: Celeiro! Na Fazenda, o botão sobre o celeiro no fundo leva pra dentro dele, onde mora uma galinha. Alimente com Milho (segura a fome por 10 minutos) ou Vagem (15 minutos) — o ícone de alimento aparece sobre a cabeça dela quando está com fome, mas dá pra alimentar a qualquer momento",
+            "Celeiro: a cada 15 minutos de galinha alimentada (o tempo pausa enquanto ela está com fome), ela entrega 3 ovos de uma vez — cada um com 10% de chance de sair Ovo Sortudo. Os dois vão pra aba Comida do inventário, mas só servem pra vender no Mercado (Ovo 50 de ouro, Ovo Sortudo 500)",
+            "Rebalanceamento dos atributos especiais (Chance Crítica, Roubo de Vida, Penetração, Absorção, Miasma, Imitação, Confusão, Paralisia, Golpe Duplo e Pressão Gravitacional): removido o teto por raridade de equipamento que existia antes — agora o valor final é sempre a soma direta do que a Arma e o Elmo Lendário dão (mais o Quartzo Rosa, que já não tinha teto). Pra a maioria das classes isso é um reforço direto no fim de jogo: Arma+Elmo Lendário de 9 das 10 classes foram recalibrados pra somarem os mesmos 48% no teto de qualidade (o Mímico ficou em 30%, de propósito — a Imitação dele conta em dobro, aplicando o mesmo % em Ataque, Armadura E Agilidade ao mesmo tempo, então o valor-alvo dele é mais baixo pra não ficar desproporcional)",
+            "Pets: a XP necessária pra subir do nível 35 ao 50 dobrou — a reta final fica mais demorada"
+        ]
+    },
+
+    {
         version: "Beta 0.3.6 — Novas Culturas",
         date: "Outubro de 2026",
         changes: [
