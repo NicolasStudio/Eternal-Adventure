@@ -36,10 +36,13 @@ export default class CharacterView {
         this.characterLightboxKeyHandler = null;
     }
 
-    // Semente, colheita da Fazenda (petFeedValue) ou Ração de Pet —
-    // saem da aba "Itens" genérica e vão pra aba própria "Comidas".
+    // Semente, colheita da Fazenda (petFeedValue), Ração de Pet ou
+    // produto de animal do Celeiro (category:"food", ver
+    // animalProducts.js — esses não servem de alimento pro pet, só
+    // vendem, mas ainda são "Comida" pro inventário) — saem da aba
+    // "Itens" genérica e vão pra aba própria "Comidas".
     static isFood(item) {
-        return item.category === "seed" || item.category === "ration" || item.petFeedValue > 0;
+        return item.category === "seed" || item.category === "ration" || item.category === "food" || item.petFeedValue > 0;
     }
 
     getFilteredInventory() {

@@ -509,6 +509,204 @@
     border-color:#d4a373;
 }
 
+/* ==========================================================
+   CELEIRO (sub-tela dentro da Fazenda — ver FarmView.renderBarnButton/
+   renderBarnView). Posição em % de propósito: o background usa
+   background-size:cover, então a posição do celeiro na imagem se move
+   um pouco com a proporção da tela — % acompanha isso melhor que px.
+========================================================== */
+.farm-barn-button{
+    position:absolute;
+    top:22%;
+    right:13%;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 18px;
+    background:linear-gradient(180deg,#2c1810,#1a0f0a);
+    border:2px solid #8b7355;
+    border-radius:8px;
+    color:#e6d2b5;
+    font-family:"Cinzel",serif;
+    font-size:.85rem;
+    cursor:pointer;
+    box-shadow:0 6px 18px rgba(0,0,0,.45);
+    transition:.2s;
+    z-index:12;
+}
+.farm-barn-button:hover{
+    border-color:#f1c75c;
+    transform:translateY(-2px);
+}
+
+.farm-barn-view{
+    position:absolute;
+    inset:0;
+}
+/* Mesma posição exata do botão "Ir para o celeiro" (farm-barn-button
+   acima) — faz sentido pro jogador entrar e sair sempre no mesmo lugar
+   da tela. */
+.farm-barn-back{
+    position:absolute;
+    top:22%;
+    right:13%;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 18px;
+    background:linear-gradient(180deg,#2c1810,#1a0f0a);
+    border:2px solid #8b7355;
+    border-radius:8px;
+    color:#e6d2b5;
+    font-family:"Cinzel",serif;
+    font-size:.85rem;
+    cursor:pointer;
+    box-shadow:0 6px 18px rgba(0,0,0,.45);
+    transition:.2s;
+    z-index:12;
+}
+.farm-barn-back:hover{
+    border-color:#f1c75c;
+    transform:translateY(-2px);
+}
+
+/* Galinha (ver FarmView.renderChicken) — posição em % de propósito,
+   mesmo motivo do botão do celeiro acima. */
+.farm-barn-chicken-wrap{
+    position:absolute;
+    left:38%;
+    bottom:14%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+.farm-barn-chicken{
+    width:85px;
+    height:auto;
+    image-rendering:pixelated;
+    filter:drop-shadow(0 6px 6px rgba(0,0,0,.5));
+}
+.farm-barn-bubbles{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-height:50px;
+    margin-bottom:4px;
+}
+.farm-barn-bubble{
+    position:relative;
+    width:48px;
+    height:48px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(180deg,#3a2816,#1a0f0a);
+    border:2px solid #f1c75c;
+    border-radius:50%;
+    box-shadow:0 4px 12px rgba(0,0,0,.5), 0 0 10px rgba(241,199,92,.35);
+    cursor:pointer;
+    animation:farmBarnBubblePop .35s ease, farmBarnBubbleFloat 1.6s ease-in-out .35s infinite;
+}
+.farm-barn-bubble img{
+    width:30px;
+    height:30px;
+    image-rendering:pixelated;
+}
+.farm-barn-bubble:hover{
+    border-color:#fff2c9;
+}
+@keyframes farmBarnBubblePop{
+    from{ transform:scale(.4); opacity:0; }
+    to{ transform:scale(1); opacity:1; }
+}
+@keyframes farmBarnBubbleFloat{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-6px); }
+}
+
+/* Ícone de milho acima da cabeça da galinha, ao lado de onde o balão de
+   ovo aparece (ver FarmView.renderChicken) — só existe enquanto ela está
+   com fome; clicar abre o seletor de alimento (renderFeedPicker). */
+.farm-barn-feed-icon{
+    position:relative;
+    width:34px;
+    height:34px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,.35);
+    border:2px solid #8b7355;
+    border-radius:50%;
+    cursor:pointer;
+    transition:.15s;
+}
+.farm-barn-feed-icon img{
+    width:22px;
+    height:22px;
+    object-fit:contain;
+    image-rendering:pixelated;
+}
+.farm-barn-feed-icon:hover{
+    border-color:#f1c75c;
+    background:rgba(241,199,92,.15);
+}
+
+/* Tooltip (atr. data-tooltip) compartilhado pelo ícone de alimentar e
+   pelos balões do celeiro — mesmo efeito de .farm-tool::after da
+   Fazenda. */
+.farm-barn-feed-icon::after,
+.farm-barn-bubble::after{
+    content:attr(data-tooltip);
+    position:absolute;
+    bottom:120%;
+    left:50%;
+    transform:translateX(-50%);
+    background:#24140d;
+    border:1px solid #8b7355;
+    color:#f0d5b0;
+    font-family:"Cinzel",serif;
+    font-size:12px;
+    padding:6px 10px;
+    white-space:nowrap;
+    opacity:0;
+    pointer-events:none;
+    transition:.2s;
+}
+.farm-barn-feed-icon:hover::after,
+.farm-barn-bubble:hover::after{
+    opacity:1;
+}
+
+/* Seletor de alimento (ver renderFeedPicker) — reaproveita o visual do
+   seletor de sementes (.farm-seed-picker*), só com classe extra pra
+   distinguir o clique (ver registerEvents). */
+.farm-feed-picker-item:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}
+
+@media (max-width:640px){
+    .farm-barn-chicken{
+        width:62px;
+    }
+    .farm-barn-bubble{
+        width:38px;
+        height:38px;
+    }
+    .farm-barn-bubble img{
+        width:22px;
+        height:22px;
+    }
+    .farm-barn-feed-icon{
+        width:28px;
+        height:28px;
+    }
+    .farm-barn-feed-icon img{
+        width:18px;
+        height:18px;
+    }
+}
+
 @media (max-width:640px){
     .farm-plot-grid{
         width:94vw;
@@ -525,5 +723,10 @@
     .farm-tool{
         width:40px;
         height:40px;
+    }
+    .farm-barn-button,
+    .farm-barn-back{
+        padding:8px 12px;
+        font-size:.75rem;
     }
 }

@@ -4,6 +4,7 @@ import SaveService from "../services/SaveService.js";
 import Toast from "../ui/components/Toast.js";
 import FarmConfirmModal from "../ui/components/modals/FarmConfirmModal.js";
 import FarmPlotTooltip from "./FarmPlotTooltip.js";
+import animalProducts from "../data/animalProducts.js";
 
 const TOOLS = [
     { id: "hoe", icon: "assets/img/assets/farm/tools-image/hoe.png", tooltip: "Abrir novo terreno" },
@@ -19,6 +20,39 @@ const VISIT_TOOLS = TOOLS
     .map(tool => (tool.id === "glove" ? { ...tool, tooltip: "Roubar" } : tool));
 
 const TICK_INTERVAL_MS = 5000;
+
+// Galinha do celeiro — 16 sprites de movimento PARADO (não anda, só
+// balança/bica no lugar), trocados em sequência pra virar animação.
+const CHICKEN_FRAME_COUNT = 16;
+const CHICKEN_FRAME_MS = 300;
+const CHICKEN_SPRITE = frame => `assets/img/assets/farm/animals/chicken/chicken-sprite-${frame}.png`;
+
+// Alimentos aceitos no seletor (ver renderFeedPicker/handleFeedChicken) —
+// cada um pelo id direto do item colhido na Fazenda. satiationMs é por
+// quanto tempo a galinha fica sem fome depois de comer AQUELE alimento
+// (ver scheduleHungerTimeout) — Vagem segura mais fome que Milho.
+const CHICKEN_FOODS = [
+    { id: "corn", name: "Milho", icon: "assets/img/assets/farm/seed/corn.png", satiationMs: 10 * 60 * 1000 },
+    { id: "pod", name: "Vagem", icon: "assets/img/assets/farm/seed/pod.png", satiationMs: 15 * 60 * 1000 }
+];
+
+// Fome — some o ícone de alimentar acima da cabeça (ver renderChicken)
+// quando o prazo do último alimento comido vence (ou, se ela ainda não
+// comeu nessa visita, o prazo do primeiro alimento da lista acima, só
+// pra ter um valor inicial — ver startChickenLoop). Enquanto está com
+// fome, o contador do ovo abaixo PAUSA (ver chickenEggInterval) —
+// alimentar (handleFeedChicken) tira a fome, reagenda esse prazo pro
+// alimento escolhido, e o contador do ovo retoma de onde parou.
+
+// Ovo — 15min de galinha ALIMENTADA (não 15min corridos, ver pausa
+// acima) pra "terminar" uma leva. Clicar no balão coleta
+// CHICKEN_EGGS_PER_BATCH ovos de uma vez, cada um com
+// CHICKEN_LUCKY_EGG_CHANCE de chance de vir Sortudo (ver animalProducts.js
+// — sellValue bem maior) em vez de normal.
+const CHICKEN_EGG_INTERVAL_MS = 15 * 60 * 1000; // 15min
+const CHICKEN_EGG_TICK_MS = 1000; // passo da contagem regressiva pausável
+const CHICKEN_EGGS_PER_BATCH = 3;
+const CHICKEN_LUCKY_EGG_CHANCE = 0.1; // 10%
 
 // Durante a visita, recarrega a fazenda visitada a cada tantos ticks
 // (6 × 5s = 30s) — pra ver o que o dono ou outros visitantes fizeram.
@@ -60,6 +94,22 @@ export default class FarmView {
 
         // Eventos dos visitantes pro modal de resumo (null = sem modal).
         this.summaryEvents = null;
+
+        // Dentro do celeiro (sub-tela da própria Fazenda, acessível pelo
+        // botão sobre o celeiro no fundo) — troca o background e esconde
+        // grade/ferramentas. Não existe durante visita a outro jogador.
+        this.inBarn = false;
+
+        // Animação/balões da galinha — só rodam enquanto this.inBarn é
+        // true (ver enterBarn/exitBarn). IDs de interval ficam aqui pra
+        // sempre dar pra limpar, mesmo se a view sair do ar no meio.
+        this.chickenFrameInterval = null;
+        this.chickenHungerTimeout = null;
+        this.chickenEggInterval = null;
+        this.chickenHungry = false;
+        this.chickenEgg = false;
+        this.chickenEggRemainingMs = CHICKEN_EGG_INTERVAL_MS;
+        this.feedPickerOpen = false; // seletor de alimento (botão Alimentar)
     }
 
     get player() {
@@ -81,6 +131,7 @@ export default class FarmView {
         this.selectedTool = null;
         this.seedPickerIndex = null;
         this.summaryEvents = null;
+        this.inBarn = false;
         this.syncOwnFarm();
         this.loadVisitList();
     }
@@ -88,6 +139,8 @@ export default class FarmView {
     onClose() {
         this.visit = null;
         this.visitPanelOpen = false;
+        this.inBarn = false;
+        this.stopChickenLoop();
         this.plotTooltip.hide();
     }
 
@@ -139,14 +192,104 @@ export default class FarmView {
         if (FarmService.applyPestSpawn(this.player)) FarmSyncService.pushChanged(this.player);
 
         return `
-            <section class="farm-screen ${this.visit ? "farm-visiting" : ""}">
+            <section class="farm-screen ${this.visit ? "farm-visiting" : ""} ${this.inBarn ? "farm-in-barn" : ""}">
                 ${this.visit ? this.renderVisitBanner() : ""}
-                ${this.renderTools()}
-                ${this.renderGrid()}
+                ${this.inBarn ? this.renderBarnView() : `
+                    ${this.renderTools()}
+                    ${this.renderGrid()}
+                    ${!this.visit ? this.renderBarnButton() : ""}
+                `}
                 ${this.visitPanelOpen ? this.renderVisitPanel() : ""}
                 ${this.seedPickerIndex !== null && !this.visit ? this.renderSeedPicker() : ""}
                 ${this.summaryEvents ? this.renderSummary() : ""}
             </section>
+        `;
+    }
+
+    // Botão sobre o celeiro, no fundo da Fazenda — leva pra sub-tela do
+    // celeiro (troca o background, some grade/ferramentas). Só na sua
+    // própria fazenda, nunca visitando outra.
+    renderBarnButton() {
+        return `
+            <button class="farm-barn-button">
+                <i class="fa-solid fa-warehouse"></i>
+                Ir para o celeiro
+            </button>
+        `;
+    }
+
+    renderBarnView() {
+        return `
+            <div class="farm-barn-view">
+                <button class="farm-barn-back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Voltar pra Fazenda
+                </button>
+                ${this.renderChicken()}
+                ${this.feedPickerOpen ? this.renderFeedPicker() : ""}
+            </div>
+        `;
+    }
+
+    // Seletor de alimento (ícone acima da galinha, só enquanto com fome)
+    // — reaproveita o visual do seletor de sementes da Fazenda
+    // (farm-seed-picker-*), só com classes extras (farm-feed-picker-*)
+    // pra não confundir os cliques dos dois (mesmo padrão já usado pro
+    // resumo de visitantes, ver farm-summary-overlay).
+    renderFeedPicker() {
+
+        const options = CHICKEN_FOODS.map(food => {
+
+            const owned = this.player.inventory.find(i => i.id === food.id);
+            const qty = owned?.quantity ?? 0;
+
+            return `
+                <button class="farm-seed-picker-item farm-feed-picker-item" data-food="${food.id}" ${qty > 0 ? "" : "disabled"}>
+                    <img src="${food.icon}" alt="${food.name}">
+                    <span>${food.name}</span>
+                    <span class="farm-seed-picker-qty">x${qty}</span>
+                </button>
+            `;
+
+        }).join("");
+
+        const anyOwned = CHICKEN_FOODS.some(food => (this.player.inventory.find(i => i.id === food.id)?.quantity ?? 0) > 0);
+
+        return `
+            <div class="farm-seed-picker-overlay farm-feed-picker-overlay">
+                <div class="farm-seed-picker">
+                    <h3>Alimentar a galinha</h3>
+                    <div class="farm-seed-picker-grid">${options}</div>
+                    ${anyOwned ? "" : `<p class="farm-seed-picker-empty">Você não tem Milho nem Vagem. Colha na Fazenda.</p>`}
+                    <button class="farm-seed-picker-cancel farm-feed-picker-cancel">Cancelar</button>
+                </div>
+            </div>
+        `;
+
+    }
+
+    // Galinha + balões de fome/ovo (ver constantes CHICKEN_* no topo do
+    // arquivo). A animação dos sprites é atualizada direto no <img> (ver
+    // startChickenAnimation) — isso aqui só desenha o frame inicial e os
+    // balões, que mudam via this.refresh() normal (timers raros, sem
+    // problema re-renderizar a tela toda quando disparam).
+    renderChicken() {
+        return `
+            <div class="farm-barn-chicken-wrap">
+                <div class="farm-barn-bubbles">
+                    ${this.chickenHungry ? `
+                        <button class="farm-barn-feed-icon" data-tooltip="Alimentar">
+                            <img src="${CHICKEN_FOODS[0].icon}" alt="Alimentar">
+                        </button>
+                    ` : ""}
+                    ${this.chickenEgg ? `
+                        <button class="farm-barn-bubble farm-barn-bubble-egg" data-bubble="egg" data-tooltip="Tem um ovo pronto">
+                            <img src="assets/img/assets/farm/food/egg.png" alt="Ovo">
+                        </button>
+                    ` : ""}
+                </div>
+                <img id="farm-chicken-sprite" class="farm-barn-chicken" src="${CHICKEN_SPRITE(1)}" alt="Galinha">
+            </div>
         `;
     }
 
@@ -361,6 +504,175 @@ export default class FarmView {
 
     }
 
+    /* =====================================================
+       CELEIRO — sub-tela dentro da Fazenda (ver renderBarnButton/
+       renderBarnView). Só troca o background e o que é mostrado; não
+       sai da view "farm" nenhuma hora, então nada no HudScreen precisa
+       saber disso.
+    ===================================================== */
+
+    enterBarn() {
+        this.inBarn = true;
+        this.selectedTool = null;
+        this.plotTooltip.hide();
+        this.game.hudScreen.setBackground("assets/img/backgrounds/celeiro.png");
+        this.refresh();
+        this.startChickenLoop();
+    }
+
+    exitBarn() {
+        this.inBarn = false;
+        this.game.hudScreen.setBackground("assets/img/backgrounds/fazenda.png");
+        this.stopChickenLoop();
+        this.refresh();
+    }
+
+    // Animação (troca de sprite, sem re-renderizar nada — só muda o
+    // src do <img>, igual updatePlotImages() faz com o solo/plantação)
+    // + os dois timers de fome/ovo, que SÓ disparam this.refresh() quando
+    // o balão muda de estado (raro, 1 e 15min — tudo bem re-desenhar a
+    // tela toda nesse caso).
+    startChickenLoop() {
+
+        this.stopChickenLoop();
+
+        this.chickenHungry = false;
+        this.chickenEgg = false;
+        this.feedPickerOpen = false;
+        this.chickenEggRemainingMs = CHICKEN_EGG_INTERVAL_MS;
+
+        let frame = 1;
+        this.chickenFrameInterval = setInterval(() => {
+            frame = frame % CHICKEN_FRAME_COUNT + 1;
+            const img = document.getElementById("farm-chicken-sprite");
+            if (img) img.src = CHICKEN_SPRITE(frame);
+        }, CHICKEN_FRAME_MS);
+
+        // Ainda não comeu nenhuma vez nessa visita — usa o prazo do
+        // primeiro alimento da lista só como valor inicial.
+        this.scheduleHungerTimeout(CHICKEN_FOODS[0].satiationMs);
+
+        // Contagem regressiva do ovo, em passos de 1s — só anda enquanto
+        // NÃO está com fome (ver handleFeedChicken, que não mexe nisso
+        // além de tirar a fome: o próprio tick já retoma sozinho assim
+        // que chickenHungry vira false, de onde parou, sem reiniciar).
+        this.chickenEggInterval = setInterval(() => {
+
+            if (this.chickenHungry) return;
+
+            this.chickenEggRemainingMs -= CHICKEN_EGG_TICK_MS;
+
+            if (this.chickenEggRemainingMs <= 0) {
+                this.chickenEgg = true;
+                this.chickenEggRemainingMs = CHICKEN_EGG_INTERVAL_MS;
+                this.refresh();
+            }
+
+        }, CHICKEN_EGG_TICK_MS);
+
+    }
+
+    stopChickenLoop() {
+        clearInterval(this.chickenFrameInterval);
+        clearTimeout(this.chickenHungerTimeout);
+        clearInterval(this.chickenEggInterval);
+        this.chickenFrameInterval = null;
+        this.chickenHungerTimeout = null;
+        this.chickenEggInterval = null;
+    }
+
+    // Reagenda quando a fome volta a aparecer — chamado uma vez ao
+    // entrar no celeiro (prazo do 1º alimento, só de ponto de partida) e
+    // de novo toda vez que ela come de verdade (ver handleFeedChicken,
+    // com o prazo do alimento escolhido).
+    scheduleHungerTimeout(ms) {
+        clearTimeout(this.chickenHungerTimeout);
+        this.chickenHungerTimeout = setTimeout(() => {
+            this.chickenHungry = true;
+            this.refresh();
+        }, ms);
+    }
+
+    // Balão de ovo (único balão que sobrou — a fome agora mostra o
+    // ícone de milho fixo sob a galinha, ver renderChicken): coleta a
+    // leva na hora, sem seletor (não tem escolha a fazer).
+    handleChickenBubbleClick(type) {
+        if (type === "egg") {
+            this.collectEggs();
+        }
+    }
+
+    // Ícone de milho sob a galinha (só existe enquanto ela está com fome).
+    openFeedPicker() {
+        this.feedPickerOpen = true;
+        this.refresh();
+    }
+
+    closeFeedPicker() {
+        this.feedPickerOpen = false;
+        this.refresh();
+    }
+
+    // Gasta 1 do alimento escolhido (ver CHICKEN_FOODS), satisfaz a fome
+    // e reagenda o próximo vencimento com o satiationMs DESSE alimento —
+    // Vagem segura mais fome que Milho.
+    handleFeedChicken(foodId) {
+
+        const food = CHICKEN_FOODS.find(f => f.id === foodId);
+
+        if (!food) return;
+
+        const owned = this.player.inventory.find(i => i.id === foodId);
+
+        if (!owned || (owned.quantity ?? 0) <= 0) {
+            Toast.show(`Você não tem ${food.name}.`);
+            return;
+        }
+
+        this.player.removeItem(owned, 1);
+        this.chickenHungry = false;
+        this.feedPickerOpen = false;
+        this.scheduleHungerTimeout(food.satiationMs);
+
+        Toast.show(`Você alimentou a galinha com ${food.name}!`);
+
+        SaveService.autoSave(this.player);
+        this.refresh();
+
+    }
+
+    // Balão de ovo — concede CHICKEN_EGGS_PER_BATCH ovos de uma vez,
+    // cada um rolado independente pra ver se sai Sortudo (ver
+    // animalProducts.js). Os itens em si bloqueiam qualquer uso (sem
+    // petFeedValue) — só servem pra vender no Mercado.
+    collectEggs() {
+
+        let normal = 0;
+        let lucky = 0;
+
+        for (let i = 0; i < CHICKEN_EGGS_PER_BATCH; i++) {
+
+            const isLucky = Math.random() < CHICKEN_LUCKY_EGG_CHANCE;
+
+            this.player.addItem(isLucky ? animalProducts.eggLuck : animalProducts.egg, 1);
+
+            if (isLucky) lucky++; else normal++;
+
+        }
+
+        this.chickenEgg = false;
+
+        const parts = [];
+        if (normal) parts.push(`${normal}x Ovo`);
+        if (lucky) parts.push(`${lucky}x Ovo Sortudo`);
+
+        Toast.show(`Você coletou ${parts.join(" e ")}!`);
+
+        SaveService.autoSave(this.player);
+        this.refresh();
+
+    }
+
     refresh() {
         this.game.hudScreen.refreshCurrentView();
     }
@@ -457,13 +769,13 @@ export default class FarmView {
             });
         });
 
-        screen.querySelector(".farm-seed-picker-overlay:not(.farm-summary-overlay) .farm-seed-picker-cancel")?.addEventListener("click", (event) => {
+        screen.querySelector(".farm-seed-picker-overlay:not(.farm-summary-overlay):not(.farm-feed-picker-overlay) .farm-seed-picker-cancel")?.addEventListener("click", (event) => {
             event.stopPropagation();
             this.seedPickerIndex = null;
             this.refresh();
         });
 
-        screen.querySelector(".farm-seed-picker-overlay:not(.farm-summary-overlay)")?.addEventListener("click", (event) => {
+        screen.querySelector(".farm-seed-picker-overlay:not(.farm-summary-overlay):not(.farm-feed-picker-overlay)")?.addEventListener("click", (event) => {
             if (event.target.classList.contains("farm-seed-picker-overlay")) {
                 this.seedPickerIndex = null;
                 this.refresh();
@@ -511,6 +823,44 @@ export default class FarmView {
         screen.querySelector(".farm-visit-back")?.addEventListener("click", (event) => {
             event.stopPropagation();
             this.endVisit();
+        });
+
+        screen.querySelector(".farm-barn-button")?.addEventListener("click", (event) => {
+            event.stopPropagation();
+            this.enterBarn();
+        });
+
+        screen.querySelector(".farm-barn-back")?.addEventListener("click", (event) => {
+            event.stopPropagation();
+            this.exitBarn();
+        });
+
+        screen.querySelectorAll(".farm-barn-bubble").forEach(button => {
+            button.addEventListener("click", (event) => {
+                event.stopPropagation();
+                this.handleChickenBubbleClick(button.dataset.bubble);
+            });
+        });
+
+        screen.querySelector(".farm-barn-feed-icon")?.addEventListener("click", (event) => {
+            event.stopPropagation();
+            this.openFeedPicker();
+        });
+
+        screen.querySelectorAll(".farm-feed-picker-item").forEach(button => {
+            button.addEventListener("click", (event) => {
+                event.stopPropagation();
+                this.handleFeedChicken(button.dataset.food);
+            });
+        });
+
+        screen.querySelector(".farm-feed-picker-cancel")?.addEventListener("click", (event) => {
+            event.stopPropagation();
+            this.closeFeedPicker();
+        });
+
+        screen.querySelector(".farm-feed-picker-overlay")?.addEventListener("click", (event) => {
+            if (event.target.classList.contains("farm-feed-picker-overlay")) this.closeFeedPicker();
         });
 
         this.startTicking();
